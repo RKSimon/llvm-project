@@ -1781,7 +1781,7 @@ define void @interleave_24i32_in(ptr %p, ptr %q1, ptr %q2, ptr %q3) nounwind {
 ; AVX2-FAST-ALL-NEXT:    vblendps {{.*#+}} ymm3 = ymm3[0,1],ymm4[2],ymm3[3,4],ymm4[5],ymm3[6,7]
 ; AVX2-FAST-ALL-NEXT:    vpermpd {{.*#+}} ymm4 = ymm2[2,1,3,3]
 ; AVX2-FAST-ALL-NEXT:    vblendps {{.*#+}} ymm3 = ymm3[0],ymm4[1],ymm3[2,3],ymm4[4],ymm3[5,6],ymm4[7]
-; AVX2-FAST-ALL-NEXT:    vbroadcastf128 {{.*#+}} ymm4 = [1,0,2,2,1,0,2,2]
+; AVX2-FAST-ALL-NEXT:    vbroadcastf128 {{.*#+}} ymm4 = [1,0,0,2,1,0,0,2]
 ; AVX2-FAST-ALL-NEXT:    # ymm4 = mem[0,1,0,1]
 ; AVX2-FAST-ALL-NEXT:    vpermps %ymm1, %ymm4, %ymm4
 ; AVX2-FAST-ALL-NEXT:    vpermpd {{.*#+}} ymm5 = ymm0[0,0,2,1]

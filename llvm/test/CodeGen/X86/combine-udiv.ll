@@ -352,8 +352,7 @@ define <4 x i32> @combine_vec_udiv_by_shl_pow2a(<4 x i32> %x, <4 x i32> %y) {
 ;
 ; AVX2-LABEL: combine_vec_udiv_by_shl_pow2a:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [2,2,2,2]
-; AVX2-NEXT:    vpaddd %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;

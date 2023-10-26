@@ -45,7 +45,7 @@ define <4 x i64> @var_rotate_v4i64(<4 x i64> %a, <4 x i64> %b) nounwind {
 ;
 ; AVX2-LABEL: var_rotate_v4i64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [64,64,64,64]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm2 = [64,64,64,64]
 ; AVX2-NEXT:    vpsubq %ymm1, %ymm2, %ymm2
 ; AVX2-NEXT:    vpsllvq %ymm1, %ymm0, %ymm1
 ; AVX2-NEXT:    vpsrlvq %ymm2, %ymm0, %ymm0
@@ -127,8 +127,7 @@ define <8 x i32> @var_rotate_v8i32(<8 x i32> %a, <8 x i32> %b) nounwind {
 ;
 ; AVX2-LABEL: var_rotate_v8i32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [31,31,31,31,31,31,31,31]
-; AVX2-NEXT:    vpand %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vpsllvd %ymm1, %ymm0, %ymm2
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [32,32,32,32,32,32,32,32]
 ; AVX2-NEXT:    vpsubd %ymm1, %ymm3, %ymm1
@@ -664,7 +663,7 @@ define <16 x i16> @splatvar_rotate_v16i16(<16 x i16> %a, <16 x i16> %b) nounwind
 ;
 ; AVX2-LABEL: splatvar_rotate_v16i16:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} xmm2 = [15,0,0,0,15,0,0,0]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} xmm2 = [15,0]
 ; AVX2-NEXT:    vpandn %xmm2, %xmm1, %xmm3
 ; AVX2-NEXT:    vpsrlw $1, %ymm0, %ymm4
 ; AVX2-NEXT:    vpsrlw %xmm3, %ymm4, %ymm3
@@ -675,7 +674,7 @@ define <16 x i16> @splatvar_rotate_v16i16(<16 x i16> %a, <16 x i16> %b) nounwind
 ;
 ; AVX512F-LABEL: splatvar_rotate_v16i16:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vpbroadcastq {{.*#+}} xmm2 = [15,0,0,0,15,0,0,0]
+; AVX512F-NEXT:    vpmovsxbq {{.*#+}} xmm2 = [15,0]
 ; AVX512F-NEXT:    vpandn %xmm2, %xmm1, %xmm3
 ; AVX512F-NEXT:    vpsrlw $1, %ymm0, %ymm4
 ; AVX512F-NEXT:    vpsrlw %xmm3, %ymm4, %ymm3
@@ -697,7 +696,7 @@ define <16 x i16> @splatvar_rotate_v16i16(<16 x i16> %a, <16 x i16> %b) nounwind
 ;
 ; AVX512BW-LABEL: splatvar_rotate_v16i16:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastq {{.*#+}} xmm2 = [15,0,0,0,15,0,0,0]
+; AVX512BW-NEXT:    vpmovsxbq {{.*#+}} xmm2 = [15,0]
 ; AVX512BW-NEXT:    vpandn %xmm2, %xmm1, %xmm3
 ; AVX512BW-NEXT:    vpsrlw $1, %ymm0, %ymm4
 ; AVX512BW-NEXT:    vpsrlw %xmm3, %ymm4, %ymm3

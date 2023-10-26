@@ -151,8 +151,7 @@ define <4 x i32> @combine_vec_rot_select_zero(<4 x i32>, <4 x i32>) {
 ; AVX2-LABEL: combine_vec_rot_select_zero:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [31,31,31,31]
-; AVX2-NEXT:    vpand %xmm3, %xmm1, %xmm3
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm3
 ; AVX2-NEXT:    vpsllvd %xmm3, %xmm0, %xmm4
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm5 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm3, %xmm5, %xmm3
@@ -206,8 +205,7 @@ define <4 x i32> @rotate_demanded_bits(<4 x i32>, <4 x i32>) {
 ;
 ; AVX2-LABEL: rotate_demanded_bits:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [30,30,30,30]
-; AVX2-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsllvd %xmm1, %xmm0, %xmm2
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm1, %xmm3, %xmm1
@@ -257,8 +255,7 @@ define <4 x i32> @rotate_demanded_bits_2(<4 x i32>, <4 x i32>) {
 ;
 ; AVX2-LABEL: rotate_demanded_bits_2:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [23,23,23,23]
-; AVX2-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsllvd %xmm1, %xmm0, %xmm2
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm1, %xmm3, %xmm1
@@ -309,8 +306,7 @@ define <4 x i32> @rotate_demanded_bits_3(<4 x i32>, <4 x i32>) {
 ; AVX2-LABEL: rotate_demanded_bits_3:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm1, %xmm1
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [31,31,31,31]
-; AVX2-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsllvd %xmm1, %xmm0, %xmm2
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm1, %xmm3, %xmm1
@@ -360,8 +356,7 @@ define <4 x i32> @rotl_binop_shuffle(<4 x i32>, <4 x i32>) {
 ;
 ; AVX2-LABEL: rotl_binop_shuffle:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [31,31,31,31]
-; AVX2-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsllvd %xmm1, %xmm0, %xmm2
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm1, %xmm3, %xmm1

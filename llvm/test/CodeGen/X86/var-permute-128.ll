@@ -1179,11 +1179,10 @@ define void @indices_convert() {
 ; AVX2-LABEL: indices_convert:
 ; AVX2:       # %bb.0: # %bb
 ; AVX2-NEXT:    vpbroadcastq (%rax), %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpmovzxdq {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero
-; AVX2-NEXT:    vpaddq %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovapd (%rax), %xmm1
+; AVX2-NEXT:    vpaddq %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vpermilpd %xmm0, %xmm1, %xmm0
 ; AVX2-NEXT:    vmovupd %xmm0, (%rax)
 ; AVX2-NEXT:    retq
@@ -1192,8 +1191,7 @@ define void @indices_convert() {
 ; AVX512:       # %bb.0: # %bb
 ; AVX512-NEXT:    vmovdqa (%rax), %ymm0
 ; AVX512-NEXT:    vpbroadcastq (%rax), %xmm1
-; AVX512-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [7,7,7,7]
-; AVX512-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX512-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX512-NEXT:    vpmovzxdq {{.*#+}} xmm1 = xmm1[0],zero,xmm1[1],zero
 ; AVX512-NEXT:    vpermq %zmm0, %zmm1, %zmm0
 ; AVX512-NEXT:    vmovdqu %xmm0, (%rax)

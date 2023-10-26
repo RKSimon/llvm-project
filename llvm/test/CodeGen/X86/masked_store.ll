@@ -5239,7 +5239,8 @@ define void @one_mask_bit_set1_variable(ptr %addr, <4 x float> %val, <4 x i32> %
 ; AVX512F:       ## %bb.0:
 ; AVX512F-NEXT:    ## kill: def $xmm1 killed $xmm1 def $zmm1
 ; AVX512F-NEXT:    ## kill: def $xmm0 killed $xmm0 def $zmm0
-; AVX512F-NEXT:    vptestmd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm1, %k0
+; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [2147483648,2147483648,2147483648,2147483648]
+; AVX512F-NEXT:    vptestmd %zmm2, %zmm1, %k0
 ; AVX512F-NEXT:    kshiftlw $12, %k0, %k0
 ; AVX512F-NEXT:    kshiftrw $12, %k0, %k1
 ; AVX512F-NEXT:    vmovups %zmm0, (%rdi) {%k1}

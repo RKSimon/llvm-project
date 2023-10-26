@@ -58,8 +58,7 @@ define <4 x i1> @t1_all_odd_eq(<4 x i32> %X) nounwind {
 ;
 ; CHECK-AVX2-LABEL: t1_all_odd_eq:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2863311531,2863311531,2863311531,2863311531]
-; CHECK-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
@@ -119,8 +118,7 @@ define <4 x i1> @t1_all_odd_ne(<4 x i32> %X) nounwind {
 ;
 ; CHECK-AVX2-LABEL: t1_all_odd_ne:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2863311531,2863311531,2863311531,2863311531]
-; CHECK-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1

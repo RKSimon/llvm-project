@@ -190,8 +190,7 @@ define <4 x i32> @freeze_add_vec(<4 x i32> %a0) nounwind {
 ;
 ; X64-LABEL: freeze_add_vec:
 ; X64:       # %bb.0:
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [5,5,5,5]
-; X64-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
   %x = add <4 x i32> %a0, <i32 1, i32 2, i32 3, i32 4>
   %y = freeze <4 x i32> %x
@@ -261,8 +260,7 @@ define <4 x i32> @freeze_sub_vec(<4 x i32> %a0) nounwind {
 ;
 ; X64-LABEL: freeze_sub_vec:
 ; X64:       # %bb.0:
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [5,5,5,5]
-; X64-NEXT:    vpsubd %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpsubd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
   %x = sub <4 x i32> %a0, <i32 1, i32 2, i32 3, i32 4>
   %y = freeze <4 x i32> %x

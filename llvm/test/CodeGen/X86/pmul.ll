@@ -100,8 +100,7 @@ define <4 x i32> @mul_v4i32c(<4 x i32> %i) nounwind  {
 ;
 ; AVX-LABEL: mul_v4i32c:
 ; AVX:       # %bb.0: # %entry
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [117,117,117,117]
-; AVX-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
 entry:
   %A = mul <4 x i32> %i, < i32 117, i32 117, i32 117, i32 117 >
@@ -513,8 +512,7 @@ define <8 x i32> @mul_v8i32c(<8 x i32> %i) nounwind  {
 ;
 ; AVX-LABEL: mul_v8i32c:
 ; AVX:       # %bb.0: # %entry
-; AVX-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [117,117,117,117,117,117,117,117]
-; AVX-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX-NEXT:    retq
 entry:
   %A = mul <8 x i32> %i, < i32 117, i32 117, i32 117, i32 117, i32 117, i32 117, i32 117, i32 117 >
@@ -558,7 +556,7 @@ define <4 x i64> @mul_v4i64c(<4 x i64> %i) nounwind  {
 ;
 ; AVX-LABEL: mul_v4i64c:
 ; AVX:       # %bb.0: # %entry
-; AVX-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [117,117,117,117]
+; AVX-NEXT:    vpmovsxbq {{.*#+}} ymm1 = [117,117,117,117]
 ; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm2
 ; AVX-NEXT:    vpsrlq $32, %ymm0, %ymm0
 ; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0

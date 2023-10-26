@@ -260,8 +260,7 @@ define <8 x i16> @combine_trunc_v8i32_v8i16(<8 x i16> %a0, <8 x i32> %a1) {
 ;
 ; AVX2-LABEL: combine_trunc_v8i32_v8i16:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0

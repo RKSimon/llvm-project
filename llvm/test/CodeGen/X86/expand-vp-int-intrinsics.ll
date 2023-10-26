@@ -204,8 +204,7 @@ define void @vp_sdiv_v4i32(<4 x i32> %a0, <4 x i32> %a1, ptr %out, i32 %vp) noun
 ; AVX2-NEXT:    vpmovsxbd {{.*#+}} xmm3 = [0,1,2,3]
 ; AVX2-NEXT:    vpmaxud %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vblendvps %xmm2, %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vblendvps %xmm2, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vextractps $1, %xmm1, %ecx
 ; AVX2-NEXT:    vpextrd $1, %xmm0, %eax
 ; AVX2-NEXT:    cltd
@@ -383,8 +382,7 @@ define void @vp_udiv_v4i32(<4 x i32> %a0, <4 x i32> %a1, ptr %out, i32 %vp) noun
 ; AVX2-NEXT:    vpmovsxbd {{.*#+}} xmm3 = [0,1,2,3]
 ; AVX2-NEXT:    vpmaxud %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vblendvps %xmm2, %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vblendvps %xmm2, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vextractps $1, %xmm1, %ecx
 ; AVX2-NEXT:    vpextrd $1, %xmm0, %eax
 ; AVX2-NEXT:    xorl %edx, %edx
@@ -562,8 +560,7 @@ define void @vp_srem_v4i32(<4 x i32> %a0, <4 x i32> %a1, ptr %out, i32 %vp) noun
 ; AVX2-NEXT:    vpmovsxbd {{.*#+}} xmm3 = [0,1,2,3]
 ; AVX2-NEXT:    vpmaxud %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vblendvps %xmm2, %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vblendvps %xmm2, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vextractps $1, %xmm1, %ecx
 ; AVX2-NEXT:    vpextrd $1, %xmm0, %eax
 ; AVX2-NEXT:    cltd
@@ -741,8 +738,7 @@ define void @vp_urem_v4i32(<4 x i32> %a0, <4 x i32> %a1, ptr %out, i32 %vp) noun
 ; AVX2-NEXT:    vpmovsxbd {{.*#+}} xmm3 = [0,1,2,3]
 ; AVX2-NEXT:    vpmaxud %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vblendvps %xmm2, %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vblendvps %xmm2, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vextractps $1, %xmm1, %ecx
 ; AVX2-NEXT:    vpextrd $1, %xmm0, %eax
 ; AVX2-NEXT:    xorl %edx, %edx

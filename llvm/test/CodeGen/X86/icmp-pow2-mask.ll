@@ -31,7 +31,7 @@ define <8 x i16> @pow2_mask_v16i8(i8 zeroext %0) {
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vmovd %edi, %xmm0
 ; AVX2-NEXT:    vpbroadcastb %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} xmm1 = [128,64,32,16,8,4,2,1,128,64,32,16,8,4,2,1]
+; AVX2-NEXT:    vmovq {{.*#+}} xmm1 = [128,64,32,16,8,4,2,1,0,0,0,0,0,0,0,0]
 ; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpmovsxbw %xmm0, %xmm0
@@ -121,7 +121,7 @@ define i64 @pow2_mask_v8i8(i8 zeroext %0) {
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vmovd %edi, %xmm0
 ; AVX2-NEXT:    vpbroadcastb %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} xmm1 = [128,64,32,16,8,4,2,1,128,64,32,16,8,4,2,1]
+; AVX2-NEXT:    vmovq {{.*#+}} xmm1 = [128,64,32,16,8,4,2,1,0,0,0,0,0,0,0,0]
 ; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovq %xmm0, %rax

@@ -5199,8 +5199,7 @@ define void @vec384_v12i32_to_v2i192_factor6(ptr %in.vec.base.ptr, ptr %in.vec.b
 ; AVX2-FAST-NEXT:    vmovdqa (%rdi), %ymm0
 ; AVX2-FAST-NEXT:    vpaddb (%rsi), %ymm0, %ymm0
 ; AVX2-FAST-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX2-FAST-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [0,0,1,0,0,0,1,0]
-; AVX2-FAST-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVX2-FAST-NEXT:    vpmovsxbq {{.*#+}} ymm2 = [0,0,0,1]
 ; AVX2-FAST-NEXT:    vpermd %ymm0, %ymm2, %ymm0
 ; AVX2-FAST-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm1[1,2,3,4,5],ymm0[6],ymm1[7]
 ; AVX2-FAST-NEXT:    vmovaps 32(%rdx), %ymm1
@@ -6100,8 +6099,7 @@ define void @vec512_v64i8_to_v4i128_factor16(ptr %in.vec.base.ptr, ptr %in.vec.b
 ; AVX2-SLOW-NEXT:    vpaddb (%rsi), %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpmovzxbq {{.*#+}} xmm1 = xmm0[0],zero,zero,zero,zero,zero,zero,zero,xmm0[1],zero,zero,zero,zero,zero,zero,zero
 ; AVX2-SLOW-NEXT:    vpermq {{.*#+}} ymm1 = ymm1[0,1,1,3]
-; AVX2-SLOW-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX2-SLOW-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVX2-SLOW-NEXT:    vpmovzxbq {{.*#+}} ymm2 = [255,0,255,0]
 ; AVX2-SLOW-NEXT:    vpand %ymm2, %ymm1, %ymm1
 ; AVX2-SLOW-NEXT:    vpsrld $16, %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpmovzxbq {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,zero,zero,zero,zero,xmm0[1],zero,zero,zero,zero,zero,zero,zero
@@ -6120,8 +6118,7 @@ define void @vec512_v64i8_to_v4i128_factor16(ptr %in.vec.base.ptr, ptr %in.vec.b
 ; AVX2-FAST-PERLANE-NEXT:    vpaddb (%rsi), %xmm0, %xmm0
 ; AVX2-FAST-PERLANE-NEXT:    vpmovzxbq {{.*#+}} xmm1 = xmm0[0],zero,zero,zero,zero,zero,zero,zero,xmm0[1],zero,zero,zero,zero,zero,zero,zero
 ; AVX2-FAST-PERLANE-NEXT:    vpermq {{.*#+}} ymm1 = ymm1[0,1,1,3]
-; AVX2-FAST-PERLANE-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX2-FAST-PERLANE-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVX2-FAST-PERLANE-NEXT:    vpmovzxbq {{.*#+}} ymm2 = [255,0,255,0]
 ; AVX2-FAST-PERLANE-NEXT:    vpand %ymm2, %ymm1, %ymm1
 ; AVX2-FAST-PERLANE-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[2,u,u,u,u,u,u,u,3,u,u,u,u,u,u,u]
 ; AVX2-FAST-PERLANE-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,1,1,3]
@@ -6139,8 +6136,7 @@ define void @vec512_v64i8_to_v4i128_factor16(ptr %in.vec.base.ptr, ptr %in.vec.b
 ; AVX2-FAST-NEXT:    vpaddb (%rsi), %xmm0, %xmm0
 ; AVX2-FAST-NEXT:    vpmovzxbq {{.*#+}} xmm1 = xmm0[0],zero,zero,zero,zero,zero,zero,zero,xmm0[1],zero,zero,zero,zero,zero,zero,zero
 ; AVX2-FAST-NEXT:    vpermq {{.*#+}} ymm1 = ymm1[0,1,1,3]
-; AVX2-FAST-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX2-FAST-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVX2-FAST-NEXT:    vpmovzxbq {{.*#+}} ymm2 = [255,0,255,0]
 ; AVX2-FAST-NEXT:    vpand %ymm2, %ymm1, %ymm1
 ; AVX2-FAST-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[2,u,u,u,u,u,u,u,3,u,u,u,u,u,u,u]
 ; AVX2-FAST-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,1,1,3]

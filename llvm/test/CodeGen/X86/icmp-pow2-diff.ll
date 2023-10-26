@@ -46,8 +46,7 @@ define <4 x i1> @andnot_eq_v4i32(<4 x i32> %x) nounwind {
 ;
 ; AVX2-LABEL: andnot_eq_v4i32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [4294967287,4294967287,4294967287,4294967287]
-; AVX2-NEXT:    vpandn %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq

@@ -813,8 +813,7 @@ define <8 x i16> @test13(<8 x i16> %x, <8 x i32> %y) nounwind {
 ;
 ; AVX2-LABEL: test13:
 ; AVX2:       # %bb.0: # %vector.ph
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -1067,8 +1066,7 @@ define <8 x i16> @test15(<8 x i16> %x, <8 x i32> %y) nounwind {
 ;
 ; AVX2-LABEL: test15:
 ; AVX2:       # %bb.0: # %vector.ph
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -1585,8 +1583,7 @@ define <8 x i16> @psubus_8i32_max(<8 x i16> %x, <8 x i32> %y) nounwind {
 ;
 ; AVX2-LABEL: psubus_8i32_max:
 ; AVX2:       # %bb.0: # %vector.ph
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -1995,8 +1992,7 @@ define <8 x i16> @psubus_i16_i32_max_swapped(<8 x i16> %x, <8 x i32> %y) nounwin
 ;
 ; AVX2-LABEL: psubus_i16_i32_max_swapped:
 ; AVX2:       # %bb.0: # %vector.ph
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -2090,8 +2086,7 @@ define <8 x i16> @psubus_i16_i32_min(<8 x i16> %x, <8 x i32> %y) nounwind {
 ;
 ; AVX2-LABEL: psubus_i16_i32_min:
 ; AVX2:       # %bb.0: # %vector.ph
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -2679,8 +2674,7 @@ define <8 x i16> @test32(<8 x i16> %a0, <8 x i32> %a1) {
 ;
 ; AVX2-LABEL: test32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vextracti128 $1, %ymm1, %xmm2
 ; AVX2-NEXT:    vpackusdw %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubusw %xmm1, %xmm0, %xmm0
@@ -3081,8 +3075,7 @@ define <8 x i32> @test34(<8 x i32> %a0, <8 x i64> %a1) {
 ;
 ; AVX2-SLOW-LABEL: test34:
 ; AVX2-SLOW:       # %bb.0:
-; AVX2-SLOW-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [1,1,1,1,1,1,1,1]
-; AVX2-SLOW-NEXT:    vpand %ymm3, %ymm0, %ymm0
+; AVX2-SLOW-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-SLOW-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
 ; AVX2-SLOW-NEXT:    vpxor %ymm3, %ymm2, %ymm4
 ; AVX2-SLOW-NEXT:    vpbroadcastq {{.*#+}} ymm5 = [9223372041149743103,9223372041149743103,9223372041149743103,9223372041149743103]
@@ -3101,8 +3094,7 @@ define <8 x i32> @test34(<8 x i32> %a0, <8 x i64> %a1) {
 ;
 ; AVX2-FAST-ALL-LABEL: test34:
 ; AVX2-FAST-ALL:       # %bb.0:
-; AVX2-FAST-ALL-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [1,1,1,1,1,1,1,1]
-; AVX2-FAST-ALL-NEXT:    vpand %ymm3, %ymm0, %ymm0
+; AVX2-FAST-ALL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-FAST-ALL-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
 ; AVX2-FAST-ALL-NEXT:    vpxor %ymm3, %ymm1, %ymm4
 ; AVX2-FAST-ALL-NEXT:    vpbroadcastq {{.*#+}} ymm5 = [9223372041149743103,9223372041149743103,9223372041149743103,9223372041149743103]
@@ -3122,8 +3114,7 @@ define <8 x i32> @test34(<8 x i32> %a0, <8 x i64> %a1) {
 ;
 ; AVX2-FAST-PERLANE-LABEL: test34:
 ; AVX2-FAST-PERLANE:       # %bb.0:
-; AVX2-FAST-PERLANE-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [1,1,1,1,1,1,1,1]
-; AVX2-FAST-PERLANE-NEXT:    vpand %ymm3, %ymm0, %ymm0
+; AVX2-FAST-PERLANE-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-FAST-PERLANE-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
 ; AVX2-FAST-PERLANE-NEXT:    vpxor %ymm3, %ymm2, %ymm4
 ; AVX2-FAST-PERLANE-NEXT:    vpbroadcastq {{.*#+}} ymm5 = [9223372041149743103,9223372041149743103,9223372041149743103,9223372041149743103]

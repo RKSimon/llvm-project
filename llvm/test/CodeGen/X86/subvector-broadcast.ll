@@ -1017,8 +1017,7 @@ define dso_local void @fallback_broadcast_v4i32_v8i32_v16i32(<4 x i32> %a, <8 x 
 ; X86-AVX2-NEXT:    movl %esp, %ebp
 ; X86-AVX2-NEXT:    andl $-32, %esp
 ; X86-AVX2-NEXT:    subl $32, %esp
-; X86-AVX2-NEXT:    vbroadcasti128 {{.*#+}} ymm3 = [1,2,3,4,1,2,3,4]
-; X86-AVX2-NEXT:    # ymm3 = mem[0,1,0,1]
+; X86-AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm3 = [1,2,3,4,1,2,3,4]
 ; X86-AVX2-NEXT:    vpaddd %xmm3, %xmm0, %xmm0
 ; X86-AVX2-NEXT:    vpaddd %ymm3, %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpand %ymm3, %ymm1, %ymm1
@@ -1079,8 +1078,7 @@ define dso_local void @fallback_broadcast_v4i32_v8i32_v16i32(<4 x i32> %a, <8 x 
 ;
 ; X64-AVX2-LABEL: fallback_broadcast_v4i32_v8i32_v16i32:
 ; X64-AVX2:       # %bb.0: # %entry
-; X64-AVX2-NEXT:    vbroadcasti128 {{.*#+}} ymm4 = [1,2,3,4,1,2,3,4]
-; X64-AVX2-NEXT:    # ymm4 = mem[0,1,0,1]
+; X64-AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm4 = [1,2,3,4,1,2,3,4]
 ; X64-AVX2-NEXT:    vpaddd %xmm4, %xmm0, %xmm0
 ; X64-AVX2-NEXT:    vpaddd %ymm4, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpand %ymm4, %ymm1, %ymm1

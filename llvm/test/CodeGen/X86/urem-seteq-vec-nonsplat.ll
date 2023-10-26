@@ -727,8 +727,7 @@ define <4 x i32> @test_urem_odd_one(<4 x i32> %X) nounwind {
 ;
 ; CHECK-AVX2-LABEL: test_urem_odd_one:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [3435973837,3435973837,3435973837,3435973837]
-; CHECK-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpsrld $31, %xmm0, %xmm0
@@ -793,8 +792,7 @@ define <4 x i32> @test_urem_even_one(<4 x i32> %X) nounwind {
 ;
 ; CHECK-AVX2-LABEL: test_urem_even_one:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [3067833783,3067833783,3067833783,3067833783]
-; CHECK-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpsrld $1, %xmm0, %xmm1
 ; CHECK-AVX2-NEXT:    vpslld $31, %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0

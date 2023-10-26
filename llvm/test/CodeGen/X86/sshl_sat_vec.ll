@@ -196,9 +196,8 @@ define <4 x i32> @vec_v4i32(<4 x i32> %x, <4 x i32> %y) nounwind {
 ;
 ; X64-AVX2-LABEL: vec_v4i32:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [2147483648,2147483648,2147483648,2147483648]
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [2147483647,2147483647,2147483647,2147483647]
-; X64-AVX2-NEXT:    vblendvps %xmm0, %xmm2, %xmm3, %xmm2
+; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [2147483647,2147483647,2147483647,2147483647]
+; X64-AVX2-NEXT:    vblendvps %xmm0, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
 ; X64-AVX2-NEXT:    vpsllvd %xmm1, %xmm0, %xmm3
 ; X64-AVX2-NEXT:    vpsravd %xmm1, %xmm3, %xmm1
 ; X64-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0

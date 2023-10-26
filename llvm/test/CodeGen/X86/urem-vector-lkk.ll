@@ -156,40 +156,22 @@ define <4 x i16> @dont_fold_urem_power_of_two(<4 x i16> %x) {
 ; SSE-NEXT:    movdqa %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX1-LABEL: dont_fold_urem_power_of_two:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVX1-NEXT:    vpextrw $1, %xmm0, %eax
-; AVX1-NEXT:    andl $31, %eax
-; AVX1-NEXT:    vpinsrw $1, %eax, %xmm1, %xmm1
-; AVX1-NEXT:    vpextrw $2, %xmm0, %eax
-; AVX1-NEXT:    andl $7, %eax
-; AVX1-NEXT:    vpinsrw $2, %eax, %xmm1, %xmm1
-; AVX1-NEXT:    vpextrw $3, %xmm0, %eax
-; AVX1-NEXT:    imull $44151, %eax, %ecx # imm = 0xAC77
-; AVX1-NEXT:    shrl $22, %ecx
-; AVX1-NEXT:    imull $95, %ecx, %ecx
-; AVX1-NEXT:    subl %ecx, %eax
-; AVX1-NEXT:    vpinsrw $3, %eax, %xmm1, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: dont_fold_urem_power_of_two:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [63,63,63,63]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm1
-; AVX2-NEXT:    vpextrw $1, %xmm0, %eax
-; AVX2-NEXT:    andl $31, %eax
-; AVX2-NEXT:    vpinsrw $1, %eax, %xmm1, %xmm1
-; AVX2-NEXT:    vpextrw $2, %xmm0, %eax
-; AVX2-NEXT:    andl $7, %eax
-; AVX2-NEXT:    vpinsrw $2, %eax, %xmm1, %xmm1
-; AVX2-NEXT:    vpextrw $3, %xmm0, %eax
-; AVX2-NEXT:    imull $44151, %eax, %ecx # imm = 0xAC77
-; AVX2-NEXT:    shrl $22, %ecx
-; AVX2-NEXT:    imull $95, %ecx, %ecx
-; AVX2-NEXT:    subl %ecx, %eax
-; AVX2-NEXT:    vpinsrw $3, %eax, %xmm1, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: dont_fold_urem_power_of_two:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; AVX-NEXT:    vpextrw $1, %xmm0, %eax
+; AVX-NEXT:    andl $31, %eax
+; AVX-NEXT:    vpinsrw $1, %eax, %xmm1, %xmm1
+; AVX-NEXT:    vpextrw $2, %xmm0, %eax
+; AVX-NEXT:    andl $7, %eax
+; AVX-NEXT:    vpinsrw $2, %eax, %xmm1, %xmm1
+; AVX-NEXT:    vpextrw $3, %xmm0, %eax
+; AVX-NEXT:    imull $44151, %eax, %ecx # imm = 0xAC77
+; AVX-NEXT:    shrl $22, %ecx
+; AVX-NEXT:    imull $95, %ecx, %ecx
+; AVX-NEXT:    subl %ecx, %eax
+; AVX-NEXT:    vpinsrw $3, %eax, %xmm1, %xmm0
+; AVX-NEXT:    retq
   %1 = urem <4 x i16> %x, <i16 64, i16 32, i16 8, i16 95>
   ret <4 x i16> %1
 }

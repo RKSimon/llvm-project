@@ -86,8 +86,7 @@ define <4 x i1> @is_pow2_non_zero_4xv64(<4 x i64> %xin) {
 ;
 ; CHECK-AVX2-LABEL: is_pow2_non_zero_4xv64:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [256,256,256,256]
-; CHECK-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; CHECK-AVX2-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
 ; CHECK-AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm1
 ; CHECK-AVX2-NEXT:    vpand %ymm1, %ymm0, %ymm0
@@ -138,8 +137,7 @@ define <4 x i1> @neither_pow2_non_zero_4xv64(<4 x i64> %xin) {
 ;
 ; CHECK-AVX2-LABEL: neither_pow2_non_zero_4xv64:
 ; CHECK-AVX2:       # %bb.0:
-; CHECK-AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [256,256,256,256]
-; CHECK-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; CHECK-AVX2-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
 ; CHECK-AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm2
 ; CHECK-AVX2-NEXT:    vpand %ymm2, %ymm0, %ymm0
@@ -198,8 +196,7 @@ define <4 x i1> @neither_pow2_non_zero_4xv64_x_maybe_z(<4 x i64> %x) {
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
 ; CHECK-AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm2
-; CHECK-AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; CHECK-AVX2-NEXT:    vpxor %ymm3, %ymm2, %ymm2
+; CHECK-AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm2, %ymm2
 ; CHECK-AVX2-NEXT:    vpxor %ymm0, %ymm2, %ymm0
 ; CHECK-AVX2-NEXT:    vpcmpgtq %ymm2, %ymm0, %ymm0
 ; CHECK-AVX2-NEXT:    vpxor %ymm1, %ymm0, %ymm0

@@ -42,13 +42,12 @@ define <4 x i64> @var_shuffle_v4i64(<4 x i64> %v, <4 x i64> %indices) nounwind {
 ; AVX2-LABEL: var_shuffle_v4i64:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpaddq %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [2,2,2,2]
-; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm2
-; AVX2-NEXT:    vpermpd {{.*#+}} ymm3 = ymm0[2,3,2,3]
-; AVX2-NEXT:    vpermilpd %ymm1, %ymm3, %ymm3
+; AVX2-NEXT:    vpermpd {{.*#+}} ymm2 = ymm0[2,3,2,3]
+; AVX2-NEXT:    vpermilpd %ymm1, %ymm2, %ymm2
 ; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,0,1]
 ; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: var_shuffle_v4i64:
@@ -462,13 +461,12 @@ define <4 x double> @var_shuffle_v4f64(<4 x double> %v, <4 x i64> %indices) noun
 ; AVX2-LABEL: var_shuffle_v4f64:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpaddq %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [2,2,2,2]
-; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm2
-; AVX2-NEXT:    vpermpd {{.*#+}} ymm3 = ymm0[2,3,2,3]
-; AVX2-NEXT:    vpermilpd %ymm1, %ymm3, %ymm3
+; AVX2-NEXT:    vpermpd {{.*#+}} ymm2 = ymm0[2,3,2,3]
+; AVX2-NEXT:    vpermilpd %ymm1, %ymm2, %ymm2
 ; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,0,1]
 ; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: var_shuffle_v4f64:
@@ -586,12 +584,11 @@ define <4 x i64> @var_shuffle_v4i64_from_v2i64(<2 x i64> %v, <4 x i64> %indices)
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    # kill: def $xmm0 killed $xmm0 def $ymm0
 ; AVX2-NEXT:    vpaddq %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [2,2,2,2]
-; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm2
-; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm3
+; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm2
 ; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,0,1]
 ; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: var_shuffle_v4i64_from_v2i64:
@@ -1007,12 +1004,11 @@ define <4 x double> @var_shuffle_v4f64_from_v2f64(<2 x double> %v, <4 x i64> %in
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    # kill: def $xmm0 killed $xmm0 def $ymm0
 ; AVX2-NEXT:    vpaddq %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [2,2,2,2]
-; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm2
-; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm3
+; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm2
 ; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,0,1]
 ; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: var_shuffle_v4f64_from_v2f64:
@@ -1290,14 +1286,13 @@ define <4 x i64> @var_shuffle_v4i64_with_v16i8_indices(<4 x i64> %v, <16 x i8> %
 ; AVX2-LABEL: var_shuffle_v4i64_with_v16i8_indices:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm1 = xmm1[0],zero,zero,zero,zero,zero,zero,zero,xmm1[1],zero,zero,zero,zero,zero,zero,zero,xmm1[2],zero,zero,zero,zero,zero,zero,zero,xmm1[3],zero,zero,zero,zero,zero,zero,zero
+; AVX2-NEXT:    vpermpd {{.*#+}} ymm2 = ymm0[2,3,2,3]
 ; AVX2-NEXT:    vpaddq %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [2,2,2,2]
-; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm2
-; AVX2-NEXT:    vpermpd {{.*#+}} ymm3 = ymm0[2,3,2,3]
-; AVX2-NEXT:    vpermilpd %ymm1, %ymm3, %ymm3
+; AVX2-NEXT:    vpermilpd %ymm1, %ymm2, %ymm2
 ; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,0,1]
 ; AVX2-NEXT:    vpermilpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: var_shuffle_v4i64_with_v16i8_indices:

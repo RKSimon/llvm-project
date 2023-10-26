@@ -88,8 +88,7 @@ define <4 x i32> @combine_vec_uadd_not(<4 x i32> %a0, <4 x i32> %a1) {
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX-NEXT:    vpsubd %xmm0, %xmm2, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1,1,1,1]
-; AVX-NEXT:    vpmaxud %xmm2, %xmm0, %xmm2
+; AVX-NEXT:    vpmaxud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm2
 ; AVX-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm2
 ; AVX-NEXT:    vblendvps %xmm2, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    retq

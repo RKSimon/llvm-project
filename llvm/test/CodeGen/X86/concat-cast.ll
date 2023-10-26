@@ -61,13 +61,10 @@ define <4 x float> @uitofp_v4i32_v4f32(<2 x i32> %x, <2 x i32> %y) {
 ; AVX2-LABEL: uitofp_v4i32_v4f32:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpunpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm1[0]
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1258291200,1258291200,1258291200,1258291200]
-; AVX2-NEXT:    vpblendw {{.*#+}} xmm1 = xmm0[0],xmm1[1],xmm0[2],xmm1[3],xmm0[4],xmm1[5],xmm0[6],xmm1[7]
+; AVX2-NEXT:    vpblendw {{.*#+}} xmm1 = xmm0[0],mem[1],xmm0[2],mem[3],xmm0[4],mem[5],xmm0[6],mem[7]
 ; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1392508928,1392508928,1392508928,1392508928]
-; AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],xmm2[1],xmm0[2],xmm2[3],xmm0[4],xmm2[5],xmm0[6],xmm2[7]
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11]
-; AVX2-NEXT:    vsubps %xmm2, %xmm0, %xmm0
+; AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],mem[1],xmm0[2],mem[3],xmm0[4],mem[5],xmm0[6],mem[7]
+; AVX2-NEXT:    vsubps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vaddps %xmm0, %xmm1, %xmm0
 ; AVX2-NEXT:    retq
 ;
@@ -137,8 +134,7 @@ define <4 x i32> @fptoui_v4f32_v4i32(<2 x float> %x, <2 x float> %y) {
 ; AVX2-NEXT:    vmovlhps {{.*#+}} xmm0 = xmm0[0],xmm1[0]
 ; AVX2-NEXT:    vcvttps2dq %xmm0, %xmm1
 ; AVX2-NEXT:    vpsrad $31, %xmm1, %xmm2
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm3 = [2.14748365E+9,2.14748365E+9,2.14748365E+9,2.14748365E+9]
-; AVX2-NEXT:    vsubps %xmm3, %xmm0, %xmm0
+; AVX2-NEXT:    vsubps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vcvttps2dq %xmm0, %xmm0
 ; AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
@@ -303,8 +299,7 @@ define <4 x i32> @fptoui_v4f64_v4i32(<2 x double> %x, <2 x double> %y) {
 ; AVX2-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vcvttpd2dq %ymm0, %xmm1
 ; AVX2-NEXT:    vpsrad $31, %xmm1, %xmm2
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm3 = [2.147483648E+9,2.147483648E+9,2.147483648E+9,2.147483648E+9]
-; AVX2-NEXT:    vsubpd %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vsubpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vcvttpd2dq %ymm0, %xmm0
 ; AVX2-NEXT:    vandpd %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vorpd %xmm0, %xmm1, %xmm0

@@ -42,30 +42,18 @@ baz:
 @qa_ = external unnamed_addr global [49216 x i8], align 32
 
 define void @concat_of_broadcast_v2f64_v4f64() {
-; AVX1-LABEL: concat_of_broadcast_v2f64_v4f64:
-; AVX1:       # %bb.0: # %alloca_0
-; AVX1-NEXT:    movq qa_@GOTPCREL(%rip), %rax
-; AVX1-NEXT:    movl $1091567616, 30256(%rax) # imm = 0x41100000
-; AVX1-NEXT:    movabsq $4294967297, %rcx # imm = 0x100000001
-; AVX1-NEXT:    movq %rcx, 46348(%rax)
-; AVX1-NEXT:    vbroadcastss {{.*#+}} ymm0 = [1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216]
-; AVX1-NEXT:    vmovups %ymm0, 48296(%rax)
-; AVX1-NEXT:    vmovsd {{.*#+}} xmm0 = [7.812501848093234E-3,0.0E+0]
-; AVX1-NEXT:    vmovsd %xmm0, 47372(%rax)
-; AVX1-NEXT:    vzeroupper
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: concat_of_broadcast_v2f64_v4f64:
-; AVX2:       # %bb.0: # %alloca_0
-; AVX2-NEXT:    movq qa_@GOTPCREL(%rip), %rax
-; AVX2-NEXT:    movl $1091567616, 30256(%rax) # imm = 0x41100000
-; AVX2-NEXT:    movabsq $4294967297, %rcx # imm = 0x100000001
-; AVX2-NEXT:    movq %rcx, 46348(%rax)
-; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm0 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vmovups %ymm0, 48296(%rax)
-; AVX2-NEXT:    vmovlps %xmm0, 47372(%rax)
-; AVX2-NEXT:    vzeroupper
-; AVX2-NEXT:    retq
+; CHECK-LABEL: concat_of_broadcast_v2f64_v4f64:
+; CHECK:       # %bb.0: # %alloca_0
+; CHECK-NEXT:    movq qa_@GOTPCREL(%rip), %rax
+; CHECK-NEXT:    movl $1091567616, 30256(%rax) # imm = 0x41100000
+; CHECK-NEXT:    movabsq $4294967297, %rcx # imm = 0x100000001
+; CHECK-NEXT:    movq %rcx, 46348(%rax)
+; CHECK-NEXT:    vbroadcastss {{.*#+}} ymm0 = [1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216]
+; CHECK-NEXT:    vmovups %ymm0, 48296(%rax)
+; CHECK-NEXT:    vmovsd {{.*#+}} xmm0 = [7.812501848093234E-3,0.0E+0]
+; CHECK-NEXT:    vmovsd %xmm0, 47372(%rax)
+; CHECK-NEXT:    vzeroupper
+; CHECK-NEXT:    retq
 alloca_0:
   store float 9.000000e+00, ptr getelementptr inbounds ([49216 x i8], ptr @qa_, i64 0, i64 30256), align 16
   store <2 x i32> <i32 1, i32 1>, ptr getelementptr inbounds ([49216 x i8], ptr @qa_, i64 0, i64 46348), align 4

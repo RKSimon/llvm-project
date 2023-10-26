@@ -608,16 +608,10 @@ define <4 x i32> @test_v4i32_1(<4 x i32> %a) nounwind {
 ; SSE-NEXT:    psubd %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX1-LABEL: test_v4i32_1:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpmaxud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: test_v4i32_1:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
-; AVX2-NEXT:    vpmaxud %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: test_v4i32_1:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpmaxud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    retq
 ;
 ; X86-LABEL: test_v4i32_1:
 ; X86:       # %bb.0:
@@ -767,8 +761,7 @@ define <8 x i32> @test_v8i32_1(<8 x i32> %a) nounwind {
 ;
 ; AVX2-LABEL: test_v8i32_1:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [1,1,1,1,1,1,1,1]
-; AVX2-NEXT:    vpmaxud %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpmaxud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; X86-LABEL: test_v8i32_1:

@@ -96,16 +96,10 @@ define <4 x i32> @combine_vec_urem_by_minsigned(<4 x i32> %x) {
 ; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX1-LABEL: combine_vec_urem_by_minsigned:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: combine_vec_urem_by_minsigned:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [2147483647,2147483647,2147483647,2147483647]
-; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: combine_vec_urem_by_minsigned:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    retq
   %1 = urem <4 x i32> %x, <i32 -2147483648, i32 -2147483648, i32 -2147483648, i32 -2147483648>
   ret <4 x i32> %1
 }
@@ -165,16 +159,10 @@ define <4 x i32> @combine_vec_urem_by_pow2a(<4 x i32> %x) {
 ; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX1-LABEL: combine_vec_urem_by_pow2a:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: combine_vec_urem_by_pow2a:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [3,3,3,3]
-; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: combine_vec_urem_by_pow2a:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    retq
   %1 = urem <4 x i32> %x, <i32 4, i32 4, i32 4, i32 4>
   ret <4 x i32> %1
 }

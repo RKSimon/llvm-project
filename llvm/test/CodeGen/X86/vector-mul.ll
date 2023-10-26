@@ -337,8 +337,8 @@ define <4 x i32> @mul_v4i32_17(<4 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v4i32_17:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [17,17,17,17]
-; X64-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpslld $4, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v4i32_17:
@@ -465,8 +465,8 @@ define <8 x i32> @mul_v8i32_17(<8 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v8i32_17:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [17,17,17,17,17,17,17,17]
-; X64-AVX2-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpslld $4, %ymm0, %ymm1
+; X64-AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v8i32_17:
@@ -600,8 +600,10 @@ define <4 x i32> @mul_v4i32_neg33(<4 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v4i32_neg33:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [4294967263,4294967263,4294967263,4294967263]
-; X64-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpslld $5, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; X64-AVX2-NEXT:    vpsubd %xmm0, %xmm1, %xmm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v4i32_neg33:
@@ -762,8 +764,10 @@ define <8 x i32> @mul_v8i32_neg33(<8 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v8i32_neg33:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [4294967263,4294967263,4294967263,4294967263,4294967263,4294967263,4294967263,4294967263]
-; X64-AVX2-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpslld $5, %ymm0, %ymm1
+; X64-AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; X64-AVX2-NEXT:    vpsubd %ymm0, %ymm1, %ymm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v8i32_neg33:
@@ -1123,8 +1127,8 @@ define <4 x i32> @mul_v4i32_7(<4 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v4i32_7:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpslld $3, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpsubd %xmm0, %xmm1, %xmm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v4i32_7:
@@ -1232,8 +1236,8 @@ define <4 x i32> @mul_v4i32_neg63(<4 x i32> %a0) nounwind {
 ;
 ; X64-AVX2-LABEL: mul_v4i32_neg63:
 ; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [4294967233,4294967233,4294967233,4294967233]
-; X64-AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpslld $6, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpsubd %xmm1, %xmm0, %xmm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X64-AVX512DQ-LABEL: mul_v4i32_neg63:

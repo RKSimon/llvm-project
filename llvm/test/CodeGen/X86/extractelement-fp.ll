@@ -5,15 +5,13 @@
 define float @fneg_v4f32(<4 x float> %x) nounwind {
 ; X64-LABEL: fneg_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-NEXT:    vxorps %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: fneg_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-NEXT:    vxorps %xmm1, %xmm0, %xmm0
+; X86-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; X86-NEXT:    vmovss %xmm0, (%esp)
 ; X86-NEXT:    flds (%esp)
 ; X86-NEXT:    popl %eax
@@ -26,9 +24,7 @@ define float @fneg_v4f32(<4 x float> %x) nounwind {
 define double @fneg_v4f64(<4 x double> %x) nounwind {
 ; X64-LABEL: fneg_v4f64:
 ; X64:       # %bb.0:
-; X64-NEXT:    vmovddup {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0]
-; X64-NEXT:    # xmm1 = mem[0,0]
-; X64-NEXT:    vxorps %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vzeroupper
 ; X64-NEXT:    retq
 ;
@@ -38,9 +34,7 @@ define double @fneg_v4f64(<4 x double> %x) nounwind {
 ; X86-NEXT:    movl %esp, %ebp
 ; X86-NEXT:    andl $-8, %esp
 ; X86-NEXT:    subl $8, %esp
-; X86-NEXT:    vmovddup {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0]
-; X86-NEXT:    # xmm1 = mem[0,0]
-; X86-NEXT:    vxorps %xmm1, %xmm0, %xmm0
+; X86-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; X86-NEXT:    vmovlps %xmm0, (%esp)
 ; X86-NEXT:    fldl (%esp)
 ; X86-NEXT:    movl %ebp, %esp
@@ -525,15 +519,13 @@ define double @fma_v4f64(<4 x double> %x, <4 x double> %y, <4 x double> %z) noun
 define float @fabs_v4f32(<4 x float> %x) nounwind {
 ; X64-LABEL: fabs_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vbroadcastss {{.*#+}} xmm1 = [NaN,NaN,NaN,NaN]
-; X64-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: fabs_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vbroadcastss {{.*#+}} xmm1 = [NaN,NaN,NaN,NaN]
-; X86-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; X86-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; X86-NEXT:    vmovss %xmm0, (%esp)
 ; X86-NEXT:    flds (%esp)
 ; X86-NEXT:    popl %eax
@@ -951,20 +943,16 @@ define double @minpd_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 define float @copysign_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 ; X64-LABEL: copysign_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vbroadcastss {{.*#+}} xmm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; X64-NEXT:    vbroadcastss {{.*#+}} xmm2 = [NaN,NaN,NaN,NaN]
-; X64-NEXT:    vandps %xmm2, %xmm0, %xmm0
+; X64-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; X64-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vorps %xmm1, %xmm0, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: copysign_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vbroadcastss {{.*#+}} xmm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; X86-NEXT:    vbroadcastss {{.*#+}} xmm2 = [NaN,NaN,NaN,NaN]
-; X86-NEXT:    vandps %xmm2, %xmm0, %xmm0
+; X86-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1, %xmm1
+; X86-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; X86-NEXT:    vorps %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovss %xmm0, (%esp)
 ; X86-NEXT:    flds (%esp)
@@ -1227,8 +1215,7 @@ define double @nearbyint_v4f64(<4 x double> %x) nounwind {
 define float @round_v4f32(<4 x float> %x) nounwind {
 ; X64-LABEL: round_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-NEXT:    vandps %xmm1, %xmm0, %xmm1
+; X64-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; X64-NEXT:    vbroadcastss {{.*#+}} xmm2 = [4.9999997E-1,4.9999997E-1,4.9999997E-1,4.9999997E-1]
 ; X64-NEXT:    vorps %xmm2, %xmm1, %xmm1
 ; X64-NEXT:    vaddss %xmm1, %xmm0, %xmm0
@@ -1238,8 +1225,7 @@ define float @round_v4f32(<4 x float> %x) nounwind {
 ; X86-LABEL: round_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-NEXT:    vandps %xmm1, %xmm0, %xmm1
+; X86-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm1
 ; X86-NEXT:    vbroadcastss {{.*#+}} xmm2 = [4.9999997E-1,4.9999997E-1,4.9999997E-1,4.9999997E-1]
 ; X86-NEXT:    vorps %xmm2, %xmm1, %xmm1
 ; X86-NEXT:    vaddss %xmm1, %xmm0, %xmm0

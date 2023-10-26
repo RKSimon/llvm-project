@@ -122,18 +122,11 @@ define <4 x double> @constrained_vector_fdiv_v4f64() #0 {
 ; CHECK-NEXT:    divpd %xmm2, %xmm0
 ; CHECK-NEXT:    retq
 ;
-; AVX1-LABEL: constrained_vector_fdiv_v4f64:
-; AVX1:       # %bb.0: # %entry
-; AVX1-NEXT:    vmovapd {{.*#+}} ymm0 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0]
-; AVX1-NEXT:    vdivpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX1-NEXT:    retq
-;
-; AVX512-LABEL: constrained_vector_fdiv_v4f64:
-; AVX512:       # %bb.0: # %entry
-; AVX512-NEXT:    vbroadcastsd {{.*#+}} ymm0 = [1.0E+1,1.0E+1,1.0E+1,1.0E+1]
-; AVX512-NEXT:    vmovapd {{.*#+}} ymm1 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0]
-; AVX512-NEXT:    vdivpd %ymm0, %ymm1, %ymm0
-; AVX512-NEXT:    retq
+; AVX-LABEL: constrained_vector_fdiv_v4f64:
+; AVX:       # %bb.0: # %entry
+; AVX-NEXT:    vmovapd {{.*#+}} ymm0 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0]
+; AVX-NEXT:    vdivpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; AVX-NEXT:    retq
 entry:
   %div = call <4 x double> @llvm.experimental.constrained.fdiv.v4f64(
            <4 x double> <double 1.000000e+00, double 2.000000e+00,

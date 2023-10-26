@@ -1032,8 +1032,8 @@ define <4 x i32> @usubo_v4i24(<4 x i24> %a0, <4 x i24> %a1, ptr %p2) nounwind {
 ; AVX1-LABEL: usubo_v4i24:
 ; AVX1:       # %bb.0:
 ; AVX1-NEXT:    vbroadcastss {{.*#+}} xmm2 = [255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0]
-; AVX1-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vandps %xmm2, %xmm0, %xmm0
+; AVX1-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; AVX1-NEXT:    vpand %xmm2, %xmm0, %xmm0
 ; AVX1-NEXT:    vpsubd %xmm1, %xmm0, %xmm1
 ; AVX1-NEXT:    vpand %xmm2, %xmm1, %xmm0
 ; AVX1-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0

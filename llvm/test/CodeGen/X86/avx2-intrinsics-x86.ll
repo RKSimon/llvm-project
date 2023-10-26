@@ -1572,8 +1572,8 @@ define <4 x i64> @test_x86_avx2_psrlv_q_256_const() {
 ;
 ; X64-AVX-LABEL: test_x86_avx2_psrlv_q_256_const:
 ; X64-AVX:       # %bb.0:
-; X64-AVX-NEXT:    vpbroadcastq {{.*#+}} ymm0 = [4,4,4,4]
-; X64-AVX-NEXT:    # encoding: [0xc4,0xe2,0x7d,0x59,0x05,A,A,A,A]
+; X64-AVX-NEXT:    vpmovsxbq {{.*#+}} ymm0 = [4,4,4,4]
+; X64-AVX-NEXT:    # encoding: [0xc4,0xe2,0x7d,0x22,0x05,A,A,A,A]
 ; X64-AVX-NEXT:    # fixup A - offset: 5, value: {{\.?LCPI[0-9]+_[0-9]+}}-4, kind: reloc_riprel_4byte
 ; X64-AVX-NEXT:    vpsrlvq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # encoding: [0xc4,0xe2,0xfd,0x45,0x05,A,A,A,A]
 ; X64-AVX-NEXT:    # fixup A - offset: 5, value: {{\.?LCPI[0-9]+_[0-9]+}}-4, kind: reloc_riprel_4byte

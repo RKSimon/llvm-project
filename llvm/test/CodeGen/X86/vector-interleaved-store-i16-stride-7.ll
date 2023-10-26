@@ -591,8 +591,7 @@ define void @store_i16_stride7_vf4(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX2-FCP-NEXT:    vpmovsxbd {{.*#+}} ymm1 = [5,7,1,3,7,0,0,0]
 ; AVX2-FCP-NEXT:    vpermd %ymm2, %ymm1, %ymm1
 ; AVX2-FCP-NEXT:    vpshufb {{.*#+}} ymm1 = ymm1[0,1,4,5],zero,zero,zero,zero,zero,zero,ymm1[10,11,14,15,2,3,18,19],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
-; AVX2-FCP-NEXT:    vbroadcasti128 {{.*#+}} ymm3 = [1,3,5,7,1,3,5,7]
-; AVX2-FCP-NEXT:    # ymm3 = mem[0,1,0,1]
+; AVX2-FCP-NEXT:    vpmovsxbd {{.*#+}} ymm3 = [1,3,5,0,1,3,5,0]
 ; AVX2-FCP-NEXT:    vpermd %ymm0, %ymm3, %ymm3
 ; AVX2-FCP-NEXT:    vpshufb {{.*#+}} ymm3 = zero,zero,zero,zero,ymm3[0,1,4,5,8,9],zero,zero,zero,zero,zero,zero,zero,zero,ymm3[18,19,22,23,26,27],zero,zero,zero,zero,zero,zero,zero,zero
 ; AVX2-FCP-NEXT:    vpor %ymm3, %ymm1, %ymm1
@@ -600,8 +599,7 @@ define void @store_i16_stride7_vf4(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX2-FCP-NEXT:    vpermq {{.*#+}} ymm2 = ymm2[2,3,0,1]
 ; AVX2-FCP-NEXT:    vpshufb {{.*#+}} ymm2 = zero,zero,zero,zero,ymm2[0,1,8,9,4,5,6,7,4,5],zero,zero,ymm2[26,27],zero,zero,zero,zero,ymm2[24,25,20,21,22,23,20,21,28,29]
 ; AVX2-FCP-NEXT:    vpor %ymm2, %ymm3, %ymm2
-; AVX2-FCP-NEXT:    vbroadcasti128 {{.*#+}} ymm3 = [0,2,4,6,0,2,4,6]
-; AVX2-FCP-NEXT:    # ymm3 = mem[0,1,0,1]
+; AVX2-FCP-NEXT:    vpmovsxbd {{.*#+}} ymm3 = [0,2,4,0,0,2,4,0]
 ; AVX2-FCP-NEXT:    vpermd %ymm0, %ymm3, %ymm0
 ; AVX2-FCP-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[u,u,u,u,u,u,u,u,0,1,4,5,8,9,u,u,u,u,u,u,u,u,18,19,22,23,26,27,u,u,u,u]
 ; AVX2-FCP-NEXT:    vpmovsxbw {{.*#+}} ymm3 = [65535,65535,65535,65535,0,0,0,65535,65535,65535,65535,0,0,0,65535,65535]

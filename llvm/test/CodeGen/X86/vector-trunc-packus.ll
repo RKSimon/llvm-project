@@ -2606,7 +2606,7 @@ define <4 x i8> @trunc_packus_v4i64_v4i8(<4 x i64> %a0) {
 ;
 ; AVX2-LABEL: trunc_packus_v4i64_v4i8:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [255,255,255,255]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm1 = [255,255,255,255]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm1, %ymm2
 ; AVX2-NEXT:    vblendvpd %ymm2, %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
@@ -2801,7 +2801,7 @@ define void @trunc_packus_v4i64_v4i8_store(<4 x i64> %a0, ptr%p1) {
 ;
 ; AVX2-LABEL: trunc_packus_v4i64_v4i8_store:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [255,255,255,255]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm1 = [255,255,255,255]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm1, %ymm2
 ; AVX2-NEXT:    vblendvpd %ymm2, %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
@@ -3111,7 +3111,7 @@ define <8 x i8> @trunc_packus_v8i64_v8i8(ptr %p0) "min-legal-vector-width"="256"
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vmovdqa (%rdi), %ymm0
 ; AVX2-NEXT:    vmovdqa 32(%rdi), %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [255,255,255,255]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm2 = [255,255,255,255]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm2, %ymm3
 ; AVX2-NEXT:    vblendvpd %ymm3, %ymm0, %ymm2, %ymm0
 ; AVX2-NEXT:    vpcmpgtq %ymm1, %ymm2, %ymm3
@@ -3402,7 +3402,7 @@ define void @trunc_packus_v8i64_v8i8_store(ptr %p0, ptr%p1) "min-legal-vector-wi
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vmovdqa (%rdi), %ymm0
 ; AVX2-NEXT:    vmovdqa 32(%rdi), %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [255,255,255,255]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm2 = [255,255,255,255]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm2, %ymm3
 ; AVX2-NEXT:    vblendvpd %ymm3, %ymm0, %ymm2, %ymm0
 ; AVX2-NEXT:    vpcmpgtq %ymm1, %ymm2, %ymm3
@@ -3913,7 +3913,7 @@ define <16 x i8> @trunc_packus_v16i64_v16i8(ptr %p0) "min-legal-vector-width"="2
 ; AVX2-NEXT:    vmovdqa 32(%rdi), %ymm1
 ; AVX2-NEXT:    vmovdqa 64(%rdi), %ymm2
 ; AVX2-NEXT:    vmovdqa 96(%rdi), %ymm3
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [255,255,255,255]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm4 = [255,255,255,255]
 ; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm4, %ymm5
 ; AVX2-NEXT:    vblendvpd %ymm5, %ymm2, %ymm4, %ymm2
 ; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm4, %ymm5

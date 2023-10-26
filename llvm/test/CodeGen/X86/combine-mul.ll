@@ -158,15 +158,14 @@ define <4 x i64> @combine_vec_mul_negpow2c(<4 x i64> %x) {
 ;
 ; AVX-LABEL: combine_vec_mul_negpow2c:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [4294967295,4294967295,4294967295,4294967295]
-; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm1
-; AVX-NEXT:    vpsrlq $32, %ymm0, %ymm2
-; AVX-NEXT:    vpmovsxbq {{.*#+}} ymm3 = [18446744073709551615,18446744073709551614,18446744073709551612,18446744073709551600]
-; AVX-NEXT:    vpmuludq %ymm3, %ymm2, %ymm2
-; AVX-NEXT:    vpaddq %ymm2, %ymm1, %ymm1
-; AVX-NEXT:    vpsllq $32, %ymm1, %ymm1
-; AVX-NEXT:    vpmuludq %ymm3, %ymm0, %ymm0
+; AVX-NEXT:    vpmovsxbq {{.*#+}} ymm1 = [18446744073709551615,18446744073709551614,18446744073709551612,18446744073709551600]
+; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm2
+; AVX-NEXT:    vpsrlq $32, %ymm0, %ymm3
+; AVX-NEXT:    vpmuludq %ymm1, %ymm3, %ymm1
+; AVX-NEXT:    vpmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX-NEXT:    vpaddq %ymm1, %ymm0, %ymm0
+; AVX-NEXT:    vpsllq $32, %ymm0, %ymm0
+; AVX-NEXT:    vpaddq %ymm0, %ymm2, %ymm0
 ; AVX-NEXT:    retq
   %1 = mul <4 x i64> %x, <i64 -1, i64 -2, i64 -4, i64 -16>
   ret <4 x i64> %1

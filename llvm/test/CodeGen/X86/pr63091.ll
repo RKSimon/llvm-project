@@ -43,8 +43,7 @@ define <4 x i32> @merge_and(<16 x i8> %0, <4 x i32> %1) {
 ; AVX2-LABEL: merge_and:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [1,1,1,1]
-; AVX2-NEXT:    vandps %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vblendps {{.*#+}} xmm0 = xmm0[0,1,2],xmm1[3]
 ; AVX2-NEXT:    retq
 ;

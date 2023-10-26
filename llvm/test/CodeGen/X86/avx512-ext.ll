@@ -3000,8 +3000,7 @@ define <4 x i32> @zext_4xi1_to_4x32(<4 x i8> %x, <4 x i8> %y) #0 {
 ; KNL:       # %bb.0:
 ; KNL-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
 ; KNL-NEXT:    vpmovzxbd {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero
-; KNL-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
-; KNL-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; KNL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; KNL-NEXT:    retq
 ;
 ; SKX-LABEL: zext_4xi1_to_4x32:

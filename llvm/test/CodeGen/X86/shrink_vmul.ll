@@ -2192,8 +2192,7 @@ define void @PR34947(ptr %p0, ptr %p1) nounwind {
 ; X86-AVX2-NEXT:    vmovd %xmm0, %eax
 ; X86-AVX2-NEXT:    xorl %edx, %edx
 ; X86-AVX2-NEXT:    divl 32(%esi)
-; X86-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm0 = [8199,8199,8199,8199,8199,8199,8199,8199]
-; X86-AVX2-NEXT:    vpmulld %ymm0, %ymm1, %ymm0
+; X86-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm0
 ; X86-AVX2-NEXT:    imull $8199, %edx, %eax # imm = 0x2007
 ; X86-AVX2-NEXT:    movl %eax, (%eax)
 ; X86-AVX2-NEXT:    vmovdqa %ymm0, (%eax)
@@ -2395,8 +2394,7 @@ define void @PR34947(ptr %p0, ptr %p1) nounwind {
 ; X64-AVX2-NEXT:    vmovd %xmm0, %eax
 ; X64-AVX2-NEXT:    xorl %edx, %edx
 ; X64-AVX2-NEXT:    divl 32(%rsi)
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm0 = [8199,8199,8199,8199,8199,8199,8199,8199]
-; X64-AVX2-NEXT:    vpmulld %ymm0, %ymm1, %ymm0
+; X64-AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm0
 ; X64-AVX2-NEXT:    imull $8199, %edx, %eax # imm = 0x2007
 ; X64-AVX2-NEXT:    movl %eax, (%rax)
 ; X64-AVX2-NEXT:    vmovdqa %ymm0, (%rax)

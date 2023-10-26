@@ -507,8 +507,7 @@ define <4 x i32> @combine_vec_shl_gt_lshr0(<4 x i32> %x) {
 ; AVX-LABEL: combine_vec_shl_gt_lshr0:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpslld $2, %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [4294967264,4294967264,4294967264,4294967264]
-; AVX-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = lshr <4 x i32> %x, <i32 3, i32 3, i32 3, i32 3>
   %2 = shl <4 x i32> %1, <i32 5, i32 5, i32 5, i32 5>
@@ -543,8 +542,7 @@ define <4 x i32> @combine_vec_shl_le_lshr0(<4 x i32> %x) {
 ; AVX-LABEL: combine_vec_shl_le_lshr0:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpsrld $2, %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1073741816,1073741816,1073741816,1073741816]
-; AVX-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = lshr <4 x i32> %x, <i32 5, i32 5, i32 5, i32 5>
   %2 = shl <4 x i32> %1, <i32 3, i32 3, i32 3, i32 3>
@@ -589,8 +587,7 @@ define <4 x i32> @combine_vec_shl_ashr0(<4 x i32> %x) {
 ;
 ; AVX-LABEL: combine_vec_shl_ashr0:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vbroadcastss {{.*#+}} xmm1 = [4294967264,4294967264,4294967264,4294967264]
-; AVX-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = ashr <4 x i32> %x, <i32 5, i32 5, i32 5, i32 5>
   %2 = shl <4 x i32> %1, <i32 5, i32 5, i32 5, i32 5>
@@ -623,8 +620,7 @@ define <4 x i32> @combine_vec_shl_add0(<4 x i32> %x) {
 ; AVX-LABEL: combine_vec_shl_add0:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpslld $2, %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [20,20,20,20]
-; AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = add <4 x i32> %x, <i32 5, i32 5, i32 5, i32 5>
   %2 = shl <4 x i32> %1, <i32 2, i32 2, i32 2, i32 2>
@@ -670,8 +666,7 @@ define <4 x i32> @combine_vec_shl_or0(<4 x i32> %x) {
 ; AVX-LABEL: combine_vec_shl_or0:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpslld $2, %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [20,20,20,20]
-; AVX-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = or  <4 x i32> %x, <i32 5, i32 5, i32 5, i32 5>
   %2 = shl <4 x i32> %1, <i32 2, i32 2, i32 2, i32 2>
@@ -726,8 +721,7 @@ define <4 x i32> @combine_vec_shl_mul0(<4 x i32> %x) {
 ;
 ; AVX-LABEL: combine_vec_shl_mul0:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [20,20,20,20]
-; AVX-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = mul <4 x i32> %x, <i32 5, i32 5, i32 5, i32 5>
   %2 = shl <4 x i32> %1, <i32 2, i32 2, i32 2, i32 2>
@@ -781,8 +775,7 @@ define <4 x i32> @combine_vec_add_shl_nonsplat(<4 x i32> %a0)  {
 ; AVX-LABEL: combine_vec_add_shl_nonsplat:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpsllvd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [3,3,3,3]
-; AVX-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = shl <4 x i32> %a0, <i32 2, i32 3, i32 4, i32 5>
   %2 = add <4 x i32> %1, <i32 3, i32 3, i32 3, i32 3>
@@ -817,8 +810,7 @@ define <4 x i32> @combine_vec_add_shl_and_nonsplat(<4 x i32> %a0)  {
 ; AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX-NEXT:    vpblendw {{.*#+}} xmm0 = xmm1[0],xmm0[1],xmm1[2],xmm0[3],xmm1[4],xmm0[5],xmm1[6],xmm0[7]
 ; AVX-NEXT:    vpsllvd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [15,15,15,15]
-; AVX-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = and <4 x i32> %a0, <i32 4294901760, i32 4294901760, i32 4294901760, i32 4294901760>
   %2 = shl <4 x i32> %1, <i32 2, i32 3, i32 4, i32 5>
@@ -851,8 +843,7 @@ define <4 x i32> @combine_vec_add_shuffle_shl(<4 x i32> %a0)  {
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,1,0]
 ; AVX-NEXT:    vpsllvd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [3,3,3,3]
-; AVX-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = shl <4 x i32> %a0, <i32 2, i32 3, i32 0, i32 1>
   %2 = shufflevector <4 x i32> %1, <4 x i32> undef, <4 x i32> <i32 0, i32 1, i32 1, i32 0>

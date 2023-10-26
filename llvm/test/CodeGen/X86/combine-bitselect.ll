@@ -1011,32 +1011,23 @@ define <4 x i1> @bitselect_v4i1_loop(<4 x i32> %a0, <4 x i32> %a1) {
 ; XOP-NEXT:    vblendvps %xmm0, %xmm2, %xmm1, %xmm0
 ; XOP-NEXT:    retq
 ;
-; AVX1-LABEL: bitselect_v4i1_loop:
-; AVX1:       # %bb.0: # %bb
-; AVX1-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX1-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm0
-; AVX1-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm2
-; AVX1-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
-; AVX1-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: bitselect_v4i1_loop:
-; AVX2:       # %bb.0: # %bb
-; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [12,12,12,12]
-; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [15,15,15,15]
-; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm1, %xmm1
-; AVX2-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: bitselect_v4i1_loop:
+; AVX:       # %bb.0: # %bb
+; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm0
+; AVX-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm2
+; AVX-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; AVX-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
+; AVX-NEXT:    retq
 ;
 ; AVX512F-LABEL: bitselect_v4i1_loop:
 ; AVX512F:       # %bb.0: # %bb
 ; AVX512F-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
 ; AVX512F-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
-; AVX512F-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm1, %k1
-; AVX512F-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm1, %k2
+; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [12,12,12,12]
+; AVX512F-NEXT:    vpcmpeqd %zmm2, %zmm1, %k1
+; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [15,15,15,15]
+; AVX512F-NEXT:    vpcmpeqd %zmm2, %zmm1, %k2
 ; AVX512F-NEXT:    vptestnmd %zmm0, %zmm0, %k0 {%k2}
 ; AVX512F-NEXT:    vptestmd %zmm0, %zmm0, %k1 {%k1}
 ; AVX512F-NEXT:    korw %k0, %k1, %k1

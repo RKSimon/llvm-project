@@ -356,8 +356,7 @@ define <4 x i1> @shr_to_ror_eq_4xi32_s4(<4 x i32> %x) {
 ; CHECK-AVX2-LABEL: shr_to_ror_eq_4xi32_s4:
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpsrld $4, %xmm0, %xmm1
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [268435455,268435455,268435455,268435455]
-; CHECK-AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm0, %xmm1, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; CHECK-AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
@@ -441,8 +440,7 @@ define <4 x i1> @shl_to_ror_eq_4xi32_s7_fail_no_p2(<4 x i32> %x) {
 ; CHECK-AVX2-LABEL: shl_to_ror_eq_4xi32_s7_fail_no_p2:
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpslld $7, %xmm0, %xmm1
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [4294967168,4294967168,4294967168,4294967168]
-; CHECK-AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm0, %xmm1, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; CHECK-AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
@@ -493,8 +491,7 @@ define <4 x i1> @shr_to_ror_eq_4xi32_s4_fail_no_splat(<4 x i32> %x) {
 ; CHECK-AVX2-LABEL: shr_to_ror_eq_4xi32_s4_fail_no_splat:
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpsrlvd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [268435455,268435455,268435455,268435455]
-; CHECK-AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm0, %xmm1, %xmm0
 ; CHECK-AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; CHECK-AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0

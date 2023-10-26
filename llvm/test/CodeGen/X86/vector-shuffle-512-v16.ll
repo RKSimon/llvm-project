@@ -862,8 +862,8 @@ define void @ispc_1864(ptr %arg) {
 ; ALL-NEXT:    .cfi_def_cfa_register %rbp
 ; ALL-NEXT:    andq $-64, %rsp
 ; ALL-NEXT:    subq $4864, %rsp # imm = 0x1300
-; ALL-NEXT:    vbroadcastss {{.*#+}} ymm0 = [-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0]
-; ALL-NEXT:    vmulps 32(%rdi), %ymm0, %ymm0
+; ALL-NEXT:    vmovups 32(%rdi), %ymm0
+; ALL-NEXT:    vmulps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; ALL-NEXT:    vcvtps2pd %ymm0, %zmm0
 ; ALL-NEXT:    vshuff64x2 {{.*#+}} zmm0 = zmm0[2,3,4,5,4,5,6,7]
 ; ALL-NEXT:    vmovapd %ymm0, {{[0-9]+}}(%rsp)

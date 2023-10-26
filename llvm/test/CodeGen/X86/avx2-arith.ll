@@ -243,22 +243,30 @@ define <8 x i32> @mul_const9(<8 x i32> %x) {
 
 ; ptr 0x01010101
 define <4 x i32> @mul_const10(<4 x i32> %x) {
-; CHECK-LABEL: mul_const10:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [16843009,16843009,16843009,16843009]
-; CHECK-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
-; CHECK-NEXT:    ret{{[l|q]}}
+; X86-LABEL: mul_const10:
+; X86:       # %bb.0:
+; X86-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-NEXT:    retl
+;
+; X64-LABEL: mul_const10:
+; X64:       # %bb.0:
+; X64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-NEXT:    retq
   %m = mul <4 x i32> %x, <i32 16843009, i32 16843009, i32 16843009, i32 16843009>
   ret <4 x i32> %m
 }
 
 ; ptr 0x80808080
 define <4 x i32> @mul_const11(<4 x i32> %x) {
-; CHECK-LABEL: mul_const11:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2155905152,2155905152,2155905152,2155905152]
-; CHECK-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
-; CHECK-NEXT:    ret{{[l|q]}}
+; X86-LABEL: mul_const11:
+; X86:       # %bb.0:
+; X86-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-NEXT:    retl
+;
+; X64-LABEL: mul_const11:
+; X64:       # %bb.0:
+; X64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-NEXT:    retq
   %m = mul <4 x i32> %x, <i32 2155905152, i32 2155905152, i32 2155905152, i32 2155905152>
   ret <4 x i32> %m
 }

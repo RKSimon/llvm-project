@@ -556,7 +556,7 @@ define void @store_i32_stride3_vf8(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX2-FCP-NEXT:    vmovaps (%rdi), %ymm0
 ; AVX2-FCP-NEXT:    vmovaps (%rsi), %ymm1
 ; AVX2-FCP-NEXT:    vmovaps (%rdx), %ymm2
-; AVX2-FCP-NEXT:    vbroadcastf128 {{.*#+}} ymm3 = [1,0,2,2,1,0,2,2]
+; AVX2-FCP-NEXT:    vbroadcastf128 {{.*#+}} ymm3 = [1,0,0,2,1,0,0,2]
 ; AVX2-FCP-NEXT:    # ymm3 = mem[0,1,0,1]
 ; AVX2-FCP-NEXT:    vpermps %ymm1, %ymm3, %ymm3
 ; AVX2-FCP-NEXT:    vpermpd {{.*#+}} ymm4 = ymm0[0,0,2,1]

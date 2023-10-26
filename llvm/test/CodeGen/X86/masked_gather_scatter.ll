@@ -515,13 +515,11 @@ define <8 x i32> @test9(ptr %base, <8 x i64> %ind1, <8 x i32>%ind5) {
 ; KNL_32-LABEL: test9:
 ; KNL_32:       # %bb.0: # %entry
 ; KNL_32-NEXT:    vpbroadcastd {{[0-9]+}}(%esp), %ymm2
-; KNL_32-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [80,80,80,80,80,80,80,80]
-; KNL_32-NEXT:    vpmulld %ymm3, %ymm1, %ymm1
 ; KNL_32-NEXT:    vpmovqd %zmm0, %ymm0
-; KNL_32-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [820,820,820,820,820,820,820,820]
-; KNL_32-NEXT:    vpmulld %ymm3, %ymm0, %ymm0
-; KNL_32-NEXT:    vpaddd %ymm0, %ymm2, %ymm0
-; KNL_32-NEXT:    vpaddd %ymm1, %ymm0, %ymm1
+; KNL_32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; KNL_32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; KNL_32-NEXT:    vpaddd %ymm1, %ymm2, %ymm1
+; KNL_32-NEXT:    vpaddd %ymm0, %ymm1, %ymm1
 ; KNL_32-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; KNL_32-NEXT:    movw $255, %ax
 ; KNL_32-NEXT:    kmovw %eax, %k1
@@ -599,13 +597,11 @@ define <8 x i32> @test10(ptr %base, <8 x i64> %i1, <8 x i32>%ind5) {
 ; KNL_32-LABEL: test10:
 ; KNL_32:       # %bb.0: # %entry
 ; KNL_32-NEXT:    vpbroadcastd {{[0-9]+}}(%esp), %ymm2
-; KNL_32-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [80,80,80,80,80,80,80,80]
-; KNL_32-NEXT:    vpmulld %ymm3, %ymm1, %ymm1
 ; KNL_32-NEXT:    vpmovqd %zmm0, %ymm0
-; KNL_32-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [820,820,820,820,820,820,820,820]
-; KNL_32-NEXT:    vpmulld %ymm3, %ymm0, %ymm0
-; KNL_32-NEXT:    vpaddd %ymm0, %ymm2, %ymm0
-; KNL_32-NEXT:    vpaddd %ymm1, %ymm0, %ymm1
+; KNL_32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; KNL_32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; KNL_32-NEXT:    vpaddd %ymm1, %ymm2, %ymm1
+; KNL_32-NEXT:    vpaddd %ymm0, %ymm1, %ymm1
 ; KNL_32-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; KNL_32-NEXT:    movw $255, %ax
 ; KNL_32-NEXT:    kmovw %eax, %k1

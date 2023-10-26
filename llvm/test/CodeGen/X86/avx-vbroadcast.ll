@@ -920,8 +920,7 @@ define double @broadcast_scale_xyz(ptr nocapture readonly, ptr nocapture readonl
 define void @fmul_by_v2f32_broadcast() nounwind {
 ; X86-LABEL: fmul_by_v2f32_broadcast:
 ; X86:       ## %bb.0:
-; X86-NEXT:    vmovddup {{.*#+}} xmm0 = [3.1E+1,0.0E+0,3.1E+1,0.0E+0]
-; X86-NEXT:    ## xmm0 = mem[0,0]
+; X86-NEXT:    vmovsd {{.*#+}} xmm0 = [3.1E+1,1.0E+0,0.0E+0,0.0E+0]
 ; X86-NEXT:    ## implicit-def: $xmm1
 ; X86-NEXT:    .p2align 4, 0x90
 ; X86-NEXT:  LBB42_1: ## =>This Inner Loop Header: Depth=1
@@ -934,8 +933,7 @@ define void @fmul_by_v2f32_broadcast() nounwind {
 ;
 ; X64-LABEL: fmul_by_v2f32_broadcast:
 ; X64:       ## %bb.0:
-; X64-NEXT:    vmovddup {{.*#+}} xmm0 = [3.1E+1,0.0E+0,3.1E+1,0.0E+0]
-; X64-NEXT:    ## xmm0 = mem[0,0]
+; X64-NEXT:    vmovsd {{.*#+}} xmm0 = [3.1E+1,1.0E+0,0.0E+0,0.0E+0]
 ; X64-NEXT:    ## implicit-def: $xmm1
 ; X64-NEXT:    .p2align 4, 0x90
 ; X64-NEXT:  LBB42_1: ## =>This Inner Loop Header: Depth=1
@@ -949,9 +947,9 @@ define void @fmul_by_v2f32_broadcast() nounwind {
 1:
   %2 = phi <2 x float> [ undef, %0 ], [ %5, %1 ]
   %3 = load <2 x float>, ptr poison, align 8
-  %4 = fmul <2 x float> %3, <float 3.100000e+01, float 0.000000e+00>
+  %4 = fmul <2 x float> %3, <float 3.100000e+01, float 1.000000e+00>
   store <2 x float> %4, ptr poison, align 8
-  %5 = fmul <2 x float> %2, <float 3.100000e+01, float 0.000000e+00>
+  %5 = fmul <2 x float> %2, <float 3.100000e+01, float 1.000000e+00>
   store <2 x float> %5, ptr poison, align 8
   br label %1
 }

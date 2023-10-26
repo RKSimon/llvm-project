@@ -526,18 +526,11 @@ define <4 x i64> @shuffle_v4i64_67zz(<4 x i64> %a, <4 x i64> %b) {
 ;;; Memory folding cases
 
 define <4 x double> @ld0_hi0_lo1_4f64(ptr %pa, <4 x double> %b) nounwind uwtable readnone ssp {
-; AVX1-LABEL: ld0_hi0_lo1_4f64:
-; AVX1:       # %bb.0: # %entry
-; AVX1-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
-; AVX1-NEXT:    vaddpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: ld0_hi0_lo1_4f64:
-; AVX2:       # %bb.0: # %entry
-; AVX2-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vaddpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    retq
+; ALL-LABEL: ld0_hi0_lo1_4f64:
+; ALL:       # %bb.0: # %entry
+; ALL-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
+; ALL-NEXT:    vaddpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; ALL-NEXT:    retq
 entry:
   %a = load <4 x double>, ptr %pa
   %shuffle = shufflevector <4 x double> %a, <4 x double> %b, <4 x i32> <i32 2, i32 3, i32 4, i32 5>
@@ -546,18 +539,11 @@ entry:
 }
 
 define <4 x double> @ld1_hi0_hi1_4f64(<4 x double> %a, ptr %pb) nounwind uwtable readnone ssp {
-; AVX1-LABEL: ld1_hi0_hi1_4f64:
-; AVX1:       # %bb.0: # %entry
-; AVX1-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
-; AVX1-NEXT:    vaddpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: ld1_hi0_hi1_4f64:
-; AVX2:       # %bb.0: # %entry
-; AVX2-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vaddpd %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    retq
+; ALL-LABEL: ld1_hi0_hi1_4f64:
+; ALL:       # %bb.0: # %entry
+; ALL-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
+; ALL-NEXT:    vaddpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; ALL-NEXT:    retq
 entry:
   %b = load <4 x double>, ptr %pb
   %shuffle = shufflevector <4 x double> %a, <4 x double> %b, <4 x i32> <i32 2, i32 3, i32 6, i32 7>
@@ -566,18 +552,11 @@ entry:
 }
 
 define <8 x float> @ld0_hi0_lo1_8f32(ptr %pa, <8 x float> %b) nounwind uwtable readnone ssp {
-; AVX1-LABEL: ld0_hi0_lo1_8f32:
-; AVX1:       # %bb.0: # %entry
-; AVX1-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
-; AVX1-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: ld0_hi0_lo1_8f32:
-; AVX2:       # %bb.0: # %entry
-; AVX2-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
-; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vaddps %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    retq
+; ALL-LABEL: ld0_hi0_lo1_8f32:
+; ALL:       # %bb.0: # %entry
+; ALL-NEXT:    vperm2f128 $3, (%rdi), %ymm0, %ymm0 # ymm0 = mem[2,3],ymm0[0,1]
+; ALL-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; ALL-NEXT:    retq
 entry:
   %a = load <8 x float>, ptr %pa
   %shuffle = shufflevector <8 x float> %a, <8 x float> %b, <8 x i32> <i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11>
@@ -586,18 +565,11 @@ entry:
 }
 
 define <8 x float> @ld1_hi0_hi1_8f32(<8 x float> %a, ptr %pb) nounwind uwtable readnone ssp {
-; AVX1-LABEL: ld1_hi0_hi1_8f32:
-; AVX1:       # %bb.0: # %entry
-; AVX1-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
-; AVX1-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: ld1_hi0_hi1_8f32:
-; AVX2:       # %bb.0: # %entry
-; AVX2-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
-; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vaddps %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    retq
+; ALL-LABEL: ld1_hi0_hi1_8f32:
+; ALL:       # %bb.0: # %entry
+; ALL-NEXT:    vperm2f128 $49, (%rdi), %ymm0, %ymm0 # ymm0 = ymm0[2,3],mem[2,3]
+; ALL-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; ALL-NEXT:    retq
 entry:
   %b = load <8 x float>, ptr %pb
   %shuffle = shufflevector <8 x float> %a, <8 x float> %b, <8 x i32> <i32 4, i32 5, i32 6, i32 7, i32 12, i32 13, i32 14, i32 15>

@@ -224,7 +224,8 @@ define <4 x i64> @imulq256_bcast(<4 x i64> %x) {
 ; AVX512DQ-LABEL: imulq256_bcast:
 ; AVX512DQ:       # %bb.0:
 ; AVX512DQ-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
-; AVX512DQ-NEXT:    vpmullq {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %zmm0, %zmm0
+; AVX512DQ-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [1337,1337,1337,1337]
+; AVX512DQ-NEXT:    vpmullq %zmm1, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    # kill: def $ymm0 killed $ymm0 killed $zmm0
 ; AVX512DQ-NEXT:    retq
 ;
@@ -1063,8 +1064,7 @@ define <16 x float>  @test_fxor(<16 x float> %a) {
 define <8 x float>  @test_fxor_8f32(<8 x float> %a) {
 ; AVX512F-LABEL: test_fxor_8f32:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; AVX512F-NEXT:    vxorps %ymm1, %ymm0, %ymm0
+; AVX512F-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX512F-NEXT:    retq
 ;
 ; AVX512VL-LABEL: test_fxor_8f32:
@@ -1074,14 +1074,12 @@ define <8 x float>  @test_fxor_8f32(<8 x float> %a) {
 ;
 ; AVX512BW-LABEL: test_fxor_8f32:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; AVX512BW-NEXT:    vxorps %ymm1, %ymm0, %ymm0
+; AVX512BW-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX512BW-NEXT:    retq
 ;
 ; AVX512DQ-LABEL: test_fxor_8f32:
 ; AVX512DQ:       # %bb.0:
-; AVX512DQ-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; AVX512DQ-NEXT:    vxorps %ymm1, %ymm0, %ymm0
+; AVX512DQ-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX512DQ-NEXT:    retq
 ;
 ; SKX-LABEL: test_fxor_8f32:

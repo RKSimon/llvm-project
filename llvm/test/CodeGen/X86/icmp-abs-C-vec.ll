@@ -103,8 +103,7 @@ define <4 x i1> @illegal_abs_to_eq_or(<4 x i64> %x) {
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubq %ymm0, %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvpd %ymm0, %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackssdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vzeroupper
@@ -163,8 +162,7 @@ define <4 x i64> @illegal_abs_to_eq_or_sext(<4 x i64> %x) {
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubq %ymm0, %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvpd %ymm0, %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; SSE41-LABEL: illegal_abs_to_eq_or_sext:
@@ -223,8 +221,7 @@ define <4 x i1> @illegal_abs_to_ne_and(<4 x i64> %x) {
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubq %ymm0, %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvpd %ymm0, %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
 ; AVX2-NEXT:    vpxor %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
@@ -289,8 +286,7 @@ define <4 x i64> @illegal_abs_to_ne_and_sext(<4 x i64> %x) {
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubq %ymm0, %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvpd %ymm0, %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
 ; AVX2-NEXT:    vpxor %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
@@ -353,8 +349,7 @@ define <4 x i1> @legal_abs_eq_unchanged(<4 x i32> %x) {
 ; AVX2-LABEL: legal_abs_eq_unchanged:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; SSE41-LABEL: legal_abs_eq_unchanged:
@@ -387,8 +382,7 @@ define <4 x i32> @legal_abs_eq_unchanged_sext(<4 x i32> %x) {
 ; AVX2-LABEL: legal_abs_eq_unchanged_sext:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; SSE41-LABEL: legal_abs_eq_unchanged_sext:
@@ -423,8 +417,7 @@ define <4 x i1> @legal_abs_ne_unchangedd(<4 x i32> %x) {
 ; AVX2-LABEL: legal_abs_ne_unchangedd:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
@@ -464,8 +457,7 @@ define <4 x i32> @legal_abs_ne_unchangedd_sext(<4 x i32> %x) {
 ; AVX2-LABEL: legal_abs_ne_unchangedd_sext:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
@@ -506,10 +498,8 @@ define <4 x i1> @eq_or_to_abs_vec4x64(<4 x i64> %x) {
 ;
 ; AVX2-LABEL: eq_or_to_abs_vec4x64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [18446744073709551487,18446744073709551487,18446744073709551487,18446744073709551487]
-; AVX2-NEXT:    vpcmpeqq %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackssdw %xmm1, %xmm0, %xmm0
@@ -565,10 +555,8 @@ define <4 x i64> @eq_or_to_abs_vec4x64_sext(<4 x i64> %x) {
 ;
 ; AVX2-LABEL: eq_or_to_abs_vec4x64_sext:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [18446744073709551487,18446744073709551487,18446744073709551487,18446744073709551487]
-; AVX2-NEXT:    vpcmpeqq %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    retq
 ;
@@ -635,11 +623,9 @@ define <4 x i1> @ne_and_to_abs_vec4x64(<4 x i64> %x) {
 ;
 ; AVX2-LABEL: ne_and_to_abs_vec4x64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
 ; AVX2-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [18446744073709551487,18446744073709551487,18446744073709551487,18446744073709551487]
-; AVX2-NEXT:    vpcmpeqq %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
@@ -701,11 +687,9 @@ define <4 x i64> @ne_and_to_abs_vec4x64_sext(<4 x i64> %x) {
 ;
 ; AVX2-LABEL: ne_and_to_abs_vec4x64_sext:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [129,129,129,129]
-; AVX2-NEXT:    vpcmpeqq %ymm1, %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
 ; AVX2-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [18446744073709551487,18446744073709551487,18446744073709551487,18446744073709551487]
-; AVX2-NEXT:    vpcmpeqq %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
@@ -775,9 +759,8 @@ define <4 x i1> @eq_or_to_abs_vec4x32(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: eq_or_to_abs_vec4x32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; SSE41-LABEL: eq_or_to_abs_vec4x32:
@@ -810,9 +793,8 @@ define <4 x i32> @eq_or_to_abs_vec4x32_sext(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: eq_or_to_abs_vec4x32_sext:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; SSE41-LABEL: eq_or_to_abs_vec4x32_sext:
@@ -847,9 +829,8 @@ define <4 x i1> @ne_and_to_abs_vec4x32(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: ne_and_to_abs_vec4x32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
@@ -888,9 +869,8 @@ define <4 x i32> @ne_and_to_abs_vec4x32_sext(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: ne_and_to_abs_vec4x32_sext:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
 ; AVX2-NEXT:    vpabsd %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq

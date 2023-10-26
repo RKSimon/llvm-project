@@ -83,15 +83,13 @@ define <4 x i32> @test_mul_v4i32_v4i8(<4 x i8> %A) {
 ; KNL-32-LABEL: test_mul_v4i32_v4i8:
 ; KNL-32:       # %bb.0:
 ; KNL-32-NEXT:    vpmovzxbd {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero
-; KNL-32-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [18778,18778,18778,18778]
-; KNL-32-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; KNL-32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; KNL-32-NEXT:    retl
 ;
 ; KNL-64-LABEL: test_mul_v4i32_v4i8:
 ; KNL-64:       # %bb.0:
 ; KNL-64-NEXT:    vpmovzxbd {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero
-; KNL-64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [18778,18778,18778,18778]
-; KNL-64-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; KNL-64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; KNL-64-NEXT:    retq
   %z = zext <4 x i8> %A to <4 x i32>
   %m = mul nuw nsw <4 x i32> %z, <i32 18778, i32 18778, i32 18778, i32 18778>
@@ -180,15 +178,13 @@ define <8 x i32> @test_mul_v8i32_v8i8(<8 x i8> %A) {
 ; KNL-32-LABEL: test_mul_v8i32_v8i8:
 ; KNL-32:       # %bb.0:
 ; KNL-32-NEXT:    vpmovzxbd {{.*#+}} ymm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
-; KNL-32-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [18778,18778,18778,18778,18778,18778,18778,18778]
-; KNL-32-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; KNL-32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
 ; KNL-32-NEXT:    retl
 ;
 ; KNL-64-LABEL: test_mul_v8i32_v8i8:
 ; KNL-64:       # %bb.0:
 ; KNL-64-NEXT:    vpmovzxbd {{.*#+}} ymm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
-; KNL-64-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [18778,18778,18778,18778,18778,18778,18778,18778]
-; KNL-64-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; KNL-64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; KNL-64-NEXT:    retq
   %z = zext <8 x i8> %A to <8 x i32>
   %m = mul nuw nsw <8 x i32> %z, <i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778>
@@ -356,15 +352,13 @@ define <4 x i32> @test_mul_v4i32_v4i16(<4 x i16> %A) {
 ; AVX-32-LABEL: test_mul_v4i32_v4i16:
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vpmovzxwd {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero
-; AVX-32-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [18778,18778,18778,18778]
-; AVX-32-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; AVX-32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; AVX-32-NEXT:    retl
 ;
 ; AVX-64-LABEL: test_mul_v4i32_v4i16:
 ; AVX-64:       # %bb.0:
 ; AVX-64-NEXT:    vpmovzxwd {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero
-; AVX-64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [18778,18778,18778,18778]
-; AVX-64-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; AVX-64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-64-NEXT:    retq
   %z = zext <4 x i16> %A to <4 x i32>
   %m = mul nuw nsw <4 x i32> %z, <i32 18778, i32 18778, i32 18778, i32 18778>
@@ -418,15 +412,13 @@ define <8 x i32> @test_mul_v8i32_v8i16(<8 x i16> %A) {
 ; AVX-32-LABEL: test_mul_v8i32_v8i16:
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vpmovzxwd {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
-; AVX-32-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [18778,18778,18778,18778,18778,18778,18778,18778]
-; AVX-32-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX-32-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
 ; AVX-32-NEXT:    retl
 ;
 ; AVX-64-LABEL: test_mul_v8i32_v8i16:
 ; AVX-64:       # %bb.0:
 ; AVX-64-NEXT:    vpmovzxwd {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
-; AVX-64-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [18778,18778,18778,18778,18778,18778,18778,18778]
-; AVX-64-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX-64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX-64-NEXT:    retq
   %z = zext <8 x i16> %A to <8 x i32>
   %m = mul nuw nsw <8 x i32> %z, <i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778, i32 18778>

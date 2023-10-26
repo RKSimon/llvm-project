@@ -21,20 +21,16 @@ define <4 x float> @PR32368_128(<4 x float>) {
 ;
 ; AVX2-LABEL: PR32368_128:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [4294967004,4294967004,4294967004,4294967004]
-; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vaddps %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [291,291,291,291]
-; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: PR32368_128:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vbroadcastss {{.*#+}} xmm1 = [4294967004,4294967004,4294967004,4294967004]
-; AVX512-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX512-NEXT:    vaddps %xmm0, %xmm0, %xmm0
-; AVX512-NEXT:    vbroadcastss {{.*#+}} xmm1 = [291,291,291,291]
-; AVX512-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX512-NEXT:    retq
   %2 = bitcast <4 x float> %0 to <4 x i32>
   %3 = and <4 x i32> %2, <i32 -292, i32 -292, i32 -292, i32 -292>
@@ -68,20 +64,16 @@ define <8 x float> @PR32368_256(<8 x float>) {
 ;
 ; AVX2-LABEL: PR32368_256:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [4294967004,4294967004,4294967004,4294967004,4294967004,4294967004,4294967004,4294967004]
-; AVX2-NEXT:    vandps %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vaddps %ymm0, %ymm0, %ymm0
-; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [291,291,291,291,291,291,291,291]
-; AVX2-NEXT:    vandps %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: PR32368_256:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vbroadcastss {{.*#+}} ymm1 = [4294967004,4294967004,4294967004,4294967004,4294967004,4294967004,4294967004,4294967004]
-; AVX512-NEXT:    vandps %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX512-NEXT:    vaddps %ymm0, %ymm0, %ymm0
-; AVX512-NEXT:    vbroadcastss {{.*#+}} ymm1 = [291,291,291,291,291,291,291,291]
-; AVX512-NEXT:    vandps %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX512-NEXT:    retq
   %2 = bitcast <8 x float> %0 to <8 x i32>
   %3 = and <8 x i32> %2, <i32 -292, i32 -292, i32 -292, i32 -292, i32 -292, i32 -292, i32 -292, i32 -292>

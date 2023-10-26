@@ -37,9 +37,8 @@ define float @sqrt_ieee_ninf(float %f) #0 {
   ; CHECK-NEXT:   [[VMULSSrr5:%[0-9]+]]:fr32 = ninf afn nofpexcept VMULSSrr killed [[VMULSSrr4]], killed [[VFMADD213SSr1]], implicit $mxcsr
   ; CHECK-NEXT:   [[COPY1:%[0-9]+]]:vr128 = COPY [[VMULSSrr5]]
   ; CHECK-NEXT:   [[COPY2:%[0-9]+]]:vr128 = COPY [[COPY]]
-  ; CHECK-NEXT:   [[VPBROADCASTDrm:%[0-9]+]]:vr128 = VPBROADCASTDrm $rip, 1, $noreg, %const.2, $noreg :: (load (s32) from constant-pool)
-  ; CHECK-NEXT:   [[VPANDrr:%[0-9]+]]:vr128 = VPANDrr killed [[COPY2]], killed [[VPBROADCASTDrm]]
-  ; CHECK-NEXT:   [[COPY3:%[0-9]+]]:fr32 = COPY [[VPANDrr]]
+  ; CHECK-NEXT:   [[VPANDrm:%[0-9]+]]:vr128 = VPANDrm killed [[COPY2]], $rip, 1, $noreg, %const.2, $noreg :: (load (s128) from constant-pool)
+  ; CHECK-NEXT:   [[COPY3:%[0-9]+]]:fr32 = COPY [[VPANDrm]]
   ; CHECK-NEXT:   [[VCMPSSrm:%[0-9]+]]:fr32 = nofpexcept VCMPSSrm killed [[COPY3]], $rip, 1, $noreg, %const.3, $noreg, 1, implicit $mxcsr :: (load (s32) from constant-pool)
   ; CHECK-NEXT:   [[COPY4:%[0-9]+]]:vr128 = COPY [[VCMPSSrm]]
   ; CHECK-NEXT:   [[VPANDNrr:%[0-9]+]]:vr128 = VPANDNrr killed [[COPY4]], killed [[COPY1]]

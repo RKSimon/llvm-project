@@ -875,28 +875,34 @@ define i1 @mask_v8i32(<8 x i32> %a0) {
 ; SSE41-NEXT:    sete %al
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: mask_v8i32:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
-; AVX1-NEXT:    sete %al
-; AVX1-NEXT:    vzeroupper
-; AVX1-NEXT:    retq
+; AVX1OR2-LABEL: mask_v8i32:
+; AVX1OR2:       # %bb.0:
+; AVX1OR2-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
+; AVX1OR2-NEXT:    sete %al
+; AVX1OR2-NEXT:    vzeroupper
+; AVX1OR2-NEXT:    retq
 ;
-; AVX2-LABEL: mask_v8i32:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372039002259456,9223372039002259456,9223372039002259456,9223372039002259456]
-; AVX2-NEXT:    vptest %ymm1, %ymm0
-; AVX2-NEXT:    sete %al
-; AVX2-NEXT:    vzeroupper
-; AVX2-NEXT:    retq
+; AVX512F-LABEL: mask_v8i32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
+; AVX512F-NEXT:    sete %al
+; AVX512F-NEXT:    vzeroupper
+; AVX512F-NEXT:    retq
 ;
-; AVX512-LABEL: mask_v8i32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372039002259456,9223372039002259456,9223372039002259456,9223372039002259456]
-; AVX512-NEXT:    vptest %ymm1, %ymm0
-; AVX512-NEXT:    sete %al
-; AVX512-NEXT:    vzeroupper
-; AVX512-NEXT:    retq
+; AVX512BW-LABEL: mask_v8i32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
+; AVX512BW-NEXT:    sete %al
+; AVX512BW-NEXT:    vzeroupper
+; AVX512BW-NEXT:    retq
+;
+; AVX512BWVL-LABEL: mask_v8i32:
+; AVX512BWVL:       # %bb.0:
+; AVX512BWVL-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372039002259456,9223372039002259456,9223372039002259456,9223372039002259456]
+; AVX512BWVL-NEXT:    vptest %ymm1, %ymm0
+; AVX512BWVL-NEXT:    sete %al
+; AVX512BWVL-NEXT:    vzeroupper
+; AVX512BWVL-NEXT:    retq
   %1 = call i32 @llvm.vector.reduce.or.v8i32(<8 x i32> %a0)
   %2 = and i32 %1, 2147483648
   %3 = icmp eq i32 %2, 0
@@ -978,8 +984,7 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [72340172838076673,72340172838076673,72340172838076673,72340172838076673]
-; AVX2-NEXT:    vptest %ymm1, %ymm0
+; AVX2-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
 ; AVX2-NEXT:    sete %al
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    retq

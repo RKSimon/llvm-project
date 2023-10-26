@@ -826,7 +826,7 @@ define void @truncstore_v8i64_v8i8(<8 x i64> %x, ptr %p, <8 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v8i64_v8i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [255,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0]
+; AVX2-NEXT:    vpmovzxbq {{.*#+}} ymm4 = [255,255,255,255]
 ; AVX2-NEXT:    vpand %ymm4, %ymm1, %ymm1
 ; AVX2-NEXT:    vpand %ymm4, %ymm0, %ymm0
 ; AVX2-NEXT:    vpackusdw %ymm1, %ymm0, %ymm0

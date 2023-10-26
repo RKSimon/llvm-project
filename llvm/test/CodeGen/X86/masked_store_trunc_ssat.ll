@@ -1300,12 +1300,12 @@ define void @truncstore_v8i64_v8i8(<8 x i64> %x, ptr %p, <8 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v8i64_v8i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [127,127,127,127]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm4 = [127,127,127,127]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm4, %ymm5
 ; AVX2-NEXT:    vblendvpd %ymm5, %ymm0, %ymm4, %ymm0
 ; AVX2-NEXT:    vpcmpgtq %ymm1, %ymm4, %ymm5
 ; AVX2-NEXT:    vblendvpd %ymm5, %ymm1, %ymm4, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [18446744073709551488,18446744073709551488,18446744073709551488,18446744073709551488]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm4 = [18446744073709551488,18446744073709551488,18446744073709551488,18446744073709551488]
 ; AVX2-NEXT:    vpcmpgtq %ymm4, %ymm1, %ymm5
 ; AVX2-NEXT:    vblendvpd %ymm5, %ymm1, %ymm4, %ymm1
 ; AVX2-NEXT:    vpcmpgtq %ymm4, %ymm0, %ymm5
@@ -2221,10 +2221,10 @@ define void @truncstore_v4i64_v4i8(<4 x i64> %x, ptr %p, <4 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v4i64_v4i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [127,127,127,127]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm3 = [127,127,127,127]
 ; AVX2-NEXT:    vpcmpgtq %ymm0, %ymm3, %ymm4
 ; AVX2-NEXT:    vblendvpd %ymm4, %ymm0, %ymm3, %ymm0
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [18446744073709551488,18446744073709551488,18446744073709551488,18446744073709551488]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm3 = [18446744073709551488,18446744073709551488,18446744073709551488,18446744073709551488]
 ; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm0, %ymm4
 ; AVX2-NEXT:    vblendvpd %ymm4, %ymm0, %ymm3, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm3

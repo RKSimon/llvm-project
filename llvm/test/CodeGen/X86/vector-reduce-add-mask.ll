@@ -279,7 +279,7 @@ define i64 @test_v16i64_v16i8(<16 x i64> %a0) {
 ;
 ; AVX2-LABEL: test_v16i64_v16i8:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [1,1,1,1]
+; AVX2-NEXT:    vpmovsxbq {{.*#+}} ymm4 = [1,1,1,1]
 ; AVX2-NEXT:    vpand %ymm4, %ymm2, %ymm2
 ; AVX2-NEXT:    vpand %ymm4, %ymm0, %ymm0
 ; AVX2-NEXT:    vpaddq %ymm2, %ymm0, %ymm0

@@ -111,13 +111,10 @@ define <4 x i1> @p4_vector_urem_by_const__splat(<4 x i32> %x, <4 x i32> %y) {
 ;
 ; AVX2-LABEL: p4_vector_urem_by_const__splat:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [128,128,128,128]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2863311531,2863311531,2863311531,2863311531]
-; AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpsrld $1, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [715827882,715827882,715827882,715827882]
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm1
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
   %t0 = and <4 x i32> %x, <i32 128, i32 128, i32 128, i32 128> ; clearly a power-of-two or zero
@@ -211,13 +208,12 @@ define <4 x i1> @p6_vector_urem_by_const__nonsplat_undef0(<4 x i32> %x, <4 x i32
 ;
 ; AVX2-LABEL: p6_vector_urem_by_const__nonsplat_undef0:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [128,128,128,128]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2863311531,2863311531,2863311531,2863311531]
-; AVX2-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpsrld $1, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [715827882,715827882,715827882,715827882]
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm1
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $1, %xmm0, %xmm1
+; AVX2-NEXT:    vpslld $31, %xmm0, %xmm0
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
   %t0 = and <4 x i32> %x, <i32 128, i32 128, i32 undef, i32 128>
@@ -263,8 +259,7 @@ define <4 x i1> @p7_vector_urem_by_const__nonsplat_undef2(<4 x i32> %x, <4 x i32
 ;
 ; AVX2-LABEL: p7_vector_urem_by_const__nonsplat_undef2:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [128,128,128,128]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,3,3]
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [2863311531,2863311531,2863311531,2863311531]
 ; AVX2-NEXT:    vpmuludq %xmm2, %xmm1, %xmm1
@@ -326,8 +321,7 @@ define <4 x i1> @p8_vector_urem_by_const__nonsplat_undef3(<4 x i32> %x, <4 x i32
 ;
 ; AVX2-LABEL: p8_vector_urem_by_const__nonsplat_undef3:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [128,128,128,128]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,3,3]
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [2863311531,2863311531,2863311531,2863311531]
 ; AVX2-NEXT:    vpmuludq %xmm2, %xmm1, %xmm1
@@ -335,8 +329,7 @@ define <4 x i1> @p8_vector_urem_by_const__nonsplat_undef3(<4 x i32> %x, <4 x i32
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm2 = xmm2[1,1,3,3]
 ; AVX2-NEXT:    vpblendd {{.*#+}} xmm1 = xmm2[0],xmm1[1],xmm2[2],xmm1[3]
 ; AVX2-NEXT:    vpsrld $2, %xmm1, %xmm1
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [6,6,6,6]
-; AVX2-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
+; AVX2-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vpsubd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0

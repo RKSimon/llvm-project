@@ -7144,11 +7144,28 @@ static SDValue lowerBuildVectorAsBroadcast(BuildVectorSDNode *BVOp,
     return SDValue();
 
   MVT VT = BVOp->getSimpleValueType(0);
-  unsigned NumElts = VT.getVectorNumElements();
-  SDLoc dl(BVOp);
-
   assert((VT.is128BitVector() || VT.is256BitVector() || VT.is512BitVector()) &&
          "Unsupported vector type for broadcast.");
+
+  // When optimizing for size, generate up to 5 extra bytes for a broadcast
+  // instruction to save 8 or more bytes of constant pool data.
+  // TODO: If multiple splats are generated to load the same constant,
+  // it may be detrimental to overall size. There needs to be a way to detect
+  // that condition to know if this is truly a size win.
+  bool OptForSize = DAG.shouldOptForSize();
+
+  // If we're not optimizing for size, then we're better off keeping a full
+  // width constant vector so we can hopefully fold the load into an
+  // instruction. If folding fails then X86FixupVectorConstantsPass should
+  // cleanup for us. This shouldn't be necessary for AVX512 which can often fold
+  // broadcast loads.
+  if (!OptForSize &&
+      !(Subtarget.hasAVX512() && (Subtarget.hasVLX() || VT.is512BitVector())) &&
+      BVOp->isConstant())
+    return SDValue();
+
+  unsigned NumElts = VT.getVectorNumElements();
+  SDLoc dl(BVOp);
 
   // See if the build vector is a repeating sequence of scalars (inc. splat).
   SDValue Ld;
@@ -7277,20 +7294,9 @@ static SDValue lowerBuildVectorAsBroadcast(BuildVectorSDNode *BVOp,
   unsigned ScalarSize = Ld.getValueSizeInBits();
   bool IsGE256 = (VT.getSizeInBits() >= 256);
 
-  // When optimizing for size, generate up to 5 extra bytes for a broadcast
-  // instruction to save 8 or more bytes of constant pool data.
-  // TODO: If multiple splats are generated to load the same constant,
-  // it may be detrimental to overall size. There needs to be a way to detect
-  // that condition to know if this is truly a size win.
-  bool OptForSize = DAG.shouldOptForSize();
-
   // Handle broadcasting a single constant scalar from the constant pool
   // into a vector.
-  // On Sandybridge (no AVX2), it is still better to load a constant vector
-  // from the constant pool and not to broadcast it from a scalar.
-  // But override that restriction when optimizing for size.
-  // TODO: Check if splatting is recommended for other AVX-capable CPUs.
-  if (ConstSplatVal && (Subtarget.hasAVX2() || OptForSize)) {
+  if (ConstSplatVal) {
     EVT CVT = Ld.getValueType();
     assert(!CVT.isVector() && "Must not broadcast a vector type");
 

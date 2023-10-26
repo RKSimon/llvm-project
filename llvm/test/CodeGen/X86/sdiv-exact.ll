@@ -49,8 +49,7 @@ define <4 x i32> @test3(<4 x i32> %x) {
 ; X64-LABEL: test3:
 ; X64:       # %bb.0:
 ; X64-NEXT:    vpsrad $3, %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2863311531,2863311531,2863311531,2863311531]
-; X64-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
   %div = sdiv exact <4 x i32> %x, <i32 24, i32 24, i32 24, i32 24>
   ret <4 x i32> %div
@@ -70,8 +69,7 @@ define <4 x i32> @test4(<4 x i32> %x) {
 ;
 ; X64-LABEL: test4:
 ; X64:       # %bb.0:
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [3264175145,3264175145,3264175145,3264175145]
-; X64-NEXT:    vpmulld %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    retq
   %div = sdiv exact <4 x i32> %x, <i32 25, i32 25, i32 25, i32 25>
   ret <4 x i32> %div

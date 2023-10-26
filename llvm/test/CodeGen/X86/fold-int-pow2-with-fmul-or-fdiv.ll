@@ -19,15 +19,13 @@ define <4 x float> @fmul_pow2_4xfloat(<4 x i32> %i) {
 ; CHECK-AVX2-LABEL: fmul_pow2_4xfloat:
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpslld $23, %xmm0, %xmm0
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1091567616,1091567616,1091567616,1091567616]
-; CHECK-AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    retq
 ;
 ; CHECK-NO-FASTFMA-LABEL: fmul_pow2_4xfloat:
 ; CHECK-NO-FASTFMA:       # %bb.0:
 ; CHECK-NO-FASTFMA-NEXT:    vpslld $23, %xmm0, %xmm0
-; CHECK-NO-FASTFMA-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1091567616,1091567616,1091567616,1091567616]
-; CHECK-NO-FASTFMA-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NO-FASTFMA-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    retq
 ;
 ; CHECK-FMA-LABEL: fmul_pow2_4xfloat:
@@ -376,8 +374,7 @@ define <8 x half> @fmul_pow2_8xhalf(<8 x i16> %i) {
 ; CHECK-NO-FASTFMA-NEXT:    vcvtdq2ps %ymm0, %ymm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtps2ph $4, %ymm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtph2ps %xmm0, %ymm0
-; CHECK-NO-FASTFMA-NEXT:    vbroadcastss {{.*#+}} ymm1 = [8.192E+3,8.192E+3,8.192E+3,8.192E+3,8.192E+3,8.192E+3,8.192E+3,8.192E+3]
-; CHECK-NO-FASTFMA-NEXT:    vmulps %ymm1, %ymm0, %ymm0
+; CHECK-NO-FASTFMA-NEXT:    vmulps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtps2ph $4, %ymm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vzeroupper
 ; CHECK-NO-FASTFMA-NEXT:    retq
@@ -898,8 +895,7 @@ define <2 x float> @fmul_pow_shl_cnt_vec_fail_expensive_cast(<2 x i64> %cnt) nou
 ; CHECK-AVX2-NEXT:    vpcmpgtq %xmm0, %xmm3, %xmm0
 ; CHECK-AVX2-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[1,3,2,3]
 ; CHECK-AVX2-NEXT:    vblendvps %xmm0, %xmm2, %xmm1, %xmm0
-; CHECK-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1.5E+1,1.5E+1,1.5E+1,1.5E+1]
-; CHECK-AVX2-NEXT:    vmulps %xmm1, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vmulps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    retq
 ;
 ; CHECK-NO-FASTFMA-LABEL: fmul_pow_shl_cnt_vec_fail_expensive_cast:
@@ -911,8 +907,7 @@ define <2 x float> @fmul_pow_shl_cnt_vec_fail_expensive_cast(<2 x i64> %cnt) nou
 ; CHECK-NO-FASTFMA-NEXT:    vmovq %xmm0, %rax
 ; CHECK-NO-FASTFMA-NEXT:    vcvtusi2ss %rax, %xmm2, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm1[0],zero,zero
-; CHECK-NO-FASTFMA-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1.5E+1,1.5E+1,1.5E+1,1.5E+1]
-; CHECK-NO-FASTFMA-NEXT:    vmulps %xmm1, %xmm0, %xmm0
+; CHECK-NO-FASTFMA-NEXT:    vmulps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    retq
 ;
 ; CHECK-FMA-LABEL: fmul_pow_shl_cnt_vec_fail_expensive_cast:
@@ -969,16 +964,14 @@ define <4 x float> @fmul_pow_shl_cnt_vec_preserve_fma(<4 x i32> %cnt, <4 x float
 ; CHECK-AVX2-LABEL: fmul_pow_shl_cnt_vec_preserve_fma:
 ; CHECK-AVX2:       # %bb.0:
 ; CHECK-AVX2-NEXT:    vpslld $23, %xmm0, %xmm0
-; CHECK-AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1092616192,1092616192,1092616192,1092616192]
-; CHECK-AVX2-NEXT:    vpaddd %xmm2, %xmm0, %xmm0
+; CHECK-AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    vaddps %xmm1, %xmm0, %xmm0
 ; CHECK-AVX2-NEXT:    retq
 ;
 ; CHECK-NO-FASTFMA-LABEL: fmul_pow_shl_cnt_vec_preserve_fma:
 ; CHECK-NO-FASTFMA:       # %bb.0:
 ; CHECK-NO-FASTFMA-NEXT:    vpslld $23, %xmm0, %xmm0
-; CHECK-NO-FASTFMA-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1092616192,1092616192,1092616192,1092616192]
-; CHECK-NO-FASTFMA-NEXT:    vpaddd %xmm2, %xmm0, %xmm0
+; CHECK-NO-FASTFMA-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vaddps %xmm1, %xmm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    retq
 ;
@@ -1107,8 +1100,7 @@ define <2 x half> @fmul_pow_shl_cnt_vec_fail_to_large(<2 x i16> %cnt) nounwind {
 ; CHECK-NO-FASTFMA-NEXT:    vcvtdq2ps %ymm0, %ymm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtps2ph $4, %ymm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtph2ps %xmm0, %ymm0
-; CHECK-NO-FASTFMA-NEXT:    vbroadcastss {{.*#+}} ymm1 = [1.5E+1,1.5E+1,1.5E+1,1.5E+1,1.5E+1,1.5E+1,1.5E+1,1.5E+1]
-; CHECK-NO-FASTFMA-NEXT:    vmulps %ymm1, %ymm0, %ymm0
+; CHECK-NO-FASTFMA-NEXT:    vmulps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; CHECK-NO-FASTFMA-NEXT:    vcvtps2ph $4, %ymm0, %xmm0
 ; CHECK-NO-FASTFMA-NEXT:    vzeroupper
 ; CHECK-NO-FASTFMA-NEXT:    retq

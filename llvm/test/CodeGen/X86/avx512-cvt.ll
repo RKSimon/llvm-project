@@ -1930,8 +1930,7 @@ define <8 x float> @ubto8f32(<8 x i32> %a) {
 ; NOVL:       # %bb.0:
 ; NOVL-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; NOVL-NEXT:    vpcmpgtd %ymm0, %ymm1, %ymm0
-; NOVL-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216,1065353216]
-; NOVL-NEXT:    vpand %ymm1, %ymm0, %ymm0
+; NOVL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; NOVL-NEXT:    retq
 ;
 ; VL-LABEL: ubto8f32:
@@ -1961,8 +1960,7 @@ define <4 x float> @ubto4f32(<4 x i32> %a) {
 ; NOVL:       # %bb.0:
 ; NOVL-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; NOVL-NEXT:    vpcmpgtd %xmm0, %xmm1, %xmm0
-; NOVL-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1065353216,1065353216,1065353216,1065353216]
-; NOVL-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; NOVL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; NOVL-NEXT:    retq
 ;
 ; VL-LABEL: ubto4f32:
@@ -1992,8 +1990,7 @@ define <2 x float> @ubto2f32(<2 x i32> %a) {
 ; NOVL:       # %bb.0:
 ; NOVL-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; NOVL-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
-; NOVL-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1065353216,1065353216,1065353216,1065353216]
-; NOVL-NEXT:    vpandn %xmm1, %xmm0, %xmm0
+; NOVL-NEXT:    vpandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; NOVL-NEXT:    retq
 ;
 ; VL-LABEL: ubto2f32:
@@ -2012,8 +2009,7 @@ define <2 x double> @ubto2f64(<2 x i32> %a) {
 ; NOVL:       # %bb.0:
 ; NOVL-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; NOVL-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
-; NOVL-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
-; NOVL-NEXT:    vpandn %xmm1, %xmm0, %xmm0
+; NOVL-NEXT:    vpandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; NOVL-NEXT:    vcvtdq2pd %xmm0, %xmm0
 ; NOVL-NEXT:    retq
 ;

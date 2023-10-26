@@ -1405,12 +1405,9 @@ define void @truncstore_v4i64_v4i32(<4 x i64> %x, ptr %p, <4 x i32> %mask) {
 ; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
 ; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm2, %xmm2
 ; AVX2-NEXT:    vpxor %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [4294967295,4294967295,4294967295,4294967295]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm3, %ymm0, %ymm3
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [9223372041149743102,9223372041149743102,9223372041149743102,9223372041149743102]
-; AVX2-NEXT:    vpcmpgtq %ymm4, %ymm3, %ymm3
-; AVX2-NEXT:    vblendvpd %ymm3, %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm2
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm2, %ymm2
+; AVX2-NEXT:    vblendvpd %ymm2, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm2
 ; AVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm2[0,2]
 ; AVX2-NEXT:    vpmaskmovd %xmm0, %xmm1, (%rdi)
@@ -1630,12 +1627,9 @@ define void @truncstore_v4i64_v4i16(<4 x i64> %x, ptr %p, <4 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v4i64_v4i16:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm3 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm4, %ymm0, %ymm4
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm5 = [9223372036854841342,9223372036854841342,9223372036854841342,9223372036854841342]
-; AVX2-NEXT:    vpcmpgtq %ymm5, %ymm4, %ymm4
-; AVX2-NEXT:    vblendvpd %ymm4, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm3
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm3, %ymm3
+; AVX2-NEXT:    vblendvpd %ymm3, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm3
 ; AVX2-NEXT:    vpackusdw %xmm3, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -1913,12 +1907,9 @@ define void @truncstore_v4i64_v4i8(<4 x i64> %x, ptr %p, <4 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v4i64_v4i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm3 = [255,255,255,255]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm4 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm4, %ymm0, %ymm4
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm5 = [9223372036854776062,9223372036854776062,9223372036854776062,9223372036854776062]
-; AVX2-NEXT:    vpcmpgtq %ymm5, %ymm4, %ymm4
-; AVX2-NEXT:    vblendvpd %ymm4, %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm3
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm3, %ymm3
+; AVX2-NEXT:    vblendvpd %ymm3, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm3
 ; AVX2-NEXT:    vpackusdw %xmm3, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -4080,8 +4071,7 @@ define void @truncstore_v8i32_v8i16(<8 x i32> %x, ptr %p, <8 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v8i32_v8i16:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm3
 ; AVX2-NEXT:    vpackusdw %xmm3, %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpeqd %ymm2, %ymm1, %ymm1
@@ -4472,8 +4462,7 @@ define void @truncstore_v8i32_v8i8(<8 x i32> %x, ptr %p, <8 x i32> %mask) {
 ; AVX2-LABEL: truncstore_v8i32_v8i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [255,255,255,255,255,255,255,255]
-; AVX2-NEXT:    vpminud %ymm3, %ymm0, %ymm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm3
 ; AVX2-NEXT:    vpackusdw %xmm3, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
@@ -4719,80 +4708,42 @@ define void @truncstore_v4i32_v4i16(<4 x i32> %x, ptr %p, <4 x i32> %mask) {
 ; SSE4-NEXT:    pextrw $3, %xmm0, 6(%rdi)
 ; SSE4-NEXT:    retq
 ;
-; AVX1-LABEL: truncstore_v4i32_v4i16:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX1-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vmovmskps %xmm1, %eax
-; AVX1-NEXT:    xorl $15, %eax
-; AVX1-NEXT:    testb $1, %al
-; AVX1-NEXT:    jne .LBB13_1
-; AVX1-NEXT:  # %bb.2: # %else
-; AVX1-NEXT:    testb $2, %al
-; AVX1-NEXT:    jne .LBB13_3
-; AVX1-NEXT:  .LBB13_4: # %else2
-; AVX1-NEXT:    testb $4, %al
-; AVX1-NEXT:    jne .LBB13_5
-; AVX1-NEXT:  .LBB13_6: # %else4
-; AVX1-NEXT:    testb $8, %al
-; AVX1-NEXT:    jne .LBB13_7
-; AVX1-NEXT:  .LBB13_8: # %else6
-; AVX1-NEXT:    retq
-; AVX1-NEXT:  .LBB13_1: # %cond.store
-; AVX1-NEXT:    vpextrw $0, %xmm0, (%rdi)
-; AVX1-NEXT:    testb $2, %al
-; AVX1-NEXT:    je .LBB13_4
-; AVX1-NEXT:  .LBB13_3: # %cond.store1
-; AVX1-NEXT:    vpextrw $1, %xmm0, 2(%rdi)
-; AVX1-NEXT:    testb $4, %al
-; AVX1-NEXT:    je .LBB13_6
-; AVX1-NEXT:  .LBB13_5: # %cond.store3
-; AVX1-NEXT:    vpextrw $2, %xmm0, 4(%rdi)
-; AVX1-NEXT:    testb $8, %al
-; AVX1-NEXT:    je .LBB13_8
-; AVX1-NEXT:  .LBB13_7: # %cond.store5
-; AVX1-NEXT:    vpextrw $3, %xmm0, 6(%rdi)
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: truncstore_v4i32_v4i16:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %xmm3, %xmm0, %xmm0
-; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vmovmskps %xmm1, %eax
-; AVX2-NEXT:    xorl $15, %eax
-; AVX2-NEXT:    testb $1, %al
-; AVX2-NEXT:    jne .LBB13_1
-; AVX2-NEXT:  # %bb.2: # %else
-; AVX2-NEXT:    testb $2, %al
-; AVX2-NEXT:    jne .LBB13_3
-; AVX2-NEXT:  .LBB13_4: # %else2
-; AVX2-NEXT:    testb $4, %al
-; AVX2-NEXT:    jne .LBB13_5
-; AVX2-NEXT:  .LBB13_6: # %else4
-; AVX2-NEXT:    testb $8, %al
-; AVX2-NEXT:    jne .LBB13_7
-; AVX2-NEXT:  .LBB13_8: # %else6
-; AVX2-NEXT:    retq
-; AVX2-NEXT:  .LBB13_1: # %cond.store
-; AVX2-NEXT:    vpextrw $0, %xmm0, (%rdi)
-; AVX2-NEXT:    testb $2, %al
-; AVX2-NEXT:    je .LBB13_4
-; AVX2-NEXT:  .LBB13_3: # %cond.store1
-; AVX2-NEXT:    vpextrw $1, %xmm0, 2(%rdi)
-; AVX2-NEXT:    testb $4, %al
-; AVX2-NEXT:    je .LBB13_6
-; AVX2-NEXT:  .LBB13_5: # %cond.store3
-; AVX2-NEXT:    vpextrw $2, %xmm0, 4(%rdi)
-; AVX2-NEXT:    testb $8, %al
-; AVX2-NEXT:    je .LBB13_8
-; AVX2-NEXT:  .LBB13_7: # %cond.store5
-; AVX2-NEXT:    vpextrw $3, %xmm0, 6(%rdi)
-; AVX2-NEXT:    retq
+; AVX-LABEL: truncstore_v4i32_v4i16:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
+; AVX-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vmovmskps %xmm1, %eax
+; AVX-NEXT:    xorl $15, %eax
+; AVX-NEXT:    testb $1, %al
+; AVX-NEXT:    jne .LBB13_1
+; AVX-NEXT:  # %bb.2: # %else
+; AVX-NEXT:    testb $2, %al
+; AVX-NEXT:    jne .LBB13_3
+; AVX-NEXT:  .LBB13_4: # %else2
+; AVX-NEXT:    testb $4, %al
+; AVX-NEXT:    jne .LBB13_5
+; AVX-NEXT:  .LBB13_6: # %else4
+; AVX-NEXT:    testb $8, %al
+; AVX-NEXT:    jne .LBB13_7
+; AVX-NEXT:  .LBB13_8: # %else6
+; AVX-NEXT:    retq
+; AVX-NEXT:  .LBB13_1: # %cond.store
+; AVX-NEXT:    vpextrw $0, %xmm0, (%rdi)
+; AVX-NEXT:    testb $2, %al
+; AVX-NEXT:    je .LBB13_4
+; AVX-NEXT:  .LBB13_3: # %cond.store1
+; AVX-NEXT:    vpextrw $1, %xmm0, 2(%rdi)
+; AVX-NEXT:    testb $4, %al
+; AVX-NEXT:    je .LBB13_6
+; AVX-NEXT:  .LBB13_5: # %cond.store3
+; AVX-NEXT:    vpextrw $2, %xmm0, 4(%rdi)
+; AVX-NEXT:    testb $8, %al
+; AVX-NEXT:    je .LBB13_8
+; AVX-NEXT:  .LBB13_7: # %cond.store5
+; AVX-NEXT:    vpextrw $3, %xmm0, 6(%rdi)
+; AVX-NEXT:    retq
 ;
 ; AVX512F-LABEL: truncstore_v4i32_v4i16:
 ; AVX512F:       # %bb.0:
@@ -4945,82 +4896,43 @@ define void @truncstore_v4i32_v4i8(<4 x i32> %x, ptr %p, <4 x i32> %mask) {
 ; SSE4-NEXT:    pextrb $3, %xmm0, 3(%rdi)
 ; SSE4-NEXT:    retq
 ;
-; AVX1-LABEL: truncstore_v4i32_v4i8:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX1-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vmovmskps %xmm1, %eax
-; AVX1-NEXT:    xorl $15, %eax
-; AVX1-NEXT:    testb $1, %al
-; AVX1-NEXT:    jne .LBB14_1
-; AVX1-NEXT:  # %bb.2: # %else
-; AVX1-NEXT:    testb $2, %al
-; AVX1-NEXT:    jne .LBB14_3
-; AVX1-NEXT:  .LBB14_4: # %else2
-; AVX1-NEXT:    testb $4, %al
-; AVX1-NEXT:    jne .LBB14_5
-; AVX1-NEXT:  .LBB14_6: # %else4
-; AVX1-NEXT:    testb $8, %al
-; AVX1-NEXT:    jne .LBB14_7
-; AVX1-NEXT:  .LBB14_8: # %else6
-; AVX1-NEXT:    retq
-; AVX1-NEXT:  .LBB14_1: # %cond.store
-; AVX1-NEXT:    vpextrb $0, %xmm0, (%rdi)
-; AVX1-NEXT:    testb $2, %al
-; AVX1-NEXT:    je .LBB14_4
-; AVX1-NEXT:  .LBB14_3: # %cond.store1
-; AVX1-NEXT:    vpextrb $1, %xmm0, 1(%rdi)
-; AVX1-NEXT:    testb $4, %al
-; AVX1-NEXT:    je .LBB14_6
-; AVX1-NEXT:  .LBB14_5: # %cond.store3
-; AVX1-NEXT:    vpextrb $2, %xmm0, 2(%rdi)
-; AVX1-NEXT:    testb $8, %al
-; AVX1-NEXT:    je .LBB14_8
-; AVX1-NEXT:  .LBB14_7: # %cond.store5
-; AVX1-NEXT:    vpextrb $3, %xmm0, 3(%rdi)
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: truncstore_v4i32_v4i8:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [255,255,255,255]
-; AVX2-NEXT:    vpminud %xmm3, %xmm0, %xmm0
-; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vmovmskps %xmm1, %eax
-; AVX2-NEXT:    xorl $15, %eax
-; AVX2-NEXT:    testb $1, %al
-; AVX2-NEXT:    jne .LBB14_1
-; AVX2-NEXT:  # %bb.2: # %else
-; AVX2-NEXT:    testb $2, %al
-; AVX2-NEXT:    jne .LBB14_3
-; AVX2-NEXT:  .LBB14_4: # %else2
-; AVX2-NEXT:    testb $4, %al
-; AVX2-NEXT:    jne .LBB14_5
-; AVX2-NEXT:  .LBB14_6: # %else4
-; AVX2-NEXT:    testb $8, %al
-; AVX2-NEXT:    jne .LBB14_7
-; AVX2-NEXT:  .LBB14_8: # %else6
-; AVX2-NEXT:    retq
-; AVX2-NEXT:  .LBB14_1: # %cond.store
-; AVX2-NEXT:    vpextrb $0, %xmm0, (%rdi)
-; AVX2-NEXT:    testb $2, %al
-; AVX2-NEXT:    je .LBB14_4
-; AVX2-NEXT:  .LBB14_3: # %cond.store1
-; AVX2-NEXT:    vpextrb $1, %xmm0, 1(%rdi)
-; AVX2-NEXT:    testb $4, %al
-; AVX2-NEXT:    je .LBB14_6
-; AVX2-NEXT:  .LBB14_5: # %cond.store3
-; AVX2-NEXT:    vpextrb $2, %xmm0, 2(%rdi)
-; AVX2-NEXT:    testb $8, %al
-; AVX2-NEXT:    je .LBB14_8
-; AVX2-NEXT:  .LBB14_7: # %cond.store5
-; AVX2-NEXT:    vpextrb $3, %xmm0, 3(%rdi)
-; AVX2-NEXT:    retq
+; AVX-LABEL: truncstore_v4i32_v4i8:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
+; AVX-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
+; AVX-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vmovmskps %xmm1, %eax
+; AVX-NEXT:    xorl $15, %eax
+; AVX-NEXT:    testb $1, %al
+; AVX-NEXT:    jne .LBB14_1
+; AVX-NEXT:  # %bb.2: # %else
+; AVX-NEXT:    testb $2, %al
+; AVX-NEXT:    jne .LBB14_3
+; AVX-NEXT:  .LBB14_4: # %else2
+; AVX-NEXT:    testb $4, %al
+; AVX-NEXT:    jne .LBB14_5
+; AVX-NEXT:  .LBB14_6: # %else4
+; AVX-NEXT:    testb $8, %al
+; AVX-NEXT:    jne .LBB14_7
+; AVX-NEXT:  .LBB14_8: # %else6
+; AVX-NEXT:    retq
+; AVX-NEXT:  .LBB14_1: # %cond.store
+; AVX-NEXT:    vpextrb $0, %xmm0, (%rdi)
+; AVX-NEXT:    testb $2, %al
+; AVX-NEXT:    je .LBB14_4
+; AVX-NEXT:  .LBB14_3: # %cond.store1
+; AVX-NEXT:    vpextrb $1, %xmm0, 1(%rdi)
+; AVX-NEXT:    testb $4, %al
+; AVX-NEXT:    je .LBB14_6
+; AVX-NEXT:  .LBB14_5: # %cond.store3
+; AVX-NEXT:    vpextrb $2, %xmm0, 2(%rdi)
+; AVX-NEXT:    testb $8, %al
+; AVX-NEXT:    je .LBB14_8
+; AVX-NEXT:  .LBB14_7: # %cond.store5
+; AVX-NEXT:    vpextrb $3, %xmm0, 3(%rdi)
+; AVX-NEXT:    retq
 ;
 ; AVX512F-LABEL: truncstore_v4i32_v4i8:
 ; AVX512F:       # %bb.0:

@@ -586,14 +586,12 @@ entry:
 define <8 x i32> @V111(<8 x i32> %in) nounwind uwtable readnone ssp {
 ; X86-AVX2-LABEL: V111:
 ; X86-AVX2:       ## %bb.0: ## %entry
-; X86-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [2,2,2,2,2,2,2,2]
-; X86-AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    retl
 ;
 ; X64-AVX2-LABEL: V111:
 ; X64-AVX2:       ## %bb.0: ## %entry
-; X64-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [2,2,2,2,2,2,2,2]
-; X64-AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X86-AVX512VL-LABEL: V111:
@@ -613,14 +611,12 @@ entry:
 define <8 x float> @V113(<8 x float> %in) nounwind uwtable readnone ssp {
 ; X86-AVX2-LABEL: V113:
 ; X86-AVX2:       ## %bb.0: ## %entry
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3]
-; X86-AVX2-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    retl
 ;
 ; X64-AVX2-LABEL: V113:
 ; X64-AVX2:       ## %bb.0: ## %entry
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3,-7.8125E-3]
-; X64-AVX2-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vaddps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; X64-AVX2-NEXT:    retq
 ;
 ; X86-AVX512VL-LABEL: V113:

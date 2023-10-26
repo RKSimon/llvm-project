@@ -31,12 +31,17 @@ define <4 x float> @test2(<4 x float> %a, <4 x float> %b, <4 x float> %c) {
 }
 
 define <4 x float> @test3(<4 x float> %a, <4 x float> %b, <4 x float> %c)  {
-; CHECK-LABEL: test3:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    vfnmadd213ss {{.*#+}} xmm0 = -(xmm1 * xmm0) + xmm2
-; CHECK-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; CHECK-NEXT:    vxorps %xmm1, %xmm0, %xmm0
-; CHECK-NEXT:    ret{{[l|q]}}
+; X86-LABEL: test3:
+; X86:       # %bb.0:
+; X86-NEXT:    vfnmadd213ss {{.*#+}} xmm0 = -(xmm1 * xmm0) + xmm2
+; X86-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-NEXT:    retl
+;
+; X64-LABEL: test3:
+; X64:       # %bb.0:
+; X64-NEXT:    vfnmadd213ss {{.*#+}} xmm0 = -(xmm1 * xmm0) + xmm2
+; X64-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-NEXT:    retq
   %a0 = extractelement <4 x float> %a, i64 0
   %b0 = extractelement <4 x float> %b, i64 0
   %c0 = extractelement <4 x float> %c, i64 0

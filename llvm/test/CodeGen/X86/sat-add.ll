@@ -489,10 +489,8 @@ define <4 x i32> @unsigned_sat_constant_v4i32_using_min(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: unsigned_sat_constant_v4i32_using_min:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [4294967253,4294967253,4294967253,4294967253]
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [42,42,42,42]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: unsigned_sat_constant_v4i32_using_min:
@@ -526,10 +524,8 @@ define <4 x i32> @unsigned_sat_constant_v4i32_using_cmp_sum(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: unsigned_sat_constant_v4i32_using_cmp_sum:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [42,42,42,42]
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [4294967253,4294967253,4294967253,4294967253]
-; AVX2-NEXT:    vpminud %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: unsigned_sat_constant_v4i32_using_cmp_sum:
@@ -561,10 +557,8 @@ define <4 x i32> @unsigned_sat_constant_v4i32_using_cmp_notval(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: unsigned_sat_constant_v4i32_using_cmp_notval:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [42,42,42,42]
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [4294967253,4294967253,4294967253,4294967253]
-; AVX2-NEXT:    vpminud %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: unsigned_sat_constant_v4i32_using_cmp_notval:

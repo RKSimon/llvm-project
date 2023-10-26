@@ -76,16 +76,10 @@ define <4 x float> @fneg_v4f32(<4 x float> %p) nounwind {
 ; X86-SSE-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v4f32:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v4f32:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vxorps %xmm1, %xmm0, %xmm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v4f32:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512VL-LABEL: fneg_v4f32:
 ; X86-AVX512VL:       # %bb.0:
@@ -107,16 +101,10 @@ define <4 x float> @fneg_v4f32(<4 x float> %p) nounwind {
 ; X64-SSE-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v4f32:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v4f32:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vxorps %xmm1, %xmm0, %xmm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v4f32:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512VL-LABEL: fneg_v4f32:
 ; X64-AVX512VL:       # %bb.0:
@@ -144,19 +132,12 @@ define <8 x half> @fneg_v8f16(ptr %p) nounwind {
 ; X86-SSE-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v8f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    vmovaps (%eax), %xmm0
-; X86-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v8f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vpxor (%eax), %xmm0, %xmm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v8f16:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX-NEXT:    vmovaps (%eax), %xmm0
+; X86-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fneg_v8f16:
 ; X86-AVX512:       # %bb.0:
@@ -171,17 +152,11 @@ define <8 x half> @fneg_v8f16(ptr %p) nounwind {
 ; X64-SSE-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v8f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vmovaps (%rdi), %xmm0
-; X64-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v8f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vpxor (%rdi), %xmm0, %xmm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v8f16:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vmovaps (%rdi), %xmm0
+; X64-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fneg_v8f16:
 ; X64-AVX512:       # %bb.0:
@@ -205,16 +180,10 @@ define <4 x double> @fneg_v4f64(<4 x double> %p) nounwind {
 ; X86-SSE-NEXT:    xorps %xmm2, %xmm1
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v4f64:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v4f64:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v4f64:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512VL-LABEL: fneg_v4f64:
 ; X86-AVX512VL:       # %bb.0:
@@ -238,16 +207,10 @@ define <4 x double> @fneg_v4f64(<4 x double> %p) nounwind {
 ; X64-SSE-NEXT:    xorps %xmm2, %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v4f64:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v4f64:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v4f64:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512VL-LABEL: fneg_v4f64:
 ; X64-AVX512VL:       # %bb.0:
@@ -275,16 +238,10 @@ define <8 x float> @fneg_v8f32(<8 x float> %p) nounwind {
 ; X86-SSE-NEXT:    xorps %xmm2, %xmm1
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v8f32:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v8f32:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v8f32:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512VL-LABEL: fneg_v8f32:
 ; X86-AVX512VL:       # %bb.0:
@@ -308,16 +265,10 @@ define <8 x float> @fneg_v8f32(<8 x float> %p) nounwind {
 ; X64-SSE-NEXT:    xorps %xmm2, %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v8f32:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v8f32:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v8f32:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512VL-LABEL: fneg_v8f32:
 ; X64-AVX512VL:       # %bb.0:
@@ -347,19 +298,12 @@ define <16 x half> @fneg_v16f16(ptr %p) nounwind {
 ; X86-SSE-NEXT:    xorps 16(%eax), %xmm1
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v16f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    vmovups (%eax), %ymm0
-; X86-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v16f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vpxor (%eax), %ymm0, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v16f16:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX-NEXT:    vmovups (%eax), %ymm0
+; X86-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fneg_v16f16:
 ; X86-AVX512:       # %bb.0:
@@ -376,17 +320,11 @@ define <16 x half> @fneg_v16f16(ptr %p) nounwind {
 ; X64-SSE-NEXT:    xorps 16(%rdi), %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v16f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vmovups (%rdi), %ymm0
-; X64-AVX1-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v16f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vpxor (%rdi), %ymm0, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v16f16:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vmovups (%rdi), %ymm0
+; X64-AVX-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fneg_v16f16:
 ; X64-AVX512:       # %bb.0:
@@ -560,21 +498,13 @@ define <32 x half> @fneg_v32f16(ptr %p) nounwind {
 ; X86-SSE-NEXT:    xorps 48(%eax), %xmm3
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fneg_v32f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX1-NEXT:    vxorps (%eax), %ymm1, %ymm0
-; X86-AVX1-NEXT:    vxorps 32(%eax), %ymm1, %ymm1
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fneg_v32f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vpxor (%eax), %ymm1, %ymm0
-; X86-AVX2-NEXT:    vpxor 32(%eax), %ymm1, %ymm1
-; X86-AVX2-NEXT:    retl
+; X86-AVX-LABEL: fneg_v32f16:
+; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
+; X86-AVX-NEXT:    vxorps (%eax), %ymm1, %ymm0
+; X86-AVX-NEXT:    vxorps 32(%eax), %ymm1, %ymm1
+; X86-AVX-NEXT:    retl
 ;
 ; X86-AVX512VL-LABEL: fneg_v32f16:
 ; X86-AVX512VL:       # %bb.0:
@@ -611,19 +541,12 @@ define <32 x half> @fneg_v32f16(ptr %p) nounwind {
 ; X64-SSE-NEXT:    xorps 48(%rdi), %xmm3
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fneg_v32f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX1-NEXT:    vxorps (%rdi), %ymm1, %ymm0
-; X64-AVX1-NEXT:    vxorps 32(%rdi), %ymm1, %ymm1
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fneg_v32f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vpxor (%rdi), %ymm1, %ymm0
-; X64-AVX2-NEXT:    vpxor 32(%rdi), %ymm1, %ymm1
-; X64-AVX2-NEXT:    retq
+; X64-AVX-LABEL: fneg_v32f16:
+; X64-AVX:       # %bb.0:
+; X64-AVX-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
+; X64-AVX-NEXT:    vxorps (%rdi), %ymm1, %ymm0
+; X64-AVX-NEXT:    vxorps 32(%rdi), %ymm1, %ymm1
+; X64-AVX-NEXT:    retq
 ;
 ; X64-AVX512VL-LABEL: fneg_v32f16:
 ; X64-AVX512VL:       # %bb.0:
@@ -650,4 +573,8 @@ define <32 x half> @fneg_v32f16(ptr %p) nounwind {
 }
 ;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
 ; X64: {{.*}}
+; X64-AVX1: {{.*}}
+; X64-AVX2: {{.*}}
 ; X86: {{.*}}
+; X86-AVX1: {{.*}}
+; X86-AVX2: {{.*}}

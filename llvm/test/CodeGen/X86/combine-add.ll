@@ -265,8 +265,8 @@ define void @PR52039(ptr %pa, ptr %pb) {
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm0 = [10,10,10,10,10,10,10,10]
 ; AVX2-NEXT:    vpsubd (%rdi), %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [3,3,3,3,3,3,3,3]
-; AVX2-NEXT:    vpmulld %ymm1, %ymm0, %ymm1
+; AVX2-NEXT:    vpaddd %ymm0, %ymm0, %ymm1
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm1
 ; AVX2-NEXT:    vmovdqu %ymm0, (%rsi)
 ; AVX2-NEXT:    vmovdqu %ymm1, (%rdi)
 ; AVX2-NEXT:    vzeroupper
@@ -288,21 +288,12 @@ define <4 x i32> @combine_vec_add_uniquebits(<4 x i32> %a, <4 x i32> %b) {
 ; SSE-NEXT:    orps %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX1-LABEL: combine_vec_add_uniquebits:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
-; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: combine_vec_add_uniquebits:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [61680,61680,61680,61680]
-; AVX2-NEXT:    vandps %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [3855,3855,3855,3855]
-; AVX2-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: combine_vec_add_uniquebits:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; AVX-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    retq
   %1 = and <4 x i32> %a, <i32 61680, i32 61680, i32 61680, i32 61680>
   %2 = and <4 x i32> %b, <i32 3855, i32 3855, i32 3855, i32 3855>
   %3 = add <4 x i32> %1, %2

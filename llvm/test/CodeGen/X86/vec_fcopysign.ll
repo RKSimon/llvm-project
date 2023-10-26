@@ -67,21 +67,12 @@ define <4 x float> @fcopysign_v4f32(<4 x float> %a0, <4 x float> %a1) nounwind {
 ; X86-SSE-NEXT:    orps %xmm1, %xmm0
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v4f32:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1, %xmm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
-; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v4f32:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vandps %xmm2, %xmm0, %xmm0
-; X86-AVX2-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v4f32:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1, %xmm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-AVX1OR2-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v4f32:
 ; X86-AVX512:       # %bb.0:
@@ -95,21 +86,12 @@ define <4 x float> @fcopysign_v4f32(<4 x float> %a0, <4 x float> %a1) nounwind {
 ; X64-SSE-NEXT:    orps %xmm1, %xmm0
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v4f32:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v4f32:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vandps %xmm2, %xmm1, %xmm1
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm2 = [NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vandps %xmm2, %xmm0, %xmm0
-; X64-AVX2-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v4f32:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-AVX1OR2-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v4f32:
 ; X64-AVX512:       # %bb.0:
@@ -132,27 +114,16 @@ define <8 x half> @fcopysign_v8f16(ptr %p0, ptr %p1) nounwind {
 ; X86-SSE-NEXT:    orps %xmm1, %xmm0
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v8f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX1-NEXT:    vmovaps (%ecx), %xmm0
-; X86-AVX1-NEXT:    vmovaps (%eax), %xmm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1, %xmm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
-; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v8f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vpand (%ecx), %xmm0, %xmm0
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vpand (%eax), %xmm1, %xmm1
-; X86-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v8f16:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-AVX1OR2-NEXT:    vmovaps (%ecx), %xmm0
+; X86-AVX1OR2-NEXT:    vmovaps (%eax), %xmm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1, %xmm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
+; X86-AVX1OR2-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v8f16:
 ; X86-AVX512:       # %bb.0:
@@ -172,23 +143,14 @@ define <8 x half> @fcopysign_v8f16(ptr %p0, ptr %p1) nounwind {
 ; X64-SSE-NEXT:    orps %xmm1, %xmm0
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v8f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vmovaps (%rdi), %xmm0
-; X64-AVX1-NEXT:    vmovaps (%rsi), %xmm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v8f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vpand (%rsi), %xmm0, %xmm0
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} xmm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vpand (%rdi), %xmm1, %xmm1
-; X64-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v8f16:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vmovaps (%rdi), %xmm0
+; X64-AVX1OR2-NEXT:    vmovaps (%rsi), %xmm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; X64-AVX1OR2-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v8f16:
 ; X64-AVX512:       # %bb.0:
@@ -226,21 +188,12 @@ define <4 x double> @fcopysign_v4f64(<4 x double> %a0, <4 x double> %a1) nounwin
 ; X86-SSE-NEXT:    popl %ebp
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v4f64:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v4f64:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vandps %ymm2, %ymm1, %ymm1
-; X86-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vandps %ymm2, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v4f64:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v4f64:
 ; X86-AVX512:       # %bb.0:
@@ -259,21 +212,12 @@ define <4 x double> @fcopysign_v4f64(<4 x double> %a0, <4 x double> %a1) nounwin
 ; X64-SSE-NEXT:    orps %xmm4, %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v4f64:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v4f64:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vandps %ymm2, %ymm1, %ymm1
-; X64-AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vandps %ymm2, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v4f64:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v4f64:
 ; X64-AVX512:       # %bb.0:
@@ -303,21 +247,12 @@ define <8 x float> @fcopysign_v8f32(<8 x float> %a0, <8 x float> %a1) nounwind {
 ; X86-SSE-NEXT:    popl %ebp
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v8f32:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v8f32:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vandps %ymm2, %ymm1, %ymm1
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm2 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vandps %ymm2, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v8f32:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v8f32:
 ; X86-AVX512:       # %bb.0:
@@ -336,21 +271,12 @@ define <8 x float> @fcopysign_v8f32(<8 x float> %a0, <8 x float> %a1) nounwind {
 ; X64-SSE-NEXT:    orps %xmm4, %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v8f32:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v8f32:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm2 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vandps %ymm2, %ymm1, %ymm1
-; X64-AVX2-NEXT:    vbroadcastss {{.*#+}} ymm2 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vandps %ymm2, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v8f32:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v8f32:
 ; X64-AVX512:       # %bb.0:
@@ -378,27 +304,16 @@ define <16 x half> @fcopysign_v16f16(ptr %p0, ptr %p1) nounwind {
 ; X86-SSE-NEXT:    orps %xmm2, %xmm1
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v16f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX1-NEXT:    vmovups (%ecx), %ymm0
-; X86-AVX1-NEXT:    vmovups (%eax), %ymm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
-; X86-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v16f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X86-AVX2-NEXT:    vpand (%ecx), %ymm0, %ymm0
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vpand (%eax), %ymm1, %ymm1
-; X86-AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v16f16:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-AVX1OR2-NEXT:    vmovups (%ecx), %ymm0
+; X86-AVX1OR2-NEXT:    vmovups (%eax), %ymm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; X86-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v16f16:
 ; X86-AVX512:       # %bb.0:
@@ -423,23 +338,14 @@ define <16 x half> @fcopysign_v16f16(ptr %p0, ptr %p1) nounwind {
 ; X64-SSE-NEXT:    orps %xmm2, %xmm1
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v16f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vmovups (%rdi), %ymm0
-; X64-AVX1-NEXT:    vmovups (%rsi), %ymm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
-; X64-AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v16f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; X64-AVX2-NEXT:    vpand (%rsi), %ymm0, %ymm0
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vpand (%rdi), %ymm1, %ymm1
-; X64-AVX2-NEXT:    vpor %ymm0, %ymm1, %ymm0
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v16f16:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vmovups (%rdi), %ymm0
+; X64-AVX1OR2-NEXT:    vmovups (%rsi), %ymm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; X64-AVX1OR2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v16f16:
 ; X64-AVX512:       # %bb.0:
@@ -665,31 +571,18 @@ define <32 x half> @fcopysign_v32f16(ptr %p0, ptr %p1) nounwind {
 ; X86-SSE-NEXT:    orps %xmm4, %xmm3
 ; X86-SSE-NEXT:    retl
 ;
-; X86-AVX1-LABEL: fcopysign_v32f16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX1-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX1-NEXT:    vbroadcastss {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X86-AVX1-NEXT:    vandnps (%ecx), %ymm1, %ymm0
-; X86-AVX1-NEXT:    vandps (%eax), %ymm1, %ymm2
-; X86-AVX1-NEXT:    vorps %ymm0, %ymm2, %ymm0
-; X86-AVX1-NEXT:    vandnps 32(%ecx), %ymm1, %ymm2
-; X86-AVX1-NEXT:    vandps 32(%eax), %ymm1, %ymm1
-; X86-AVX1-NEXT:    vorps %ymm2, %ymm1, %ymm1
-; X86-AVX1-NEXT:    retl
-;
-; X86-AVX2-LABEL: fcopysign_v32f16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X86-AVX2-NEXT:    vpandn (%ecx), %ymm1, %ymm0
-; X86-AVX2-NEXT:    vpand (%eax), %ymm1, %ymm2
-; X86-AVX2-NEXT:    vpor %ymm0, %ymm2, %ymm0
-; X86-AVX2-NEXT:    vpandn 32(%ecx), %ymm1, %ymm2
-; X86-AVX2-NEXT:    vpand 32(%eax), %ymm1, %ymm1
-; X86-AVX2-NEXT:    vpor %ymm2, %ymm1, %ymm1
-; X86-AVX2-NEXT:    retl
+; X86-AVX1OR2-LABEL: fcopysign_v32f16:
+; X86-AVX1OR2:       # %bb.0:
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX1OR2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-AVX1OR2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
+; X86-AVX1OR2-NEXT:    vandnps (%ecx), %ymm1, %ymm0
+; X86-AVX1OR2-NEXT:    vandps (%eax), %ymm1, %ymm2
+; X86-AVX1OR2-NEXT:    vorps %ymm0, %ymm2, %ymm0
+; X86-AVX1OR2-NEXT:    vandnps 32(%ecx), %ymm1, %ymm2
+; X86-AVX1OR2-NEXT:    vandps 32(%eax), %ymm1, %ymm1
+; X86-AVX1OR2-NEXT:    vorps %ymm2, %ymm1, %ymm1
+; X86-AVX1OR2-NEXT:    retl
 ;
 ; X86-AVX512-LABEL: fcopysign_v32f16:
 ; X86-AVX512:       # %bb.0:
@@ -724,27 +617,16 @@ define <32 x half> @fcopysign_v32f16(ptr %p0, ptr %p1) nounwind {
 ; X64-SSE-NEXT:    orps %xmm4, %xmm3
 ; X64-SSE-NEXT:    retq
 ;
-; X64-AVX1-LABEL: fcopysign_v32f16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vbroadcastss {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X64-AVX1-NEXT:    vandnps (%rsi), %ymm1, %ymm0
-; X64-AVX1-NEXT:    vandps (%rdi), %ymm1, %ymm2
-; X64-AVX1-NEXT:    vorps %ymm0, %ymm2, %ymm0
-; X64-AVX1-NEXT:    vandnps 32(%rsi), %ymm1, %ymm2
-; X64-AVX1-NEXT:    vandps 32(%rdi), %ymm1, %ymm1
-; X64-AVX1-NEXT:    vorps %ymm2, %ymm1, %ymm1
-; X64-AVX1-NEXT:    retq
-;
-; X64-AVX2-LABEL: fcopysign_v32f16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
-; X64-AVX2-NEXT:    vpandn (%rsi), %ymm1, %ymm0
-; X64-AVX2-NEXT:    vpand (%rdi), %ymm1, %ymm2
-; X64-AVX2-NEXT:    vpor %ymm0, %ymm2, %ymm0
-; X64-AVX2-NEXT:    vpandn 32(%rsi), %ymm1, %ymm2
-; X64-AVX2-NEXT:    vpand 32(%rdi), %ymm1, %ymm1
-; X64-AVX2-NEXT:    vpor %ymm2, %ymm1, %ymm1
-; X64-AVX2-NEXT:    retq
+; X64-AVX1OR2-LABEL: fcopysign_v32f16:
+; X64-AVX1OR2:       # %bb.0:
+; X64-AVX1OR2-NEXT:    vbroadcastss {{.*#+}} ymm1 = [NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN]
+; X64-AVX1OR2-NEXT:    vandnps (%rsi), %ymm1, %ymm0
+; X64-AVX1OR2-NEXT:    vandps (%rdi), %ymm1, %ymm2
+; X64-AVX1OR2-NEXT:    vorps %ymm0, %ymm2, %ymm0
+; X64-AVX1OR2-NEXT:    vandnps 32(%rsi), %ymm1, %ymm2
+; X64-AVX1OR2-NEXT:    vandps 32(%rdi), %ymm1, %ymm1
+; X64-AVX1OR2-NEXT:    vorps %ymm2, %ymm1, %ymm1
+; X64-AVX1OR2-NEXT:    retq
 ;
 ; X64-AVX512-LABEL: fcopysign_v32f16:
 ; X64-AVX512:       # %bb.0:
@@ -761,11 +643,15 @@ declare <32 x half> @llvm.copysign.v32f16(<32 x half>, <32 x half>)
 ;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
 ; X64: {{.*}}
 ; X64-AVX: {{.*}}
+; X64-AVX1: {{.*}}
+; X64-AVX2: {{.*}}
 ; X64-AVX512FP16: {{.*}}
 ; X64-AVX512VL: {{.*}}
 ; X64-AVX512VLDQ: {{.*}}
 ; X86: {{.*}}
 ; X86-AVX: {{.*}}
+; X86-AVX1: {{.*}}
+; X86-AVX2: {{.*}}
 ; X86-AVX512FP16: {{.*}}
 ; X86-AVX512VL: {{.*}}
 ; X86-AVX512VLDQ: {{.*}}

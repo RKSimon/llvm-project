@@ -291,8 +291,7 @@ define <4 x i32> @combine_vec_lshr_shl_mask0(<4 x i32> %x) {
 ;
 ; AVX-LABEL: combine_vec_lshr_shl_mask0:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1073741823,1073741823,1073741823,1073741823]
-; AVX-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 =  shl <4 x i32> %x, <i32 2, i32 2, i32 2, i32 2>
   %2 = lshr <4 x i32> %1, <i32 2, i32 2, i32 2, i32 2>
@@ -341,8 +340,7 @@ define <4 x i32> @combine_vec_lshr_lzcnt_bit0(<4 x i32> %x) {
 ; AVX-LABEL: combine_vec_lshr_lzcnt_bit0:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpsrld $4, %xmm0, %xmm0
-; AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1,1,1,1]
-; AVX-NEXT:    vpandn %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = and <4 x i32> %x, <i32 16, i32 16, i32 16, i32 16>
   %2 = call <4 x i32> @llvm.ctlz.v4i32(<4 x i32> %1, i1 0)

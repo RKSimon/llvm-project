@@ -24,8 +24,7 @@ define void @any_extend_load_v8i32(ptr %ptr) {
 ; KNL-LABEL: any_extend_load_v8i32:
 ; KNL:       # %bb.0:
 ; KNL-NEXT:    vpmovzxbd {{.*#+}} ymm0 = mem[0],zero,zero,zero,mem[1],zero,zero,zero,mem[2],zero,zero,zero,mem[3],zero,zero,zero,mem[4],zero,zero,zero,mem[5],zero,zero,zero,mem[6],zero,zero,zero,mem[7],zero,zero,zero
-; KNL-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [4,4,4,4,4,4,4,4]
-; KNL-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; KNL-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; KNL-NEXT:    vpmovdb %zmm0, %xmm0
 ; KNL-NEXT:    vmovq %xmm0, (%rdi)
 ; KNL-NEXT:    vzeroupper

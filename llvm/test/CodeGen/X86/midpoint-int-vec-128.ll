@@ -60,64 +60,28 @@ define <4 x i32> @vec128_i32_signed_reg_reg(<4 x i32> %a1, <4 x i32> %a2) nounwi
 ; SSE41-NEXT:    paddd %xmm2, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: vec128_i32_signed_reg_reg:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; AVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX1-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    retq
+; AVX-LABEL: vec128_i32_signed_reg_reg:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; AVX-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; AVX-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; AVX-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; AVX-NEXT:    vpsrld $1, %xmm1, %xmm1
+; AVX-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    retq
 ;
-; AVX2-LABEL: vec128_i32_signed_reg_reg:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX2-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX2-NEXT:    retq
-;
-; XOP-FALLBACK-LABEL: vec128_i32_signed_reg_reg:
-; XOP-FALLBACK:       # %bb.0:
-; XOP-FALLBACK-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOP-FALLBACK-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOP-FALLBACK-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOP-FALLBACK-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOP-FALLBACK-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOP-FALLBACK-NEXT:    retq
-;
-; XOPAVX1-LABEL: vec128_i32_signed_reg_reg:
-; XOPAVX1:       # %bb.0:
-; XOPAVX1-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOPAVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX1-NEXT:    retq
-;
-; XOPAVX2-LABEL: vec128_i32_signed_reg_reg:
-; XOPAVX2:       # %bb.0:
-; XOPAVX2-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; XOPAVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; XOPAVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX2-NEXT:    retq
+; XOP-LABEL: vec128_i32_signed_reg_reg:
+; XOP:       # %bb.0:
+; XOP-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
+; XOP-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; XOP-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; XOP-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; XOP-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; XOP-NEXT:    vpsrld $1, %xmm1, %xmm1
+; XOP-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
+; XOP-NEXT:    retq
 ;
 ; AVX512F-LABEL: vec128_i32_signed_reg_reg:
 ; AVX512F:       # %bb.0:
@@ -218,68 +182,30 @@ define <4 x i32> @vec128_i32_unsigned_reg_reg(<4 x i32> %a1, <4 x i32> %a2) noun
 ; SSE41-NEXT:    paddd %xmm4, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: vec128_i32_unsigned_reg_reg:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpminud %xmm1, %xmm0, %xmm2
-; AVX1-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm3
-; AVX1-NEXT:    vpcmpeqd %xmm4, %xmm4, %xmm4
-; AVX1-NEXT:    vpxor %xmm4, %xmm3, %xmm3
-; AVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3, %xmm3
-; AVX1-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
-; AVX1-NEXT:    vpsubd %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX1-NEXT:    vpmulld %xmm3, %xmm1, %xmm1
-; AVX1-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    retq
+; AVX-LABEL: vec128_i32_unsigned_reg_reg:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpminud %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm3
+; AVX-NEXT:    vpcmpeqd %xmm4, %xmm4, %xmm4
+; AVX-NEXT:    vpxor %xmm4, %xmm3, %xmm3
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3, %xmm3
+; AVX-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
+; AVX-NEXT:    vpsubd %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vpsrld $1, %xmm1, %xmm1
+; AVX-NEXT:    vpmulld %xmm3, %xmm1, %xmm1
+; AVX-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    retq
 ;
-; AVX2-LABEL: vec128_i32_unsigned_reg_reg:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm2
-; AVX2-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm3
-; AVX2-NEXT:    vpcmpeqd %xmm4, %xmm4, %xmm4
-; AVX2-NEXT:    vpxor %xmm4, %xmm3, %xmm3
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm4 = [1,1,1,1]
-; AVX2-NEXT:    vpor %xmm4, %xmm3, %xmm3
-; AVX2-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
-; AVX2-NEXT:    vpsubd %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX2-NEXT:    vpmulld %xmm3, %xmm1, %xmm1
-; AVX2-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX2-NEXT:    retq
-;
-; XOP-FALLBACK-LABEL: vec128_i32_unsigned_reg_reg:
-; XOP-FALLBACK:       # %bb.0:
-; XOP-FALLBACK-NEXT:    vpcomgtud %xmm1, %xmm0, %xmm2
-; XOP-FALLBACK-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOP-FALLBACK-NEXT:    vpminud %xmm1, %xmm0, %xmm3
-; XOP-FALLBACK-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
-; XOP-FALLBACK-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOP-FALLBACK-NEXT:    retq
-;
-; XOPAVX1-LABEL: vec128_i32_unsigned_reg_reg:
-; XOPAVX1:       # %bb.0:
-; XOPAVX1-NEXT:    vpcomgtud %xmm1, %xmm0, %xmm2
-; XOPAVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOPAVX1-NEXT:    vpminud %xmm1, %xmm0, %xmm3
-; XOPAVX1-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
-; XOPAVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX1-NEXT:    retq
-;
-; XOPAVX2-LABEL: vec128_i32_unsigned_reg_reg:
-; XOPAVX2:       # %bb.0:
-; XOPAVX2-NEXT:    vpcomgtud %xmm1, %xmm0, %xmm2
-; XOPAVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; XOPAVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; XOPAVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm3
-; XOPAVX2-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
-; XOPAVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX2-NEXT:    retq
+; XOP-LABEL: vec128_i32_unsigned_reg_reg:
+; XOP:       # %bb.0:
+; XOP-NEXT:    vpcomgtud %xmm1, %xmm0, %xmm2
+; XOP-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; XOP-NEXT:    vpminud %xmm1, %xmm0, %xmm3
+; XOP-NEXT:    vpmaxud %xmm1, %xmm0, %xmm1
+; XOP-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; XOP-NEXT:    vpsrld $1, %xmm1, %xmm1
+; XOP-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
+; XOP-NEXT:    retq
 ;
 ; AVX512F-LABEL: vec128_i32_unsigned_reg_reg:
 ; AVX512F:       # %bb.0:
@@ -379,69 +305,30 @@ define <4 x i32> @vec128_i32_signed_mem_reg(ptr %a1_addr, <4 x i32> %a2) nounwin
 ; SSE41-NEXT:    paddd %xmm1, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: vec128_i32_signed_mem_reg:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vmovdqa (%rdi), %xmm1
-; AVX1-NEXT:    vpcmpgtd %xmm0, %xmm1, %xmm2
-; AVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; AVX1-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
-; AVX1-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
-; AVX1-NEXT:    vpsrld $1, %xmm0, %xmm0
-; AVX1-NEXT:    vpmulld %xmm2, %xmm0, %xmm0
-; AVX1-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVX1-NEXT:    retq
+; AVX-LABEL: vec128_i32_signed_mem_reg:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vmovdqa (%rdi), %xmm1
+; AVX-NEXT:    vpcmpgtd %xmm0, %xmm1, %xmm2
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; AVX-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
+; AVX-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
+; AVX-NEXT:    vpsrld $1, %xmm0, %xmm0
+; AVX-NEXT:    vpmulld %xmm2, %xmm0, %xmm0
+; AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    retq
 ;
-; AVX2-LABEL: vec128_i32_signed_mem_reg:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovdqa (%rdi), %xmm1
-; AVX2-NEXT:    vpcmpgtd %xmm0, %xmm1, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
-; AVX2-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
-; AVX2-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
-; AVX2-NEXT:    vpsrld $1, %xmm0, %xmm0
-; AVX2-NEXT:    vpmulld %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    retq
-;
-; XOP-FALLBACK-LABEL: vec128_i32_signed_mem_reg:
-; XOP-FALLBACK:       # %bb.0:
-; XOP-FALLBACK-NEXT:    vmovdqa (%rdi), %xmm1
-; XOP-FALLBACK-NEXT:    vpcomgtd %xmm0, %xmm1, %xmm2
-; XOP-FALLBACK-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOP-FALLBACK-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
-; XOP-FALLBACK-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
-; XOP-FALLBACK-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
-; XOP-FALLBACK-NEXT:    vpsrld $1, %xmm0, %xmm0
-; XOP-FALLBACK-NEXT:    vpmacsdd %xmm1, %xmm2, %xmm0, %xmm0
-; XOP-FALLBACK-NEXT:    retq
-;
-; XOPAVX1-LABEL: vec128_i32_signed_mem_reg:
-; XOPAVX1:       # %bb.0:
-; XOPAVX1-NEXT:    vmovdqa (%rdi), %xmm1
-; XOPAVX1-NEXT:    vpcomgtd %xmm0, %xmm1, %xmm2
-; XOPAVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOPAVX1-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
-; XOPAVX1-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
-; XOPAVX1-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
-; XOPAVX1-NEXT:    vpsrld $1, %xmm0, %xmm0
-; XOPAVX1-NEXT:    vpmacsdd %xmm1, %xmm2, %xmm0, %xmm0
-; XOPAVX1-NEXT:    retq
-;
-; XOPAVX2-LABEL: vec128_i32_signed_mem_reg:
-; XOPAVX2:       # %bb.0:
-; XOPAVX2-NEXT:    vmovdqa (%rdi), %xmm1
-; XOPAVX2-NEXT:    vpcomgtd %xmm0, %xmm1, %xmm2
-; XOPAVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; XOPAVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; XOPAVX2-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
-; XOPAVX2-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
-; XOPAVX2-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
-; XOPAVX2-NEXT:    vpsrld $1, %xmm0, %xmm0
-; XOPAVX2-NEXT:    vpmacsdd %xmm1, %xmm2, %xmm0, %xmm0
-; XOPAVX2-NEXT:    retq
+; XOP-LABEL: vec128_i32_signed_mem_reg:
+; XOP:       # %bb.0:
+; XOP-NEXT:    vmovdqa (%rdi), %xmm1
+; XOP-NEXT:    vpcomgtd %xmm0, %xmm1, %xmm2
+; XOP-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; XOP-NEXT:    vpminsd %xmm0, %xmm1, %xmm3
+; XOP-NEXT:    vpmaxsd %xmm0, %xmm1, %xmm0
+; XOP-NEXT:    vpsubd %xmm3, %xmm0, %xmm0
+; XOP-NEXT:    vpsrld $1, %xmm0, %xmm0
+; XOP-NEXT:    vpmacsdd %xmm1, %xmm2, %xmm0, %xmm0
+; XOP-NEXT:    retq
 ;
 ; AVX512F-LABEL: vec128_i32_signed_mem_reg:
 ; AVX512F:       # %bb.0:
@@ -541,69 +428,30 @@ define <4 x i32> @vec128_i32_signed_reg_mem(<4 x i32> %a1, ptr %a2_addr) nounwin
 ; SSE41-NEXT:    paddd %xmm1, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: vec128_i32_signed_reg_mem:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vmovdqa (%rdi), %xmm1
-; AVX1-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; AVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX1-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    retq
+; AVX-LABEL: vec128_i32_signed_reg_mem:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vmovdqa (%rdi), %xmm1
+; AVX-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; AVX-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; AVX-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; AVX-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; AVX-NEXT:    vpsrld $1, %xmm1, %xmm1
+; AVX-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    retq
 ;
-; AVX2-LABEL: vec128_i32_signed_reg_mem:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovdqa (%rdi), %xmm1
-; AVX2-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX2-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX2-NEXT:    retq
-;
-; XOP-FALLBACK-LABEL: vec128_i32_signed_reg_mem:
-; XOP-FALLBACK:       # %bb.0:
-; XOP-FALLBACK-NEXT:    vmovdqa (%rdi), %xmm1
-; XOP-FALLBACK-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOP-FALLBACK-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOP-FALLBACK-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOP-FALLBACK-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOP-FALLBACK-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOP-FALLBACK-NEXT:    retq
-;
-; XOPAVX1-LABEL: vec128_i32_signed_reg_mem:
-; XOPAVX1:       # %bb.0:
-; XOPAVX1-NEXT:    vmovdqa (%rdi), %xmm1
-; XOPAVX1-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOPAVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX1-NEXT:    retq
-;
-; XOPAVX2-LABEL: vec128_i32_signed_reg_mem:
-; XOPAVX2:       # %bb.0:
-; XOPAVX2-NEXT:    vmovdqa (%rdi), %xmm1
-; XOPAVX2-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; XOPAVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; XOPAVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX2-NEXT:    retq
+; XOP-LABEL: vec128_i32_signed_reg_mem:
+; XOP:       # %bb.0:
+; XOP-NEXT:    vmovdqa (%rdi), %xmm1
+; XOP-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
+; XOP-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; XOP-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; XOP-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; XOP-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; XOP-NEXT:    vpsrld $1, %xmm1, %xmm1
+; XOP-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
+; XOP-NEXT:    retq
 ;
 ; AVX512F-LABEL: vec128_i32_signed_reg_mem:
 ; AVX512F:       # %bb.0:
@@ -705,74 +553,32 @@ define <4 x i32> @vec128_i32_signed_mem_mem(ptr %a1_addr, ptr %a2_addr) nounwind
 ; SSE41-NEXT:    paddd %xmm1, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: vec128_i32_signed_mem_mem:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vmovdqa (%rdi), %xmm0
-; AVX1-NEXT:    vmovdqa (%rsi), %xmm1
-; AVX1-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; AVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX1-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX1-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    retq
+; AVX-LABEL: vec128_i32_signed_mem_mem:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vmovdqa (%rdi), %xmm0
+; AVX-NEXT:    vmovdqa (%rsi), %xmm1
+; AVX-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; AVX-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; AVX-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; AVX-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; AVX-NEXT:    vpsrld $1, %xmm1, %xmm1
+; AVX-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
+; AVX-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    retq
 ;
-; AVX2-LABEL: vec128_i32_signed_mem_mem:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovdqa (%rdi), %xmm0
-; AVX2-NEXT:    vmovdqa (%rsi), %xmm1
-; AVX2-NEXT:    vpcmpgtd %xmm1, %xmm0, %xmm2
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; AVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; AVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; AVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; AVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; AVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; AVX2-NEXT:    vpmulld %xmm2, %xmm1, %xmm1
-; AVX2-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX2-NEXT:    retq
-;
-; XOP-FALLBACK-LABEL: vec128_i32_signed_mem_mem:
-; XOP-FALLBACK:       # %bb.0:
-; XOP-FALLBACK-NEXT:    vmovdqa (%rdi), %xmm0
-; XOP-FALLBACK-NEXT:    vmovdqa (%rsi), %xmm1
-; XOP-FALLBACK-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOP-FALLBACK-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOP-FALLBACK-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOP-FALLBACK-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOP-FALLBACK-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOP-FALLBACK-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOP-FALLBACK-NEXT:    retq
-;
-; XOPAVX1-LABEL: vec128_i32_signed_mem_mem:
-; XOPAVX1:       # %bb.0:
-; XOPAVX1-NEXT:    vmovdqa (%rdi), %xmm0
-; XOPAVX1-NEXT:    vmovdqa (%rsi), %xmm1
-; XOPAVX1-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX1-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
-; XOPAVX1-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX1-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX1-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX1-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX1-NEXT:    retq
-;
-; XOPAVX2-LABEL: vec128_i32_signed_mem_mem:
-; XOPAVX2:       # %bb.0:
-; XOPAVX2-NEXT:    vmovdqa (%rdi), %xmm0
-; XOPAVX2-NEXT:    vmovdqa (%rsi), %xmm1
-; XOPAVX2-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
-; XOPAVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [1,1,1,1]
-; XOPAVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
-; XOPAVX2-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
-; XOPAVX2-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
-; XOPAVX2-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpsrld $1, %xmm1, %xmm1
-; XOPAVX2-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
-; XOPAVX2-NEXT:    retq
+; XOP-LABEL: vec128_i32_signed_mem_mem:
+; XOP:       # %bb.0:
+; XOP-NEXT:    vmovdqa (%rdi), %xmm0
+; XOP-NEXT:    vmovdqa (%rsi), %xmm1
+; XOP-NEXT:    vpcomgtd %xmm1, %xmm0, %xmm2
+; XOP-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; XOP-NEXT:    vpminsd %xmm1, %xmm0, %xmm3
+; XOP-NEXT:    vpmaxsd %xmm1, %xmm0, %xmm1
+; XOP-NEXT:    vpsubd %xmm3, %xmm1, %xmm1
+; XOP-NEXT:    vpsrld $1, %xmm1, %xmm1
+; XOP-NEXT:    vpmacsdd %xmm0, %xmm2, %xmm1, %xmm0
+; XOP-NEXT:    retq
 ;
 ; AVX512F-LABEL: vec128_i32_signed_mem_mem:
 ; AVX512F:       # %bb.0:

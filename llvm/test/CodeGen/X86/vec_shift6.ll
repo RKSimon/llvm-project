@@ -227,8 +227,7 @@ define <16 x i32> @test8(<16 x i32> %a) {
 ;
 ; AVX2-LABEL: test8:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [1,1,2,3,1,1,2,3]
-; AVX2-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm2 = [1,1,2,3,1,1,2,3]
 ; AVX2-NEXT:    vpsllvd %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vpsllvd %ymm2, %ymm1, %ymm1
 ; AVX2-NEXT:    retq

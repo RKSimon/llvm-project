@@ -290,8 +290,7 @@ define void @freeze_buildvector_single_maybe_poison_operand(ptr %origin, ptr %ds
 ; X64:       # %bb.0:
 ; X64-NEXT:    vpbroadcastd {{.*#+}} xmm0 = [42,42,42,42]
 ; X64-NEXT:    vpinsrd $0, (%rdi), %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%rsi)
 ; X64-NEXT:    retq
   %i0.src = load i32, ptr %origin
@@ -325,8 +324,7 @@ define void @freeze_buildvector_single_repeated_maybe_poison_operand(ptr %origin
 ; X64-NEXT:    vpbroadcastd {{.*#+}} xmm0 = [42,42,42,42]
 ; X64-NEXT:    vpinsrd $0, (%rdi), %xmm0, %xmm0
 ; X64-NEXT:    vpbroadcastq %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%rsi)
 ; X64-NEXT:    retq
   %i0.src = load i32, ptr %origin
@@ -447,8 +445,7 @@ define void @freeze_two_buildvectors_one_undef_elt(ptr %origin0, ptr %origin1, p
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl (%edx), %edx
 ; X86-NEXT:    andl $15, %edx
-; X86-NEXT:    vmovddup {{.*#+}} xmm0 = [7,0,7,0]
-; X86-NEXT:    # xmm0 = mem[0,0]
+; X86-NEXT:    vpmovsxbq {{.*#+}} xmm0 = [7,7]
 ; X86-NEXT:    vmovd %edx, %xmm1
 ; X86-NEXT:    vpand %xmm0, %xmm1, %xmm2
 ; X86-NEXT:    vmovdqa %xmm2, (%ecx)
@@ -506,8 +503,7 @@ define void @freeze_buildvector(ptr %origin0, ptr %origin1, ptr %origin2, ptr %o
 ; X64-NEXT:    vpinsrd $1, (%rsi), %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $2, (%rdx), %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $3, (%rcx), %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%r8)
 ; X64-NEXT:    retq
   %i0.src = load i32, ptr %origin0
@@ -551,8 +547,7 @@ define void @freeze_buildvector_one_undef_elt(ptr %origin0, ptr %origin1, ptr %o
 ; X64-NEXT:    vpinsrd $1, (%rsi), %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $2, %eax, %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $3, (%rcx), %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%r8)
 ; X64-NEXT:    retq
   %i0.src = load i32, ptr %origin0
@@ -601,11 +596,9 @@ define void @freeze_buildvector_extrause(ptr %origin0, ptr %origin1, ptr %origin
 ; X64-NEXT:    vpinsrd $1, (%rsi), %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $2, (%rdx), %xmm0, %xmm0
 ; X64-NEXT:    vpinsrd $3, (%rcx), %xmm0, %xmm0
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [15,15,15,15]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%r9)
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [7,7,7,7]
-; X64-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; X64-NEXT:    vmovdqa %xmm0, (%r8)
 ; X64-NEXT:    retq
   %i0.src = load i32, ptr %origin0

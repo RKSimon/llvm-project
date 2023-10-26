@@ -1773,8 +1773,7 @@ define <4 x i32> @sh_trunc_sh_vec(<4 x i64> %x) {
 ; AVX2-NEXT:    vpsrlq $36, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1048575,1048575,1048575,1048575]
-; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    retq
 ;
@@ -1793,8 +1792,7 @@ define <4 x i32> @sh_trunc_sh_vec(<4 x i64> %x) {
 ; XOPAVX2-NEXT:    vpsrlq $36, %ymm0, %ymm0
 ; XOPAVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; XOPAVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
-; XOPAVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1048575,1048575,1048575,1048575]
-; XOPAVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; XOPAVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; XOPAVX2-NEXT:    vzeroupper
 ; XOPAVX2-NEXT:    retq
 ;
@@ -1802,8 +1800,7 @@ define <4 x i32> @sh_trunc_sh_vec(<4 x i64> %x) {
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vpsrlq $36, %ymm0, %ymm0
 ; AVX512-NEXT:    vpmovqd %zmm0, %ymm0
-; AVX512-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [1048575,1048575,1048575,1048575]
-; AVX512-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
 ;
@@ -1830,8 +1827,7 @@ define <4 x i32> @sh_trunc_sh_vec(<4 x i64> %x) {
 ; X86-AVX2-NEXT:    vpsrlq $36, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; X86-AVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
-; X86-AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1048575,1048575,1048575,1048575]
-; X86-AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0, %xmm0
 ; X86-AVX2-NEXT:    vzeroupper
 ; X86-AVX2-NEXT:    retl
   %s = lshr <4 x i64> %x, <i64 24, i64 24, i64 24, i64 24>

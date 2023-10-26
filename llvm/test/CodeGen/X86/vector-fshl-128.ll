@@ -1494,17 +1494,16 @@ define void @sink_splatvar(ptr %p, i32 %shift_amt) {
 ; AVX2-NEXT:    vmovd %esi, %xmm0
 ; AVX2-NEXT:    vpbroadcastd %xmm0, %xmm0
 ; AVX2-NEXT:    movq $-1024, %rax # imm = 0xFC00
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [31,31,31,31]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [32,32,32,32]
 ; AVX2-NEXT:    vpsubd %xmm0, %xmm1, %xmm1
 ; AVX2-NEXT:    .p2align 4, 0x90
 ; AVX2-NEXT:  .LBB8_1: # %loop
 ; AVX2-NEXT:    # =>This Inner Loop Header: Depth=1
 ; AVX2-NEXT:    vmovdqu 1024(%rdi,%rax), %xmm2
-; AVX2-NEXT:    vpsllvd %xmm0, %xmm2, %xmm3
-; AVX2-NEXT:    vpsrlvd %xmm1, %xmm2, %xmm2
-; AVX2-NEXT:    vpor %xmm2, %xmm3, %xmm2
+; AVX2-NEXT:    vpsrlvd %xmm1, %xmm2, %xmm3
+; AVX2-NEXT:    vpsllvd %xmm0, %xmm2, %xmm2
+; AVX2-NEXT:    vpor %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vmovdqu %xmm2, 1024(%rdi,%rax)
 ; AVX2-NEXT:    addq $16, %rax
 ; AVX2-NEXT:    jne .LBB8_1

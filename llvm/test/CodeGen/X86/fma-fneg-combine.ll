@@ -167,8 +167,7 @@ define <8 x float> @test7(<8 x float> %a, <8 x float> %b, <8 x float> %c) {
 ; KNL-LABEL: test7:
 ; KNL:       # %bb.0:
 ; KNL-NEXT:    vfmsub213ps {{.*#+}} ymm0 = (ymm1 * ymm0) - ymm2
-; KNL-NEXT:    vbroadcastss {{.*#+}} ymm1 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; KNL-NEXT:    vxorps %ymm1, %ymm0, %ymm0
+; KNL-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; KNL-NEXT:    retq
   %t0 = fneg <8 x float> %c
   %t1 = call <8 x float> @llvm.fma.v8f32(<8 x float> %a, <8 x float> %b, <8 x float> %t0)
@@ -255,8 +254,7 @@ define <4 x float> @test11(<4 x float> %a, <4 x float> %b, <4 x float> %c, i8 ze
 ;
 ; KNL-LABEL: test11:
 ; KNL:       # %bb.0: # %entry
-; KNL-NEXT:    vbroadcastss {{.*#+}} xmm3 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; KNL-NEXT:    vxorps %xmm3, %xmm2, %xmm3
+; KNL-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm3
 ; KNL-NEXT:    vfmsub213ss {{.*#+}} xmm0 = (xmm1 * xmm0) - xmm2
 ; KNL-NEXT:    kmovw %edi, %k1
 ; KNL-NEXT:    vmovss %xmm0, %xmm3, %xmm3 {%k1}

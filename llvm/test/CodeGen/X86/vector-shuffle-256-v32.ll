@@ -2347,8 +2347,7 @@ define <32 x i8> @load_fold_pblendvb_commute(ptr %px, <32 x i8> %y) {
 ; XOPAVX1-LABEL: load_fold_pblendvb_commute:
 ; XOPAVX1:       # %bb.0:
 ; XOPAVX1-NEXT:    vmovdqa (%rdi), %ymm1
-; XOPAVX1-NEXT:    vbroadcastsd {{.*#+}} ymm2 = [255,255,0,255,0,0,0,255,255,255,0,255,0,0,0,255,255,255,0,255,0,0,0,255,255,255,0,255,0,0,0,255]
-; XOPAVX1-NEXT:    vpcmov %ymm2, %ymm0, %ymm1, %ymm0
+; XOPAVX1-NEXT:    vpcmov {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1, %ymm0
 ; XOPAVX1-NEXT:    retq
 ;
 ; XOPAVX2-LABEL: load_fold_pblendvb_commute:

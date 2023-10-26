@@ -650,8 +650,7 @@ define <2 x i32> @v2i32(<2 x i32> %x, <2 x i32> %y) nounwind {
 ; AVX2-NEXT:    vpcmpgtd %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vpxor %xmm0, %xmm1, %xmm0
 ; AVX2-NEXT:    vpsrad $31, %xmm2, %xmm1
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [2147483648,2147483648,2147483648,2147483648]
-; AVX2-NEXT:    vpxor %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; AVX2-NEXT:    retq
 ;
@@ -661,8 +660,7 @@ define <2 x i32> @v2i32(<2 x i32> %x, <2 x i32> %y) nounwind {
 ; AVX512F-NEXT:    vpcmpgtd %xmm2, %xmm0, %xmm0
 ; AVX512F-NEXT:    vpxor %xmm0, %xmm1, %xmm0
 ; AVX512F-NEXT:    vpsrad $31, %xmm2, %xmm1
-; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [2147483648,2147483648,2147483648,2147483648]
-; AVX512F-NEXT:    vpxor %xmm3, %xmm1, %xmm1
+; AVX512F-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX512F-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; AVX512F-NEXT:    retq
 ;
@@ -741,8 +739,7 @@ define <4 x i32> @v4i32(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; AVX2-NEXT:    vpcmpgtd %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vpxor %xmm0, %xmm1, %xmm0
 ; AVX2-NEXT:    vpsrad $31, %xmm2, %xmm1
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [2147483648,2147483648,2147483648,2147483648]
-; AVX2-NEXT:    vpxor %xmm3, %xmm1, %xmm1
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX2-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; AVX2-NEXT:    retq
 ;
@@ -752,8 +749,7 @@ define <4 x i32> @v4i32(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; AVX512F-NEXT:    vpcmpgtd %xmm2, %xmm0, %xmm0
 ; AVX512F-NEXT:    vpxor %xmm0, %xmm1, %xmm0
 ; AVX512F-NEXT:    vpsrad $31, %xmm2, %xmm1
-; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm3 = [2147483648,2147483648,2147483648,2147483648]
-; AVX512F-NEXT:    vpxor %xmm3, %xmm1, %xmm1
+; AVX512F-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; AVX512F-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; AVX512F-NEXT:    retq
 ;
@@ -875,8 +871,7 @@ define <8 x i32> @v8i32(<8 x i32> %x, <8 x i32> %y) nounwind {
 ; AVX2-NEXT:    vpcmpgtd %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vpxor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpsrad $31, %ymm2, %ymm1
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [2147483648,2147483648,2147483648,2147483648,2147483648,2147483648,2147483648,2147483648]
-; AVX2-NEXT:    vpxor %ymm3, %ymm1, %ymm1
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvps %ymm0, %ymm1, %ymm2, %ymm0
 ; AVX2-NEXT:    retq
 ;
@@ -886,8 +881,7 @@ define <8 x i32> @v8i32(<8 x i32> %x, <8 x i32> %y) nounwind {
 ; AVX512F-NEXT:    vpcmpgtd %ymm2, %ymm0, %ymm0
 ; AVX512F-NEXT:    vpxor %ymm0, %ymm1, %ymm0
 ; AVX512F-NEXT:    vpsrad $31, %ymm2, %ymm1
-; AVX512F-NEXT:    vpbroadcastd {{.*#+}} ymm3 = [2147483648,2147483648,2147483648,2147483648,2147483648,2147483648,2147483648,2147483648]
-; AVX512F-NEXT:    vpxor %ymm3, %ymm1, %ymm1
+; AVX512F-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX512F-NEXT:    vblendvps %ymm0, %ymm1, %ymm2, %ymm0
 ; AVX512F-NEXT:    retq
 ;
@@ -1415,8 +1409,7 @@ define <4 x i64> @v4i64(<4 x i64> %x, <4 x i64> %y) nounwind {
 ; AVX2-NEXT:    vpxor %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm1
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm3, %ymm1, %ymm1
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-NEXT:    vblendvpd %ymm0, %ymm1, %ymm2, %ymm0
 ; AVX2-NEXT:    retq
 ;
@@ -1426,8 +1419,7 @@ define <4 x i64> @v4i64(<4 x i64> %x, <4 x i64> %y) nounwind {
 ; AVX512F-NEXT:    vpcmpgtq %ymm2, %ymm0, %ymm0
 ; AVX512F-NEXT:    vpxor %ymm0, %ymm1, %ymm0
 ; AVX512F-NEXT:    vpsraq $63, %zmm2, %zmm1
-; AVX512F-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX512F-NEXT:    vpxor %ymm3, %ymm1, %ymm1
+; AVX512F-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX512F-NEXT:    vblendvpd %ymm0, %ymm1, %ymm2, %ymm0
 ; AVX512F-NEXT:    retq
 ;

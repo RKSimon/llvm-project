@@ -252,10 +252,8 @@ define <4 x i32> @trunc_usat_v4i64_v4i32(<4 x i64> %a0) {
 ;
 ; AVX2-SLOW-LABEL: trunc_usat_v4i64_v4i32:
 ; AVX2-SLOW:       # %bb.0:
-; AVX2-SLOW-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-SLOW-NEXT:    vpxor %ymm1, %ymm0, %ymm1
-; AVX2-SLOW-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372041149743102,9223372041149743102,9223372041149743102,9223372041149743102]
-; AVX2-SLOW-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm1
+; AVX2-SLOW-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-SLOW-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-SLOW-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-SLOW-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-SLOW-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
@@ -264,10 +262,8 @@ define <4 x i32> @trunc_usat_v4i64_v4i32(<4 x i64> %a0) {
 ;
 ; AVX2-FAST-ALL-LABEL: trunc_usat_v4i64_v4i32:
 ; AVX2-FAST-ALL:       # %bb.0:
-; AVX2-FAST-ALL-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-FAST-ALL-NEXT:    vpxor %ymm1, %ymm0, %ymm1
-; AVX2-FAST-ALL-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372041149743102,9223372041149743102,9223372041149743102,9223372041149743102]
-; AVX2-FAST-ALL-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm1
+; AVX2-FAST-ALL-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-FAST-ALL-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-FAST-ALL-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-FAST-ALL-NEXT:    vbroadcastf128 {{.*#+}} ymm1 = [0,2,4,6,0,2,4,6]
 ; AVX2-FAST-ALL-NEXT:    # ymm1 = mem[0,1,0,1]
@@ -278,10 +274,8 @@ define <4 x i32> @trunc_usat_v4i64_v4i32(<4 x i64> %a0) {
 ;
 ; AVX2-FAST-PERLANE-LABEL: trunc_usat_v4i64_v4i32:
 ; AVX2-FAST-PERLANE:       # %bb.0:
-; AVX2-FAST-PERLANE-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-FAST-PERLANE-NEXT:    vpxor %ymm1, %ymm0, %ymm1
-; AVX2-FAST-PERLANE-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372041149743102,9223372041149743102,9223372041149743102,9223372041149743102]
-; AVX2-FAST-PERLANE-NEXT:    vpcmpgtq %ymm2, %ymm1, %ymm1
+; AVX2-FAST-PERLANE-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-FAST-PERLANE-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX2-FAST-PERLANE-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-FAST-PERLANE-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-FAST-PERLANE-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
@@ -291,7 +285,8 @@ define <4 x i32> @trunc_usat_v4i64_v4i32(<4 x i64> %a0) {
 ; AVX512F-LABEL: trunc_usat_v4i64_v4i32:
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
-; AVX512F-NEXT:    vpcmpltuq {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %zmm0, %k1
+; AVX512F-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [4294967295,4294967295,4294967295,4294967295]
+; AVX512F-NEXT:    vpcmpltuq %zmm1, %zmm0, %k1
 ; AVX512F-NEXT:    vpmovzxdq {{.*#+}} ymm1 = [4294967295,4294967295,4294967295,429496729]
 ; AVX512F-NEXT:    vmovdqa64 %zmm0, %zmm1 {%k1}
 ; AVX512F-NEXT:    vpmovqd %zmm1, %ymm0
@@ -311,7 +306,8 @@ define <4 x i32> @trunc_usat_v4i64_v4i32(<4 x i64> %a0) {
 ; AVX512BW-LABEL: trunc_usat_v4i64_v4i32:
 ; AVX512BW:       # %bb.0:
 ; AVX512BW-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
-; AVX512BW-NEXT:    vpcmpltuq {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %zmm0, %k1
+; AVX512BW-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [4294967295,4294967295,4294967295,4294967295]
+; AVX512BW-NEXT:    vpcmpltuq %zmm1, %zmm0, %k1
 ; AVX512BW-NEXT:    vpmovzxdq {{.*#+}} ymm1 = [4294967295,4294967295,4294967295,429496729]
 ; AVX512BW-NEXT:    vmovdqa64 %zmm0, %zmm1 {%k1}
 ; AVX512BW-NEXT:    vpmovqd %zmm1, %ymm0
@@ -836,12 +832,9 @@ define <4 x i16> @trunc_usat_v4i64_v4i16(<4 x i64> %a0) {
 ;
 ; AVX2-LABEL: trunc_usat_v4i64_v4i16:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854841342,9223372036854841342,9223372036854841342,9223372036854841342]
-; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm2, %ymm2
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -971,12 +964,9 @@ define void @trunc_usat_v4i64_v4i16_store(<4 x i64> %a0, ptr%p1) {
 ;
 ; AVX2-LABEL: trunc_usat_v4i64_v4i16_store:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854841342,9223372036854841342,9223372036854841342,9223372036854841342]
-; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm2, %ymm2
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -1242,18 +1232,11 @@ define <4 x i16> @trunc_usat_v4i32_v4i16(<4 x i32> %a0) {
 ; SSE41-NEXT:    packusdw %xmm0, %xmm0
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: trunc_usat_v4i32_v4i16:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: trunc_usat_v4i32_v4i16:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: trunc_usat_v4i32_v4i16:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
+; AVX-NEXT:    retq
 ;
 ; AVX512F-LABEL: trunc_usat_v4i32_v4i16:
 ; AVX512F:       # %bb.0:
@@ -1327,20 +1310,12 @@ define void @trunc_usat_v4i32_v4i16_store(<4 x i32> %a0, ptr%p1) {
 ; SSE41-NEXT:    movq %xmm0, (%rdi)
 ; SSE41-NEXT:    retq
 ;
-; AVX1-LABEL: trunc_usat_v4i32_v4i16_store:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX1-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vmovq %xmm0, (%rdi)
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: trunc_usat_v4i32_v4i16_store:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vmovq %xmm0, (%rdi)
-; AVX2-NEXT:    retq
+; AVX-LABEL: trunc_usat_v4i32_v4i16_store:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
+; AVX-NEXT:    vmovq %xmm0, (%rdi)
+; AVX-NEXT:    retq
 ;
 ; AVX512F-LABEL: trunc_usat_v4i32_v4i16_store:
 ; AVX512F:       # %bb.0:
@@ -1447,8 +1422,7 @@ define <8 x i16> @trunc_usat_v8i32_v8i16(<8 x i32> %a0) {
 ;
 ; AVX2-LABEL: trunc_usat_v8i32_v8i16:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [65535,65535,65535,65535,65535,65535,65535,65535]
-; AVX2-NEXT:    vpminud %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vzeroupper
@@ -1917,12 +1891,9 @@ define <4 x i8> @trunc_usat_v4i64_v4i8(<4 x i64> %a0) {
 ;
 ; AVX2-LABEL: trunc_usat_v4i64_v4i8:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [255,255,255,255]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854776062,9223372036854776062,9223372036854776062,9223372036854776062]
-; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm2, %ymm2
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -2054,12 +2025,9 @@ define void @trunc_usat_v4i64_v4i8_store(<4 x i64> %a0, ptr%p1) {
 ;
 ; AVX2-LABEL: trunc_usat_v4i64_v4i8_store:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm1 = [255,255,255,255]
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm2 = [9223372036854775808,9223372036854775808,9223372036854775808,9223372036854775808]
-; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm2
-; AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm3 = [9223372036854776062,9223372036854776062,9223372036854776062,9223372036854776062]
-; AVX2-NEXT:    vpcmpgtq %ymm3, %ymm2, %ymm2
-; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVX2-NEXT:    vpcmpgtq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; AVX2-NEXT:    vblendvpd %ymm1, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
@@ -2830,16 +2798,14 @@ define <4 x i8> @trunc_usat_v4i32_v4i8(<4 x i32> %a0) {
 ;
 ; AVX2-SLOW-LABEL: trunc_usat_v4i32_v4i8:
 ; AVX2-SLOW:       # %bb.0:
-; AVX2-SLOW-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [255,255,255,255]
-; AVX2-SLOW-NEXT:    vpminud %xmm1, %xmm0, %xmm0
+; AVX2-SLOW-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    retq
 ;
 ; AVX2-FAST-LABEL: trunc_usat_v4i32_v4i8:
 ; AVX2-FAST:       # %bb.0:
-; AVX2-FAST-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [255,255,255,255]
-; AVX2-FAST-NEXT:    vpminud %xmm1, %xmm0, %xmm0
+; AVX2-FAST-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-FAST-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,0,4,8,12,0,4,8,12,0,4,8,12]
 ; AVX2-FAST-NEXT:    retq
 ;
@@ -2910,8 +2876,7 @@ define void @trunc_usat_v4i32_v4i8_store(<4 x i32> %a0, ptr%p1) {
 ;
 ; AVX2-SLOW-LABEL: trunc_usat_v4i32_v4i8_store:
 ; AVX2-SLOW:       # %bb.0:
-; AVX2-SLOW-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [255,255,255,255]
-; AVX2-SLOW-NEXT:    vpminud %xmm1, %xmm0, %xmm0
+; AVX2-SLOW-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpackusdw %xmm0, %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
 ; AVX2-SLOW-NEXT:    vmovd %xmm0, (%rdi)
@@ -2919,8 +2884,7 @@ define void @trunc_usat_v4i32_v4i8_store(<4 x i32> %a0, ptr%p1) {
 ;
 ; AVX2-FAST-LABEL: trunc_usat_v4i32_v4i8_store:
 ; AVX2-FAST:       # %bb.0:
-; AVX2-FAST-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [255,255,255,255]
-; AVX2-FAST-NEXT:    vpminud %xmm1, %xmm0, %xmm0
+; AVX2-FAST-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-FAST-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,u,u,u,u,u,u,u,u,u,u,u,u]
 ; AVX2-FAST-NEXT:    vmovd %xmm0, (%rdi)
 ; AVX2-FAST-NEXT:    retq
@@ -3006,8 +2970,7 @@ define <8 x i8> @trunc_usat_v8i32_v8i8(<8 x i32> %a0) {
 ;
 ; AVX2-LABEL: trunc_usat_v8i32_v8i8:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [255,255,255,255,255,255,255,255]
-; AVX2-NEXT:    vpminud %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
@@ -3098,8 +3061,7 @@ define void @trunc_usat_v8i32_v8i8_store(<8 x i32> %a0, ptr%p1) {
 ;
 ; AVX2-LABEL: trunc_usat_v8i32_v8i8_store:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [255,255,255,255,255,255,255,255]
-; AVX2-NEXT:    vpminud %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpminud {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0

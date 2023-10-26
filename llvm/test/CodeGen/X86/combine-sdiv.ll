@@ -80,15 +80,13 @@ define <4 x i32> @combine_vec_sdiv_by_minsigned(<4 x i32> %x) {
 ;
 ; AVX2-LABEL: combine_vec_sdiv_by_minsigned:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2147483648,2147483648,2147483648,2147483648]
-; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vpsrld $31, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512F-LABEL: combine_vec_sdiv_by_minsigned:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [2147483648,2147483648,2147483648,2147483648]
-; AVX512F-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
+; AVX512F-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX512F-NEXT:    vpsrld $31, %xmm0, %xmm0
 ; AVX512F-NEXT:    retq
 ;
@@ -172,15 +170,13 @@ define <4 x i32> @combine_vec_sdiv_by_pos0(<4 x i32> %x) {
 ; AVX2-LABEL: combine_vec_sdiv_by_pos0:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpsrld $2, %xmm0, %xmm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [63,63,63,63]
-; AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512F-LABEL: combine_vec_sdiv_by_pos0:
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    vpsrld $2, %xmm0, %xmm0
-; AVX512F-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [63,63,63,63]
-; AVX512F-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX512F-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX512F-NEXT:    retq
 ;
 ; AVX512BW-LABEL: combine_vec_sdiv_by_pos0:
@@ -726,9 +722,7 @@ define <16 x i16> @combine_vec_sdiv_by_pow2b_v16i16(<16 x i16> %x) {
 ; XOP-NEXT:    vpaddw %xmm3, %xmm0, %xmm3
 ; XOP-NEXT:    vpshaw %xmm2, %xmm3, %xmm2
 ; XOP-NEXT:    vinsertf128 $1, %xmm1, %ymm2, %ymm1
-; XOP-NEXT:    vbroadcastf128 {{.*#+}} ymm2 = [0,65535,65535,65535,65535,65535,65535,65535,0,65535,65535,65535,65535,65535,65535,65535]
-; XOP-NEXT:    # ymm2 = mem[0,1,0,1]
-; XOP-NEXT:    vpcmov %ymm2, %ymm0, %ymm1, %ymm0
+; XOP-NEXT:    vpcmov {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1, %ymm0
 ; XOP-NEXT:    retq
   %1 = sdiv <16 x i16> %x, <i16 1, i16 4, i16 2, i16 16, i16 8, i16 32, i16 64, i16 2, i16 1, i16 4, i16 2, i16 16, i16 8, i16 32, i16 64, i16 2>
   ret <16 x i16> %1
@@ -1465,12 +1459,10 @@ define <16 x i32> @combine_vec_sdiv_by_pow2b_v16i32(<16 x i32> %x) {
 ; AVX2-LABEL: combine_vec_sdiv_by_pow2b_v16i32:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpsrad $31, %ymm0, %ymm2
-; AVX2-NEXT:    vbroadcasti128 {{.*#+}} ymm3 = [0,30,29,28,0,30,29,28]
-; AVX2-NEXT:    # ymm3 = mem[0,1,0,1]
+; AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm3 = [0,30,29,28,0,30,29,28]
 ; AVX2-NEXT:    vpsrlvd %ymm3, %ymm2, %ymm2
 ; AVX2-NEXT:    vpaddd %ymm2, %ymm0, %ymm2
-; AVX2-NEXT:    vbroadcasti128 {{.*#+}} ymm4 = [0,2,3,4,0,2,3,4]
-; AVX2-NEXT:    # ymm4 = mem[0,1,0,1]
+; AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm4 = [0,2,3,4,0,2,3,4]
 ; AVX2-NEXT:    vpsravd %ymm4, %ymm2, %ymm2
 ; AVX2-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm2[1,2,3],ymm0[4],ymm2[5,6,7]
 ; AVX2-NEXT:    vpsrad $31, %ymm1, %ymm2
