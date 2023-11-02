@@ -437,7 +437,7 @@ define i128 @urem_i128_12(i128 %x) nounwind {
 ; X86-64-NEXT:    leal (%rdx,%rdx,2), %eax
 ; X86-64-NEXT:    subl %eax, %ecx
 ; X86-64-NEXT:    andl $3, %edi
-; X86-64-NEXT:    leaq (%rdi,%rcx,4), %rax
+; X86-64-NEXT:    leal (%rdi,%rcx,4), %eax
 ; X86-64-NEXT:    xorl %edx, %edx
 ; X86-64-NEXT:    retq
 ;
@@ -455,7 +455,7 @@ define i128 @urem_i128_12(i128 %x) nounwind {
 ; WIN64-NEXT:    leal (%rdx,%rdx,2), %eax
 ; WIN64-NEXT:    subl %eax, %r8d
 ; WIN64-NEXT:    andl $3, %ecx
-; WIN64-NEXT:    leaq (%rcx,%r8,4), %rax
+; WIN64-NEXT:    leal (%rcx,%r8,4), %eax
 ; WIN64-NEXT:    xorl %edx, %edx
 ; WIN64-NEXT:    retq
 entry:

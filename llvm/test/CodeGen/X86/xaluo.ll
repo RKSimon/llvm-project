@@ -995,9 +995,9 @@ define {i64, i1} @ssuboovf(i64 %a, i64 %b) {
 define {i64, i1} @uaddoovf(i64 %a, i64 %b) {
 ; CHECK-LABEL: uaddoovf:
 ; CHECK:       ## %bb.0:
-; CHECK-NEXT:    movzbl %dil, %ecx
-; CHECK-NEXT:    movzbl %sil, %eax
-; CHECK-NEXT:    addq %rcx, %rax
+; CHECK-NEXT:    movzbl %dil, %eax
+; CHECK-NEXT:    movzbl %sil, %ecx
+; CHECK-NEXT:    addl %ecx, %eax
 ; CHECK-NEXT:    xorl %edx, %edx
 ; CHECK-NEXT:    retq
   %1 = and i64 %a, 255

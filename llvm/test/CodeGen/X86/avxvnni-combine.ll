@@ -47,8 +47,7 @@ define <2 x i64> @foo_128(i32 %0, <2 x i64> %1, <2 x i64> %2, ptr %3) {
 ; AVX-NEXT:    testl %edi, %edi
 ; AVX-NEXT:    jle .LBB1_6
 ; AVX-NEXT:  # %bb.1:
-; AVX-NEXT:    movl %edi, %edx
-; AVX-NEXT:    movl %edx, %eax
+; AVX-NEXT:    movl %edi, %eax
 ; AVX-NEXT:    andl $3, %eax
 ; AVX-NEXT:    cmpl $4, %edi
 ; AVX-NEXT:    jae .LBB1_7
@@ -56,6 +55,7 @@ define <2 x i64> @foo_128(i32 %0, <2 x i64> %1, <2 x i64> %2, ptr %3) {
 ; AVX-NEXT:    xorl %ecx, %ecx
 ; AVX-NEXT:    jmp .LBB1_3
 ; AVX-NEXT:  .LBB1_7:
+; AVX-NEXT:    movl %edi, %edx
 ; AVX-NEXT:    andl $-4, %edx
 ; AVX-NEXT:    leaq 48(%rsi), %rdi
 ; AVX-NEXT:    xorl %ecx, %ecx
@@ -94,8 +94,7 @@ define <2 x i64> @foo_128(i32 %0, <2 x i64> %1, <2 x i64> %2, ptr %3) {
 ; AVX512-NEXT:    testl %edi, %edi
 ; AVX512-NEXT:    jle .LBB1_6
 ; AVX512-NEXT:  # %bb.1:
-; AVX512-NEXT:    movl %edi, %edx
-; AVX512-NEXT:    movl %edx, %eax
+; AVX512-NEXT:    movl %edi, %eax
 ; AVX512-NEXT:    andl $3, %eax
 ; AVX512-NEXT:    cmpl $4, %edi
 ; AVX512-NEXT:    jae .LBB1_7
@@ -103,6 +102,7 @@ define <2 x i64> @foo_128(i32 %0, <2 x i64> %1, <2 x i64> %2, ptr %3) {
 ; AVX512-NEXT:    xorl %ecx, %ecx
 ; AVX512-NEXT:    jmp .LBB1_3
 ; AVX512-NEXT:  .LBB1_7:
+; AVX512-NEXT:    movl %edi, %edx
 ; AVX512-NEXT:    andl $-4, %edx
 ; AVX512-NEXT:    leaq 48(%rsi), %rdi
 ; AVX512-NEXT:    xorl %ecx, %ecx
@@ -394,8 +394,7 @@ define <4 x i64> @foo_256(i32 %0, <4 x i64> %1, <4 x i64> %2, ptr %3) {
 ; AVX-NEXT:    testl %edi, %edi
 ; AVX-NEXT:    jle .LBB4_6
 ; AVX-NEXT:  # %bb.1:
-; AVX-NEXT:    movl %edi, %edx
-; AVX-NEXT:    movl %edx, %eax
+; AVX-NEXT:    movl %edi, %eax
 ; AVX-NEXT:    andl $3, %eax
 ; AVX-NEXT:    cmpl $4, %edi
 ; AVX-NEXT:    jae .LBB4_7
@@ -403,6 +402,7 @@ define <4 x i64> @foo_256(i32 %0, <4 x i64> %1, <4 x i64> %2, ptr %3) {
 ; AVX-NEXT:    xorl %ecx, %ecx
 ; AVX-NEXT:    jmp .LBB4_3
 ; AVX-NEXT:  .LBB4_7:
+; AVX-NEXT:    movl %edi, %edx
 ; AVX-NEXT:    andl $-4, %edx
 ; AVX-NEXT:    leaq 96(%rsi), %rdi
 ; AVX-NEXT:    xorl %ecx, %ecx
@@ -441,8 +441,7 @@ define <4 x i64> @foo_256(i32 %0, <4 x i64> %1, <4 x i64> %2, ptr %3) {
 ; AVX512-NEXT:    testl %edi, %edi
 ; AVX512-NEXT:    jle .LBB4_6
 ; AVX512-NEXT:  # %bb.1:
-; AVX512-NEXT:    movl %edi, %edx
-; AVX512-NEXT:    movl %edx, %eax
+; AVX512-NEXT:    movl %edi, %eax
 ; AVX512-NEXT:    andl $3, %eax
 ; AVX512-NEXT:    cmpl $4, %edi
 ; AVX512-NEXT:    jae .LBB4_7
@@ -450,6 +449,7 @@ define <4 x i64> @foo_256(i32 %0, <4 x i64> %1, <4 x i64> %2, ptr %3) {
 ; AVX512-NEXT:    xorl %ecx, %ecx
 ; AVX512-NEXT:    jmp .LBB4_3
 ; AVX512-NEXT:  .LBB4_7:
+; AVX512-NEXT:    movl %edi, %edx
 ; AVX512-NEXT:    andl $-4, %edx
 ; AVX512-NEXT:    leaq 96(%rsi), %rdi
 ; AVX512-NEXT:    xorl %ecx, %ecx

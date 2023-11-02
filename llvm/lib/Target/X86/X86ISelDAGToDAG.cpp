@@ -556,6 +556,7 @@ namespace {
     bool isMaskZeroExtended(SDNode *N) const;
     bool tryShiftAmountMod(SDNode *N);
     bool tryShrinkShlLogicImm(SDNode *N);
+    bool tryShrinkBinOp(SDNode *N);
     bool tryVPTERNLOG(SDNode *N);
     bool matchVPTERNLOG(SDNode *Root, SDNode *ParentA, SDNode *ParentB,
                         SDNode *ParentC, SDValue A, SDValue B, SDValue C,
@@ -4681,6 +4682,31 @@ bool X86DAGToDAGISel::shrinkAndImmediate(SDNode *And) {
   return true;
 }
 
+bool X86DAGToDAGISel::tryShrinkBinOp(SDNode *N) {
+  if (N->getSimpleValueType(0) != MVT::i64)
+    return false;
+
+  KnownBits Bits = CurDAG->computeKnownBits(SDValue(N, 0));
+  if (Bits.countMinLeadingZeros() < 32)
+    return false;
+
+  SDLoc DL(N);
+  SDValue NewOp0 = CurDAG->getNode(ISD::TRUNCATE, DL, MVT::i32, N->getOperand(0));
+  SDValue NewOp1 = CurDAG->getNode(ISD::TRUNCATE, DL, MVT::i32, N->getOperand(1));
+  insertDAGNode(*CurDAG, SDValue(N, 0), NewOp0);
+  insertDAGNode(*CurDAG, SDValue(N, 0), NewOp1);
+
+  SDValue NewBinOp =
+      CurDAG->getNode(N->getOpcode(), DL, MVT::i32, NewOp0, NewOp1);
+  insertDAGNode(*CurDAG, SDValue(N, 0), NewBinOp);
+
+  SDValue ZextBinOp = CurDAG->getNode(ISD::ZERO_EXTEND, DL, MVT::i64, NewBinOp);
+  ReplaceNode(N, ZextBinOp.getNode());
+  SelectCode(ZextBinOp.getNode());
+  return true;
+}
+
+
 static unsigned getVPTESTMOpc(MVT TestVT, bool IsTestN, bool FoldedLoad,
                               bool FoldedBCast, bool Masked) {
 #define VPTESTM_CASE(VT, SUFFIX) \
@@ -5188,6 +5214,8 @@ void X86DAGToDAGISel::Select(SDNode *Node) {
   case X86ISD::ANDNP:
     if (tryVPTERNLOG(Node))
       return;
+    if (tryShrinkBinOp(Node))
+      return;
     break;
 
   case ISD::AND:
@@ -5227,6 +5255,9 @@ void X86DAGToDAGISel::Select(SDNode *Node) {
   case ISD::ADD:
     if (Opcode == ISD::ADD && matchBitExtract(Node))
       return;
+    if (tryShrinkBinOp(Node))
+      return;
+
     [[fallthrough]];
   case ISD::SUB: {
     // Try to avoid folding immediates with multiple uses for optsize.

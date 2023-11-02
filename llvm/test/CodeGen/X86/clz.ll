@@ -1451,14 +1451,14 @@ define i32 @PR47603_zext(i32 %a0, ptr %a1) {
 ; X64-CLZ-LABEL: PR47603_zext:
 ; X64-CLZ:       # %bb.0:
 ; X64-CLZ-NEXT:    lzcntl %edi, %eax
-; X64-CLZ-NEXT:    xorq $31, %rax
+; X64-CLZ-NEXT:    xorl $31, %eax
 ; X64-CLZ-NEXT:    movsbl (%rsi,%rax), %eax
 ; X64-CLZ-NEXT:    retq
 ;
 ; X64-FASTLZCNT-LABEL: PR47603_zext:
 ; X64-FASTLZCNT:       # %bb.0:
 ; X64-FASTLZCNT-NEXT:    lzcntl %edi, %eax
-; X64-FASTLZCNT-NEXT:    xorq $31, %rax
+; X64-FASTLZCNT-NEXT:    xorl $31, %eax
 ; X64-FASTLZCNT-NEXT:    movsbl (%rsi,%rax), %eax
 ; X64-FASTLZCNT-NEXT:    retq
 ;
@@ -1836,7 +1836,7 @@ define i64 @ctlz_xor63_i64_true(i64 %x) {
 ; X64-FASTLZCNT-LABEL: ctlz_xor63_i64_true:
 ; X64-FASTLZCNT:       # %bb.0:
 ; X64-FASTLZCNT-NEXT:    lzcntq %rdi, %rax
-; X64-FASTLZCNT-NEXT:    xorq $63, %rax
+; X64-FASTLZCNT-NEXT:    xorl $63, %eax
 ; X64-FASTLZCNT-NEXT:    retq
 ;
 ; X86-FASTLZCNT-LABEL: ctlz_xor63_i64_true:

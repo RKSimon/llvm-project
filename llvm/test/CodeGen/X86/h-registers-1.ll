@@ -16,25 +16,26 @@ define i64 @foo(i64 %a, i64 %b, i64 %c, i64 %d, i64 %e, i64 %f, i64 %g, i64 %h) 
 ; CHECK-NEXT:    .cfi_def_cfa_offset 24
 ; CHECK-NEXT:    .cfi_offset %rbx, -24
 ; CHECK-NEXT:    .cfi_offset %rbp, -16
-; CHECK-NEXT:    movq %rsi, %rax
-; CHECK-NEXT:    movq %rdi, %rbx
-; CHECK-NEXT:    movzbl %bh, %esi
-; CHECK-NEXT:    movzbl %ah, %edi
+; CHECK-NEXT:    movq %rcx, %rbx
+; CHECK-NEXT:    movq %rsi, %rcx
+; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    movzbl %ah, %eax
+; CHECK-NEXT:    movzbl %ch, %edi
 ; CHECK-NEXT:    movzbl %dh, %edx
-; CHECK-NEXT:    movzbl %ch, %ebp
-; CHECK-NEXT:    movq %r8, %rax
-; CHECK-NEXT:    movzbl %ah, %ecx
-; CHECK-NEXT:    movq %r9, %rax
-; CHECK-NEXT:    movzbl %ah, %ebx
-; CHECK-NEXT:    movzbl {{[0-9]+}}(%rsp), %eax
+; CHECK-NEXT:    movzbl %bh, %ebp
+; CHECK-NEXT:    movq %r8, %rcx
+; CHECK-NEXT:    movzbl %ch, %ecx
+; CHECK-NEXT:    movq %r9, %rbx
+; CHECK-NEXT:    movzbl %bh, %ebx
+; CHECK-NEXT:    movzbl {{[0-9]+}}(%rsp), %esi
 ; CHECK-NEXT:    movzbl {{[0-9]+}}(%rsp), %r8d
-; CHECK-NEXT:    addq %rdi, %rsi
-; CHECK-NEXT:    addq %rbp, %rdx
-; CHECK-NEXT:    addq %rsi, %rdx
-; CHECK-NEXT:    addq %rbx, %rcx
-; CHECK-NEXT:    addq %r8, %rax
-; CHECK-NEXT:    addq %rcx, %rax
-; CHECK-NEXT:    addq %rdx, %rax
+; CHECK-NEXT:    addl %edi, %eax
+; CHECK-NEXT:    addl %ebp, %edx
+; CHECK-NEXT:    addl %ebx, %ecx
+; CHECK-NEXT:    addl %r8d, %esi
+; CHECK-NEXT:    addl %edx, %eax
+; CHECK-NEXT:    addl %esi, %ecx
+; CHECK-NEXT:    addl %ecx, %eax
 ; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    .cfi_def_cfa_offset 16
 ; CHECK-NEXT:    popq %rbp
@@ -49,25 +50,26 @@ define i64 @foo(i64 %a, i64 %b, i64 %c, i64 %d, i64 %e, i64 %f, i64 %g, i64 %h) 
 ; GNUX32-NEXT:    .cfi_def_cfa_offset 24
 ; GNUX32-NEXT:    .cfi_offset %rbx, -24
 ; GNUX32-NEXT:    .cfi_offset %rbp, -16
-; GNUX32-NEXT:    movq %rsi, %rax
-; GNUX32-NEXT:    movq %rdi, %rbx
-; GNUX32-NEXT:    movzbl %bh, %esi
-; GNUX32-NEXT:    movzbl %ah, %edi
+; GNUX32-NEXT:    movq %rcx, %rbx
+; GNUX32-NEXT:    movq %rsi, %rcx
+; GNUX32-NEXT:    movq %rdi, %rax
+; GNUX32-NEXT:    movzbl %ah, %eax
+; GNUX32-NEXT:    movzbl %ch, %edi
 ; GNUX32-NEXT:    movzbl %dh, %edx
-; GNUX32-NEXT:    movzbl %ch, %ebp
-; GNUX32-NEXT:    movq %r8, %rax
-; GNUX32-NEXT:    movzbl %ah, %ecx
-; GNUX32-NEXT:    movq %r9, %rax
-; GNUX32-NEXT:    movzbl %ah, %ebx
-; GNUX32-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; GNUX32-NEXT:    movzbl %bh, %ebp
+; GNUX32-NEXT:    movq %r8, %rcx
+; GNUX32-NEXT:    movzbl %ch, %ecx
+; GNUX32-NEXT:    movq %r9, %rbx
+; GNUX32-NEXT:    movzbl %bh, %ebx
+; GNUX32-NEXT:    movzbl {{[0-9]+}}(%esp), %esi
 ; GNUX32-NEXT:    movzbl {{[0-9]+}}(%esp), %r8d
-; GNUX32-NEXT:    addq %rdi, %rsi
-; GNUX32-NEXT:    addq %rbp, %rdx
-; GNUX32-NEXT:    addq %rsi, %rdx
-; GNUX32-NEXT:    addq %rbx, %rcx
-; GNUX32-NEXT:    addq %r8, %rax
-; GNUX32-NEXT:    addq %rcx, %rax
-; GNUX32-NEXT:    addq %rdx, %rax
+; GNUX32-NEXT:    addl %edi, %eax
+; GNUX32-NEXT:    addl %ebp, %edx
+; GNUX32-NEXT:    addl %ebx, %ecx
+; GNUX32-NEXT:    addl %r8d, %esi
+; GNUX32-NEXT:    addl %edx, %eax
+; GNUX32-NEXT:    addl %esi, %ecx
+; GNUX32-NEXT:    addl %ecx, %eax
 ; GNUX32-NEXT:    popq %rbx
 ; GNUX32-NEXT:    .cfi_def_cfa_offset 16
 ; GNUX32-NEXT:    popq %rbp

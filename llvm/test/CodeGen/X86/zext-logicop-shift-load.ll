@@ -115,7 +115,7 @@ define i64 @test5(ptr %data) {
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movzbl (%rdi), %eax
 ; X64-NEXT:    shrl $2, %eax
-; X64-NEXT:    xorq $60, %rax
+; X64-NEXT:    xorl $60, %eax
 ; X64-NEXT:    retq
 entry:
   %bf.load = load i8, ptr %data, align 4
@@ -139,7 +139,7 @@ define i64 @test6(ptr %data) {
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movzbl (%rdi), %eax
 ; X64-NEXT:    shrl $2, %eax
-; X64-NEXT:    orq $60, %rax
+; X64-NEXT:    orl $60, %eax
 ; X64-NEXT:    retq
 entry:
   %bf.load = load i8, ptr %data, align 4

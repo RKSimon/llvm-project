@@ -830,10 +830,10 @@ define i32 @PR46586(ptr %p, <4 x i32> %v) {
 define void @pr59781(ptr %in, ptr %out) {
 ; CHECK-LABEL: pr59781:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movzwl (%rdi), %eax
-; CHECK-NEXT:    movzbl 2(%rdi), %ecx
-; CHECK-NEXT:    shll $16, %ecx
-; CHECK-NEXT:    orq %rax, %rcx
+; CHECK-NEXT:    movzbl 2(%rdi), %eax
+; CHECK-NEXT:    shll $16, %eax
+; CHECK-NEXT:    movzwl (%rdi), %ecx
+; CHECK-NEXT:    orl %eax, %ecx
 ; CHECK-NEXT:    movq %rcx, (%rsi)
 ; CHECK-NEXT:    retq
   %bf.load = load i24, ptr %in, align 8

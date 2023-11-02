@@ -107,7 +107,7 @@ define dso_local i64 @foo5() #0 {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    endbr64
 ; CHECK-NEXT:    movabsq $-4077854459, %rax # imm = 0xFFFFFFFF0CF0E105
-; CHECK-NEXT:    notq %rax
+; CHECK-NEXT:    notl %eax
 ; CHECK-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    retq
 entry:

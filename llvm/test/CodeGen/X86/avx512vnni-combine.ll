@@ -42,8 +42,7 @@ define <8 x i64> @foo_512(i32 %0, <8 x i64> %1, <8 x i64> %2, ptr %3) {
 ; CHECK-NEXT:    testl %edi, %edi
 ; CHECK-NEXT:    jle .LBB1_6
 ; CHECK-NEXT:  # %bb.1:
-; CHECK-NEXT:    movl %edi, %edx
-; CHECK-NEXT:    movl %edx, %eax
+; CHECK-NEXT:    movl %edi, %eax
 ; CHECK-NEXT:    andl $3, %eax
 ; CHECK-NEXT:    cmpl $4, %edi
 ; CHECK-NEXT:    jae .LBB1_7
@@ -51,6 +50,7 @@ define <8 x i64> @foo_512(i32 %0, <8 x i64> %1, <8 x i64> %2, ptr %3) {
 ; CHECK-NEXT:    xorl %ecx, %ecx
 ; CHECK-NEXT:    jmp .LBB1_3
 ; CHECK-NEXT:  .LBB1_7:
+; CHECK-NEXT:    movl %edi, %edx
 ; CHECK-NEXT:    andl $-4, %edx
 ; CHECK-NEXT:    leaq 192(%rsi), %rdi
 ; CHECK-NEXT:    xorl %ecx, %ecx

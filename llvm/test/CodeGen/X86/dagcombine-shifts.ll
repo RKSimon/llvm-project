@@ -215,12 +215,11 @@ define i64 @fun10(i8 zeroext %v) {
 ;
 ; X64-LABEL: fun10:
 ; X64:       # %bb.0: # %entry
-; X64-NEXT:    # kill: def $edi killed $edi def $rdi
 ; X64-NEXT:    movl %edi, %eax
 ; X64-NEXT:    shrb $4, %al
-; X64-NEXT:    movzbl %al, %eax
 ; X64-NEXT:    andl $-16, %edi
-; X64-NEXT:    orq %rdi, %rax
+; X64-NEXT:    movzbl %al, %eax
+; X64-NEXT:    orl %edi, %eax
 ; X64-NEXT:    retq
 entry:
   %shr = lshr i8 %v, 4
@@ -243,11 +242,10 @@ define i64 @fun11(i16 zeroext %v) {
 ;
 ; X64-LABEL: fun11:
 ; X64:       # %bb.0: # %entry
-; X64-NEXT:    # kill: def $edi killed $edi def $rdi
 ; X64-NEXT:    movl %edi, %eax
 ; X64-NEXT:    shrl $4, %eax
 ; X64-NEXT:    andl $-16, %edi
-; X64-NEXT:    addq %rdi, %rax
+; X64-NEXT:    addl %edi, %eax
 ; X64-NEXT:    retq
 entry:
   %shr = lshr i16 %v, 4

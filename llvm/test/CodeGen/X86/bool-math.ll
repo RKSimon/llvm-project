@@ -156,7 +156,7 @@ define i64 @low_bit_select_constants_bigger_false_wider_result(i32 %x) {
 ; X64:       # %bb.0:
 ; X64-NEXT:    # kill: def $edi killed $edi def $rdi
 ; X64-NEXT:    andl $1, %edi
-; X64-NEXT:    leaq 26(%rdi), %rax
+; X64-NEXT:    leal 26(%rdi), %eax
 ; X64-NEXT:    retq
 ;
 ; X32-LABEL: low_bit_select_constants_bigger_false_wider_result:

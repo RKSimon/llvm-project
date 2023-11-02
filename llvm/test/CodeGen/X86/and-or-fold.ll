@@ -78,7 +78,7 @@ define i64 @test2(i64 %x) nounwind readnone ssp {
 ; DARWIN-OPT-LABEL: test2:
 ; DARWIN-OPT:       ## %bb.0: ## %entry
 ; DARWIN-OPT-NEXT:    andl $123124, %edi ## imm = 0x1E0F4
-; DARWIN-OPT-NEXT:    leaq 3(%rdi), %rax
+; DARWIN-OPT-NEXT:    leal 3(%rdi), %eax
 ; DARWIN-OPT-NEXT:    retq
 entry:
   %tmp1 = and i64 %x, 123127
