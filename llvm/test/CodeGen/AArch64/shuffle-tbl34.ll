@@ -182,10 +182,10 @@ define <16 x i8> @shuffle4_v16i8(<16 x i8> %a, <16 x i8> %b, <16 x i8> %c, <16 x
 ; CHECK-NEXT:    adrp x8, .LCPI3_1
 ; CHECK-NEXT:    ldr q3, [x8, :lo12:.LCPI3_1]
 ; CHECK-NEXT:    adrp x8, .LCPI3_2
-; CHECK-NEXT:    tbl v1.16b, { v0.16b }, v1.16b
-; CHECK-NEXT:    tbl v0.16b, { v2.16b }, v3.16b
-; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI3_2]
-; CHECK-NEXT:    tbl v0.16b, { v0.16b, v1.16b }, v2.16b
+; CHECK-NEXT:    tbl v2.16b, { v2.16b }, v1.16b
+; CHECK-NEXT:    tbl v1.16b, { v0.16b }, v3.16b
+; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI3_2]
+; CHECK-NEXT:    tbl v0.16b, { v1.16b, v2.16b }, v0.16b
 ; CHECK-NEXT:    ret
   %x = shufflevector <16 x i8> %a, <16 x i8> %b, <8 x i32> <i32 0, i32 3, i32 2, i32 1, i32 12, i32 15, i32 14, i32 12>
   %y = shufflevector <16 x i8> %c, <16 x i8> %d, <8 x i32> <i32 4, i32 7, i32 6, i32 7, i32 8, i32 10, i32 9, i32 11>
@@ -270,7 +270,7 @@ define <16 x i8> @shuffle4_v8i8_v16i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 
 ; CHECK-NEXT:    mov x8, #-63744 // =0xffffffffffff0700
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
 ; CHECK-NEXT:    mov v2.d[1], v2.d[0]
-; CHECK-NEXT:    movk x8, #511, lsl #16
+; CHECK-NEXT:    movk x8, #261, lsl #16
 ; CHECK-NEXT:    mov v0.d[1], v0.d[0]
 ; CHECK-NEXT:    fmov d1, x8
 ; CHECK-NEXT:    adrp x8, .LCPI6_0
@@ -300,7 +300,7 @@ define <8 x i8> @shuffle4_v8i8_v8i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 x 
 ; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
 ; CHECK-NEXT:    mov x8, #-63744 // =0xffffffffffff0700
-; CHECK-NEXT:    movk x8, #511, lsl #16
+; CHECK-NEXT:    movk x8, #261, lsl #16
 ; CHECK-NEXT:    mov v2.d[1], v2.d[0]
 ; CHECK-NEXT:    mov v0.d[1], v0.d[0]
 ; CHECK-NEXT:    fmov d1, x8
@@ -416,13 +416,13 @@ define <16 x i8> @shuffle4_v4i16_trunc(<4 x i16> %ae, <4 x i16> %be, <4 x i16> %
 define <16 x i8> @shuffle4_v4i32_trunc(<4 x i32> %ae, <4 x i32> %be, <4 x i32> %ce, <4 x i32> %de) {
 ; CHECK-LABEL: shuffle4_v4i32_trunc:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    xtn v4.4h, v0.4s
+; CHECK-NEXT:    uzp1 v0.8h, v0.8h, v1.8h
+; CHECK-NEXT:    uzp1 v1.8h, v2.8h, v3.8h
 ; CHECK-NEXT:    adrp x8, .LCPI10_0
-; CHECK-NEXT:    xtn v5.4h, v1.4s
+; CHECK-NEXT:    xtn v2.8b, v0.8h
 ; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI10_0]
-; CHECK-NEXT:    xtn v6.4h, v2.4s
-; CHECK-NEXT:    xtn v7.4h, v3.4s
-; CHECK-NEXT:    tbl v0.16b, { v4.16b, v5.16b, v6.16b, v7.16b }, v0.16b
+; CHECK-NEXT:    xtn v3.8b, v1.8h
+; CHECK-NEXT:    tbl v0.16b, { v2.16b, v3.16b }, v0.16b
 ; CHECK-NEXT:    ret
   %a = trunc <4 x i32> %ae to <4 x i8>
   %b = trunc <4 x i32> %be to <4 x i8>
@@ -538,19 +538,16 @@ define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> 
 ; CHECK-LABEL: insert4_v8i8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    mov x9, #-63484 // =0xffffffffffff0804
-; CHECK-NEXT:    mov v4.16b, v3.16b
+; CHECK-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-NEXT:    adrp x8, .LCPI14_0
-; CHECK-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-NEXT:    movk x9, #782, lsl #32
-; CHECK-NEXT:    mov v3.16b, v1.16b
-; CHECK-NEXT:    fmov d2, x9
-; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI14_0]
-; CHECK-NEXT:    tbl v1.16b, { v3.16b, v4.16b }, v1.16b
-; CHECK-NEXT:    tbl v0.8b, { v0.16b }, v2.8b
-; CHECK-NEXT:    trn1 v0.4h, v1.4h, v0.4h
-; CHECK-NEXT:    trn2 v0.4h, v0.4h, v1.4h
+; CHECK-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-NEXT:    fmov d0, d4
 ; CHECK-NEXT:    ret
   %e1 = extractelement <8 x i8> %a, i32 4
   %e2 = extractelement <8 x i8> %c, i32 0
@@ -608,17 +605,25 @@ define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> 
 define <16 x i8> @insert4_v16i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> %d) {
 ; CHECK-LABEL: insert4_v16i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov v4.16b, v3.16b
-; CHECK-NEXT:    adrp x8, .LCPI15_0
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q31_q0
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-NEXT:    mov v3.16b, v1.16b
-; CHECK-NEXT:    ldr q5, [x8, :lo12:.LCPI15_0]
-; CHECK-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-NEXT:    adrp x8, .LCPI15_1
-; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI15_1]
-; CHECK-NEXT:    tbl v31.16b, { v3.16b, v4.16b }, v5.16b
-; CHECK-NEXT:    tbl v0.16b, { v31.16b, v0.16b }, v1.16b
+; CHECK-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-NEXT:    mov v4.b[8], v0.b[4]
+; CHECK-NEXT:    mov v4.b[9], v2.b[0]
+; CHECK-NEXT:    mov v4.b[10], v1.b[15]
+; CHECK-NEXT:    mov v4.b[11], v3.b[11]
+; CHECK-NEXT:    mov v4.b[12], v2.b[6]
+; CHECK-NEXT:    mov v4.b[13], v0.b[3]
+; CHECK-NEXT:    mov v4.b[14], v3.b[8]
+; CHECK-NEXT:    mov v4.b[15], v1.b[12]
+; CHECK-NEXT:    mov v0.16b, v4.16b
 ; CHECK-NEXT:    ret
   %e1 = extractelement <8 x i8> %a, i32 4
   %e2 = extractelement <8 x i8> %c, i32 0
@@ -677,27 +682,44 @@ define <16 x i16> @test(<2 x double> %l213, <2 x double> %l231, <2 x double> %l2
 ; CHECK-LABEL: test:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fcvtms v0.2d, v0.2d
-; CHECK-NEXT:    fcvtms v4.2d, v4.2d
-; CHECK-NEXT:    adrp x8, .LCPI16_0
 ; CHECK-NEXT:    fcvtms v1.2d, v1.2d
-; CHECK-NEXT:    fcvtms v5.2d, v5.2d
-; CHECK-NEXT:    fcvtms v2.2d, v2.2d
-; CHECK-NEXT:    fcvtms v6.2d, v6.2d
 ; CHECK-NEXT:    fcvtms v3.2d, v3.2d
+; CHECK-NEXT:    fcvtms v4.2d, v4.2d
+; CHECK-NEXT:    fcvtms v5.2d, v5.2d
+; CHECK-NEXT:    fcvtms v6.2d, v6.2d
 ; CHECK-NEXT:    fcvtms v7.2d, v7.2d
-; CHECK-NEXT:    xtn v16.2s, v0.2d
-; CHECK-NEXT:    xtn v20.2s, v4.2d
-; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI16_0]
-; CHECK-NEXT:    xtn v17.2s, v1.2d
-; CHECK-NEXT:    xtn v21.2s, v5.2d
-; CHECK-NEXT:    xtn v18.2s, v2.2d
-; CHECK-NEXT:    xtn v22.2s, v6.2d
-; CHECK-NEXT:    xtn v19.2s, v3.2d
-; CHECK-NEXT:    xtn v23.2s, v7.2d
-; CHECK-NEXT:    tbl v1.16b, { v16.16b, v17.16b, v18.16b, v19.16b }, v0.16b
-; CHECK-NEXT:    tbl v2.16b, { v20.16b, v21.16b, v22.16b, v23.16b }, v0.16b
-; CHECK-NEXT:    uzp1 v0.8h, v1.8h, v2.8h
-; CHECK-NEXT:    uzp2 v1.8h, v1.8h, v2.8h
+; CHECK-NEXT:    xtn v0.2s, v0.2d
+; CHECK-NEXT:    xtn v16.2s, v1.2d
+; CHECK-NEXT:    fcvtms v1.2d, v2.2d
+; CHECK-NEXT:    xtn v3.2s, v3.2d
+; CHECK-NEXT:    xtn v4.2s, v4.2d
+; CHECK-NEXT:    xtn v5.2s, v5.2d
+; CHECK-NEXT:    xtn v6.2s, v6.2d
+; CHECK-NEXT:    xtn v7.2s, v7.2d
+; CHECK-NEXT:    mov w8, v0.s[1]
+; CHECK-NEXT:    xtn v2.2s, v1.2d
+; CHECK-NEXT:    mov w9, v16.s[1]
+; CHECK-NEXT:    mov v0.h[1], v16.h[0]
+; CHECK-NEXT:    fmov s1, w8
+; CHECK-NEXT:    mov w8, v2.s[1]
+; CHECK-NEXT:    mov v0.h[2], v2.h[0]
+; CHECK-NEXT:    mov v1.h[1], w9
+; CHECK-NEXT:    mov w9, v3.s[1]
+; CHECK-NEXT:    mov v0.h[3], v3.h[0]
+; CHECK-NEXT:    mov v1.h[2], w8
+; CHECK-NEXT:    mov w8, v4.s[1]
+; CHECK-NEXT:    mov v0.h[4], v4.h[0]
+; CHECK-NEXT:    mov v1.h[3], w9
+; CHECK-NEXT:    mov w9, v5.s[1]
+; CHECK-NEXT:    mov v0.h[5], v5.h[0]
+; CHECK-NEXT:    mov v1.h[4], w8
+; CHECK-NEXT:    mov w8, v6.s[1]
+; CHECK-NEXT:    mov v0.h[6], v6.h[0]
+; CHECK-NEXT:    mov v1.h[5], w9
+; CHECK-NEXT:    mov w9, v7.s[1]
+; CHECK-NEXT:    mov v0.h[7], v7.h[0]
+; CHECK-NEXT:    mov v1.h[6], w8
+; CHECK-NEXT:    mov v1.h[7], w9
 ; CHECK-NEXT:    ret
   %l214 = call fast <2 x double> @llvm.floor.v2f64(<2 x double> %l213)
   %l215 = fptosi <2 x double> %l214 to <2 x i16>

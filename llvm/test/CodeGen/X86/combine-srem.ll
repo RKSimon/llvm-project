@@ -152,15 +152,18 @@ define <4 x i32> @combine_vec_srem_by_pos0(<4 x i32> %x) {
 ; SSE-LABEL: combine_vec_srem_by_pos0:
 ; SSE:       # %bb.0:
 ; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: combine_vec_srem_by_pos0:
 ; AVX1:       # %bb.0:
 ; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: combine_vec_srem_by_pos0:
 ; AVX2:       # %bb.0:
+; AVX2-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [3,3,3,3]
 ; AVX2-NEXT:    vandps %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
@@ -173,10 +176,12 @@ define <4 x i32> @combine_vec_srem_by_pos1(<4 x i32> %x) {
 ; SSE-LABEL: combine_vec_srem_by_pos1:
 ; SSE:       # %bb.0:
 ; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX-LABEL: combine_vec_srem_by_pos1:
 ; AVX:       # %bb.0:
+; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = and <4 x i32> %x, <i32 255, i32 255, i32 255, i32 255>
@@ -498,7 +503,7 @@ define i16 @combine_i16_srem_pow2(i16 %x) {
 ; CHECK-NEXT:    leal 15(%rax), %ecx
 ; CHECK-NEXT:    testw %ax, %ax
 ; CHECK-NEXT:    cmovnsl %edi, %ecx
-; CHECK-NEXT:    andl $-16, %ecx
+; CHECK-NEXT:    andl $65520, %ecx # imm = 0xFFF0
 ; CHECK-NEXT:    subl %ecx, %eax
 ; CHECK-NEXT:    # kill: def $ax killed $ax killed $rax
 ; CHECK-NEXT:    retq
@@ -513,7 +518,7 @@ define i16 @combine_i16_srem_negpow2(i16 %x) {
 ; CHECK-NEXT:    leal 255(%rax), %ecx
 ; CHECK-NEXT:    testw %ax, %ax
 ; CHECK-NEXT:    cmovnsl %edi, %ecx
-; CHECK-NEXT:    andl $-256, %ecx
+; CHECK-NEXT:    andl $65280, %ecx # imm = 0xFF00
 ; CHECK-NEXT:    subl %ecx, %eax
 ; CHECK-NEXT:    # kill: def $ax killed $ax killed $rax
 ; CHECK-NEXT:    retq

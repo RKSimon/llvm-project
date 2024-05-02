@@ -1940,8 +1940,8 @@ entry:
 define void @merge_zr32_3(ptr %p) {
 ; NOSTRICTALIGN-LABEL: merge_zr32_3:
 ; NOSTRICTALIGN:       // %bb.0: // %entry
-; NOSTRICTALIGN-NEXT:    movi v0.2d, #0000000000000000
-; NOSTRICTALIGN-NEXT:    stp q0, q0, [x0]
+; NOSTRICTALIGN-NEXT:    stp xzr, xzr, [x0]
+; NOSTRICTALIGN-NEXT:    stp xzr, xzr, [x0, #16]
 ; NOSTRICTALIGN-NEXT:    ret
 ;
 ; STRICTALIGN-LABEL: merge_zr32_3:
@@ -2076,30 +2076,29 @@ define void @merge_zr64_unalign(ptr %p) {
 ;
 ; STRICTALIGN-LABEL: merge_zr64_unalign:
 ; STRICTALIGN:       // %bb.0: // %entry
-; STRICTALIGN-NEXT:    lsr x8, xzr, #40
-; STRICTALIGN-NEXT:    lsr x9, xzr, #24
-; STRICTALIGN-NEXT:    lsr x11, xzr, #16
-; STRICTALIGN-NEXT:    mov x10, x0
-; STRICTALIGN-NEXT:    lsr x12, xzr, #8
-; STRICTALIGN-NEXT:    strb wzr, [x0]
-; STRICTALIGN-NEXT:    strb w8, [x0, #13]
-; STRICTALIGN-NEXT:    strb wzr, [x10, #8]!
-; STRICTALIGN-NEXT:    strb w9, [x10, #3]
-; STRICTALIGN-NEXT:    strb w11, [x10, #2]
-; STRICTALIGN-NEXT:    strb w8, [x0, #5]
-; STRICTALIGN-NEXT:    lsr x8, xzr, #32
-; STRICTALIGN-NEXT:    strb w9, [x0, #3]
+; STRICTALIGN-NEXT:    lsr x8, xzr, #8
 ; STRICTALIGN-NEXT:    lsr x9, xzr, #56
-; STRICTALIGN-NEXT:    strb w11, [x0, #2]
-; STRICTALIGN-NEXT:    lsr x11, xzr, #48
-; STRICTALIGN-NEXT:    strb w12, [x0, #9]
-; STRICTALIGN-NEXT:    strb w12, [x0, #1]
-; STRICTALIGN-NEXT:    strb w8, [x10, #4]!
-; STRICTALIGN-NEXT:    strb w9, [x10, #3]
-; STRICTALIGN-NEXT:    strb w11, [x10, #2]
-; STRICTALIGN-NEXT:    strb w8, [x0, #4]!
+; STRICTALIGN-NEXT:    lsr x10, xzr, #48
+; STRICTALIGN-NEXT:    lsr x11, xzr, #40
+; STRICTALIGN-NEXT:    lsr x12, xzr, #32
+; STRICTALIGN-NEXT:    lsr x13, xzr, #24
+; STRICTALIGN-NEXT:    lsr x14, xzr, #16
+; STRICTALIGN-NEXT:    strb wzr, [x0]
+; STRICTALIGN-NEXT:    strb w8, [x0, #9]
+; STRICTALIGN-NEXT:    strb w9, [x0, #7]
+; STRICTALIGN-NEXT:    strb w10, [x0, #6]
+; STRICTALIGN-NEXT:    strb w11, [x0, #5]
+; STRICTALIGN-NEXT:    strb w12, [x0, #4]
+; STRICTALIGN-NEXT:    strb w13, [x0, #3]
+; STRICTALIGN-NEXT:    strb w14, [x0, #2]
+; STRICTALIGN-NEXT:    strb w8, [x0, #1]
+; STRICTALIGN-NEXT:    strb wzr, [x0, #8]!
+; STRICTALIGN-NEXT:    strb w12, [x0, #4]!
 ; STRICTALIGN-NEXT:    strb w9, [x0, #3]
-; STRICTALIGN-NEXT:    strb w11, [x0, #2]
+; STRICTALIGN-NEXT:    strb w10, [x0, #2]
+; STRICTALIGN-NEXT:    strb w11, [x0, #1]
+; STRICTALIGN-NEXT:    sturb w13, [x0, #-1]
+; STRICTALIGN-NEXT:    sturb w14, [x0, #-2]
 ; STRICTALIGN-NEXT:    ret
 entry:
   store <2 x i64> zeroinitializer, ptr %p, align 1
@@ -2109,17 +2108,11 @@ entry:
 ; Similar to merge_zr32_3, replaceZeroVectorStore should not split the
 ; vector store since the zero constant vector has multiple uses.
 define void @merge_zr64_2(ptr %p) {
-; NOSTRICTALIGN-LABEL: merge_zr64_2:
-; NOSTRICTALIGN:       // %bb.0: // %entry
-; NOSTRICTALIGN-NEXT:    movi v0.2d, #0000000000000000
-; NOSTRICTALIGN-NEXT:    stp q0, q0, [x0]
-; NOSTRICTALIGN-NEXT:    ret
-;
-; STRICTALIGN-LABEL: merge_zr64_2:
-; STRICTALIGN:       // %bb.0: // %entry
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #16]
-; STRICTALIGN-NEXT:    ret
+; CHECK-LABEL: merge_zr64_2:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #16]
+; CHECK-NEXT:    ret
 entry:
   store i64 0, ptr %p
   %p1 = getelementptr i64, ptr %p, i64 1
@@ -2168,20 +2161,12 @@ entry:
 
 ; Verify that non-consecutive merges do not generate q0
 define void @merge_multiple_128bit_stores(ptr %p) {
-; NOSTRICTALIGN-LABEL: merge_multiple_128bit_stores:
-; NOSTRICTALIGN:       // %bb.0: // %entry
-; NOSTRICTALIGN-NEXT:    movi v0.2d, #0000000000000000
-; NOSTRICTALIGN-NEXT:    str q0, [x0]
-; NOSTRICTALIGN-NEXT:    stur q0, [x0, #24]
-; NOSTRICTALIGN-NEXT:    str q0, [x0, #48]
-; NOSTRICTALIGN-NEXT:    ret
-;
-; STRICTALIGN-LABEL: merge_multiple_128bit_stores:
-; STRICTALIGN:       // %bb.0: // %entry
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #24]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #48]
-; STRICTALIGN-NEXT:    ret
+; CHECK-LABEL: merge_multiple_128bit_stores:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #24]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #48]
+; CHECK-NEXT:    ret
 entry:
   store i64 0, ptr %p
   %p1 = getelementptr i64, ptr %p, i64 1
@@ -2199,20 +2184,13 @@ entry:
 
 ; Verify that large stores generate stp q
 define void @merge_multiple_128bit_stores_consec(ptr %p) {
-; NOSTRICTALIGN-LABEL: merge_multiple_128bit_stores_consec:
-; NOSTRICTALIGN:       // %bb.0: // %entry
-; NOSTRICTALIGN-NEXT:    movi v0.2d, #0000000000000000
-; NOSTRICTALIGN-NEXT:    stp q0, q0, [x0]
-; NOSTRICTALIGN-NEXT:    stp q0, q0, [x0, #32]
-; NOSTRICTALIGN-NEXT:    ret
-;
-; STRICTALIGN-LABEL: merge_multiple_128bit_stores_consec:
-; STRICTALIGN:       // %bb.0: // %entry
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #16]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #32]
-; STRICTALIGN-NEXT:    stp xzr, xzr, [x0, #48]
-; STRICTALIGN-NEXT:    ret
+; CHECK-LABEL: merge_multiple_128bit_stores_consec:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #16]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #32]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #48]
+; CHECK-NEXT:    ret
 entry:
   store i64 0, ptr %p
   %p1 = getelementptr i64, ptr %p, i64 1

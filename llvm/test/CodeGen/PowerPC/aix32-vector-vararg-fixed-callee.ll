@@ -9,15 +9,13 @@
 define double @callee(i32 %count, <4 x i32> %vsi, double %next, ...) {
   ; CHECK-LABEL: name: callee
   ; CHECK: bb.0.entry:
-  ; CHECK:   LIFETIME_START %stack.0.arg_list
-  ; CHECK:   [[ADDI:%[0-9]+]]:gprc = ADDI %fixed-stack.0, 0
-  ; CHECK:   STW killed [[ADDI]], 0, %stack.0.arg_list :: (store (s32) into %ir.arg_list)
-  ; CHECK:   [[ADDI1:%[0-9]+]]:gprc = ADDI %fixed-stack.0, 15
-  ; CHECK:   [[RLWINM:%[0-9]+]]:gprc_and_gprc_nor0 = RLWINM killed [[ADDI1]], 0, 0, 27
-  ; CHECK:   [[LFD:%[0-9]+]]:f8rc = LFD 16, killed [[RLWINM]] :: (load (s64) from %ir.argp.next, align 16)
-  ; CHECK:   LIFETIME_END %stack.0.arg_list
-  ; CHECK:   $f1 = COPY [[LFD]]
-  ; CHECK:   BLR implicit $lr, implicit $rm, implicit $f1
+  ; CHECK-NEXT:   LIFETIME_START %stack.0.arg_list
+  ; CHECK-NEXT:   [[ADDI:%[0-9]+]]:gprc = ADDI %fixed-stack.0, 15
+  ; CHECK-NEXT:   [[RLWINM:%[0-9]+]]:gprc_and_gprc_nor0 = RLWINM killed [[ADDI]], 0, 0, 27
+  ; CHECK-NEXT:   [[LFD:%[0-9]+]]:f8rc = LFD 16, killed [[RLWINM]] :: (load (s64) from %ir.argp.next, align 16)
+  ; CHECK-NEXT:   LIFETIME_END %stack.0.arg_list
+  ; CHECK-NEXT:   $f1 = COPY [[LFD]]
+  ; CHECK-NEXT:   BLR implicit $lr, implicit $rm, implicit $f1
 entry:
   %arg_list = alloca ptr, align 4
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %arg_list)

@@ -285,8 +285,8 @@ define i96 @fptosi_fp128_to_i96(fp128 %a) nounwind {
 ; RV32I-NEXT:    sw a3, 4(sp)
 ; RV32I-NEXT:    sw a0, 8(sp)
 ; RV32I-NEXT:    sw a1, 12(sp)
-; RV32I-NEXT:    srli a0, a2, 3
-; RV32I-NEXT:    andi a0, a0, 12
+; RV32I-NEXT:    andi a0, a2, 96
+; RV32I-NEXT:    srli a0, a0, 3
 ; RV32I-NEXT:    add a0, a7, a0
 ; RV32I-NEXT:    lw a1, 4(a0)
 ; RV32I-NEXT:    lw a3, 8(a0)
@@ -362,9 +362,9 @@ define i96 @fptosi_fp128_to_i96(fp128 %a) nounwind {
 ; RV32I-NEXT:    addi a1, sp, 48
 ; RV32I-NEXT:    addi a0, a0, -111
 ; RV32I-NEXT:    add a0, a2, a0
-; RV32I-NEXT:    srli a2, a0, 3
+; RV32I-NEXT:    andi a2, a0, 96
 ; RV32I-NEXT:    andi a3, a0, 31
-; RV32I-NEXT:    andi a2, a2, 12
+; RV32I-NEXT:    srli a2, a2, 3
 ; RV32I-NEXT:    xori a3, a3, 31
 ; RV32I-NEXT:    sub a1, a1, a2
 ; RV32I-NEXT:    lw a4, 0(a1)

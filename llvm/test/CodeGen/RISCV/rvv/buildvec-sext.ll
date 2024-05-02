@@ -30,9 +30,31 @@ define <4 x i32> @buildvec_sext_extract_v4(<8 x i16> %x) {
 define <4 x i32> @buildvec_zext_extract_v4(<8 x i16> %x) {
 ; CHECK-LABEL: buildvec_zext_extract_v4:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    vsetivli zero, 8, e16, m1, ta, ma
+; CHECK-NEXT:    vslidedown.vi v9, v8, 1
+; CHECK-NEXT:    vmv.x.s a0, v9
+; CHECK-NEXT:    vslidedown.vi v9, v8, 2
+; CHECK-NEXT:    vmv.x.s a1, v9
+; CHECK-NEXT:    vslidedown.vi v9, v8, 3
+; CHECK-NEXT:    lui a2, 16
+; CHECK-NEXT:    vmv.x.s a3, v9
+; CHECK-NEXT:    vid.v v9
+; CHECK-NEXT:    addi a2, a2, -1
+; CHECK-NEXT:    vadd.vi v9, v9, -1
+; CHECK-NEXT:    and a0, a0, a2
+; CHECK-NEXT:    and a1, a1, a2
+; CHECK-NEXT:    and a2, a3, a2
+; CHECK-NEXT:    vand.vv v8, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.s.x v9, a0
+; CHECK-NEXT:    vsetivli zero, 2, e32, m1, tu, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 1
+; CHECK-NEXT:    vmv.s.x v9, a1
+; CHECK-NEXT:    vsetivli zero, 3, e32, m1, tu, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 2
+; CHECK-NEXT:    vmv.s.x v9, a2
 ; CHECK-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; CHECK-NEXT:    vzext.vf2 v9, v8
-; CHECK-NEXT:    vmv.v.v v8, v9
+; CHECK-NEXT:    vslideup.vi v8, v9, 3
 ; CHECK-NEXT:    ret
   %e0 = extractelement <8 x i16> %x, i32 0
   %e1 = extractelement <8 x i16> %x, i32 1

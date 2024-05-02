@@ -139,15 +139,17 @@ define <8 x float> @concat_uitofp_v8f32_v4i32(<4 x i32> %a0, <4 x i32> %a1, <4 x
 ;
 ; AVX2-LABEL: concat_uitofp_v8f32_v4i32:
 ; AVX2:       # %bb.0:
+; AVX2-NEXT:    # kill: def $xmm2 killed $xmm2 def $ymm2
 ; AVX2-NEXT:    # kill: def $xmm0 killed $xmm0 def $ymm0
 ; AVX2-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpsrld $16, %ymm0, %ymm1
-; AVX2-NEXT:    vpblendw {{.*#+}} ymm1 = ymm1[0],mem[1],ymm1[2],mem[3],ymm1[4],mem[5],ymm1[6],mem[7],ymm1[8],mem[9],ymm1[10],mem[11],ymm1[12],mem[13],ymm1[14],mem[15]
-; AVX2-NEXT:    # kill: def $xmm2 killed $xmm2 def $ymm2
+; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [1258291200,1258291200,1258291200,1258291200,1258291200,1258291200,1258291200,1258291200]
+; AVX2-NEXT:    vpblendw {{.*#+}} ymm1 = ymm0[0],ymm1[1],ymm0[2],ymm1[3],ymm0[4],ymm1[5],ymm0[6],ymm1[7],ymm0[8],ymm1[9],ymm0[10],ymm1[11],ymm0[12],ymm1[13],ymm0[14],ymm1[15]
+; AVX2-NEXT:    vpsrld $16, %ymm0, %ymm0
+; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm4 = [1392508928,1392508928,1392508928,1392508928,1392508928,1392508928,1392508928,1392508928]
+; AVX2-NEXT:    vpblendw {{.*#+}} ymm0 = ymm0[0],ymm4[1],ymm0[2],ymm4[3],ymm0[4],ymm4[5],ymm0[6],ymm4[7],ymm0[8],ymm4[9],ymm0[10],ymm4[11],ymm0[12],ymm4[13],ymm0[14],ymm4[15]
 ; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm4 = [5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11]
-; AVX2-NEXT:    vpblendw {{.*#+}} ymm0 = ymm0[0],mem[1],ymm0[2],mem[3],ymm0[4],mem[5],ymm0[6],mem[7],ymm0[8],mem[9],ymm0[10],mem[11],ymm0[12],mem[13],ymm0[14],mem[15]
-; AVX2-NEXT:    vsubps %ymm4, %ymm1, %ymm1
-; AVX2-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vsubps %ymm4, %ymm0, %ymm0
+; AVX2-NEXT:    vaddps %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vinsertf128 $1, %xmm3, %ymm2, %ymm1
 ; AVX2-NEXT:    vaddps %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    retq
@@ -396,10 +398,10 @@ define <16 x float> @concat_uitofp_v16f32_v4i32(<4 x i32> %a0, <4 x i32> %a1, <4
 ; AVX2-NEXT:    # kill: def $xmm2 killed $xmm2 def $ymm2
 ; AVX2-NEXT:    # kill: def $xmm0 killed $xmm0 def $ymm0
 ; AVX2-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [0,19200,0,19200,0,19200,0,19200,0,19200,0,19200,0,19200,0,19200]
+; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [1258291200,1258291200,1258291200,1258291200,1258291200,1258291200,1258291200,1258291200]
 ; AVX2-NEXT:    vpblendw {{.*#+}} ymm8 = ymm0[0],ymm1[1],ymm0[2],ymm1[3],ymm0[4],ymm1[5],ymm0[6],ymm1[7],ymm0[8],ymm1[9],ymm0[10],ymm1[11],ymm0[12],ymm1[13],ymm0[14],ymm1[15]
 ; AVX2-NEXT:    vpsrld $16, %ymm0, %ymm0
-; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm9 = [0,21248,0,21248,0,21248,0,21248,0,21248,0,21248,0,21248,0,21248]
+; AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm9 = [1392508928,1392508928,1392508928,1392508928,1392508928,1392508928,1392508928,1392508928]
 ; AVX2-NEXT:    vpblendw {{.*#+}} ymm0 = ymm0[0],ymm9[1],ymm0[2],ymm9[3],ymm0[4],ymm9[5],ymm0[6],ymm9[7],ymm0[8],ymm9[9],ymm0[10],ymm9[11],ymm0[12],ymm9[13],ymm0[14],ymm9[15]
 ; AVX2-NEXT:    vbroadcastss {{.*#+}} ymm10 = [5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11,5.49764202E+11]
 ; AVX2-NEXT:    vsubps %ymm10, %ymm0, %ymm0

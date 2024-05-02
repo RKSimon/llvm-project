@@ -1780,10 +1780,10 @@ define <4 x half> @v_test_fmin_legacy_ule_v4f16_safe(<4 x half> %a, <4 x half> %
 ; GFX7-NEXT:    v_cmp_ngt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -1920,10 +1920,10 @@ define <4 x half> @v_test_fmin_legacy_ule_v4f16_nnan_flag(<4 x half> %a, <4 x ha
 ; GFX7-NEXT:    v_cmp_ngt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2060,10 +2060,10 @@ define <4 x half> @v_test_fmin_legacy_ule_v4f16_nsz_flag(<4 x half> %a, <4 x hal
 ; GFX7-NEXT:    v_cmp_ngt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2259,10 +2259,10 @@ define <4 x half> @v_test_fmax_legacy_uge_v4f16_safe(<4 x half> %a, <4 x half> %
 ; GFX7-NEXT:    v_cmp_nlt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2399,10 +2399,10 @@ define <4 x half> @v_test_fmax_legacy_uge_v4f16_nnan_flag(<4 x half> %a, <4 x ha
 ; GFX7-NEXT:    v_cmp_nlt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2539,10 +2539,10 @@ define <4 x half> @v_test_fmax_legacy_uge_v4f16_nsz_flag(<4 x half> %a, <4 x hal
 ; GFX7-NEXT:    v_cmp_nlt_f32_e32 vcc, v13, v12
 ; GFX7-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX7-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; GFX7-NEXT:    v_or_b32_e32 v0, v0, v5
+; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v4
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;

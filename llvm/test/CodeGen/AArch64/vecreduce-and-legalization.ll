@@ -101,8 +101,11 @@ define i8 @test_v3i8(<3 x i8> %a) nounwind {
 define i8 @test_v9i8(<9 x i8> %a) nounwind {
 ; CHECK-LABEL: test_v9i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    movi v1.2d, #0xffffffffffffff00
+; CHECK-NEXT:    adrp x8, .LCPI8_0
+; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI8_0]
+; CHECK-NEXT:    mov w8, #-1 // =0xffffffff
 ; CHECK-NEXT:    orr v1.16b, v0.16b, v1.16b
+; CHECK-NEXT:    mov v1.b[15], w8
 ; CHECK-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
 ; CHECK-NEXT:    and v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    fmov x8, d0

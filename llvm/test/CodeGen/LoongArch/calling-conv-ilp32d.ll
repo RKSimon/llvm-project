@@ -126,11 +126,11 @@ define i32 @caller_double_on_stack_exhausted_fprs_gprs() nounwind {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    addi.w $sp, $sp, -32
 ; CHECK-NEXT:    st.w $ra, $sp, 28 # 4-byte Folded Spill
-; CHECK-NEXT:    lu12i.w $a0, 262816
-; CHECK-NEXT:    st.w $a0, $sp, 4
-; CHECK-NEXT:    st.w $zero, $sp, 0
 ; CHECK-NEXT:    lu12i.w $a0, 262848
 ; CHECK-NEXT:    st.w $a0, $sp, 12
+; CHECK-NEXT:    st.w $zero, $sp, 8
+; CHECK-NEXT:    lu12i.w $a0, 262816
+; CHECK-NEXT:    st.w $a0, $sp, 4
 ; CHECK-NEXT:    movgr2fr.w $fa7, $zero
 ; CHECK-NEXT:    lu12i.w $a0, 261888
 ; CHECK-NEXT:    fmov.d $fa0, $fa7
@@ -159,7 +159,7 @@ define i32 @caller_double_on_stack_exhausted_fprs_gprs() nounwind {
 ; CHECK-NEXT:    lu12i.w $a3, 262720
 ; CHECK-NEXT:    lu12i.w $a5, 262752
 ; CHECK-NEXT:    lu12i.w $a7, 262784
-; CHECK-NEXT:    st.w $zero, $sp, 8
+; CHECK-NEXT:    st.w $zero, $sp, 0
 ; CHECK-NEXT:    move $a0, $zero
 ; CHECK-NEXT:    move $a2, $zero
 ; CHECK-NEXT:    move $a4, $zero

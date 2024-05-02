@@ -43,7 +43,9 @@ define i64 @rdvl_i64() nounwind {
 
 define i32 @rdvl_const() nounwind {
 ; CHECK-LABEL: rdvl_const:
-; CHECK:       rdvl x0, #1
+; CHECK:       rdvl x8, #1
+; CHECK-NEXT:  lsr x8, x8, #4
+; CHECK-NEXT:  lsl w0, w8, #4
 ; CHECK-NEXT:  ret
   %vscale.ptr = getelementptr <vscale x 1 x i8>, ptr null, i64 1
   %vscale.int = ptrtoint ptr %vscale.ptr to i32

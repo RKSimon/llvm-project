@@ -26,7 +26,8 @@ define i64 @bswap_i16_to_i64_anyext(i16 %a) {
 ; CHECK-SD-LABEL: bswap_i16_to_i64_anyext:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    // kill: def $w0 killed $w0 def $x0
-; CHECK-SD-NEXT:    rev16 x8, x0
+; CHECK-SD-NEXT:    and x8, x0, #0xffff
+; CHECK-SD-NEXT:    rev16 x8, x8
 ; CHECK-SD-NEXT:    lsl x0, x8, #48
 ; CHECK-SD-NEXT:    ret
 ;

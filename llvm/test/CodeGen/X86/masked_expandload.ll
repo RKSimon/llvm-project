@@ -1358,7 +1358,7 @@ define <32 x float> @expandload_v32f32_v32i32(ptr %base, <32 x float> %src0, <32
 ; SSE2-NEXT:    pmovmskb %xmm8, %ecx
 ; SSE2-NEXT:    shll $16, %ecx
 ; SSE2-NEXT:    orl %edx, %ecx
-; SSE2-NEXT:    testb $1, %cl
+; SSE2-NEXT:    testb $1, %dl
 ; SSE2-NEXT:    jne LBB8_1
 ; SSE2-NEXT:  ## %bb.2: ## %else
 ; SSE2-NEXT:    testb $2, %cl
@@ -1715,7 +1715,7 @@ define <32 x float> @expandload_v32f32_v32i32(ptr %base, <32 x float> %src0, <32
 ; SSE42-NEXT:    pmovmskb %xmm8, %ecx
 ; SSE42-NEXT:    shll $16, %ecx
 ; SSE42-NEXT:    orl %edx, %ecx
-; SSE42-NEXT:    testb $1, %cl
+; SSE42-NEXT:    testb $1, %dl
 ; SSE42-NEXT:    jne LBB8_1
 ; SSE42-NEXT:  ## %bb.2: ## %else
 ; SSE42-NEXT:    testb $2, %cl
@@ -2012,7 +2012,7 @@ define <32 x float> @expandload_v32f32_v32i32(ptr %base, <32 x float> %src0, <32
 ; AVX1-NEXT:    vpmovmskb %xmm4, %eax
 ; AVX1-NEXT:    shll $16, %eax
 ; AVX1-NEXT:    orl %ecx, %eax
-; AVX1-NEXT:    testb $1, %al
+; AVX1-NEXT:    testb $1, %cl
 ; AVX1-NEXT:    jne LBB8_1
 ; AVX1-NEXT:  ## %bb.2: ## %else
 ; AVX1-NEXT:    testb $2, %al
@@ -2635,20 +2635,16 @@ define <32 x float> @expandload_v32f32_v32i32(ptr %base, <32 x float> %src0, <32
 ;
 
 define <2 x i64> @expandload_v2i64_const(ptr %base, <2 x i64> %src0) {
-; SSE2-LABEL: expandload_v2i64_const:
-; SSE2:       ## %bb.0:
-; SSE2-NEXT:    movsd (%rdi), %xmm1 ## xmm1 = mem[0],zero
-; SSE2-NEXT:    movlhps {{.*#+}} xmm0 = xmm0[0],xmm1[0]
-; SSE2-NEXT:    retq
-;
-; SSE42-LABEL: expandload_v2i64_const:
-; SSE42:       ## %bb.0:
-; SSE42-NEXT:    pinsrq $1, (%rdi), %xmm0
-; SSE42-NEXT:    retq
+; SSE-LABEL: expandload_v2i64_const:
+; SSE:       ## %bb.0:
+; SSE-NEXT:    movsd (%rdi), %xmm1 ## xmm1 = mem[0],zero
+; SSE-NEXT:    movlhps {{.*#+}} xmm0 = xmm0[0],xmm1[0]
+; SSE-NEXT:    retq
 ;
 ; AVX1OR2-LABEL: expandload_v2i64_const:
 ; AVX1OR2:       ## %bb.0:
-; AVX1OR2-NEXT:    vpinsrq $1, (%rdi), %xmm0, %xmm0
+; AVX1OR2-NEXT:    vmovddup (%rdi), %xmm1 ## xmm1 = mem[0,0]
+; AVX1OR2-NEXT:    vmovlhps {{.*#+}} xmm0 = xmm0[0],xmm1[0]
 ; AVX1OR2-NEXT:    retq
 ;
 ; AVX512F-LABEL: expandload_v2i64_const:
@@ -2973,10 +2969,11 @@ define <8 x i16> @expandload_v8i16_v8i16(ptr %base, <8 x i16> %src0, <8 x i16> %
 ; AVX512F:       ## %bb.0:
 ; AVX512F-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512F-NEXT:    vpcmpeqw %xmm2, %xmm1, %xmm1
+; AVX512F-NEXT:    vmovd %xmm1, %ecx
 ; AVX512F-NEXT:    vpmovsxwq %xmm1, %zmm1
 ; AVX512F-NEXT:    vptestmq %zmm1, %zmm1, %k0
 ; AVX512F-NEXT:    kmovw %k0, %eax
-; AVX512F-NEXT:    testb $1, %al
+; AVX512F-NEXT:    testb $1, %cl
 ; AVX512F-NEXT:    jne LBB11_1
 ; AVX512F-NEXT:  ## %bb.2: ## %else
 ; AVX512F-NEXT:    testb $2, %al
@@ -3046,9 +3043,10 @@ define <8 x i16> @expandload_v8i16_v8i16(ptr %base, <8 x i16> %src0, <8 x i16> %
 ; AVX512VLDQ:       ## %bb.0:
 ; AVX512VLDQ-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512VLDQ-NEXT:    vpcmpeqw %xmm2, %xmm1, %xmm1
+; AVX512VLDQ-NEXT:    vmovd %xmm1, %ecx
 ; AVX512VLDQ-NEXT:    vpmovsxwd %xmm1, %ymm1
 ; AVX512VLDQ-NEXT:    vmovmskps %ymm1, %eax
-; AVX512VLDQ-NEXT:    testb $1, %al
+; AVX512VLDQ-NEXT:    testb $1, %cl
 ; AVX512VLDQ-NEXT:    jne LBB11_1
 ; AVX512VLDQ-NEXT:  ## %bb.2: ## %else
 ; AVX512VLDQ-NEXT:    testb $2, %al
@@ -3117,8 +3115,9 @@ define <8 x i16> @expandload_v8i16_v8i16(ptr %base, <8 x i16> %src0, <8 x i16> %
 ; AVX512VLBW-LABEL: expandload_v8i16_v8i16:
 ; AVX512VLBW:       ## %bb.0:
 ; AVX512VLBW-NEXT:    vptestnmw %xmm1, %xmm1, %k0
+; AVX512VLBW-NEXT:    kmovd %k0, %ecx
 ; AVX512VLBW-NEXT:    kmovd %k0, %eax
-; AVX512VLBW-NEXT:    testb $1, %al
+; AVX512VLBW-NEXT:    testb $1, %cl
 ; AVX512VLBW-NEXT:    jne LBB11_1
 ; AVX512VLBW-NEXT:  ## %bb.2: ## %else
 ; AVX512VLBW-NEXT:    testb $2, %al

@@ -245,7 +245,8 @@ define <4 x i16> @fix_float_to_i16(<4 x float> %in) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vmov d17, r2, r3
 ; CHECK-NEXT:    vmov d16, r0, r1
-; CHECK-NEXT:    vcvt.u32.f32 q8, q8, #1
+; CHECK-NEXT:    vadd.f32 q8, q8, q8
+; CHECK-NEXT:    vcvt.u32.f32 q8, q8
 ; CHECK-NEXT:    vmovn.i32 d16, q8
 ; CHECK-NEXT:    vmov r0, r1, d16
 ; CHECK-NEXT:    mov pc, lr

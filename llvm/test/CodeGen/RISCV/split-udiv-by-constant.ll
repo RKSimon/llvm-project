@@ -755,17 +755,20 @@ define iXLen2 @test_udiv_3_shl_32(iXLen2 %x) nounwind {
 ; RV32:       # %bb.0:
 ; RV32-NEXT:    lui a0, 699051
 ; RV32-NEXT:    addi a2, a0, -1365
+; RV32-NEXT:    addi a0, a0, -1366
 ; RV32-NEXT:    mulhu a3, a1, a2
-; RV32-NEXT:    srli a0, a3, 1
+; RV32-NEXT:    srli a4, a3, 1
 ; RV32-NEXT:    andi a3, a3, -2
-; RV32-NEXT:    add a4, a3, a0
-; RV32-NEXT:    mulhu a5, a4, a2
-; RV32-NEXT:    sub a4, a1, a4
-; RV32-NEXT:    sub a5, a5, a3
+; RV32-NEXT:    add a3, a3, a4
+; RV32-NEXT:    mul a0, a3, a0
+; RV32-NEXT:    mulhu a4, a3, a2
+; RV32-NEXT:    add a0, a4, a0
+; RV32-NEXT:    sub a4, a1, a3
 ; RV32-NEXT:    sltu a1, a1, a4
 ; RV32-NEXT:    neg a1, a1
 ; RV32-NEXT:    mul a1, a1, a2
-; RV32-NEXT:    add a1, a5, a1
+; RV32-NEXT:    add a1, a0, a1
+; RV32-NEXT:    mul a0, a3, a2
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_udiv_3_shl_32:
@@ -808,21 +811,24 @@ define iXLen2 @test_udiv_7_shl_60(iXLen2 %x) nounwind {
 ; RV32:       # %bb.0:
 ; RV32-NEXT:    srli a1, a1, 28
 ; RV32-NEXT:    lui a0, 149797
-; RV32-NEXT:    lui a2, 748983
+; RV32-NEXT:    lui a2, 449390
+; RV32-NEXT:    lui a3, 748983
 ; RV32-NEXT:    addi a0, a0, -1755
-; RV32-NEXT:    addi a2, a2, -585
+; RV32-NEXT:    addi a2, a2, -1171
+; RV32-NEXT:    addi a3, a3, -585
 ; RV32-NEXT:    mulhu a0, a1, a0
-; RV32-NEXT:    slli a3, a0, 2
 ; RV32-NEXT:    slli a4, a0, 3
-; RV32-NEXT:    or a3, a3, a0
-; RV32-NEXT:    sub a4, a4, a0
-; RV32-NEXT:    mulhu a5, a4, a2
-; RV32-NEXT:    sub a4, a1, a4
-; RV32-NEXT:    sub a5, a5, a3
-; RV32-NEXT:    sltu a1, a1, a4
-; RV32-NEXT:    neg a1, a1
-; RV32-NEXT:    mul a1, a1, a2
-; RV32-NEXT:    add a1, a5, a1
+; RV32-NEXT:    add a0, a1, a0
+; RV32-NEXT:    sub a0, a0, a4
+; RV32-NEXT:    sub a4, a1, a0
+; RV32-NEXT:    sltu a0, a1, a0
+; RV32-NEXT:    mul a1, a4, a2
+; RV32-NEXT:    mulhu a2, a4, a3
+; RV32-NEXT:    neg a0, a0
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    mul a0, a0, a3
+; RV32-NEXT:    add a1, a1, a0
+; RV32-NEXT:    mul a0, a4, a3
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_udiv_7_shl_60:

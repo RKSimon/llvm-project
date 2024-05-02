@@ -40875,7 +40875,7 @@ define inreg <52 x half> @bitcast_v52i16_to_v52f16_scalar(<52 x i16> inreg %a, i
 ; VI-NEXT:    s_or_b32 s12, s12, s13
 ; VI-NEXT:    s_or_b32 s10, s10, s11
 ; VI-NEXT:    s_or_b32 s8, s8, s9
-; VI-NEXT:    s_or_b32 s6, s7, s6
+; VI-NEXT:    s_or_b32 s7, s7, s6
 ; VI-NEXT:    v_mov_b32_e32 v0, s4
 ; VI-NEXT:    v_mov_b32_e32 v1, s5
 ; VI-NEXT:    v_mov_b32_e32 v2, s16
@@ -40901,7 +40901,7 @@ define inreg <52 x half> @bitcast_v52i16_to_v52f16_scalar(<52 x i16> inreg %a, i
 ; VI-NEXT:    v_mov_b32_e32 v22, s12
 ; VI-NEXT:    v_mov_b32_e32 v23, s10
 ; VI-NEXT:    v_mov_b32_e32 v24, s8
-; VI-NEXT:    v_mov_b32_e32 v25, s6
+; VI-NEXT:    v_mov_b32_e32 v25, s7
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ; VI-NEXT:  .LBB57_4:
 ; VI-NEXT:    s_branch .LBB57_2

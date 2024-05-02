@@ -21,14 +21,14 @@ define void @fmul_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmul_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmul_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
+; CHECK-NEXT:    ldp q1, q0, [x0]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q2, q3, [x1]
+; CHECK-NEXT:    ldp q3, q2, [x1]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    bfmul z0.h, p0/m, z0.h, z2.h
 ; CHECK-NEXT:    bfmul z1.h, p0/m, z1.h, z3.h
-; CHECK-NEXT:    stp q0, q1, [x2]
+; CHECK-NEXT:    stp q1, q0, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b
@@ -110,17 +110,17 @@ define void @fmla_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmla_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmla_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
+; CHECK-NEXT:    ldp q1, q0, [x0]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q2, q3, [x1]
-; CHECK-NEXT:    ldp q4, q5, [x2]
+; CHECK-NEXT:    ldp q3, q2, [x1]
+; CHECK-NEXT:    ldp q5, q4, [x2]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    bfmul z0.h, p0/m, z0.h, z2.h
 ; CHECK-NEXT:    bfmul z1.h, p0/m, z1.h, z3.h
 ; CHECK-NEXT:    bfadd z0.h, p0/m, z0.h, z4.h
 ; CHECK-NEXT:    bfadd z1.h, p0/m, z1.h, z5.h
-; CHECK-NEXT:    stp q0, q1, [x2]
+; CHECK-NEXT:    stp q1, q0, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b
@@ -210,17 +210,17 @@ define void @fmls_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmls_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmls_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
+; CHECK-NEXT:    ldp q1, q0, [x0]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q2, q3, [x1]
-; CHECK-NEXT:    ldp q4, q5, [x2]
+; CHECK-NEXT:    ldp q3, q2, [x1]
+; CHECK-NEXT:    ldp q5, q4, [x2]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    bfmul z0.h, p0/m, z0.h, z2.h
 ; CHECK-NEXT:    bfmul z1.h, p0/m, z1.h, z3.h
 ; CHECK-NEXT:    bfsub z0.h, p0/m, z0.h, z4.h
 ; CHECK-NEXT:    bfsub z1.h, p0/m, z1.h, z5.h
-; CHECK-NEXT:    stp q0, q1, [x2]
+; CHECK-NEXT:    stp q1, q0, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b

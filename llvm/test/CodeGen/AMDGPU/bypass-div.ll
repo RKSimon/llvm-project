@@ -1162,7 +1162,7 @@ define i64 @udiv64_known32(i64 %a, i64 %b) {
 ; GFX9-NEXT:    v_mul_lo_u32 v3, v3, v1
 ; GFX9-NEXT:    v_mul_hi_u32 v3, v1, v3
 ; GFX9-NEXT:    v_add_u32_e32 v1, v1, v3
-; GFX9-NEXT:    v_mul_hi_u32 v1, v0, v1
+; GFX9-NEXT:    v_mul_hi_u32 v1, v1, v0
 ; GFX9-NEXT:    v_mul_lo_u32 v3, v1, v2
 ; GFX9-NEXT:    v_add_u32_e32 v4, 1, v1
 ; GFX9-NEXT:    v_sub_u32_e32 v0, v0, v3

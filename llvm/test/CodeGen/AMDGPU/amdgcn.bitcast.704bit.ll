@@ -34399,13 +34399,13 @@ define inreg <44 x half> @bitcast_v44i16_to_v44f16_scalar(<44 x i16> inreg %a, i
 ; VI-NEXT:    s_or_b32 s25, s25, s26
 ; VI-NEXT:    s_and_b32 s26, 0xffff, s28
 ; VI-NEXT:    s_lshl_b32 s13, s13, 16
-; VI-NEXT:    s_or_b32 s13, s26, s13
-; VI-NEXT:    s_and_b32 s26, 0xffff, s29
+; VI-NEXT:    s_or_b32 s26, s26, s13
+; VI-NEXT:    s_and_b32 s13, 0xffff, s29
 ; VI-NEXT:    s_lshl_b32 s10, s10, 16
-; VI-NEXT:    s_or_b32 s10, s26, s10
-; VI-NEXT:    s_and_b32 s26, 0xffff, s59
+; VI-NEXT:    s_or_b32 s13, s13, s10
+; VI-NEXT:    s_and_b32 s10, 0xffff, s59
 ; VI-NEXT:    s_lshl_b32 s27, s60, 16
-; VI-NEXT:    s_or_b32 s26, s26, s27
+; VI-NEXT:    s_or_b32 s10, s10, s27
 ; VI-NEXT:    s_and_b32 s27, 0xffff, s56
 ; VI-NEXT:    s_lshl_b32 s28, s57, 16
 ; VI-NEXT:    s_or_b32 s27, s27, s28
@@ -34426,7 +34426,7 @@ define inreg <44 x half> @bitcast_v44i16_to_v44f16_scalar(<44 x i16> inreg %a, i
 ; VI-NEXT:    s_or_b32 s14, s14, s15
 ; VI-NEXT:    s_or_b32 s11, s11, s12
 ; VI-NEXT:    s_or_b32 s8, s8, s9
-; VI-NEXT:    s_or_b32 s6, s7, s6
+; VI-NEXT:    s_or_b32 s7, s7, s6
 ; VI-NEXT:    v_mov_b32_e32 v0, s4
 ; VI-NEXT:    v_mov_b32_e32 v1, s5
 ; VI-NEXT:    v_mov_b32_e32 v2, s16
@@ -34439,16 +34439,16 @@ define inreg <44 x half> @bitcast_v44i16_to_v44f16_scalar(<44 x i16> inreg %a, i
 ; VI-NEXT:    v_mov_b32_e32 v9, s23
 ; VI-NEXT:    v_mov_b32_e32 v10, s24
 ; VI-NEXT:    v_mov_b32_e32 v11, s25
-; VI-NEXT:    v_mov_b32_e32 v12, s13
-; VI-NEXT:    v_mov_b32_e32 v13, s10
-; VI-NEXT:    v_mov_b32_e32 v14, s26
+; VI-NEXT:    v_mov_b32_e32 v12, s26
+; VI-NEXT:    v_mov_b32_e32 v13, s13
+; VI-NEXT:    v_mov_b32_e32 v14, s10
 ; VI-NEXT:    v_mov_b32_e32 v15, s27
 ; VI-NEXT:    v_mov_b32_e32 v16, s28
 ; VI-NEXT:    v_mov_b32_e32 v17, s29
 ; VI-NEXT:    v_mov_b32_e32 v18, s14
 ; VI-NEXT:    v_mov_b32_e32 v19, s11
 ; VI-NEXT:    v_mov_b32_e32 v20, s8
-; VI-NEXT:    v_mov_b32_e32 v21, s6
+; VI-NEXT:    v_mov_b32_e32 v21, s7
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ; VI-NEXT:  .LBB57_4:
 ; VI-NEXT:    s_branch .LBB57_2

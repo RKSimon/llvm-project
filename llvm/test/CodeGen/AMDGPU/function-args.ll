@@ -2611,7 +2611,7 @@ define void @void_func_v32i32_i1_i8_i16_bf16(<32 x i32> %arg0, i1 %arg1, i8 %arg
 ; GFX89-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX89-NEXT:    buffer_load_dword v31, off, s[0:3], s32
 ; GFX89-NEXT:    buffer_load_ubyte v32, off, s[0:3], s32 offset:4
-; GFX89-NEXT:    buffer_load_ushort v33, off, s[0:3], s32 offset:8
+; GFX89-NEXT:    buffer_load_ubyte v33, off, s[0:3], s32 offset:8
 ; GFX89-NEXT:    buffer_load_ushort v34, off, s[0:3], s32 offset:12
 ; GFX89-NEXT:    buffer_load_ushort v35, off, s[0:3], s32 offset:16
 ; GFX89-NEXT:    buffer_load_ushort v36, off, s[0:3], s32 offset:20
@@ -2653,7 +2653,7 @@ define void @void_func_v32i32_i1_i8_i16_bf16(<32 x i32> %arg0, i1 %arg1, i8 %arg
 ; GFX11-TRUE16-NEXT:    s_clause 0x5
 ; GFX11-TRUE16-NEXT:    scratch_load_b32 v31, off, s32
 ; GFX11-TRUE16-NEXT:    scratch_load_u8 v34, off, s32 offset:4
-; GFX11-TRUE16-NEXT:    scratch_load_d16_b16 v32, off, s32 offset:8
+; GFX11-TRUE16-NEXT:    scratch_load_d16_u8 v32, off, s32 offset:8
 ; GFX11-TRUE16-NEXT:    scratch_load_d16_hi_b16 v32, off, s32 offset:12
 ; GFX11-TRUE16-NEXT:    scratch_load_d16_b16 v33, off, s32 offset:16
 ; GFX11-TRUE16-NEXT:    scratch_load_d16_hi_b16 v33, off, s32 offset:20
@@ -2698,7 +2698,7 @@ define void @void_func_v32i32_i1_i8_i16_bf16(<32 x i32> %arg0, i1 %arg1, i8 %arg
 ; GFX11-FAKE16-NEXT:    s_clause 0x5
 ; GFX11-FAKE16-NEXT:    scratch_load_b32 v31, off, s32
 ; GFX11-FAKE16-NEXT:    scratch_load_u8 v32, off, s32 offset:4
-; GFX11-FAKE16-NEXT:    scratch_load_u16 v33, off, s32 offset:8
+; GFX11-FAKE16-NEXT:    scratch_load_u8 v33, off, s32 offset:8
 ; GFX11-FAKE16-NEXT:    scratch_load_u16 v34, off, s32 offset:12
 ; GFX11-FAKE16-NEXT:    scratch_load_u16 v35, off, s32 offset:16
 ; GFX11-FAKE16-NEXT:    scratch_load_u16 v36, off, s32 offset:20

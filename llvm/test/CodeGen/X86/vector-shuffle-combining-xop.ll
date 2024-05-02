@@ -403,7 +403,7 @@ define <4 x float> @PR31296(ptr %in) {
 ; X64-LABEL: PR31296:
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
-; X64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],zero,zero,mem[0]
+; X64-NEXT:    vunpcklps {{.*#+}} xmm0 = xmm0[0],mem[0],xmm0[1],mem[1]
 ; X64-NEXT:    retq
 entry:
   %0 = load i32, ptr %in

@@ -69,8 +69,9 @@ define preserve_nonecc void @caller_byval_alloca() {
 ; CHECK-NEXT:    xorps %xmm0, %xmm0
 ; CHECK-NEXT:    movups %xmm0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, {{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movq {{[0-9]+}}(%rsp), %rax
+; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movups %xmm0, (%rsp)
-; CHECK-NEXT:    movq $0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    callq callee_byval@PLT
 ; CHECK-NEXT:    addq $56, %rsp
 ; CHECK-NEXT:    .cfi_def_cfa_offset 8

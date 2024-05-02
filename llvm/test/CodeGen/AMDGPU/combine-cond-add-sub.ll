@@ -267,11 +267,11 @@ define amdgpu_kernel void @sub_sube_commuted(ptr addrspace(1) nocapture %arg, i3
 ; GCN-NEXT:    v_mov_b32_e32 v3, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
 ; GCN-NEXT:    buffer_load_dword v4, v[2:3], s[0:3], 0 addr64
+; GCN-NEXT:    v_mov_b32_e32 v5, s4
 ; GCN-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_subbrev_u32_e32 v0, vcc, 0, v4, vcc
-; GCN-NEXT:    v_sub_i32_e32 v0, vcc, s4, v0
-; GCN-NEXT:    v_add_i32_e32 v0, vcc, 0x64, v0
+; GCN-NEXT:    v_subb_u32_e32 v0, vcc, v4, v5, vcc
+; GCN-NEXT:    v_sub_i32_e32 v0, vcc, 0x64, v0
 ; GCN-NEXT:    buffer_store_dword v0, v[2:3], s[0:3], 0 addr64
 ; GCN-NEXT:    s_endpgm
 ;
@@ -283,10 +283,10 @@ define amdgpu_kernel void @sub_sube_commuted(ptr addrspace(1) nocapture %arg, i3
 ; GFX9-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX9-NEXT:    global_load_dword v3, v2, s[0:1]
+; GFX9-NEXT:    v_mov_b32_e32 v4, s2
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_subbrev_co_u32_e32 v0, vcc, 0, v3, vcc
-; GFX9-NEXT:    v_sub_u32_e32 v0, s2, v0
-; GFX9-NEXT:    v_add_u32_e32 v0, 0x64, v0
+; GFX9-NEXT:    v_subb_co_u32_e32 v0, vcc, v3, v4, vcc
+; GFX9-NEXT:    v_sub_u32_e32 v0, 0x64, v0
 ; GFX9-NEXT:    global_store_dword v2, v0, s[0:1]
 ; GFX9-NEXT:    s_endpgm
 bb:
@@ -655,10 +655,9 @@ define amdgpu_kernel void @sub_zext_setcc_commute(ptr addrspace(1) nocapture %ar
 ; GCN-NEXT:    v_mov_b32_e32 v3, 0
 ; GCN-NEXT:    buffer_load_dword v4, v[2:3], s[0:3], 0 addr64
 ; GCN-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
-; GCN-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_sub_i32_e32 v0, vcc, v0, v4
-; GCN-NEXT:    v_add_i32_e32 v0, vcc, s4, v0
+; GCN-NEXT:    v_subbrev_u32_e32 v0, vcc, 0, v4, vcc
+; GCN-NEXT:    v_sub_i32_e32 v0, vcc, s4, v0
 ; GCN-NEXT:    v_subrev_i32_e32 v0, vcc, s5, v0
 ; GCN-NEXT:    buffer_store_dword v0, v[2:3], s[0:3], 0 addr64
 ; GCN-NEXT:    s_endpgm
@@ -668,12 +667,11 @@ define amdgpu_kernel void @sub_zext_setcc_commute(ptr addrspace(1) nocapture %ar
 ; GFX9-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x24
 ; GFX9-NEXT:    v_lshlrev_b32_e32 v2, 2, v0
 ; GFX9-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
-; GFX9-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX9-NEXT:    global_load_dword v3, v2, s[0:1]
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_sub_u32_e32 v0, v0, v3
-; GFX9-NEXT:    v_add_u32_e32 v0, s2, v0
+; GFX9-NEXT:    v_subbrev_co_u32_e32 v0, vcc, 0, v3, vcc
+; GFX9-NEXT:    v_sub_u32_e32 v0, s2, v0
 ; GFX9-NEXT:    v_subrev_u32_e32 v0, s3, v0
 ; GFX9-NEXT:    global_store_dword v2, v0, s[0:1]
 ; GFX9-NEXT:    s_endpgm
@@ -704,10 +702,9 @@ define amdgpu_kernel void @sub_sext_setcc_commute(ptr addrspace(1) nocapture %ar
 ; GCN-NEXT:    v_mov_b32_e32 v3, 0
 ; GCN-NEXT:    buffer_load_dword v4, v[2:3], s[0:3], 0 addr64
 ; GCN-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
-; GCN-NEXT:    v_cndmask_b32_e64 v0, 0, -1, vcc
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_sub_i32_e32 v0, vcc, v0, v4
-; GCN-NEXT:    v_add_i32_e32 v0, vcc, s4, v0
+; GCN-NEXT:    v_addc_u32_e32 v0, vcc, 0, v4, vcc
+; GCN-NEXT:    v_sub_i32_e32 v0, vcc, s4, v0
 ; GCN-NEXT:    v_subrev_i32_e32 v0, vcc, s5, v0
 ; GCN-NEXT:    buffer_store_dword v0, v[2:3], s[0:3], 0 addr64
 ; GCN-NEXT:    s_endpgm
@@ -717,12 +714,11 @@ define amdgpu_kernel void @sub_sext_setcc_commute(ptr addrspace(1) nocapture %ar
 ; GFX9-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x24
 ; GFX9-NEXT:    v_lshlrev_b32_e32 v2, 2, v0
 ; GFX9-NEXT:    v_cmp_gt_u32_e32 vcc, v0, v1
-; GFX9-NEXT:    v_cndmask_b32_e64 v0, 0, -1, vcc
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX9-NEXT:    global_load_dword v3, v2, s[0:1]
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_sub_u32_e32 v0, v0, v3
-; GFX9-NEXT:    v_add_u32_e32 v0, s2, v0
+; GFX9-NEXT:    v_addc_co_u32_e32 v0, vcc, 0, v3, vcc
+; GFX9-NEXT:    v_sub_u32_e32 v0, s2, v0
 ; GFX9-NEXT:    v_subrev_u32_e32 v0, s3, v0
 ; GFX9-NEXT:    global_store_dword v2, v0, s[0:1]
 ; GFX9-NEXT:    s_endpgm

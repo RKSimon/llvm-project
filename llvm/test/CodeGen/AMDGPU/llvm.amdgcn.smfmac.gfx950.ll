@@ -316,10 +316,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x32_f16__vgpr(ptr addrspace(1) %
 ; SDAG-NEXT:    v_smfmac_f32_32x32x32_f16 v[0:15], v[26:29], v[18:25], v16 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_f32_32x32x32_f16__vgpr:
@@ -378,10 +378,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x32_f16__vgpr(ptr addrspace(1) %
 ; SDAG-VGPR-NEXT:    v_smfmac_f32_32x32x32_f16 v[0:15], v[26:29], v[18:25], v16 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_f32_32x32x32_f16__vgpr:
@@ -1105,10 +1105,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x32_bf16__vgpr(ptr addrspace(1) 
 ; GCN-NEXT:    v_smfmac_f32_32x32x32_bf16 v[0:15], v[26:29], v[18:25], v16 cbsz:1 abid:2
 ; GCN-NEXT:    v_mov_b32_e32 v16, 0
 ; GCN-NEXT:    s_nop 10
-; GCN-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; GCN-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; GCN-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; GCN-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; GCN-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; GCN-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; GCN-NEXT:    s_endpgm
 ;
 ; GCN-VGPR-LABEL: test_smfmac_f32_32x32x32_bf16__vgpr:
@@ -1136,10 +1136,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x32_bf16__vgpr(ptr addrspace(1) 
 ; GCN-VGPR-NEXT:    v_smfmac_f32_32x32x32_bf16 v[0:15], v[26:29], v[18:25], v16 cbsz:1 abid:2
 ; GCN-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; GCN-VGPR-NEXT:    s_nop 10
-; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; GCN-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; GCN-VGPR-NEXT:    s_endpgm
 bb:
   %id = call i32 @llvm.amdgcn.workitem.id.x()
@@ -1729,10 +1729,10 @@ define amdgpu_kernel void @test_smfmac_i32_32x32x64_i8__vgpr(ptr addrspace(1) %a
 ; SDAG-NEXT:    v_smfmac_i32_32x32x64_i8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_i32_32x32x64_i8__vgpr:
@@ -1797,10 +1797,10 @@ define amdgpu_kernel void @test_smfmac_i32_32x32x64_i8__vgpr(ptr addrspace(1) %a
 ; SDAG-VGPR-NEXT:    v_smfmac_i32_32x32x64_i8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_i32_32x32x64_i8__vgpr:
@@ -3501,10 +3501,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_bf8_bf8__vgpr(ptr addrspace(
 ; SDAG-NEXT:    v_smfmac_f32_32x32x64_bf8_bf8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_f32_32x32x64_bf8_bf8__vgpr:
@@ -3569,10 +3569,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_bf8_bf8__vgpr(ptr addrspace(
 ; SDAG-VGPR-NEXT:    v_smfmac_f32_32x32x64_bf8_bf8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_f32_32x32x64_bf8_bf8__vgpr:
@@ -4109,10 +4109,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_bf8_fp8__vgpr(ptr addrspace(
 ; SDAG-NEXT:    v_smfmac_f32_32x32x64_bf8_fp8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_f32_32x32x64_bf8_fp8__vgpr:
@@ -4177,10 +4177,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_bf8_fp8__vgpr(ptr addrspace(
 ; SDAG-VGPR-NEXT:    v_smfmac_f32_32x32x64_bf8_fp8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_f32_32x32x64_bf8_fp8__vgpr:
@@ -4717,10 +4717,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_fp8_bf8__vgpr(ptr addrspace(
 ; SDAG-NEXT:    v_smfmac_f32_32x32x64_fp8_bf8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_f32_32x32x64_fp8_bf8__vgpr:
@@ -4785,10 +4785,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_fp8_bf8__vgpr(ptr addrspace(
 ; SDAG-VGPR-NEXT:    v_smfmac_f32_32x32x64_fp8_bf8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_f32_32x32x64_fp8_bf8__vgpr:
@@ -5325,10 +5325,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_fp8_fp8__vgpr(ptr addrspace(
 ; SDAG-NEXT:    v_smfmac_f32_32x32x64_fp8_fp8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_smfmac_f32_32x32x64_fp8_fp8__vgpr:
@@ -5393,10 +5393,10 @@ define amdgpu_kernel void @test_smfmac_f32_32x32x64_fp8_fp8__vgpr(ptr addrspace(
 ; SDAG-VGPR-NEXT:    v_smfmac_f32_32x32x64_fp8_fp8 v[0:15], v[24:27], v[16:23], v28 cbsz:1 abid:2
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v16, 0
 ; SDAG-VGPR-NEXT:    s_nop 10
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[12:15], s[6:7] offset:48
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[8:11], s[6:7] offset:32
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[4:7], s[6:7] offset:16
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v16, v[0:3], s[6:7]
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
 ; GISEL-VGPR-LABEL: test_smfmac_f32_32x32x64_fp8_fp8__vgpr:

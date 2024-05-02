@@ -120,8 +120,7 @@ define void @demand_one_loaded_byte(ptr %xp, ptr %yp) {
 define i16 @bswap_src_and_lo_i16(i16 %x) {
 ; CHECK-LABEL: bswap_src_and_lo_i16:
 ; CHECK:       ; %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    rev16 w0, w8
+; CHECK-NEXT:    lsl w0, w0, #8
 ; CHECK-NEXT:    ret
   %m = and i16 %x, 255
   %b = call i16 @llvm.bswap.i16(i16 %m)
@@ -131,8 +130,7 @@ define i16 @bswap_src_and_lo_i16(i16 %x) {
 define i16 @bswap_src_and_hi_i16(i16 %x) {
 ; CHECK-LABEL: bswap_src_and_hi_i16:
 ; CHECK:       ; %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xffffff00
-; CHECK-NEXT:    rev16 w0, w8
+; CHECK-NEXT:    ubfx w0, w0, #8, #8
 ; CHECK-NEXT:    ret
   %m = and i16 %x, 65280
   %b = call i16 @llvm.bswap.i16(i16 %m)
@@ -142,8 +140,7 @@ define i16 @bswap_src_and_hi_i16(i16 %x) {
 define i16 @bswap_src_zext_i8_to_i16(i8 %x) {
 ; CHECK-LABEL: bswap_src_zext_i8_to_i16:
 ; CHECK:       ; %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    rev16 w0, w8
+; CHECK-NEXT:    lsl w0, w0, #8
 ; CHECK-NEXT:    ret
   %z = zext i8 %x to i16
   %b = call i16 @llvm.bswap.i16(i16 %z)

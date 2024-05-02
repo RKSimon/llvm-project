@@ -120,12 +120,11 @@ define i32 @extract_last_active_v2i32(<2 x i32> %a, <2 x i1> %c) {
 ; CHECK-NEXT:    local.get 4
 ; CHECK-NEXT:    i32.const 8
 ; CHECK-NEXT:    i32.add
-; CHECK-NEXT:    i32.const 4
-; CHECK-NEXT:    i32.const 0
 ; CHECK-NEXT:    local.get 3
 ; CHECK-NEXT:    i32.const 1
 ; CHECK-NEXT:    i32.and
-; CHECK-NEXT:    i32.select
+; CHECK-NEXT:    i32.const 2
+; CHECK-NEXT:    i32.shl
 ; CHECK-NEXT:    i32.or
 ; CHECK-NEXT:    i32.load 0
 ; CHECK-NEXT:    i32.const -1

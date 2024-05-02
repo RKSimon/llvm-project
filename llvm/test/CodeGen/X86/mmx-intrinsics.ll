@@ -2807,8 +2807,8 @@ declare void @llvm.x86.mmx.movnt.dq(ptr, <1 x i64>) nounwind
 define void @test25(ptr %p, <1 x i64> %a) nounwind optsize ssp {
 ; X86-LABEL: test25:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    movq {{[0-9]+}}(%esp), %mm0
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movq {{[0-9]+}}(%esp), %mm0
 ; X86-NEXT:    movntq %mm0, (%eax)
 ; X86-NEXT:    retl
 ;
@@ -2868,14 +2868,14 @@ define void @test23(<1 x i64> %d, <1 x i64> %n, ptr %p) nounwind optsize ssp {
 ; X86-NEXT:    movl 16(%ebp), %eax
 ; X86-NEXT:    movl 20(%ebp), %ecx
 ; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl %eax, (%esp)
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl 12(%ebp), %ecx
 ; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl %eax, (%esp)
+; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl 24(%ebp), %edi
-; X86-NEXT:    movq {{[0-9]+}}(%esp), %mm0
-; X86-NEXT:    movq (%esp), %mm1
+; X86-NEXT:    movq (%esp), %mm0
+; X86-NEXT:    movq {{[0-9]+}}(%esp), %mm1
 ; X86-NEXT:    maskmovq %mm0, %mm1
 ; X86-NEXT:    leal -4(%ebp), %esp
 ; X86-NEXT:    popl %edi

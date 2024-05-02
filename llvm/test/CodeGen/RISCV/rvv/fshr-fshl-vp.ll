@@ -892,10 +892,10 @@ define <vscale x 1 x i9> @fshr_v1i9(<vscale x 1 x i9> %a, <vscale x 1 x i9> %b, 
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a0, 511
 ; CHECK-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
-; CHECK-NEXT:    vand.vx v10, v10, a0
+; CHECK-NEXT:    vand.vx v11, v10, a0
 ; CHECK-NEXT:    lui a0, 2
 ; CHECK-NEXT:    addi a0, a0, -910
-; CHECK-NEXT:    vmulhu.vx v11, v10, a0
+; CHECK-NEXT:    vmulhu.vx v11, v11, a0
 ; CHECK-NEXT:    li a0, 9
 ; CHECK-NEXT:    vsll.vi v9, v9, 7
 ; CHECK-NEXT:    vnmsub.vx v11, a0, v10

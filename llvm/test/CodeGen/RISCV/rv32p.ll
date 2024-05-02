@@ -316,8 +316,11 @@ define i32 @cls_i32_knownbits_4(i32 signext %x) {
 define i32 @cls_i32_knownbits_no_overestimate(i32 signext %x) {
 ; CHECK-LABEL: cls_i32_knownbits_no_overestimate:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srai a0, a0, 15
-; CHECK-NEXT:    cls a0, a0
+; CHECK-NEXT:    srai a1, a0, 15
+; CHECK-NEXT:    srai a0, a0, 31
+; CHECK-NEXT:    xor a0, a1, a0
+; CHECK-NEXT:    clz a0, a0
+; CHECK-NEXT:    addi a0, a0, -1
 ; CHECK-NEXT:    ori a0, a0, 16
 ; CHECK-NEXT:    ret
   %ashr = ashr i32 %x, 15
@@ -1935,7 +1938,12 @@ define i8 @usati_i8_from_i32(i32 %x) {
 define i12 @usati_i12_from_i32(i32 %x) {
 ; CHECK-LABEL: usati_i12_from_i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    usati a0, a0, 12
+; CHECK-NEXT:    srli a1, a0, 12
+; CHECK-NEXT:    beqz a1, .LBB156_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    srli a0, a0, 31
+; CHECK-NEXT:    addi a0, a0, -1
+; CHECK-NEXT:  .LBB156_2:
 ; CHECK-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 4095
   %cmp2 = icmp sgt i32 %x, -1
@@ -1948,7 +1956,12 @@ define i12 @usati_i12_from_i32(i32 %x) {
 define i16 @usati_i16_from_i32(i32 %x) {
 ; CHECK-LABEL: usati_i16_from_i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    usati a0, a0, 16
+; CHECK-NEXT:    srli a1, a0, 16
+; CHECK-NEXT:    beqz a1, .LBB157_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    srli a0, a0, 31
+; CHECK-NEXT:    addi a0, a0, -1
+; CHECK-NEXT:  .LBB157_2:
 ; CHECK-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 65535
   %cmp2 = icmp sgt i32 %x, -1
@@ -1961,7 +1974,12 @@ define i16 @usati_i16_from_i32(i32 %x) {
 define i24 @usati_i24_from_i32(i32 %x) {
 ; CHECK-LABEL: usati_i24_from_i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    usati a0, a0, 24
+; CHECK-NEXT:    srli a1, a0, 24
+; CHECK-NEXT:    beqz a1, .LBB158_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    srli a0, a0, 31
+; CHECK-NEXT:    addi a0, a0, -1
+; CHECK-NEXT:  .LBB158_2:
 ; CHECK-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 16777215
   %cmp2 = icmp sgt i32 %x, -1

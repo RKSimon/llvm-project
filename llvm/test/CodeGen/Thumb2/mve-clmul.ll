@@ -5209,1365 +5209,1366 @@ define <1 x i128> @clmul_v1i128(<1 x i128> %x, <1 x i128> %y) {
 ; CHECK-NEXT:    push.w {r4, r5, r6, r7, r8, r9, r10, r11, lr}
 ; CHECK-NEXT:    .pad #636
 ; CHECK-NEXT:    sub.w sp, sp, #636
-; CHECK-NEXT:    ldr.w r10, [sp, #672]
-; CHECK-NEXT:    mov lr, r3
+; CHECK-NEXT:    ldrd r7, r11, [sp, #672]
+; CHECK-NEXT:    mov r12, r0
+; CHECK-NEXT:    mov lr, r2
+; CHECK-NEXT:    ldrd r10, r4, [sp, #680]
+; CHECK-NEXT:    and r0, r7, #2
+; CHECK-NEXT:    str r0, [sp, #524] @ 4-byte Spill
+; CHECK-NEXT:    mov r9, r3
 ; CHECK-NEXT:    mov r3, r1
-; CHECK-NEXT:    mov r1, r0
-; CHECK-NEXT:    and r0, r10, #2
-; CHECK-NEXT:    str r0, [sp, #528] @ 4-byte Spill
-; CHECK-NEXT:    mov r12, r2
-; CHECK-NEXT:    ldr r6, [sp, #680]
 ; CHECK-NEXT:    muls r0, r2, r0
-; CHECK-NEXT:    and r2, r10, #1
-; CHECK-NEXT:    str r2, [sp, #524] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
-; CHECK-NEXT:    and r4, r6, #1
-; CHECK-NEXT:    str r4, [sp, #252] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #4
+; CHECK-NEXT:    and r2, r7, #1
 ; CHECK-NEXT:    str r2, [sp, #520] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    and r1, r10, #4
+; CHECK-NEXT:    str r1, [sp, #244] @ 4-byte Spill
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #8
-; CHECK-NEXT:    str r2, [sp, #508] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
-; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #16
-; CHECK-NEXT:    str r2, [sp, #552] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
-; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #32
-; CHECK-NEXT:    str r2, [sp, #548] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
-; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #64
-; CHECK-NEXT:    str r2, [sp, #556] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
-; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #128
+; CHECK-NEXT:    and r2, r7, #4
 ; CHECK-NEXT:    str r2, [sp, #516] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #256
-; CHECK-NEXT:    str r2, [sp, #512] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    and r2, r7, #8
+; CHECK-NEXT:    str r2, [sp, #548] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #512
+; CHECK-NEXT:    and r2, r7, #16
 ; CHECK-NEXT:    str r2, [sp, #544] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #1024
+; CHECK-NEXT:    and r2, r7, #32
+; CHECK-NEXT:    str r2, [sp, #556] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    and r2, r7, #64
 ; CHECK-NEXT:    str r2, [sp, #540] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #2048
+; CHECK-NEXT:    and r2, r7, #128
+; CHECK-NEXT:    str r2, [sp, #512] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    and r2, r7, #256
+; CHECK-NEXT:    str r2, [sp, #508] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    and r2, r7, #512
 ; CHECK-NEXT:    str r2, [sp, #536] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #4096
+; CHECK-NEXT:    and r2, r7, #1024
 ; CHECK-NEXT:    str r2, [sp, #532] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #8192
+; CHECK-NEXT:    and r2, r7, #2048
+; CHECK-NEXT:    str r2, [sp, #552] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    and r2, r7, #4096
+; CHECK-NEXT:    str r2, [sp, #528] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    and r2, r7, #8192
 ; CHECK-NEXT:    str r2, [sp, #632] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #16384
+; CHECK-NEXT:    and r2, r7, #16384
 ; CHECK-NEXT:    str r2, [sp, #628] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #32768
+; CHECK-NEXT:    and r2, r7, #32768
 ; CHECK-NEXT:    str r2, [sp, #624] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #65536
+; CHECK-NEXT:    and r2, r7, #65536
 ; CHECK-NEXT:    str r2, [sp, #620] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #131072
+; CHECK-NEXT:    and r2, r7, #131072
 ; CHECK-NEXT:    str r2, [sp, #616] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #262144
+; CHECK-NEXT:    and r2, r7, #262144
 ; CHECK-NEXT:    str r2, [sp, #612] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #524288
+; CHECK-NEXT:    and r2, r7, #524288
 ; CHECK-NEXT:    str r2, [sp, #608] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #1048576
+; CHECK-NEXT:    and r2, r7, #1048576
 ; CHECK-NEXT:    str r2, [sp, #604] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #2097152
+; CHECK-NEXT:    and r2, r7, #2097152
 ; CHECK-NEXT:    str r2, [sp, #600] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #4194304
+; CHECK-NEXT:    and r2, r7, #4194304
 ; CHECK-NEXT:    str r2, [sp, #596] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #8388608
+; CHECK-NEXT:    and r2, r7, #8388608
 ; CHECK-NEXT:    str r2, [sp, #592] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #16777216
+; CHECK-NEXT:    and r2, r7, #16777216
 ; CHECK-NEXT:    str r2, [sp, #588] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #33554432
+; CHECK-NEXT:    and r2, r7, #33554432
 ; CHECK-NEXT:    str r2, [sp, #584] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #67108864
+; CHECK-NEXT:    and r2, r7, #67108864
 ; CHECK-NEXT:    str r2, [sp, #580] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #134217728
+; CHECK-NEXT:    and r2, r7, #134217728
 ; CHECK-NEXT:    str r2, [sp, #576] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #268435456
+; CHECK-NEXT:    and r2, r7, #268435456
 ; CHECK-NEXT:    str r2, [sp, #572] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #536870912
+; CHECK-NEXT:    and r2, r7, #536870912
 ; CHECK-NEXT:    str r2, [sp, #568] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #1073741824
+; CHECK-NEXT:    and r2, r7, #1073741824
 ; CHECK-NEXT:    str r2, [sp, #564] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    mul r2, lr, r2
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r10, #-2147483648
+; CHECK-NEXT:    and r2, r7, #-2147483648
 ; CHECK-NEXT:    str r2, [sp, #560] @ 4-byte Spill
-; CHECK-NEXT:    mul r2, r12, r2
+; CHECK-NEXT:    rbit r7, r7
+; CHECK-NEXT:    mul r2, lr, r2
+; CHECK-NEXT:    eor.w r8, r0, r2
+; CHECK-NEXT:    and r0, r10, #2
+; CHECK-NEXT:    str r0, [sp, #252] @ 4-byte Spill
+; CHECK-NEXT:    mul r2, r12, r0
+; CHECK-NEXT:    and r0, r10, #1
+; CHECK-NEXT:    str r0, [sp, #248] @ 4-byte Spill
+; CHECK-NEXT:    mul r0, r12, r0
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    and r2, r6, #2
-; CHECK-NEXT:    str r2, [sp, #256] @ 4-byte Spill
-; CHECK-NEXT:    muls r2, r1, r2
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #4
-; CHECK-NEXT:    str r4, [sp, #248] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #8
-; CHECK-NEXT:    str r4, [sp, #244] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #16
-; CHECK-NEXT:    str r4, [sp, #236] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #32
-; CHECK-NEXT:    str r4, [sp, #232] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #64
-; CHECK-NEXT:    str r4, [sp, #228] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #128
-; CHECK-NEXT:    str r4, [sp, #224] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #256
-; CHECK-NEXT:    str r4, [sp, #220] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #512
-; CHECK-NEXT:    str r4, [sp, #216] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #1024
-; CHECK-NEXT:    str r4, [sp, #212] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #2048
-; CHECK-NEXT:    str r4, [sp, #208] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #4096
-; CHECK-NEXT:    str r4, [sp, #204] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #8192
-; CHECK-NEXT:    str r4, [sp, #200] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #16384
-; CHECK-NEXT:    str r4, [sp, #196] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #32768
-; CHECK-NEXT:    str r4, [sp, #192] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #65536
-; CHECK-NEXT:    str r4, [sp, #188] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #131072
-; CHECK-NEXT:    str r4, [sp, #184] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #262144
-; CHECK-NEXT:    str r4, [sp, #180] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #524288
-; CHECK-NEXT:    str r4, [sp, #176] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #1048576
-; CHECK-NEXT:    str r4, [sp, #172] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #2097152
-; CHECK-NEXT:    str r4, [sp, #168] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #4194304
-; CHECK-NEXT:    str r4, [sp, #164] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #8388608
-; CHECK-NEXT:    str r4, [sp, #160] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #16777216
-; CHECK-NEXT:    str r4, [sp, #156] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #33554432
-; CHECK-NEXT:    str r4, [sp, #152] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #67108864
-; CHECK-NEXT:    str r4, [sp, #148] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #134217728
-; CHECK-NEXT:    str r4, [sp, #144] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #268435456
-; CHECK-NEXT:    str r4, [sp, #140] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #536870912
-; CHECK-NEXT:    str r4, [sp, #136] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #1073741824
-; CHECK-NEXT:    str r4, [sp, #132] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
-; CHECK-NEXT:    and r4, r6, #-2147483648
-; CHECK-NEXT:    str r4, [sp, #128] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r2, r4
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #8
+; CHECK-NEXT:    str r1, [sp, #240] @ 4-byte Spill
 ; CHECK-NEXT:    eors r0, r2
-; CHECK-NEXT:    str r0, [sp, #264] @ 4-byte Spill
-; CHECK-NEXT:    ldr r0, [sp, #676]
-; CHECK-NEXT:    rbit r2, r1
-; CHECK-NEXT:    rbit r0, r0
-; CHECK-NEXT:    and r5, r0, #1
-; CHECK-NEXT:    and r4, r0, #2
-; CHECK-NEXT:    str r4, [sp, #240] @ 4-byte Spill
-; CHECK-NEXT:    and r9, r0, #-2147483648
-; CHECK-NEXT:    muls r4, r2, r4
-; CHECK-NEXT:    str r5, [sp, #120] @ 4-byte Spill
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #4
-; CHECK-NEXT:    str r5, [sp, #116] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #8
-; CHECK-NEXT:    str r5, [sp, #112] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #16
-; CHECK-NEXT:    str r5, [sp, #108] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #32
-; CHECK-NEXT:    str r5, [sp, #104] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #64
-; CHECK-NEXT:    str r5, [sp, #100] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #128
-; CHECK-NEXT:    str r5, [sp, #96] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #256
-; CHECK-NEXT:    str r5, [sp, #92] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #512
-; CHECK-NEXT:    str r5, [sp, #88] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #1024
-; CHECK-NEXT:    str r5, [sp, #84] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #2048
-; CHECK-NEXT:    str r5, [sp, #80] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #4096
-; CHECK-NEXT:    str r5, [sp, #76] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #8192
-; CHECK-NEXT:    str r5, [sp, #72] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #16384
-; CHECK-NEXT:    str r5, [sp, #68] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #32768
-; CHECK-NEXT:    str r5, [sp, #64] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #65536
-; CHECK-NEXT:    str r5, [sp, #60] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #131072
-; CHECK-NEXT:    str r5, [sp, #56] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #262144
-; CHECK-NEXT:    str r5, [sp, #52] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #524288
-; CHECK-NEXT:    str r5, [sp, #48] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #1048576
-; CHECK-NEXT:    str r5, [sp, #44] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #2097152
-; CHECK-NEXT:    str r5, [sp, #40] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #4194304
-; CHECK-NEXT:    str r5, [sp, #36] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #8388608
-; CHECK-NEXT:    str r5, [sp, #32] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #16777216
-; CHECK-NEXT:    str r5, [sp, #28] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #33554432
-; CHECK-NEXT:    str r5, [sp, #24] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #67108864
-; CHECK-NEXT:    str r5, [sp, #20] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #134217728
-; CHECK-NEXT:    str r5, [sp, #16] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #268435456
-; CHECK-NEXT:    str r5, [sp, #12] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #536870912
-; CHECK-NEXT:    str r5, [sp, #8] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    and r5, r0, #1073741824
-; CHECK-NEXT:    mul r0, r2, r9
-; CHECK-NEXT:    str r5, [sp, #4] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    mul r7, r2, r5
-; CHECK-NEXT:    rbit r5, r10
-; CHECK-NEXT:    and r10, r5, #268435456
-; CHECK-NEXT:    str.w r10, [sp, #124] @ 4-byte Spill
-; CHECK-NEXT:    eors r4, r7
-; CHECK-NEXT:    and r7, r5, #1
-; CHECK-NEXT:    eor.w r8, r4, r0
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #16
+; CHECK-NEXT:    str r1, [sp, #232] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #32
+; CHECK-NEXT:    str r1, [sp, #228] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #64
+; CHECK-NEXT:    str r1, [sp, #224] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #128
+; CHECK-NEXT:    str r1, [sp, #220] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #256
+; CHECK-NEXT:    str r1, [sp, #216] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #512
+; CHECK-NEXT:    str r1, [sp, #212] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #1024
+; CHECK-NEXT:    str r1, [sp, #208] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #2048
+; CHECK-NEXT:    str r1, [sp, #204] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #4096
+; CHECK-NEXT:    str r1, [sp, #200] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #8192
+; CHECK-NEXT:    str r1, [sp, #196] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #16384
+; CHECK-NEXT:    str r1, [sp, #192] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #32768
+; CHECK-NEXT:    str r1, [sp, #188] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #65536
+; CHECK-NEXT:    str r1, [sp, #184] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #131072
+; CHECK-NEXT:    str r1, [sp, #180] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #262144
+; CHECK-NEXT:    str r1, [sp, #176] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #524288
+; CHECK-NEXT:    str r1, [sp, #172] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #1048576
+; CHECK-NEXT:    str r1, [sp, #168] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #2097152
+; CHECK-NEXT:    str r1, [sp, #164] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #4194304
+; CHECK-NEXT:    str r1, [sp, #160] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #8388608
+; CHECK-NEXT:    str r1, [sp, #156] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #16777216
+; CHECK-NEXT:    str r1, [sp, #152] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #33554432
+; CHECK-NEXT:    str r1, [sp, #148] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #67108864
+; CHECK-NEXT:    str r1, [sp, #144] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #134217728
+; CHECK-NEXT:    str r1, [sp, #140] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #268435456
+; CHECK-NEXT:    str r1, [sp, #136] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #536870912
+; CHECK-NEXT:    str r1, [sp, #132] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #1073741824
+; CHECK-NEXT:    str r1, [sp, #128] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    and r1, r10, #-2147483648
+; CHECK-NEXT:    str r1, [sp, #124] @ 4-byte Spill
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    mul r2, r12, r1
+; CHECK-NEXT:    eors r0, r2
+; CHECK-NEXT:    rbit r2, r12
+; CHECK-NEXT:    eor.w r0, r0, r8
+; CHECK-NEXT:    str r0, [sp, #260] @ 4-byte Spill
+; CHECK-NEXT:    rbit r0, r11
+; CHECK-NEXT:    and r1, r0, #2
+; CHECK-NEXT:    str r1, [sp, #236] @ 4-byte Spill
+; CHECK-NEXT:    mul r8, r2, r1
+; CHECK-NEXT:    and r1, r0, #1
+; CHECK-NEXT:    str r1, [sp, #120] @ 4-byte Spill
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #4
+; CHECK-NEXT:    str r1, [sp, #116] @ 4-byte Spill
+; CHECK-NEXT:    mul r5, r2, r1
+; CHECK-NEXT:    and r1, r0, #8
+; CHECK-NEXT:    str r1, [sp, #112] @ 4-byte Spill
+; CHECK-NEXT:    eor.w r6, r6, r8
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #16
+; CHECK-NEXT:    str r1, [sp, #108] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #32
+; CHECK-NEXT:    str r1, [sp, #104] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #64
+; CHECK-NEXT:    str r1, [sp, #100] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #128
+; CHECK-NEXT:    str r1, [sp, #96] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #256
+; CHECK-NEXT:    str r1, [sp, #92] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #512
+; CHECK-NEXT:    str r1, [sp, #88] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #1024
+; CHECK-NEXT:    str r1, [sp, #84] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #2048
+; CHECK-NEXT:    str r1, [sp, #80] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #4096
+; CHECK-NEXT:    str r1, [sp, #76] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #8192
+; CHECK-NEXT:    str r1, [sp, #72] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #16384
+; CHECK-NEXT:    str r1, [sp, #68] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #32768
+; CHECK-NEXT:    str r1, [sp, #64] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #65536
+; CHECK-NEXT:    str r1, [sp, #60] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #131072
+; CHECK-NEXT:    str r1, [sp, #56] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #262144
+; CHECK-NEXT:    str r1, [sp, #52] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #524288
+; CHECK-NEXT:    str r1, [sp, #48] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #1048576
+; CHECK-NEXT:    str r1, [sp, #44] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #2097152
+; CHECK-NEXT:    str r1, [sp, #40] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #4194304
+; CHECK-NEXT:    str r1, [sp, #36] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #8388608
+; CHECK-NEXT:    str r1, [sp, #32] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #16777216
+; CHECK-NEXT:    str r1, [sp, #28] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #33554432
+; CHECK-NEXT:    str r1, [sp, #24] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #67108864
+; CHECK-NEXT:    str r1, [sp, #20] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #134217728
+; CHECK-NEXT:    str r1, [sp, #16] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #268435456
+; CHECK-NEXT:    str r1, [sp, #12] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #536870912
+; CHECK-NEXT:    str r1, [sp, #8] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    and r1, r0, #1073741824
+; CHECK-NEXT:    and r0, r0, #-2147483648
+; CHECK-NEXT:    str r0, [sp] @ 4-byte Spill
+; CHECK-NEXT:    str r1, [sp, #4] @ 4-byte Spill
+; CHECK-NEXT:    muls r0, r2, r0
+; CHECK-NEXT:    eors r6, r5
+; CHECK-NEXT:    mul r5, r2, r1
+; CHECK-NEXT:    and r1, r7, #2
+; CHECK-NEXT:    str r1, [sp, #504] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    eor.w r8, r5, r0
 ; CHECK-NEXT:    rbit r0, r3
-; CHECK-NEXT:    and r4, r5, #2
-; CHECK-NEXT:    str r4, [sp, #452] @ 4-byte Spill
-; CHECK-NEXT:    mul r11, r0, r7
-; CHECK-NEXT:    str r7, [sp, #504] @ 4-byte Spill
-; CHECK-NEXT:    muls r4, r0, r4
-; CHECK-NEXT:    eor.w r11, r11, r4
-; CHECK-NEXT:    and r4, r5, #4
-; CHECK-NEXT:    str r4, [sp, #500] @ 4-byte Spill
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #8
-; CHECK-NEXT:    str r4, [sp, #496] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #16
-; CHECK-NEXT:    str r4, [sp, #492] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #32
-; CHECK-NEXT:    str r4, [sp, #488] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #64
-; CHECK-NEXT:    str r4, [sp, #484] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #128
-; CHECK-NEXT:    str r4, [sp, #480] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #256
-; CHECK-NEXT:    str r4, [sp, #476] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #512
-; CHECK-NEXT:    str r4, [sp, #472] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #1024
-; CHECK-NEXT:    str r4, [sp, #468] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #2048
-; CHECK-NEXT:    str r4, [sp, #464] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #4096
-; CHECK-NEXT:    str r4, [sp, #460] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #8192
-; CHECK-NEXT:    str r4, [sp, #456] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #16384
-; CHECK-NEXT:    str r4, [sp, #396] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #32768
-; CHECK-NEXT:    str r4, [sp, #448] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #65536
-; CHECK-NEXT:    str r4, [sp, #444] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #131072
-; CHECK-NEXT:    str r4, [sp, #440] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #262144
-; CHECK-NEXT:    str r4, [sp, #436] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #524288
-; CHECK-NEXT:    str r4, [sp, #432] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #1048576
-; CHECK-NEXT:    str r4, [sp, #428] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #2097152
-; CHECK-NEXT:    str r4, [sp, #424] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #4194304
-; CHECK-NEXT:    str r4, [sp, #420] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #8388608
-; CHECK-NEXT:    str r4, [sp, #416] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #16777216
-; CHECK-NEXT:    str r4, [sp, #412] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #33554432
-; CHECK-NEXT:    str r4, [sp, #408] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #67108864
-; CHECK-NEXT:    str r4, [sp, #404] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #134217728
-; CHECK-NEXT:    str r4, [sp, #400] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #536870912
-; CHECK-NEXT:    str r4, [sp, #392] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r10
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    and r4, r5, #1073741824
-; CHECK-NEXT:    and r5, r5, #-2147483648
-; CHECK-NEXT:    str r4, [sp, #388] @ 4-byte Spill
-; CHECK-NEXT:    muls r5, r0, r5
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r0, r4
-; CHECK-NEXT:    eor.w r4, r11, r7
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    ldr r5, [sp, #676]
-; CHECK-NEXT:    eor.w r8, r8, r4
-; CHECK-NEXT:    and r4, r5, #2
-; CHECK-NEXT:    str r4, [sp, #260] @ 4-byte Spill
-; CHECK-NEXT:    mul r11, r3, r4
-; CHECK-NEXT:    and r4, r5, #1
-; CHECK-NEXT:    str r4, [sp, #384] @ 4-byte Spill
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #4
-; CHECK-NEXT:    str r4, [sp, #380] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #8
-; CHECK-NEXT:    str r4, [sp, #376] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #16
-; CHECK-NEXT:    str r4, [sp, #372] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #32
-; CHECK-NEXT:    str r4, [sp, #368] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #64
-; CHECK-NEXT:    str r4, [sp, #364] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #128
-; CHECK-NEXT:    str r4, [sp, #360] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #256
-; CHECK-NEXT:    str r4, [sp, #356] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #512
-; CHECK-NEXT:    str r4, [sp, #352] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #1024
-; CHECK-NEXT:    str r4, [sp, #348] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #2048
-; CHECK-NEXT:    str r4, [sp, #344] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #4096
-; CHECK-NEXT:    str r4, [sp, #340] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #8192
-; CHECK-NEXT:    str r4, [sp, #336] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #16384
-; CHECK-NEXT:    str r4, [sp, #332] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #32768
-; CHECK-NEXT:    str r4, [sp, #328] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #65536
-; CHECK-NEXT:    str r4, [sp, #324] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #131072
-; CHECK-NEXT:    str r4, [sp, #320] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #262144
-; CHECK-NEXT:    str r4, [sp, #316] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #524288
-; CHECK-NEXT:    str r4, [sp, #312] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #1048576
-; CHECK-NEXT:    str r4, [sp, #308] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #2097152
-; CHECK-NEXT:    str r4, [sp, #304] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #4194304
-; CHECK-NEXT:    str r4, [sp, #300] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #8388608
-; CHECK-NEXT:    str r4, [sp, #296] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #16777216
-; CHECK-NEXT:    str r4, [sp, #292] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #33554432
-; CHECK-NEXT:    str r4, [sp, #288] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #67108864
-; CHECK-NEXT:    str r4, [sp, #284] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #134217728
-; CHECK-NEXT:    str r4, [sp, #280] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #268435456
-; CHECK-NEXT:    str r4, [sp, #276] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #536870912
-; CHECK-NEXT:    str r4, [sp, #272] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    and r4, r5, #1073741824
-; CHECK-NEXT:    ldr r5, [sp, #240] @ 4-byte Reload
-; CHECK-NEXT:    str r4, [sp, #268] @ 4-byte Spill
-; CHECK-NEXT:    eor.w r11, r11, r7
-; CHECK-NEXT:    mul r7, r3, r4
-; CHECK-NEXT:    muls r5, r0, r5
-; CHECK-NEXT:    eor.w r4, r11, r7
-; CHECK-NEXT:    ldr r7, [sp, #120] @ 4-byte Reload
-; CHECK-NEXT:    rbit r4, r4
-; CHECK-NEXT:    ldr.w r11, [sp, #524] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eor.w r4, r8, r4, lsr #1
-; CHECK-NEXT:    rbit r4, r4
-; CHECK-NEXT:    ldr.w r8, [sp, #520] @ 4-byte Reload
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #116] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #112] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #108] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #104] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #100] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #96] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #92] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #88] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #84] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #80] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #76] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #72] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #68] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #64] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #60] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #56] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #52] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #48] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #44] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #40] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #36] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #32] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #28] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #24] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #20] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #16] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #12] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #8] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #4] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r0, r7
-; CHECK-NEXT:    mul r0, r0, r9
-; CHECK-NEXT:    ldr.w r9, [sp, #516] @ 4-byte Reload
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #684]
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    rbit r5, r0
-; CHECK-NEXT:    ldr r0, [sp, #264] @ 4-byte Reload
-; CHECK-NEXT:    lsrl r4, r5, #1
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #252] @ 4-byte Reload
-; CHECK-NEXT:    str r0, [sp, #264] @ 4-byte Spill
-; CHECK-NEXT:    ldr r0, [sp, #256] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    str r5, [sp, #240] @ 4-byte Spill
-; CHECK-NEXT:    and r5, r7, #1
-; CHECK-NEXT:    muls r0, r3, r0
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #248] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #244] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #236] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #232] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #228] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #224] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #220] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #216] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #212] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #208] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #204] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #200] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #196] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #192] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #188] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #184] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #180] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #176] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #172] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #168] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #164] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #160] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #156] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #152] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #148] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #144] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #140] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #136] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #132] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    ldr r4, [sp, #128] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r3, r4
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    and r4, r7, #2
-; CHECK-NEXT:    muls r4, r1, r4
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #4
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #8
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #16
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #32
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #64
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #128
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #256
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #512
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #1024
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #2048
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #4096
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #8192
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #16384
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #32768
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #65536
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #131072
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #262144
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #524288
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #1048576
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #2097152
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #4194304
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #8388608
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #16777216
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #33554432
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #67108864
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #134217728
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #268435456
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #536870912
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #1073741824
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    and r5, r7, #-2147483648
-; CHECK-NEXT:    ldr r7, [sp, #504] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    ldr r5, [sp, #452] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r4
-; CHECK-NEXT:    rbit r4, r12
-; CHECK-NEXT:    muls r5, r4, r5
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #500] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #496] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #492] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #488] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #484] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #480] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #476] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #472] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #468] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #464] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #460] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #456] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #396] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #448] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #444] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #440] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #436] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #432] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #428] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #424] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #420] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #416] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #412] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #408] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #404] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #400] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    mul r7, r4, r10
-; CHECK-NEXT:    ldr.w r10, [sp, #512] @ 4-byte Reload
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #392] @ 4-byte Reload
-; CHECK-NEXT:    muls r7, r4, r7
-; CHECK-NEXT:    eors r5, r7
-; CHECK-NEXT:    ldr r7, [sp, #388] @ 4-byte Reload
-; CHECK-NEXT:    muls r4, r7, r4
-; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    rbit r7, r4
-; CHECK-NEXT:    rbit r4, r6
-; CHECK-NEXT:    and r5, r4, #2
+; CHECK-NEXT:    mul r5, r0, r1
+; CHECK-NEXT:    and r1, r7, #1
+; CHECK-NEXT:    str r1, [sp, #500] @ 4-byte Spill
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #4
+; CHECK-NEXT:    str r1, [sp, #496] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #8
+; CHECK-NEXT:    str r1, [sp, #492] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #16
+; CHECK-NEXT:    str r1, [sp, #488] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #32
+; CHECK-NEXT:    str r1, [sp, #484] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #64
+; CHECK-NEXT:    str r1, [sp, #480] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #128
+; CHECK-NEXT:    str r1, [sp, #476] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #256
+; CHECK-NEXT:    str r1, [sp, #472] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #512
+; CHECK-NEXT:    str r1, [sp, #468] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #1024
+; CHECK-NEXT:    str r1, [sp, #464] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #2048
+; CHECK-NEXT:    str r1, [sp, #460] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #4096
+; CHECK-NEXT:    str r1, [sp, #456] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #8192
+; CHECK-NEXT:    str r1, [sp, #452] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #16384
+; CHECK-NEXT:    str r1, [sp, #448] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #32768
+; CHECK-NEXT:    str r1, [sp, #444] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #65536
+; CHECK-NEXT:    str r1, [sp, #440] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #131072
+; CHECK-NEXT:    str r1, [sp, #436] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #262144
+; CHECK-NEXT:    str r1, [sp, #432] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #524288
+; CHECK-NEXT:    str r1, [sp, #428] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #1048576
+; CHECK-NEXT:    str r1, [sp, #424] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #2097152
+; CHECK-NEXT:    str r1, [sp, #420] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #4194304
+; CHECK-NEXT:    str r1, [sp, #416] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #8388608
+; CHECK-NEXT:    str r1, [sp, #412] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #16777216
+; CHECK-NEXT:    str r1, [sp, #408] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #33554432
+; CHECK-NEXT:    str r1, [sp, #404] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #67108864
+; CHECK-NEXT:    str r1, [sp, #400] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #134217728
+; CHECK-NEXT:    str r1, [sp, #396] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #268435456
+; CHECK-NEXT:    str r1, [sp, #392] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #536870912
+; CHECK-NEXT:    str r1, [sp, #388] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r7, #1073741824
+; CHECK-NEXT:    str r1, [sp, #384] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    and r1, r11, #2
+; CHECK-NEXT:    str r1, [sp, #256] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    and r6, r7, #-2147483648
+; CHECK-NEXT:    muls r6, r0, r6
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    eor.w r7, r5, r8
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    and r1, r11, #1
+; CHECK-NEXT:    str r1, [sp, #380] @ 4-byte Spill
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #4
+; CHECK-NEXT:    str r1, [sp, #376] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #8
+; CHECK-NEXT:    str r1, [sp, #372] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #16
+; CHECK-NEXT:    str r1, [sp, #368] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #32
+; CHECK-NEXT:    str r1, [sp, #364] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #64
+; CHECK-NEXT:    str r1, [sp, #360] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #128
+; CHECK-NEXT:    str r1, [sp, #356] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #256
+; CHECK-NEXT:    str r1, [sp, #352] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #512
+; CHECK-NEXT:    str r1, [sp, #348] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #1024
+; CHECK-NEXT:    str r1, [sp, #344] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #2048
+; CHECK-NEXT:    str r1, [sp, #340] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #4096
+; CHECK-NEXT:    str r1, [sp, #336] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #8192
+; CHECK-NEXT:    str r1, [sp, #332] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #16384
+; CHECK-NEXT:    str r1, [sp, #328] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #32768
+; CHECK-NEXT:    str r1, [sp, #324] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #65536
+; CHECK-NEXT:    str r1, [sp, #320] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #131072
+; CHECK-NEXT:    str r1, [sp, #316] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #262144
+; CHECK-NEXT:    str r1, [sp, #312] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #524288
+; CHECK-NEXT:    str r1, [sp, #308] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #1048576
+; CHECK-NEXT:    str r1, [sp, #304] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #2097152
+; CHECK-NEXT:    str r1, [sp, #300] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #4194304
+; CHECK-NEXT:    str r1, [sp, #296] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #8388608
+; CHECK-NEXT:    str r1, [sp, #292] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #16777216
+; CHECK-NEXT:    str r1, [sp, #288] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #33554432
+; CHECK-NEXT:    str r1, [sp, #284] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #67108864
+; CHECK-NEXT:    str r1, [sp, #280] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #134217728
+; CHECK-NEXT:    str r1, [sp, #276] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #268435456
+; CHECK-NEXT:    str r1, [sp, #272] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #536870912
+; CHECK-NEXT:    str r1, [sp, #268] @ 4-byte Spill
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    and r1, r11, #1073741824
+; CHECK-NEXT:    str r1, [sp, #264] @ 4-byte Spill
+; CHECK-NEXT:    ldr.w r11, [sp, #508] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #236] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    rbit r5, r5
+; CHECK-NEXT:    eor.w r5, r7, r5, lsr #1
+; CHECK-NEXT:    rbit r8, r5
+; CHECK-NEXT:    mul r5, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #120] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #116] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #112] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #108] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #104] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #100] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #96] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #92] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #88] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #84] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #80] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #76] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #72] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #68] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #64] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #60] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #56] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #52] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #48] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #44] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #40] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #36] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #32] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #28] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #24] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #20] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #16] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #12] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #8] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp, #4] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r0, r1
+; CHECK-NEXT:    ldr r1, [sp] @ 4-byte Reload
+; CHECK-NEXT:    muls r0, r1, r0
+; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #1
-; CHECK-NEXT:    muls r5, r2, r5
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    rbit r1, r0
+; CHECK-NEXT:    ldr r0, [sp, #260] @ 4-byte Reload
+; CHECK-NEXT:    lsrl r8, r1, #1
+; CHECK-NEXT:    eor.w r0, r0, r8
+; CHECK-NEXT:    str r1, [sp, #236] @ 4-byte Spill
+; CHECK-NEXT:    str r0, [sp, #260] @ 4-byte Spill
+; CHECK-NEXT:    ldr r0, [sp, #252] @ 4-byte Reload
+; CHECK-NEXT:    ldr r1, [sp, #248] @ 4-byte Reload
+; CHECK-NEXT:    ldr.w r8, [sp, #516] @ 4-byte Reload
+; CHECK-NEXT:    muls r0, r3, r0
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #244] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #240] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #232] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #228] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #224] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #220] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #216] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #212] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #208] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #204] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #200] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #196] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #192] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #188] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #184] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #180] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #176] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #172] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #168] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #164] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #160] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #156] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #152] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #148] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #144] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #140] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #136] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #132] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #128] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #124] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #504] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    and r5, r4, #2
+; CHECK-NEXT:    mul r5, r12, r5
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #4
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #8
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #16
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #32
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #64
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #128
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #256
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #512
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #1024
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #2048
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #4096
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #8192
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #16384
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #32768
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #65536
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #131072
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #262144
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #524288
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #1048576
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #2097152
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #4194304
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #8388608
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #16777216
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #33554432
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #67108864
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #134217728
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #268435456
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r12, r6
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    and r6, r4, #536870912
-; CHECK-NEXT:    and r4, r4, #1073741824
-; CHECK-NEXT:    muls r6, r2, r6
-; CHECK-NEXT:    muls r4, r2, r4
+; CHECK-NEXT:    mul r6, r12, r6
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    and r6, r4, #1073741824
+; CHECK-NEXT:    and r4, r4, #-2147483648
+; CHECK-NEXT:    mul r6, r12, r6
+; CHECK-NEXT:    mul r4, r12, r4
 ; CHECK-NEXT:    eors r5, r6
 ; CHECK-NEXT:    eors r4, r5
-; CHECK-NEXT:    mul r5, lr, r11
+; CHECK-NEXT:    eors r0, r4
+; CHECK-NEXT:    rbit r4, lr
+; CHECK-NEXT:    mul r5, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #500] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #496] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #492] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #488] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #484] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #480] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #476] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #472] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #468] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #464] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #460] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #456] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #452] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #448] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #444] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #440] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #436] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #432] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #428] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #424] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #420] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #416] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #412] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #408] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #404] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #400] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #396] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #392] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #388] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    mul r6, r4, r1
+; CHECK-NEXT:    ldr r1, [sp, #384] @ 4-byte Reload
+; CHECK-NEXT:    muls r4, r1, r4
+; CHECK-NEXT:    ldr r1, [sp, #512] @ 4-byte Reload
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    eors r4, r5
+; CHECK-NEXT:    rbit r5, r10
+; CHECK-NEXT:    and r6, r5, #2
+; CHECK-NEXT:    and r7, r5, #1
 ; CHECK-NEXT:    rbit r4, r4
-; CHECK-NEXT:    eors r4, r7
+; CHECK-NEXT:    ldr.w r10, [sp, #520] @ 4-byte Reload
+; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #4
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #8
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #16
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #32
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #64
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #128
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #256
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #512
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #1024
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #2048
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #4096
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #8192
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #16384
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #32768
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #65536
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #131072
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #262144
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #524288
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #1048576
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #2097152
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #4194304
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #8388608
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #16777216
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #33554432
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #67108864
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #134217728
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #268435456
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    and r7, r5, #536870912
+; CHECK-NEXT:    and r5, r5, #1073741824
+; CHECK-NEXT:    muls r7, r2, r7
+; CHECK-NEXT:    muls r5, r2, r5
+; CHECK-NEXT:    eors r6, r7
+; CHECK-NEXT:    eors r5, r6
+; CHECK-NEXT:    ldr r6, [sp, #380] @ 4-byte Reload
+; CHECK-NEXT:    rbit r5, r5
+; CHECK-NEXT:    eors r4, r5
+; CHECK-NEXT:    mul r5, r9, r10
 ; CHECK-NEXT:    eor.w r0, r0, r4, lsr #1
-; CHECK-NEXT:    ldr r4, [sp, #528] @ 4-byte Reload
-; CHECK-NEXT:    str r0, [sp, #256] @ 4-byte Spill
-; CHECK-NEXT:    mul r0, lr, r4
+; CHECK-NEXT:    ldr r4, [sp, #524] @ 4-byte Reload
+; CHECK-NEXT:    str r0, [sp, #252] @ 4-byte Spill
+; CHECK-NEXT:    mul r0, r9, r4
 ; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    mul r5, lr, r8
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    ldr r5, [sp, #508] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    ldr r5, [sp, #552] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r8
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #548] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    ldr r5, [sp, #556] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    mul r5, lr, r9
-; CHECK-NEXT:    eors r0, r5
-; CHECK-NEXT:    mul r5, lr, r10
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #544] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    ldr r5, [sp, #556] @ 4-byte Reload
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #540] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r9, r1
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    mul r5, r9, r11
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #536] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #532] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    ldr r5, [sp, #552] @ 4-byte Reload
+; CHECK-NEXT:    mul r5, r9, r5
+; CHECK-NEXT:    eors r0, r5
+; CHECK-NEXT:    ldr r5, [sp, #528] @ 4-byte Reload
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #632] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #628] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #624] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #620] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #616] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #612] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #608] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #604] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #600] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #596] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #592] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #588] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #584] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #580] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #576] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #572] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #568] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #564] @ 4-byte Reload
-; CHECK-NEXT:    mul r5, lr, r5
+; CHECK-NEXT:    mul r5, r9, r5
 ; CHECK-NEXT:    eors r0, r5
 ; CHECK-NEXT:    ldr r5, [sp, #560] @ 4-byte Reload
-; CHECK-NEXT:    mul r7, lr, r5
-; CHECK-NEXT:    ldr r5, [sp, #384] @ 4-byte Reload
-; CHECK-NEXT:    ldr.w lr, [sp, #260] @ 4-byte Reload
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #380] @ 4-byte Reload
+; CHECK-NEXT:    mul r7, r9, r5
+; CHECK-NEXT:    ldr.w r9, [sp, #256] @ 4-byte Reload
+; CHECK-NEXT:    eor.w r5, r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #376] @ 4-byte Reload
+; CHECK-NEXT:    mul r0, lr, r9
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #372] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #368] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #364] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #360] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #356] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #352] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #348] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #344] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #340] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #336] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #332] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #328] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #324] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #320] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #316] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #312] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #308] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #304] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #300] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #296] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #292] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #288] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #284] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #280] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #276] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #272] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #268] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
+; CHECK-NEXT:    ldr r6, [sp, #264] @ 4-byte Reload
+; CHECK-NEXT:    eors r0, r7
+; CHECK-NEXT:    mul r7, lr, r6
 ; CHECK-NEXT:    eors r7, r0
-; CHECK-NEXT:    mul r0, r12, lr
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #376] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #372] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #368] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #364] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #360] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #356] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #352] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #348] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #344] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #340] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #336] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #332] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #328] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #324] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #320] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #316] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #312] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #308] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #304] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #300] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #296] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #292] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #288] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #284] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #280] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #276] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #272] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    ldr r5, [sp, #268] @ 4-byte Reload
-; CHECK-NEXT:    eors r0, r6
-; CHECK-NEXT:    mul r6, r12, r5
-; CHECK-NEXT:    eors r6, r0
 ; CHECK-NEXT:    ldr r0, [sp, #676]
 ; CHECK-NEXT:    and r0, r0, #-2147483648
-; CHECK-NEXT:    mul r5, r12, r0
-; CHECK-NEXT:    ldr.w r12, [sp, #548] @ 4-byte Reload
-; CHECK-NEXT:    muls r0, r1, r0
-; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r11
+; CHECK-NEXT:    mul r6, lr, r0
+; CHECK-NEXT:    ldr.w lr, [sp, #540] @ 4-byte Reload
+; CHECK-NEXT:    mul r0, r12, r0
 ; CHECK-NEXT:    eors r7, r6
-; CHECK-NEXT:    ldr r6, [sp, #256] @ 4-byte Reload
-; CHECK-NEXT:    ldr.w r11, [sp, #532] @ 4-byte Reload
+; CHECK-NEXT:    ldr r6, [sp, #252] @ 4-byte Reload
+; CHECK-NEXT:    eors r7, r5
+; CHECK-NEXT:    mul r5, r3, r10
 ; CHECK-NEXT:    eors r7, r6
-; CHECK-NEXT:    ldr r6, [sp, #240] @ 4-byte Reload
+; CHECK-NEXT:    ldr r6, [sp, #236] @ 4-byte Reload
+; CHECK-NEXT:    ldr.w r10, [sp, #528] @ 4-byte Reload
 ; CHECK-NEXT:    eors r7, r6
 ; CHECK-NEXT:    mul r6, r3, r4
-; CHECK-NEXT:    str r7, [sp, #256] @ 4-byte Spill
-; CHECK-NEXT:    ldr r7, [sp, #508] @ 4-byte Reload
-; CHECK-NEXT:    ldr r4, [sp, #556] @ 4-byte Reload
+; CHECK-NEXT:    str r7, [sp, #252] @ 4-byte Spill
+; CHECK-NEXT:    ldr r7, [sp, #548] @ 4-byte Reload
+; CHECK-NEXT:    ldr r4, [sp, #532] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    mul r5, r3, r8
-; CHECK-NEXT:    ldr.w r8, [sp, #552] @ 4-byte Reload
+; CHECK-NEXT:    ldr.w r8, [sp, #544] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    mul r5, r3, r7
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    mul r5, r3, r8
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r12
+; CHECK-NEXT:    ldr r5, [sp, #556] @ 4-byte Reload
+; CHECK-NEXT:    muls r5, r3, r5
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r4
-; CHECK-NEXT:    ldr r4, [sp, #540] @ 4-byte Reload
+; CHECK-NEXT:    mul r5, r3, lr
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r9
-; CHECK-NEXT:    ldr.w r9, [sp, #536] @ 4-byte Reload
-; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r10
-; CHECK-NEXT:    ldr.w r10, [sp, #544] @ 4-byte Reload
-; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r10
-; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r4
-; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    mul r5, r3, r9
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #552] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    mul r5, r3, r11
+; CHECK-NEXT:    ldr.w r11, [sp, #536] @ 4-byte Reload
+; CHECK-NEXT:    eors r6, r5
+; CHECK-NEXT:    mul r5, r3, r11
+; CHECK-NEXT:    eors r6, r5
+; CHECK-NEXT:    mul r5, r3, r4
+; CHECK-NEXT:    eors r6, r5
+; CHECK-NEXT:    mul r5, r3, r1
+; CHECK-NEXT:    ldr r1, [sp, #380] @ 4-byte Reload
+; CHECK-NEXT:    eors r6, r5
+; CHECK-NEXT:    mul r5, r3, r10
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    ldr r5, [sp, #632] @ 4-byte Reload
 ; CHECK-NEXT:    muls r5, r3, r5
@@ -6625,285 +6626,285 @@ define <1 x i128> @clmul_v1i128(<1 x i128> %x, <1 x i128> %y) {
 ; CHECK-NEXT:    eors r6, r5
 ; CHECK-NEXT:    ldr r5, [sp, #560] @ 4-byte Reload
 ; CHECK-NEXT:    muls r3, r5, r3
-; CHECK-NEXT:    ldr r5, [sp, #384] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #376] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r1, lr
+; CHECK-NEXT:    mul r6, r12, r9
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #380] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #372] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #376] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #368] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #372] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #364] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #368] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #360] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #364] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #356] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #360] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #352] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #356] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #348] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #352] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #344] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #348] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #340] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #344] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #336] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #340] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #332] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #336] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #328] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #332] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #324] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #328] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #320] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #324] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #316] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #320] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #312] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #316] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #308] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #312] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #304] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #308] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #300] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #304] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #296] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #300] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #292] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #296] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #288] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #292] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #284] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #288] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #280] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #284] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #276] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #280] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #272] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #276] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #268] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #272] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #264] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #268] @ 4-byte Reload
-; CHECK-NEXT:    muls r5, r1, r5
+; CHECK-NEXT:    mul r5, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #504] @ 4-byte Reload
 ; CHECK-NEXT:    eors r6, r5
-; CHECK-NEXT:    ldr r5, [sp, #504] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r6
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    ldr r3, [sp, #452] @ 4-byte Reload
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #500] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r2, r3
+; CHECK-NEXT:    mul r3, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #500] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #496] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #496] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #492] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #492] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #488] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #488] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #484] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #484] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #480] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #480] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #476] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #476] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #472] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #472] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #468] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #468] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #464] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #464] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #460] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #460] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #456] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #456] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #452] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #396] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #448] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #448] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #444] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #444] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #440] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #440] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #436] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #436] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #432] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #432] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #428] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #428] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #424] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #424] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #420] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #420] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #416] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #416] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #412] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #412] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #408] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #408] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #404] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #404] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #400] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #400] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #396] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #392] @ 4-byte Reload
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #392] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    ldr r6, [sp, #124] @ 4-byte Reload
-; CHECK-NEXT:    muls r6, r2, r6
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #388] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
-; CHECK-NEXT:    mul r6, r2, r5
-; CHECK-NEXT:    ldr r5, [sp, #388] @ 4-byte Reload
-; CHECK-NEXT:    muls r2, r5, r2
+; CHECK-NEXT:    mul r6, r2, r1
+; CHECK-NEXT:    ldr r1, [sp, #384] @ 4-byte Reload
+; CHECK-NEXT:    muls r2, r1, r2
+; CHECK-NEXT:    ldr r1, [sp, #520] @ 4-byte Reload
 ; CHECK-NEXT:    eors r3, r6
 ; CHECK-NEXT:    eors r2, r3
-; CHECK-NEXT:    ldr r3, [sp, #524] @ 4-byte Reload
+; CHECK-NEXT:    mul r3, r12, r1
 ; CHECK-NEXT:    rbit r2, r2
+; CHECK-NEXT:    ldr r1, [sp, #516] @ 4-byte Reload
 ; CHECK-NEXT:    eor.w r2, r0, r2, lsr #1
-; CHECK-NEXT:    ldr r0, [sp, #528] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
-; CHECK-NEXT:    muls r0, r1, r0
+; CHECK-NEXT:    ldr r0, [sp, #524] @ 4-byte Reload
+; CHECK-NEXT:    mul r0, r12, r0
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    ldr r3, [sp, #520] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #556] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r7
+; CHECK-NEXT:    mul r3, r12, r7
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r8
+; CHECK-NEXT:    mul r3, r12, r8
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r12
+; CHECK-NEXT:    mul r3, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #512] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    ldr r3, [sp, #556] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, lr
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    ldr r3, [sp, #516] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #508] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    ldr r3, [sp, #512] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r1
+; CHECK-NEXT:    ldr r1, [sp, #552] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r10
+; CHECK-NEXT:    mul r3, r12, r11
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r4
+; CHECK-NEXT:    mul r3, r12, r4
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r9
+; CHECK-NEXT:    mul r3, r12, r1
 ; CHECK-NEXT:    eors r0, r3
-; CHECK-NEXT:    mul r3, r1, r11
+; CHECK-NEXT:    mul r3, r12, r10
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #632] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #628] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #624] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #620] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #616] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #612] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #608] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #604] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #600] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #596] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #592] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #588] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #584] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #580] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #576] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #572] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #568] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #564] @ 4-byte Reload
-; CHECK-NEXT:    muls r3, r1, r3
+; CHECK-NEXT:    mul r3, r12, r3
 ; CHECK-NEXT:    eors r0, r3
 ; CHECK-NEXT:    ldr r3, [sp, #560] @ 4-byte Reload
-; CHECK-NEXT:    muls r1, r3, r1
-; CHECK-NEXT:    ldr r3, [sp, #256] @ 4-byte Reload
+; CHECK-NEXT:    mul r1, r12, r3
+; CHECK-NEXT:    ldr r3, [sp, #252] @ 4-byte Reload
 ; CHECK-NEXT:    eors r0, r1
 ; CHECK-NEXT:    mov r1, r2
-; CHECK-NEXT:    ldr r2, [sp, #264] @ 4-byte Reload
+; CHECK-NEXT:    ldr r2, [sp, #260] @ 4-byte Reload
 ; CHECK-NEXT:    add.w sp, sp, #636
 ; CHECK-NEXT:    pop.w {r4, r5, r6, r7, r8, r9, r10, r11, pc}
   %a = call <1 x i128> @llvm.clmul.v1i128(<1 x i128> %x, <1 x i128> %y)
@@ -8186,767 +8187,764 @@ define <2 x i64> @clmul_v2i64_zext(<2 x i32> %x, <2 x i32> %y) {
 define <4 x i64> @clmul_v4i64_zext(<4 x i32> %x, <4 x i32> %y) {
 ; CHECK-LABEL: clmul_v4i64_zext:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    .save {r4, r5, r6, r7, r8, r9, lr}
-; CHECK-NEXT:    push.w {r4, r5, r6, r7, r8, r9, lr}
-; CHECK-NEXT:    .pad #4
-; CHECK-NEXT:    sub sp, #4
+; CHECK-NEXT:    .save {r4, r5, r6, r7, r8, r9, r10, lr}
+; CHECK-NEXT:    push.w {r4, r5, r6, r7, r8, r9, r10, lr}
 ; CHECK-NEXT:    .vsave {d8, d9, d10, d11, d12, d13, d14, d15}
 ; CHECK-NEXT:    vpush {d8, d9, d10, d11, d12, d13, d14, d15}
 ; CHECK-NEXT:    .pad #480
 ; CHECK-NEXT:    sub sp, #480
-; CHECK-NEXT:    vmov d6, r2, r3
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov q0[2], q0[0], r2, r3
+; CHECK-NEXT:    vmov.i64 q1, #0xffffffff
+; CHECK-NEXT:    vand q3, q0, q1
+; CHECK-NEXT:    mov r12, r3
+; CHECK-NEXT:    vmov r9, s15
+; CHECK-NEXT:    mov r4, r3
+; CHECK-NEXT:    vmov r3, s13
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    vmov.f32 s14, s13
-; CHECK-NEXT:    lsll r6, r5, #2
 ; CHECK-NEXT:    vmov.i32 q5, #0x0
 ; CHECK-NEXT:    mov.w lr, #0
-; CHECK-NEXT:    vmov r12, s14
-; CHECK-NEXT:    mov r4, r12
-; CHECK-NEXT:    lsll r4, r3, #2
+; CHECK-NEXT:    mov r1, r9
+; CHECK-NEXT:    mov r7, r3
+; CHECK-NEXT:    lsll r4, r1, #2
+; CHECK-NEXT:    lsll r6, r7, #2
+; CHECK-NEXT:    mov r5, r3
 ; CHECK-NEXT:    vmov q0[2], q0[0], r6, r4
 ; CHECK-NEXT:    movs r6, #0
-; CHECK-NEXT:    vmov q0[3], q0[1], r5, r3
-; CHECK-NEXT:    add r3, sp, #584
-; CHECK-NEXT:    vldrw.u32 q6, [r3]
-; CHECK-NEXT:    adr.w r3, .LCPI22_32
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q0[3], q0[1], r7, r1
+; CHECK-NEXT:    add r1, sp, #584
+; CHECK-NEXT:    vldrw.u32 q6, [r1]
+; CHECK-NEXT:    adr.w r1, .LCPI22_32
+; CHECK-NEXT:    vldrw.u32 q1, [r1]
 ; CHECK-NEXT:    mov r4, r12
 ; CHECK-NEXT:    vmov.f32 s8, s24
-; CHECK-NEXT:    movs r5, #0
 ; CHECK-NEXT:    vmov.f32 s10, s25
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #464] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r1, s4
+; CHECK-NEXT:    cmp r1, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r9
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #1
+; CHECK-NEXT:    lsll r4, r7, #1
 ; CHECK-NEXT:    lsll r6, r5, #1
 ; CHECK-NEXT:    vpsel q4, q5, q0
 ; CHECK-NEXT:    vmov q0[2], q0[0], r6, r4
-; CHECK-NEXT:    vmov q0[3], q0[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_33
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q0[3], q0[1], r5, r7
+; CHECK-NEXT:    adr.w r7, .LCPI22_33
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
-; CHECK-NEXT:    movs r5, #0
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #448] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    adr.w r3, .LCPI22_34
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #3
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    adr.w r7, .LCPI22_34
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    vpsel q0, q5, q0
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #432] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    vmov.i64 q1, #0xffffffff
-; CHECK-NEXT:    vand q1, q3, q1
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #3
-; CHECK-NEXT:    lsll r6, r5, #3
+; CHECK-NEXT:    lsll r6, r7, #3
+; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vpsel q1, q5, q1
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_35
 ; CHECK-NEXT:    veor q0, q1, q0
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_35
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #416] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #4
 ; CHECK-NEXT:    veor q0, q0, q4
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #4
-; CHECK-NEXT:    lsll r6, r5, #4
+; CHECK-NEXT:    lsll r6, r7, #4
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_36
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_36
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #400] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #5
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #5
-; CHECK-NEXT:    lsll r6, r5, #5
+; CHECK-NEXT:    lsll r6, r7, #5
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_37
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_37
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #384] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #6
-; CHECK-NEXT:    lsll r6, r5, #6
+; CHECK-NEXT:    lsll r6, r7, #6
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_38
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_38
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #368] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #7
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #7
-; CHECK-NEXT:    lsll r6, r5, #7
+; CHECK-NEXT:    lsll r6, r7, #7
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_39
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_39
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #352] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #8
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #8
-; CHECK-NEXT:    lsll r6, r5, #8
+; CHECK-NEXT:    lsll r6, r7, #8
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_40
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_40
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #336] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #9
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #9
-; CHECK-NEXT:    lsll r6, r5, #9
+; CHECK-NEXT:    lsll r6, r7, #9
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_41
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_41
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #320] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #10
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #10
-; CHECK-NEXT:    lsll r6, r5, #10
+; CHECK-NEXT:    lsll r6, r7, #10
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_42
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_42
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #304] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #11
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #11
-; CHECK-NEXT:    lsll r6, r5, #11
+; CHECK-NEXT:    lsll r6, r7, #11
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_43
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_43
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #288] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #12
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #12
-; CHECK-NEXT:    lsll r6, r5, #12
+; CHECK-NEXT:    lsll r6, r7, #12
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_44
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_44
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #272] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #13
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #13
-; CHECK-NEXT:    lsll r6, r5, #13
+; CHECK-NEXT:    lsll r6, r7, #13
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_45
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_45
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #256] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #14
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #14
-; CHECK-NEXT:    lsll r6, r5, #14
+; CHECK-NEXT:    lsll r6, r7, #14
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_14
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_14
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #240] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #15
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #15
-; CHECK-NEXT:    lsll r6, r5, #15
+; CHECK-NEXT:    lsll r6, r7, #15
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_15
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_15
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #224] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #16
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #16
-; CHECK-NEXT:    lsll r6, r5, #16
+; CHECK-NEXT:    lsll r6, r7, #16
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_16
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_16
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #208] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #17
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #17
-; CHECK-NEXT:    lsll r6, r5, #17
+; CHECK-NEXT:    lsll r6, r7, #17
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_17
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_17
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #192] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #18
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #18
-; CHECK-NEXT:    lsll r6, r5, #18
+; CHECK-NEXT:    lsll r6, r7, #18
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_18
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_18
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #176] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #19
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #19
-; CHECK-NEXT:    lsll r6, r5, #19
+; CHECK-NEXT:    lsll r6, r7, #19
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_19
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_19
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #160] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #20
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #20
-; CHECK-NEXT:    lsll r6, r5, #20
+; CHECK-NEXT:    lsll r6, r7, #20
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_20
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_20
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #144] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #21
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #21
-; CHECK-NEXT:    lsll r6, r5, #21
+; CHECK-NEXT:    lsll r6, r7, #21
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_21
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_21
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #128] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #22
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #22
-; CHECK-NEXT:    lsll r6, r5, #22
+; CHECK-NEXT:    lsll r6, r7, #22
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_22
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_22
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #112] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #23
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #23
-; CHECK-NEXT:    lsll r6, r5, #23
+; CHECK-NEXT:    lsll r6, r7, #23
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_23
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_23
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #96] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #24
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #24
-; CHECK-NEXT:    lsll r6, r5, #24
+; CHECK-NEXT:    lsll r6, r7, #24
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_24
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_24
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #80] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #25
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #25
-; CHECK-NEXT:    lsll r6, r5, #25
+; CHECK-NEXT:    lsll r6, r7, #25
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_25
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_25
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #64] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #26
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #26
-; CHECK-NEXT:    lsll r6, r5, #26
+; CHECK-NEXT:    lsll r6, r7, #26
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_26
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_26
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #48] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #27
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #27
-; CHECK-NEXT:    lsll r6, r5, #27
+; CHECK-NEXT:    lsll r6, r7, #27
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_27
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_27
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #32] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #28
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #28
-; CHECK-NEXT:    lsll r6, r5, #28
+; CHECK-NEXT:    lsll r6, r7, #28
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_28
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_28
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp, #16] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #29
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #29
-; CHECK-NEXT:    lsll r6, r5, #29
+; CHECK-NEXT:    lsll r6, r7, #29
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_29
 ; CHECK-NEXT:    veor q0, q0, q1
-; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_29
+; CHECK-NEXT:    vldrw.u32 q1, [r7]
 ; CHECK-NEXT:    movs r6, #0
 ; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    mov r5, r9
 ; CHECK-NEXT:    vstrw.32 q1, [sp] @ 16-byte Spill
 ; CHECK-NEXT:    vand q1, q2, q1
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    movs r5, #0
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    lsll r4, r5, #30
+; CHECK-NEXT:    lsll r12, r9, #31
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
+; CHECK-NEXT:    mov r7, r3
 ; CHECK-NEXT:    vmsr p0, r6
 ; CHECK-NEXT:    mov r6, r2
-; CHECK-NEXT:    lsll r4, r3, #30
-; CHECK-NEXT:    lsll r6, r5, #30
+; CHECK-NEXT:    lsll r6, r7, #30
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov q3[2], q3[0], r6, r4
-; CHECK-NEXT:    vmov q3[3], q3[1], r5, r3
-; CHECK-NEXT:    adr.w r3, .LCPI22_30
-; CHECK-NEXT:    vldrw.u32 q7, [r3]
 ; CHECK-NEXT:    veor q0, q0, q1
+; CHECK-NEXT:    vmov q3[3], q3[1], r7, r5
+; CHECK-NEXT:    adr.w r7, .LCPI22_30
+; CHECK-NEXT:    vldrw.u32 q7, [r7]
 ; CHECK-NEXT:    movs r6, #0
-; CHECK-NEXT:    movs r5, #0
+; CHECK-NEXT:    lsll r2, r3, #31
 ; CHECK-NEXT:    vand q1, q2, q7
-; CHECK-NEXT:    lsll r2, r5, #31
-; CHECK-NEXT:    vmov r3, s4
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s6
-; CHECK-NEXT:    cmp r3, #0
-; CHECK-NEXT:    csetm r3, eq
-; CHECK-NEXT:    bfi r6, r3, #8, #8
-; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    vmov r7, s4
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #0, #8
+; CHECK-NEXT:    vmov r7, s6
+; CHECK-NEXT:    cmp r7, #0
+; CHECK-NEXT:    csetm r7, eq
+; CHECK-NEXT:    bfi r6, r7, #8, #8
 ; CHECK-NEXT:    vmsr p0, r6
-; CHECK-NEXT:    lsll r12, r3, #31
 ; CHECK-NEXT:    vpsel q1, q5, q3
 ; CHECK-NEXT:    vmov.i64 q3, #0xffffffff
 ; CHECK-NEXT:    veor q1, q0, q1
 ; CHECK-NEXT:    vmov q0[2], q0[0], r2, r12
 ; CHECK-NEXT:    adr.w r2, .LCPI22_31
-; CHECK-NEXT:    vmov q0[3], q0[1], r5, r3
+; CHECK-NEXT:    vmov q0[3], q0[1], r3, r9
 ; CHECK-NEXT:    vldrw.u32 q4, [r2]
 ; CHECK-NEXT:    movs r3, #0
 ; CHECK-NEXT:    vand q2, q2, q4
@@ -9403,6 +9401,11 @@ define <4 x i64> @clmul_v4i64_zext(<4 x i32> %x, <4 x i32> %y) {
 ; CHECK-NEXT:    vmov r4, s14
 ; CHECK-NEXT:    cmp r4, #0
 ; CHECK-NEXT:    csetm r4, eq
+; CHECK-NEXT:    bfi r5, r4, #8, #8
+; CHECK-NEXT:    mov r4, r12
+; CHECK-NEXT:    vmsr p0, r5
+; CHECK-NEXT:    vldrw.u32 q3, [sp, #144] @ 16-byte Reload
+; CHECK-NEXT:    mov r5, r3
 ; CHECK-NEXT:    b.w .LBB22_15
 ; CHECK-NEXT:    .p2align 4
 ; CHECK-NEXT:  @ %bb.1:
@@ -9504,11 +9507,6 @@ define <4 x i64> @clmul_v4i64_zext(<4 x i32> %x, <4 x i32> %y) {
 ; CHECK-NEXT:    .long 0 @ 0x0
 ; CHECK-NEXT:    .p2align 1
 ; CHECK-NEXT:  .LBB22_15:
-; CHECK-NEXT:    bfi r5, r4, #8, #8
-; CHECK-NEXT:    mov r4, r12
-; CHECK-NEXT:    vmsr p0, r5
-; CHECK-NEXT:    vldrw.u32 q3, [sp, #144] @ 16-byte Reload
-; CHECK-NEXT:    mov r5, r3
 ; CHECK-NEXT:    vpsel q2, q5, q2
 ; CHECK-NEXT:    lsll r4, r5, #20
 ; CHECK-NEXT:    vand q3, q1, q3
@@ -9765,8 +9763,7 @@ define <4 x i64> @clmul_v4i64_zext(<4 x i32> %x, <4 x i32> %y) {
 ; CHECK-NEXT:    vstrw.32 q0, [r0, #16]
 ; CHECK-NEXT:    add sp, #480
 ; CHECK-NEXT:    vpop {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECK-NEXT:    add sp, #4
-; CHECK-NEXT:    pop.w {r4, r5, r6, r7, r8, r9, pc}
+; CHECK-NEXT:    pop.w {r4, r5, r6, r7, r8, r9, r10, pc}
 ; CHECK-NEXT:    .p2align 4
 ; CHECK-NEXT:  @ %bb.16:
 ; CHECK-NEXT:  .LCPI22_14:

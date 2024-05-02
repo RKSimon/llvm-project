@@ -3393,37 +3393,37 @@ define amdgpu_kernel void @test_mfma_scale_f32_32x32x64_f8f6f4_0_0__nonmac(<8 x 
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s21
 ; SDAG-NEXT:    v_mov_b32_e32 v20, s22
 ; SDAG-NEXT:    v_mov_b32_e32 v21, s23
-; SDAG-NEXT:    v_mov_b64_e32 v[16:17], 48
+; SDAG-NEXT:    v_mov_b64_e32 v[16:17], 32
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[18:21], off offset:16 sc0 sc1
+; SDAG-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-NEXT:    v_mov_b32_e32 v22, s14
+; SDAG-NEXT:    v_mov_b32_e32 v23, s15
+; SDAG-NEXT:    v_mov_b32_e32 v18, s16
+; SDAG-NEXT:    v_mov_b32_e32 v19, s17
+; SDAG-NEXT:    v_mov_b32_e32 v20, s18
+; SDAG-NEXT:    v_mov_b32_e32 v21, s19
 ; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[18:21], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v22, s18
-; SDAG-NEXT:    v_mov_b32_e32 v23, s19
-; SDAG-NEXT:    v_mov_b32_e32 v20, s16
-; SDAG-NEXT:    v_mov_b32_e32 v21, s17
-; SDAG-NEXT:    v_mov_b64_e32 v[18:19], 32
+; SDAG-NEXT:    v_mov_b32_e32 v24, s10
+; SDAG-NEXT:    v_mov_b32_e32 v25, s11
+; SDAG-NEXT:    v_mov_b32_e32 v20, s12
+; SDAG-NEXT:    v_mov_b32_e32 v21, s13
+; SDAG-NEXT:    v_mov_b64_e32 v[18:19], 16
 ; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[20:23], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v24, s14
-; SDAG-NEXT:    v_mov_b32_e32 v25, s15
-; SDAG-NEXT:    v_mov_b32_e32 v22, s12
-; SDAG-NEXT:    v_mov_b32_e32 v23, s13
-; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 16
+; SDAG-NEXT:    s_nop 0
+; SDAG-NEXT:    v_mov_b32_e32 v22, s8
+; SDAG-NEXT:    v_mov_b32_e32 v23, s9
+; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 0
 ; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[22:25], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v26, s10
-; SDAG-NEXT:    v_mov_b32_e32 v27, s11
-; SDAG-NEXT:    v_mov_b32_e32 v24, s8
-; SDAG-NEXT:    v_mov_b32_e32 v25, s9
-; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 0
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[24:27], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[12:15], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[8:11], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[8:11], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[12:15], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[4:7], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[0:3], off sc0 sc1
-; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[4:7], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[0:3], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_endpgm
 ;
@@ -3528,37 +3528,37 @@ define amdgpu_kernel void @test_mfma_scale_f32_32x32x64_f8f6f4_25_42__nonmac(<8 
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s21
 ; SDAG-NEXT:    v_mov_b32_e32 v20, s22
 ; SDAG-NEXT:    v_mov_b32_e32 v21, s23
-; SDAG-NEXT:    v_mov_b64_e32 v[16:17], 48
+; SDAG-NEXT:    v_mov_b64_e32 v[16:17], 32
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[18:21], off offset:16 sc0 sc1
+; SDAG-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-NEXT:    v_mov_b32_e32 v22, s14
+; SDAG-NEXT:    v_mov_b32_e32 v23, s15
+; SDAG-NEXT:    v_mov_b32_e32 v18, s16
+; SDAG-NEXT:    v_mov_b32_e32 v19, s17
+; SDAG-NEXT:    v_mov_b32_e32 v20, s18
+; SDAG-NEXT:    v_mov_b32_e32 v21, s19
 ; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[18:21], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v22, s18
-; SDAG-NEXT:    v_mov_b32_e32 v23, s19
-; SDAG-NEXT:    v_mov_b32_e32 v20, s16
-; SDAG-NEXT:    v_mov_b32_e32 v21, s17
-; SDAG-NEXT:    v_mov_b64_e32 v[18:19], 32
+; SDAG-NEXT:    v_mov_b32_e32 v24, s10
+; SDAG-NEXT:    v_mov_b32_e32 v25, s11
+; SDAG-NEXT:    v_mov_b32_e32 v20, s12
+; SDAG-NEXT:    v_mov_b32_e32 v21, s13
+; SDAG-NEXT:    v_mov_b64_e32 v[18:19], 16
 ; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[20:23], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v24, s14
-; SDAG-NEXT:    v_mov_b32_e32 v25, s15
-; SDAG-NEXT:    v_mov_b32_e32 v22, s12
-; SDAG-NEXT:    v_mov_b32_e32 v23, s13
-; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 16
+; SDAG-NEXT:    s_nop 0
+; SDAG-NEXT:    v_mov_b32_e32 v22, s8
+; SDAG-NEXT:    v_mov_b32_e32 v23, s9
+; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 0
 ; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[22:25], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b32_e32 v26, s10
-; SDAG-NEXT:    v_mov_b32_e32 v27, s11
-; SDAG-NEXT:    v_mov_b32_e32 v24, s8
-; SDAG-NEXT:    v_mov_b32_e32 v25, s9
-; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 0
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[24:27], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[12:15], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[8:11], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[8:11], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[16:17], v[12:15], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[18:19], v[4:7], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[0:3], off sc0 sc1
-; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[4:7], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[0:3], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_endpgm
 ;
@@ -3660,38 +3660,38 @@ define amdgpu_kernel void @test_mfma_scale_f32_32x32x64_f8f6f4_0_0__vgprcd_nonma
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s21
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s22
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s23
-; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 48
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off sc0 sc1
+; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 32
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 32
-; SDAG-NEXT:    v_mov_b64_e32 v[24:25], 16
+; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 16
+; SDAG-NEXT:    v_mov_b64_e32 v[24:25], 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s16
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s17
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s18
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s19
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b64_e32 v[26:27], 0
+; SDAG-NEXT:    s_nop 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s12
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s13
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s14
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s15
-; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_nop 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s8
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s9
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s10
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s11
-; SDAG-NEXT:    global_store_dwordx4 v[26:27], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[8:11], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[12:15], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[12:15], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[8:11], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[26:27], v[0:3], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[4:7], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[4:7], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[0:3], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_endpgm
 ;
@@ -3785,38 +3785,38 @@ define amdgpu_kernel void @test_mfma_scale_f32_32x32x64_f8f6f4_25_42__vgprcd_non
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s21
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s22
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s23
-; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 48
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off sc0 sc1
+; SDAG-NEXT:    v_mov_b64_e32 v[20:21], 32
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 32
-; SDAG-NEXT:    v_mov_b64_e32 v[24:25], 16
+; SDAG-NEXT:    v_mov_b64_e32 v[22:23], 16
+; SDAG-NEXT:    v_mov_b64_e32 v[24:25], 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s16
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s17
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s18
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s19
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    v_mov_b64_e32 v[26:27], 0
+; SDAG-NEXT:    s_nop 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s12
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s13
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s14
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s15
-; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_nop 0
 ; SDAG-NEXT:    v_mov_b32_e32 v16, s8
 ; SDAG-NEXT:    v_mov_b32_e32 v17, s9
 ; SDAG-NEXT:    v_mov_b32_e32 v18, s10
 ; SDAG-NEXT:    v_mov_b32_e32 v19, s11
-; SDAG-NEXT:    global_store_dwordx4 v[26:27], v[16:19], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[16:19], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[8:11], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[12:15], off offset:16 sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[12:15], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[20:21], v[8:11], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[26:27], v[0:3], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[22:23], v[4:7], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[4:7], off sc0 sc1
+; SDAG-NEXT:    global_store_dwordx4 v[24:25], v[0:3], off sc0 sc1
 ; SDAG-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-NEXT:    s_endpgm
 ;

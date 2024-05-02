@@ -7,32 +7,31 @@ define i256 @shl_i256(i256 %a, i256 %amt) nounwind {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    sub sp, sp, #64
 ; CHECK-NEXT:    movi v0.2d, #0000000000000000
-; CHECK-NEXT:    lsr x8, x4, #3
-; CHECK-NEXT:    mov x9, sp
-; CHECK-NEXT:    add x9, x9, #32
+; CHECK-NEXT:    mov x8, sp
+; CHECK-NEXT:    and x9, x4, #0xc0
+; CHECK-NEXT:    add x8, x8, #32
 ; CHECK-NEXT:    stp x2, x3, [sp, #48]
-; CHECK-NEXT:    mvn w14, w4
-; CHECK-NEXT:    and x8, x8, #0x18
-; CHECK-NEXT:    stp x0, x1, [sp, #32]
 ; CHECK-NEXT:    and x11, x4, #0x3f
-; CHECK-NEXT:    sub x8, x9, x8
+; CHECK-NEXT:    sub x8, x8, x9, lsr #3
+; CHECK-NEXT:    stp x0, x1, [sp, #32]
+; CHECK-NEXT:    mvn w12, w4
 ; CHECK-NEXT:    eor x11, x11, #0x3f
 ; CHECK-NEXT:    stp q0, q0, [sp]
 ; CHECK-NEXT:    ldp x10, x9, [x8]
-; CHECK-NEXT:    ldp x12, x8, [x8, #16]
-; CHECK-NEXT:    lsr x13, x9, #1
-; CHECK-NEXT:    lsr x15, x10, #1
-; CHECK-NEXT:    lsl x9, x9, x4
+; CHECK-NEXT:    ldp x13, x8, [x8, #16]
+; CHECK-NEXT:    lsr x14, x10, #1
+; CHECK-NEXT:    lsl x15, x9, x4
+; CHECK-NEXT:    lsr x9, x9, #1
+; CHECK-NEXT:    lsr x16, x13, #1
+; CHECK-NEXT:    lsl x13, x13, x4
 ; CHECK-NEXT:    lsl x8, x8, x4
+; CHECK-NEXT:    lsr x14, x14, x11
 ; CHECK-NEXT:    lsl x0, x10, x4
-; CHECK-NEXT:    lsr x13, x13, x14
-; CHECK-NEXT:    lsr x14, x12, #1
-; CHECK-NEXT:    lsr x15, x15, x11
-; CHECK-NEXT:    lsl x12, x12, x4
-; CHECK-NEXT:    lsr x11, x14, x11
-; CHECK-NEXT:    orr x1, x9, x15
-; CHECK-NEXT:    orr x2, x12, x13
-; CHECK-NEXT:    orr x3, x8, x11
+; CHECK-NEXT:    lsr x9, x9, x12
+; CHECK-NEXT:    lsr x10, x16, x11
+; CHECK-NEXT:    orr x1, x15, x14
+; CHECK-NEXT:    orr x2, x13, x9
+; CHECK-NEXT:    orr x3, x8, x10
 ; CHECK-NEXT:    add sp, sp, #64
 ; CHECK-NEXT:    ret
   %r = shl i256 %a, %amt
@@ -45,15 +44,14 @@ define i256 @lshr_i256(i256 %a, i256 %amt) nounwind {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    sub sp, sp, #64
 ; CHECK-NEXT:    movi v0.2d, #0000000000000000
-; CHECK-NEXT:    lsr x8, x4, #3
-; CHECK-NEXT:    mov x9, sp
+; CHECK-NEXT:    mov x8, sp
+; CHECK-NEXT:    and x9, x4, #0xc0
+; CHECK-NEXT:    add x8, x8, x9, lsr #3
 ; CHECK-NEXT:    stp x2, x3, [sp, #16]
 ; CHECK-NEXT:    and x11, x4, #0x3f
-; CHECK-NEXT:    mvn w13, w4
-; CHECK-NEXT:    and x8, x8, #0x18
 ; CHECK-NEXT:    stp x0, x1, [sp]
+; CHECK-NEXT:    mvn w13, w4
 ; CHECK-NEXT:    eor x11, x11, #0x3f
-; CHECK-NEXT:    add x8, x9, x8
 ; CHECK-NEXT:    stp q0, q0, [sp, #32]
 ; CHECK-NEXT:    ldp x9, x10, [x8]
 ; CHECK-NEXT:    ldp x12, x8, [x8, #16]
@@ -81,32 +79,31 @@ define i256 @ashr_i256(i256 %a, i256 %amt) nounwind {
 ; CHECK-LABEL: ashr_i256:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    sub sp, sp, #64
-; CHECK-NEXT:    lsr x9, x4, #3
 ; CHECK-NEXT:    asr x8, x3, #63
+; CHECK-NEXT:    and x9, x4, #0xc0
 ; CHECK-NEXT:    mov x10, sp
+; CHECK-NEXT:    add x9, x10, x9, lsr #3
 ; CHECK-NEXT:    stp x2, x3, [sp, #16]
-; CHECK-NEXT:    mvn w14, w4
-; CHECK-NEXT:    and x13, x4, #0x3f
-; CHECK-NEXT:    and x9, x9, #0x18
+; CHECK-NEXT:    mvn w15, w4
 ; CHECK-NEXT:    stp x0, x1, [sp]
-; CHECK-NEXT:    eor x13, x13, #0x3f
+; CHECK-NEXT:    and x13, x4, #0x3f
 ; CHECK-NEXT:    stp x8, x8, [sp, #48]
-; CHECK-NEXT:    add x9, x10, x9
+; CHECK-NEXT:    eor x13, x13, #0x3f
 ; CHECK-NEXT:    stp x8, x8, [sp, #32]
 ; CHECK-NEXT:    ldp x10, x8, [x9, #8]
 ; CHECK-NEXT:    ldr x11, [x9]
 ; CHECK-NEXT:    ldr x9, [x9, #24]
 ; CHECK-NEXT:    lsr x11, x11, x4
 ; CHECK-NEXT:    lsl x12, x8, #1
-; CHECK-NEXT:    lsl x15, x10, #1
+; CHECK-NEXT:    lsl x14, x10, #1
 ; CHECK-NEXT:    lsr x10, x10, x4
 ; CHECK-NEXT:    lsr x8, x8, x4
 ; CHECK-NEXT:    asr x3, x9, x4
-; CHECK-NEXT:    lsl x12, x12, x14
-; CHECK-NEXT:    lsl x14, x9, #1
-; CHECK-NEXT:    lsl x15, x15, x13
-; CHECK-NEXT:    lsl x13, x14, x13
-; CHECK-NEXT:    orr x0, x15, x11
+; CHECK-NEXT:    lsl x12, x12, x15
+; CHECK-NEXT:    lsl x15, x9, #1
+; CHECK-NEXT:    lsl x14, x14, x13
+; CHECK-NEXT:    lsl x13, x15, x13
+; CHECK-NEXT:    orr x0, x14, x11
 ; CHECK-NEXT:    orr x1, x10, x12
 ; CHECK-NEXT:    orr x2, x13, x8
 ; CHECK-NEXT:    add sp, sp, #64

@@ -381,7 +381,10 @@ define i64 @PR23590(i64 %x) nounwind {
 ; X64-FAST-NEXT:    movabsq $2635249153387078803, %rcx # imm = 0x2492492492492493
 ; X64-FAST-NEXT:    movq %rdi, %rax
 ; X64-FAST-NEXT:    mulq %rcx
-; X64-FAST-NEXT:    movq %rdx, %rax
+; X64-FAST-NEXT:    subq %rdx, %rdi
+; X64-FAST-NEXT:    shrq %rdi
+; X64-FAST-NEXT:    leaq (%rdi,%rdx), %rax
+; X64-FAST-NEXT:    shrq $2, %rax
 ; X64-FAST-NEXT:    retq
 ;
 ; X64-SLOW-LABEL: PR23590:
@@ -390,10 +393,12 @@ define i64 @PR23590(i64 %x) nounwind {
 ; X64-SLOW-NEXT:    movq %rdi, %rax
 ; X64-SLOW-NEXT:    mulq %rcx
 ; X64-SLOW-NEXT:    shrq $12, %rdx
-; X64-SLOW-NEXT:    imulq $12345, %rdx, %rax # imm = 0x3039
-; X64-SLOW-NEXT:    subq %rax, %rdi
-; X64-SLOW-NEXT:    imulq $613566757, %rdi, %rax # imm = 0x24924925
-; X64-SLOW-NEXT:    shrq $32, %rax
+; X64-SLOW-NEXT:    imull $12345, %edx, %eax # imm = 0x3039
+; X64-SLOW-NEXT:    subl %eax, %edi
+; X64-SLOW-NEXT:    movabsq $2635249153617166336, %rcx # imm = 0x24924924A0000000
+; X64-SLOW-NEXT:    movq %rdi, %rax
+; X64-SLOW-NEXT:    mulq %rcx
+; X64-SLOW-NEXT:    movq %rdx, %rax
 ; X64-SLOW-NEXT:    retq
 entry:
   %rem = urem i64 %x, 12345
@@ -820,7 +825,8 @@ define i64 @urem_i64_12(i64 %x) nounwind {
 ; X86-NEXT:    subl %eax, %ecx
 ; X86-NEXT:    andl $3, %esi
 ; X86-NEXT:    leal (%esi,%ecx,4), %eax
-; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    shrl $30, %ecx
+; X86-NEXT:    movl %ecx, %edx
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
 ;
@@ -1305,36 +1311,37 @@ define i64 @urem_i64_magic_large_postshift(i64 %x) nounwind {
 ; X86-NEXT:    movl $-1431655766, %edx # imm = 0xAAAAAAAA
 ; X86-NEXT:    movl %ecx, %eax
 ; X86-NEXT:    mull %edx
-; X86-NEXT:    movl %eax, %edi
-; X86-NEXT:    movl %edx, %ebx
+; X86-NEXT:    movl %eax, %ebx
+; X86-NEXT:    movl %edx, %edi
 ; X86-NEXT:    movl $-1431655763, %edx # imm = 0xAAAAAAAD
 ; X86-NEXT:    movl %ecx, %eax
 ; X86-NEXT:    mull %edx
 ; X86-NEXT:    movl %edx, %ebp
-; X86-NEXT:    addl %edi, %ebp
-; X86-NEXT:    adcl $0, %ebx
+; X86-NEXT:    addl %ebx, %ebp
+; X86-NEXT:    adcl $0, %edi
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    movl $-1431655766, %edx # imm = 0xAAAAAAAA
 ; X86-NEXT:    mull %edx
-; X86-NEXT:    movl %edx, %edi
+; X86-NEXT:    movl %edx, %ebx
 ; X86-NEXT:    movl %eax, (%esp) # 4-byte Spill
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    movl $-1431655763, %edx # imm = 0xAAAAAAAD
 ; X86-NEXT:    mull %edx
 ; X86-NEXT:    addl %ebp, %eax
-; X86-NEXT:    adcl %ebx, %edx
-; X86-NEXT:    adcl $0, %edi
+; X86-NEXT:    adcl %edi, %edx
+; X86-NEXT:    adcl $0, %ebx
 ; X86-NEXT:    addl (%esp), %edx # 4-byte Folded Reload
-; X86-NEXT:    adcl $0, %edi
-; X86-NEXT:    shrl $31, %edi
-; X86-NEXT:    movl %edi, %eax
-; X86-NEXT:    shll $30, %eax
-; X86-NEXT:    orl %edi, %eax
-; X86-NEXT:    negl %eax
-; X86-NEXT:    addl %edi, %edi
-; X86-NEXT:    negl %edi
-; X86-NEXT:    subl %edi, %ecx
-; X86-NEXT:    sbbl %eax, %esi
+; X86-NEXT:    adcl $0, %ebx
+; X86-NEXT:    shrl $31, %ebx
+; X86-NEXT:    movl %ebx, %edi
+; X86-NEXT:    shll $30, %edi
+; X86-NEXT:    orl %ebx, %edi
+; X86-NEXT:    movl $-2, %edx
+; X86-NEXT:    movl %ebx, %eax
+; X86-NEXT:    mull %edx
+; X86-NEXT:    subl %edi, %edx
+; X86-NEXT:    subl %eax, %ecx
+; X86-NEXT:    sbbl %edx, %esi
 ; X86-NEXT:    movl %ecx, %eax
 ; X86-NEXT:    movl %esi, %edx
 ; X86-NEXT:    addl $4, %esp
@@ -1602,8 +1609,8 @@ define i64 @urem_i64_magic_is_add(i64 %x) nounwind {
 ; X86-NEXT:    movl $-1, %edx
 ; X86-NEXT:    movl %ebx, %eax
 ; X86-NEXT:    mull %edx
-; X86-NEXT:    shll $16, %ebx
 ; X86-NEXT:    leal (%ebx,%ebx,2), %edi
+; X86-NEXT:    shll $16, %edi
 ; X86-NEXT:    orl %edx, %edi
 ; X86-NEXT:    subl %eax, %ecx
 ; X86-NEXT:    sbbl %edi, %esi

@@ -119,8 +119,8 @@ define void @xor_sext_masks_v4i64(ptr %res, ptr %a, ptr %b) nounwind {
 ; LA64-NEXT:    xvld $xr2, $a1, %pc_lo12(.LCPI3_0)
 ; LA64-NEXT:    xvfcmp.clt.d $xr0, $xr0, $xr1
 ; LA64-NEXT:    xvxor.v $xr0, $xr0, $xr2
-; LA64-NEXT:    xvslli.d $xr0, $xr0, 32
-; LA64-NEXT:    xvsrai.d $xr0, $xr0, 32
+; LA64-NEXT:    xvslli.d $xr0, $xr0, 63
+; LA64-NEXT:    xvsrai.d $xr0, $xr0, 63
 ; LA64-NEXT:    xvst $xr0, $a0, 0
 ; LA64-NEXT:    ret
   %v0 = load <4 x double>, ptr %a
@@ -140,8 +140,8 @@ define void @xor_sext_masks_v8i32(ptr %res, ptr %a, ptr %b) nounwind {
 ; CHECK-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
 ; CHECK-NEXT:    xvldi $xr1, -1789
 ; CHECK-NEXT:    xvxor.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvslli.w $xr0, $xr0, 16
-; CHECK-NEXT:    xvsrai.w $xr0, $xr0, 16
+; CHECK-NEXT:    xvslli.w $xr0, $xr0, 31
+; CHECK-NEXT:    xvsrai.w $xr0, $xr0, 31
 ; CHECK-NEXT:    xvst $xr0, $a0, 0
 ; CHECK-NEXT:    ret
   %v0 = load <8 x float>, ptr %a
@@ -161,8 +161,8 @@ define void @xor_sext_masks_v16i16(ptr %res, ptr %a, ptr %b) nounwind {
 ; CHECK-NEXT:    xvseq.h $xr0, $xr0, $xr1
 ; CHECK-NEXT:    xvrepli.w $xr1, 255
 ; CHECK-NEXT:    xvxor.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvslli.h $xr0, $xr0, 8
-; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 8
+; CHECK-NEXT:    xvslli.h $xr0, $xr0, 15
+; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 15
 ; CHECK-NEXT:    xvst $xr0, $a0, 0
 ; CHECK-NEXT:    ret
   %v0 = load <16 x i16>, ptr %a
@@ -282,7 +282,7 @@ define void @or_sext_masks_v4i64(ptr %res, ptr %a, ptr %b) nounwind {
 ; LA64-NEXT:    xvld $xr2, $a1, %pc_lo12(.LCPI9_0)
 ; LA64-NEXT:    xvfcmp.clt.d $xr0, $xr0, $xr1
 ; LA64-NEXT:    xvor.v $xr0, $xr0, $xr2
-; LA64-NEXT:    xvsrai.d $xr0, $xr0, 32
+; LA64-NEXT:    xvsrai.d $xr0, $xr0, 63
 ; LA64-NEXT:    xvst $xr0, $a0, 0
 ; LA64-NEXT:    ret
   %v0 = load <4 x double>, ptr %a
@@ -295,16 +295,30 @@ define void @or_sext_masks_v4i64(ptr %res, ptr %a, ptr %b) nounwind {
 }
 
 define void @or_sext_masks_v8i32(ptr %res, ptr %a, ptr %b) nounwind {
-; CHECK-LABEL: or_sext_masks_v8i32:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    xvld $xr0, $a1, 0
-; CHECK-NEXT:    xvld $xr1, $a2, 0
-; CHECK-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvldi $xr1, -1780
-; CHECK-NEXT:    xvor.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvsrai.w $xr0, $xr0, 16
-; CHECK-NEXT:    xvst $xr0, $a0, 0
-; CHECK-NEXT:    ret
+; LA32-LABEL: or_sext_masks_v8i32:
+; LA32:       # %bb.0:
+; LA32-NEXT:    xvld $xr0, $a1, 0
+; LA32-NEXT:    xvld $xr1, $a2, 0
+; LA32-NEXT:    pcalau12i $a1, %pc_hi20(.LCPI10_0)
+; LA32-NEXT:    xvld $xr2, $a1, %pc_lo12(.LCPI10_0)
+; LA32-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
+; LA32-NEXT:    xvor.v $xr0, $xr0, $xr2
+; LA32-NEXT:    xvsrai.w $xr0, $xr0, 31
+; LA32-NEXT:    xvst $xr0, $a0, 0
+; LA32-NEXT:    ret
+;
+; LA64-LABEL: or_sext_masks_v8i32:
+; LA64:       # %bb.0:
+; LA64-NEXT:    xvld $xr0, $a1, 0
+; LA64-NEXT:    xvld $xr1, $a2, 0
+; LA64-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
+; LA64-NEXT:    lu12i.w $a1, -524288
+; LA64-NEXT:    lu32i.d $a1, 0
+; LA64-NEXT:    xvreplgr2vr.d $xr1, $a1
+; LA64-NEXT:    xvor.v $xr0, $xr0, $xr1
+; LA64-NEXT:    xvsrai.w $xr0, $xr0, 31
+; LA64-NEXT:    xvst $xr0, $a0, 0
+; LA64-NEXT:    ret
   %v0 = load <8 x float>, ptr %a
   %v1 = load <8 x float>, ptr %b
   %m0 = fcmp olt <8 x float> %v0, %v1
@@ -320,9 +334,8 @@ define void @or_sext_masks_v16i16(ptr %res, ptr %a, ptr %b) nounwind {
 ; CHECK-NEXT:    xvld $xr0, $a1, 0
 ; CHECK-NEXT:    xvld $xr1, $a2, 0
 ; CHECK-NEXT:    xvseq.h $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvldi $xr1, -3585
-; CHECK-NEXT:    xvor.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 8
+; CHECK-NEXT:    xvbitseti.w $xr0, $xr0, 15
+; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 15
 ; CHECK-NEXT:    xvst $xr0, $a0, 0
 ; CHECK-NEXT:    ret
   %v0 = load <16 x i16>, ptr %a
@@ -429,7 +442,7 @@ define void @and_sext_masks_v4i64(ptr %res, ptr %a, ptr %b) nounwind {
 ; LA64-NEXT:    xvld $xr2, $a1, %pc_lo12(.LCPI15_0)
 ; LA64-NEXT:    xvfcmp.clt.d $xr0, $xr0, $xr1
 ; LA64-NEXT:    xvand.v $xr0, $xr0, $xr2
-; LA64-NEXT:    xvsrai.d $xr0, $xr0, 32
+; LA64-NEXT:    xvsrai.d $xr0, $xr0, 63
 ; LA64-NEXT:    xvst $xr0, $a0, 0
 ; LA64-NEXT:    ret
   %v0 = load <4 x double>, ptr %a
@@ -442,16 +455,30 @@ define void @and_sext_masks_v4i64(ptr %res, ptr %a, ptr %b) nounwind {
 }
 
 define void @and_sext_masks_v8i32(ptr %res, ptr %a, ptr %b) nounwind {
-; CHECK-LABEL: and_sext_masks_v8i32:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    xvld $xr0, $a1, 0
-; CHECK-NEXT:    xvld $xr1, $a2, 0
-; CHECK-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvldi $xr1, -1780
-; CHECK-NEXT:    xvand.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvsrai.w $xr0, $xr0, 16
-; CHECK-NEXT:    xvst $xr0, $a0, 0
-; CHECK-NEXT:    ret
+; LA32-LABEL: and_sext_masks_v8i32:
+; LA32:       # %bb.0:
+; LA32-NEXT:    xvld $xr0, $a1, 0
+; LA32-NEXT:    xvld $xr1, $a2, 0
+; LA32-NEXT:    pcalau12i $a1, %pc_hi20(.LCPI16_0)
+; LA32-NEXT:    xvld $xr2, $a1, %pc_lo12(.LCPI16_0)
+; LA32-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
+; LA32-NEXT:    xvand.v $xr0, $xr0, $xr2
+; LA32-NEXT:    xvsrai.w $xr0, $xr0, 31
+; LA32-NEXT:    xvst $xr0, $a0, 0
+; LA32-NEXT:    ret
+;
+; LA64-LABEL: and_sext_masks_v8i32:
+; LA64:       # %bb.0:
+; LA64-NEXT:    xvld $xr0, $a1, 0
+; LA64-NEXT:    xvld $xr1, $a2, 0
+; LA64-NEXT:    xvfcmp.clt.s $xr0, $xr0, $xr1
+; LA64-NEXT:    lu12i.w $a1, -524288
+; LA64-NEXT:    lu32i.d $a1, 0
+; LA64-NEXT:    xvreplgr2vr.d $xr1, $a1
+; LA64-NEXT:    xvand.v $xr0, $xr0, $xr1
+; LA64-NEXT:    xvsrai.w $xr0, $xr0, 31
+; LA64-NEXT:    xvst $xr0, $a0, 0
+; LA64-NEXT:    ret
   %v0 = load <8 x float>, ptr %a
   %v1 = load <8 x float>, ptr %b
   %m0 = fcmp olt <8 x float> %v0, %v1
@@ -467,9 +494,9 @@ define void @and_sext_masks_v16i16(ptr %res, ptr %a, ptr %b) nounwind {
 ; CHECK-NEXT:    xvld $xr0, $a1, 0
 ; CHECK-NEXT:    xvld $xr1, $a2, 0
 ; CHECK-NEXT:    xvseq.h $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvldi $xr1, -3585
+; CHECK-NEXT:    xvldi $xr1, -3712
 ; CHECK-NEXT:    xvand.v $xr0, $xr0, $xr1
-; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 8
+; CHECK-NEXT:    xvsrai.h $xr0, $xr0, 15
 ; CHECK-NEXT:    xvst $xr0, $a0, 0
 ; CHECK-NEXT:    ret
   %v0 = load <16 x i16>, ptr %a

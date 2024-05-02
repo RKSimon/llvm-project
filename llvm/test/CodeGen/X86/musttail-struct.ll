@@ -106,8 +106,8 @@ define dso_local i32 @swapByValArguments(ptr byval(%struct.1xi32) %0, ptr byval(
 ; X32-NEXT:    mov dword ptr [esp], eax
 ; X32-NEXT:    mov ecx, dword ptr [esp + 16]
 ; X32-NEXT:    mov dword ptr [esp + 4], ecx
-; X32-NEXT:    mov dword ptr [esp + 12], ecx
 ; X32-NEXT:    mov dword ptr [esp + 16], eax
+; X32-NEXT:    mov dword ptr [esp + 12], ecx
 ; X32-NEXT:    add esp, 8
 ; X32-NEXT:    .cfi_def_cfa_offset 4
 ; X32-NEXT:    jmp swap # TAILCALL
@@ -118,8 +118,8 @@ define dso_local i32 @swapByValArguments(ptr byval(%struct.1xi32) %0, ptr byval(
 ; X64-NEXT:    mov dword ptr [rsp - 16], eax
 ; X64-NEXT:    mov ecx, dword ptr [rsp + 16]
 ; X64-NEXT:    mov dword ptr [rsp - 8], ecx
-; X64-NEXT:    mov dword ptr [rsp + 8], ecx
 ; X64-NEXT:    mov dword ptr [rsp + 16], eax
+; X64-NEXT:    mov dword ptr [rsp + 8], ecx
 ; X64-NEXT:    jmp swap # TAILCALL
   %r = musttail call i32 @swap(ptr byval(%struct.1xi32) %1, ptr byval(%struct.1xi32) %0)
   ret i32 %r
@@ -161,11 +161,11 @@ define void @large_caller_new_value(%twenty_bytes* byval(%twenty_bytes) align 4 
 ; X32-NEXT:    mov dword ptr [esp + 8], 2
 ; X32-NEXT:    mov dword ptr [esp + 12], 3
 ; X32-NEXT:    mov dword ptr [esp + 16], 4
-; X32-NEXT:    mov dword ptr [esp + 24], 0
-; X32-NEXT:    mov dword ptr [esp + 28], 1
-; X32-NEXT:    mov dword ptr [esp + 32], 2
-; X32-NEXT:    mov dword ptr [esp + 36], 3
 ; X32-NEXT:    mov dword ptr [esp + 40], 4
+; X32-NEXT:    mov dword ptr [esp + 36], 3
+; X32-NEXT:    mov dword ptr [esp + 32], 2
+; X32-NEXT:    mov dword ptr [esp + 28], 1
+; X32-NEXT:    mov dword ptr [esp + 24], 0
 ; X32-NEXT:    add esp, 20
 ; X32-NEXT:    .cfi_def_cfa_offset 4
 ; X32-NEXT:    jmp large_callee@PLT # TAILCALL
@@ -177,8 +177,8 @@ define void @large_caller_new_value(%twenty_bytes* byval(%twenty_bytes) align 4 
 ; X64-NEXT:    movabs rcx, 12884901890
 ; X64-NEXT:    mov qword ptr [rsp - 12], rcx
 ; X64-NEXT:    mov dword ptr [rsp - 4], 4
-; X64-NEXT:    mov qword ptr [rsp + 8], rax
 ; X64-NEXT:    mov qword ptr [rsp + 16], rcx
+; X64-NEXT:    mov qword ptr [rsp + 8], rax
 ; X64-NEXT:    mov dword ptr [rsp + 24], 4
 ; X64-NEXT:    jmp large_callee@PLT # TAILCALL
 entry:
@@ -258,14 +258,14 @@ define void @swap_byvals(%twenty_bytes* byval(%twenty_bytes) align 4 %a, %twenty
 ; X64-NEXT:    mov rsi, qword ptr [rsp + 40]
 ; X64-NEXT:    mov qword ptr [rsp - 16], rsi
 ; X64-NEXT:    mov qword ptr [rsp - 24], rdx
-; X64-NEXT:    mov qword ptr [rsp + 8], rdx
-; X64-NEXT:    mov qword ptr [rsp + 16], rsi
-; X64-NEXT:    mov dword ptr [rsp + 24], ecx
 ; X64-NEXT:    mov dword ptr [rsp + 48], eax
+; X64-NEXT:    mov dword ptr [rsp + 24], ecx
+; X64-NEXT:    mov qword ptr [rsp + 16], rsi
+; X64-NEXT:    mov qword ptr [rsp + 8], rdx
 ; X64-NEXT:    mov rax, qword ptr [rsp - 56]
 ; X64-NEXT:    mov rcx, qword ptr [rsp - 48]
-; X64-NEXT:    mov qword ptr [rsp + 32], rax
 ; X64-NEXT:    mov qword ptr [rsp + 40], rcx
+; X64-NEXT:    mov qword ptr [rsp + 32], rax
 ; X64-NEXT:    jmp two_byvals_callee@PLT # TAILCALL
 entry:
   musttail call void @two_byvals_callee(%twenty_bytes* byval(%twenty_bytes) align 4 %b, %twenty_bytes* byval(%twenty_bytes) align 4 %a)

@@ -24,16 +24,18 @@ define <vscale x 1 x double> @test2(<vscale x 1 x double> %a, <vscale x 1 x i1> 
 ; RV32-NEXT:    lui a0, %hi(.LCPI1_0)
 ; RV32-NEXT:    fld fa5, %lo(.LCPI1_0)(a0)
 ; RV32-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
-; RV32-NEXT:    vfmul.vf v8, v8, fa5
+; RV32-NEXT:    vfadd.vv v9, v8, v8
+; RV32-NEXT:    vfmadd.vf v8, fa5, v9
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test2:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    lui a0, 2051
-; RV64-NEXT:    slli a0, a0, 39
-; RV64-NEXT:    fmv.d.x fa5, a0
 ; RV64-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
-; RV64-NEXT:    vfmul.vf v8, v8, fa5
+; RV64-NEXT:    vfadd.vv v9, v8, v8
+; RV64-NEXT:    li a0, 1025
+; RV64-NEXT:    slli a0, a0, 52
+; RV64-NEXT:    fmv.d.x fa5, a0
+; RV64-NEXT:    vfmadd.vf v8, fa5, v9
 ; RV64-NEXT:    ret
   %t = call <vscale x 1 x double> @llvm.vp.fmul.nxv1f64(<vscale x 1 x double> %a, <vscale x 1 x double> splat (double 2.0), <vscale x 1 x i1> %m, i32 %evl)
   %v = call fast <vscale x 1 x double> @llvm.vp.fma.nxv1f64(<vscale x 1 x double> %a, <vscale x 1 x double> splat (double 4.0), <vscale x 1 x double> %t, <vscale x 1 x i1> %m, i32 %evl)
@@ -47,15 +49,17 @@ define <vscale x 1 x double> @test3(<vscale x 1 x double> %a, <vscale x 1 x doub
 ; RV32-NEXT:    lui a0, %hi(.LCPI2_0)
 ; RV32-NEXT:    fld fa5, %lo(.LCPI2_0)(a0)
 ; RV32-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; RV32-NEXT:    vfadd.vv v8, v8, v8
 ; RV32-NEXT:    vfmadd.vf v8, fa5, v9
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test3:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    li a0, 513
-; RV64-NEXT:    slli a0, a0, 53
-; RV64-NEXT:    fmv.d.x fa5, a0
 ; RV64-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; RV64-NEXT:    vfadd.vv v8, v8, v8
+; RV64-NEXT:    li a0, 1025
+; RV64-NEXT:    slli a0, a0, 52
+; RV64-NEXT:    fmv.d.x fa5, a0
 ; RV64-NEXT:    vfmadd.vf v8, fa5, v9
 ; RV64-NEXT:    ret
   %t = call <vscale x 1 x double> @llvm.vp.fmul.nxv1f64(<vscale x 1 x double> %a, <vscale x 1 x double> splat (double 2.0), <vscale x 1 x i1> %m, i32 %evl)

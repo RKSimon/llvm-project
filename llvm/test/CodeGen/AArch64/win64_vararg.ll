@@ -7,10 +7,10 @@ define void @pass_va(i32 %count, ...) nounwind {
 ; CHECK-NEXT:    str x30, [sp, #-80]! // 8-byte Folded Spill
 ; CHECK-NEXT:    add x8, sp, #24
 ; CHECK-NEXT:    add x0, sp, #24
-; CHECK-NEXT:    stp x1, x2, [sp, #24]
-; CHECK-NEXT:    stp x3, x4, [sp, #40]
-; CHECK-NEXT:    stp x5, x6, [sp, #56]
-; CHECK-NEXT:    str x7, [sp, #72]
+; CHECK-NEXT:    stp x6, x7, [sp, #64]
+; CHECK-NEXT:    stp x4, x5, [sp, #48]
+; CHECK-NEXT:    stp x2, x3, [sp, #32]
+; CHECK-NEXT:    str x1, [sp, #24]
 ; CHECK-NEXT:    str x8, [sp, #8]
 ; CHECK-NEXT:    bl other_func
 ; CHECK-NEXT:    ldr x30, [sp], #80 // 8-byte Folded Reload
@@ -82,10 +82,10 @@ define void @copy1(i64 %a0, ...) nounwind {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    sub sp, sp, #80
 ; CHECK-NEXT:    add x8, sp, #24
-; CHECK-NEXT:    stp x1, x2, [sp, #24]
-; CHECK-NEXT:    stp x3, x4, [sp, #40]
-; CHECK-NEXT:    stp x5, x6, [sp, #56]
-; CHECK-NEXT:    str x7, [sp, #72]
+; CHECK-NEXT:    stp x6, x7, [sp, #64]
+; CHECK-NEXT:    stp x4, x5, [sp, #48]
+; CHECK-NEXT:    stp x2, x3, [sp, #32]
+; CHECK-NEXT:    str x1, [sp, #24]
 ; CHECK-NEXT:    stp x8, x8, [sp], #80
 ; CHECK-NEXT:    ret
 entry:
@@ -120,9 +120,9 @@ define i32 @fp(ptr, i64, ptr, ...) local_unnamed_addr #6 {
 ; CHECK-NEXT:    mov x19, x2
 ; CHECK-NEXT:    mov x20, x1
 ; CHECK-NEXT:    mov x21, x0
-; CHECK-NEXT:    stp x3, x4, [x29, #32]
-; CHECK-NEXT:    stp x5, x6, [x29, #48]
-; CHECK-NEXT:    str x7, [x29, #64]
+; CHECK-NEXT:    stp x6, x7, [x29, #56]
+; CHECK-NEXT:    stp x4, x5, [x29, #40]
+; CHECK-NEXT:    str x3, [x29, #32]
 ; CHECK-NEXT:    str x8, [x29, #16]
 ; CHECK-NEXT:    bl __local_stdio_printf_options
 ; CHECK-NEXT:    ldr x8, [x0]
@@ -186,9 +186,9 @@ define void @vla(i32, ptr, ...) local_unnamed_addr {
 ; CHECK-NEXT:    add x8, x9, #15
 ; CHECK-NEXT:    mov x23, sp
 ; CHECK-NEXT:    lsr x15, x8, #4
-; CHECK-NEXT:    stp x2, x3, [x29, #24]
-; CHECK-NEXT:    stp x4, x5, [x29, #40]
 ; CHECK-NEXT:    stp x6, x7, [x29, #56]
+; CHECK-NEXT:    stp x4, x5, [x29, #40]
+; CHECK-NEXT:    stp x2, x3, [x29, #24]
 ; CHECK-NEXT:    bl __chkstk
 ; CHECK-NEXT:    sub x20, sp, x15, lsl #4
 ; CHECK-NEXT:    mov sp, x20
@@ -255,9 +255,9 @@ define i32 @snprintf(ptr, i64, ptr, ...) local_unnamed_addr #5 {
 ; CHECK-NEXT:    mov x19, x2
 ; CHECK-NEXT:    mov x20, x1
 ; CHECK-NEXT:    mov x21, x0
-; CHECK-NEXT:    stp x3, x4, [sp, #56]
-; CHECK-NEXT:    stp x5, x6, [sp, #72]
-; CHECK-NEXT:    str x7, [sp, #88]
+; CHECK-NEXT:    stp x6, x7, [sp, #80]
+; CHECK-NEXT:    stp x4, x5, [sp, #64]
+; CHECK-NEXT:    str x3, [sp, #56]
 ; CHECK-NEXT:    str x8, [sp, #8]
 ; CHECK-NEXT:    bl __local_stdio_printf_options
 ; CHECK-NEXT:    ldr x8, [x0]

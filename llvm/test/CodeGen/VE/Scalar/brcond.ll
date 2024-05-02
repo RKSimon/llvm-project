@@ -5,7 +5,7 @@
 define void @brcond_then(i1 zeroext %0) {
 ; CHECK-LABEL: brcond_then:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    breq.w 0, %s0, .LBB0_2
+; CHECK-NEXT:    breq.l 0, %s0, .LBB0_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop

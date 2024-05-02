@@ -390,7 +390,7 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ;
 ; MAX-BANDWIDTH-LABEL: bb2053_inner_loop:
 ; MAX-BANDWIDTH:         .functype bb2053_inner_loop (i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32) -> ()
-; MAX-BANDWIDTH-NEXT:    .local i32, i32, v128, v128, v128, v128, v128, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128
+; MAX-BANDWIDTH-NEXT:    .local i32, i32, v128, v128, v128, v128, v128, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128
 ; MAX-BANDWIDTH-NEXT:  # %bb.0: # %entry
 ; MAX-BANDWIDTH-NEXT:    i32.const 0
 ; MAX-BANDWIDTH-NEXT:    local.set 11
@@ -440,6 +440,7 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:  .LBB0_3: # %vector.body
 ; MAX-BANDWIDTH-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MAX-BANDWIDTH-NEXT:    loop # label3:
+; MAX-BANDWIDTH-NEXT:    local.get 14
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 10
 ; MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=2
@@ -448,32 +449,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    local.tee 8
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 7
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; MAX-BANDWIDTH-NEXT:    local.tee 18
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 19
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; MAX-BANDWIDTH-NEXT:    local.tee 20
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 21
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; MAX-BANDWIDTH-NEXT:    local.tee 22
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 23
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 10
 ; MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=2
@@ -482,32 +475,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    local.tee 24
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 25
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; MAX-BANDWIDTH-NEXT:    local.tee 26
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 27
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; MAX-BANDWIDTH-NEXT:    local.tee 28
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 29
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; MAX-BANDWIDTH-NEXT:    local.tee 30
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 31
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 10
 ; MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=2
@@ -516,32 +501,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    local.tee 32
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 33
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; MAX-BANDWIDTH-NEXT:    local.tee 34
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 35
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; MAX-BANDWIDTH-NEXT:    local.tee 36
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 37
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; MAX-BANDWIDTH-NEXT:    local.tee 38
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 39
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 10
 ; MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=2
@@ -550,30 +527,125 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    local.tee 40
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 41
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; MAX-BANDWIDTH-NEXT:    local.tee 42
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 43
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; MAX-BANDWIDTH-NEXT:    local.tee 44
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 45
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    local.get 13
 ; MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; MAX-BANDWIDTH-NEXT:    local.tee 46
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 47
+; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
+; MAX-BANDWIDTH-NEXT:    local.tee 48
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 13
+; MAX-BANDWIDTH-NEXT:    local.get 3
+; MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
+; MAX-BANDWIDTH-NEXT:    local.tee 49
+; MAX-BANDWIDTH-NEXT:    local.get 3
+; MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
+; MAX-BANDWIDTH-NEXT:    local.tee 50
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 5, 9, 13, 17, 21, 25, 29, 0, 0, 0, 0, 0, 0, 0, 0
+; MAX-BANDWIDTH-NEXT:    local.get 3
+; MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=0
+; MAX-BANDWIDTH-NEXT:    local.tee 51
+; MAX-BANDWIDTH-NEXT:    local.get 3
+; MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=0
+; MAX-BANDWIDTH-NEXT:    local.tee 52
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 9, 13, 17, 21, 25, 29
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; MAX-BANDWIDTH-NEXT:    local.tee 53
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 13
+; MAX-BANDWIDTH-NEXT:    local.get 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 48
+; MAX-BANDWIDTH-NEXT:    local.get 53
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 53
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    local.get 53
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 7
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 23
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 25
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 27
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 29
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 31
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 33
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 35
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 37
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 39
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 41
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 43
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 45
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 47
 ; MAX-BANDWIDTH-NEXT:    local.get 6
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
@@ -592,213 +664,242 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
 ; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
 ; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; MAX-BANDWIDTH-NEXT:    local.tee 13
-; MAX-BANDWIDTH-NEXT:    local.get 3
-; MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 48
-; MAX-BANDWIDTH-NEXT:    local.get 3
-; MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 49
+; MAX-BANDWIDTH-NEXT:    local.tee 55
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 56
+; MAX-BANDWIDTH-NEXT:    local.get 49
+; MAX-BANDWIDTH-NEXT:    local.get 50
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
-; MAX-BANDWIDTH-NEXT:    local.get 3
-; MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 50
-; MAX-BANDWIDTH-NEXT:    local.get 3
-; MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 51
+; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    local.get 52
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 3, 7, 11, 15, 19, 23, 27, 31
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; MAX-BANDWIDTH-NEXT:    local.tee 52
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    local.get 52
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    local.tee 57
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 58
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 7
-; MAX-BANDWIDTH-NEXT:    local.get 19
-; MAX-BANDWIDTH-NEXT:    local.get 21
-; MAX-BANDWIDTH-NEXT:    local.get 23
-; MAX-BANDWIDTH-NEXT:    local.get 25
-; MAX-BANDWIDTH-NEXT:    local.get 27
-; MAX-BANDWIDTH-NEXT:    local.get 29
-; MAX-BANDWIDTH-NEXT:    local.get 31
-; MAX-BANDWIDTH-NEXT:    local.get 33
-; MAX-BANDWIDTH-NEXT:    local.get 35
-; MAX-BANDWIDTH-NEXT:    local.get 37
-; MAX-BANDWIDTH-NEXT:    local.get 39
-; MAX-BANDWIDTH-NEXT:    local.get 41
-; MAX-BANDWIDTH-NEXT:    local.get 43
-; MAX-BANDWIDTH-NEXT:    local.get 45
-; MAX-BANDWIDTH-NEXT:    local.get 47
-; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; MAX-BANDWIDTH-NEXT:    local.tee 53
-; MAX-BANDWIDTH-NEXT:    local.get 48
-; MAX-BANDWIDTH-NEXT:    local.get 49
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 5, 9, 13, 17, 21, 25, 29, 0, 0, 0, 0, 0, 0, 0, 0
-; MAX-BANDWIDTH-NEXT:    local.get 50
-; MAX-BANDWIDTH-NEXT:    local.get 51
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 9, 13, 17, 21, 25, 29
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; MAX-BANDWIDTH-NEXT:    local.tee 54
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 53
-; MAX-BANDWIDTH-NEXT:    local.get 54
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    local.get 56
+; MAX-BANDWIDTH-NEXT:    local.get 58
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 14
+; MAX-BANDWIDTH-NEXT:    local.get 55
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 55
+; MAX-BANDWIDTH-NEXT:    local.get 57
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 57
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 55
+; MAX-BANDWIDTH-NEXT:    local.get 57
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 14
+; MAX-BANDWIDTH-NEXT:    local.get 16
 ; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    local.get 48
 ; MAX-BANDWIDTH-NEXT:    local.get 49
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
 ; MAX-BANDWIDTH-NEXT:    local.get 50
-; MAX-BANDWIDTH-NEXT:    local.get 51
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 10, 14, 18, 22, 26, 30
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; MAX-BANDWIDTH-NEXT:    local.tee 55
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    local.get 55
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 53
-; MAX-BANDWIDTH-NEXT:    local.get 48
-; MAX-BANDWIDTH-NEXT:    local.get 49
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 4, 8, 12, 16, 20, 24, 28, 0, 0, 0, 0, 0, 0, 0, 0
-; MAX-BANDWIDTH-NEXT:    local.get 50
 ; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    local.get 52
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 24, 28
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; MAX-BANDWIDTH-NEXT:    local.tee 13
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 53
+; MAX-BANDWIDTH-NEXT:    local.tee 59
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 60
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    local.get 60
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 16
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    local.get 59
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 13
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    local.get 13
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 56
+; MAX-BANDWIDTH-NEXT:    local.get 49
+; MAX-BANDWIDTH-NEXT:    local.get 50
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
+; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 10, 14, 18, 22, 26, 30
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; MAX-BANDWIDTH-NEXT:    local.tee 50
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 49
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 56
+; MAX-BANDWIDTH-NEXT:    local.get 49
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 55
+; MAX-BANDWIDTH-NEXT:    local.get 50
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 50
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 55
+; MAX-BANDWIDTH-NEXT:    local.get 50
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 16
-; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    local.get 15
+; MAX-BANDWIDTH-NEXT:    local.get 54
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 8
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 8
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 18
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 7
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 20
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 18
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 22
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 19
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 24
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 20
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 26
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 21
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 28
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 22
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 30
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 23
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 32
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 24
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 34
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 25
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 36
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 26
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 38
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 27
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 40
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 28
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 42
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 29
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 44
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 30
-; MAX-BANDWIDTH-NEXT:    local.get 6
-; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    local.get 46
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.tee 31
+; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
+; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
+; MAX-BANDWIDTH-NEXT:    local.tee 52
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 51
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 54
+; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 53
+; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 52
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 53
+; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 58
+; MAX-BANDWIDTH-NEXT:    local.get 8
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 7
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 20
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 23
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 24
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 25
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 26
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 27
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 28
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 29
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 30
+; MAX-BANDWIDTH-NEXT:    local.get 6
+; MAX-BANDWIDTH-NEXT:    i32.add
+; MAX-BANDWIDTH-NEXT:    local.get 31
 ; MAX-BANDWIDTH-NEXT:    local.get 6
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
@@ -818,78 +919,57 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
 ; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
 ; MAX-BANDWIDTH-NEXT:    local.tee 48
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 58
+; MAX-BANDWIDTH-NEXT:    local.get 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 57
 ; MAX-BANDWIDTH-NEXT:    local.get 48
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 48
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 54
-; MAX-BANDWIDTH-NEXT:    local.get 8
-; MAX-BANDWIDTH-NEXT:    local.get 7
-; MAX-BANDWIDTH-NEXT:    local.get 18
-; MAX-BANDWIDTH-NEXT:    local.get 19
-; MAX-BANDWIDTH-NEXT:    local.get 20
-; MAX-BANDWIDTH-NEXT:    local.get 21
-; MAX-BANDWIDTH-NEXT:    local.get 22
-; MAX-BANDWIDTH-NEXT:    local.get 23
-; MAX-BANDWIDTH-NEXT:    local.get 24
-; MAX-BANDWIDTH-NEXT:    local.get 25
-; MAX-BANDWIDTH-NEXT:    local.get 26
-; MAX-BANDWIDTH-NEXT:    local.get 27
-; MAX-BANDWIDTH-NEXT:    local.get 28
-; MAX-BANDWIDTH-NEXT:    local.get 29
-; MAX-BANDWIDTH-NEXT:    local.get 30
-; MAX-BANDWIDTH-NEXT:    local.get 31
-; MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
-; MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; MAX-BANDWIDTH-NEXT:    local.tee 49
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 54
-; MAX-BANDWIDTH-NEXT:    local.get 49
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 15
-; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 57
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 15
-; MAX-BANDWIDTH-NEXT:    local.get 55
-; MAX-BANDWIDTH-NEXT:    local.get 48
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 55
-; MAX-BANDWIDTH-NEXT:    local.get 48
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    local.get 49
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 13
-; MAX-BANDWIDTH-NEXT:    local.get 49
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.get 17
+; MAX-BANDWIDTH-NEXT:    local.get 60
+; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 60
+; MAX-BANDWIDTH-NEXT:    local.get 51
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 13
+; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 13
+; MAX-BANDWIDTH-NEXT:    local.get 52
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 49
+; MAX-BANDWIDTH-NEXT:    local.get 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 49
+; MAX-BANDWIDTH-NEXT:    local.get 54
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 50
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 50
+; MAX-BANDWIDTH-NEXT:    local.get 48
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 17
 ; MAX-BANDWIDTH-NEXT:    local.get 3
@@ -1080,7 +1160,7 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ;
 ; RELAXED-MAX-BANDWIDTH-LABEL: bb2053_inner_loop:
 ; RELAXED-MAX-BANDWIDTH:         .functype bb2053_inner_loop (i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32) -> ()
-; RELAXED-MAX-BANDWIDTH-NEXT:    .local i32, i32, v128, v128, v128, v128, v128, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128
+; RELAXED-MAX-BANDWIDTH-NEXT:    .local i32, i32, v128, v128, v128, v128, v128, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128
 ; RELAXED-MAX-BANDWIDTH-NEXT:  # %bb.0: # %entry
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.const 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 11
@@ -1130,6 +1210,7 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:  .LBB0_3: # %vector.body
 ; RELAXED-MAX-BANDWIDTH-NEXT:    # =>This Inner Loop Header: Depth=1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    loop # label3:
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 10
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=2
@@ -1138,32 +1219,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 8
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 22
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 23
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 10
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=2
@@ -1172,32 +1245,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 24
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 25
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 26
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 27
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 28
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 29
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 30
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 10
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=2
@@ -1206,32 +1271,24 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 32
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 33
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 34
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 35
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 36
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 37
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 38
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 39
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 10
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=2
@@ -1240,30 +1297,379 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 40
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 41
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 42
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 43
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 44
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 45
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 46
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 47
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 5, 9, 13, 17, 21, 25, 29, 0, 0, 0, 0, 0, 0, 0, 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 9, 13, 17, 21, 25, 29
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 23
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 25
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 27
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 29
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 33
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 35
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 37
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 39
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 41
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 43
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 45
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 47
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 56
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 3, 7, 11, 15, 19, 23, 27, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 58
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 56
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 58
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 4, 8, 12, 16, 20, 24, 28, 0, 0, 0, 0, 0, 0, 0, 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 24, 28
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 59
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 60
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 60
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 59
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 56
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 10, 14, 18, 22, 26, 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 56
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 55
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 24
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 26
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 28
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 23
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 32
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 24
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 34
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 25
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 36
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 26
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 38
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 27
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 40
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 28
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 42
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 29
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 44
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 46
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 53
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 58
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 8
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 7
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 23
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 24
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 25
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 26
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 27
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 28
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 29
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 31
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
@@ -1283,248 +1689,58 @@ define hidden { i32, i32, i32, i32 } @bb2053_inner_loop(ptr nocapture %base0, pt
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
 ; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 48
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 49
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 32:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 50
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 48:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 51
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 3, 7, 11, 15, 19, 23, 27, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 52
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 23
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 25
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 27
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 29
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 33
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 35
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 37
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 39
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 41
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 43
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 45
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 47
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 53
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 5, 9, 13, 17, 21, 25, 29, 0, 0, 0, 0, 0, 0, 0, 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 9, 13, 17, 21, 25, 29
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 54
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 10, 14, 18, 22, 26, 30
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 55
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 53
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 4, 8, 12, 16, 20, 24, 28, 0, 0, 0, 0, 0, 0, 0, 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 24, 28
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 16
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 16
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 24
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 26
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 28
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 22
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 30
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 23
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 32
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 24
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 34
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 25
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 36
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 26
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 38
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 27
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 40
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 28
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 42
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 29
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 44
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 30
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 46
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 58
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 23
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 24
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 25
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 26
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 27
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 28
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 29
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 30
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_splat 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 2
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 4
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 5
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 6
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 7
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 8
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 9
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 10
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load8_lane 0, 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 50
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 57
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 55
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 17
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 60
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 60
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 51
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 52
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 49
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 54
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 50
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 48
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 17
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.const 64
@@ -2021,7 +2237,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ;
 ; MAX-BANDWIDTH-LABEL: bb41_inner_loop:
 ; MAX-BANDWIDTH:         .functype bb41_inner_loop (i32, i32, i32, i32, i32, i32, i32, i32) -> ()
-; MAX-BANDWIDTH-NEXT:    .local i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, i32
+; MAX-BANDWIDTH-NEXT:    .local i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, i32
 ; MAX-BANDWIDTH-NEXT:  # %bb.0: # %entry
 ; MAX-BANDWIDTH-NEXT:    i32.const 0
 ; MAX-BANDWIDTH-NEXT:    local.set 8
@@ -2076,6 +2292,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; MAX-BANDWIDTH-NEXT:  .LBB1_3: # %vector.body
 ; MAX-BANDWIDTH-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MAX-BANDWIDTH-NEXT:    loop # label8:
+; MAX-BANDWIDTH-NEXT:    local.get 12
 ; MAX-BANDWIDTH-NEXT:    local.get 1
 ; MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
 ; MAX-BANDWIDTH-NEXT:    local.tee 16
@@ -2083,65 +2300,104 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
 ; MAX-BANDWIDTH-NEXT:    local.tee 17
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
+; MAX-BANDWIDTH-NEXT:    local.tee 18
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
 ; MAX-BANDWIDTH-NEXT:    local.tee 11
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 18
+; MAX-BANDWIDTH-NEXT:    local.tee 19
 ; MAX-BANDWIDTH-NEXT:    local.get 2
 ; MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
-; MAX-BANDWIDTH-NEXT:    local.tee 19
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
 ; MAX-BANDWIDTH-NEXT:    local.tee 20
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    local.get 20
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
+; MAX-BANDWIDTH-NEXT:    local.tee 21
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 12
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 18
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 21
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 12
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    local.get 18
-; MAX-BANDWIDTH-NEXT:    local.get 19
-; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-; MAX-BANDWIDTH-NEXT:    local.tee 18
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    local.get 18
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.get 13
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    local.get 20
+; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+; MAX-BANDWIDTH-NEXT:    local.tee 20
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 19
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    local.get 20
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 11
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 13
-; MAX-BANDWIDTH-NEXT:    local.get 20
+; MAX-BANDWIDTH-NEXT:    local.get 14
+; MAX-BANDWIDTH-NEXT:    local.get 22
 ; MAX-BANDWIDTH-NEXT:    local.get 16
 ; MAX-BANDWIDTH-NEXT:    local.get 17
 ; MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-; MAX-BANDWIDTH-NEXT:    local.tee 11
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 20
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
+; MAX-BANDWIDTH-NEXT:    local.tee 16
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 18
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
-; MAX-BANDWIDTH-NEXT:    local.get 14
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    local.get 16
+; MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; MAX-BANDWIDTH-NEXT:    local.tee 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 14
-; MAX-BANDWIDTH-NEXT:    local.get 18
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_low_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    local.get 18
-; MAX-BANDWIDTH-NEXT:    local.get 11
-; MAX-BANDWIDTH-NEXT:    i16x8.extmul_high_i8x16_s
-; MAX-BANDWIDTH-NEXT:    i32x4.extadd_pairwise_i16x8_s
-; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.get 15
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 19
+; MAX-BANDWIDTH-NEXT:    local.get 18
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; MAX-BANDWIDTH-NEXT:    i32x4.add
+; MAX-BANDWIDTH-NEXT:    local.get 11
+; MAX-BANDWIDTH-NEXT:    local.get 22
+; MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
 ; MAX-BANDWIDTH-NEXT:    i32x4.add
 ; MAX-BANDWIDTH-NEXT:    local.set 15
 ; MAX-BANDWIDTH-NEXT:    local.get 1
@@ -2239,7 +2495,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; MAX-BANDWIDTH-NEXT:    local.tee 8
 ; MAX-BANDWIDTH-NEXT:    local.get 9
 ; MAX-BANDWIDTH-NEXT:    i32.load8_s 0
-; MAX-BANDWIDTH-NEXT:    local.tee 21
+; MAX-BANDWIDTH-NEXT:    local.tee 23
 ; MAX-BANDWIDTH-NEXT:    i32.mul
 ; MAX-BANDWIDTH-NEXT:    local.get 4
 ; MAX-BANDWIDTH-NEXT:    i32.add
@@ -2251,7 +2507,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; MAX-BANDWIDTH-NEXT:    i32.add
 ; MAX-BANDWIDTH-NEXT:    local.set 6
 ; MAX-BANDWIDTH-NEXT:    local.get 3
-; MAX-BANDWIDTH-NEXT:    local.get 21
+; MAX-BANDWIDTH-NEXT:    local.get 23
 ; MAX-BANDWIDTH-NEXT:    i32.mul
 ; MAX-BANDWIDTH-NEXT:    local.get 5
 ; MAX-BANDWIDTH-NEXT:    i32.add
@@ -2288,7 +2544,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ;
 ; RELAXED-MAX-BANDWIDTH-LABEL: bb41_inner_loop:
 ; RELAXED-MAX-BANDWIDTH:         .functype bb41_inner_loop (i32, i32, i32, i32, i32, i32, i32, i32) -> ()
-; RELAXED-MAX-BANDWIDTH-NEXT:    .local i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, i32
+; RELAXED-MAX-BANDWIDTH-NEXT:    .local i32, i32, i32, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, v128, i32
 ; RELAXED-MAX-BANDWIDTH-NEXT:  # %bb.0: # %entry
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.const 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 8
@@ -2323,7 +2579,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 4
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.replace_lane 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 15
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.const -16
@@ -2343,46 +2599,114 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; RELAXED-MAX-BANDWIDTH-NEXT:  .LBB1_3: # %vector.body
 ; RELAXED-MAX-BANDWIDTH-NEXT:    # =>This Inner Loop Header: Depth=1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    loop # label8:
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 16
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 17
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
-; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 17
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 17
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 16
-; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 15
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 0:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 2
+; RELAXED-MAX-BANDWIDTH-NEXT:    v128.load 16:p2align=0
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.relaxed_dot_i8x16_i7x16_add_s
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 20
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 13
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 17
+; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_low_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 16
+; RELAXED-MAX-BANDWIDTH-NEXT:    i16x8.extend_high_i8x16_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 14
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 19
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 18
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_low_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 22
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extmul_high_i16x8_s
+; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 15
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 1
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.const 32
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
@@ -2400,48 +2724,48 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; RELAXED-MAX-BANDWIDTH-NEXT:    end_loop
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 7
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 13
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 6
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 14
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 5
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 15
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 12
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 11
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i8x16.shuffle 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32x4.extract_lane 0
@@ -2478,7 +2802,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 8
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 9
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.load8_s 0
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.tee 23
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.mul
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 4
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
@@ -2490,7 +2814,7 @@ define hidden { i32, i32, i32, i32 } @bb41_inner_loop(ptr nocapture %lhs, ptr no
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.set 6
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 3
-; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 21
+; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 23
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.mul
 ; RELAXED-MAX-BANDWIDTH-NEXT:    local.get 5
 ; RELAXED-MAX-BANDWIDTH-NEXT:    i32.add

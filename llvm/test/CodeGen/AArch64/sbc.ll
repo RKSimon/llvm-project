@@ -111,7 +111,9 @@ define i32 @test_sext_add(i32 %a, i32 %b, i32 %x, i32 %y) {
 ; CHECK-SD-LABEL: test_sext_add:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    cmp w0, w1
-; CHECK-SD-NEXT:    sbc w0, w2, w3
+; CHECK-SD-NEXT:    sub w8, w2, w3
+; CHECK-SD-NEXT:    csetm w9, lo
+; CHECK-SD-NEXT:    add w0, w8, w9
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_sext_add:

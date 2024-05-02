@@ -712,16 +712,13 @@ define amdgpu_kernel void @v_ctlz_zero_undef_i16_with_select(ptr addrspace(1) no
 ; VI-NEXT:    v_mov_b32_e32 v0, s0
 ; VI-NEXT:    v_mov_b32_e32 v1, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
-; VI-NEXT:    v_readfirstlane_b32 s0, v2
+; VI-NEXT:    v_lshlrev_b32_e32 v2, 8, v2
 ; VI-NEXT:    s_waitcnt vmcnt(0)
-; VI-NEXT:    v_readfirstlane_b32 s1, v3
-; VI-NEXT:    s_lshl_b32 s0, s0, 8
-; VI-NEXT:    s_or_b32 s0, s0, s1
-; VI-NEXT:    s_lshl_b32 s1, s0, 16
-; VI-NEXT:    s_flbit_i32_b32 s1, s1
-; VI-NEXT:    s_and_b32 s0, s0, 0xffff
-; VI-NEXT:    s_cselect_b32 s0, s1, 32
-; VI-NEXT:    v_mov_b32_e32 v2, s0
+; VI-NEXT:    v_or_b32_e32 v2, v2, v3
+; VI-NEXT:    v_lshlrev_b32_e32 v3, 16, v2
+; VI-NEXT:    v_ffbh_u32_e32 v3, v3
+; VI-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v2
+; VI-NEXT:    v_cndmask_b32_e32 v2, 32, v3, vcc
 ; VI-NEXT:    flat_store_short v[0:1], v2
 ; VI-NEXT:    s_endpgm
 ;
@@ -2481,16 +2478,15 @@ define <4 x i16> @v_ctlz_zero_undef_v4i16(<4 x i16> %val) {
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NEXT:    v_and_b32_e32 v2, 0xffff0000, v1
 ; SI-NEXT:    v_lshlrev_b32_e32 v1, 16, v1
-; SI-NEXT:    v_and_b32_e32 v3, 0xffff0000, v0
-; SI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
+; SI-NEXT:    v_lshlrev_b32_e32 v3, 16, v0
+; SI-NEXT:    v_and_b32_e32 v0, 0xffff0000, v0
 ; SI-NEXT:    v_ffbh_u32_e32 v2, v2
 ; SI-NEXT:    v_ffbh_u32_e32 v1, v1
 ; SI-NEXT:    v_ffbh_u32_e32 v3, v3
 ; SI-NEXT:    v_ffbh_u32_e32 v0, v0
 ; SI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
-; SI-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
-; SI-NEXT:    v_and_b32_e32 v1, 63, v1
-; SI-NEXT:    v_or_b32_e32 v0, v0, v3
+; SI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
+; SI-NEXT:    v_or_b32_e32 v0, v3, v0
 ; SI-NEXT:    v_or_b32_e32 v1, v1, v2
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;

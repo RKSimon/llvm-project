@@ -37,6 +37,14 @@ define i128 @sub128(i128 %a, i128 %b) nounwind {
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: sub128:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    retq
 entry:
   %0 = sub i128 %a, %b
   ret i128 %0
@@ -86,6 +94,19 @@ define i256 @sub256(i256 %a, i256 %b) nounwind {
 ; X86-NEXT:    movl %ecx, 28(%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: sub256:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %r9, %rsi
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rdx
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rcx
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %r8
+; AVX512-NEXT:    movq %rcx, 16(%rdi)
+; AVX512-NEXT:    movq %rdx, 8(%rdi)
+; AVX512-NEXT:    movq %rsi, (%rdi)
+; AVX512-NEXT:    movq %r8, 24(%rdi)
+; AVX512-NEXT:    retq
 entry:
   %0 = sub i256 %a, %b
   ret i256 %0
@@ -99,16 +120,21 @@ define %S @negate(ptr nocapture readonly %this) nounwind {
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    xorl %edx, %edx
-; X64-NEXT:    subq (%rsi), %rdx
-; X64-NEXT:    movl $0, %edi
-; X64-NEXT:    sbbq 8(%rsi), %rdi
-; X64-NEXT:    movl $0, %r8d
-; X64-NEXT:    sbbq 16(%rsi), %r8
-; X64-NEXT:    sbbq 24(%rsi), %rcx
-; X64-NEXT:    movq %rdx, (%rax)
+; X64-NEXT:    subq (%rsi), %rcx
+; X64-NEXT:    setae %dl
+; X64-NEXT:    movq 8(%rsi), %rdi
+; X64-NEXT:    movq 16(%rsi), %r8
+; X64-NEXT:    notq %rdi
+; X64-NEXT:    addq %rdx, %rdi
+; X64-NEXT:    notq %r8
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    movq 24(%rsi), %rdx
+; X64-NEXT:    notq %rdx
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    movq %rcx, (%rax)
 ; X64-NEXT:    movq %rdi, 8(%rax)
 ; X64-NEXT:    movq %r8, 16(%rax)
-; X64-NEXT:    movq %rcx, 24(%rax)
+; X64-NEXT:    movq %rdx, 24(%rax)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: negate:
@@ -118,45 +144,76 @@ define %S @negate(ptr nocapture readonly %this) nounwind {
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    subl $12, %esp
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl $0, (%esp) # 4-byte Folded Spill
-; X86-NEXT:    xorl %ecx, %ecx
-; X86-NEXT:    subl (%eax), %ecx
-; X86-NEXT:    movl %ecx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl $0, %ecx
-; X86-NEXT:    sbbl 4(%eax), %ecx
-; X86-NEXT:    movl %ecx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl $0, %edi
-; X86-NEXT:    sbbl 8(%eax), %edi
-; X86-NEXT:    movl $0, %ebx
-; X86-NEXT:    sbbl 12(%eax), %ebx
-; X86-NEXT:    movl $0, %ebp
-; X86-NEXT:    sbbl 16(%eax), %ebp
-; X86-NEXT:    movl $0, %edx
-; X86-NEXT:    sbbl 20(%eax), %edx
-; X86-NEXT:    movl $0, %ecx
-; X86-NEXT:    sbbl 24(%eax), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    xorl %eax, %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    subl (%ecx), %edx
+; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
+; X86-NEXT:    sbbl 4(%ecx), %eax
+; X86-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
+; X86-NEXT:    setae %al
+; X86-NEXT:    movzbl %al, %eax
+; X86-NEXT:    movl 8(%ecx), %edi
+; X86-NEXT:    movl 12(%ecx), %edx
+; X86-NEXT:    movl %edx, (%esp) # 4-byte Spill
+; X86-NEXT:    notl %edi
+; X86-NEXT:    addl %eax, %edi
+; X86-NEXT:    movl 16(%ecx), %ebp
+; X86-NEXT:    movl 20(%ecx), %ebx
+; X86-NEXT:    movl 24(%ecx), %eax
+; X86-NEXT:    movl 28(%ecx), %ecx
+; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    movl %edx, (%esi)
+; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
+; X86-NEXT:    movl %edx, 4(%esi)
+; X86-NEXT:    movl %esi, %edx
+; X86-NEXT:    movl %edi, 8(%esi)
 ; X86-NEXT:    movl (%esp), %esi # 4-byte Reload
-; X86-NEXT:    sbbl 28(%eax), %esi
-; X86-NEXT:    movl %esi, (%esp) # 4-byte Spill
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
-; X86-NEXT:    movl %esi, (%eax)
-; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
-; X86-NEXT:    movl %esi, 4(%eax)
-; X86-NEXT:    movl %edi, 8(%eax)
-; X86-NEXT:    movl %ebx, 12(%eax)
-; X86-NEXT:    movl %ebp, 16(%eax)
-; X86-NEXT:    movl %edx, 20(%eax)
-; X86-NEXT:    movl %ecx, 24(%eax)
-; X86-NEXT:    movl (%esp), %ecx # 4-byte Reload
-; X86-NEXT:    movl %ecx, 28(%eax)
+; X86-NEXT:    notl %esi
+; X86-NEXT:    adcl $0, %esi
+; X86-NEXT:    movl %esi, 12(%edx)
+; X86-NEXT:    notl %ebp
+; X86-NEXT:    adcl $0, %ebp
+; X86-NEXT:    movl %ebp, 16(%edx)
+; X86-NEXT:    notl %ebx
+; X86-NEXT:    adcl $0, %ebx
+; X86-NEXT:    movl %ebx, 20(%edx)
+; X86-NEXT:    notl %eax
+; X86-NEXT:    adcl $0, %eax
+; X86-NEXT:    movl %eax, 24(%edx)
+; X86-NEXT:    notl %ecx
+; X86-NEXT:    adcl $0, %ecx
+; X86-NEXT:    movl %ecx, 28(%edx)
+; X86-NEXT:    movl %edx, %eax
 ; X86-NEXT:    addl $12, %esp
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: negate:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    xorl %ecx, %ecx
+; AVX512-NEXT:    xorl %edx, %edx
+; AVX512-NEXT:    subq (%rsi), %rcx
+; AVX512-NEXT:    setae %dl
+; AVX512-NEXT:    movq 8(%rsi), %rdi
+; AVX512-NEXT:    movq 16(%rsi), %r8
+; AVX512-NEXT:    notq %rdi
+; AVX512-NEXT:    addq %rdx, %rdi
+; AVX512-NEXT:    notq %r8
+; AVX512-NEXT:    adcq $0, %r8
+; AVX512-NEXT:    movq 24(%rsi), %rdx
+; AVX512-NEXT:    notq %rdx
+; AVX512-NEXT:    adcq $0, %rdx
+; AVX512-NEXT:    movq %rcx, (%rax)
+; AVX512-NEXT:    movq %rdi, 8(%rax)
+; AVX512-NEXT:    movq %r8, 16(%rax)
+; AVX512-NEXT:    movq %rdx, 24(%rax)
+; AVX512-NEXT:    retq
 entry:
   %0 = load i64, ptr %this, align 8
   %1 = xor i64 %0, -1
@@ -197,13 +254,12 @@ define %S @sub(ptr nocapture readonly %this, %S %arg.b) nounwind {
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movq (%rsi), %rdi
-; X64-NEXT:    movq 8(%rsi), %r10
+; X64-NEXT:    xorl %r10d, %r10d
 ; X64-NEXT:    subq %rdx, %rdi
-; X64-NEXT:    setae %dl
-; X64-NEXT:    addb $-1, %dl
-; X64-NEXT:    adcq $0, %r10
+; X64-NEXT:    setae %r10b
+; X64-NEXT:    xorl %edx, %edx
+; X64-NEXT:    addq 8(%rsi), %r10
 ; X64-NEXT:    setb %dl
-; X64-NEXT:    movzbl %dl, %edx
 ; X64-NEXT:    notq %rcx
 ; X64-NEXT:    addq %r10, %rcx
 ; X64-NEXT:    adcq 16(%rsi), %rdx
@@ -304,6 +360,32 @@ define %S @sub(ptr nocapture readonly %this, %S %arg.b) nounwind {
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: sub:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    movq (%rsi), %rdi
+; AVX512-NEXT:    xorl %r10d, %r10d
+; AVX512-NEXT:    subq %rdx, %rdi
+; AVX512-NEXT:    setae %r10b
+; AVX512-NEXT:    xorl %edx, %edx
+; AVX512-NEXT:    addq 8(%rsi), %r10
+; AVX512-NEXT:    setb %dl
+; AVX512-NEXT:    notq %rcx
+; AVX512-NEXT:    addq %r10, %rcx
+; AVX512-NEXT:    adcq 16(%rsi), %rdx
+; AVX512-NEXT:    setb %r10b
+; AVX512-NEXT:    movzbl %r10b, %r10d
+; AVX512-NEXT:    notq %r8
+; AVX512-NEXT:    addq %rdx, %r8
+; AVX512-NEXT:    adcq 24(%rsi), %r10
+; AVX512-NEXT:    notq %r9
+; AVX512-NEXT:    addq %r10, %r9
+; AVX512-NEXT:    movq %rdi, (%rax)
+; AVX512-NEXT:    movq %rcx, 8(%rax)
+; AVX512-NEXT:    movq %r8, 16(%rax)
+; AVX512-NEXT:    movq %r9, 24(%rax)
+; AVX512-NEXT:    retq
 entry:
   %0 = extractvalue %S %arg.b, 0
   %.elt6 = extractvalue [4 x i64] %0, 1
@@ -382,6 +464,15 @@ define i64 @sub_from_carry(i64 %x, i64 %y, ptr %valout, i64 %z) nounwind {
 ; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: sub_from_carry:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rcx, %rax
+; AVX512-NEXT:    negq %rax
+; AVX512-NEXT:    addq %rsi, %rdi
+; AVX512-NEXT:    movq %rdi, (%rdx)
+; AVX512-NEXT:    adcq $0, %rax
+; AVX512-NEXT:    retq
   %agg = call {i64, i1} @llvm.uadd.with.overflow(i64 %x, i64 %y)
   %val = extractvalue {i64, i1} %agg, 0
   %ov = extractvalue {i64, i1} %agg, 1
@@ -430,6 +521,15 @@ define { i64, i64, i1 } @subcarry_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1) nounw
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: subcarry_2x64:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
   %k0 = extractvalue { i64, i1 } %t0, 1
@@ -489,6 +589,15 @@ define { i64, i64, i1 } @subcarry_2x64_or_reversed(i64 %x0, i64 %x1, i64 %y0, i6
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: subcarry_2x64_or_reversed:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
   %k0 = extractvalue { i64, i1 } %t0, 1
@@ -548,6 +657,15 @@ define { i64, i64, i1 } @subcarry_2x64_xor_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: subcarry_2x64_xor_reversed:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
   %k0 = extractvalue { i64, i1 } %t0, 1
@@ -607,6 +725,15 @@ define { i64, i64, i1 } @subcarry_2x64_and_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: subcarry_2x64_and_reversed:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    xorl %ecx, %ecx
+; AVX512-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
   %k0 = extractvalue { i64, i1 } %t0, 1
@@ -666,6 +793,15 @@ define { i64, i64, i1 } @subcarry_2x64_add_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: subcarry_2x64_add_reversed:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    movq %rsi, %rdx
+; AVX512-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
   %k0 = extractvalue { i64, i1 } %t0, 1
@@ -713,6 +849,14 @@ define { i64, i1 } @subcarry_fake_carry(i64 %a, i64 %b, i1 %carryin) nounwind {
 ; X86-NEXT:    orb %ch, %cl
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_fake_carry:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    btl $0, %edx
+; AVX512-NEXT:    sbbq %rsi, %rax
+; AVX512-NEXT:    setb %dl
+; AVX512-NEXT:    retq
     %t1 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %a, i64 %b)
     %partial = extractvalue { i64, i1 } %t1, 0
     %k1 = extractvalue { i64, i1 } %t1, 1
@@ -751,6 +895,16 @@ define { i64, i1 } @subcarry_carry_not_zext(i64 %a, i64 %b, i64 %carryin) nounwi
 ; X86-NEXT:    setb %cl
 ; X86-NEXT:    orb %ch, %cl
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_carry_not_zext:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rsi, %rax
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    setb %dl
+; AVX512-NEXT:    orb %cl, %dl
+; AVX512-NEXT:    retq
     %t1 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %a, i64 %b)
     %partial = extractvalue { i64, i1 } %t1, 0
     %k1 = extractvalue { i64, i1 } %t1, 1
@@ -792,6 +946,17 @@ define { i64, i1 } @subcarry_carry_not_i1(i64 %a, i64 %b, i8 %carryin) nounwind 
 ; X86-NEXT:    orb %bl, %cl
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_carry_not_i1:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    subq %rsi, %rax
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    movzbl %dl, %edx
+; AVX512-NEXT:    subq %rdx, %rax
+; AVX512-NEXT:    setb %dl
+; AVX512-NEXT:    orb %cl, %dl
+; AVX512-NEXT:    retq
     %t1 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %a, i64 %b)
     %partial = extractvalue { i64, i1 } %t1, 0
     %k1 = extractvalue { i64, i1 } %t1, 1
@@ -903,6 +1068,17 @@ define i32 @sub_U320_without_i128_or(ptr nocapture dereferenceable(40) %0, i64 %
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: sub_U320_without_i128_or:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    subq %rsi, (%rdi)
+; AVX512-NEXT:    sbbq %rdx, 8(%rdi)
+; AVX512-NEXT:    sbbq %rcx, 16(%rdi)
+; AVX512-NEXT:    sbbq %r8, 24(%rdi)
+; AVX512-NEXT:    sbbq %r9, 32(%rdi)
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    movzbl %al, %eax
+; AVX512-NEXT:    retq
   %7 = load i64, ptr %0, align 8
   %8 = getelementptr inbounds %struct.U320, ptr %0, i64 0, i32 0, i64 1
   %9 = load i64, ptr %8, align 8
@@ -1039,6 +1215,17 @@ define i32 @sub_U320_usubo(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2,
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: sub_U320_usubo:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    subq %rsi, (%rdi)
+; AVX512-NEXT:    sbbq %rdx, 8(%rdi)
+; AVX512-NEXT:    sbbq %rcx, 16(%rdi)
+; AVX512-NEXT:    sbbq %r8, 24(%rdi)
+; AVX512-NEXT:    sbbq %r9, 32(%rdi)
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    movzbl %al, %eax
+; AVX512-NEXT:    retq
   %7 = load i64, ptr %0, align 8
   %8 = getelementptr inbounds %struct.U320, ptr %0, i64 0, i32 0, i64 1
   %9 = load i64, ptr %8, align 8
@@ -1149,6 +1336,20 @@ define void @PR39464(ptr noalias nocapture sret(%struct.U192) %0, ptr nocapture 
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: PR39464:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    movq (%rsi), %rcx
+; AVX512-NEXT:    subq (%rdx), %rcx
+; AVX512-NEXT:    movq %rcx, (%rdi)
+; AVX512-NEXT:    movq 8(%rsi), %rcx
+; AVX512-NEXT:    sbbq 8(%rdx), %rcx
+; AVX512-NEXT:    movq %rcx, 8(%rdi)
+; AVX512-NEXT:    movq 16(%rsi), %rcx
+; AVX512-NEXT:    sbbq 16(%rdx), %rcx
+; AVX512-NEXT:    movq %rcx, 16(%rdi)
+; AVX512-NEXT:    retq
   %4 = load i64, ptr %1, align 8
   %5 = load i64, ptr %2, align 8
   %6 = tail call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %4, i64 %5)
@@ -1194,14 +1395,12 @@ define void @sub_U256_without_i128_or_recursive(ptr sret(%uint256) %0, ptr %1, p
 ; X64-NEXT:    movq 8(%rsi), %rdi
 ; X64-NEXT:    movq 16(%rsi), %r8
 ; X64-NEXT:    movq 24(%rsi), %rsi
-; X64-NEXT:    xorl %r9d, %r9d
 ; X64-NEXT:    subq 16(%rdx), %r8
-; X64-NEXT:    setb %r9b
-; X64-NEXT:    subq 24(%rdx), %rsi
+; X64-NEXT:    sbbq 24(%rdx), %rsi
 ; X64-NEXT:    subq (%rdx), %rcx
 ; X64-NEXT:    sbbq 8(%rdx), %rdi
 ; X64-NEXT:    sbbq $0, %r8
-; X64-NEXT:    sbbq %r9, %rsi
+; X64-NEXT:    sbbq $0, %rsi
 ; X64-NEXT:    movq %rcx, (%rax)
 ; X64-NEXT:    movq %rdi, 8(%rax)
 ; X64-NEXT:    movq %r8, 16(%rax)
@@ -1268,6 +1467,25 @@ define void @sub_U256_without_i128_or_recursive(ptr sret(%uint256) %0, ptr %1, p
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl $4
+;
+; AVX512-LABEL: sub_U256_without_i128_or_recursive:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq %rdi, %rax
+; AVX512-NEXT:    movq (%rsi), %rcx
+; AVX512-NEXT:    movq 8(%rsi), %rdi
+; AVX512-NEXT:    movq 16(%rsi), %r8
+; AVX512-NEXT:    movq 24(%rsi), %rsi
+; AVX512-NEXT:    subq 16(%rdx), %r8
+; AVX512-NEXT:    sbbq 24(%rdx), %rsi
+; AVX512-NEXT:    subq (%rdx), %rcx
+; AVX512-NEXT:    sbbq 8(%rdx), %rdi
+; AVX512-NEXT:    sbbq $0, %r8
+; AVX512-NEXT:    sbbq $0, %rsi
+; AVX512-NEXT:    movq %rcx, (%rax)
+; AVX512-NEXT:    movq %rdi, 8(%rax)
+; AVX512-NEXT:    movq %r8, 16(%rax)
+; AVX512-NEXT:    movq %rsi, 24(%rax)
+; AVX512-NEXT:    retq
   %4 = load i64, ptr %1, align 8
   %5 = getelementptr inbounds %uint256, ptr %1, i64 0, i32 0, i32 1
   %6 = load i64, ptr %5, align 8
@@ -1343,6 +1561,16 @@ define i1 @subcarry_ult_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1) nounwind {
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %ebx
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_ult_2x64:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    subq %rcx, %rsi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    cmpq %rdx, %rdi
+; AVX512-NEXT:    sbbq $0, %rsi
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    orb %cl, %al
+; AVX512-NEXT:    retq
   %b0 = icmp ult i64 %x0, %y0
   %d1 = sub i64 %x1, %y1
   %b10 = icmp ult i64 %x1, %y1
@@ -1379,6 +1607,13 @@ define i1 @subcarry_ult_2x64_2(i64 %x0, i64 %x1, i64 %y0, i64 %y1) nounwind {
 ; X86-NEXT:    setb %al
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_ult_2x64_2:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    cmpq %rdx, %rdi
+; AVX512-NEXT:    sbbq %rcx, %rsi
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    retq
 entry:
   %0 = icmp ult i64 %x0, %y0
   %1 = icmp ult i64 %x1, %y1
@@ -1414,6 +1649,15 @@ define i1 @subcarry_ult_2x64_1x64(i64 %x0, i64 %x1, i64 %y) nounwind {
 ; X86-NEXT:    sete %al
 ; X86-NEXT:    andb %cl, %al
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_ult_2x64_1x64:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    cmpq %rdx, %rdi
+; AVX512-NEXT:    setb %cl
+; AVX512-NEXT:    testq %rsi, %rsi
+; AVX512-NEXT:    sete %al
+; AVX512-NEXT:    andb %cl, %al
+; AVX512-NEXT:    retq
 entry:
   %0 = icmp ult i64 %x0, %y
   %1 = icmp eq i64 %x1, 0
@@ -1458,6 +1702,15 @@ define i1 @subcarry_ult_2x128(i128 %x0, i128 %x1, i128 %y0, i128 %y1) nounwind {
 ; X86-NEXT:    movl %ebp, %esp
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_ult_2x128:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    cmpq %r8, %rdi
+; AVX512-NEXT:    sbbq %r9, %rsi
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rdx
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rcx
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    retq
   %b0 = icmp ult i128 %x0, %y0
   %b1 = icmp ult i128 %x1, %y1
   %e1 = icmp eq i128 %x1, %y1
@@ -1466,59 +1719,74 @@ define i1 @subcarry_ult_2x128(i128 %x0, i128 %x1, i128 %y0, i128 %y1) nounwind {
   ret i1 %br
 }
 
-; i256 borrow chain — exercises the non-simple EVT path (i256->i128->i64/i32).
+; i256 borrow chain â€” exercises the non-simple EVT path (i256->i128->i64/i32).
 define i1 @subcarry_ult_2x256(i256 %x0, i256 %x1, i256 %y0, i256 %y1) nounwind {
 ; X64-LABEL: subcarry_ult_2x256:
 ; X64:       # %bb.0:
-; X64-NEXT:    movq 16(%rsp), %rax
-; X64-NEXT:    movq 8(%rsp), %r10
-; X64-NEXT:    cmpq 24(%rsp), %rdi
-; X64-NEXT:    sbbq 32(%rsp), %rsi
-; X64-NEXT:    sbbq 40(%rsp), %rdx
-; X64-NEXT:    sbbq 48(%rsp), %rcx
-; X64-NEXT:    sbbq 56(%rsp), %r8
-; X64-NEXT:    sbbq 64(%rsp), %r9
-; X64-NEXT:    sbbq 72(%rsp), %r10
-; X64-NEXT:    sbbq 80(%rsp), %rax
+; X64-NEXT:    movq {{[0-9]+}}(%rsp), %rax
+; X64-NEXT:    movq {{[0-9]+}}(%rsp), %r10
+; X64-NEXT:    cmpq {{[0-9]+}}(%rsp), %rdi
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %rsi
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %rdx
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %rcx
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %r8
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %r9
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %rax
+; X64-NEXT:    sbbq {{[0-9]+}}(%rsp), %r10
 ; X64-NEXT:    setb %al
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: subcarry_ult_2x256:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    cmpl 68(%esp), %eax
-; X86-NEXT:    movl 8(%esp), %eax
-; X86-NEXT:    sbbl 72(%esp), %eax
-; X86-NEXT:    movl 12(%esp), %eax
-; X86-NEXT:    sbbl 76(%esp), %eax
-; X86-NEXT:    movl 16(%esp), %eax
-; X86-NEXT:    sbbl 80(%esp), %eax
-; X86-NEXT:    movl 20(%esp), %eax
-; X86-NEXT:    sbbl 84(%esp), %eax
-; X86-NEXT:    movl 24(%esp), %eax
-; X86-NEXT:    sbbl 88(%esp), %eax
-; X86-NEXT:    movl 28(%esp), %eax
-; X86-NEXT:    sbbl 92(%esp), %eax
-; X86-NEXT:    movl 32(%esp), %eax
-; X86-NEXT:    sbbl 96(%esp), %eax
-; X86-NEXT:    movl 36(%esp), %eax
-; X86-NEXT:    sbbl 100(%esp), %eax
-; X86-NEXT:    movl 40(%esp), %eax
-; X86-NEXT:    sbbl 104(%esp), %eax
-; X86-NEXT:    movl 44(%esp), %eax
-; X86-NEXT:    sbbl 108(%esp), %eax
-; X86-NEXT:    movl 48(%esp), %eax
-; X86-NEXT:    sbbl 112(%esp), %eax
-; X86-NEXT:    movl 52(%esp), %eax
-; X86-NEXT:    sbbl 116(%esp), %eax
-; X86-NEXT:    movl 56(%esp), %eax
-; X86-NEXT:    sbbl 120(%esp), %eax
-; X86-NEXT:    movl 60(%esp), %eax
-; X86-NEXT:    sbbl 124(%esp), %eax
-; X86-NEXT:    movl 64(%esp), %eax
-; X86-NEXT:    sbbl 128(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    cmpl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    setb %al
 ; X86-NEXT:    retl
+;
+; AVX512-LABEL: subcarry_ult_2x256:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    movq {{[0-9]+}}(%rsp), %rax
+; AVX512-NEXT:    movq {{[0-9]+}}(%rsp), %r10
+; AVX512-NEXT:    cmpq {{[0-9]+}}(%rsp), %rdi
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rsi
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rdx
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rcx
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %r8
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %r9
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %rax
+; AVX512-NEXT:    sbbq {{[0-9]+}}(%rsp), %r10
+; AVX512-NEXT:    setb %al
+; AVX512-NEXT:    retq
   %b0 = icmp ult i256 %x0, %y0
   %b1 = icmp ult i256 %x1, %y1
   %e1 = icmp eq i256 %x1, %y1
@@ -1528,6 +1796,52 @@ define i1 @subcarry_ult_2x256(i256 %x0, i256 %x1, i256 %y0, i256 %y1) nounwind {
 }
 ; Negative test: vector types are not a borrow chain.
 define <4 x i1> @no_subcarry_vector(<4 x i32> %x0, <4 x i32> %x1, <4 x i32> %y0, <4 x i32> %y1) nounwind {
+; X64-LABEL: no_subcarry_vector:
+; X64:       # %bb.0:
+; X64-NEXT:    movdqa {{.*#+}} xmm4 = [2147483648,2147483648,2147483648,2147483648]
+; X64-NEXT:    pxor %xmm4, %xmm0
+; X64-NEXT:    pxor %xmm4, %xmm2
+; X64-NEXT:    pcmpgtd %xmm0, %xmm2
+; X64-NEXT:    movdqa %xmm1, %xmm0
+; X64-NEXT:    pxor %xmm4, %xmm0
+; X64-NEXT:    pxor %xmm3, %xmm4
+; X64-NEXT:    pcmpgtd %xmm0, %xmm4
+; X64-NEXT:    pcmpeqd %xmm3, %xmm1
+; X64-NEXT:    pand %xmm2, %xmm1
+; X64-NEXT:    por %xmm1, %xmm4
+; X64-NEXT:    movdqa %xmm4, %xmm0
+; X64-NEXT:    retq
+;
+; X86-LABEL: no_subcarry_vector:
+; X86:       # %bb.0:
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    cmpl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    setb %al
+; X86-NEXT:    addb %al, %al
+; X86-NEXT:    cmpl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    adcb $0, %al
+; X86-NEXT:    shlb $2, %al
+; X86-NEXT:    cmpl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    setb %dl
+; X86-NEXT:    addb %dl, %dl
+; X86-NEXT:    cmpl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    sbbl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    adcb %al, %dl
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    andb $15, %dl
+; X86-NEXT:    movb %dl, (%eax)
+; X86-NEXT:    retl $4
+;
 ; AVX512-LABEL: no_subcarry_vector:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vpcmpltud %xmm2, %xmm0, %k1
@@ -1537,36 +1851,6 @@ define <4 x i1> @no_subcarry_vector(<4 x i32> %x0, <4 x i32> %x1, <4 x i32> %y0,
 ; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
 ; AVX512-NEXT:    vmovdqa32 %xmm0, %xmm0 {%k1} {z}
 ; AVX512-NEXT:    retq
-;
-; X86-LABEL: no_subcarry_vector:
-; X86:       # %bb.0:
-; X86-NEXT:    movl 16(%esp), %ecx
-; X86-NEXT:    movl 20(%esp), %eax
-; X86-NEXT:    cmpl 52(%esp), %eax
-; X86-NEXT:    movl 36(%esp), %eax
-; X86-NEXT:    sbbl 68(%esp), %eax
-; X86-NEXT:    setb %al
-; X86-NEXT:    addb %al, %al
-; X86-NEXT:    cmpl 48(%esp), %ecx
-; X86-NEXT:    movl 32(%esp), %ecx
-; X86-NEXT:    sbbl 64(%esp), %ecx
-; X86-NEXT:    movl 12(%esp), %ecx
-; X86-NEXT:    adcb $0, %al
-; X86-NEXT:    shlb $2, %al
-; X86-NEXT:    cmpl 44(%esp), %ecx
-; X86-NEXT:    movl 28(%esp), %ecx
-; X86-NEXT:    sbbl 60(%esp), %ecx
-; X86-NEXT:    movl 8(%esp), %ecx
-; X86-NEXT:    setb %dl
-; X86-NEXT:    addb %dl, %dl
-; X86-NEXT:    cmpl 40(%esp), %ecx
-; X86-NEXT:    movl 24(%esp), %ecx
-; X86-NEXT:    sbbl 56(%esp), %ecx
-; X86-NEXT:    adcb %al, %dl
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    andb $15, %dl
-; X86-NEXT:    movb %dl, (%eax)
-; X86-NEXT:    retl $4
   %b0 = icmp ult <4 x i32> %x0, %y0
   %b1 = icmp ult <4 x i32> %x1, %y1
   %e1 = icmp eq <4 x i32> %x1, %y1

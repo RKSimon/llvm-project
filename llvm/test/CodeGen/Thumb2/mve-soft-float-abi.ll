@@ -551,10 +551,10 @@ define i32 @main(i64 %x, i64 %y) {
 ; CHECK-LE-NEXT:    vpush {d8, d9}
 ; CHECK-LE-NEXT:    .pad #8
 ; CHECK-LE-NEXT:    sub sp, #8
-; CHECK-LE-NEXT:    vmov.32 q4[2], r2
 ; CHECK-LE-NEXT:    mov r4, r1
+; CHECK-LE-NEXT:    vmov q4[2], q4[0], r0, r2
 ; CHECK-LE-NEXT:    mov r1, r0
-; CHECK-LE-NEXT:    vmov.32 q4[3], r3
+; CHECK-LE-NEXT:    vmov q4[3], q4[1], r4, r3
 ; CHECK-LE-NEXT:    movs r0, #0
 ; CHECK-LE-NEXT:    mov r2, r1
 ; CHECK-LE-NEXT:    mov r3, r4
@@ -578,10 +578,10 @@ define i32 @main(i64 %x, i64 %y) {
 ; CHECK-BE-NEXT:    vpush {d8, d9}
 ; CHECK-BE-NEXT:    .pad #8
 ; CHECK-BE-NEXT:    sub sp, #8
-; CHECK-BE-NEXT:    vmov.32 q0[2], r2
 ; CHECK-BE-NEXT:    mov r4, r1
+; CHECK-BE-NEXT:    vmov q0[2], q0[0], r0, r2
 ; CHECK-BE-NEXT:    mov r1, r0
-; CHECK-BE-NEXT:    vmov.32 q0[3], r3
+; CHECK-BE-NEXT:    vmov q0[3], q0[1], r4, r3
 ; CHECK-BE-NEXT:    vrev64.32 q4, q0
 ; CHECK-BE-NEXT:    movs r0, #0
 ; CHECK-BE-NEXT:    mov r2, r1

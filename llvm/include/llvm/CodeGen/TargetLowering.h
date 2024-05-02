@@ -4058,7 +4058,7 @@ public:
   // If set to true, SelectionDAG nodes will be consistently processed in
   // topological order. This is a temporary hook until sorting can be
   // enabled globally.
-  virtual bool useTopologicalSorting() const { return false; }
+  virtual bool useTopologicalSorting() const { return true; }
 
   virtual bool isSDNodeSourceOfDivergence(const SDNode *N,
                                           FunctionLoweringInfo *FLI,

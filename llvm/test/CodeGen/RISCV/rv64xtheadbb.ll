@@ -37,12 +37,15 @@ define signext i32 @ctlz_i32(i32 signext %a) nounwind {
 ; RV64I-NEXT:    srli a1, a0, 4
 ; RV64I-NEXT:    add a0, a0, a1
 ; RV64I-NEXT:    addi a1, a2, -241
-; RV64I-NEXT:    and a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 8
+; RV64I-NEXT:    and a1, a0, a1
+; RV64I-NEXT:    slli a0, a0, 8
+; RV64I-NEXT:    addi a2, a2, -256
+; RV64I-NEXT:    and a0, a0, a2
+; RV64I-NEXT:    add a0, a1, a0
+; RV64I-NEXT:    slli a1, a0, 48
+; RV64I-NEXT:    srli a1, a1, 32
 ; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 16
-; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    srliw a0, a0, 24
+; RV64I-NEXT:    srli a0, a0, 24
 ; RV64I-NEXT:    ret
 ; RV64I-NEXT:  .LBB0_2:
 ; RV64I-NEXT:    li a0, 32
@@ -94,12 +97,15 @@ define signext i32 @log2_i32(i32 signext %a) nounwind {
 ; RV64I-NEXT:    srli a1, a0, 4
 ; RV64I-NEXT:    add a0, a0, a1
 ; RV64I-NEXT:    addi a1, a2, -241
-; RV64I-NEXT:    and a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 8
+; RV64I-NEXT:    and a1, a0, a1
+; RV64I-NEXT:    slli a0, a0, 8
+; RV64I-NEXT:    addi a2, a2, -256
+; RV64I-NEXT:    and a0, a0, a2
+; RV64I-NEXT:    add a0, a1, a0
+; RV64I-NEXT:    slli a1, a0, 48
+; RV64I-NEXT:    srli a1, a1, 32
 ; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 16
-; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    srliw a0, a0, 24
+; RV64I-NEXT:    srli a0, a0, 24
 ; RV64I-NEXT:    j .LBB1_3
 ; RV64I-NEXT:  .LBB1_2:
 ; RV64I-NEXT:    li a0, 32
@@ -161,12 +167,15 @@ define signext i32 @log2_ceil_i32(i32 signext %a) nounwind {
 ; RV64I-NEXT:    srli a2, a1, 4
 ; RV64I-NEXT:    add a1, a1, a2
 ; RV64I-NEXT:    addi a2, a3, -241
-; RV64I-NEXT:    and a1, a1, a2
-; RV64I-NEXT:    slli a2, a1, 8
+; RV64I-NEXT:    and a2, a1, a2
+; RV64I-NEXT:    slli a1, a1, 8
+; RV64I-NEXT:    addi a3, a3, -256
+; RV64I-NEXT:    and a1, a1, a3
+; RV64I-NEXT:    add a1, a2, a1
+; RV64I-NEXT:    slli a2, a1, 48
+; RV64I-NEXT:    srli a2, a2, 32
 ; RV64I-NEXT:    add a1, a1, a2
-; RV64I-NEXT:    slli a2, a1, 16
-; RV64I-NEXT:    add a1, a1, a2
-; RV64I-NEXT:    srliw a2, a1, 24
+; RV64I-NEXT:    srli a2, a1, 24
 ; RV64I-NEXT:  .LBB2_2: # %cond.end
 ; RV64I-NEXT:    sub a0, a0, a2
 ; RV64I-NEXT:    ret
@@ -219,16 +228,19 @@ define signext i32 @findLastSet_i32(i32 signext %a) nounwind {
 ; RV64I-NEXT:    and a1, a1, a3
 ; RV64I-NEXT:    lui a3, 61681
 ; RV64I-NEXT:    snez a0, a0
-; RV64I-NEXT:    addi a3, a3, -241
 ; RV64I-NEXT:    add a1, a2, a1
 ; RV64I-NEXT:    srli a2, a1, 4
 ; RV64I-NEXT:    add a1, a1, a2
+; RV64I-NEXT:    addi a2, a3, -241
+; RV64I-NEXT:    addi a3, a3, -256
+; RV64I-NEXT:    and a2, a1, a2
+; RV64I-NEXT:    slli a1, a1, 8
 ; RV64I-NEXT:    and a1, a1, a3
-; RV64I-NEXT:    slli a2, a1, 8
+; RV64I-NEXT:    add a1, a2, a1
+; RV64I-NEXT:    slli a2, a1, 48
+; RV64I-NEXT:    srli a2, a2, 32
 ; RV64I-NEXT:    add a1, a1, a2
-; RV64I-NEXT:    slli a2, a1, 16
-; RV64I-NEXT:    add a1, a1, a2
-; RV64I-NEXT:    srliw a1, a1, 24
+; RV64I-NEXT:    srli a1, a1, 24
 ; RV64I-NEXT:    xori a1, a1, 31
 ; RV64I-NEXT:    addi a0, a0, -1
 ; RV64I-NEXT:    or a0, a0, a1
@@ -291,12 +303,15 @@ define i32 @ctlz_lshr_i32(i32 signext %a) {
 ; RV64I-NEXT:    srli a1, a0, 4
 ; RV64I-NEXT:    add a0, a0, a1
 ; RV64I-NEXT:    addi a1, a2, -241
-; RV64I-NEXT:    and a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 8
+; RV64I-NEXT:    and a1, a0, a1
+; RV64I-NEXT:    slli a0, a0, 8
+; RV64I-NEXT:    addi a2, a2, -256
+; RV64I-NEXT:    and a0, a0, a2
+; RV64I-NEXT:    add a0, a1, a0
+; RV64I-NEXT:    slli a1, a0, 48
+; RV64I-NEXT:    srli a1, a1, 32
 ; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 16
-; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    srliw a0, a0, 24
+; RV64I-NEXT:    srli a0, a0, 24
 ; RV64I-NEXT:    ret
 ; RV64I-NEXT:  .LBB4_2:
 ; RV64I-NEXT:    li a0, 32

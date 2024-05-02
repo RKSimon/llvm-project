@@ -347,10 +347,16 @@ define void @reg17_unaligned(ptr %Dst, i8 %val) {
 define void @reg18(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg18:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    mhi %r0, 257
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    sth %r0, 16(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
-; CHECK-NEXT:    vsteh %v0, 16(%r2), 0
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 18, i1 false)
   ret void
@@ -359,10 +365,16 @@ define void @reg18(ptr %Dst, i8 %val) {
 define void @reg18_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg18_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    mhi %r0, 257
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    sth %r0, 16(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2)
-; CHECK-NEXT:    vsteh %v0, 16(%r2), 0
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 18, i1 false)
   ret void
@@ -371,9 +383,15 @@ define void @reg18_unaligned(ptr %Dst, i8 %val) {
 define void @reg19(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg19:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vstef %v0, 15(%r2), 0
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    st %r0, 15(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 19, i1 false)
@@ -383,9 +401,15 @@ define void @reg19(ptr %Dst, i8 %val) {
 define void @reg19_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg19_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vstef %v0, 15(%r2), 0
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    st %r0, 15(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 19, i1 false)
@@ -395,9 +419,15 @@ define void @reg19_unaligned(ptr %Dst, i8 %val) {
 define void @reg20(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg20:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vstef %v0, 16(%r2), 0
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    st %r0, 16(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 20, i1 false)
@@ -407,9 +437,15 @@ define void @reg20(ptr %Dst, i8 %val) {
 define void @reg20_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg20_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vstef %v0, 16(%r2), 0
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llcr %r0, %r3
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    st %r0, 16(%r2)
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 20, i1 false)
@@ -421,9 +457,15 @@ define void @reg20_localDst(i8 %val) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    aghi %r15, -184
 ; CHECK-NEXT:    .cfi_def_cfa_offset 344
-; CHECK-NEXT:    vlvgp %v0, %r2, %r2
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vstef %v0, 180(%r15), 0
+; CHECK-NEXT:    # kill: def $r2l killed $r2l def $r2d
+; CHECK-NEXT:    llcr %r0, %r2
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    st %r0, 180(%r15)
+; CHECK-NEXT:    llgcr %r0, %r2
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 164(%r15), 4
 ; CHECK-NEXT:    aghi %r15, 184
 ; CHECK-NEXT:    br %r14
@@ -435,9 +477,13 @@ define void @reg20_localDst(i8 %val) {
 define void @reg21(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg21:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 13(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 13(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 21, i1 false)
@@ -447,9 +493,13 @@ define void @reg21(ptr %Dst, i8 %val) {
 define void @reg21_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg21_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 13(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 13(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 21, i1 false)
@@ -459,9 +509,13 @@ define void @reg21_unaligned(ptr %Dst, i8 %val) {
 define void @reg22(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg22:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 14(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 14(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 22, i1 false)
@@ -471,9 +525,13 @@ define void @reg22(ptr %Dst, i8 %val) {
 define void @reg22_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg22_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 14(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 14(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 22, i1 false)
@@ -483,9 +541,13 @@ define void @reg22_unaligned(ptr %Dst, i8 %val) {
 define void @reg23(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg23:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 15(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 15(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 23, i1 false)
@@ -495,9 +557,13 @@ define void @reg23(ptr %Dst, i8 %val) {
 define void @reg23_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg23_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 15(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 15(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 23, i1 false)
@@ -507,9 +573,13 @@ define void @reg23_unaligned(ptr %Dst, i8 %val) {
 define void @reg24(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg24:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 16(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 16(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 8 %Dst, i8 %val, i64 24, i1 false)
@@ -519,9 +589,13 @@ define void @reg24(ptr %Dst, i8 %val) {
 define void @reg24_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg24_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 16(%r2), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 16(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   call void @llvm.memset.p0.i64(ptr align 1 %Dst, i8 %val, i64 24, i1 false)
@@ -531,8 +605,12 @@ define void @reg24_unaligned(ptr %Dst, i8 %val) {
 define void @reg25(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg25:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 9(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -543,8 +621,12 @@ define void @reg25(ptr %Dst, i8 %val) {
 define void @reg25_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg25_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 9(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -555,8 +637,12 @@ define void @reg25_unaligned(ptr %Dst, i8 %val) {
 define void @reg26(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg26:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 10(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -567,8 +653,12 @@ define void @reg26(ptr %Dst, i8 %val) {
 define void @reg26_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg26_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 10(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -579,8 +669,12 @@ define void @reg26_unaligned(ptr %Dst, i8 %val) {
 define void @reg27(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg27:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 11(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -591,8 +685,12 @@ define void @reg27(ptr %Dst, i8 %val) {
 define void @reg27_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg27_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 11(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -603,8 +701,12 @@ define void @reg27_unaligned(ptr %Dst, i8 %val) {
 define void @reg28(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg28:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 12(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -615,8 +717,12 @@ define void @reg28(ptr %Dst, i8 %val) {
 define void @reg28_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg28_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 12(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -627,8 +733,12 @@ define void @reg28_unaligned(ptr %Dst, i8 %val) {
 define void @reg29(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg29:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 13(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -639,8 +749,12 @@ define void @reg29(ptr %Dst, i8 %val) {
 define void @reg29_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg29_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 13(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -651,8 +765,12 @@ define void @reg29_unaligned(ptr %Dst, i8 %val) {
 define void @reg30(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg30:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 14(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -663,8 +781,12 @@ define void @reg30(ptr %Dst, i8 %val) {
 define void @reg30_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg30_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 14(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -675,8 +797,12 @@ define void @reg30_unaligned(ptr %Dst, i8 %val) {
 define void @reg31(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg31:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 15(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -687,8 +813,12 @@ define void @reg31(ptr %Dst, i8 %val) {
 define void @reg31_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg31_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 15(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14
@@ -699,8 +829,12 @@ define void @reg31_unaligned(ptr %Dst, i8 %val) {
 define void @reg32(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 16(%r2), 3
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
@@ -711,8 +845,12 @@ define void @reg32(ptr %Dst, i8 %val) {
 define void @reg32_unaligned(ptr %Dst, i8 %val) {
 ; CHECK-LABEL: reg32_unaligned:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r3, %r3
-; CHECK-NEXT:    vrepb %v0, %v0, 7
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r3l killed $r3l def $r3d
+; CHECK-NEXT:    llgcr %r0, %r3
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 16(%r2)
 ; CHECK-NEXT:    vst %v0, 0(%r2)
 ; CHECK-NEXT:    br %r14

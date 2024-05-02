@@ -4,9 +4,11 @@
 define i1 @and_cmp1(i32 %x, i32 %y) {
 ; CHECK-LABEL: and_cmp1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    andc 3, 4, 3
-; CHECK-NEXT:    cntlzw 3, 3
-; CHECK-NEXT:    rlwinm 3, 3, 27, 31, 31
+; CHECK-NEXT:    and 3, 3, 4
+; CHECK-NEXT:    cmpw 3, 4
+; CHECK-NEXT:    li 3, 0
+; CHECK-NEXT:    li 4, 1
+; CHECK-NEXT:    iseleq 3, 4, 3
 ; CHECK-NEXT:    blr
   %and = and i32 %x, %y
   %cmp = icmp eq i32 %and, %y

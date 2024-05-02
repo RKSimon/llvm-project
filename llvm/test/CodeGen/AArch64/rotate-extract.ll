@@ -24,8 +24,8 @@ define i64 @ror_extract_shl(i64 %i) nounwind {
 define i32 @ror_extract_shrl(i32 %i) nounwind {
 ; CHECK-LABEL: ror_extract_shrl:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    lsr w8, w0, #3
-; CHECK-NEXT:    ror w0, w8, #4
+; CHECK-NEXT:    ror w8, w0, #7
+; CHECK-NEXT:    and w0, w8, #0xf1ffffff
 ; CHECK-NEXT:    ret
   %lhs_div = lshr i32 %i, 7
   %rhs_div = lshr i32 %i, 3
@@ -53,8 +53,8 @@ define i64 @ror_extract_udiv(i64 %i) nounwind {
 ; CHECK-NEXT:    mov x8, #-6148914691236517206 // =0xaaaaaaaaaaaaaaaa
 ; CHECK-NEXT:    movk x8, #43691
 ; CHECK-NEXT:    umulh x8, x0, x8
-; CHECK-NEXT:    lsr x8, x8, #1
-; CHECK-NEXT:    ror x0, x8, #4
+; CHECK-NEXT:    ror x8, x8, #5
+; CHECK-NEXT:    and x0, x8, #0xf7ffffffffffffff
 ; CHECK-NEXT:    ret
   %lhs_div = udiv i64 %i, 3
   %rhs_div = udiv i64 %i, 48
@@ -67,7 +67,7 @@ define i64 @ror_extract_mul_with_mask(i64 %i) nounwind {
 ; CHECK-LABEL: ror_extract_mul_with_mask:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    add x8, x0, x0, lsl #3
-; CHECK-NEXT:    ror x8, x8, #57
+; CHECK-NEXT:    extr x8, x0, x8, #57
 ; CHECK-NEXT:    and x0, x8, #0xff
 ; CHECK-NEXT:    ret
   %lhs_mul = mul i64 %i, 1152
@@ -134,8 +134,8 @@ define i32 @no_extract_udiv(i32 %i) nounwind {
 ; CHECK-NEXT:    umull x8, w0, w8
 ; CHECK-NEXT:    umull x9, w0, w9
 ; CHECK-NEXT:    lsr x8, x8, #33
-; CHECK-NEXT:    lsr x9, x9, #32
-; CHECK-NEXT:    extr w0, w8, w9, #4
+; CHECK-NEXT:    lsr x9, x9, #36
+; CHECK-NEXT:    orr w0, w9, w8, lsl #28
 ; CHECK-NEXT:    ret
   %lhs_div = udiv i32 %i, 3
   %rhs_div = udiv i32 %i, 49

@@ -1250,9 +1250,9 @@ define <2 x half> @no_fmax3_v2f16(<2 x half> %a, <2 x half> %b, <2 x half> %c, <
 ; GFX1250:       ; %bb.0: ; %entry
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_pk_max_num_f16 v0, v0, v1
+; GFX1250-NEXT:    v_pk_max3_num_f16 v0, v2, v0, v1
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_pk_max3_num_f16 v0, v2, v0, v3
+; GFX1250-NEXT:    v_pk_max_num_f16 v0, v0, v3
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
 entry:
   %max = call nnan <2 x half> @llvm.maxnum.v2f16(<2 x half> %a, <2 x half> %b)

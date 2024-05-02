@@ -512,7 +512,7 @@ define amdgpu_kernel void @v_ctlz_i8(ptr addrspace(1) noalias %out, ptr addrspac
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_ffbh_u32_e32 v0, v0
 ; VI-NEXT:    v_min_u32_e32 v0, 32, v0
-; VI-NEXT:    v_subrev_u32_e32 v0, vcc, 24, v0
+; VI-NEXT:    v_add_u32_e32 v0, vcc, 0xffe8, v0
 ; VI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; VI-NEXT:    s_endpgm
 ;
@@ -555,7 +555,7 @@ define amdgpu_kernel void @v_ctlz_i8(ptr addrspace(1) noalias %out, ptr addrspac
 ; GFX10-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-NEXT:    v_ffbh_u32_e32 v1, v1
 ; GFX10-NEXT:    v_min_u32_e32 v1, 32, v1
-; GFX10-NEXT:    v_subrev_nc_u32_e32 v1, 24, v1
+; GFX10-NEXT:    v_add_nc_u32_e32 v1, 0xffe8, v1
 ; GFX10-NEXT:    global_store_byte v0, v1, s[0:1]
 ; GFX10-NEXT:    s_endpgm
 ;
@@ -584,7 +584,7 @@ define amdgpu_kernel void @v_ctlz_i8(ptr addrspace(1) noalias %out, ptr addrspac
 ; GFX11-NEXT:    v_clz_i32_u32_e32 v1, v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_min_u32_e32 v1, 32, v1
-; GFX11-NEXT:    v_subrev_nc_u32_e32 v1, 24, v1
+; GFX11-NEXT:    v_add_nc_u32_e32 v1, 0xffe8, v1
 ; GFX11-NEXT:    global_store_b8 v0, v1, s[0:1]
 ; GFX11-NEXT:    s_endpgm
   %val = load i8, ptr addrspace(1) %valptr
@@ -1693,7 +1693,7 @@ define amdgpu_kernel void @v_ctlz_i64_sel_ne_bitwidth(ptr addrspace(1) noalias %
 ; EG:       ; %bb.0:
 ; EG-NEXT:    ALU 2, @8, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    TEX 0 @6
-; EG-NEXT:    ALU 12, @11, KC0[CB0:0-32], KC1[]
+; EG-NEXT:    ALU 13, @11, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T0.XY, T1.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    PAD
@@ -1711,12 +1711,13 @@ define amdgpu_kernel void @v_ctlz_i64_sel_ne_bitwidth(ptr addrspace(1) noalias %
 ; EG-NEXT:     ADD_INT * T0.W, PV.W, literal.x,
 ; EG-NEXT:    32(4.484155e-44), 0(0.000000e+00)
 ; EG-NEXT:     CNDE_INT * T0.W, T0.Y, PS, PV.W,
-; EG-NEXT:     XOR_INT * T1.W, PV.W, literal.x,
+; EG-NEXT:     SETNE_INT * T1.W, PV.W, literal.x,
 ; EG-NEXT:    64(8.968310e-44), 0(0.000000e+00)
 ; EG-NEXT:     CNDE_INT T0.X, PV.W, literal.x, T0.W,
 ; EG-NEXT:     LSHR * T1.X, KC0[2].Y, literal.y,
 ; EG-NEXT:    -1(nan), 2(2.802597e-45)
-; EG-NEXT:     SETE_INT * T0.Y, T1.W, 0.0,
+; EG-NEXT:     SETE_INT * T0.Y, T0.W, literal.x,
+; EG-NEXT:    64(8.968310e-44), 0(0.000000e+00)
 ;
 ; GFX10-LABEL: v_ctlz_i64_sel_ne_bitwidth:
 ; GFX10:       ; %bb.0:

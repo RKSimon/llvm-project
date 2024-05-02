@@ -37,19 +37,23 @@ define i64 @f123(i64 inreg %bufptr.coerce0, i64 inreg %bufptr.coerce1) local_unn
 ; MIPS64R2-NEXT:    daddiu $sp, $sp, -16
 ; MIPS64R2-NEXT:    .cfi_def_cfa_offset 16
 ; MIPS64R2-NEXT:    sd $4, 8($sp)
-; MIPS64R2-NEXT:    sd $5, 0($sp)
 ; MIPS64R2-NEXT:    daddiu $1, $zero, 123
+; MIPS64R2-NEXT:    sd $5, 0($sp)
+; MIPS64R2-NEXT:    dsll $1, $1, 27
 ; MIPS64R2-NEXT:    ld $2, 8($sp)
-; MIPS64R2-NEXT:    dinsm $2, $1, 27, 37
-; MIPS64R2-NEXT:    sd $2, 8($sp)
-; MIPS64R2-NEXT:    daddiu $1, $zero, 4
-; MIPS64R2-NEXT:    ld $2, 0($sp)
-; MIPS64R2-NEXT:    dinsm $2, $1, 28, 6
+; MIPS64R2-NEXT:    dext $2, $2, 0, 27
+; MIPS64R2-NEXT:    or $1, $2, $1
+; MIPS64R2-NEXT:    sd $1, 8($sp)
 ; MIPS64R2-NEXT:    daddiu $1, $zero, 5
-; MIPS64R2-NEXT:    sd $2, 0($sp)
+; MIPS64R2-NEXT:    daddiu $2, $zero, 4
+; MIPS64R2-NEXT:    ld $3, 0($sp)
+; MIPS64R2-NEXT:    dinsm $3, $2, 28, 6
+; MIPS64R2-NEXT:    dsll $1, $1, 50
+; MIPS64R2-NEXT:    sd $3, 0($sp)
 ; MIPS64R2-NEXT:    ld $2, 0($sp)
-; MIPS64R2-NEXT:    dinsu $2, $1, 50, 14
-; MIPS64R2-NEXT:    sd $2, 0($sp)
+; MIPS64R2-NEXT:    dextm $2, $2, 0, 50
+; MIPS64R2-NEXT:    or $1, $2, $1
+; MIPS64R2-NEXT:    sd $1, 0($sp)
 ; MIPS64R2-NEXT:    ld $1, 0($sp)
 ; MIPS64R2-NEXT:    dsrl $1, $1, 50
 ; MIPS64R2-NEXT:    ld $2, 0($sp)
@@ -181,19 +185,23 @@ define i64 @f123(i64 inreg %bufptr.coerce0, i64 inreg %bufptr.coerce1) local_unn
 ; MIPS64R2N32-NEXT:    addiu $sp, $sp, -16
 ; MIPS64R2N32-NEXT:    .cfi_def_cfa_offset 16
 ; MIPS64R2N32-NEXT:    sd $4, 8($sp)
-; MIPS64R2N32-NEXT:    sd $5, 0($sp)
 ; MIPS64R2N32-NEXT:    daddiu $1, $zero, 123
+; MIPS64R2N32-NEXT:    sd $5, 0($sp)
+; MIPS64R2N32-NEXT:    dsll $1, $1, 27
 ; MIPS64R2N32-NEXT:    ld $2, 8($sp)
-; MIPS64R2N32-NEXT:    dinsm $2, $1, 27, 37
-; MIPS64R2N32-NEXT:    sd $2, 8($sp)
-; MIPS64R2N32-NEXT:    daddiu $1, $zero, 4
-; MIPS64R2N32-NEXT:    ld $2, 0($sp)
-; MIPS64R2N32-NEXT:    dinsm $2, $1, 28, 6
+; MIPS64R2N32-NEXT:    dext $2, $2, 0, 27
+; MIPS64R2N32-NEXT:    or $1, $2, $1
+; MIPS64R2N32-NEXT:    sd $1, 8($sp)
 ; MIPS64R2N32-NEXT:    daddiu $1, $zero, 5
-; MIPS64R2N32-NEXT:    sd $2, 0($sp)
+; MIPS64R2N32-NEXT:    daddiu $2, $zero, 4
+; MIPS64R2N32-NEXT:    ld $3, 0($sp)
+; MIPS64R2N32-NEXT:    dinsm $3, $2, 28, 6
+; MIPS64R2N32-NEXT:    dsll $1, $1, 50
+; MIPS64R2N32-NEXT:    sd $3, 0($sp)
 ; MIPS64R2N32-NEXT:    ld $2, 0($sp)
-; MIPS64R2N32-NEXT:    dinsu $2, $1, 50, 14
-; MIPS64R2N32-NEXT:    sd $2, 0($sp)
+; MIPS64R2N32-NEXT:    dextm $2, $2, 0, 50
+; MIPS64R2N32-NEXT:    or $1, $2, $1
+; MIPS64R2N32-NEXT:    sd $1, 0($sp)
 ; MIPS64R2N32-NEXT:    ld $1, 0($sp)
 ; MIPS64R2N32-NEXT:    dsrl $1, $1, 50
 ; MIPS64R2N32-NEXT:    ld $2, 0($sp)

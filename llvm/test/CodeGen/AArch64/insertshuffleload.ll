@@ -30,8 +30,11 @@ define <8 x i8> @inserti8_last(ptr %p) {
 define <8 x i16> @inserti8_first_sext(ptr %p) {
 ; CHECK-LABEL: inserti8_first_sext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldr d0, [x0]
+; CHECK-NEXT:    ldur d0, [x0, #1]
+; CHECK-NEXT:    ldrsb w8, [x0]
 ; CHECK-NEXT:    sshll v0.8h, v0.8b, #0
+; CHECK-NEXT:    ext v0.16b, v0.16b, v0.16b, #14
+; CHECK-NEXT:    mov v0.h[0], w8
 ; CHECK-NEXT:    ret
   %q = getelementptr inbounds i8, ptr %p, i32 1
   %l1 = load <8 x i8>, ptr %q
@@ -46,8 +49,11 @@ define <8 x i16> @inserti8_first_sext(ptr %p) {
 define <8 x i16> @inserti8_last_sext(ptr %p) {
 ; CHECK-LABEL: inserti8_last_sext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldur d0, [x0, #1]
+; CHECK-NEXT:    ldr d0, [x0]
+; CHECK-NEXT:    ldrsb w8, [x0, #8]
 ; CHECK-NEXT:    sshll v0.8h, v0.8b, #0
+; CHECK-NEXT:    ext v0.16b, v0.16b, v0.16b, #2
+; CHECK-NEXT:    mov v0.h[7], w8
 ; CHECK-NEXT:    ret
   %q = getelementptr inbounds i8, ptr %p, i32 8
   %l1 = load <8 x i8>, ptr %p
@@ -62,8 +68,11 @@ define <8 x i16> @inserti8_last_sext(ptr %p) {
 define <8 x i16> @inserti8_first_zext(ptr %p) {
 ; CHECK-LABEL: inserti8_first_zext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldr d0, [x0]
+; CHECK-NEXT:    ldur d0, [x0, #1]
+; CHECK-NEXT:    ldrb w8, [x0]
 ; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
+; CHECK-NEXT:    ext v0.16b, v0.16b, v0.16b, #14
+; CHECK-NEXT:    mov v0.h[0], w8
 ; CHECK-NEXT:    ret
   %q = getelementptr inbounds i8, ptr %p, i32 1
   %l1 = load <8 x i8>, ptr %q
@@ -78,8 +87,11 @@ define <8 x i16> @inserti8_first_zext(ptr %p) {
 define <8 x i16> @inserti8_last_zext(ptr %p) {
 ; CHECK-LABEL: inserti8_last_zext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldur d0, [x0, #1]
+; CHECK-NEXT:    ldr d0, [x0]
+; CHECK-NEXT:    ldrb w8, [x0, #8]
 ; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
+; CHECK-NEXT:    ext v0.16b, v0.16b, v0.16b, #2
+; CHECK-NEXT:    mov v0.h[7], w8
 ; CHECK-NEXT:    ret
   %q = getelementptr inbounds i8, ptr %p, i32 8
   %l1 = load <8 x i8>, ptr %p

@@ -37,7 +37,7 @@ define i32 @ctls_i32_known_positive(i32 %x) {
 ; GFX6:       ; %bb.0:
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX6-NEXT:    v_and_b32_e32 v0, 0x7fffffff, v0
-; GFX6-NEXT:    v_ffbh_i32_e32 v0, v0
+; GFX6-NEXT:    v_ffbh_u32_e32 v0, v0
 ; GFX6-NEXT:    v_min_u32_e32 v0, 32, v0
 ; GFX6-NEXT:    v_add_i32_e32 v0, vcc, -1, v0
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -47,7 +47,7 @@ define i32 @ctls_i32_known_positive(i32 %x) {
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_and_b32_e32 v0, 0x7fffffff, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_cls_i32_e32 v0, v0
+; GFX11-NEXT:    v_clz_i32_u32_e32 v0, v0
 ; GFX11-NEXT:    v_min_u32_e32 v0, 32, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v0, -1, v0
@@ -116,7 +116,7 @@ define i32 @ctls_i32_known_mixed_bits(i32 %x) {
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX6-NEXT:    v_or_b32_e32 v0, 1, v0
 ; GFX6-NEXT:    v_and_b32_e32 v0, 0x7fffffff, v0
-; GFX6-NEXT:    v_ffbh_i32_e32 v0, v0
+; GFX6-NEXT:    v_ffbh_u32_e32 v0, v0
 ; GFX6-NEXT:    v_add_i32_e32 v0, vcc, -1, v0
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -126,7 +126,7 @@ define i32 @ctls_i32_known_mixed_bits(i32 %x) {
 ; GFX11-NEXT:    v_or_b32_e32 v0, 1, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_and_b32_e32 v0, 0x7fffffff, v0
-; GFX11-NEXT:    v_cls_i32_e32 v0, v0
+; GFX11-NEXT:    v_clz_i32_u32_e32 v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v0, -1, v0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]

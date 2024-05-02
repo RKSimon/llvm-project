@@ -826,45 +826,25 @@ entry:
 }
 
 define void @aligned_memmove7_volatile(ptr nocapture %dest, ptr %src) nounwind {
-; RV32-LABEL: aligned_memmove7_volatile:
-; RV32:       # %bb.0: # %entry
-; RV32-NEXT:    lw a2, 0(a1)
-; RV32-NEXT:    lh a3, 4(a1)
-; RV32-NEXT:    lbu a1, 6(a1)
-; RV32-NEXT:    sb a1, 6(a0)
-; RV32-NEXT:    sh a3, 4(a0)
-; RV32-NEXT:    sw a2, 0(a0)
-; RV32-NEXT:    ret
+; RV32-BOTH-LABEL: aligned_memmove7_volatile:
+; RV32-BOTH:       # %bb.0: # %entry
+; RV32-BOTH-NEXT:    lw a2, 0(a1)
+; RV32-BOTH-NEXT:    lh a3, 4(a1)
+; RV32-BOTH-NEXT:    lbu a1, 6(a1)
+; RV32-BOTH-NEXT:    sb a1, 6(a0)
+; RV32-BOTH-NEXT:    sh a3, 4(a0)
+; RV32-BOTH-NEXT:    sw a2, 0(a0)
+; RV32-BOTH-NEXT:    ret
 ;
-; RV64-LABEL: aligned_memmove7_volatile:
-; RV64:       # %bb.0: # %entry
-; RV64-NEXT:    lw a2, 0(a1)
-; RV64-NEXT:    lh a3, 4(a1)
-; RV64-NEXT:    lbu a1, 6(a1)
-; RV64-NEXT:    sb a1, 6(a0)
-; RV64-NEXT:    sh a3, 4(a0)
-; RV64-NEXT:    sw a2, 0(a0)
-; RV64-NEXT:    ret
-;
-; RV32-FAST-LABEL: aligned_memmove7_volatile:
-; RV32-FAST:       # %bb.0: # %entry
-; RV32-FAST-NEXT:    lw a2, 0(a1)
-; RV32-FAST-NEXT:    lh a3, 4(a1)
-; RV32-FAST-NEXT:    lbu a1, 6(a1)
-; RV32-FAST-NEXT:    sb a1, 6(a0)
-; RV32-FAST-NEXT:    sh a3, 4(a0)
-; RV32-FAST-NEXT:    sw a2, 0(a0)
-; RV32-FAST-NEXT:    ret
-;
-; RV64-FAST-LABEL: aligned_memmove7_volatile:
-; RV64-FAST:       # %bb.0: # %entry
-; RV64-FAST-NEXT:    lw a2, 0(a1)
-; RV64-FAST-NEXT:    lh a3, 4(a1)
-; RV64-FAST-NEXT:    lbu a1, 6(a1)
-; RV64-FAST-NEXT:    sb a1, 6(a0)
-; RV64-FAST-NEXT:    sh a3, 4(a0)
-; RV64-FAST-NEXT:    sw a2, 0(a0)
-; RV64-FAST-NEXT:    ret
+; RV64-BOTH-LABEL: aligned_memmove7_volatile:
+; RV64-BOTH:       # %bb.0: # %entry
+; RV64-BOTH-NEXT:    lw a2, 0(a1)
+; RV64-BOTH-NEXT:    lh a3, 4(a1)
+; RV64-BOTH-NEXT:    lbu a1, 6(a1)
+; RV64-BOTH-NEXT:    sb a1, 6(a0)
+; RV64-BOTH-NEXT:    sh a3, 4(a0)
+; RV64-BOTH-NEXT:    sw a2, 0(a0)
+; RV64-BOTH-NEXT:    ret
 entry:
   tail call void @llvm.memmove.p0.p0.i64(ptr align 4 %dest, ptr align 4 %src, i64 7, i1 true)
   ret void

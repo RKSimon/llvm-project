@@ -37,23 +37,27 @@ define { i16, i16 } @test_reduce_v16i16_with_umin(<16 x i16> %x, <16 x i16> %y) 
 ; AVX2-LABEL: test_reduce_v16i16_with_umin:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm2
-; AVX2-NEXT:    vpminuw %xmm2, %xmm0, %xmm2
+; AVX2-NEXT:    vpminuw %ymm2, %ymm0, %ymm2
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
-; AVX2-NEXT:    vpminuw %xmm3, %xmm2, %xmm3
-; AVX2-NEXT:    vpshufd {{.*#+}} xmm4 = xmm3[1,1,1,1]
-; AVX2-NEXT:    vpminuw %xmm4, %xmm3, %xmm3
-; AVX2-NEXT:    vpsrld $16, %xmm3, %xmm4
-; AVX2-NEXT:    vphminposuw %xmm2, %xmm2
+; AVX2-NEXT:    vpminuw %ymm3, %ymm2, %ymm2
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[1,1,1,1]
+; AVX2-NEXT:    vpminuw %ymm3, %ymm2, %ymm2
+; AVX2-NEXT:    vpsrld $16, %xmm2, %xmm3
+; AVX2-NEXT:    vpminuw %xmm3, %xmm2, %xmm2
 ; AVX2-NEXT:    vmovd %xmm2, %eax
-; AVX2-NEXT:    vpminuw %xmm4, %xmm3, %xmm2
 ; AVX2-NEXT:    vpbroadcastw %xmm2, %ymm2
 ; AVX2-NEXT:    vpcmpeqw %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
 ; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm0
 ; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
 ; AVX2-NEXT:    vpminuw %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vphminposuw %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %edx
 ; AVX2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; AVX2-NEXT:    # kill: def $dx killed $dx killed $edx
@@ -108,12 +112,7 @@ define { i16, i16 } @test_reduce_v16i16_with_add(<16 x i16> %x, <16 x i16> %y) {
 ; SSE41-FAST-NEXT:    pshufd {{.*#+}} xmm4 = xmm5[1,1,1,1]
 ; SSE41-FAST-NEXT:    paddw %xmm5, %xmm4
 ; SSE41-FAST-NEXT:    phaddw %xmm4, %xmm4
-; SSE41-FAST-NEXT:    movdqa %xmm1, %xmm5
-; SSE41-FAST-NEXT:    phaddw %xmm0, %xmm5
-; SSE41-FAST-NEXT:    phaddw %xmm5, %xmm5
-; SSE41-FAST-NEXT:    phaddw %xmm5, %xmm5
-; SSE41-FAST-NEXT:    phaddw %xmm5, %xmm5
-; SSE41-FAST-NEXT:    movd %xmm5, %eax
+; SSE41-FAST-NEXT:    movd %xmm4, %eax
 ; SSE41-FAST-NEXT:    pshuflw {{.*#+}} xmm4 = xmm4[0,0,0,0,4,5,6,7]
 ; SSE41-FAST-NEXT:    pshufd {{.*#+}} xmm4 = xmm4[0,1,0,1]
 ; SSE41-FAST-NEXT:    pcmpeqw %xmm4, %xmm1
@@ -130,58 +129,35 @@ define { i16, i16 } @test_reduce_v16i16_with_add(<16 x i16> %x, <16 x i16> %y) {
 ; SSE41-FAST-NEXT:    # kill: def $dx killed $dx killed $edx
 ; SSE41-FAST-NEXT:    retq
 ;
-; AVX2-SLOW-LABEL: test_reduce_v16i16_with_add:
-; AVX2-SLOW:       # %bb.0:
-; AVX2-SLOW-NEXT:    vextracti128 $1, %ymm0, %xmm2
-; AVX2-SLOW-NEXT:    vpaddw %xmm2, %xmm0, %xmm2
-; AVX2-SLOW-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
-; AVX2-SLOW-NEXT:    vpaddw %xmm3, %xmm2, %xmm2
-; AVX2-SLOW-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[1,1,1,1]
-; AVX2-SLOW-NEXT:    vpaddw %xmm3, %xmm2, %xmm2
-; AVX2-SLOW-NEXT:    vpsrld $16, %xmm2, %xmm3
-; AVX2-SLOW-NEXT:    vpaddw %xmm3, %xmm2, %xmm2
-; AVX2-SLOW-NEXT:    vmovd %xmm2, %eax
-; AVX2-SLOW-NEXT:    vpbroadcastw %xmm2, %ymm2
-; AVX2-SLOW-NEXT:    vpcmpeqw %ymm2, %ymm0, %ymm0
-; AVX2-SLOW-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
-; AVX2-SLOW-NEXT:    vpxor %ymm2, %ymm0, %ymm0
-; AVX2-SLOW-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-SLOW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-SLOW-NEXT:    vpminuw %xmm1, %xmm0, %xmm0
-; AVX2-SLOW-NEXT:    vphminposuw %xmm0, %xmm0
-; AVX2-SLOW-NEXT:    vmovd %xmm0, %edx
-; AVX2-SLOW-NEXT:    # kill: def $ax killed $ax killed $eax
-; AVX2-SLOW-NEXT:    # kill: def $dx killed $dx killed $edx
-; AVX2-SLOW-NEXT:    vzeroupper
-; AVX2-SLOW-NEXT:    retq
-;
-; AVX2-FAST-LABEL: test_reduce_v16i16_with_add:
-; AVX2-FAST:       # %bb.0:
-; AVX2-FAST-NEXT:    vextracti128 $1, %ymm0, %xmm2
-; AVX2-FAST-NEXT:    vpaddw %xmm2, %xmm0, %xmm3
-; AVX2-FAST-NEXT:    vpshufd {{.*#+}} xmm4 = xmm3[2,3,2,3]
-; AVX2-FAST-NEXT:    vpaddw %xmm4, %xmm3, %xmm3
-; AVX2-FAST-NEXT:    vpshufd {{.*#+}} xmm4 = xmm3[1,1,1,1]
-; AVX2-FAST-NEXT:    vpaddw %xmm4, %xmm3, %xmm3
-; AVX2-FAST-NEXT:    vphaddw %xmm3, %xmm3, %xmm3
-; AVX2-FAST-NEXT:    vphaddw %xmm0, %xmm2, %xmm2
-; AVX2-FAST-NEXT:    vphaddw %xmm2, %xmm2, %xmm2
-; AVX2-FAST-NEXT:    vphaddw %xmm2, %xmm2, %xmm2
-; AVX2-FAST-NEXT:    vphaddw %xmm2, %xmm2, %xmm2
-; AVX2-FAST-NEXT:    vmovd %xmm2, %eax
-; AVX2-FAST-NEXT:    vpbroadcastw %xmm3, %ymm2
-; AVX2-FAST-NEXT:    vpcmpeqw %ymm2, %ymm0, %ymm0
-; AVX2-FAST-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
-; AVX2-FAST-NEXT:    vpxor %ymm2, %ymm0, %ymm0
-; AVX2-FAST-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-FAST-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-FAST-NEXT:    vpminuw %xmm1, %xmm0, %xmm0
-; AVX2-FAST-NEXT:    vphminposuw %xmm0, %xmm0
-; AVX2-FAST-NEXT:    vmovd %xmm0, %edx
-; AVX2-FAST-NEXT:    # kill: def $ax killed $ax killed $eax
-; AVX2-FAST-NEXT:    # kill: def $dx killed $dx killed $edx
-; AVX2-FAST-NEXT:    vzeroupper
-; AVX2-FAST-NEXT:    retq
+; AVX2-LABEL: test_reduce_v16i16_with_add:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; AVX2-NEXT:    vpaddw %ymm2, %ymm0, %ymm2
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
+; AVX2-NEXT:    vpaddw %ymm3, %ymm2, %ymm2
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm3 = xmm2[1,1,1,1]
+; AVX2-NEXT:    vpaddw %ymm3, %ymm2, %ymm2
+; AVX2-NEXT:    vpsrld $16, %xmm2, %xmm3
+; AVX2-NEXT:    vpaddw %xmm3, %xmm2, %xmm2
+; AVX2-NEXT:    vmovd %xmm2, %eax
+; AVX2-NEXT:    vpbroadcastw %xmm2, %ymm2
+; AVX2-NEXT:    vpcmpeqw %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqd %ymm2, %ymm2, %ymm2
+; AVX2-NEXT:    vpxor %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpminuw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpminuw %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %edx
+; AVX2-NEXT:    # kill: def $ax killed $ax killed $eax
+; AVX2-NEXT:    # kill: def $dx killed $dx killed $edx
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    retq
   %sum_x = tail call i16 @llvm.vector.reduce.add.v16i16(<16 x i16> %x)
   %sum_x_vec = insertelement <1 x i16> poison, i16 %sum_x, i64 0
   %sum_x_splat = shufflevector <1 x i16> %sum_x_vec, <1 x i16> poison, <16 x i32> zeroinitializer
@@ -192,3 +168,6 @@ define { i16, i16 } @test_reduce_v16i16_with_add(<16 x i16> %x, <16 x i16> %y) {
   %ret = insertvalue { i16, i16 } %ret_0, i16 %select_min, 1
   ret { i16, i16 } %ret
 }
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; AVX2-FAST: {{.*}}
+; AVX2-SLOW: {{.*}}

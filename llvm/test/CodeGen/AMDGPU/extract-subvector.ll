@@ -449,14 +449,14 @@ define <4 x double> @extract_4xf64(ptr addrspace(1) %p0, ptr addrspace(1) %p1, i
 ; GCN-NEXT:  .LBB5_4: ; %exit
 ; GCN-NEXT:    s_or_b64 exec, exec, s[4:5]
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0xbff00000
-; GCN-NEXT:    v_cmp_nlt_f64_e32 vcc, -1.0, v[4:5]
-; GCN-NEXT:    v_cndmask_b32_e32 v1, -2.0, v0, vcc
-; GCN-NEXT:    v_cmp_nlt_f64_e32 vcc, -1.0, v[6:7]
-; GCN-NEXT:    v_cndmask_b32_e32 v3, -2.0, v0, vcc
-; GCN-NEXT:    v_cmp_nlt_f64_e32 vcc, -1.0, v[8:9]
-; GCN-NEXT:    v_cndmask_b32_e32 v5, -2.0, v0, vcc
-; GCN-NEXT:    v_cmp_nlt_f64_e32 vcc, -1.0, v[10:11]
-; GCN-NEXT:    v_cndmask_b32_e32 v7, -2.0, v0, vcc
+; GCN-NEXT:    v_cmp_lt_f64_e32 vcc, -1.0, v[4:5]
+; GCN-NEXT:    v_cndmask_b32_e64 v1, v0, -2.0, vcc
+; GCN-NEXT:    v_cmp_lt_f64_e32 vcc, -1.0, v[6:7]
+; GCN-NEXT:    v_cndmask_b32_e64 v3, v0, -2.0, vcc
+; GCN-NEXT:    v_cmp_lt_f64_e32 vcc, -1.0, v[8:9]
+; GCN-NEXT:    v_cndmask_b32_e64 v5, v0, -2.0, vcc
+; GCN-NEXT:    v_cmp_lt_f64_e32 vcc, -1.0, v[10:11]
+; GCN-NEXT:    v_cndmask_b32_e64 v7, v0, -2.0, vcc
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    v_mov_b32_e32 v2, 0
 ; GCN-NEXT:    v_mov_b32_e32 v4, 0
@@ -539,22 +539,22 @@ define <8 x double> @extract_8xf64(ptr addrspace(1) %p0, ptr addrspace(1) %p1, i
 ; GCN-NEXT:  .LBB6_4: ; %exit
 ; GCN-NEXT:    s_or_b64 exec, exec, s[4:5]
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0xbff00000
-; GCN-NEXT:    v_cmp_nlt_f64_e32 vcc, -1.0, v[6:7]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[4:5], -1.0, v[8:9]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[6:7], -1.0, v[10:11]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[8:9], -1.0, v[12:13]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[10:11], -1.0, v[14:15]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[12:13], -1.0, v[16:17]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[14:15], -1.0, v[18:19]
-; GCN-NEXT:    v_cmp_nlt_f64_e64 s[16:17], -1.0, v[4:5]
-; GCN-NEXT:    v_cndmask_b32_e64 v1, -2.0, v0, s[16:17]
-; GCN-NEXT:    v_cndmask_b32_e32 v3, -2.0, v0, vcc
-; GCN-NEXT:    v_cndmask_b32_e64 v5, -2.0, v0, s[4:5]
-; GCN-NEXT:    v_cndmask_b32_e64 v7, -2.0, v0, s[6:7]
-; GCN-NEXT:    v_cndmask_b32_e64 v9, -2.0, v0, s[8:9]
-; GCN-NEXT:    v_cndmask_b32_e64 v11, -2.0, v0, s[10:11]
-; GCN-NEXT:    v_cndmask_b32_e64 v13, -2.0, v0, s[12:13]
-; GCN-NEXT:    v_cndmask_b32_e64 v15, -2.0, v0, s[14:15]
+; GCN-NEXT:    v_cmp_lt_f64_e32 vcc, -1.0, v[18:19]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[4:5], -1.0, v[16:17]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[6:7], -1.0, v[14:15]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[8:9], -1.0, v[12:13]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[10:11], -1.0, v[10:11]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[12:13], -1.0, v[8:9]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[14:15], -1.0, v[6:7]
+; GCN-NEXT:    v_cmp_lt_f64_e64 s[16:17], -1.0, v[4:5]
+; GCN-NEXT:    v_cndmask_b32_e64 v1, v0, -2.0, s[16:17]
+; GCN-NEXT:    v_cndmask_b32_e64 v3, v0, -2.0, s[14:15]
+; GCN-NEXT:    v_cndmask_b32_e64 v5, v0, -2.0, s[12:13]
+; GCN-NEXT:    v_cndmask_b32_e64 v7, v0, -2.0, s[10:11]
+; GCN-NEXT:    v_cndmask_b32_e64 v9, v0, -2.0, s[8:9]
+; GCN-NEXT:    v_cndmask_b32_e64 v11, v0, -2.0, s[6:7]
+; GCN-NEXT:    v_cndmask_b32_e64 v13, v0, -2.0, s[4:5]
+; GCN-NEXT:    v_cndmask_b32_e64 v15, v0, -2.0, vcc
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    v_mov_b32_e32 v2, 0
 ; GCN-NEXT:    v_mov_b32_e32 v4, 0
