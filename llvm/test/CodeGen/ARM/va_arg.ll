@@ -13,8 +13,8 @@ define i64 @test1(i32 %i, ...) nounwind optsize {
 ; CHECK-NEXT:    bic r1, r0, #7
 ; CHECK-NEXT:    orr r0, r1, #4
 ; CHECK-NEXT:    str r0, [sp]
-; CHECK-NEXT:    ldr r0, [r1]
-; CHECK-NEXT:    add r2, r1, #8
+; CHECK-NEXT:    mov r2, r1
+; CHECK-NEXT:    ldr r0, [r2], #8
 ; CHECK-NEXT:    str r2, [sp]
 ; CHECK-NEXT:    ldr r1, [r1, #4]
 ; CHECK-NEXT:    add sp, sp, #16
@@ -33,9 +33,10 @@ define double @test2(i32 %a, ptr %b, ...) nounwind optsize {
 ; CHECK-NEXT:    .pad #12
 ; CHECK-NEXT:    sub sp, sp, #12
 ; CHECK-NEXT:    add r0, sp, #4
-; CHECK-NEXT:    stmib sp, {r2, r3}
-; CHECK-NEXT:    add r0, r0, #11
-; CHECK-NEXT:    bic r0, r0, #3
+; CHECK-NEXT:    str r2, [sp, #4]
+; CHECK-NEXT:    orr r0, r0, #4
+; CHECK-NEXT:    str r3, [r0], #7
+; CHECK-NEXT:    bic r0, r0, #7
 ; CHECK-NEXT:    str r2, [r1]
 ; CHECK-NEXT:    add r1, r0, #8
 ; CHECK-NEXT:    str r1, [sp]

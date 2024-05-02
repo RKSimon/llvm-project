@@ -451,52 +451,35 @@ define <8 x i8> @vuzp_trunc_and_shuffle_undef_left(<8 x i8> %tr0, <8 x i8> %tr1,
 define <10 x i8> @vuzp_wide_type(<10 x i8> %tr0, <10 x i8> %tr1,
 ; CHECK-LABEL: vuzp_wide_type:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    add r12, sp, #32
-; CHECK-NEXT:    add lr, sp, #48
-; CHECK-NEXT:    vld1.32 {d17[0]}, [r12:32]
-; CHECK-NEXT:    add r12, sp, #24
-; CHECK-NEXT:    vld1.32 {d16[0]}, [r12:32]
-; CHECK-NEXT:    add r12, sp, #56
-; CHECK-NEXT:    vld1.32 {d19[0]}, [r12:32]
-; CHECK-NEXT:    vld1.32 {d18[0]}, [lr:32]
-; CHECK-NEXT:    add lr, sp, #40
-; CHECK-NEXT:    vld1.32 {d20[0]}, [lr:32]
+; CHECK-NEXT:    .save {r11, lr}
+; CHECK-NEXT:    push {r11, lr}
 ; CHECK-NEXT:    ldr r12, [sp, #68]
-; CHECK-NEXT:    ldr r4, [r12]
-; CHECK-NEXT:    vmov.32 d23[0], r4
-; CHECK-NEXT:    add r4, sp, #64
-; CHECK-NEXT:    vld1.32 {d24[0]}, [r4:32]
-; CHECK-NEXT:    add r4, sp, #36
-; CHECK-NEXT:    vcgt.u32 q10, q12, q10
-; CHECK-NEXT:    vld1.32 {d17[1]}, [r4:32]
-; CHECK-NEXT:    add r4, sp, #28
-; CHECK-NEXT:    vld1.32 {d16[1]}, [r4:32]
-; CHECK-NEXT:    add r4, sp, #60
-; CHECK-NEXT:    vld1.32 {d19[1]}, [r4:32]
-; CHECK-NEXT:    add r4, sp, #52
-; CHECK-NEXT:    vld1.32 {d18[1]}, [r4:32]
-; CHECK-NEXT:    add r4, r12, #4
-; CHECK-NEXT:    vcgt.u32 q8, q9, q8
+; CHECK-NEXT:    add r11, sp, #24
+; CHECK-NEXT:    vldmia r11, {s0, s1, s2, s3, s4}
+; CHECK-NEXT:    add r11, sp, #48
+; CHECK-NEXT:    ldr lr, [r12], #4
+; CHECK-NEXT:    vldmia r11, {s8, s9, s10, s11, s12}
+; CHECK-NEXT:    vcgt.u32 q10, q3, q1
+; CHECK-NEXT:    vmov.32 d17[0], lr
+; CHECK-NEXT:    vcgt.u32 q9, q2, q0
+; CHECK-NEXT:    vmov.u8 lr, d17[3]
+; CHECK-NEXT:    vmovn.i32 d18, q9
 ; CHECK-NEXT:    vmovn.i32 d19, q10
-; CHECK-NEXT:    vmov.u8 lr, d23[3]
-; CHECK-NEXT:    vmovn.i32 d18, q8
-; CHECK-NEXT:    vmovn.i16 d22, q9
-; CHECK-NEXT:    vldr d18, .LCPI23_0
-; CHECK-NEXT:    vmov.8 d17[0], lr
-; CHECK-NEXT:    vtbl.8 d16, {d22, d23}, d18
+; CHECK-NEXT:    vldr d20, .LCPI23_0
+; CHECK-NEXT:    vmovn.i16 d16, q9
+; CHECK-NEXT:    vmov.8 d19[0], lr
+; CHECK-NEXT:    vtbl.8 d18, {d16, d17}, d20
+; CHECK-NEXT:    vld1.8 {d19[1]}, [r12]
+; CHECK-NEXT:    add r12, sp, #8
+; CHECK-NEXT:    vshl.i8 q8, q9, #7
 ; CHECK-NEXT:    vmov d19, r2, r3
-; CHECK-NEXT:    vld1.8 {d17[1]}, [r4]
-; CHECK-NEXT:    add r4, sp, #8
+; CHECK-NEXT:    vld1.64 {d20, d21}, [r12]
 ; CHECK-NEXT:    vmov d18, r0, r1
-; CHECK-NEXT:    vshl.i8 q8, q8, #7
-; CHECK-NEXT:    vld1.64 {d20, d21}, [r4]
 ; CHECK-NEXT:    vshr.s8 q8, q8, #7
 ; CHECK-NEXT:    vbsl q8, q9, q10
 ; CHECK-NEXT:    vmov r0, r1, d16
 ; CHECK-NEXT:    vmov r2, r3, d17
-; CHECK-NEXT:    pop {r4, lr}
+; CHECK-NEXT:    pop {r11, lr}
 ; CHECK-NEXT:    mov pc, lr
 ; CHECK-NEXT:    .p2align 3
 ; CHECK-NEXT:  @ %bb.1:

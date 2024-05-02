@@ -234,7 +234,8 @@ define <4 x i16> @uabd_4h_promoted_ops(<4 x i8> %a, <4 x i8> %b) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vbic.i16 d1, #0xff00
 ; CHECK-NEXT:    vbic.i16 d0, #0xff00
-; CHECK-NEXT:    vabd.u16 d0, d0, d1
+; CHECK-NEXT:    vsub.i16 d16, d0, d1
+; CHECK-NEXT:    vabs.s16 d0, d16
 ; CHECK-NEXT:    bx lr
   %a.zext = zext <4 x i8> %a to <4 x i16>
   %b.zext = zext <4 x i8> %b to <4 x i16>
@@ -285,8 +286,8 @@ define <2 x i32> @uabd_2s_promoted_ops(<2 x i16> %a, <2 x i16> %b) {
 ; CHECK-LABEL: uabd_2s_promoted_ops:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vmov.i32 d16, #0xffff
-; CHECK-NEXT:    vand d17, d1, d16
-; CHECK-NEXT:    vand d16, d0, d16
+; CHECK-NEXT:    vand d17, d0, d16
+; CHECK-NEXT:    vand d16, d1, d16
 ; CHECK-NEXT:    vabd.u32 d0, d16, d17
 ; CHECK-NEXT:    bx lr
   %a.zext = zext <2 x i16> %a to <2 x i32>

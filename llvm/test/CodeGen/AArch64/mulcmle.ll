@@ -69,10 +69,18 @@ define <8 x i32> @v8i32(<8 x i32> %a) {
 }
 
 define <4 x i16> @v4i16(<4 x i16> %a) {
-; CHECK-LABEL: v4i16:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    cmlt v0.8b, v0.8b, #0
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: v4i16:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    ushr v0.4h, v0.4h, #7
+; CHECK-SD-NEXT:    movi d1, #0xff00ff00ff00ff
+; CHECK-SD-NEXT:    bic v0.4h, #254
+; CHECK-SD-NEXT:    mul v0.4h, v0.4h, v1.4h
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: v4i16:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    cmlt v0.8b, v0.8b, #0
+; CHECK-GI-NEXT:    ret
   %b = lshr <4 x i16> %a, <i16 7, i16 7, i16 7, i16 7>
   %c = and <4 x i16> %b, <i16 257, i16 257, i16 257, i16 257>
   %d = mul nuw <4 x i16> %c, <i16 255, i16 255, i16 255, i16 255>
@@ -80,10 +88,18 @@ define <4 x i16> @v4i16(<4 x i16> %a) {
 }
 
 define <8 x i16> @v8i16(<8 x i16> %a) {
-; CHECK-LABEL: v8i16:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    cmlt v0.16b, v0.16b, #0
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: v8i16:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    ushr v0.8h, v0.8h, #7
+; CHECK-SD-NEXT:    movi v1.2d, #0xff00ff00ff00ff
+; CHECK-SD-NEXT:    bic v0.8h, #254
+; CHECK-SD-NEXT:    mul v0.8h, v0.8h, v1.8h
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: v8i16:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    cmlt v0.16b, v0.16b, #0
+; CHECK-GI-NEXT:    ret
   %b = lshr <8 x i16> %a, <i16 7, i16 7, i16 7, i16 7, i16 7, i16 7, i16 7, i16 7>
   %c = and <8 x i16> %b, <i16 257, i16 257, i16 257, i16 257, i16 257, i16 257, i16 257, i16 257>
   %d = mul nuw <8 x i16> %c, <i16 255, i16 255, i16 255, i16 255, i16 255, i16 255, i16 255, i16 255>

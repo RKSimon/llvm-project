@@ -18,7 +18,7 @@ define i32 @neg_sel_constants(i32 signext %a) {
 ;
 ; RV64-LABEL: neg_sel_constants:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srai a0, a0, 63
+; RV64-NEXT:    srli a0, a0, 31
 ; RV64-NEXT:    andi a0, a0, 5
 ; RV64-NEXT:    ret
   %tmp.1 = icmp slt i32 %a, 0
@@ -101,8 +101,8 @@ define i32 @pos_sel_special_constant(i32 signext %a) {
 ;
 ; RV64-LABEL: pos_sel_special_constant:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slti a0, a0, 0
-; RV64-NEXT:    xori a0, a0, 1
+; RV64-NEXT:    not a0, a0
+; RV64-NEXT:    srliw a0, a0, 31
 ; RV64-NEXT:    slli a0, a0, 9
 ; RV64-NEXT:    ret
   %tmp.1 = icmp sgt i32 %a, -1
@@ -209,19 +209,10 @@ define i32 @sub_clamp_zero(i32 signext %x, i32 signext %y) {
 }
 
 define i8 @sel_shift_bool_i8(i1 %t) {
-; RV32-LABEL: sel_shift_bool_i8:
-; RV32:       # %bb.0:
-; RV32-NEXT:    slli a0, a0, 31
-; RV32-NEXT:    srai a0, a0, 31
-; RV32-NEXT:    andi a0, a0, -128
-; RV32-NEXT:    ret
-;
-; RV64-LABEL: sel_shift_bool_i8:
-; RV64:       # %bb.0:
-; RV64-NEXT:    slli a0, a0, 63
-; RV64-NEXT:    srai a0, a0, 63
-; RV64-NEXT:    andi a0, a0, -128
-; RV64-NEXT:    ret
+; CHECK-LABEL: sel_shift_bool_i8:
+; CHECK:       # %bb.0:
+; CHECK-NEXT:    slli a0, a0, 7
+; CHECK-NEXT:    ret
   %shl = select i1 %t, i8 128, i8 0
   ret i8 %shl
 }

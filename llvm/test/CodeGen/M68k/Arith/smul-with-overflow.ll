@@ -5,9 +5,11 @@ define zeroext i8 @smul_i8(i8 signext %a, i8 signext %b) nounwind ssp {
 ; CHECK-LABEL: smul_i8:
 ; CHECK:       ; %bb.0: ; %entry
 ; CHECK-NEXT:    move.b (11,%sp), %d0
-; CHECK-NEXT:    and.l #255, %d0
+; CHECK-NEXT:    ext.w %d0
+; CHECK-NEXT:    ext.l %d0
 ; CHECK-NEXT:    move.b (7,%sp), %d1
-; CHECK-NEXT:    and.l #255, %d1
+; CHECK-NEXT:    ext.w %d1
+; CHECK-NEXT:    ext.l %d1
 ; CHECK-NEXT:    muls %d0, %d1
 ; CHECK-NEXT:    move.l %d1, %d0
 ; CHECK-NEXT:    and.l #65535, %d0

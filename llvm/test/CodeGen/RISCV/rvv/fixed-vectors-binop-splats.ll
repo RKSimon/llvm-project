@@ -33,10 +33,6 @@ define <2 x i1> @v2i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmsne.vi v8, v8, 0
 ; CHECK-NEXT:    vmsne.vi v9, v9, 0
 ; CHECK-NEXT:    vmxor.mm v0, v8, v9
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v9, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v9, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <2 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <2 x i1> %head.x, <2 x i1> poison, <2 x i32> zeroinitializer
@@ -57,10 +53,6 @@ define <4 x i1> @v4i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmsne.vi v8, v8, 0
 ; CHECK-NEXT:    vmsne.vi v9, v9, 0
 ; CHECK-NEXT:    vmxor.mm v0, v8, v9
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v9, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v9, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <4 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <4 x i1> %head.x, <4 x i1> poison, <4 x i32> zeroinitializer
@@ -81,10 +73,6 @@ define <8 x i1> @v8i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmsne.vi v8, v8, 0
 ; CHECK-NEXT:    vmsne.vi v9, v9, 0
 ; CHECK-NEXT:    vmxor.mm v0, v8, v9
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v9, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v9, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <8 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <8 x i1> %head.x, <8 x i1> poison, <8 x i32> zeroinitializer
@@ -105,10 +93,6 @@ define <16 x i1> @v16i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmsne.vi v8, v8, 0
 ; CHECK-NEXT:    vmsne.vi v9, v9, 0
 ; CHECK-NEXT:    vmxor.mm v0, v8, v9
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v9, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v9, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <16 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <16 x i1> %head.x, <16 x i1> poison, <16 x i32> zeroinitializer
@@ -130,10 +114,6 @@ define <32 x i1> @v32i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmv.v.x v8, a1
 ; CHECK-NEXT:    vmsne.vi v11, v8, 0
 ; CHECK-NEXT:    vmxor.mm v0, v10, v11
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v10, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v10, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <32 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <32 x i1> %head.x, <32 x i1> poison, <32 x i32> zeroinitializer
@@ -155,10 +135,6 @@ define <64 x i1> @v64i1(i1 %x, i1 %y) {
 ; CHECK-NEXT:    vmv.v.x v8, a1
 ; CHECK-NEXT:    vmsne.vi v13, v8, 0
 ; CHECK-NEXT:    vmxor.mm v0, v12, v13
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
-; CHECK-NEXT:    vrgather.vi v12, v8, 0
-; CHECK-NEXT:    vmsne.vi v0, v12, 0
 ; CHECK-NEXT:    ret
   %head.x = insertelement <64 x i1> poison, i1 %x, i32 0
   %splat.x = shufflevector <64 x i1> %head.x, <64 x i1> poison, <64 x i32> zeroinitializer
@@ -187,9 +163,8 @@ define <2 x i8> @v2i8(i8 %x, i8 %y) {
 ; CHECK-LABEL: v2i8:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 2, e8, mf8, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <2 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <2 x i8> %head.x, <2 x i8> poison, <2 x i32> zeroinitializer
@@ -203,9 +178,8 @@ define <4 x i8> @v4i8(i8 %x, i8 %y) {
 ; CHECK-LABEL: v4i8:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 4, e8, mf4, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <4 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <4 x i8> %head.x, <4 x i8> poison, <4 x i32> zeroinitializer
@@ -219,9 +193,8 @@ define <8 x i8> @v8i8(i8 %x, i8 %y) {
 ; CHECK-LABEL: v8i8:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <8 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <8 x i8> %head.x, <8 x i8> poison, <8 x i32> zeroinitializer
@@ -235,9 +208,8 @@ define <16 x i8> @v16i8(i8 %x, i8 %y) {
 ; CHECK-LABEL: v16i8:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 16, e8, m1, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <16 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <16 x i8> %head.x, <16 x i8> poison, <16 x i32> zeroinitializer
@@ -252,9 +224,8 @@ define <32 x i8> @v32i8(i8 %x, i8 %y) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 32
 ; CHECK-NEXT:    vsetvli zero, a2, e8, m2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v10, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v10, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <32 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <32 x i8> %head.x, <32 x i8> poison, <32 x i32> zeroinitializer
@@ -269,9 +240,8 @@ define <64 x i8> @v64i8(i8 %x, i8 %y) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 64
 ; CHECK-NEXT:    vsetvli zero, a2, e8, m4, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v12, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v12, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <64 x i8> poison, i8 %x, i32 0
   %splat.x = shufflevector <64 x i8> %head.x, <64 x i8> poison, <64 x i32> zeroinitializer
@@ -300,9 +270,8 @@ define <2 x i16> @v2i16(i16 %x, i16 %y) {
 ; CHECK-LABEL: v2i16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <2 x i16> poison, i16 %x, i32 0
   %splat.x = shufflevector <2 x i16> %head.x, <2 x i16> poison, <2 x i32> zeroinitializer
@@ -316,9 +285,8 @@ define <4 x i16> @v4i16(i16 %x, i16 %y) {
 ; CHECK-LABEL: v4i16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <4 x i16> poison, i16 %x, i32 0
   %splat.x = shufflevector <4 x i16> %head.x, <4 x i16> poison, <4 x i32> zeroinitializer
@@ -332,9 +300,8 @@ define <8 x i16> @v8i16(i16 %x, i16 %y) {
 ; CHECK-LABEL: v8i16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 8, e16, m1, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <8 x i16> poison, i16 %x, i32 0
   %splat.x = shufflevector <8 x i16> %head.x, <8 x i16> poison, <8 x i32> zeroinitializer
@@ -348,9 +315,8 @@ define <16 x i16> @v16i16(i16 %x, i16 %y) {
 ; CHECK-LABEL: v16i16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v10, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v10, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <16 x i16> poison, i16 %x, i32 0
   %splat.x = shufflevector <16 x i16> %head.x, <16 x i16> poison, <16 x i32> zeroinitializer
@@ -365,9 +331,8 @@ define <32 x i16> @v32i16(i16 %x, i16 %y) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 32
 ; CHECK-NEXT:    vsetvli zero, a2, e16, m4, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v12, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v12, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <32 x i16> poison, i16 %x, i32 0
   %splat.x = shufflevector <32 x i16> %head.x, <32 x i16> poison, <32 x i32> zeroinitializer
@@ -396,9 +361,8 @@ define <2 x i32> @v2i32(i32 %x, i32 %y) {
 ; CHECK-LABEL: v2i32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 2, e32, mf2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <2 x i32> poison, i32 %x, i32 0
   %splat.x = shufflevector <2 x i32> %head.x, <2 x i32> poison, <2 x i32> zeroinitializer
@@ -412,9 +376,8 @@ define <4 x i32> @v4i32(i32 %x, i32 %y) {
 ; CHECK-LABEL: v4i32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v9, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <4 x i32> poison, i32 %x, i32 0
   %splat.x = shufflevector <4 x i32> %head.x, <4 x i32> poison, <4 x i32> zeroinitializer
@@ -428,9 +391,8 @@ define <8 x i32> @v8i32(i32 %x, i32 %y) {
 ; CHECK-LABEL: v8i32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v10, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v10, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <8 x i32> poison, i32 %x, i32 0
   %splat.x = shufflevector <8 x i32> %head.x, <8 x i32> poison, <8 x i32> zeroinitializer
@@ -444,9 +406,8 @@ define <16 x i32> @v16i32(i32 %x, i32 %y) {
 ; CHECK-LABEL: v16i32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 16, e32, m4, ta, ma
-; CHECK-NEXT:    vmv.s.x v8, a0
-; CHECK-NEXT:    vadd.vx v12, v8, a1
-; CHECK-NEXT:    vrgather.vi v8, v12, 0
+; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vadd.vx v8, v8, a1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <16 x i32> poison, i32 %x, i32 0
   %splat.x = shufflevector <16 x i32> %head.x, <16 x i32> poison, <16 x i32> zeroinitializer
@@ -509,9 +470,8 @@ define <2 x i64> @v2i64(i64 %x, i64 %y) {
 ; RV64-LABEL: v2i64:
 ; RV64:       # %bb.0:
 ; RV64-NEXT:    vsetivli zero, 2, e64, m1, ta, ma
-; RV64-NEXT:    vmv.s.x v8, a0
-; RV64-NEXT:    vadd.vx v9, v8, a1
-; RV64-NEXT:    vrgather.vi v8, v9, 0
+; RV64-NEXT:    vmv.v.x v8, a0
+; RV64-NEXT:    vadd.vx v8, v8, a1
 ; RV64-NEXT:    ret
   %head.x = insertelement <2 x i64> poison, i64 %x, i32 0
   %splat.x = shufflevector <2 x i64> %head.x, <2 x i64> poison, <2 x i32> zeroinitializer
@@ -542,9 +502,8 @@ define <4 x i64> @v4i64(i64 %x, i64 %y) {
 ; RV64-LABEL: v4i64:
 ; RV64:       # %bb.0:
 ; RV64-NEXT:    vsetivli zero, 4, e64, m2, ta, ma
-; RV64-NEXT:    vmv.s.x v8, a0
-; RV64-NEXT:    vadd.vx v10, v8, a1
-; RV64-NEXT:    vrgather.vi v8, v10, 0
+; RV64-NEXT:    vmv.v.x v8, a0
+; RV64-NEXT:    vadd.vx v8, v8, a1
 ; RV64-NEXT:    ret
   %head.x = insertelement <4 x i64> poison, i64 %x, i32 0
   %splat.x = shufflevector <4 x i64> %head.x, <4 x i64> poison, <4 x i32> zeroinitializer
@@ -575,9 +534,8 @@ define <8 x i64> @v8i64(i64 %x, i64 %y) {
 ; RV64-LABEL: v8i64:
 ; RV64:       # %bb.0:
 ; RV64-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
-; RV64-NEXT:    vmv.s.x v8, a0
-; RV64-NEXT:    vadd.vx v12, v8, a1
-; RV64-NEXT:    vrgather.vi v8, v12, 0
+; RV64-NEXT:    vmv.v.x v8, a0
+; RV64-NEXT:    vadd.vx v8, v8, a1
 ; RV64-NEXT:    ret
   %head.x = insertelement <8 x i64> poison, i64 %x, i32 0
   %splat.x = shufflevector <8 x i64> %head.x, <8 x i64> poison, <8 x i32> zeroinitializer
@@ -591,9 +549,8 @@ define <4 x half> @v4f16(half %x, half %y) {
 ; CHECK-LABEL: v4f16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vfmv.s.f v8, fa0
-; CHECK-NEXT:    vfadd.vf v9, v8, fa1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vfmv.v.f v8, fa0
+; CHECK-NEXT:    vfadd.vf v8, v8, fa1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <4 x half> poison, half %x, i32 0
   %splat.x = shufflevector <4 x half> %head.x, <4 x half> poison, <4 x i32> zeroinitializer
@@ -607,9 +564,8 @@ define <2 x float> @v2f32(float %x, float %y) {
 ; CHECK-LABEL: v2f32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 2, e32, mf2, ta, ma
-; CHECK-NEXT:    vfmv.s.f v8, fa0
-; CHECK-NEXT:    vfadd.vf v9, v8, fa1
-; CHECK-NEXT:    vrgather.vi v8, v9, 0
+; CHECK-NEXT:    vfmv.v.f v8, fa0
+; CHECK-NEXT:    vfadd.vf v8, v8, fa1
 ; CHECK-NEXT:    ret
   %head.x = insertelement <2 x float> poison, float %x, i32 0
   %splat.x = shufflevector <2 x float> %head.x, <2 x float> poison, <2 x i32> zeroinitializer

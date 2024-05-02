@@ -478,9 +478,9 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    mtvsrd v3, r3
 ; P9LE-NEXT:    li r3, 2
 ; P9LE-NEXT:    vextuhrx r3, r3, v2
-; P9LE-NEXT:    extsh r6, r3
-; P9LE-NEXT:    mulhw r7, r6, r4
-; P9LE-NEXT:    add r6, r7, r6
+; P9LE-NEXT:    extsh r3, r3
+; P9LE-NEXT:    mulhw r6, r3, r4
+; P9LE-NEXT:    add r6, r6, r3
 ; P9LE-NEXT:    srwi r7, r6, 31
 ; P9LE-NEXT:    srawi r6, r6, 6
 ; P9LE-NEXT:    add r6, r6, r7
@@ -490,9 +490,9 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    li r3, 4
 ; P9LE-NEXT:    vextuhrx r3, r3, v2
 ; P9LE-NEXT:    vmrghh v3, v4, v3
-; P9LE-NEXT:    extsh r7, r3
-; P9LE-NEXT:    mulhw r8, r7, r4
-; P9LE-NEXT:    add r7, r8, r7
+; P9LE-NEXT:    extsh r3, r3
+; P9LE-NEXT:    mulhw r7, r3, r4
+; P9LE-NEXT:    add r7, r7, r3
 ; P9LE-NEXT:    srwi r8, r7, 31
 ; P9LE-NEXT:    srawi r7, r7, 6
 ; P9LE-NEXT:    add r7, r7, r8
@@ -501,9 +501,9 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    mtvsrd v4, r3
 ; P9LE-NEXT:    li r3, 6
 ; P9LE-NEXT:    vextuhrx r3, r3, v2
-; P9LE-NEXT:    extsh r8, r3
-; P9LE-NEXT:    mulhw r4, r8, r4
-; P9LE-NEXT:    add r4, r4, r8
+; P9LE-NEXT:    extsh r3, r3
+; P9LE-NEXT:    mulhw r4, r3, r4
+; P9LE-NEXT:    add r4, r4, r3
 ; P9LE-NEXT:    srwi r8, r4, 31
 ; P9LE-NEXT:    srawi r4, r4, 6
 ; P9LE-NEXT:    add r4, r4, r8
@@ -525,23 +525,23 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-LABEL: combine_srem_sdiv:
 ; P9BE:       # %bb.0:
 ; P9BE-NEXT:    li r3, 6
-; P9BE-NEXT:    lis r5, -21386
+; P9BE-NEXT:    lis r4, -21386
 ; P9BE-NEXT:    vextuhlx r3, r3, v2
-; P9BE-NEXT:    ori r5, r5, 37253
-; P9BE-NEXT:    extsh r4, r3
-; P9BE-NEXT:    mulhw r6, r4, r5
-; P9BE-NEXT:    add r4, r6, r4
-; P9BE-NEXT:    srwi r6, r4, 31
-; P9BE-NEXT:    srawi r4, r4, 6
-; P9BE-NEXT:    add r4, r4, r6
-; P9BE-NEXT:    mulli r6, r4, 95
+; P9BE-NEXT:    ori r4, r4, 37253
+; P9BE-NEXT:    extsh r3, r3
+; P9BE-NEXT:    mulhw r5, r3, r4
+; P9BE-NEXT:    add r5, r5, r3
+; P9BE-NEXT:    srwi r6, r5, 31
+; P9BE-NEXT:    srawi r5, r5, 6
+; P9BE-NEXT:    add r5, r5, r6
+; P9BE-NEXT:    mulli r6, r5, 95
 ; P9BE-NEXT:    sub r3, r3, r6
 ; P9BE-NEXT:    mtfprwz f0, r3
 ; P9BE-NEXT:    li r3, 4
 ; P9BE-NEXT:    vextuhlx r3, r3, v2
-; P9BE-NEXT:    extsh r6, r3
-; P9BE-NEXT:    mulhw r7, r6, r5
-; P9BE-NEXT:    add r6, r7, r6
+; P9BE-NEXT:    extsh r3, r3
+; P9BE-NEXT:    mulhw r6, r3, r4
+; P9BE-NEXT:    add r6, r6, r3
 ; P9BE-NEXT:    srwi r7, r6, 31
 ; P9BE-NEXT:    srawi r6, r6, 6
 ; P9BE-NEXT:    add r6, r6, r7
@@ -553,10 +553,10 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-NEXT:    lxv vs2, 0(r3)
 ; P9BE-NEXT:    li r3, 2
 ; P9BE-NEXT:    vextuhlx r3, r3, v2
-; P9BE-NEXT:    extsh r7, r3
+; P9BE-NEXT:    extsh r3, r3
 ; P9BE-NEXT:    xxperm vs0, vs1, vs2
-; P9BE-NEXT:    mulhw r8, r7, r5
-; P9BE-NEXT:    add r7, r8, r7
+; P9BE-NEXT:    mulhw r7, r3, r4
+; P9BE-NEXT:    add r7, r7, r3
 ; P9BE-NEXT:    srwi r8, r7, 31
 ; P9BE-NEXT:    srawi r7, r7, 6
 ; P9BE-NEXT:    add r7, r7, r8
@@ -566,18 +566,18 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-NEXT:    li r3, 0
 ; P9BE-NEXT:    vextuhlx r3, r3, v2
 ; P9BE-NEXT:    extsh r3, r3
-; P9BE-NEXT:    mulhw r5, r3, r5
-; P9BE-NEXT:    add r5, r5, r3
-; P9BE-NEXT:    srwi r8, r5, 31
-; P9BE-NEXT:    srawi r5, r5, 6
-; P9BE-NEXT:    add r5, r5, r8
-; P9BE-NEXT:    mulli r8, r5, 95
+; P9BE-NEXT:    mulhw r4, r3, r4
+; P9BE-NEXT:    add r4, r4, r3
+; P9BE-NEXT:    srwi r8, r4, 31
+; P9BE-NEXT:    srawi r4, r4, 6
+; P9BE-NEXT:    add r4, r4, r8
+; P9BE-NEXT:    mulli r8, r4, 95
 ; P9BE-NEXT:    sub r3, r3, r8
 ; P9BE-NEXT:    mtfprwz f3, r3
 ; P9BE-NEXT:    xxperm vs1, vs3, vs2
-; P9BE-NEXT:    mtfprwz f3, r5
+; P9BE-NEXT:    mtfprwz f3, r4
 ; P9BE-NEXT:    xxmrghw v2, vs1, vs0
-; P9BE-NEXT:    mtfprwz f0, r4
+; P9BE-NEXT:    mtfprwz f0, r5
 ; P9BE-NEXT:    mtfprwz f1, r6
 ; P9BE-NEXT:    xxperm vs0, vs1, vs2
 ; P9BE-NEXT:    mtfprwz f1, r7
@@ -592,49 +592,49 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P8LE-NEXT:    lis r4, -21386
 ; P8LE-NEXT:    mffprd r3, f0
 ; P8LE-NEXT:    ori r4, r4, 37253
+; P8LE-NEXT:    clrldi r5, r3, 48
 ; P8LE-NEXT:    rldicl r6, r3, 48, 48
 ; P8LE-NEXT:    rldicl r7, r3, 32, 48
-; P8LE-NEXT:    clrldi r5, r3, 48
 ; P8LE-NEXT:    rldicl r3, r3, 16, 48
-; P8LE-NEXT:    extsh r8, r6
-; P8LE-NEXT:    extsh r9, r7
 ; P8LE-NEXT:    extsh r5, r5
-; P8LE-NEXT:    extsh r10, r3
-; P8LE-NEXT:    mulhw r11, r8, r4
-; P8LE-NEXT:    add r8, r11, r8
-; P8LE-NEXT:    mulhw r11, r9, r4
-; P8LE-NEXT:    add r9, r11, r9
-; P8LE-NEXT:    mulhw r11, r5, r4
-; P8LE-NEXT:    mulhw r4, r10, r4
-; P8LE-NEXT:    add r11, r11, r5
-; P8LE-NEXT:    add r4, r4, r10
-; P8LE-NEXT:    srwi r10, r11, 31
-; P8LE-NEXT:    srawi r11, r11, 6
-; P8LE-NEXT:    add r10, r11, r10
+; P8LE-NEXT:    extsh r6, r6
+; P8LE-NEXT:    extsh r7, r7
+; P8LE-NEXT:    extsh r3, r3
+; P8LE-NEXT:    mulhw r8, r5, r4
+; P8LE-NEXT:    mulhw r9, r6, r4
+; P8LE-NEXT:    mulhw r10, r7, r4
+; P8LE-NEXT:    mulhw r4, r3, r4
+; P8LE-NEXT:    add r8, r8, r5
+; P8LE-NEXT:    add r9, r9, r6
+; P8LE-NEXT:    add r10, r10, r7
+; P8LE-NEXT:    add r4, r4, r3
 ; P8LE-NEXT:    srwi r11, r8, 31
 ; P8LE-NEXT:    srawi r8, r8, 6
 ; P8LE-NEXT:    add r8, r8, r11
 ; P8LE-NEXT:    srwi r11, r9, 31
 ; P8LE-NEXT:    srawi r9, r9, 6
-; P8LE-NEXT:    mtvsrd v2, r10
 ; P8LE-NEXT:    add r9, r9, r11
+; P8LE-NEXT:    srwi r11, r10, 31
+; P8LE-NEXT:    srawi r10, r10, 6
+; P8LE-NEXT:    mtvsrd v2, r8
+; P8LE-NEXT:    add r10, r10, r11
 ; P8LE-NEXT:    srwi r11, r4, 31
 ; P8LE-NEXT:    srawi r4, r4, 6
-; P8LE-NEXT:    mtvsrd v3, r8
+; P8LE-NEXT:    mtvsrd v3, r9
 ; P8LE-NEXT:    add r4, r4, r11
-; P8LE-NEXT:    mulli r11, r10, 95
-; P8LE-NEXT:    sub r5, r5, r11
 ; P8LE-NEXT:    mulli r11, r8, 95
+; P8LE-NEXT:    sub r5, r5, r11
+; P8LE-NEXT:    mulli r11, r9, 95
 ; P8LE-NEXT:    mtvsrd v4, r5
 ; P8LE-NEXT:    sub r6, r6, r11
-; P8LE-NEXT:    mulli r11, r9, 95
+; P8LE-NEXT:    mulli r11, r10, 95
 ; P8LE-NEXT:    mtvsrd v5, r6
 ; P8LE-NEXT:    sub r7, r7, r11
 ; P8LE-NEXT:    mulli r11, r4, 95
 ; P8LE-NEXT:    mtvsrd v0, r7
 ; P8LE-NEXT:    sub r3, r3, r11
 ; P8LE-NEXT:    vmrghh v2, v3, v2
-; P8LE-NEXT:    mtvsrd v3, r9
+; P8LE-NEXT:    mtvsrd v3, r10
 ; P8LE-NEXT:    vmrghh v4, v5, v4
 ; P8LE-NEXT:    mtvsrd v5, r3
 ; P8LE-NEXT:    vmrghh v5, v5, v0
@@ -647,27 +647,27 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ;
 ; P8BE-LABEL: combine_srem_sdiv:
 ; P8BE:       # %bb.0:
-; P8BE-NEXT:    mfvsrd r4, v2
-; P8BE-NEXT:    lis r5, -21386
-; P8BE-NEXT:    ori r5, r5, 37253
-; P8BE-NEXT:    clrldi r3, r4, 48
-; P8BE-NEXT:    rldicl r6, r4, 48, 48
-; P8BE-NEXT:    rldicl r7, r4, 32, 48
-; P8BE-NEXT:    rldicl r4, r4, 16, 48
-; P8BE-NEXT:    extsh r8, r3
-; P8BE-NEXT:    extsh r9, r6
-; P8BE-NEXT:    extsh r10, r7
-; P8BE-NEXT:    extsh r4, r4
-; P8BE-NEXT:    mulhw r11, r8, r5
-; P8BE-NEXT:    add r8, r11, r8
-; P8BE-NEXT:    mulhw r11, r9, r5
-; P8BE-NEXT:    add r9, r11, r9
-; P8BE-NEXT:    mulhw r11, r10, r5
-; P8BE-NEXT:    mulhw r5, r4, r5
-; P8BE-NEXT:    add r10, r11, r10
+; P8BE-NEXT:    mfvsrd r3, v2
+; P8BE-NEXT:    lis r4, -21386
+; P8BE-NEXT:    ori r4, r4, 37253
+; P8BE-NEXT:    clrldi r5, r3, 48
+; P8BE-NEXT:    rldicl r6, r3, 48, 48
+; P8BE-NEXT:    rldicl r7, r3, 32, 48
+; P8BE-NEXT:    rldicl r3, r3, 16, 48
+; P8BE-NEXT:    extsh r5, r5
+; P8BE-NEXT:    extsh r6, r6
+; P8BE-NEXT:    extsh r7, r7
+; P8BE-NEXT:    extsh r3, r3
+; P8BE-NEXT:    mulhw r8, r5, r4
+; P8BE-NEXT:    mulhw r9, r6, r4
+; P8BE-NEXT:    mulhw r10, r7, r4
+; P8BE-NEXT:    mulhw r4, r3, r4
+; P8BE-NEXT:    add r8, r8, r5
+; P8BE-NEXT:    add r9, r9, r6
+; P8BE-NEXT:    add r10, r10, r7
+; P8BE-NEXT:    add r4, r4, r3
 ; P8BE-NEXT:    srwi r11, r8, 31
 ; P8BE-NEXT:    srawi r8, r8, 6
-; P8BE-NEXT:    add r5, r5, r4
 ; P8BE-NEXT:    add r8, r8, r11
 ; P8BE-NEXT:    srwi r11, r9, 31
 ; P8BE-NEXT:    srawi r9, r9, 6
@@ -676,30 +676,30 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P8BE-NEXT:    srawi r10, r10, 6
 ; P8BE-NEXT:    mtvsrwz v3, r8
 ; P8BE-NEXT:    add r10, r10, r11
-; P8BE-NEXT:    srwi r11, r5, 31
-; P8BE-NEXT:    srawi r5, r5, 6
+; P8BE-NEXT:    srwi r11, r4, 31
+; P8BE-NEXT:    srawi r4, r4, 6
 ; P8BE-NEXT:    mtvsrwz v4, r9
-; P8BE-NEXT:    add r5, r5, r11
+; P8BE-NEXT:    add r4, r4, r11
 ; P8BE-NEXT:    mulli r11, r8, 95
-; P8BE-NEXT:    sub r3, r3, r11
+; P8BE-NEXT:    sub r5, r5, r11
 ; P8BE-NEXT:    mulli r11, r9, 95
-; P8BE-NEXT:    mtvsrwz v5, r3
+; P8BE-NEXT:    mtvsrwz v5, r5
 ; P8BE-NEXT:    sub r6, r6, r11
 ; P8BE-NEXT:    mulli r11, r10, 95
 ; P8BE-NEXT:    mtvsrwz v0, r6
 ; P8BE-NEXT:    sub r7, r7, r11
-; P8BE-NEXT:    mulli r11, r5, 95
+; P8BE-NEXT:    mulli r11, r4, 95
 ; P8BE-NEXT:    mtvsrwz v1, r7
-; P8BE-NEXT:    sub r4, r4, r11
+; P8BE-NEXT:    sub r3, r3, r11
 ; P8BE-NEXT:    addis r11, r2, .LCPI2_0@toc@ha
 ; P8BE-NEXT:    addi r11, r11, .LCPI2_0@toc@l
 ; P8BE-NEXT:    lxvw4x v2, 0, r11
 ; P8BE-NEXT:    vperm v5, v0, v5, v2
-; P8BE-NEXT:    mtvsrwz v0, r4
+; P8BE-NEXT:    mtvsrwz v0, r3
 ; P8BE-NEXT:    vperm v3, v4, v3, v2
 ; P8BE-NEXT:    mtvsrwz v4, r10
 ; P8BE-NEXT:    vperm v0, v0, v1, v2
-; P8BE-NEXT:    mtvsrwz v1, r5
+; P8BE-NEXT:    mtvsrwz v1, r4
 ; P8BE-NEXT:    vperm v2, v1, v4, v2
 ; P8BE-NEXT:    xxmrghw v4, v0, v5
 ; P8BE-NEXT:    xxmrghw v2, v2, v3

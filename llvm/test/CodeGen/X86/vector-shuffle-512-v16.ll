@@ -195,10 +195,9 @@ define <16 x float> @shuffle_v16f32_02_03_16_17_06_07_20_21_10_11_24_25_14_15_28
 define <16 x float> @shuffle_f32_v16f32_00_08_01_09_02_10_03_11_04_12_05_13_06_14_07_15(float %a0, float %a1) {
 ; ALL-LABEL: shuffle_f32_v16f32_00_08_01_09_02_10_03_11_04_12_05_13_06_14_07_15:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    vbroadcastss %xmm0, %ymm0
-; ALL-NEXT:    vbroadcastss %xmm1, %ymm1
-; ALL-NEXT:    vunpcklps {{.*#+}} ymm0 = ymm0[0],ymm1[0],ymm0[1],ymm1[1],ymm0[4],ymm1[4],ymm0[5],ymm1[5]
-; ALL-NEXT:    vinsertf64x4 $1, %ymm0, %zmm0, %zmm0
+; ALL-NEXT:    vbroadcastss %xmm1, %zmm1
+; ALL-NEXT:    vbroadcastss %xmm0, %zmm0
+; ALL-NEXT:    vunpcklps {{.*#+}} zmm0 = zmm0[0],zmm1[0],zmm0[1],zmm1[1],zmm0[4],zmm1[4],zmm0[5],zmm1[5],zmm0[8],zmm1[8],zmm0[9],zmm1[9],zmm0[12],zmm1[12],zmm0[13],zmm1[13]
 ; ALL-NEXT:    retq
   %v0 = insertelement <8 x float> poison, float %a0, i64 0
   %v1 = insertelement <8 x float> poison, float %a1, i64 0
@@ -220,9 +219,8 @@ define <16 x float> @shuffle_f32_v16f32_00_08_00_08_00_08_00_08_00_08_00_08_00_0
 ; FAST:       # %bb.0:
 ; FAST-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
 ; FAST-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
-; FAST-NEXT:    vmovaps {{.*#+}} ymm2 = [0,16,0,16,0,16,0,16]
+; FAST-NEXT:    vbroadcastsd {{.*#+}} zmm2 = [0,16,0,16,0,16,0,16,0,16,0,16,0,16,0,16]
 ; FAST-NEXT:    vpermt2ps %zmm1, %zmm2, %zmm0
-; FAST-NEXT:    vinsertf64x4 $1, %ymm0, %zmm0, %zmm0
 ; FAST-NEXT:    retq
   %v0 = insertelement <8 x float> poison, float %a0, i64 0
   %v1 = insertelement <8 x float> poison, float %a1, i64 0
@@ -698,9 +696,9 @@ define <16 x float> @insert_sub01_8(<16 x float> %base, <4 x float> %sub1, <4 x 
 define <16 x float> @insert_sub23_0(<16 x float> %base, <4 x float> %sub1, <4 x float> %sub2, <4 x float> %sub3, <4 x float> %sub4) {
 ; ALL-LABEL: insert_sub23_0:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    # kill: def $xmm3 killed $xmm3 def $ymm3
-; ALL-NEXT:    vinsertf128 $1, %xmm4, %ymm3, %ymm1
-; ALL-NEXT:    vinsertf64x4 $0, %ymm1, %zmm0, %zmm0
+; ALL-NEXT:    vinsertf32x4 $2, %xmm3, %zmm0, %zmm1
+; ALL-NEXT:    vinsertf32x4 $3, %xmm4, %zmm1, %zmm1
+; ALL-NEXT:    vshuff64x2 {{.*#+}} zmm0 = zmm1[4,5,6,7],zmm0[4,5,6,7]
 ; ALL-NEXT:    retq
   %sub12 = shufflevector <4 x float> %sub1, <4 x float> %sub2, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
   %sub34 = shufflevector <4 x float> %sub3, <4 x float> %sub4, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
@@ -963,8 +961,8 @@ define void @ispc_1864(ptr %arg) {
 ; ALL-NEXT:    vbroadcastss {{.*#+}} ymm0 = [-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0,-5.0E+0]
 ; ALL-NEXT:    vmulps 32(%rdi), %ymm0, %ymm0
 ; ALL-NEXT:    vcvtps2pd %ymm0, %zmm0
-; ALL-NEXT:    vshuff64x2 {{.*#+}} zmm0 = zmm0[2,3,4,5,4,5,6,7]
-; ALL-NEXT:    vmovapd %ymm0, {{[0-9]+}}(%rsp)
+; ALL-NEXT:    vextractf32x4 $2, %zmm0, {{[0-9]+}}(%rsp)
+; ALL-NEXT:    vextractf32x4 $1, %zmm0, {{[0-9]+}}(%rsp)
 ; ALL-NEXT:    movq %rbp, %rsp
 ; ALL-NEXT:    popq %rbp
 ; ALL-NEXT:    .cfi_def_cfa %rsp, 8

@@ -11,17 +11,21 @@ define void @function() {
 ; CHECK-NEXT:    mov r0, #0
 ; CHECK-NEXT:    cmp r0, #0
 ; CHECK-NEXT:    bxne lr
-; CHECK-NEXT:  .LBB0_1: @ %vector.body
+; CHECK-NEXT:  .LBB0_1: @ %vector.body.preheader
+; CHECK-NEXT:    vmov.i32 q8, #0xff0000
+; CHECK-NEXT:  .LBB0_2: @ %vector.body
 ; CHECK-NEXT:    @ =>This Inner Loop Header: Depth=1
-; CHECK-NEXT:    vld1.32 {d16, d17}, [r0]
+; CHECK-NEXT:    vld1.32 {d18, d19}, [r0]
 ; CHECK-NEXT:    adr r0, .LCPI0_0
-; CHECK-NEXT:    vbic.i32 q8, #0xff
-; CHECK-NEXT:    vld1.64 {d18, d19}, [r0:128]
-; CHECK-NEXT:    vorr q8, q8, q9
-; CHECK-NEXT:    vst1.32 {d16, d17}, [r0]
-; CHECK-NEXT:    b .LBB0_1
+; CHECK-NEXT:    vand q10, q9, q8
+; CHECK-NEXT:    vbic.i16 q9, #0xff
+; CHECK-NEXT:    vorr q9, q9, q10
+; CHECK-NEXT:    vld1.64 {d20, d21}, [r0:128]
+; CHECK-NEXT:    vorr q9, q9, q10
+; CHECK-NEXT:    vst1.32 {d18, d19}, [r0]
+; CHECK-NEXT:    b .LBB0_2
 ; CHECK-NEXT:    .p2align 4
-; CHECK-NEXT:  @ %bb.2:
+; CHECK-NEXT:  @ %bb.3:
 ; CHECK-NEXT:  .LCPI0_0:
 ; CHECK-NEXT:    .long 1 @ 0x1
 ; CHECK-NEXT:    .long 2 @ 0x2

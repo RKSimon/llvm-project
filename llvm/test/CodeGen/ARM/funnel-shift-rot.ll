@@ -69,22 +69,23 @@ define i32 @rotl_i32(i32 %x, i32 %z) {
 define i64 @rotl_i64(i64 %x, i64 %z) {
 ; CHECK-LABEL: rotl_i64:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    tst r2, #32
+; CHECK-NEXT:    .save {r11, lr}
+; CHECK-NEXT:    push {r11, lr}
+; CHECK-NEXT:    mov r3, #31
+; CHECK-NEXT:    bic r12, r3, r2
+; CHECK-NEXT:    mov r3, #1
+; CHECK-NEXT:    tst r3, r2, lsr #5
 ; CHECK-NEXT:    mov r3, r0
-; CHECK-NEXT:    and r12, r2, #31
+; CHECK-NEXT:    and r2, r2, #31
 ; CHECK-NEXT:    movne r3, r1
 ; CHECK-NEXT:    movne r1, r0
-; CHECK-NEXT:    mov r4, #31
-; CHECK-NEXT:    bic r2, r4, r2
-; CHECK-NEXT:    lsl lr, r3, r12
 ; CHECK-NEXT:    lsr r0, r1, #1
-; CHECK-NEXT:    lsl r1, r1, r12
-; CHECK-NEXT:    lsr r3, r3, #1
-; CHECK-NEXT:    orr r0, lr, r0, lsr r2
-; CHECK-NEXT:    orr r1, r1, r3, lsr r2
-; CHECK-NEXT:    pop {r4, pc}
+; CHECK-NEXT:    lsl lr, r3, r2
+; CHECK-NEXT:    lsl r1, r1, r2
+; CHECK-NEXT:    lsr r2, r3, #1
+; CHECK-NEXT:    orr r0, lr, r0, lsr r12
+; CHECK-NEXT:    orr r1, r1, r2, lsr r12
+; CHECK-NEXT:    pop {r11, pc}
   %f = call i64 @llvm.fshl.i64(i64 %x, i64 %x, i64 %z)
   ret i64 %f
 }

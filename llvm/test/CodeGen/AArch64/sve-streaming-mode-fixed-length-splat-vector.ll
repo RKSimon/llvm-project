@@ -12,20 +12,28 @@ target triple = "aarch64-unknown-linux-gnu"
 define <4 x i8> @splat_v4i8(i8 %a) {
 ; CHECK-LABEL: splat_v4i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov z0.h, w0
+; CHECK-NEXT:    sub sp, sp, #16
+; CHECK-NEXT:    .cfi_def_cfa_offset 16
+; CHECK-NEXT:    ptrue p0.h, vl4
+; CHECK-NEXT:    str w0, [sp, #12]
+; CHECK-NEXT:    add x8, sp, #12
+; CHECK-NEXT:    ld1b { z0.h }, p0/z, [x8]
+; CHECK-NEXT:    mov z0.h, h0
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
+; CHECK-NEXT:    add sp, sp, #16
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: splat_v4i8:
 ; NONEON-NOSVE:       // %bb.0:
 ; NONEON-NOSVE-NEXT:    sub sp, sp, #16
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 16
-; NONEON-NOSVE-NEXT:    strh w0, [sp, #14]
-; NONEON-NOSVE-NEXT:    strh w0, [sp, #12]
-; NONEON-NOSVE-NEXT:    strh w0, [sp, #10]
-; NONEON-NOSVE-NEXT:    strh w0, [sp, #8]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #8]
-; NONEON-NOSVE-NEXT:    add sp, sp, #16
+; NONEON-NOSVE-NEXT:    and w8, w0, #0xff
+; NONEON-NOSVE-NEXT:    str w0, [sp, #12]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #6]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #4]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #2]
+; NONEON-NOSVE-NEXT:    strh w8, [sp]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp], #16
 ; NONEON-NOSVE-NEXT:    ret
   %insert = insertelement <4 x i8> poison, i8 %a, i64 0
   %splat = shufflevector <4 x i8> %insert, <4 x i8> poison, <4 x i32> zeroinitializer
@@ -133,17 +141,25 @@ define void @splat_v32i8(i8 %a, ptr %b) {
 define <2 x i16> @splat_v2i16(i16 %a) {
 ; CHECK-LABEL: splat_v2i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov z0.s, w0
+; CHECK-NEXT:    sub sp, sp, #16
+; CHECK-NEXT:    .cfi_def_cfa_offset 16
+; CHECK-NEXT:    ptrue p0.s, vl2
+; CHECK-NEXT:    str w0, [sp, #12]
+; CHECK-NEXT:    add x8, sp, #12
+; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x8]
+; CHECK-NEXT:    mov z0.s, s0
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $z0
+; CHECK-NEXT:    add sp, sp, #16
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: splat_v2i16:
 ; NONEON-NOSVE:       // %bb.0:
 ; NONEON-NOSVE-NEXT:    sub sp, sp, #16
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 16
-; NONEON-NOSVE-NEXT:    stp w0, w0, [sp, #8]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #8]
-; NONEON-NOSVE-NEXT:    add sp, sp, #16
+; NONEON-NOSVE-NEXT:    and w8, w0, #0xffff
+; NONEON-NOSVE-NEXT:    str w0, [sp, #12]
+; NONEON-NOSVE-NEXT:    stp w8, w8, [sp]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp], #16
 ; NONEON-NOSVE-NEXT:    ret
   %insert = insertelement <2 x i16> poison, i16 %a, i64 0
   %splat = shufflevector <2 x i16> %insert, <2 x i16> poison, <2 x i32> zeroinitializer

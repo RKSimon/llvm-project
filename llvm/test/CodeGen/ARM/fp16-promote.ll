@@ -707,12 +707,11 @@ define void @test_maximum(ptr %p) #0 {
 
 define void @test_copysign(ptr %p, ptr %q) #0 {
 ; CHECK-ALL-LABEL: test_copysign:
-; CHECK-ALL:         ldrh r2, [r0]
-; CHECK-ALL-NEXT:    ldrh r1, [r1]
-; CHECK-ALL-NEXT:    and r1, r1, #32768
-; CHECK-ALL-NEXT:    bfc r2, #15, #17
-; CHECK-ALL-NEXT:    orr r1, r2, r1
-; CHECK-ALL-NEXT:    strh r1, [r0]
+; CHECK-ALL:         ldrh r1, [r1]
+; CHECK-ALL-NEXT:    ldrh r2, [r0]
+; CHECK-ALL-NEXT:    lsr r1, r1, #15
+; CHECK-ALL-NEXT:    bfi r2, r1, #15, #17
+; CHECK-ALL-NEXT:    strh r2, [r0]
 ; CHECK-ALL-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2

@@ -245,11 +245,11 @@ define float @fadd_fma_fmul_2(float %a, float %b, float %c, float %d, float %n0)
 define <2 x double> @fadd_fma_fmul_3(<2 x double> %x1, <2 x double> %x2, <2 x double> %x3, <2 x double> %x4, <2 x double> %x5, <2 x double> %x6, <2 x double> %x7, <2 x double> %x8) nounwind {
 ; CHECK-LABEL: fadd_fma_fmul_3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fmul v2.2d, v2.2d, v3.2d
-; CHECK-NEXT:    fmla v2.2d, v1.2d, v0.2d
-; CHECK-NEXT:    fmla v2.2d, v7.2d, v6.2d
-; CHECK-NEXT:    fmla v2.2d, v5.2d, v4.2d
-; CHECK-NEXT:    mov v0.16b, v2.16b
+; CHECK-NEXT:    fmul v6.2d, v6.2d, v7.2d
+; CHECK-NEXT:    fmla v6.2d, v5.2d, v4.2d
+; CHECK-NEXT:    fmla v6.2d, v3.2d, v2.2d
+; CHECK-NEXT:    fmla v6.2d, v1.2d, v0.2d
+; CHECK-NEXT:    mov v0.16b, v6.16b
 ; CHECK-NEXT:    ret
   %m1 = fmul fast <2 x double> %x1, %x2
   %m2 = fmul fast <2 x double> %x3, %x4

@@ -148,6 +148,8 @@ define i64 @load_4xi16_combine(ptr addrspace(1) %p) #0 {
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    global_load_dwordx2 v[0:1], v[0:1], off
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
+; GCN-NEXT:    v_and_b32_e32 v2, 0xffff0000, v1
+; GCN-NEXT:    v_or_b32_sdwa v1, v1, v2 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %gep.p = getelementptr i16, ptr addrspace(1) %p, i32 1
   %gep.2p = getelementptr i16, ptr addrspace(1) %p, i32 2
@@ -233,10 +235,12 @@ define i64 @load_3xi16_noncombine(ptr addrspace(1) %p) #0 {
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    global_load_ushort v2, v[0:1], off
 ; GCN-NEXT:    global_load_dword v3, v[0:1], off offset:4
-; GCN-NEXT:    s_mov_b32 s4, 0x3020504
+; GCN-NEXT:    s_mov_b32 s4, 0xffff0000
+; GCN-NEXT:    s_waitcnt vmcnt(1)
+; GCN-NEXT:    v_and_b32_e32 v0, 0xffff, v2
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_perm_b32 v0, v2, v3, s4
 ; GCN-NEXT:    v_and_b32_e32 v1, 0xffff, v3
+; GCN-NEXT:    v_and_or_b32 v0, v3, s4, v0
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %gep.p = getelementptr i16, ptr addrspace(1) %p, i32 3
   %gep.2p = getelementptr i16, ptr addrspace(1) %p, i32 2

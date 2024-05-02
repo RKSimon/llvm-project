@@ -2527,7 +2527,8 @@ define i1 @and_fcmp(float %0, float %1) {
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    fcmp s1, s1
 ; CHECK-SD-NEXT:    fccmp s0, s0, #0, vs
-; CHECK-SD-NEXT:    cset w0, vs
+; CHECK-SD-NEXT:    cset w8, vs
+; CHECK-SD-NEXT:    and w0, w8, #0x1
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: and_fcmp:

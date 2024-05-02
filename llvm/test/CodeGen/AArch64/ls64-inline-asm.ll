@@ -7,10 +7,10 @@ define void @load(ptr %output, ptr %addr) {
 ; CHECK-NEXT:    //APP
 ; CHECK-NEXT:    ld64b x2, [x1]
 ; CHECK-NEXT:    //NO_APP
-; CHECK-NEXT:    stp x8, x9, [x0, #48]
-; CHECK-NEXT:    stp x6, x7, [x0, #32]
-; CHECK-NEXT:    stp x4, x5, [x0, #16]
 ; CHECK-NEXT:    stp x2, x3, [x0]
+; CHECK-NEXT:    stp x4, x5, [x0, #16]
+; CHECK-NEXT:    stp x6, x7, [x0, #32]
+; CHECK-NEXT:    stp x8, x9, [x0, #48]
 ; CHECK-NEXT:    ret
 entry:
   %val = call i512 asm sideeffect "ld64b $0,[$1]", "=r,r,~{memory}"(ptr %addr)
@@ -109,10 +109,10 @@ define void @multi_output(ptr %addr) {
 ; CHECK-NEXT:    ld64b x0, [x0]
 ; CHECK-NEXT:    mov x8, x0
 ; CHECK-NEXT:    //NO_APP
-; CHECK-NEXT:    stp x6, x7, [x8, #48]
-; CHECK-NEXT:    stp x4, x5, [x8, #32]
-; CHECK-NEXT:    stp x2, x3, [x8, #16]
 ; CHECK-NEXT:    stp x0, x1, [x8]
+; CHECK-NEXT:    stp x2, x3, [x8, #16]
+; CHECK-NEXT:    stp x4, x5, [x8, #32]
+; CHECK-NEXT:    stp x6, x7, [x8, #48]
 ; CHECK-NEXT:    ret
 entry:
   %val = call { i512, ptr } asm sideeffect "ld64b $0, [$2]; mov $1, $2", "=r,=r,r,~{memory}"(ptr %addr)

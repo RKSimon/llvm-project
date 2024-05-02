@@ -104,10 +104,9 @@ define void @computeNumSignBits_shl_zext_vec_2(<2 x i8> %x, ptr %p) nounwind {
 ; X64-NEXT:    movdqa %xmm2, %xmm3
 ; X64-NEXT:    psraw $2, %xmm3
 ; X64-NEXT:    pcmpeqw %xmm0, %xmm3
-; X64-NEXT:    movdqa %xmm3, %xmm0
-; X64-NEXT:    pandn %xmm1, %xmm0
-; X64-NEXT:    pand %xmm2, %xmm3
-; X64-NEXT:    por %xmm0, %xmm3
+; X64-NEXT:    pand %xmm3, %xmm2
+; X64-NEXT:    pandn %xmm1, %xmm3
+; X64-NEXT:    por %xmm2, %xmm3
 ; X64-NEXT:    movd %xmm3, (%rdi)
 ; X64-NEXT:    retq
   %ashr = ashr <2 x i8> %x, <i8 5, i8 5>
@@ -141,10 +140,9 @@ define void @computeNumSignBits_shl_zext_vec_3(<2 x i8> %x, ptr %p) nounwind {
 ; X64-NEXT:    movdqa %xmm2, %xmm3
 ; X64-NEXT:    psraw $1, %xmm3
 ; X64-NEXT:    pcmpeqw %xmm0, %xmm3
-; X64-NEXT:    movdqa %xmm3, %xmm0
-; X64-NEXT:    pandn %xmm1, %xmm0
-; X64-NEXT:    pand %xmm2, %xmm3
-; X64-NEXT:    por %xmm0, %xmm3
+; X64-NEXT:    pand %xmm3, %xmm2
+; X64-NEXT:    pandn %xmm1, %xmm3
+; X64-NEXT:    por %xmm2, %xmm3
 ; X64-NEXT:    movd %xmm3, (%rdi)
 ; X64-NEXT:    retq
   %ashr = ashr <2 x i8> %x, <i8 5, i8 5>

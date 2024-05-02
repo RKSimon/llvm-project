@@ -262,10 +262,11 @@ entry:
 define signext i32 @test_byval_4Byte(ptr byval(%struct.S4) align 1 %s, ptr byval(%struct.S0) align 1, ptr byval(%struct.S4A) align 4 %s4a) {
 ; 32BIT-LABEL: test_byval_4Byte:
 ; 32BIT:       # %bb.0: # %entry
-; 32BIT-NEXT:    stw 3, 24(1)
+; 32BIT-NEXT:    mr 5, 3
 ; 32BIT-NEXT:    clrlwi 3, 3, 24
-; 32BIT-NEXT:    add 3, 4, 3
 ; 32BIT-NEXT:    stw 4, 28(1)
+; 32BIT-NEXT:    add 3, 4, 3
+; 32BIT-NEXT:    stw 5, 24(1)
 ; 32BIT-NEXT:    blr
 ;
 ; 64BIT-LABEL: test_byval_4Byte:
@@ -513,23 +514,25 @@ define zeroext i8 @test_byval_32Byte(ptr byval(%struct.S32) align 1 %s) {
 ; 32BIT-LABEL: test_byval_32Byte:
 ; 32BIT:       # %bb.0: # %entry
 ; 32BIT-NEXT:    stw 8, 44(1)
-; 32BIT-NEXT:    stw 3, 24(1)
+; 32BIT-NEXT:    mr 11, 3
 ; 32BIT-NEXT:    lbz 3, 45(1)
-; 32BIT-NEXT:    stw 4, 28(1)
-; 32BIT-NEXT:    stw 5, 32(1)
-; 32BIT-NEXT:    stw 6, 36(1)
-; 32BIT-NEXT:    stw 7, 40(1)
-; 32BIT-NEXT:    stw 9, 48(1)
 ; 32BIT-NEXT:    stw 10, 52(1)
+; 32BIT-NEXT:    stw 9, 48(1)
+; 32BIT-NEXT:    stw 7, 40(1)
+; 32BIT-NEXT:    stw 6, 36(1)
+; 32BIT-NEXT:    stw 5, 32(1)
+; 32BIT-NEXT:    stw 4, 28(1)
+; 32BIT-NEXT:    stw 11, 24(1)
 ; 32BIT-NEXT:    blr
 ;
 ; 64BIT-LABEL: test_byval_32Byte:
 ; 64BIT:       # %bb.0: # %entry
 ; 64BIT-NEXT:    std 5, 64(1)
-; 64BIT-NEXT:    std 3, 48(1)
+; 64BIT-NEXT:    mr 7, 3
 ; 64BIT-NEXT:    lbz 3, 69(1)
-; 64BIT-NEXT:    std 4, 56(1)
 ; 64BIT-NEXT:    std 6, 72(1)
+; 64BIT-NEXT:    std 4, 56(1)
+; 64BIT-NEXT:    std 7, 48(1)
 ; 64BIT-NEXT:    blr
 entry:
   %arrayidx = getelementptr inbounds %struct.S32, ptr %s, i32 0, i32 0, i32 21
@@ -601,21 +604,21 @@ define double @test_byval_31Byte(ptr byval(%struct.S31) align 1 %s) {
 ; 32BIT-NEXT:    stw 8, 44(1)
 ; 32BIT-NEXT:    stw 7, 40(1)
 ; 32BIT-NEXT:    lfd 1, 40(1)
-; 32BIT-NEXT:    stw 3, 24(1)
-; 32BIT-NEXT:    stw 4, 28(1)
-; 32BIT-NEXT:    stw 5, 32(1)
-; 32BIT-NEXT:    stw 6, 36(1)
-; 32BIT-NEXT:    stw 9, 48(1)
 ; 32BIT-NEXT:    stw 10, 52(1)
+; 32BIT-NEXT:    stw 9, 48(1)
+; 32BIT-NEXT:    stw 6, 36(1)
+; 32BIT-NEXT:    stw 5, 32(1)
+; 32BIT-NEXT:    stw 4, 28(1)
+; 32BIT-NEXT:    stw 3, 24(1)
 ; 32BIT-NEXT:    blr
 ;
 ; 64BIT-LABEL: test_byval_31Byte:
 ; 64BIT:       # %bb.0: # %entry
 ; 64BIT-NEXT:    std 5, 64(1)
 ; 64BIT-NEXT:    lfd 1, 64(1)
-; 64BIT-NEXT:    std 3, 48(1)
-; 64BIT-NEXT:    std 4, 56(1)
 ; 64BIT-NEXT:    std 6, 72(1)
+; 64BIT-NEXT:    std 4, 56(1)
+; 64BIT-NEXT:    std 3, 48(1)
 ; 64BIT-NEXT:    blr
 entry:
   %gep = getelementptr inbounds %struct.S31, ptr %s, i32 0, i32 3

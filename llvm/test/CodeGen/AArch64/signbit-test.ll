@@ -23,8 +23,8 @@ define i64 @test_set_mask_i64_i32(i64 %x) nounwind {
 ; CHECK-LABEL: test_set_mask_i64_i32:
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst x0, #0x80000000
-; CHECK-NEXT:    csel x0, x8, x0, ne
+; CHECK-NEXT:    cmp w0, #0
+; CHECK-NEXT:    csel x0, x8, x0, lt
 ; CHECK-NEXT:    ret
 entry:
   %a = and i64 %x, 2147483648
@@ -202,8 +202,9 @@ f:
 define i16 @test_set_mask_i16_i8(i16 %x) nounwind {
 ; CHECK-LABEL: test_set_mask_i16_i8:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ubfx w9, w0, #7, #1
 ; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst w0, #0x80
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csel w0, w8, w0, ne
 ; CHECK-NEXT:    ret
 entry:
@@ -220,8 +221,9 @@ f:
 define i16 @test_set_mask_i16_i7(i16 %x) nounwind {
 ; CHECK-LABEL: test_set_mask_i16_i7:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ubfx w9, w0, #6, #1
 ; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst w0, #0x40
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csel w0, w8, w0, ne
 ; CHECK-NEXT:    ret
 entry:

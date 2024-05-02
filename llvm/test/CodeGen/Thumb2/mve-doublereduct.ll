@@ -94,8 +94,8 @@ define i16 @add_ext_v32i16(<32 x i8> %a, <16 x i8> %b) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
-; CHECK-NEXT:    mov r1, sp
-; CHECK-NEXT:    add r2, sp, #16
+; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    mov r2, sp
 ; CHECK-NEXT:    vstrw.32 q0, [r1]
 ; CHECK-NEXT:    vstrw.32 q1, [r2]
 ; CHECK-NEXT:    vldrb.u16 q1, [r2]
