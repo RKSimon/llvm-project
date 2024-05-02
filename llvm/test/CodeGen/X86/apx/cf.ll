@@ -129,6 +129,9 @@ define void @single_cmp(i32 %a, i32 %b, ptr %c, ptr %d) {
 ; CHECK-LABEL: single_cmp:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpl %esi, %edi
+; CHECK-NEXT:    movl $255, %eax
+; CHECK-NEXT:    cfcmovnel %eax, %eax
+; CHECK-NEXT:    andb $1, %al
 ; CHECK-NEXT:    cfcmovnew (%rdx), %ax
 ; CHECK-NEXT:    cfcmovnew %ax, (%rcx)
 ; CHECK-NEXT:    retq
@@ -144,9 +147,14 @@ define void @load_add_store(i32 %a, i32 %b, ptr %p) {
 ; CHECK-LABEL: load_add_store:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpl %esi, %edi
-; CHECK-NEXT:    cfcmovnew (%rdx), %ax
-; CHECK-NEXT:    {nf} incl %eax
-; CHECK-NEXT:    cfcmovnew %ax, (%rdx)
+; CHECK-NEXT:    movl $255, %eax
+; CHECK-NEXT:    cfcmovnel %eax, %eax
+; CHECK-NEXT:    movl %eax, %ecx
+; CHECK-NEXT:    andb $1, %cl
+; CHECK-NEXT:    cfcmovnew (%rdx), %cx
+; CHECK-NEXT:    incl %ecx
+; CHECK-NEXT:    andb $1, %al
+; CHECK-NEXT:    cfcmovnew %cx, (%rdx)
 ; CHECK-NEXT:    retq
 entry:
   %0 = icmp ne i32 %a, %b
