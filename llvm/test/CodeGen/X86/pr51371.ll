@@ -51,11 +51,14 @@ define void @pmuludq(ptr nocapture %0, i32 %1, i64 %2) {
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    movd %esi, %xmm0
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; CHECK-NEXT:    pxor %xmm1, %xmm1
+; CHECK-NEXT:    pblendw {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,3],xmm0[4,5],xmm1[6,7]
 ; CHECK-NEXT:    .p2align 4
 ; CHECK-NEXT:  .LBB1_2: # =>This Inner Loop Header: Depth=1
-; CHECK-NEXT:    movdqa (%rdi), %xmm1
-; CHECK-NEXT:    pmuludq %xmm0, %xmm1
-; CHECK-NEXT:    movdqa %xmm1, (%rdi)
+; CHECK-NEXT:    movdqa (%rdi), %xmm2
+; CHECK-NEXT:    pblendw {{.*#+}} xmm2 = xmm2[0,1],xmm1[2,3],xmm2[4,5],xmm1[6,7]
+; CHECK-NEXT:    pmuludq %xmm0, %xmm2
+; CHECK-NEXT:    movdqa %xmm2, (%rdi)
 ; CHECK-NEXT:    addq $16, %rdi
 ; CHECK-NEXT:    decq %rdx
 ; CHECK-NEXT:    jne .LBB1_2

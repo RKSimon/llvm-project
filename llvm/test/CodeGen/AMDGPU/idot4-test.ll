@@ -622,44 +622,36 @@ define i32 @udot4_i8_zext(i8 %a0, i8 %a1, i8 %a2, i8 %a3,
 ; GFX9-DL:       ; %bb.0: ; %entry
 ; GFX9-DL-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-DL-NEXT:    s_mov_b32 s4, 0xc0c0400
-; GFX9-DL-NEXT:    s_mov_b32 s5, 0x4000c0c
-; GFX9-DL-NEXT:    v_perm_b32 v4, v4, v5, s4
-; GFX9-DL-NEXT:    v_perm_b32 v5, v7, v6, s5
-; GFX9-DL-NEXT:    v_perm_b32 v0, v0, v1, s4
-; GFX9-DL-NEXT:    v_perm_b32 v1, v3, v2, s5
-; GFX9-DL-NEXT:    v_or_b32_e32 v4, v5, v4
-; GFX9-DL-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX9-DL-NEXT:    v_dot4_u32_u8 v0, v0, v4, 0
-; GFX9-DL-NEXT:    v_add_u32_e32 v0, v0, v8
+; GFX9-DL-NEXT:    v_mul_u32_u24_sdwa v1, v1, v5 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX9-DL-NEXT:    v_perm_b32 v4, v6, v4, s4
+; GFX9-DL-NEXT:    v_perm_b32 v0, v2, v0, s4
+; GFX9-DL-NEXT:    v_mul_u32_u24_sdwa v3, v3, v7 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX9-DL-NEXT:    v_dot4_u32_u8 v0, v0, v4, v1
+; GFX9-DL-NEXT:    v_add3_u32 v0, v0, v3, v8
 ; GFX9-DL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX10-DL-LABEL: udot4_i8_zext:
 ; GFX10-DL:       ; %bb.0: ; %entry
 ; GFX10-DL-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX10-DL-NEXT:    v_perm_b32 v4, v4, v5, 0xc0c0400
-; GFX10-DL-NEXT:    v_perm_b32 v5, v7, v6, 0x4000c0c
-; GFX10-DL-NEXT:    v_perm_b32 v0, v0, v1, 0xc0c0400
-; GFX10-DL-NEXT:    v_perm_b32 v1, v3, v2, 0x4000c0c
-; GFX10-DL-NEXT:    v_or_b32_e32 v2, v5, v4
-; GFX10-DL-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX10-DL-NEXT:    v_dot4_u32_u8 v0, v0, v2, 0
-; GFX10-DL-NEXT:    v_add_nc_u32_e32 v0, v0, v8
+; GFX10-DL-NEXT:    v_mul_u32_u24_sdwa v1, v1, v5 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX10-DL-NEXT:    v_perm_b32 v4, v6, v4, 0xc0c0400
+; GFX10-DL-NEXT:    v_perm_b32 v0, v2, v0, 0xc0c0400
+; GFX10-DL-NEXT:    v_mul_u32_u24_sdwa v2, v3, v7 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX10-DL-NEXT:    v_dot4_u32_u8 v0, v0, v4, v1
+; GFX10-DL-NEXT:    v_add3_u32 v0, v0, v2, v8
 ; GFX10-DL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX950-LABEL: udot4_i8_zext:
 ; GFX950:       ; %bb.0: ; %entry
 ; GFX950-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX950-NEXT:    s_mov_b32 s0, 0xc0c0400
-; GFX950-NEXT:    s_mov_b32 s1, 0x4000c0c
-; GFX950-NEXT:    v_perm_b32 v4, v4, v5, s0
-; GFX950-NEXT:    v_perm_b32 v5, v7, v6, s1
-; GFX950-NEXT:    v_perm_b32 v0, v0, v1, s0
-; GFX950-NEXT:    v_perm_b32 v1, v3, v2, s1
-; GFX950-NEXT:    v_or_b32_e32 v4, v5, v4
-; GFX950-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX950-NEXT:    v_dot4_u32_u8 v0, v0, v4, 0
+; GFX950-NEXT:    v_mul_u32_u24_sdwa v1, v1, v5 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX950-NEXT:    v_perm_b32 v4, v6, v4, s0
+; GFX950-NEXT:    v_perm_b32 v0, v2, v0, s0
+; GFX950-NEXT:    v_mul_u32_u24_sdwa v3, v3, v7 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX950-NEXT:    v_dot4_u32_u8 v0, v0, v4, v1
 ; GFX950-NEXT:    s_nop 2
-; GFX950-NEXT:    v_add_u32_e32 v0, v0, v8
+; GFX950-NEXT:    v_add3_u32 v0, v0, v3, v8
 ; GFX950-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-NODL-LABEL: udot4_i8_zext:
@@ -699,46 +691,36 @@ define i32 @sdot4_i8_sext(i8 %a0, i8 %a1, i8 %a2, i8 %a3,
 ; GFX9-DL:       ; %bb.0: ; %entry
 ; GFX9-DL-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-DL-NEXT:    s_mov_b32 s4, 0xc0c0400
-; GFX9-DL-NEXT:    s_mov_b32 s5, 0x4000c0c
-; GFX9-DL-NEXT:    v_perm_b32 v4, v4, v5, s4
-; GFX9-DL-NEXT:    v_perm_b32 v5, v7, v6, s5
-; GFX9-DL-NEXT:    v_perm_b32 v0, v0, v1, s4
-; GFX9-DL-NEXT:    v_perm_b32 v1, v3, v2, s5
-; GFX9-DL-NEXT:    v_or_b32_e32 v4, v5, v4
-; GFX9-DL-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX9-DL-NEXT:    v_dot4_i32_i8 v0, v0, v4, 0
-; GFX9-DL-NEXT:    v_add_u32_e32 v0, v0, v8
+; GFX9-DL-NEXT:    v_mul_i32_i24_sdwa v1, sext(v1), sext(v5) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX9-DL-NEXT:    v_perm_b32 v4, v6, v4, s4
+; GFX9-DL-NEXT:    v_perm_b32 v0, v2, v0, s4
+; GFX9-DL-NEXT:    v_mul_i32_i24_sdwa v3, sext(v3), sext(v7) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX9-DL-NEXT:    v_dot4_i32_i8 v0, v0, v4, v1
+; GFX9-DL-NEXT:    v_add3_u32 v0, v0, v3, v8
 ; GFX9-DL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX10-DL-LABEL: sdot4_i8_sext:
 ; GFX10-DL:       ; %bb.0: ; %entry
 ; GFX10-DL-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX10-DL-NEXT:    v_perm_b32 v4, v4, v5, 0xc0c0400
-; GFX10-DL-NEXT:    v_perm_b32 v5, v7, v6, 0x4000c0c
-; GFX10-DL-NEXT:    v_perm_b32 v0, v0, v1, 0xc0c0400
-; GFX10-DL-NEXT:    v_perm_b32 v1, v3, v2, 0x4000c0c
-; GFX10-DL-NEXT:    v_or_b32_e32 v2, v5, v4
-; GFX10-DL-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX10-DL-NEXT:    v_mov_b32_e32 v1, 0
-; GFX10-DL-NEXT:    v_dot4c_i32_i8 v1, v0, v2
-; GFX10-DL-NEXT:    v_add_nc_u32_e32 v0, v1, v8
+; GFX10-DL-NEXT:    v_mul_i32_i24_sdwa v1, sext(v1), sext(v5) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX10-DL-NEXT:    v_perm_b32 v4, v6, v4, 0xc0c0400
+; GFX10-DL-NEXT:    v_perm_b32 v0, v2, v0, 0xc0c0400
+; GFX10-DL-NEXT:    v_mul_i32_i24_sdwa v2, sext(v3), sext(v7) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX10-DL-NEXT:    v_dot4c_i32_i8 v1, v0, v4
+; GFX10-DL-NEXT:    v_add3_u32 v0, v1, v2, v8
 ; GFX10-DL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX950-LABEL: sdot4_i8_sext:
 ; GFX950:       ; %bb.0: ; %entry
 ; GFX950-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX950-NEXT:    s_mov_b32 s0, 0xc0c0400
-; GFX950-NEXT:    s_mov_b32 s1, 0x4000c0c
-; GFX950-NEXT:    v_perm_b32 v4, v4, v5, s0
-; GFX950-NEXT:    v_perm_b32 v5, v7, v6, s1
-; GFX950-NEXT:    v_perm_b32 v0, v0, v1, s0
-; GFX950-NEXT:    v_perm_b32 v1, v3, v2, s1
-; GFX950-NEXT:    v_or_b32_e32 v4, v5, v4
-; GFX950-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX950-NEXT:    v_mov_b32_e32 v1, 0
+; GFX950-NEXT:    v_mul_i32_i24_sdwa v1, sext(v1), sext(v5) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
+; GFX950-NEXT:    v_perm_b32 v4, v6, v4, s0
+; GFX950-NEXT:    v_perm_b32 v0, v2, v0, s0
+; GFX950-NEXT:    v_mul_i32_i24_sdwa v3, sext(v3), sext(v7) dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:BYTE_0
 ; GFX950-NEXT:    v_dot4c_i32_i8_e32 v1, v0, v4
 ; GFX950-NEXT:    s_nop 2
-; GFX950-NEXT:    v_add_u32_e32 v0, v1, v8
+; GFX950-NEXT:    v_add3_u32 v0, v1, v3, v8
 ; GFX950-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-NODL-LABEL: sdot4_i8_sext:

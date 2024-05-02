@@ -13,29 +13,25 @@ declare void @anchor(...)
 define dso_local { double, double } @dblCmplxRetCallee()  {
 ; 32BIT-LABEL: dblCmplxRetCallee:
 ; 32BIT:       # %bb.0: # %entry
-; 32BIT-NEXT:    lwz 4, L..C0(2) # %const.0
-; 32BIT-NEXT:    lis 3, 16368
-; 32BIT-NEXT:    stw 3, -16(1)
 ; 32BIT-NEXT:    li 3, 0
-; 32BIT-NEXT:    lfs 1, 0(4)
-; 32BIT-NEXT:    lwz 4, L..C1(2) # %const.1
-; 32BIT-NEXT:    lfs 2, 0(4)
+; 32BIT-NEXT:    lis 4, 16368
 ; 32BIT-NEXT:    stw 3, -12(1)
+; 32BIT-NEXT:    stw 4, -16(1)
 ; 32BIT-NEXT:    stw 3, -4(1)
 ; 32BIT-NEXT:    stw 3, -8(1)
+; 32BIT-NEXT:    lfd 1, -16(1)
+; 32BIT-NEXT:    lfd 2, -8(1)
 ; 32BIT-NEXT:    blr
 ;
 ; 64BIT-LABEL: dblCmplxRetCallee:
 ; 64BIT:       # %bb.0: # %entry
-; 64BIT-NEXT:    ld 3, L..C0(2) # %const.0
-; 64BIT-NEXT:    lfs 1, 0(3)
-; 64BIT-NEXT:    ld 3, L..C1(2) # %const.1
-; 64BIT-NEXT:    lfs 2, 0(3)
+; 64BIT-NEXT:    li 3, 0
+; 64BIT-NEXT:    std 3, -8(1)
 ; 64BIT-NEXT:    li 3, 1023
 ; 64BIT-NEXT:    rldic 3, 3, 52, 2
 ; 64BIT-NEXT:    std 3, -16(1)
-; 64BIT-NEXT:    li 3, 0
-; 64BIT-NEXT:    std 3, -8(1)
+; 64BIT-NEXT:    lfd 2, -8(1)
+; 64BIT-NEXT:    lfd 1, -16(1)
 ; 64BIT-NEXT:    blr
 entry:
   %retval = alloca { double, double }, align 8
@@ -54,7 +50,7 @@ define dso_local void @dblCmplxRetCaller()  {
 ; 32BIT-NEXT:    stwu 1, -64(1)
 ; 32BIT-NEXT:    stw 0, 72(1)
 ; 32BIT-NEXT:    bl .dblCmplxRetCallee
-; 32BIT-NEXT:    lwz 3, L..C2(2) # @gcd
+; 32BIT-NEXT:    lwz 3, L..C0(2) # @gcd
 ; 32BIT-NEXT:    stfd 1, 0(3)
 ; 32BIT-NEXT:    stfd 2, 8(3)
 ; 32BIT-NEXT:    bl .anchor[PR]
@@ -70,7 +66,7 @@ define dso_local void @dblCmplxRetCaller()  {
 ; 64BIT-NEXT:    stdu 1, -112(1)
 ; 64BIT-NEXT:    std 0, 128(1)
 ; 64BIT-NEXT:    bl .dblCmplxRetCallee
-; 64BIT-NEXT:    ld 3, L..C2(2) # @gcd
+; 64BIT-NEXT:    ld 3, L..C0(2) # @gcd
 ; 64BIT-NEXT:    stfd 1, 0(3)
 ; 64BIT-NEXT:    stfd 2, 8(3)
 ; 64BIT-NEXT:    bl .anchor[PR]
@@ -92,25 +88,21 @@ entry:
 define dso_local { float, float } @fltCmplxRetCallee()  {
 ; 32BIT-LABEL: fltCmplxRetCallee:
 ; 32BIT:       # %bb.0: # %entry
-; 32BIT-NEXT:    lwz 3, L..C3(2) # %const.0
-; 32BIT-NEXT:    lfs 1, 0(3)
-; 32BIT-NEXT:    lwz 3, L..C4(2) # %const.1
-; 32BIT-NEXT:    lfs 2, 0(3)
 ; 32BIT-NEXT:    lis 3, 16256
 ; 32BIT-NEXT:    stw 3, -8(1)
 ; 32BIT-NEXT:    li 3, 0
 ; 32BIT-NEXT:    stw 3, -4(1)
+; 32BIT-NEXT:    lfs 1, -8(1)
+; 32BIT-NEXT:    lfs 2, -4(1)
 ; 32BIT-NEXT:    blr
 ;
 ; 64BIT-LABEL: fltCmplxRetCallee:
 ; 64BIT:       # %bb.0: # %entry
-; 64BIT-NEXT:    ld 3, L..C3(2) # %const.0
-; 64BIT-NEXT:    lfs 1, 0(3)
-; 64BIT-NEXT:    ld 3, L..C4(2) # %const.1
-; 64BIT-NEXT:    lfs 2, 0(3)
 ; 64BIT-NEXT:    li 3, 127
 ; 64BIT-NEXT:    rldic 3, 3, 55, 2
 ; 64BIT-NEXT:    std 3, -8(1)
+; 64BIT-NEXT:    lfs 1, -8(1)
+; 64BIT-NEXT:    lfs 2, -4(1)
 ; 64BIT-NEXT:    blr
 entry:
   %retval = alloca { float, float }, align 4
@@ -129,7 +121,7 @@ define dso_local void @fltCmplxRetCaller()  {
 ; 32BIT-NEXT:    stwu 1, -64(1)
 ; 32BIT-NEXT:    stw 0, 72(1)
 ; 32BIT-NEXT:    bl .fltCmplxRetCallee
-; 32BIT-NEXT:    lwz 3, L..C5(2) # @gcf
+; 32BIT-NEXT:    lwz 3, L..C1(2) # @gcf
 ; 32BIT-NEXT:    stfs 1, 0(3)
 ; 32BIT-NEXT:    stfs 2, 4(3)
 ; 32BIT-NEXT:    bl .anchor[PR]
@@ -145,7 +137,7 @@ define dso_local void @fltCmplxRetCaller()  {
 ; 64BIT-NEXT:    stdu 1, -112(1)
 ; 64BIT-NEXT:    std 0, 128(1)
 ; 64BIT-NEXT:    bl .fltCmplxRetCallee
-; 64BIT-NEXT:    ld 3, L..C5(2) # @gcf
+; 64BIT-NEXT:    ld 3, L..C1(2) # @gcf
 ; 64BIT-NEXT:    stfs 1, 0(3)
 ; 64BIT-NEXT:    stfs 2, 4(3)
 ; 64BIT-NEXT:    bl .anchor[PR]
@@ -171,26 +163,26 @@ define dso_local { ppc_fp128, ppc_fp128 } @fp128CmplxRetCallee()  {
 ; 32BIT-NEXT:    lis 6, 16382
 ; 32BIT-NEXT:    li 3, -1
 ; 32BIT-NEXT:    li 4, -2
-; 32BIT-NEXT:    stw 3, -44(1)
+; 32BIT-NEXT:    stw 3, -60(1)
 ; 32BIT-NEXT:    ori 5, 5, 65535
 ; 32BIT-NEXT:    ori 6, 6, 65535
+; 32BIT-NEXT:    stw 3, -64(1)
+; 32BIT-NEXT:    stw 4, -44(1)
 ; 32BIT-NEXT:    stw 3, -48(1)
-; 32BIT-NEXT:    stw 4, -52(1)
-; 32BIT-NEXT:    stw 3, -56(1)
+; 32BIT-NEXT:    stw 3, -52(1)
+; 32BIT-NEXT:    stw 5, -56(1)
 ; 32BIT-NEXT:    stw 3, -36(1)
-; 32BIT-NEXT:    stw 5, -40(1)
-; 32BIT-NEXT:    stw 3, -60(1)
-; 32BIT-NEXT:    stw 6, -64(1)
-; 32BIT-NEXT:    lfd 2, -48(1)
-; 32BIT-NEXT:    lfd 4, -56(1)
-; 32BIT-NEXT:    lfd 1, -40(1)
-; 32BIT-NEXT:    lfd 3, -64(1)
-; 32BIT-NEXT:    stw 3, -28(1)
+; 32BIT-NEXT:    stw 6, -40(1)
+; 32BIT-NEXT:    lfd 2, -64(1)
+; 32BIT-NEXT:    lfd 4, -48(1)
+; 32BIT-NEXT:    lfd 1, -56(1)
+; 32BIT-NEXT:    lfd 3, -40(1)
 ; 32BIT-NEXT:    stw 3, -20(1)
 ; 32BIT-NEXT:    stw 3, -24(1)
-; 32BIT-NEXT:    stw 3, -12(1)
+; 32BIT-NEXT:    stw 3, -28(1)
 ; 32BIT-NEXT:    stw 4, -4(1)
 ; 32BIT-NEXT:    stw 3, -8(1)
+; 32BIT-NEXT:    stw 3, -12(1)
 ; 32BIT-NEXT:    stw 5, -32(1)
 ; 32BIT-NEXT:    stw 6, -16(1)
 ; 32BIT-NEXT:    blr
@@ -202,13 +194,13 @@ define dso_local { ppc_fp128, ppc_fp128 } @fp128CmplxRetCallee()  {
 ; 64BIT-NEXT:    li 3, -3
 ; 64BIT-NEXT:    rldicl 3, 3, 47, 1
 ; 64BIT-NEXT:    std 3, -32(1)
-; 64BIT-NEXT:    ld 3, L..C6(2) # %const.0
+; 64BIT-NEXT:    ld 3, L..C2(2) # %const.0
 ; 64BIT-NEXT:    lfd 1, 0(3)
-; 64BIT-NEXT:    ld 3, L..C7(2) # %const.1
+; 64BIT-NEXT:    ld 3, L..C3(2) # %const.1
 ; 64BIT-NEXT:    lfd 2, 0(3)
-; 64BIT-NEXT:    ld 3, L..C8(2) # %const.2
+; 64BIT-NEXT:    ld 3, L..C4(2) # %const.2
 ; 64BIT-NEXT:    lfd 3, 0(3)
-; 64BIT-NEXT:    ld 3, L..C9(2) # %const.3
+; 64BIT-NEXT:    ld 3, L..C5(2) # %const.3
 ; 64BIT-NEXT:    lfd 4, 0(3)
 ; 64BIT-NEXT:    li 3, -2
 ; 64BIT-NEXT:    std 3, -8(1)
@@ -233,7 +225,7 @@ define dso_local void @fp128CmplxRetCaller()  {
 ; 32BIT-NEXT:    stwu 1, -64(1)
 ; 32BIT-NEXT:    stw 0, 72(1)
 ; 32BIT-NEXT:    bl .fp128CmplxRetCallee
-; 32BIT-NEXT:    lwz 3, L..C6(2) # @gcfp128
+; 32BIT-NEXT:    lwz 3, L..C2(2) # @gcfp128
 ; 32BIT-NEXT:    stfd 2, 8(3)
 ; 32BIT-NEXT:    stfd 1, 0(3)
 ; 32BIT-NEXT:    stfd 4, 24(3)
@@ -251,7 +243,7 @@ define dso_local void @fp128CmplxRetCaller()  {
 ; 64BIT-NEXT:    stdu 1, -112(1)
 ; 64BIT-NEXT:    std 0, 128(1)
 ; 64BIT-NEXT:    bl .fp128CmplxRetCallee
-; 64BIT-NEXT:    ld 3, L..C10(2) # @gcfp128
+; 64BIT-NEXT:    ld 3, L..C6(2) # @gcfp128
 ; 64BIT-NEXT:    stfd 2, 8(3)
 ; 64BIT-NEXT:    stfd 1, 0(3)
 ; 64BIT-NEXT:    stfd 4, 24(3)

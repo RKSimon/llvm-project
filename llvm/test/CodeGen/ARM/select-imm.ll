@@ -427,10 +427,11 @@ define void @t9(ptr %a, i8 %b) {
 ; ARM-NEXT:    ldrsb r4, [r0]
 ; ARM-NEXT:    mov r0, #1
 ; ARM-NEXT:    bl f
-; ARM-NEXT:    and r0, r4, #255
-; ARM-NEXT:    cmp r0, r0
+; ARM-NEXT:    mov r0, #0
+; ARM-NEXT:    cmp r0, #0
 ; ARM-NEXT:    bne .LBB8_3
 ; ARM-NEXT:  @ %bb.1: @ %while.body.preheader
+; ARM-NEXT:    and r0, r4, #255
 ; ARM-NEXT:    add r1, r4, #1
 ; ARM-NEXT:    mov r2, r0
 ; ARM-NEXT:  .LBB8_2: @ %while.body
@@ -451,10 +452,11 @@ define void @t9(ptr %a, i8 %b) {
 ; ARMT2-NEXT:    ldrsb r4, [r0]
 ; ARMT2-NEXT:    mov r0, #1
 ; ARMT2-NEXT:    bl f
-; ARMT2-NEXT:    uxtb r0, r4
-; ARMT2-NEXT:    cmp r0, r0
+; ARMT2-NEXT:    mov r0, #0
+; ARMT2-NEXT:    cmp r0, #0
 ; ARMT2-NEXT:    popne {r4, pc}
 ; ARMT2-NEXT:  .LBB8_1: @ %while.body.preheader
+; ARMT2-NEXT:    uxtb r0, r4
 ; ARMT2-NEXT:    add r1, r4, #1
 ; ARMT2-NEXT:    mov r2, r0
 ; ARMT2-NEXT:  .LBB8_2: @ %while.body
@@ -469,16 +471,16 @@ define void @t9(ptr %a, i8 %b) {
 ;
 ; THUMB1-LABEL: t9:
 ; THUMB1:       @ %bb.0: @ %entry
-; THUMB1-NEXT:    .save {r4, lr}
-; THUMB1-NEXT:    push {r4, lr}
-; THUMB1-NEXT:    movs r1, #0
-; THUMB1-NEXT:    ldrsb r4, [r0, r1]
+; THUMB1-NEXT:    .save {r4, r5, r7, lr}
+; THUMB1-NEXT:    push {r4, r5, r7, lr}
+; THUMB1-NEXT:    movs r5, #0
+; THUMB1-NEXT:    ldrsb r4, [r0, r5]
 ; THUMB1-NEXT:    movs r0, #1
 ; THUMB1-NEXT:    bl f
-; THUMB1-NEXT:    uxtb r0, r4
-; THUMB1-NEXT:    cmp r0, r0
+; THUMB1-NEXT:    cmp r5, #0
 ; THUMB1-NEXT:    bne .LBB8_3
 ; THUMB1-NEXT:  @ %bb.1: @ %while.body.preheader
+; THUMB1-NEXT:    uxtb r0, r4
 ; THUMB1-NEXT:    adds r1, r4, #1
 ; THUMB1-NEXT:    mov r2, r0
 ; THUMB1-NEXT:  .LBB8_2: @ %while.body
@@ -489,7 +491,7 @@ define void @t9(ptr %a, i8 %b) {
 ; THUMB1-NEXT:    cmp r3, r0
 ; THUMB1-NEXT:    blt .LBB8_2
 ; THUMB1-NEXT:  .LBB8_3: @ %while.end
-; THUMB1-NEXT:    pop {r4, pc}
+; THUMB1-NEXT:    pop {r4, r5, r7, pc}
 ;
 ; THUMB2-LABEL: t9:
 ; THUMB2:       @ %bb.0: @ %entry
@@ -498,11 +500,12 @@ define void @t9(ptr %a, i8 %b) {
 ; THUMB2-NEXT:    ldrsb.w r4, [r0]
 ; THUMB2-NEXT:    movs r0, #1
 ; THUMB2-NEXT:    bl f
-; THUMB2-NEXT:    uxtb r0, r4
-; THUMB2-NEXT:    cmp r0, r0
+; THUMB2-NEXT:    movs r0, #0
+; THUMB2-NEXT:    cmp r0, #0
 ; THUMB2-NEXT:    it ne
 ; THUMB2-NEXT:    popne {r4, pc}
 ; THUMB2-NEXT:  .LBB8_1: @ %while.body.preheader
+; THUMB2-NEXT:    uxtb r0, r4
 ; THUMB2-NEXT:    adds r1, r4, #1
 ; THUMB2-NEXT:    mov r2, r0
 ; THUMB2-NEXT:  .LBB8_2: @ %while.body
@@ -517,16 +520,15 @@ define void @t9(ptr %a, i8 %b) {
 ;
 ; V8MBASE-LABEL: t9:
 ; V8MBASE:       @ %bb.0: @ %entry
-; V8MBASE-NEXT:    .save {r4, lr}
-; V8MBASE-NEXT:    push {r4, lr}
-; V8MBASE-NEXT:    movs r1, #0
-; V8MBASE-NEXT:    ldrsb r4, [r0, r1]
+; V8MBASE-NEXT:    .save {r4, r5, r7, lr}
+; V8MBASE-NEXT:    push {r4, r5, r7, lr}
+; V8MBASE-NEXT:    movs r5, #0
+; V8MBASE-NEXT:    ldrsb r4, [r0, r5]
 ; V8MBASE-NEXT:    movs r0, #1
 ; V8MBASE-NEXT:    bl f
-; V8MBASE-NEXT:    uxtb r0, r4
-; V8MBASE-NEXT:    cmp r0, r0
-; V8MBASE-NEXT:    bne .LBB8_3
+; V8MBASE-NEXT:    cbnz r5, .LBB8_3
 ; V8MBASE-NEXT:  @ %bb.1: @ %while.body.preheader
+; V8MBASE-NEXT:    uxtb r0, r4
 ; V8MBASE-NEXT:    adds r1, r4, #1
 ; V8MBASE-NEXT:    mov r2, r0
 ; V8MBASE-NEXT:  .LBB8_2: @ %while.body
@@ -537,7 +539,7 @@ define void @t9(ptr %a, i8 %b) {
 ; V8MBASE-NEXT:    cmp r3, r0
 ; V8MBASE-NEXT:    blt .LBB8_2
 ; V8MBASE-NEXT:  .LBB8_3: @ %while.end
-; V8MBASE-NEXT:    pop {r4, pc}
+; V8MBASE-NEXT:    pop {r4, r5, r7, pc}
 entry:
   %0 = load i8, ptr %a
   %conv = sext i8 %0 to i32
@@ -566,44 +568,27 @@ declare void @f(i1 zeroext)
 define i1 @t10() {
 ; ARM-LABEL: t10:
 ; ARM:       @ %bb.0: @ %entry
-; ARM-NEXT:    .save {r11, lr}
-; ARM-NEXT:    push {r11, lr}
 ; ARM-NEXT:    .pad #8
 ; ARM-NEXT:    sub sp, sp, #8
-; ARM-NEXT:    mvn r0, #2
-; ARM-NEXT:    mvn r1, #7
-; ARM-NEXT:    str r0, [sp, #4]
 ; ARM-NEXT:    mvn r0, #7
 ; ARM-NEXT:    str r0, [sp]
 ; ARM-NEXT:    mvn r0, #2
-; ARM-NEXT:    bl __aeabi_idivmod
-; ARM-NEXT:    sub r0, r1, r0, lsl #3
-; ARM-NEXT:    add r0, r0, #3
-; ARM-NEXT:    rsbs r1, r0, #0
-; ARM-NEXT:    adc r0, r0, r1
+; ARM-NEXT:    str r0, [sp, #4]
+; ARM-NEXT:    mov r0, #1
 ; ARM-NEXT:    add sp, sp, #8
-; ARM-NEXT:    pop {r11, lr}
 ; ARM-NEXT:    mov pc, lr
 ;
 ; ARMT2-LABEL: t10:
 ; ARMT2:       @ %bb.0: @ %entry
-; ARMT2-NEXT:    .save {r11, lr}
-; ARMT2-NEXT:    push {r11, lr}
 ; ARMT2-NEXT:    .pad #8
 ; ARMT2-NEXT:    sub sp, sp, #8
-; ARMT2-NEXT:    mvn r0, #2
-; ARMT2-NEXT:    str r0, [sp, #4]
 ; ARMT2-NEXT:    mvn r0, #7
 ; ARMT2-NEXT:    str r0, [sp]
 ; ARMT2-NEXT:    mvn r0, #2
-; ARMT2-NEXT:    mvn r1, #7
-; ARMT2-NEXT:    bl __aeabi_idivmod
-; ARMT2-NEXT:    sub r0, r1, r0, lsl #3
-; ARMT2-NEXT:    add r0, r0, #3
-; ARMT2-NEXT:    clz r0, r0
-; ARMT2-NEXT:    lsr r0, r0, #5
+; ARMT2-NEXT:    str r0, [sp, #4]
+; ARMT2-NEXT:    mov r0, #1
 ; ARMT2-NEXT:    add sp, sp, #8
-; ARMT2-NEXT:    pop {r11, pc}
+; ARMT2-NEXT:    bx lr
 ;
 ; THUMB1-LABEL: t10:
 ; THUMB1:       @ %bb.0: @ %entry
@@ -629,23 +614,15 @@ define i1 @t10() {
 ;
 ; THUMB2-LABEL: t10:
 ; THUMB2:       @ %bb.0: @ %entry
-; THUMB2-NEXT:    .save {r7, lr}
-; THUMB2-NEXT:    push {r7, lr}
 ; THUMB2-NEXT:    .pad #8
 ; THUMB2-NEXT:    sub sp, #8
-; THUMB2-NEXT:    mvn r0, #2
-; THUMB2-NEXT:    str r0, [sp, #4]
 ; THUMB2-NEXT:    mvn r0, #7
 ; THUMB2-NEXT:    str r0, [sp]
 ; THUMB2-NEXT:    mvn r0, #2
-; THUMB2-NEXT:    mvn r1, #7
-; THUMB2-NEXT:    bl __aeabi_idivmod
-; THUMB2-NEXT:    sub.w r0, r1, r0, lsl #3
-; THUMB2-NEXT:    adds r0, #3
-; THUMB2-NEXT:    clz r0, r0
-; THUMB2-NEXT:    lsrs r0, r0, #5
+; THUMB2-NEXT:    str r0, [sp, #4]
+; THUMB2-NEXT:    movs r0, #1
 ; THUMB2-NEXT:    add sp, #8
-; THUMB2-NEXT:    pop {r7, pc}
+; THUMB2-NEXT:    bx lr
 ;
 ; V8MBASE-LABEL: t10:
 ; V8MBASE:       @ %bb.0: @ %entry
@@ -704,16 +681,14 @@ define i1 @t11() {
 ; ARMT2-NEXT:    mov r0, #10
 ; ARMT2-NEXT:    bfi r1, r0, #12, #13
 ; ARMT2-NEXT:    mov r0, r1
+; ARMT2-NEXT:    bfc r1, #0, #12
 ; ARMT2-NEXT:    bfc r0, #12, #20
 ; ARMT2-NEXT:    umull r2, r3, r0, r2
 ; ARMT2-NEXT:    add r2, r3, r3, lsl #2
 ; ARMT2-NEXT:    sub r0, r0, r2, lsl #1
-; ARMT2-NEXT:    movw r2, #40960
-; ARMT2-NEXT:    movt r2, #65024
-; ARMT2-NEXT:    and r1, r1, r2
 ; ARMT2-NEXT:    orr r0, r1, r0
 ; ARMT2-NEXT:    str r0, [sp]
-; ARMT2-NEXT:    and r0, r0, #15
+; ARMT2-NEXT:    bfc r0, #12, #20
 ; ARMT2-NEXT:    sub r0, r0, #3
 ; ARMT2-NEXT:    clz r0, r0
 ; ARMT2-NEXT:    lsr r0, r0, #5
@@ -722,36 +697,32 @@ define i1 @t11() {
 ;
 ; THUMB1-LABEL: t11:
 ; THUMB1:       @ %bb.0: @ %entry
-; THUMB1-NEXT:    .save {r4, r5, r7, lr}
-; THUMB1-NEXT:    push {r4, r5, r7, lr}
+; THUMB1-NEXT:    .save {r4, lr}
+; THUMB1-NEXT:    push {r4, lr}
 ; THUMB1-NEXT:    .pad #8
 ; THUMB1-NEXT:    sub sp, #8
-; THUMB1-NEXT:    movs r4, #33
-; THUMB1-NEXT:    ldr r0, [sp, #4]
-; THUMB1-NEXT:    orrs r0, r4
-; THUMB1-NEXT:    ldr r1, .LCPI10_0
-; THUMB1-NEXT:    ands r1, r0
+; THUMB1-NEXT:    movs r0, #127
+; THUMB1-NEXT:    lsls r0, r0, #25
+; THUMB1-NEXT:    ldr r4, [sp, #4]
+; THUMB1-NEXT:    ands r4, r0
+; THUMB1-NEXT:    movs r0, #33
+; THUMB1-NEXT:    movs r1, #10
+; THUMB1-NEXT:    bl __aeabi_uidivmod
+; THUMB1-NEXT:    orrs r1, r4
 ; THUMB1-NEXT:    movs r0, #5
 ; THUMB1-NEXT:    lsls r0, r0, #13
-; THUMB1-NEXT:    adds r5, r1, r0
-; THUMB1-NEXT:    movs r1, #10
-; THUMB1-NEXT:    mov r0, r4
-; THUMB1-NEXT:    bl __aeabi_uidivmod
-; THUMB1-NEXT:    bics r5, r4
-; THUMB1-NEXT:    orrs r5, r1
-; THUMB1-NEXT:    str r5, [sp, #4]
-; THUMB1-NEXT:    ldr r0, .LCPI10_1
-; THUMB1-NEXT:    ands r0, r5
-; THUMB1-NEXT:    subs r1, r0, #3
+; THUMB1-NEXT:    orrs r0, r1
+; THUMB1-NEXT:    str r0, [sp, #4]
+; THUMB1-NEXT:    ldr r1, .LCPI10_0
+; THUMB1-NEXT:    ands r1, r0
+; THUMB1-NEXT:    subs r1, r1, #3
 ; THUMB1-NEXT:    rsbs r0, r1, #0
 ; THUMB1-NEXT:    adcs r0, r1
 ; THUMB1-NEXT:    add sp, #8
-; THUMB1-NEXT:    pop {r4, r5, r7, pc}
+; THUMB1-NEXT:    pop {r4, pc}
 ; THUMB1-NEXT:    .p2align 2
 ; THUMB1-NEXT:  @ %bb.1:
 ; THUMB1-NEXT:  .LCPI10_0:
-; THUMB1-NEXT:    .long 4261412897 @ 0xfe000021
-; THUMB1-NEXT:  .LCPI10_1:
 ; THUMB1-NEXT:    .long 4095 @ 0xfff
 ;
 ; THUMB2-LABEL: t11:
@@ -767,15 +738,13 @@ define i1 @t11() {
 ; THUMB2-NEXT:    mov r0, r1
 ; THUMB2-NEXT:    movt r2, #6553
 ; THUMB2-NEXT:    bfc r0, #12, #20
+; THUMB2-NEXT:    bfc r1, #0, #12
 ; THUMB2-NEXT:    umull r2, r3, r0, r2
 ; THUMB2-NEXT:    add.w r2, r3, r3, lsl #2
 ; THUMB2-NEXT:    sub.w r0, r0, r2, lsl #1
-; THUMB2-NEXT:    movw r2, #40960
-; THUMB2-NEXT:    movt r2, #65024
-; THUMB2-NEXT:    ands r1, r2
 ; THUMB2-NEXT:    orrs r0, r1
 ; THUMB2-NEXT:    str r0, [sp]
-; THUMB2-NEXT:    and r0, r0, #15
+; THUMB2-NEXT:    bfc r0, #12, #20
 ; THUMB2-NEXT:    subs r0, #3
 ; THUMB2-NEXT:    clz r0, r0
 ; THUMB2-NEXT:    lsrs r0, r0, #5
@@ -793,9 +762,10 @@ define i1 @t11() {
 ; V8MBASE-NEXT:    movw r0, #40963
 ; V8MBASE-NEXT:    adds r0, r1, r0
 ; V8MBASE-NEXT:    str r0, [sp]
-; V8MBASE-NEXT:    movs r1, #0
-; V8MBASE-NEXT:    rsbs r0, r1, #0
-; V8MBASE-NEXT:    adcs r0, r1
+; V8MBASE-NEXT:    movs r0, #0
+; V8MBASE-NEXT:    movs r1, #1
+; V8MBASE-NEXT:    subs r1, r1, #1
+; V8MBASE-NEXT:    adcs r0, r0
 ; V8MBASE-NEXT:    add sp, #4
 ; V8MBASE-NEXT:    bx lr
 entry:

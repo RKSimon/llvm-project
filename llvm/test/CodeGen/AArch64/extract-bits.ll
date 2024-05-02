@@ -709,11 +709,11 @@ define i64 @bextr64_c4_commutative(i64 %val, i64 %numskipbits, i64 %numlowbits) 
 define i32 @bextr64_32_c0(i64 %val, i64 %numskipbits, i64 %numlowbits) nounwind {
 ; CHECK-LABEL: bextr64_32_c0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    neg x8, x2
-; CHECK-NEXT:    mov x9, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    lsr x10, x0, x1
-; CHECK-NEXT:    lsr x8, x9, x8
-; CHECK-NEXT:    and w0, w8, w10
+; CHECK-NEXT:    lsr x8, x0, x1
+; CHECK-NEXT:    neg x9, x2
+; CHECK-NEXT:    lsl x8, x8, x9
+; CHECK-NEXT:    lsr x0, x8, x9
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %shifted = lshr i64 %val, %numskipbits
   %numhighbits = sub i64 64, %numlowbits

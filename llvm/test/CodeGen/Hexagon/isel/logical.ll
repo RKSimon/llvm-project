@@ -797,13 +797,16 @@ define <2 x i32> @f22(<2 x i32> %a0, <2 x i32> %a1, <2 x i32> %a2) #1 {
 ; CHECK-NEXT:     p0 = vcmpw.eq(r1:0,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p1 = vcmpw.eq(r3:2,r7:6)
+; CHECK-NEXT:     p1 = vcmpw.eq(r5:4,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p2 = vcmpw.eq(r5:4,r7:6)
+; CHECK-NEXT:     p2 = vcmpw.eq(r3:2,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p0 = and(p2,and(p0,!p1))
+; CHECK-NEXT:     p0 = and(p0,p1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     p0 = and(p0,!p2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     r1:0 = mask(p0)
@@ -902,13 +905,16 @@ define <2 x i32> @f25(<2 x i32> %a0, <2 x i32> %a1, <2 x i32> %a2) #1 {
 ; CHECK-NEXT:     p0 = vcmpw.eq(r1:0,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p1 = vcmpw.eq(r3:2,r7:6)
+; CHECK-NEXT:     p1 = vcmpw.eq(r5:4,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p2 = vcmpw.eq(r5:4,r7:6)
+; CHECK-NEXT:     p2 = vcmpw.eq(r3:2,r7:6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p0 = or(p2,or(p0,!p1))
+; CHECK-NEXT:     p0 = or(p0,p1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     p0 = or(p0,!p2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     r1:0 = mask(p0)

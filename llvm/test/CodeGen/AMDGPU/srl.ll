@@ -312,14 +312,14 @@ define amdgpu_kernel void @lshr_v4i64(ptr addrspace(1) %out, ptr addrspace(1) %i
 ; EG-NEXT:    ALU 0, @14, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    TEX 3 @6
 ; EG-NEXT:    ALU 33, @15, KC0[CB0:0-32], KC1[]
-; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T1.XYZW, T0.X, 0
-; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T2.XYZW, T3.X, 1
+; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T1.XYZW, T3.X, 0
+; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T2.XYZW, T0.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    Fetch clause starting at 6:
-; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 32, #1
-; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 16, #1
-; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 48, #1
-; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 48, #1
+; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 32, #1
+; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 16, #1
 ; EG-NEXT:    ALU clause starting at 14:
 ; EG-NEXT:     MOV * T0.X, KC0[2].Z,
 ; EG-NEXT:    ALU clause starting at 15:

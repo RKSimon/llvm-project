@@ -720,8 +720,17 @@ define <2 x i16> @test_padd_hs_splat_rhs(<2 x i16> %a, i16 %b) {
 define <4 x i8> @test_build_vector_i8(i8 %a, i8 %c, i8 %b, i8 %d) {
 ; RV32-LABEL: test_build_vector_i8:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    ppaire.db a0, a0, a2
-; RV32-NEXT:    pack a0, a0, a1
+; RV32-NEXT:    pmv.bs a0, a0
+; RV32-NEXT:    lui a4, 16
+; RV32-NEXT:    slli a2, a2, 8
+; RV32-NEXT:    addi a4, a4, -256
+; RV32-NEXT:    mvm a0, a2, a4
+; RV32-NEXT:    slli a1, a1, 16
+; RV32-NEXT:    lui a2, 4080
+; RV32-NEXT:    mvm a0, a1, a2
+; RV32-NEXT:    slli a3, a3, 24
+; RV32-NEXT:    lui a1, 1044480
+; RV32-NEXT:    mvm a0, a3, a1
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_build_vector_i8:
@@ -740,6 +749,7 @@ define <4 x i8> @test_build_vector_i8(i8 %a, i8 %c, i8 %b, i8 %d) {
 define <2 x i16> @test_build_vector_i16(i16 %a, i16 %b) {
 ; RV32-LABEL: test_build_vector_i16:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    pmv.hs a0, a0
 ; RV32-NEXT:    pack a0, a0, a1
 ; RV32-NEXT:    ret
 ;
@@ -1541,7 +1551,11 @@ define <2 x i16> @test_psdiv_h(<2 x i16> %a, <2 x i16> %b) {
 ; RV64-NEXT:    srai a1, a1, 48
 ; RV64-NEXT:    srai a0, a0, 48
 ; RV64-NEXT:    divw a0, a0, a1
-; RV64-NEXT:    ppaire.h a0, a2, a0
+; RV64-NEXT:    pmv.hs a1, a2
+; RV64-NEXT:    lui a2, 65535
+; RV64-NEXT:    slli a0, a0, 16
+; RV64-NEXT:    slli a2, a2, 4
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = sdiv <2 x i16> %a, %b
   ret <2 x i16> %res
@@ -1587,27 +1601,36 @@ define <4 x i8> @test_psdiv_b(<4 x i8> %a, <4 x i8> %b) {
 ;
 ; RV64-LABEL: test_psdiv_b:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slli a2, a1, 32
-; RV64-NEXT:    slli a3, a0, 32
-; RV64-NEXT:    srai a2, a2, 56
-; RV64-NEXT:    srai a3, a3, 56
+; RV64-NEXT:    sext.b a2, a1
+; RV64-NEXT:    sext.b a3, a0
 ; RV64-NEXT:    divw a2, a3, a2
-; RV64-NEXT:    slli a3, a1, 40
-; RV64-NEXT:    slli a4, a0, 40
+; RV64-NEXT:    slli a3, a1, 48
+; RV64-NEXT:    slli a4, a0, 48
 ; RV64-NEXT:    srai a3, a3, 56
 ; RV64-NEXT:    srai a4, a4, 56
 ; RV64-NEXT:    divw a3, a4, a3
-; RV64-NEXT:    sext.b a4, a1
-; RV64-NEXT:    sext.b a5, a0
+; RV64-NEXT:    slli a4, a1, 40
+; RV64-NEXT:    slli a5, a0, 40
+; RV64-NEXT:    srai a4, a4, 56
+; RV64-NEXT:    srai a5, a5, 56
 ; RV64-NEXT:    divw a4, a5, a4
-; RV64-NEXT:    slli a1, a1, 48
-; RV64-NEXT:    slli a0, a0, 48
+; RV64-NEXT:    slli a1, a1, 32
+; RV64-NEXT:    slli a0, a0, 32
 ; RV64-NEXT:    srai a1, a1, 56
 ; RV64-NEXT:    srai a0, a0, 56
 ; RV64-NEXT:    divw a0, a0, a1
-; RV64-NEXT:    ppaire.b a1, a3, a2
-; RV64-NEXT:    ppaire.b a0, a4, a0
-; RV64-NEXT:    ppaire.h a0, a0, a1
+; RV64-NEXT:    pmv.bs a1, a2
+; RV64-NEXT:    lui a2, 16
+; RV64-NEXT:    slli a3, a3, 8
+; RV64-NEXT:    addi a2, a2, -256
+; RV64-NEXT:    mvm a1, a3, a2
+; RV64-NEXT:    slli a4, a4, 16
+; RV64-NEXT:    lui a2, 4080
+; RV64-NEXT:    mvm a1, a4, a2
+; RV64-NEXT:    li a2, 255
+; RV64-NEXT:    slli a0, a0, 24
+; RV64-NEXT:    slli a2, a2, 24
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = sdiv <4 x i8> %a, %b
   ret <4 x i8> %res
@@ -1633,7 +1656,11 @@ define <2 x i16> @test_pudiv_h(<2 x i16> %a, <2 x i16> %b) {
 ; RV64-NEXT:    zext.h a1, a1
 ; RV64-NEXT:    zext.h a0, a0
 ; RV64-NEXT:    divuw a0, a0, a1
-; RV64-NEXT:    ppaire.h a0, a0, a2
+; RV64-NEXT:    slli a2, a2, 16
+; RV64-NEXT:    lui a1, 65535
+; RV64-NEXT:    pmv.hs a0, a0
+; RV64-NEXT:    slli a1, a1, 4
+; RV64-NEXT:    mvm a0, a2, a1
 ; RV64-NEXT:    ret
   %res = udiv <2 x i16> %a, %b
   ret <2 x i16> %res
@@ -1688,25 +1715,34 @@ define <4 x i8> @test_pudiv_b(<4 x i8> %a, <4 x i8> %b) {
 ;
 ; RV64-LABEL: test_pudiv_b:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srliw a2, a1, 24
-; RV64-NEXT:    srliw a3, a0, 24
+; RV64-NEXT:    zext.b a2, a1
+; RV64-NEXT:    zext.b a3, a0
 ; RV64-NEXT:    divuw a2, a3, a2
-; RV64-NEXT:    slli a3, a1, 40
-; RV64-NEXT:    slli a4, a0, 40
+; RV64-NEXT:    slli a3, a1, 48
+; RV64-NEXT:    slli a4, a0, 48
 ; RV64-NEXT:    srli a3, a3, 56
 ; RV64-NEXT:    srli a4, a4, 56
 ; RV64-NEXT:    divuw a3, a4, a3
-; RV64-NEXT:    zext.b a4, a1
-; RV64-NEXT:    zext.b a5, a0
+; RV64-NEXT:    slli a4, a1, 40
+; RV64-NEXT:    slli a5, a0, 40
+; RV64-NEXT:    srli a4, a4, 56
+; RV64-NEXT:    srli a5, a5, 56
 ; RV64-NEXT:    divuw a4, a5, a4
-; RV64-NEXT:    slli a1, a1, 48
-; RV64-NEXT:    slli a0, a0, 48
-; RV64-NEXT:    srli a1, a1, 56
-; RV64-NEXT:    srli a0, a0, 56
+; RV64-NEXT:    srliw a1, a1, 24
+; RV64-NEXT:    srliw a0, a0, 24
 ; RV64-NEXT:    divuw a0, a0, a1
-; RV64-NEXT:    ppaire.b a1, a3, a2
-; RV64-NEXT:    ppaire.b a0, a4, a0
-; RV64-NEXT:    ppaire.h a0, a0, a1
+; RV64-NEXT:    pmv.bs a1, a2
+; RV64-NEXT:    lui a2, 16
+; RV64-NEXT:    slli a3, a3, 8
+; RV64-NEXT:    addi a2, a2, -256
+; RV64-NEXT:    mvm a1, a3, a2
+; RV64-NEXT:    slli a4, a4, 16
+; RV64-NEXT:    lui a2, 4080
+; RV64-NEXT:    mvm a1, a4, a2
+; RV64-NEXT:    li a2, 255
+; RV64-NEXT:    slli a0, a0, 24
+; RV64-NEXT:    slli a2, a2, 24
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = udiv <4 x i8> %a, %b
   ret <4 x i8> %res
@@ -1754,7 +1790,11 @@ define <2 x i16> @test_psrem_h(<2 x i16> %a, <2 x i16> %b) {
 ; RV64-NEXT:    srai a1, a1, 48
 ; RV64-NEXT:    srai a0, a0, 48
 ; RV64-NEXT:    remw a0, a0, a1
-; RV64-NEXT:    ppaire.h a0, a2, a0
+; RV64-NEXT:    pmv.hs a1, a2
+; RV64-NEXT:    lui a2, 65535
+; RV64-NEXT:    slli a0, a0, 16
+; RV64-NEXT:    slli a2, a2, 4
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = srem <2 x i16> %a, %b
   ret <2 x i16> %res
@@ -1785,27 +1825,36 @@ define <4 x i8> @test_psrem_b(<4 x i8> %a, <4 x i8> %b) {
 ;
 ; RV64-LABEL: test_psrem_b:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slli a2, a1, 32
-; RV64-NEXT:    slli a3, a0, 32
-; RV64-NEXT:    srai a2, a2, 56
-; RV64-NEXT:    srai a3, a3, 56
+; RV64-NEXT:    sext.b a2, a1
+; RV64-NEXT:    sext.b a3, a0
 ; RV64-NEXT:    remw a2, a3, a2
-; RV64-NEXT:    slli a3, a1, 40
-; RV64-NEXT:    slli a4, a0, 40
+; RV64-NEXT:    slli a3, a1, 48
+; RV64-NEXT:    slli a4, a0, 48
 ; RV64-NEXT:    srai a3, a3, 56
 ; RV64-NEXT:    srai a4, a4, 56
 ; RV64-NEXT:    remw a3, a4, a3
-; RV64-NEXT:    sext.b a4, a1
-; RV64-NEXT:    sext.b a5, a0
+; RV64-NEXT:    slli a4, a1, 40
+; RV64-NEXT:    slli a5, a0, 40
+; RV64-NEXT:    srai a4, a4, 56
+; RV64-NEXT:    srai a5, a5, 56
 ; RV64-NEXT:    remw a4, a5, a4
-; RV64-NEXT:    slli a1, a1, 48
-; RV64-NEXT:    slli a0, a0, 48
+; RV64-NEXT:    slli a1, a1, 32
+; RV64-NEXT:    slli a0, a0, 32
 ; RV64-NEXT:    srai a1, a1, 56
 ; RV64-NEXT:    srai a0, a0, 56
 ; RV64-NEXT:    remw a0, a0, a1
-; RV64-NEXT:    ppaire.b a1, a3, a2
-; RV64-NEXT:    ppaire.b a0, a4, a0
-; RV64-NEXT:    ppaire.h a0, a0, a1
+; RV64-NEXT:    pmv.bs a1, a2
+; RV64-NEXT:    lui a2, 16
+; RV64-NEXT:    slli a3, a3, 8
+; RV64-NEXT:    addi a2, a2, -256
+; RV64-NEXT:    mvm a1, a3, a2
+; RV64-NEXT:    slli a4, a4, 16
+; RV64-NEXT:    lui a2, 4080
+; RV64-NEXT:    mvm a1, a4, a2
+; RV64-NEXT:    li a2, 255
+; RV64-NEXT:    slli a0, a0, 24
+; RV64-NEXT:    slli a2, a2, 24
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = srem <4 x i8> %a, %b
   ret <4 x i8> %res
@@ -1831,7 +1880,11 @@ define <2 x i16> @test_purem_h(<2 x i16> %a, <2 x i16> %b) {
 ; RV64-NEXT:    zext.h a1, a1
 ; RV64-NEXT:    zext.h a0, a0
 ; RV64-NEXT:    remuw a0, a0, a1
-; RV64-NEXT:    ppaire.h a0, a0, a2
+; RV64-NEXT:    slli a2, a2, 16
+; RV64-NEXT:    lui a1, 65535
+; RV64-NEXT:    pmv.hs a0, a0
+; RV64-NEXT:    slli a1, a1, 4
+; RV64-NEXT:    mvm a0, a2, a1
 ; RV64-NEXT:    ret
   %res = urem <2 x i16> %a, %b
   ret <2 x i16> %res
@@ -1862,25 +1915,34 @@ define <4 x i8> @test_purem_b(<4 x i8> %a, <4 x i8> %b) {
 ;
 ; RV64-LABEL: test_purem_b:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srliw a2, a1, 24
-; RV64-NEXT:    srliw a3, a0, 24
+; RV64-NEXT:    zext.b a2, a1
+; RV64-NEXT:    zext.b a3, a0
 ; RV64-NEXT:    remuw a2, a3, a2
-; RV64-NEXT:    slli a3, a1, 40
-; RV64-NEXT:    slli a4, a0, 40
+; RV64-NEXT:    slli a3, a1, 48
+; RV64-NEXT:    slli a4, a0, 48
 ; RV64-NEXT:    srli a3, a3, 56
 ; RV64-NEXT:    srli a4, a4, 56
 ; RV64-NEXT:    remuw a3, a4, a3
-; RV64-NEXT:    zext.b a4, a1
-; RV64-NEXT:    zext.b a5, a0
+; RV64-NEXT:    slli a4, a1, 40
+; RV64-NEXT:    slli a5, a0, 40
+; RV64-NEXT:    srli a4, a4, 56
+; RV64-NEXT:    srli a5, a5, 56
 ; RV64-NEXT:    remuw a4, a5, a4
-; RV64-NEXT:    slli a1, a1, 48
-; RV64-NEXT:    slli a0, a0, 48
-; RV64-NEXT:    srli a1, a1, 56
-; RV64-NEXT:    srli a0, a0, 56
+; RV64-NEXT:    srliw a1, a1, 24
+; RV64-NEXT:    srliw a0, a0, 24
 ; RV64-NEXT:    remuw a0, a0, a1
-; RV64-NEXT:    ppaire.b a1, a3, a2
-; RV64-NEXT:    ppaire.b a0, a4, a0
-; RV64-NEXT:    ppaire.h a0, a0, a1
+; RV64-NEXT:    pmv.bs a1, a2
+; RV64-NEXT:    lui a2, 16
+; RV64-NEXT:    slli a3, a3, 8
+; RV64-NEXT:    addi a2, a2, -256
+; RV64-NEXT:    mvm a1, a3, a2
+; RV64-NEXT:    slli a4, a4, 16
+; RV64-NEXT:    lui a2, 4080
+; RV64-NEXT:    mvm a1, a4, a2
+; RV64-NEXT:    li a2, 255
+; RV64-NEXT:    slli a0, a0, 24
+; RV64-NEXT:    slli a2, a2, 24
+; RV64-NEXT:    mvmn a0, a1, a2
 ; RV64-NEXT:    ret
   %res = urem <4 x i8> %a, %b
   ret <4 x i8> %res

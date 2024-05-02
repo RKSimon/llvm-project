@@ -10,14 +10,14 @@ define void @bar(ptr %p, i32 %lane, <4 x i32> %phitmp) nounwind {
 ; CHECK-NEXT:    mov r4, sp
 ; CHECK-NEXT:    bfc r4, #0, #4
 ; CHECK-NEXT:    mov sp, r4
-; CHECK-NEXT:    and r1, r1, #3
 ; CHECK-NEXT:    vldr d17, [r7, #8]
+; CHECK-NEXT:    and r1, r1, #3
 ; CHECK-NEXT:    vmov d16, r2, r3
 ; CHECK-NEXT:    mov r2, sp
-; CHECK-NEXT:    lsls r1, r1, #2
+; CHECK-NEXT:    orr.w r1, r2, r1, lsl #2
 ; CHECK-NEXT:    subs r4, r7, #4
-; CHECK-NEXT:    vst1.64 {d16, d17}, [r2:128], r1
-; CHECK-NEXT:    vld1.32 {d16[], d17[]}, [r2:32]
+; CHECK-NEXT:    vst1.64 {d16, d17}, [r2:128]
+; CHECK-NEXT:    vld1.32 {d16[], d17[]}, [r1:32]
 ; CHECK-NEXT:    vst1.32 {d16, d17}, [r0]
 ; CHECK-NEXT:    mov sp, r4
 ; CHECK-NEXT:    pop {r4, r7, pc}

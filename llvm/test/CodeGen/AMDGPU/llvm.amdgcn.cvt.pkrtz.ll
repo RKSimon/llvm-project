@@ -211,6 +211,12 @@ define amdgpu_kernel void @s_cvt_pkrtz_samereg_v2f16_f32(ptr addrspace(1) %out, 
 define amdgpu_kernel void @s_cvt_pkrtz_undef_undef(ptr addrspace(1) %out) #0 {
 ; SI-SDAG-LABEL: s_cvt_pkrtz_undef_undef:
 ; SI-SDAG:       ; %bb.0:
+; SI-SDAG-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; SI-SDAG-NEXT:    s_mov_b32 s3, 0xf000
+; SI-SDAG-NEXT:    s_mov_b32 s2, -1
+; SI-SDAG-NEXT:    v_mov_b32_e32 v0, 0
+; SI-SDAG-NEXT:    s_waitcnt lgkmcnt(0)
+; SI-SDAG-NEXT:    buffer_store_dword v0, off, s[0:3], 0
 ; SI-SDAG-NEXT:    s_endpgm
 ;
 ; SI-GISEL-LABEL: s_cvt_pkrtz_undef_undef:

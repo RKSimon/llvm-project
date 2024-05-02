@@ -255,16 +255,16 @@ define void @a(ptr nocapture %s, ptr nocapture %t, i64 %a, i64 %b, i64 %c) nounw
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-NEXT:    addl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    adcl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ebx
-; X86-NEXT:    adcl $0, %edi
-; X86-NEXT:    adcl $0, %ebx
-; X86-NEXT:    movl %edi, (%ecx)
-; X86-NEXT:    movl %ebx, 4(%ecx)
-; X86-NEXT:    movl %edx, (%eax)
-; X86-NEXT:    movl %esi, 4(%eax)
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %edi
+; X86-NEXT:    adcl {{[0-9]+}}(%esp), %ebx
+; X86-NEXT:    adcl $0, %edx
+; X86-NEXT:    adcl $0, %esi
+; X86-NEXT:    movl %edx, (%ecx)
+; X86-NEXT:    movl %esi, 4(%ecx)
+; X86-NEXT:    movl %edi, (%eax)
+; X86-NEXT:    movl %ebx, 4(%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
@@ -299,10 +299,10 @@ define void @b(ptr nocapture %r, i64 %a, i64 %b, i32 %c) nounwind {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-NEXT:    addl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    adcl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    adcl $0, %esi
-; X86-NEXT:    movl %esi, (%eax)
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    adcl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    adcl $0, %ecx
+; X86-NEXT:    movl %ecx, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
 entry:
@@ -329,13 +329,13 @@ define void @c(ptr nocapture %r, i64 %a, i64 %b, i16 %c) nounwind {
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-NEXT:    addl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    adcl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    adcw $0, %si
-; X86-NEXT:    movw %si, (%eax)
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    adcl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    adcw $0, %cx
+; X86-NEXT:    movw %cx, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
 entry:
@@ -360,16 +360,16 @@ define void @d(ptr nocapture %r, i64 %a, i64 %b, i8 %c) nounwind {
 ;
 ; X86-LABEL: d:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    pushl %ebx
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ebx
-; X86-NEXT:    addl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    adcl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    adcb $0, %bl
-; X86-NEXT:    movb %bl, (%eax)
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    adcl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    adcb $0, %cl
+; X86-NEXT:    movb %cl, (%eax)
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
 entry:
  %0 = zext i64 %a to i128
@@ -680,21 +680,13 @@ define %S @readd(ptr nocapture readonly %this, %S %arg.b) nounwind {
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    addq (%rsi), %rdx
-; X64-NEXT:    movq 8(%rsi), %rdi
-; X64-NEXT:    adcq $0, %rdi
-; X64-NEXT:    setb %r10b
-; X64-NEXT:    movzbl %r10b, %r10d
-; X64-NEXT:    addq %rcx, %rdi
-; X64-NEXT:    adcq 16(%rsi), %r10
-; X64-NEXT:    setb %cl
-; X64-NEXT:    movzbl %cl, %ecx
-; X64-NEXT:    addq %r8, %r10
-; X64-NEXT:    adcq 24(%rsi), %rcx
-; X64-NEXT:    addq %r9, %rcx
-; X64-NEXT:    movq %rdx, (%rax)
-; X64-NEXT:    movq %rdi, 8(%rax)
-; X64-NEXT:    movq %r10, 16(%rax)
-; X64-NEXT:    movq %rcx, 24(%rax)
+; X64-NEXT:    adcq 8(%rsi), %rcx
+; X64-NEXT:    adcq 16(%rsi), %r8
+; X64-NEXT:    adcq 24(%rsi), %r9
+; X64-NEXT:    movq %rdx, (%rdi)
+; X64-NEXT:    movq %rcx, 8(%rdi)
+; X64-NEXT:    movq %r8, 16(%rdi)
+; X64-NEXT:    movq %r9, 24(%rdi)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: readd:
@@ -927,64 +919,54 @@ define { i128, i1 } @saddo_carry_not_1(i128 %x) nounwind {
 define i128 @addcarry_to_subcarry(i64 %a, i64 %b) nounwind {
 ; X64-LABEL: addcarry_to_subcarry:
 ; X64:       # %bb.0:
-; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    movq %rsi, %rcx
+; X64-NEXT:    notq %rcx
+; X64-NEXT:    xorl %edx, %edx
+; X64-NEXT:    addq %rdi, %rcx
+; X64-NEXT:    setb %dl
+; X64-NEXT:    xorl %eax, %eax
 ; X64-NEXT:    cmpq %rsi, %rdi
-; X64-NEXT:    notq %rsi
-; X64-NEXT:    setae %cl
-; X64-NEXT:    addb $-1, %cl
-; X64-NEXT:    adcq $0, %rax
-; X64-NEXT:    setb %cl
-; X64-NEXT:    movzbl %cl, %edx
-; X64-NEXT:    addq %rsi, %rax
+; X64-NEXT:    setae %al
+; X64-NEXT:    addq %rcx, %rax
 ; X64-NEXT:    adcq $0, %rdx
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: addcarry_to_subcarry:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    pushl %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    notl %eax
 ; X86-NEXT:    notl %edx
-; X86-NEXT:    movl %ecx, %edi
-; X86-NEXT:    addl %edx, %edi
-; X86-NEXT:    movl %esi, %ebx
-; X86-NEXT:    adcl %eax, %ebx
-; X86-NEXT:    setb {{[-0-9]+}}(%e{{[sb]}}p) # 1-byte Folded Spill
-; X86-NEXT:    addl $1, %edi
-; X86-NEXT:    movzbl {{[-0-9]+}}(%e{{[sb]}}p), %edi # 1-byte Folded Reload
-; X86-NEXT:    adcl $0, %ebx
+; X86-NEXT:    notl %ecx
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    adcl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    setb %al
+; X86-NEXT:    movzbl %al, %esi
+; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    addl $1, %eax
+; X86-NEXT:    movl %edx, %eax
+; X86-NEXT:    adcl $0, %eax
 ; X86-NEXT:    setb %bl
-; X86-NEXT:    movl %edi, %ebp
-; X86-NEXT:    adcl $0, %ebp
+; X86-NEXT:    movl %esi, %eax
+; X86-NEXT:    adcl $0, %eax
 ; X86-NEXT:    setb %bh
-; X86-NEXT:    addb $255, %bl
-; X86-NEXT:    adcl %edi, %ecx
-; X86-NEXT:    movzbl %bh, %edi
-; X86-NEXT:    adcl %esi, %edi
-; X86-NEXT:    setb %bl
-; X86-NEXT:    addl %edx, %ecx
-; X86-NEXT:    adcl %eax, %edi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl %bh, %edi
+; X86-NEXT:    addb $255, %bl
+; X86-NEXT:    adcl %esi, %ecx
+; X86-NEXT:    adcl %edx, %edi
+; X86-NEXT:    adcl $0, %esi
+; X86-NEXT:    setb %dl
+; X86-NEXT:    movzbl %dl, %edx
 ; X86-NEXT:    movl %ecx, (%eax)
 ; X86-NEXT:    movl %edi, 4(%eax)
-; X86-NEXT:    movzbl %bl, %ecx
-; X86-NEXT:    adcl $0, %ecx
-; X86-NEXT:    movl %ecx, 8(%eax)
-; X86-NEXT:    setb %cl
-; X86-NEXT:    movzbl %cl, %ecx
-; X86-NEXT:    movl %ecx, 12(%eax)
-; X86-NEXT:    addl $4, %esp
+; X86-NEXT:    movl %esi, 8(%eax)
+; X86-NEXT:    movl %edx, 12(%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
-; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl $4
   %notb = xor i64 %b, -1
   %notb128 = zext i64 %notb to i128
@@ -1002,9 +984,12 @@ define { i64, i64, i1 } @addcarry_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1) nounw
 ; X64-LABEL: addcarry_2x64:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1061,9 +1046,12 @@ define { i64, i64, i1 } @addcarry_hidden_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1
 ; X64-LABEL: addcarry_hidden_2x64:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1124,9 +1112,12 @@ define { i64, i64, i1 } @addcarry_hidden2_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y
 ; X64-LABEL: addcarry_hidden2_2x64:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1187,9 +1178,12 @@ define { i64, i64, i1 } @addcarry_2x64_or_reversed(i64 %x0, i64 %x1, i64 %y0, i6
 ; X64-LABEL: addcarry_2x64_or_reversed:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1246,9 +1240,12 @@ define { i64, i64, i1 } @addcarry_2x64_xor_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X64-LABEL: addcarry_2x64_xor_reversed:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    xorb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1305,10 +1302,13 @@ define { i64, i64, i1 } @addcarry_2x64_and_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X64-LABEL: addcarry_2x64_and_reversed:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
+; X64-NEXT:    setb %cl
+; X64-NEXT:    andb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
-; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: addcarry_2x64_and_reversed:
@@ -1364,9 +1364,12 @@ define { i64, i64, i1 } @addcarry_2x64_add_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; X64-LABEL: addcarry_2x64_add_reversed:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %rdx, %rax
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %cl
+; X64-NEXT:    xorb %dil, %cl
 ; X64-NEXT:    movq %rsi, %rdx
 ; X64-NEXT:    retq
 ;
@@ -1644,17 +1647,20 @@ define { i64, i64, i1 } @addcarry_mixed_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1)
 define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: add_U320_without_i128_add:
 ; X64:       # %bb.0:
+; X64-NEXT:    pushq %rbx
 ; X64-NEXT:    movq 16(%rdi), %rax
 ; X64-NEXT:    movq 24(%rdi), %r10
 ; X64-NEXT:    movq 32(%rdi), %r11
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    movq %rax, %rbx
+; X64-NEXT:    adcq %rcx, %rbx
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
-; X64-NEXT:    movq %rax, %rdx
-; X64-NEXT:    adcq %rcx, %rdx
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    adcq $0, %rbx
 ; X64-NEXT:    addq %rcx, %rax
 ; X64-NEXT:    movq %r10, %rcx
 ; X64-NEXT:    adcq %r8, %rcx
-; X64-NEXT:    cmpq %rax, %rdx
+; X64-NEXT:    cmpq %rax, %rbx
 ; X64-NEXT:    adcq $0, %rcx
 ; X64-NEXT:    leaq (%r11,%r9), %rsi
 ; X64-NEXT:    addq %r8, %r10
@@ -1666,10 +1672,12 @@ define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 
 ; X64-NEXT:    cmpq %rsi, %r8
 ; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %r9, %r11
-; X64-NEXT:    movq %rdx, 16(%rdi)
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    movq %rbx, 16(%rdi)
 ; X64-NEXT:    movq %rcx, 24(%rdi)
 ; X64-NEXT:    movq %r8, 32(%rdi)
 ; X64-NEXT:    adcl $0, %eax
+; X64-NEXT:    popq %rbx
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: add_U320_without_i128_add:
@@ -1811,10 +1819,22 @@ define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 
 define i32 @add_U320_without_i128_or(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: add_U320_without_i128_or:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %sil
+; X64-NEXT:    orb %al, %sil
+; X64-NEXT:    addq 24(%rdi), %r8
+; X64-NEXT:    setb %al
+; X64-NEXT:    addb $-1, %sil
 ; X64-NEXT:    adcq %rcx, 16(%rdi)
-; X64-NEXT:    adcq %r8, 24(%rdi)
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %al, %cl
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    movq %r8, 24(%rdi)
+; X64-NEXT:    addb $-1, %cl
 ; X64-NEXT:    adcq %r9, 32(%rdi)
 ; X64-NEXT:    setb %al
 ; X64-NEXT:    movzbl %al, %eax
@@ -1950,10 +1970,22 @@ define i32 @add_U320_without_i128_or(ptr nocapture dereferenceable(40) %0, i64 %
 define i32 @add_U320_without_i128_xor(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: add_U320_without_i128_xor:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %sil
+; X64-NEXT:    xorb %al, %sil
+; X64-NEXT:    addq 24(%rdi), %r8
+; X64-NEXT:    setb %al
+; X64-NEXT:    addb $-1, %sil
 ; X64-NEXT:    adcq %rcx, 16(%rdi)
-; X64-NEXT:    adcq %r8, 24(%rdi)
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    setb %cl
+; X64-NEXT:    xorb %al, %cl
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    movq %r8, 24(%rdi)
+; X64-NEXT:    addb $-1, %cl
 ; X64-NEXT:    adcq %r9, 32(%rdi)
 ; X64-NEXT:    setb %al
 ; X64-NEXT:    movzbl %al, %eax
@@ -2091,9 +2123,15 @@ define i32 @add_U320_without_i128_xor(ptr nocapture dereferenceable(40) %0, i64 
 define i32 @bogus_add_U320_without_i128_and(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: bogus_add_U320_without_i128_and:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
-; X64-NEXT:    addq %rcx, 16(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %sil
+; X64-NEXT:    andb %al, %sil
+; X64-NEXT:    addb $-1, %sil
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    adcq %rcx, 16(%rdi)
 ; X64-NEXT:    addq %r8, 24(%rdi)
 ; X64-NEXT:    addq %r9, 32(%rdi)
 ; X64-NEXT:    xorl %eax, %eax
@@ -2229,11 +2267,25 @@ define i32 @bogus_add_U320_without_i128_and(ptr nocapture dereferenceable(40) %0
 define void @add_U320_without_i128_or_no_ret(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: add_U320_without_i128_or_no_ret:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %sil
+; X64-NEXT:    orb %al, %sil
+; X64-NEXT:    addq 24(%rdi), %r8
+; X64-NEXT:    setb %al
+; X64-NEXT:    addb $-1, %sil
 ; X64-NEXT:    adcq %rcx, 16(%rdi)
-; X64-NEXT:    adcq %r8, 24(%rdi)
-; X64-NEXT:    adcq %r9, 32(%rdi)
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    setb %cl
+; X64-NEXT:    addq 32(%rdi), %r9
+; X64-NEXT:    orb %al, %cl
+; X64-NEXT:    movzbl %cl, %eax
+; X64-NEXT:    addq %r9, %rax
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    movq %r8, 24(%rdi)
+; X64-NEXT:    movq %rax, 32(%rdi)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: add_U320_without_i128_or_no_ret:
@@ -2355,12 +2407,24 @@ define void @add_U320_without_i128_or_no_ret(ptr nocapture dereferenceable(40) %
 define i32 @add_U320_uaddo(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; X64-LABEL: add_U320_uaddo:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq 8(%rdi), %rdx
+; X64-NEXT:    setb %al
 ; X64-NEXT:    addq %rsi, (%rdi)
-; X64-NEXT:    adcq %rdx, 8(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %sil
+; X64-NEXT:    orb %al, %sil
+; X64-NEXT:    addq 24(%rdi), %r8
+; X64-NEXT:    setb %al
+; X64-NEXT:    addb $-1, %sil
 ; X64-NEXT:    adcq %rcx, 16(%rdi)
-; X64-NEXT:    adcq %r8, 24(%rdi)
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %al, %cl
+; X64-NEXT:    addb $-1, %cl
 ; X64-NEXT:    adcq %r9, 32(%rdi)
 ; X64-NEXT:    setb %al
+; X64-NEXT:    movq %rdx, 8(%rdi)
+; X64-NEXT:    movq %r8, 24(%rdi)
 ; X64-NEXT:    movzbl %al, %eax
 ; X64-NEXT:    retq
 ;
@@ -2504,14 +2568,22 @@ define void @PR39464(ptr noalias nocapture sret(%struct.U192) %0, ptr nocapture 
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movq (%rsi), %rcx
-; X64-NEXT:    addq (%rdx), %rcx
-; X64-NEXT:    movq %rcx, (%rdi)
-; X64-NEXT:    movq 8(%rsi), %rcx
-; X64-NEXT:    adcq 8(%rdx), %rcx
-; X64-NEXT:    movq %rcx, 8(%rdi)
-; X64-NEXT:    movq 16(%rsi), %rcx
-; X64-NEXT:    adcq 16(%rdx), %rcx
-; X64-NEXT:    movq %rcx, 16(%rdi)
+; X64-NEXT:    movq (%rdx), %rdi
+; X64-NEXT:    leaq (%rcx,%rdi), %r8
+; X64-NEXT:    movq %r8, (%rax)
+; X64-NEXT:    movq 8(%rsi), %r8
+; X64-NEXT:    addq 8(%rdx), %r8
+; X64-NEXT:    setb %r9b
+; X64-NEXT:    addq %rdi, %rcx
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    setb %cl
+; X64-NEXT:    orb %r9b, %cl
+; X64-NEXT:    movzbl %cl, %ecx
+; X64-NEXT:    movq %r8, 8(%rax)
+; X64-NEXT:    movq 16(%rsi), %rsi
+; X64-NEXT:    addq 16(%rdx), %rsi
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    movq %rsi, 16(%rax)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: PR39464:
@@ -2592,9 +2664,12 @@ define void @PR39464(ptr noalias nocapture sret(%struct.U192) %0, ptr nocapture 
 define zeroext i1 @uaddo_U128_without_i128_or(i64 %0, i64 %1, i64 %2, i64 %3, ptr nocapture %4) nounwind {
 ; X64-LABEL: uaddo_U128_without_i128_or:
 ; X64:       # %bb.0:
+; X64-NEXT:    addq %rcx, %rsi
+; X64-NEXT:    setb %cl
 ; X64-NEXT:    addq %rdx, %rdi
-; X64-NEXT:    adcq %rcx, %rsi
+; X64-NEXT:    adcq $0, %rsi
 ; X64-NEXT:    setb %al
+; X64-NEXT:    orb %cl, %al
 ; X64-NEXT:    movq %rsi, (%r8)
 ; X64-NEXT:    movq %rdi, 8(%r8)
 ; X64-NEXT:    retq
@@ -2647,12 +2722,18 @@ define void @add_U192_without_i128_or(ptr sret(%uint192) %0, i64 %1, i64 %2, i64
 ; X64-LABEL: add_U192_without_i128_or:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
+; X64-NEXT:    addq %r9, %rdx
+; X64-NEXT:    setb %dil
 ; X64-NEXT:    addq %r8, %rsi
-; X64-NEXT:    adcq %r9, %rdx
-; X64-NEXT:    adcq {{[0-9]+}}(%rsp), %rcx
-; X64-NEXT:    movq %rcx, (%rdi)
-; X64-NEXT:    movq %rdx, 8(%rdi)
-; X64-NEXT:    movq %rsi, 16(%rdi)
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    setb %r8b
+; X64-NEXT:    orb %dil, %r8b
+; X64-NEXT:    addq {{[0-9]+}}(%rsp), %rcx
+; X64-NEXT:    movzbl %r8b, %edi
+; X64-NEXT:    addq %rcx, %rdi
+; X64-NEXT:    movq %rdi, (%rax)
+; X64-NEXT:    movq %rdx, 8(%rax)
+; X64-NEXT:    movq %rsi, 16(%rax)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: add_U192_without_i128_or:
@@ -2723,9 +2804,14 @@ define void @add_U256_without_i128_or_by_i64_words(ptr sret(%uint256) %0, ptr %1
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movq (%rdx), %rcx
 ; X64-NEXT:    movq 8(%rdx), %rdi
+; X64-NEXT:    addq 8(%rsi), %rdi
+; X64-NEXT:    setb %r8b
 ; X64-NEXT:    addq (%rsi), %rcx
-; X64-NEXT:    adcq 8(%rsi), %rdi
+; X64-NEXT:    adcq $0, %rdi
+; X64-NEXT:    setb %r9b
+; X64-NEXT:    orb %r8b, %r9b
 ; X64-NEXT:    movq 16(%rdx), %r8
+; X64-NEXT:    addb $-1, %r9b
 ; X64-NEXT:    adcq 16(%rsi), %r8
 ; X64-NEXT:    movq 24(%rdx), %rdx
 ; X64-NEXT:    adcq 24(%rsi), %rdx
@@ -2847,15 +2933,22 @@ define void @add_U256_without_i128_or_recursive(ptr sret(%uint256) %0, ptr %1, p
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movq (%rdx), %rcx
 ; X64-NEXT:    movq 8(%rdx), %rdi
+; X64-NEXT:    addq 8(%rsi), %rdi
+; X64-NEXT:    setb %r8b
 ; X64-NEXT:    addq (%rsi), %rcx
-; X64-NEXT:    adcq 8(%rsi), %rdi
+; X64-NEXT:    adcq $0, %rdi
+; X64-NEXT:    setb %r9b
+; X64-NEXT:    orb %r8b, %r9b
 ; X64-NEXT:    movq 16(%rdx), %r8
 ; X64-NEXT:    movq 24(%rdx), %rdx
-; X64-NEXT:    adcq 16(%rsi), %r8
+; X64-NEXT:    addq 16(%rsi), %r8
 ; X64-NEXT:    adcq 24(%rsi), %rdx
+; X64-NEXT:    movzbl %r9b, %esi
+; X64-NEXT:    addq %r8, %rsi
+; X64-NEXT:    adcq $0, %rdx
 ; X64-NEXT:    movq %rcx, (%rax)
 ; X64-NEXT:    movq %rdi, 8(%rax)
-; X64-NEXT:    movq %r8, 16(%rax)
+; X64-NEXT:    movq %rsi, 16(%rax)
 ; X64-NEXT:    movq %rdx, 24(%rax)
 ; X64-NEXT:    retq
 ;
@@ -3154,20 +3247,10 @@ define { i64, i64 } @addcarry_commutative_2(i64 %x0, i64 %x1, i64 %y0, i64 %y1) 
 }
 
 define i1 @pr84831(i64 %arg) {
-; X64-LABEL: pr84831:
-; X64:       # %bb.0:
-; X64-NEXT:    testq %rdi, %rdi
-; X64-NEXT:    setne %al
-; X64-NEXT:    xorl %ecx, %ecx
-; X64-NEXT:    addb $-1, %al
-; X64-NEXT:    adcq $1, %rcx
-; X64-NEXT:    setb %al
-; X64-NEXT:    retq
-;
-; X86-LABEL: pr84831:
-; X86:       # %bb.0:
-; X86-NEXT:    xorl %eax, %eax
-; X86-NEXT:    retl
+; CHECK-LABEL: pr84831:
+; CHECK:       # %bb.0:
+; CHECK-NEXT:    xorl %eax, %eax
+; CHECK-NEXT:    ret{{[l|q]}}
   %a = icmp ult i64 0, %arg
   %add1 = add i64 0, 1
   %carryout1 = icmp ult i64 %add1, 0
@@ -3184,9 +3267,18 @@ define i1 @pr84831(i64 %arg) {
 define void @pr169691(ptr %p0, i64 %implicit, i1 zeroext %carry) nounwind {
 ; X64-LABEL: pr169691:
 ; X64:       # %bb.0:
-; X64-NEXT:    addb $-1, %dl
-; X64-NEXT:    adcq %rsi, (%rdi)
-; X64-NEXT:    adcq %rsi, 8(%rdi)
+; X64-NEXT:    movq (%rdi), %rax
+; X64-NEXT:    addq %rsi, %rax
+; X64-NEXT:    setb %cl
+; X64-NEXT:    movl %edx, %edx
+; X64-NEXT:    addq %rax, %rdx
+; X64-NEXT:    setb %al
+; X64-NEXT:    orb %cl, %al
+; X64-NEXT:    movq %rdx, (%rdi)
+; X64-NEXT:    addq 8(%rdi), %rsi
+; X64-NEXT:    movzbl %al, %eax
+; X64-NEXT:    addq %rsi, %rax
+; X64-NEXT:    movq %rax, 8(%rdi)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: pr169691:
@@ -3243,5 +3335,3 @@ define void @pr169691(ptr %p0, i64 %implicit, i1 zeroext %carry) nounwind {
   store i64 %uaddo1b.0, ptr %p1, align 8
   ret void
 }
-;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
-; CHECK: {{.*}}

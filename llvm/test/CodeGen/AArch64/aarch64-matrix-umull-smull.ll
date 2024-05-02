@@ -179,14 +179,15 @@ define void @matrix_mul_double_shuffle(i32 %N, ptr nocapture %C, ptr nocapture r
 ; CHECK-SD-NEXT:    // kill: def $w0 killed $w0 def $x0
 ; CHECK-SD-NEXT:    and x8, x0, #0xfffffff8
 ; CHECK-SD-NEXT:    // kill: def $w0 killed $w0 killed $x0 def $x0
+; CHECK-SD-NEXT:    ushll v0.4s, v0.4h, #0
 ; CHECK-SD-NEXT:  .LBB2_1: // %vector.body
 ; CHECK-SD-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-SD-NEXT:    ldrh w9, [x2], #16
 ; CHECK-SD-NEXT:    subs x8, x8, #8
-; CHECK-SD-NEXT:    dup v1.4h, w9
+; CHECK-SD-NEXT:    fmov s1, w9
 ; CHECK-SD-NEXT:    ubfiz x9, x0, #2, #32
 ; CHECK-SD-NEXT:    add w0, w0, #8
-; CHECK-SD-NEXT:    umull v1.4s, v0.4h, v1.4h
+; CHECK-SD-NEXT:    mul v1.4s, v0.4s, v1.s[0]
 ; CHECK-SD-NEXT:    str q1, [x1, x9]
 ; CHECK-SD-NEXT:    b.ne .LBB2_1
 ; CHECK-SD-NEXT:  // %bb.2: // %for.end12

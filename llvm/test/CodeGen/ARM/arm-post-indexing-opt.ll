@@ -88,9 +88,10 @@ define <4 x float> @test_stride_noop(ptr %A) {
 define <4 x float> @test_positive_initial_offset(ptr %A) {
 ; CHECK-LABEL: test_positive_initial_offset:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    add r0, r0, #32
-; CHECK-NEXT:    vld1.32 {d16, d17}, [r0]!
-; CHECK-NEXT:    vld1.32 {d18, d19}, [r0]!
+; CHECK-NEXT:    add r1, r0, #32
+; CHECK-NEXT:    add r0, r0, #64
+; CHECK-NEXT:    vld1.32 {d16, d17}, [r1]!
+; CHECK-NEXT:    vld1.32 {d18, d19}, [r1]
 ; CHECK-NEXT:    vadd.f32 q8, q8, q9
 ; CHECK-NEXT:    vld1.32 {d18, d19}, [r0]
 ; CHECK-NEXT:    vadd.f32 q0, q8, q9
@@ -133,9 +134,10 @@ define <4 x float> @test_global() {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    movw r0, :lower16:global_float_array
 ; CHECK-NEXT:    movt r0, :upper16:global_float_array
-; CHECK-NEXT:    add r0, r0, #32
-; CHECK-NEXT:    vld1.32 {d16, d17}, [r0]!
-; CHECK-NEXT:    vld1.32 {d18, d19}, [r0]!
+; CHECK-NEXT:    add r1, r0, #32
+; CHECK-NEXT:    vld1.32 {d16, d17}, [r1]!
+; CHECK-NEXT:    add r0, r0, #64
+; CHECK-NEXT:    vld1.32 {d18, d19}, [r1]
 ; CHECK-NEXT:    vadd.f32 q8, q8, q9
 ; CHECK-NEXT:    vld1.32 {d18, d19}, [r0]
 ; CHECK-NEXT:    vadd.f32 q0, q8, q9
@@ -184,9 +186,10 @@ define <4 x float> @test_stack() {
 define <2 x double> @test_double(ptr %A) {
 ; CHECK-LABEL: test_double:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    add r0, r0, #64
-; CHECK-NEXT:    vld1.64 {d16, d17}, [r0]!
-; CHECK-NEXT:    vld1.64 {d18, d19}, [r0]!
+; CHECK-NEXT:    add r1, r0, #64
+; CHECK-NEXT:    add r0, r0, #96
+; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]!
+; CHECK-NEXT:    vld1.64 {d18, d19}, [r1]
 ; CHECK-NEXT:    vadd.f64 d20, d17, d19
 ; CHECK-NEXT:    vadd.f64 d16, d16, d18
 ; CHECK-NEXT:    vld1.64 {d22, d23}, [r0]
@@ -227,6 +230,8 @@ define void @test_lsr_geps(ptr %a, ptr %b, i32 %n) {
 ; CHECK-NEXT:    cmp r2, #1
 ; CHECK-NEXT:    bxlt lr
 ; CHECK-NEXT:  .LBB10_1: @ %for.body.preheader
+; CHECK-NEXT:    .save {r11, lr}
+; CHECK-NEXT:    push {r11, lr}
 ; CHECK-NEXT:    mov r12, #0
 ; CHECK-NEXT:  .LBB10_2: @ %for.body
 ; CHECK-NEXT:    @ =>This Inner Loop Header: Depth=1
@@ -237,13 +242,15 @@ define void @test_lsr_geps(ptr %a, ptr %b, i32 %n) {
 ; CHECK-NEXT:    vld1.32 {d20, d21}, [r3]!
 ; CHECK-NEXT:    vld1.32 {d22, d23}, [r3]
 ; CHECK-NEXT:    add r3, r1, r12
+; CHECK-NEXT:    add lr, r3, #32
 ; CHECK-NEXT:    add r12, r12, #64
 ; CHECK-NEXT:    vst1.32 {d16, d17}, [r3]!
-; CHECK-NEXT:    vst1.32 {d18, d19}, [r3]!
-; CHECK-NEXT:    vst1.32 {d20, d21}, [r3]!
-; CHECK-NEXT:    vst1.32 {d22, d23}, [r3]
+; CHECK-NEXT:    vst1.32 {d20, d21}, [lr]!
+; CHECK-NEXT:    vst1.32 {d18, d19}, [r3]
+; CHECK-NEXT:    vst1.32 {d22, d23}, [lr]
 ; CHECK-NEXT:    bne .LBB10_2
-; CHECK-NEXT:  @ %bb.3: @ %for.cond.cleanup
+; CHECK-NEXT:  @ %bb.3:
+; CHECK-NEXT:    pop {r11, lr}
 ; CHECK-NEXT:    bx lr
 entry:
   %cmp61 = icmp sgt i32 %n, 0

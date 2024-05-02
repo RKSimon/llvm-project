@@ -235,8 +235,7 @@ define <4 x float> @combine_vec_fcopysign_fcopysign_sgn(<4 x float> %x, <4 x flo
 ;
 ; AVX512-LABEL: combine_vec_fcopysign_fcopysign_sgn:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm2, %xmm1
-; AVX512-NEXT:    vpternlogd {{.*#+}} xmm0 = xmm1 ^ (m32bcst & (xmm0 ^ xmm1))
+; AVX512-NEXT:    vpternlogd {{.*#+}} xmm0 = xmm2 ^ (m32bcst & (xmm0 ^ xmm2))
 ; AVX512-NEXT:    retq
   %1 = call <4 x float> @llvm.copysign.v4f32(<4 x float> %y, <4 x float> %z)
   %2 = call <4 x float> @llvm.copysign.v4f32(<4 x float> %x, <4 x float> %1)

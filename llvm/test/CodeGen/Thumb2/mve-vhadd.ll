@@ -191,8 +191,55 @@ entry:
 define arm_aapcs_vfpcc <4 x i32> @vrhadds_v4i32(<4 x i32> %s0, <4 x i32> %s1) {
 ; CHECK-LABEL: vrhadds_v4i32:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vrhadd.s32 q0, q0, q1
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    .save {r4, lr}
+; CHECK-NEXT:    push {r4, lr}
+; CHECK-NEXT:    vmov.f32 s8, s2
+; CHECK-NEXT:    vmov.f32 s2, s3
+; CHECK-NEXT:    vmov r1, s8
+; CHECK-NEXT:    vmov r0, s2
+; CHECK-NEXT:    vmov q2[2], q2[0], r1, r0
+; CHECK-NEXT:    vmov.f32 s2, s1
+; CHECK-NEXT:    asrs r1, r1, #31
+; CHECK-NEXT:    asrs r0, r0, #31
+; CHECK-NEXT:    vmov q2[3], q2[1], r1, r0
+; CHECK-NEXT:    vmvn q2, q2
+; CHECK-NEXT:    vmov r0, r1, d4
+; CHECK-NEXT:    vmov.f32 s8, s6
+; CHECK-NEXT:    vmov.f32 s6, s7
+; CHECK-NEXT:    vmov r2, s8
+; CHECK-NEXT:    subs r0, r2, r0
+; CHECK-NEXT:    asr.w r3, r2, #31
+; CHECK-NEXT:    sbc.w r1, r3, r1
+; CHECK-NEXT:    lsrl r0, r1, #1
+; CHECK-NEXT:    vmov r2, s0
+; CHECK-NEXT:    vmov r1, s2
+; CHECK-NEXT:    vmov q0[2], q0[0], r2, r1
+; CHECK-NEXT:    vmov r3, s4
+; CHECK-NEXT:    asrs r2, r2, #31
+; CHECK-NEXT:    asrs r1, r1, #31
+; CHECK-NEXT:    vmov q0[3], q0[1], r2, r1
+; CHECK-NEXT:    asrs r2, r3, #31
+; CHECK-NEXT:    vmvn q3, q0
+; CHECK-NEXT:    vmov r1, r12, d6
+; CHECK-NEXT:    subs r4, r3, r1
+; CHECK-NEXT:    sbc.w r1, r2, r12
+; CHECK-NEXT:    vmov r2, s6
+; CHECK-NEXT:    lsrl r4, r1, #1
+; CHECK-NEXT:    vmov.f32 s6, s5
+; CHECK-NEXT:    vmov q0[2], q0[0], r4, r0
+; CHECK-NEXT:    vmov r0, r1, d5
+; CHECK-NEXT:    asrs r3, r2, #31
+; CHECK-NEXT:    subs r0, r2, r0
+; CHECK-NEXT:    sbc.w r1, r3, r1
+; CHECK-NEXT:    vmov r3, s6
+; CHECK-NEXT:    lsrl r0, r1, #1
+; CHECK-NEXT:    vmov r1, r12, d7
+; CHECK-NEXT:    asrs r4, r3, #31
+; CHECK-NEXT:    subs r2, r3, r1
+; CHECK-NEXT:    sbc.w r1, r4, r12
+; CHECK-NEXT:    lsrl r2, r1, #1
+; CHECK-NEXT:    vmov q0[3], q0[1], r2, r0
+; CHECK-NEXT:    pop {r4, pc}
 entry:
   %s0s = sext <4 x i32> %s0 to <4 x i64>
   %s1s = sext <4 x i32> %s1 to <4 x i64>
@@ -257,7 +304,17 @@ entry:
 define arm_aapcs_vfpcc <8 x i16> @vrhadds_v8i16(<8 x i16> %s0, <8 x i16> %s1) {
 ; CHECK-LABEL: vrhadds_v8i16:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vrhadd.s16 q0, q0, q1
+; CHECK-NEXT:    vmovlt.s16 q3, q0
+; CHECK-NEXT:    vmovlb.s16 q0, q0
+; CHECK-NEXT:    vmovlt.s16 q2, q1
+; CHECK-NEXT:    vmvn q3, q3
+; CHECK-NEXT:    vmovlb.s16 q1, q1
+; CHECK-NEXT:    vmvn q0, q0
+; CHECK-NEXT:    vsub.i32 q2, q2, q3
+; CHECK-NEXT:    vsub.i32 q0, q1, q0
+; CHECK-NEXT:    vshr.u32 q2, q2, #1
+; CHECK-NEXT:    vshr.u32 q0, q0, #1
+; CHECK-NEXT:    vmovnt.i32 q0, q2
 ; CHECK-NEXT:    bx lr
 entry:
   %s0s = sext <8 x i16> %s0 to <8 x i32>
@@ -363,7 +420,17 @@ entry:
 define arm_aapcs_vfpcc <16 x i8> @vrhadds_v16i8(<16 x i8> %s0, <16 x i8> %s1) {
 ; CHECK-LABEL: vrhadds_v16i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vrhadd.s8 q0, q0, q1
+; CHECK-NEXT:    vmovlt.s8 q3, q0
+; CHECK-NEXT:    vmovlb.s8 q0, q0
+; CHECK-NEXT:    vmovlt.s8 q2, q1
+; CHECK-NEXT:    vmvn q3, q3
+; CHECK-NEXT:    vmovlb.s8 q1, q1
+; CHECK-NEXT:    vmvn q0, q0
+; CHECK-NEXT:    vsub.i16 q2, q2, q3
+; CHECK-NEXT:    vsub.i16 q0, q1, q0
+; CHECK-NEXT:    vshr.u16 q2, q2, #1
+; CHECK-NEXT:    vshr.u16 q0, q0, #1
+; CHECK-NEXT:    vmovnt.i16 q0, q2
 ; CHECK-NEXT:    bx lr
 entry:
   %s0s = sext <16 x i8> %s0 to <16 x i16>
@@ -898,8 +965,18 @@ entry:
 define arm_aapcs_vfpcc i16 @vrhadds_reduce_v16i8(<16 x i8> %s0, <16 x i8> %s1) {
 ; CHECK-LABEL: vrhadds_reduce_v16i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vrhadd.s8 q0, q0, q1
-; CHECK-NEXT:    vaddv.s8 r0, q0
+; CHECK-NEXT:    vmovlb.s8 q3, q0
+; CHECK-NEXT:    vmovlt.s8 q0, q0
+; CHECK-NEXT:    vmovlb.s8 q2, q1
+; CHECK-NEXT:    vmovlt.s8 q1, q1
+; CHECK-NEXT:    vmvn q0, q0
+; CHECK-NEXT:    vmvn q3, q3
+; CHECK-NEXT:    vsub.i16 q0, q1, q0
+; CHECK-NEXT:    vsub.i16 q2, q2, q3
+; CHECK-NEXT:    vshr.s16 q0, q0, #1
+; CHECK-NEXT:    vshr.s16 q2, q2, #1
+; CHECK-NEXT:    vaddv.u16 r0, q0
+; CHECK-NEXT:    vaddva.u16 r0, q2
 ; CHECK-NEXT:    bx lr
 entry:
   %s0s = sext <16 x i8> %s0 to <16 x i16>
@@ -914,8 +991,18 @@ entry:
 define arm_aapcs_vfpcc i16 @vrhaddu_reduce_v16i8(<16 x i8> %s0, <16 x i8> %s1) {
 ; CHECK-LABEL: vrhaddu_reduce_v16i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vrhadd.u8 q0, q0, q1
-; CHECK-NEXT:    vaddv.u8 r0, q0
+; CHECK-NEXT:    vmovlb.u8 q3, q0
+; CHECK-NEXT:    vmovlt.u8 q0, q0
+; CHECK-NEXT:    vmovlb.u8 q2, q1
+; CHECK-NEXT:    vmovlt.u8 q1, q1
+; CHECK-NEXT:    vmvn q0, q0
+; CHECK-NEXT:    vmvn q3, q3
+; CHECK-NEXT:    vsub.i16 q0, q1, q0
+; CHECK-NEXT:    vsub.i16 q2, q2, q3
+; CHECK-NEXT:    vshr.u16 q0, q0, #1
+; CHECK-NEXT:    vshr.u16 q2, q2, #1
+; CHECK-NEXT:    vaddv.u16 r0, q0
+; CHECK-NEXT:    vaddva.u16 r0, q2
 ; CHECK-NEXT:    bx lr
 entry:
   %s0s = zext <16 x i8> %s0 to <16 x i16>

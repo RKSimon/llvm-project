@@ -163,11 +163,9 @@ define i32 @issue_121372(<4 x i32> %v) {
 define i1 @extract_icmp_v4i32_splat_rhs(<4 x i32> %a, i32 %b) {
 ; CHECK-LABEL: extract_icmp_v4i32_splat_rhs:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    dup v1.4s, w0
-; CHECK-NEXT:    cmhi v0.4s, v1.4s, v0.4s
-; CHECK-NEXT:    xtn v0.4h, v0.4s
-; CHECK-NEXT:    umov w8, v0.h[1]
-; CHECK-NEXT:    and w0, w8, #0x1
+; CHECK-NEXT:    mov w8, v0.s[1]
+; CHECK-NEXT:    cmp w8, w0
+; CHECK-NEXT:    cset w0, lo
 ; CHECK-NEXT:    ret
   %ins = insertelement <4 x i32> poison, i32 %b, i32 0
   %splat = shufflevector <4 x i32> %ins, <4 x i32> poison, <4 x i32> zeroinitializer

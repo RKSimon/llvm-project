@@ -657,18 +657,18 @@ define void @load_2x_vectors_bf16_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_i8_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_i8_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    add z0.b, z0.b, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.b, z1.b, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.b, z2.b, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.b, z3.b, #5 // =0x5
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_i8_r:
@@ -709,8 +709,8 @@ define void @load_4x_vectors_i8_rr(ptr %base, i64 %idx) {
 ; SVE2p1:       // %bb.0:
 ; SVE2p1-NEXT:    ptrue p0.b
 ; SVE2p1-NEXT:    add x8, x0, x1
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ld1b { z0.b }, p0/z, [x0, x1]
 ; SVE2p1-NEXT:    add z1.b, z1.b, #5 // =0x5
@@ -718,8 +718,8 @@ define void @load_4x_vectors_i8_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    add z3.b, z3.b, #5 // =0x5
 ; SVE2p1-NEXT:    add z0.b, z0.b, #5 // =0x5
 ; SVE2p1-NEXT:    st1b { z0.b }, p0, [x0, x1]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -764,18 +764,18 @@ define void @load_4x_vectors_i8_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_i16_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_i16_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    add z0.h, z0.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.h, z1.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.h, z2.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.h, z3.h, #5 // =0x5
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_i16_r:
@@ -817,16 +817,16 @@ define void @load_4x_vectors_i16_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.h
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #1
 ; SVE2p1-NEXT:    ld1h { z0.h }, p0/z, [x0, x1, lsl #1]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    add z0.h, z0.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.h, z1.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.h, z2.h, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.h, z3.h, #5 // =0x5
 ; SVE2p1-NEXT:    st1h { z0.h }, p0, [x0, x1, lsl #1]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -871,18 +871,18 @@ define void @load_4x_vectors_i16_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_i32_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_i32_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    add z0.s, z0.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.s, z1.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.s, z2.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.s, z3.s, #5 // =0x5
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_i32_r:
@@ -924,16 +924,16 @@ define void @load_4x_vectors_i32_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.s
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #2
 ; SVE2p1-NEXT:    ld1w { z0.s }, p0/z, [x0, x1, lsl #2]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    add z0.s, z0.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.s, z1.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.s, z2.s, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.s, z3.s, #5 // =0x5
 ; SVE2p1-NEXT:    st1w { z0.s }, p0, [x0, x1, lsl #2]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -978,18 +978,18 @@ define void @load_4x_vectors_i32_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_i64_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_i64_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    add z0.d, z0.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.d, z1.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.d, z2.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.d, z3.d, #5 // =0x5
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_i64_r:
@@ -1031,16 +1031,16 @@ define void @load_4x_vectors_i64_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.d
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #3
 ; SVE2p1-NEXT:    ld1d { z0.d }, p0/z, [x0, x1, lsl #3]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    add z0.d, z0.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z1.d, z1.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z2.d, z2.d, #5 // =0x5
 ; SVE2p1-NEXT:    add z3.d, z3.d, #5 // =0x5
 ; SVE2p1-NEXT:    st1d { z0.d }, p0, [x0, x1, lsl #3]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -1085,19 +1085,19 @@ define void @load_4x_vectors_i64_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_f16_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_f16_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
 ; SVE2p1-NEXT:    ptrue p0.h
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    fadd z0.h, p0/m, z0.h, #1.0
 ; SVE2p1-NEXT:    fadd z1.h, p0/m, z1.h, #1.0
 ; SVE2p1-NEXT:    fadd z2.h, p0/m, z2.h, #1.0
 ; SVE2p1-NEXT:    fadd z3.h, p0/m, z3.h, #1.0
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_f16_r:
@@ -1141,16 +1141,16 @@ define void @load_4x_vectors_f16_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.h
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #1
 ; SVE2p1-NEXT:    ld1h { z0.h }, p0/z, [x0, x1, lsl #1]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    fadd z0.h, p0/m, z0.h, #1.0
 ; SVE2p1-NEXT:    fadd z1.h, p0/m, z1.h, #1.0
 ; SVE2p1-NEXT:    fadd z2.h, p0/m, z2.h, #1.0
 ; SVE2p1-NEXT:    fadd z3.h, p0/m, z3.h, #1.0
 ; SVE2p1-NEXT:    st1h { z0.h }, p0, [x0, x1, lsl #1]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -1195,19 +1195,19 @@ define void @load_4x_vectors_f16_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_f32_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_f32_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
 ; SVE2p1-NEXT:    ptrue p0.s
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    fadd z0.s, p0/m, z0.s, #1.0
 ; SVE2p1-NEXT:    fadd z1.s, p0/m, z1.s, #1.0
 ; SVE2p1-NEXT:    fadd z2.s, p0/m, z2.s, #1.0
 ; SVE2p1-NEXT:    fadd z3.s, p0/m, z3.s, #1.0
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_f32_r:
@@ -1251,16 +1251,16 @@ define void @load_4x_vectors_f32_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.s
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #2
 ; SVE2p1-NEXT:    ld1w { z0.s }, p0/z, [x0, x1, lsl #2]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    fadd z0.s, p0/m, z0.s, #1.0
 ; SVE2p1-NEXT:    fadd z1.s, p0/m, z1.s, #1.0
 ; SVE2p1-NEXT:    fadd z2.s, p0/m, z2.s, #1.0
 ; SVE2p1-NEXT:    fadd z3.s, p0/m, z3.s, #1.0
 ; SVE2p1-NEXT:    st1w { z0.s }, p0, [x0, x1, lsl #2]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -1305,19 +1305,19 @@ define void @load_4x_vectors_f32_rr(ptr %base, i64 %idx) {
 define void @load_4x_vectors_f64_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_f64_r:
 ; SVE2p1:       // %bb.0:
-; SVE2p1-NEXT:    ldr z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
 ; SVE2p1-NEXT:    ptrue p0.d
-; SVE2p1-NEXT:    ldr z2, [x0]
-; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0]
 ; SVE2p1-NEXT:    fadd z0.d, p0/m, z0.d, #1.0
 ; SVE2p1-NEXT:    fadd z1.d, p0/m, z1.d, #1.0
 ; SVE2p1-NEXT:    fadd z2.d, p0/m, z2.d, #1.0
 ; SVE2p1-NEXT:    fadd z3.d, p0/m, z3.d, #1.0
-; SVE2p1-NEXT:    str z0, [x0, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z2, [x0]
-; SVE2p1-NEXT:    str z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z3, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_f64_r:
@@ -1361,16 +1361,16 @@ define void @load_4x_vectors_f64_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    ptrue p0.d
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #3
 ; SVE2p1-NEXT:    ld1d { z0.d }, p0/z, [x0, x1, lsl #3]
-; SVE2p1-NEXT:    ldr z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    fadd z0.d, p0/m, z0.d, #1.0
 ; SVE2p1-NEXT:    fadd z1.d, p0/m, z1.d, #1.0
 ; SVE2p1-NEXT:    fadd z2.d, p0/m, z2.d, #1.0
 ; SVE2p1-NEXT:    fadd z3.d, p0/m, z3.d, #1.0
 ; SVE2p1-NEXT:    st1d { z0.d }, p0, [x0, x1, lsl #3]
-; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z3, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;
@@ -1416,18 +1416,18 @@ define void @load_4x_vectors_bf16_r(ptr %addr) {
 ; SVE2p1-LABEL: load_4x_vectors_bf16_r:
 ; SVE2p1:       // %bb.0:
 ; SVE2p1-NEXT:    fmov z0.h, #1.87500000
-; SVE2p1-NEXT:    ldr z1, [x0, #2, mul vl]
-; SVE2p1-NEXT:    ldr z2, [x0, #3, mul vl]
-; SVE2p1-NEXT:    ldr z3, [x0]
-; SVE2p1-NEXT:    ldr z4, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z1, [x0, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x0, #2, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x0, #1, mul vl]
+; SVE2p1-NEXT:    ldr z4, [x0]
 ; SVE2p1-NEXT:    bfadd z1.h, z1.h, z0.h
 ; SVE2p1-NEXT:    bfadd z2.h, z2.h, z0.h
-; SVE2p1-NEXT:    str z1, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #3, mul vl]
 ; SVE2p1-NEXT:    bfadd z1.h, z3.h, z0.h
 ; SVE2p1-NEXT:    bfadd z0.h, z4.h, z0.h
-; SVE2p1-NEXT:    str z2, [x0, #3, mul vl]
-; SVE2p1-NEXT:    str z1, [x0]
-; SVE2p1-NEXT:    str z0, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z2, [x0, #2, mul vl]
+; SVE2p1-NEXT:    str z1, [x0, #1, mul vl]
+; SVE2p1-NEXT:    str z0, [x0]
 ; SVE2p1-NEXT:    ret
 ;
 ; SVE2p1-SL-LABEL: load_4x_vectors_bf16_r:
@@ -1472,16 +1472,16 @@ define void @load_4x_vectors_bf16_rr(ptr %base, i64 %idx) {
 ; SVE2p1-NEXT:    add x8, x0, x1, lsl #1
 ; SVE2p1-NEXT:    fmov z0.h, #1.87500000
 ; SVE2p1-NEXT:    ld1h { z1.h }, p0/z, [x0, x1, lsl #1]
-; SVE2p1-NEXT:    ldr z2, [x8, #2, mul vl]
-; SVE2p1-NEXT:    ldr z3, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    ldr z3, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    ldr z4, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    bfadd z1.h, z1.h, z0.h
 ; SVE2p1-NEXT:    bfadd z2.h, z2.h, z0.h
 ; SVE2p1-NEXT:    st1h { z1.h }, p0, [x0, x1, lsl #1]
 ; SVE2p1-NEXT:    bfadd z1.h, z3.h, z0.h
 ; SVE2p1-NEXT:    bfadd z0.h, z4.h, z0.h
-; SVE2p1-NEXT:    str z2, [x8, #2, mul vl]
-; SVE2p1-NEXT:    str z1, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z2, [x8, #3, mul vl]
+; SVE2p1-NEXT:    str z1, [x8, #2, mul vl]
 ; SVE2p1-NEXT:    str z0, [x8, #1, mul vl]
 ; SVE2p1-NEXT:    ret
 ;

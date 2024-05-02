@@ -4,9 +4,9 @@
 define i32 @pr152630(i1 %cond) nounwind {
 ; CHECK-LABEL: pr152630:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    andl $1, %edi
-; CHECK-NEXT:    decl %edi
-; CHECK-NEXT:    cmpl $-1, %edi
+; CHECK-NEXT:    andb $1, %dil
+; CHECK-NEXT:    decb %dil
+; CHECK-NEXT:    cmpb $-1, %dil
 ; CHECK-NEXT:    je .LBB0_2
 ; CHECK-NEXT:  # %bb.1: # %entry
 ; CHECK-NEXT:    movzbl %dil, %eax

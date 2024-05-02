@@ -879,14 +879,14 @@ define <6 x half> @v_repeat_divisor_v3f16_x2(<3 x half> %x, <3 x half> %y, <3 x 
 ; GFX6-LABEL: v_repeat_divisor_v3f16_x2:
 ; GFX6:       ; %bb.0:
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX6-NEXT:    v_lshrrev_b32_e32 v6, 16, v4
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v6, v6
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v6, v4
+; GFX6-NEXT:    v_lshrrev_b32_e32 v4, 16, v4
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v4, v4
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v5, v5
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; GFX6-NEXT:    v_div_scale_f32 v7, s[4:5], v6, v6, 1.0
 ; GFX6-NEXT:    v_rcp_f32_e32 v8, v7
 ; GFX6-NEXT:    v_div_scale_f32 v9, vcc, 1.0, v6, 1.0
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v3, v3
 ; GFX6-NEXT:    v_fma_f32 v10, -v7, v8, 1.0
 ; GFX6-NEXT:    v_fma_f32 v8, v10, v8, v8
@@ -899,7 +899,7 @@ define <6 x half> @v_repeat_divisor_v3f16_x2(<3 x half> %x, <3 x half> %y, <3 x 
 ; GFX6-NEXT:    v_rcp_f32_e32 v9, v8
 ; GFX6-NEXT:    v_div_fixup_f32 v6, v7, v6, 1.0
 ; GFX6-NEXT:    v_cvt_f16_f32_e32 v6, v6
-; GFX6-NEXT:    v_lshrrev_b32_e32 v7, 16, v0
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v7, v0
 ; GFX6-NEXT:    v_fma_f32 v10, -v8, v9, 1.0
 ; GFX6-NEXT:    v_fma_f32 v9, v10, v9, v9
 ; GFX6-NEXT:    v_div_scale_f32 v10, vcc, 1.0, v4, 1.0
@@ -919,35 +919,35 @@ define <6 x half> @v_repeat_divisor_v3f16_x2(<3 x half> %x, <3 x half> %y, <3 x 
 ; GFX6-NEXT:    v_fma_f32 v11, v12, v8, v11
 ; GFX6-NEXT:    v_fma_f32 v9, -v10, v11, v9
 ; GFX6-NEXT:    v_div_fmas_f32 v8, v9, v8, v11
-; GFX6-NEXT:    v_cvt_f16_f32_e32 v4, v4
 ; GFX6-NEXT:    v_div_fixup_f32 v5, v8, v5, 1.0
+; GFX6-NEXT:    v_cvt_f16_f32_e32 v4, v4
 ; GFX6-NEXT:    v_cvt_f16_f32_e32 v5, v5
-; GFX6-NEXT:    v_lshrrev_b32_e32 v8, 16, v2
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v4, v4
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v7, v7
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v6, v6
-; GFX6-NEXT:    v_cvt_f32_f16_e32 v5, v5
+; GFX6-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; GFX6-NEXT:    v_lshrrev_b32_e32 v8, 16, v2
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v2, v2
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v4, v4
+; GFX6-NEXT:    v_cvt_f32_f16_e32 v5, v5
 ; GFX6-NEXT:    v_cvt_f32_f16_e32 v8, v8
-; GFX6-NEXT:    v_mul_f32_e32 v2, v2, v4
-; GFX6-NEXT:    v_mul_f32_e32 v7, v7, v6
+; GFX6-NEXT:    v_mul_f32_e32 v2, v2, v6
+; GFX6-NEXT:    v_mul_f32_e32 v0, v0, v4
 ; GFX6-NEXT:    v_mul_f32_e32 v1, v1, v5
 ; GFX6-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; GFX6-NEXT:    v_mul_f32_e32 v3, v3, v5
-; GFX6-NEXT:    v_cvt_f16_f32_e32 v7, v7
-; GFX6-NEXT:    v_mul_f32_e32 v0, v0, v4
-; GFX6-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; GFX6-NEXT:    v_mul_f32_e32 v6, v8, v6
-; GFX6-NEXT:    v_cvt_f16_f32_e32 v3, v3
+; GFX6-NEXT:    v_mul_f32_e32 v7, v7, v6
 ; GFX6-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; GFX6-NEXT:    v_cvt_f16_f32_e32 v4, v6
+; GFX6-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; GFX6-NEXT:    v_mul_f32_e32 v4, v8, v4
+; GFX6-NEXT:    v_cvt_f16_f32_e32 v3, v3
+; GFX6-NEXT:    v_cvt_f16_f32_e32 v7, v7
+; GFX6-NEXT:    v_cvt_f16_f32_e32 v4, v4
 ; GFX6-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
-; GFX6-NEXT:    v_lshlrev_b32_e32 v7, 16, v7
 ; GFX6-NEXT:    v_or_b32_e32 v1, v1, v2
 ; GFX6-NEXT:    v_lshlrev_b32_e32 v2, 16, v3
+; GFX6-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
 ; GFX6-NEXT:    v_or_b32_e32 v2, v4, v2
-; GFX6-NEXT:    v_or_b32_e32 v0, v0, v7
+; GFX6-NEXT:    v_or_b32_e32 v0, v7, v0
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-LABEL: v_repeat_divisor_v3f16_x2:
@@ -961,9 +961,9 @@ define <6 x half> @v_repeat_divisor_v3f16_x2(<3 x half> %x, <3 x half> %y, <3 x 
 ; GFX9-NEXT:    v_pack_b32_f16 v5, v5, s4
 ; GFX9-NEXT:    v_pk_mul_f16 v0, v0, v4
 ; GFX9-NEXT:    v_pk_mul_f16 v1, v1, v5
-; GFX9-NEXT:    v_pk_mul_f16 v3, v3, v5
 ; GFX9-NEXT:    v_pk_mul_f16 v4, v2, v4
-; GFX9-NEXT:    v_alignbit_b32 v2, v3, v4, 16
+; GFX9-NEXT:    v_pk_mul_f16 v2, v3, v5
+; GFX9-NEXT:    v_alignbit_b32 v2, v2, v4, 16
 ; GFX9-NEXT:    v_pack_b32_f16 v1, v1, v4
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;

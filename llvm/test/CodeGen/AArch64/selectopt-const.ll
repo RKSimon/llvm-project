@@ -13,7 +13,7 @@ define i32 @test_const(ptr %in1, ptr %in2, ptr %out, i32 %n, ptr %tbl) {
 ; CHECK-NEXT:    mov w8, w3
 ; CHECK-NEXT:    movk w9, #16309, lsl #16
 ; CHECK-NEXT:    fmov s0, w9
-; CHECK-NEXT:    mov w9, #16 // =0x10
+; CHECK-NEXT:    mov w9, #4 // =0x4
 ; CHECK-NEXT:    .p2align 5, , 16
 ; CHECK-NEXT:  .LBB0_2: // %for.body
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
@@ -28,7 +28,7 @@ define i32 @test_const(ptr %in1, ptr %in2, ptr %out, i32 %n, ptr %tbl) {
 ; CHECK-NEXT:    fcmp d3, d2
 ; CHECK-NEXT:    csel x10, x9, xzr, lt
 ; CHECK-NEXT:    subs x8, x8, #1
-; CHECK-NEXT:    ldr s3, [x4, x10]
+; CHECK-NEXT:    ldr s3, [x4, x10, lsl #2]
 ; CHECK-NEXT:    fcvtzs s3, s3
 ; CHECK-NEXT:    st1 { v3.s }[0], [x2], #4
 ; CHECK-NEXT:    b.ne .LBB0_2

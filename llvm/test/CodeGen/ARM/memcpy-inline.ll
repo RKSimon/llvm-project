@@ -68,7 +68,7 @@ define void @t1(ptr nocapture %C) nounwind {
 ; CHECK-NEXT:  LPC1_0:
 ; CHECK-NEXT:    add r1, pc
 ; CHECK-NEXT:    movs r2, #15
-; CHECK-NEXT:    vld1.8 {d16, d17}, [r1], r2
+; CHECK-NEXT:    vld1.64 {d16, d17}, [r1], r2
 ; CHECK-NEXT:    vst1.8 {d16, d17}, [r0], r2
 ; CHECK-NEXT:    vld1.8 {d16, d17}, [r1]
 ; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]
@@ -94,17 +94,17 @@ entry:
 define void @t2(ptr nocapture %C) nounwind {
 ; CHECK-LABEL: t2:
 ; CHECK:       @ %bb.0: @ %entry
+; CHECK-NEXT:    movw r1, #16716
+; CHECK-NEXT:    movt r1, #72
+; CHECK-NEXT:    str r1, [r0, #32]
 ; CHECK-NEXT:    movw r1, :lower16:(L_.str2-(LPC2_0+4))
 ; CHECK-NEXT:    movt r1, :upper16:(L_.str2-(LPC2_0+4))
 ; CHECK-NEXT:  LPC2_0:
 ; CHECK-NEXT:    add r1, pc
-; CHECK-NEXT:    vld1.8 {d16, d17}, [r1]!
+; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]!
 ; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]!
 ; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]
-; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]!
-; CHECK-NEXT:    movw r1, #16716
-; CHECK-NEXT:    movt r1, #72
-; CHECK-NEXT:    str r1, [r0]
+; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]
 ; CHECK-NEXT:    bx lr
 ;
 ; CHECK-T1-LABEL: t2:
@@ -131,7 +131,7 @@ define void @t3(ptr nocapture %C) nounwind {
 ; CHECK-NEXT:    movt r1, :upper16:(L_.str3-(LPC3_0+4))
 ; CHECK-NEXT:  LPC3_0:
 ; CHECK-NEXT:    add r1, pc
-; CHECK-NEXT:    vld1.8 {d16, d17}, [r1]!
+; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]!
 ; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]!
 ; CHECK-NEXT:    vldr d16, [r1]
 ; CHECK-NEXT:    vst1.8 {d16}, [r0]

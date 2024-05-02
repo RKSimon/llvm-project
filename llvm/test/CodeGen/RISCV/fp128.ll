@@ -276,12 +276,12 @@ define i96 @fptosi_fp128_to_i96(fp128 %a) nounwind {
 ; RV32I-NEXT:    addi a6, a6, 111
 ; RV32I-NEXT:    or a1, a5, a1
 ; RV32I-NEXT:    sub a4, a6, a4
-; RV32I-NEXT:    srli a5, a4, 3
+; RV32I-NEXT:    andi a5, a4, 96
 ; RV32I-NEXT:    sw zero, 16(sp)
 ; RV32I-NEXT:    sw zero, 20(sp)
 ; RV32I-NEXT:    sw zero, 24(sp)
 ; RV32I-NEXT:    sw zero, 28(sp)
-; RV32I-NEXT:    andi a5, a5, 12
+; RV32I-NEXT:    srli a5, a5, 3
 ; RV32I-NEXT:    mv a6, sp
 ; RV32I-NEXT:    sw a3, 0(sp)
 ; RV32I-NEXT:    sw a2, 4(sp)
@@ -358,9 +358,9 @@ define i96 @fptosi_fp128_to_i96(fp128 %a) nounwind {
 ; RV32I-NEXT:    sw zero, 36(sp)
 ; RV32I-NEXT:    sw zero, 40(sp)
 ; RV32I-NEXT:    sw zero, 44(sp)
-; RV32I-NEXT:    srli a4, a1, 3
+; RV32I-NEXT:    andi a4, a1, 96
 ; RV32I-NEXT:    addi a5, sp, 48
-; RV32I-NEXT:    andi a4, a4, 12
+; RV32I-NEXT:    srli a4, a4, 3
 ; RV32I-NEXT:    sw a3, 48(sp)
 ; RV32I-NEXT:    sw a2, 52(sp)
 ; RV32I-NEXT:    sw a0, 56(sp)

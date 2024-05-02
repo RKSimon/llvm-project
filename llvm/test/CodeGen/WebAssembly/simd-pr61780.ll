@@ -30,7 +30,7 @@ define void @f(ptr %0, ptr %pr) {
 ; CHECK-NEXT:    local.get 2
 ; CHECK-NEXT:    i16x8.extmul_low_i8x16_u
 ; CHECK-NEXT:    local.get 2
-; CHECK-NEXT:    i8x16.shuffle 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ; CHECK-NEXT:    v128.store16_lane 0, 0
 ; CHECK-NEXT:    # fallthrough-return
 BB:

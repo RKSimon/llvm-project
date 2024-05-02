@@ -97,24 +97,16 @@ define <8 x float> @splat_fdiv_v8f32(<8 x float> %x, float %y) {
 define <4 x float> @splat_fdiv_v4f32_estimate(<4 x float> %x, float %y) #0 {
 ; SSE-LABEL: splat_fdiv_v4f32_estimate:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    rcpss %xmm1, %xmm2
-; SSE-NEXT:    mulss %xmm2, %xmm1
-; SSE-NEXT:    movss {{.*#+}} xmm3 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; SSE-NEXT:    subss %xmm1, %xmm3
-; SSE-NEXT:    mulss %xmm2, %xmm3
-; SSE-NEXT:    addss %xmm2, %xmm3
-; SSE-NEXT:    shufps {{.*#+}} xmm3 = xmm3[0,0,0,0]
-; SSE-NEXT:    mulps %xmm3, %xmm0
+; SSE-NEXT:    movss {{.*#+}} xmm2 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; SSE-NEXT:    divss %xmm1, %xmm2
+; SSE-NEXT:    shufps {{.*#+}} xmm2 = xmm2[0,0,0,0]
+; SSE-NEXT:    mulps %xmm2, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX-LABEL: splat_fdiv_v4f32_estimate:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vrcpss %xmm1, %xmm1, %xmm2
-; AVX-NEXT:    vmulss %xmm2, %xmm1, %xmm1
-; AVX-NEXT:    vmovss {{.*#+}} xmm3 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; AVX-NEXT:    vsubss %xmm1, %xmm3, %xmm1
-; AVX-NEXT:    vmulss %xmm1, %xmm2, %xmm1
-; AVX-NEXT:    vaddss %xmm1, %xmm2, %xmm1
+; AVX-NEXT:    vmovss {{.*#+}} xmm2 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX-NEXT:    vdivss %xmm1, %xmm2, %xmm1
 ; AVX-NEXT:    vshufps {{.*#+}} xmm1 = xmm1[0,0,0,0]
 ; AVX-NEXT:    vmulps %xmm1, %xmm0, %xmm0
 ; AVX-NEXT:    retq
@@ -127,25 +119,17 @@ define <4 x float> @splat_fdiv_v4f32_estimate(<4 x float> %x, float %y) #0 {
 define <8 x float> @splat_fdiv_v8f32_estimate(<8 x float> %x, float %y) #0 {
 ; SSE-LABEL: splat_fdiv_v8f32_estimate:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    rcpss %xmm2, %xmm3
-; SSE-NEXT:    mulss %xmm3, %xmm2
-; SSE-NEXT:    movss {{.*#+}} xmm4 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; SSE-NEXT:    subss %xmm2, %xmm4
-; SSE-NEXT:    mulss %xmm3, %xmm4
-; SSE-NEXT:    addss %xmm3, %xmm4
-; SSE-NEXT:    shufps {{.*#+}} xmm4 = xmm4[0,0,0,0]
-; SSE-NEXT:    mulps %xmm4, %xmm0
-; SSE-NEXT:    mulps %xmm4, %xmm1
+; SSE-NEXT:    movss {{.*#+}} xmm3 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; SSE-NEXT:    divss %xmm2, %xmm3
+; SSE-NEXT:    shufps {{.*#+}} xmm3 = xmm3[0,0,0,0]
+; SSE-NEXT:    mulps %xmm3, %xmm0
+; SSE-NEXT:    mulps %xmm3, %xmm1
 ; SSE-NEXT:    retq
 ;
 ; AVX-LABEL: splat_fdiv_v8f32_estimate:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vrcpss %xmm1, %xmm1, %xmm2
-; AVX-NEXT:    vmulss %xmm2, %xmm1, %xmm1
-; AVX-NEXT:    vmovss {{.*#+}} xmm3 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; AVX-NEXT:    vsubss %xmm1, %xmm3, %xmm1
-; AVX-NEXT:    vmulss %xmm1, %xmm2, %xmm1
-; AVX-NEXT:    vaddss %xmm1, %xmm2, %xmm1
+; AVX-NEXT:    vmovss {{.*#+}} xmm2 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX-NEXT:    vdivss %xmm1, %xmm2, %xmm1
 ; AVX-NEXT:    vshufps {{.*#+}} xmm1 = xmm1[0,0,0,0]
 ; AVX-NEXT:    vinsertf128 $1, %xmm1, %ymm1, %ymm1
 ; AVX-NEXT:    vmulps %ymm1, %ymm0, %ymm0

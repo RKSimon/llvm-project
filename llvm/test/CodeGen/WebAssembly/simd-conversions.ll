@@ -210,8 +210,15 @@ define <4 x float> @demote_zero_v4f32(<2 x double> %x) {
 ; CHECK-LABEL: demote_zero_v4f32:
 ; CHECK:         .functype demote_zero_v4f32 (v128) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
+; CHECK-NEXT:    v128.const 0x0p0, 0x0p0, 0x0p0, 0x0p0
 ; CHECK-NEXT:    local.get 0
-; CHECK-NEXT:    f32x4.demote_f64x2_zero
+; CHECK-NEXT:    f64x2.extract_lane 0
+; CHECK-NEXT:    f32.demote_f64
+; CHECK-NEXT:    f32x4.replace_lane 0
+; CHECK-NEXT:    local.get 0
+; CHECK-NEXT:    f64x2.extract_lane 1
+; CHECK-NEXT:    f32.demote_f64
+; CHECK-NEXT:    f32x4.replace_lane 1
 ; CHECK-NEXT:    # fallthrough-return
   %v = shufflevector <2 x double> %x, <2 x double> zeroinitializer,
          <4 x i32> <i32 0, i32 1, i32 2, i32 3>

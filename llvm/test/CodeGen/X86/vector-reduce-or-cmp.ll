@@ -44,29 +44,107 @@ define i1 @test_v2i64(<2 x i64> %a0) {
 }
 
 define i1 @test_v4i64(<4 x i64> %a0) {
-; SSE2-LABEL: test_v4i64:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    por %xmm1, %xmm0
-; SSE2-NEXT:    pxor %xmm1, %xmm1
-; SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
-; SSE2-NEXT:    movmskps %xmm1, %eax
-; SSE2-NEXT:    xorl $15, %eax
-; SSE2-NEXT:    setne %al
-; SSE2-NEXT:    ret{{[l|q]}}
+; X86-SSE2-LABEL: test_v4i64:
+; X86-SSE2:       # %bb.0:
+; X86-SSE2-NEXT:    por %xmm1, %xmm0
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    movd %xmm1, %eax
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
+; X86-SSE2-NEXT:    movd %xmm0, %ecx
+; X86-SSE2-NEXT:    orl %eax, %ecx
+; X86-SSE2-NEXT:    setne %al
+; X86-SSE2-NEXT:    retl
 ;
-; SSE4-LABEL: test_v4i64:
-; SSE4:       # %bb.0:
-; SSE4-NEXT:    por %xmm1, %xmm0
-; SSE4-NEXT:    ptest %xmm0, %xmm0
-; SSE4-NEXT:    setne %al
-; SSE4-NEXT:    ret{{[l|q]}}
+; X64-SSE2-LABEL: test_v4i64:
+; X64-SSE2:       # %bb.0:
+; X64-SSE2-NEXT:    por %xmm1, %xmm0
+; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
+; X64-SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
+; X64-SSE2-NEXT:    movmskps %xmm1, %eax
+; X64-SSE2-NEXT:    xorl $15, %eax
+; X64-SSE2-NEXT:    setne %al
+; X64-SSE2-NEXT:    retq
 ;
-; AVX-LABEL: test_v4i64:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vptest %ymm0, %ymm0
-; AVX-NEXT:    setne %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; X86-SSE4-LABEL: test_v4i64:
+; X86-SSE4:       # %bb.0:
+; X86-SSE4-NEXT:    por %xmm1, %xmm0
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    pextrd $1, %xmm1, %eax
+; X86-SSE4-NEXT:    movd %xmm1, %ecx
+; X86-SSE4-NEXT:    orl %eax, %ecx
+; X86-SSE4-NEXT:    setne %al
+; X86-SSE4-NEXT:    retl
+;
+; X64-SSE4-LABEL: test_v4i64:
+; X64-SSE4:       # %bb.0:
+; X64-SSE4-NEXT:    por %xmm1, %xmm0
+; X64-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X64-SSE4-NEXT:    setne %al
+; X64-SSE4-NEXT:    retq
+;
+; X86-AVX1-LABEL: test_v4i64:
+; X86-AVX1:       # %bb.0:
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm0, %xmm1, %xmm0
+; X86-AVX1-NEXT:    vextractps $1, %xmm0, %eax
+; X86-AVX1-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX1-NEXT:    orl %eax, %ecx
+; X86-AVX1-NEXT:    setne %al
+; X86-AVX1-NEXT:    vzeroupper
+; X86-AVX1-NEXT:    retl
+;
+; X64-AVX1-LABEL: test_v4i64:
+; X64-AVX1:       # %bb.0:
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovq %xmm0, %rax
+; X64-AVX1-NEXT:    testq %rax, %rax
+; X64-AVX1-NEXT:    setne %al
+; X64-AVX1-NEXT:    vzeroupper
+; X64-AVX1-NEXT:    retq
+;
+; X86-AVX2-LABEL: test_v4i64:
+; X86-AVX2:       # %bb.0:
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X86-AVX2-NEXT:    vpextrd $1, %xmm0, %eax
+; X86-AVX2-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX2-NEXT:    orl %eax, %ecx
+; X86-AVX2-NEXT:    setne %al
+; X86-AVX2-NEXT:    vzeroupper
+; X86-AVX2-NEXT:    retl
+;
+; X64-AVX2-LABEL: test_v4i64:
+; X64-AVX2:       # %bb.0:
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovq %xmm0, %rax
+; X64-AVX2-NEXT:    testq %rax, %rax
+; X64-AVX2-NEXT:    setne %al
+; X64-AVX2-NEXT:    vzeroupper
+; X64-AVX2-NEXT:    retq
+;
+; AVX512-LABEL: test_v4i64:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovq %xmm0, %rax
+; AVX512-NEXT:    testq %rax, %rax
+; AVX512-NEXT:    setne %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i64 @llvm.vector.reduce.or.v4i64(<4 x i64> %a0)
   %2 = icmp ne i64 %1, 0
   ret i1 %2
@@ -85,10 +163,12 @@ define i1 @test_v8i64(<8 x i64> %a0) {
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
 ; X86-SSE2-NEXT:    por 8(%ebp), %xmm1
 ; X86-SSE2-NEXT:    por %xmm0, %xmm1
-; X86-SSE2-NEXT:    pxor %xmm0, %xmm0
-; X86-SSE2-NEXT:    pcmpeqd %xmm1, %xmm0
-; X86-SSE2-NEXT:    movmskps %xmm0, %eax
-; X86-SSE2-NEXT:    xorl $15, %eax
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
+; X86-SSE2-NEXT:    por %xmm1, %xmm0
+; X86-SSE2-NEXT:    movd %xmm0, %eax
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    movd %xmm0, %ecx
+; X86-SSE2-NEXT:    orl %eax, %ecx
 ; X86-SSE2-NEXT:    sete %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
 ; X86-SSE2-NEXT:    popl %ebp
@@ -119,7 +199,11 @@ define i1 @test_v8i64(<8 x i64> %a0) {
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
 ; X86-SSE4-NEXT:    por 8(%ebp), %xmm1
 ; X86-SSE4-NEXT:    por %xmm0, %xmm1
-; X86-SSE4-NEXT:    ptest %xmm1, %xmm1
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
+; X86-SSE4-NEXT:    por %xmm1, %xmm0
+; X86-SSE4-NEXT:    pextrd $1, %xmm0, %eax
+; X86-SSE4-NEXT:    movd %xmm0, %ecx
+; X86-SSE4-NEXT:    orl %eax, %ecx
 ; X86-SSE4-NEXT:    sete %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -135,26 +219,70 @@ define i1 @test_v8i64(<8 x i64> %a0) {
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
-; AVX1-LABEL: test_v8i64:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
-; AVX1-NEXT:    sete %al
-; AVX1-NEXT:    vzeroupper
-; AVX1-NEXT:    ret{{[l|q]}}
+; X86-AVX1-LABEL: test_v8i64:
+; X86-AVX1:       # %bb.0:
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm0, %xmm1, %xmm0
+; X86-AVX1-NEXT:    vextractps $1, %xmm0, %eax
+; X86-AVX1-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX1-NEXT:    orl %eax, %ecx
+; X86-AVX1-NEXT:    sete %al
+; X86-AVX1-NEXT:    vzeroupper
+; X86-AVX1-NEXT:    retl
 ;
-; AVX2-LABEL: test_v8i64:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vptest %ymm0, %ymm0
-; AVX2-NEXT:    sete %al
-; AVX2-NEXT:    vzeroupper
-; AVX2-NEXT:    ret{{[l|q]}}
+; X64-AVX1-LABEL: test_v8i64:
+; X64-AVX1:       # %bb.0:
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovq %xmm0, %rax
+; X64-AVX1-NEXT:    testq %rax, %rax
+; X64-AVX1-NEXT:    sete %al
+; X64-AVX1-NEXT:    vzeroupper
+; X64-AVX1-NEXT:    retq
+;
+; X86-AVX2-LABEL: test_v8i64:
+; X86-AVX2:       # %bb.0:
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X86-AVX2-NEXT:    vpextrd $1, %xmm0, %eax
+; X86-AVX2-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX2-NEXT:    orl %eax, %ecx
+; X86-AVX2-NEXT:    sete %al
+; X86-AVX2-NEXT:    vzeroupper
+; X86-AVX2-NEXT:    retl
+;
+; X64-AVX2-LABEL: test_v8i64:
+; X64-AVX2:       # %bb.0:
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovq %xmm0, %rax
+; X64-AVX2-NEXT:    testq %rax, %rax
+; X64-AVX2-NEXT:    sete %al
+; X64-AVX2-NEXT:    vzeroupper
+; X64-AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v8i64:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovq %xmm0, %rax
+; AVX512-NEXT:    testq %rax, %rax
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -174,17 +302,19 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X86-SSE2-NEXT:    andl $-16, %esp
 ; X86-SSE2-NEXT:    subl $16, %esp
 ; X86-SSE2-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE2-NEXT:    por %xmm3, %xmm1
 ; X86-SSE2-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE2-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
+; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE2-NEXT:    por %xmm3, %xmm1
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X86-SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
-; X86-SSE2-NEXT:    movmskps %xmm1, %eax
-; X86-SSE2-NEXT:    xorl $15, %eax
+; X86-SSE2-NEXT:    movd %xmm0, %eax
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    movd %xmm0, %ecx
+; X86-SSE2-NEXT:    orl %eax, %ecx
 ; X86-SSE2-NEXT:    setne %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
 ; X86-SSE2-NEXT:    popl %ebp
@@ -193,16 +323,16 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ;
 ; X64-SSE2-LABEL: test_v16i64:
 ; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm7, %xmm3
-; X64-SSE2-NEXT:    por %xmm5, %xmm1
-; X64-SSE2-NEXT:    por %xmm3, %xmm1
 ; X64-SSE2-NEXT:    por %xmm6, %xmm2
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0
 ; X64-SSE2-NEXT:    por %xmm2, %xmm0
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X64-SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
-; X64-SSE2-NEXT:    movmskps %xmm1, %eax
+; X64-SSE2-NEXT:    por %xmm7, %xmm3
+; X64-SSE2-NEXT:    por %xmm5, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    por %xmm0, %xmm1
+; X64-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X64-SSE2-NEXT:    pcmpeqd %xmm1, %xmm0
+; X64-SSE2-NEXT:    movmskps %xmm0, %eax
 ; X64-SSE2-NEXT:    xorl $15, %eax
 ; X64-SSE2-NEXT:    setne %al
 ; X64-SSE2-NEXT:    retq
@@ -217,14 +347,18 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X86-SSE4-NEXT:    andl $-16, %esp
 ; X86-SSE4-NEXT:    subl $16, %esp
 ; X86-SSE4-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE4-NEXT:    por %xmm3, %xmm1
 ; X86-SSE4-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE4-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
+; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE4-NEXT:    por %xmm3, %xmm1
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
 ; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X86-SSE4-NEXT:    pextrd $1, %xmm0, %eax
+; X86-SSE4-NEXT:    movd %xmm0, %ecx
+; X86-SSE4-NEXT:    orl %eax, %ecx
 ; X86-SSE4-NEXT:    setne %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -233,14 +367,14 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ;
 ; X64-SSE4-LABEL: test_v16i64:
 ; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm7, %xmm3
-; X64-SSE4-NEXT:    por %xmm5, %xmm1
-; X64-SSE4-NEXT:    por %xmm3, %xmm1
 ; X64-SSE4-NEXT:    por %xmm6, %xmm2
 ; X64-SSE4-NEXT:    por %xmm4, %xmm0
 ; X64-SSE4-NEXT:    por %xmm2, %xmm0
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X64-SSE4-NEXT:    por %xmm7, %xmm3
+; X64-SSE4-NEXT:    por %xmm5, %xmm1
+; X64-SSE4-NEXT:    por %xmm3, %xmm1
+; X64-SSE4-NEXT:    por %xmm0, %xmm1
+; X64-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X64-SSE4-NEXT:    setne %al
 ; X64-SSE4-NEXT:    retq
 ;
@@ -256,7 +390,13 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X86-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X86-AVX1-NEXT:    vorps 8(%ebp), %ymm1, %ymm1
 ; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm0, %xmm1, %xmm0
+; X86-AVX1-NEXT:    vextractps $1, %xmm0, %eax
+; X86-AVX1-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX1-NEXT:    orl %eax, %ecx
 ; X86-AVX1-NEXT:    setne %al
 ; X86-AVX1-NEXT:    movl %ebp, %esp
 ; X86-AVX1-NEXT:    popl %ebp
@@ -269,7 +409,12 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X64-AVX1-NEXT:    vorps %ymm3, %ymm1, %ymm1
 ; X64-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovq %xmm0, %rax
+; X64-AVX1-NEXT:    testq %rax, %rax
 ; X64-AVX1-NEXT:    setne %al
 ; X64-AVX1-NEXT:    vzeroupper
 ; X64-AVX1-NEXT:    retq
@@ -286,7 +431,13 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X86-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vpor 8(%ebp), %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X86-AVX2-NEXT:    vpextrd $1, %xmm0, %eax
+; X86-AVX2-NEXT:    vmovd %xmm0, %ecx
+; X86-AVX2-NEXT:    orl %eax, %ecx
 ; X86-AVX2-NEXT:    setne %al
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -299,7 +450,12 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; X64-AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovq %xmm0, %rax
+; X64-AVX2-NEXT:    testq %rax, %rax
 ; X64-AVX2-NEXT:    setne %al
 ; X64-AVX2-NEXT:    vzeroupper
 ; X64-AVX2-NEXT:    retq
@@ -307,8 +463,14 @@ define i1 @test_v16i64(<16 x i64> %a0) {
 ; AVX512-LABEL: test_v16i64:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovq %xmm0, %rax
+; AVX512-NEXT:    testq %rax, %rax
 ; AVX512-NEXT:    setne %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -431,12 +593,47 @@ define i1 @test_v8i32(<8 x i32> %a0) {
 ; SSE4-NEXT:    sete %al
 ; SSE4-NEXT:    ret{{[l|q]}}
 ;
-; AVX-LABEL: test_v8i32:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vptest %ymm0, %ymm0
-; AVX-NEXT:    sete %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; AVX1-LABEL: test_v8i32:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testl %eax, %eax
+; AVX1-NEXT:    sete %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
+;
+; AVX2-LABEL: test_v8i32:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testl %eax, %eax
+; AVX2-NEXT:    sete %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
+;
+; AVX512-LABEL: test_v8i32:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl %eax, %eax
+; AVX512-NEXT:    sete %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i32 @llvm.vector.reduce.or.v8i32(<8 x i32> %a0)
   %2 = icmp eq i32 %1, 0
   ret i1 %2
@@ -508,7 +705,14 @@ define i1 @test_v16i32(<16 x i32> %a0) {
 ; AVX1-LABEL: test_v16i32:
 ; AVX1:       # %bb.0:
 ; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testl %eax, %eax
 ; AVX1-NEXT:    setne %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    ret{{[l|q]}}
@@ -516,15 +720,30 @@ define i1 @test_v16i32(<16 x i32> %a0) {
 ; AVX2-LABEL: test_v16i32:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vptest %ymm0, %ymm0
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testl %eax, %eax
 ; AVX2-NEXT:    setne %al
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: test_v16i32:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl %eax, %eax
 ; AVX512-NEXT:    setne %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -544,16 +763,16 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X86-SSE2-NEXT:    andl $-16, %esp
 ; X86-SSE2-NEXT:    subl $16, %esp
 ; X86-SSE2-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE2-NEXT:    por %xmm3, %xmm1
 ; X86-SSE2-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE2-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
-; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X86-SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
-; X86-SSE2-NEXT:    movmskps %xmm1, %eax
+; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE2-NEXT:    por %xmm3, %xmm1
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X86-SSE2-NEXT:    pcmpeqd %xmm1, %xmm0
+; X86-SSE2-NEXT:    movmskps %xmm0, %eax
 ; X86-SSE2-NEXT:    xorl $15, %eax
 ; X86-SSE2-NEXT:    sete %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
@@ -563,16 +782,16 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ;
 ; X64-SSE2-LABEL: test_v32i32:
 ; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm7, %xmm3
-; X64-SSE2-NEXT:    por %xmm5, %xmm1
-; X64-SSE2-NEXT:    por %xmm3, %xmm1
 ; X64-SSE2-NEXT:    por %xmm6, %xmm2
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0
 ; X64-SSE2-NEXT:    por %xmm2, %xmm0
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X64-SSE2-NEXT:    pcmpeqd %xmm0, %xmm1
-; X64-SSE2-NEXT:    movmskps %xmm1, %eax
+; X64-SSE2-NEXT:    por %xmm7, %xmm3
+; X64-SSE2-NEXT:    por %xmm5, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    por %xmm0, %xmm1
+; X64-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X64-SSE2-NEXT:    pcmpeqd %xmm1, %xmm0
+; X64-SSE2-NEXT:    movmskps %xmm0, %eax
 ; X64-SSE2-NEXT:    xorl $15, %eax
 ; X64-SSE2-NEXT:    sete %al
 ; X64-SSE2-NEXT:    retq
@@ -587,14 +806,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X86-SSE4-NEXT:    andl $-16, %esp
 ; X86-SSE4-NEXT:    subl $16, %esp
 ; X86-SSE4-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE4-NEXT:    por %xmm3, %xmm1
 ; X86-SSE4-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE4-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE4-NEXT:    por %xmm3, %xmm1
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X86-SSE4-NEXT:    sete %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -603,14 +822,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ;
 ; X64-SSE4-LABEL: test_v32i32:
 ; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm7, %xmm3
-; X64-SSE4-NEXT:    por %xmm5, %xmm1
-; X64-SSE4-NEXT:    por %xmm3, %xmm1
 ; X64-SSE4-NEXT:    por %xmm6, %xmm2
 ; X64-SSE4-NEXT:    por %xmm4, %xmm0
 ; X64-SSE4-NEXT:    por %xmm2, %xmm0
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X64-SSE4-NEXT:    por %xmm7, %xmm3
+; X64-SSE4-NEXT:    por %xmm5, %xmm1
+; X64-SSE4-NEXT:    por %xmm3, %xmm1
+; X64-SSE4-NEXT:    por %xmm0, %xmm1
+; X64-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
@@ -626,7 +845,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X86-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X86-AVX1-NEXT:    vorps 8(%ebp), %ymm1, %ymm1
 ; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vmovd %xmm0, %eax
+; X86-AVX1-NEXT:    testl %eax, %eax
 ; X86-AVX1-NEXT:    sete %al
 ; X86-AVX1-NEXT:    movl %ebp, %esp
 ; X86-AVX1-NEXT:    popl %ebp
@@ -639,7 +865,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X64-AVX1-NEXT:    vorps %ymm3, %ymm1, %ymm1
 ; X64-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovd %xmm0, %eax
+; X64-AVX1-NEXT:    testl %eax, %eax
 ; X64-AVX1-NEXT:    sete %al
 ; X64-AVX1-NEXT:    vzeroupper
 ; X64-AVX1-NEXT:    retq
@@ -656,7 +889,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X86-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vpor 8(%ebp), %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vmovd %xmm0, %eax
+; X86-AVX2-NEXT:    testl %eax, %eax
 ; X86-AVX2-NEXT:    sete %al
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -669,7 +909,14 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; X64-AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovd %xmm0, %eax
+; X64-AVX2-NEXT:    testl %eax, %eax
 ; X64-AVX2-NEXT:    sete %al
 ; X64-AVX2-NEXT:    vzeroupper
 ; X64-AVX2-NEXT:    retq
@@ -677,8 +924,16 @@ define i1 @test_v32i32(<32 x i32> %a0) {
 ; AVX512-LABEL: test_v32i32:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpord %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl %eax, %eax
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -820,12 +1075,53 @@ define i1 @test_v16i16(<16 x i16> %a0) {
 ; SSE4-NEXT:    setne %al
 ; SSE4-NEXT:    ret{{[l|q]}}
 ;
-; AVX-LABEL: test_v16i16:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vptest %ymm0, %ymm0
-; AVX-NEXT:    setne %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; AVX1-LABEL: test_v16i16:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testw %ax, %ax
+; AVX1-NEXT:    setne %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
+;
+; AVX2-LABEL: test_v16i16:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testw %ax, %ax
+; AVX2-NEXT:    setne %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
+;
+; AVX512-LABEL: test_v16i16:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testw %ax, %ax
+; AVX512-NEXT:    setne %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i16 @llvm.vector.reduce.or.v16i16(<16 x i16> %a0)
   %2 = icmp ne i16 %1, 0
   ret i1 %2
@@ -897,7 +1193,16 @@ define i1 @test_v32i16(<32 x i16> %a0) {
 ; AVX1-LABEL: test_v32i16:
 ; AVX1:       # %bb.0:
 ; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testw %ax, %ax
 ; AVX1-NEXT:    sete %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    ret{{[l|q]}}
@@ -905,15 +1210,34 @@ define i1 @test_v32i16(<32 x i16> %a0) {
 ; AVX2-LABEL: test_v32i16:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vptest %ymm0, %ymm0
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testw %ax, %ax
 ; AVX2-NEXT:    sete %al
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: test_v32i16:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testw %ax, %ax
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -933,16 +1257,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X86-SSE2-NEXT:    andl $-16, %esp
 ; X86-SSE2-NEXT:    subl $16, %esp
 ; X86-SSE2-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE2-NEXT:    por %xmm3, %xmm1
 ; X86-SSE2-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE2-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
-; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X86-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X86-SSE2-NEXT:    pmovmskb %xmm1, %eax
+; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE2-NEXT:    por %xmm3, %xmm1
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X86-SSE2-NEXT:    pcmpeqb %xmm1, %xmm0
+; X86-SSE2-NEXT:    pmovmskb %xmm0, %eax
 ; X86-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X86-SSE2-NEXT:    setne %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
@@ -952,16 +1276,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ;
 ; X64-SSE2-LABEL: test_v64i16:
 ; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm7, %xmm3
-; X64-SSE2-NEXT:    por %xmm5, %xmm1
-; X64-SSE2-NEXT:    por %xmm3, %xmm1
 ; X64-SSE2-NEXT:    por %xmm6, %xmm2
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0
 ; X64-SSE2-NEXT:    por %xmm2, %xmm0
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X64-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X64-SSE2-NEXT:    pmovmskb %xmm1, %eax
+; X64-SSE2-NEXT:    por %xmm7, %xmm3
+; X64-SSE2-NEXT:    por %xmm5, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    por %xmm0, %xmm1
+; X64-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X64-SSE2-NEXT:    pcmpeqb %xmm1, %xmm0
+; X64-SSE2-NEXT:    pmovmskb %xmm0, %eax
 ; X64-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X64-SSE2-NEXT:    setne %al
 ; X64-SSE2-NEXT:    retq
@@ -976,14 +1300,14 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X86-SSE4-NEXT:    andl $-16, %esp
 ; X86-SSE4-NEXT:    subl $16, %esp
 ; X86-SSE4-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE4-NEXT:    por %xmm3, %xmm1
 ; X86-SSE4-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE4-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE4-NEXT:    por %xmm3, %xmm1
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X86-SSE4-NEXT:    setne %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -992,14 +1316,14 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ;
 ; X64-SSE4-LABEL: test_v64i16:
 ; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm7, %xmm3
-; X64-SSE4-NEXT:    por %xmm5, %xmm1
-; X64-SSE4-NEXT:    por %xmm3, %xmm1
 ; X64-SSE4-NEXT:    por %xmm6, %xmm2
 ; X64-SSE4-NEXT:    por %xmm4, %xmm0
 ; X64-SSE4-NEXT:    por %xmm2, %xmm0
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X64-SSE4-NEXT:    por %xmm7, %xmm3
+; X64-SSE4-NEXT:    por %xmm5, %xmm1
+; X64-SSE4-NEXT:    por %xmm3, %xmm1
+; X64-SSE4-NEXT:    por %xmm0, %xmm1
+; X64-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X64-SSE4-NEXT:    setne %al
 ; X64-SSE4-NEXT:    retq
 ;
@@ -1015,7 +1339,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X86-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X86-AVX1-NEXT:    vorps 8(%ebp), %ymm1, %ymm1
 ; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX1-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X86-AVX1-NEXT:    vmovd %xmm0, %eax
+; X86-AVX1-NEXT:    testw %ax, %ax
 ; X86-AVX1-NEXT:    setne %al
 ; X86-AVX1-NEXT:    movl %ebp, %esp
 ; X86-AVX1-NEXT:    popl %ebp
@@ -1028,7 +1361,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X64-AVX1-NEXT:    vorps %ymm3, %ymm1, %ymm1
 ; X64-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX1-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X64-AVX1-NEXT:    vmovd %xmm0, %eax
+; X64-AVX1-NEXT:    testw %ax, %ax
 ; X64-AVX1-NEXT:    setne %al
 ; X64-AVX1-NEXT:    vzeroupper
 ; X64-AVX1-NEXT:    retq
@@ -1045,7 +1387,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X86-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vpor 8(%ebp), %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X86-AVX2-NEXT:    vmovd %xmm0, %eax
+; X86-AVX2-NEXT:    testw %ax, %ax
 ; X86-AVX2-NEXT:    setne %al
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -1058,7 +1409,16 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; X64-AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; X64-AVX2-NEXT:    vmovd %xmm0, %eax
+; X64-AVX2-NEXT:    testw %ax, %ax
 ; X64-AVX2-NEXT:    setne %al
 ; X64-AVX2-NEXT:    vzeroupper
 ; X64-AVX2-NEXT:    retq
@@ -1066,8 +1426,18 @@ define i1 @test_v64i16(<64 x i16> %a0) {
 ; AVX512-LABEL: test_v64i16:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testw %ax, %ax
 ; AVX512-NEXT:    setne %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -1228,12 +1598,59 @@ define i1 @test_v32i8(<32 x i8> %a0) {
 ; SSE4-NEXT:    sete %al
 ; SSE4-NEXT:    ret{{[l|q]}}
 ;
-; AVX-LABEL: test_v32i8:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vptest %ymm0, %ymm0
-; AVX-NEXT:    sete %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; AVX1-LABEL: test_v32i8:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testb %al, %al
+; AVX1-NEXT:    sete %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
+;
+; AVX2-LABEL: test_v32i8:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testb %al, %al
+; AVX2-NEXT:    sete %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
+;
+; AVX512-LABEL: test_v32i8:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testb %al, %al
+; AVX512-NEXT:    sete %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i8 @llvm.vector.reduce.or.v32i8(<32 x i8> %a0)
   %2 = icmp eq i8 %1, 0
   ret i1 %2
@@ -1305,7 +1722,18 @@ define i1 @test_v64i8(<64 x i8> %a0) {
 ; AVX1-LABEL: test_v64i8:
 ; AVX1:       # %bb.0:
 ; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testb %al, %al
 ; AVX1-NEXT:    setne %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    ret{{[l|q]}}
@@ -1313,15 +1741,38 @@ define i1 @test_v64i8(<64 x i8> %a0) {
 ; AVX2-LABEL: test_v64i8:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vptest %ymm0, %ymm0
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testb %al, %al
 ; AVX2-NEXT:    setne %al
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: test_v64i8:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testb %al, %al
 ; AVX512-NEXT:    setne %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -1341,16 +1792,16 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X86-SSE2-NEXT:    andl $-16, %esp
 ; X86-SSE2-NEXT:    subl $16, %esp
 ; X86-SSE2-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE2-NEXT:    por %xmm3, %xmm1
 ; X86-SSE2-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE2-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
-; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X86-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X86-SSE2-NEXT:    pmovmskb %xmm1, %eax
+; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE2-NEXT:    por %xmm3, %xmm1
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X86-SSE2-NEXT:    pcmpeqb %xmm1, %xmm0
+; X86-SSE2-NEXT:    pmovmskb %xmm0, %eax
 ; X86-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X86-SSE2-NEXT:    sete %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
@@ -1360,16 +1811,16 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ;
 ; X64-SSE2-LABEL: test_v128i8:
 ; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm7, %xmm3
-; X64-SSE2-NEXT:    por %xmm5, %xmm1
-; X64-SSE2-NEXT:    por %xmm3, %xmm1
 ; X64-SSE2-NEXT:    por %xmm6, %xmm2
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0
 ; X64-SSE2-NEXT:    por %xmm2, %xmm0
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X64-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X64-SSE2-NEXT:    pmovmskb %xmm1, %eax
+; X64-SSE2-NEXT:    por %xmm7, %xmm3
+; X64-SSE2-NEXT:    por %xmm5, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    por %xmm0, %xmm1
+; X64-SSE2-NEXT:    pxor %xmm0, %xmm0
+; X64-SSE2-NEXT:    pcmpeqb %xmm1, %xmm0
+; X64-SSE2-NEXT:    pmovmskb %xmm0, %eax
 ; X64-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X64-SSE2-NEXT:    sete %al
 ; X64-SSE2-NEXT:    retq
@@ -1384,14 +1835,14 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X86-SSE4-NEXT:    andl $-16, %esp
 ; X86-SSE4-NEXT:    subl $16, %esp
 ; X86-SSE4-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE4-NEXT:    por %xmm3, %xmm1
 ; X86-SSE4-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE4-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE4-NEXT:    por %xmm3, %xmm1
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X86-SSE4-NEXT:    sete %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -1400,14 +1851,14 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ;
 ; X64-SSE4-LABEL: test_v128i8:
 ; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm7, %xmm3
-; X64-SSE4-NEXT:    por %xmm5, %xmm1
-; X64-SSE4-NEXT:    por %xmm3, %xmm1
 ; X64-SSE4-NEXT:    por %xmm6, %xmm2
 ; X64-SSE4-NEXT:    por %xmm4, %xmm0
 ; X64-SSE4-NEXT:    por %xmm2, %xmm0
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest %xmm0, %xmm0
+; X64-SSE4-NEXT:    por %xmm7, %xmm3
+; X64-SSE4-NEXT:    por %xmm5, %xmm1
+; X64-SSE4-NEXT:    por %xmm3, %xmm1
+; X64-SSE4-NEXT:    por %xmm0, %xmm1
+; X64-SSE4-NEXT:    ptest %xmm1, %xmm1
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
@@ -1423,7 +1874,18 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X86-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X86-AVX1-NEXT:    vorps 8(%ebp), %ymm1, %ymm1
 ; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X86-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vmovd %xmm0, %eax
+; X86-AVX1-NEXT:    testb %al, %al
 ; X86-AVX1-NEXT:    sete %al
 ; X86-AVX1-NEXT:    movl %ebp, %esp
 ; X86-AVX1-NEXT:    popl %ebp
@@ -1436,7 +1898,18 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X64-AVX1-NEXT:    vorps %ymm3, %ymm1, %ymm1
 ; X64-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X64-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovd %xmm0, %eax
+; X64-AVX1-NEXT:    testb %al, %al
 ; X64-AVX1-NEXT:    sete %al
 ; X64-AVX1-NEXT:    vzeroupper
 ; X64-AVX1-NEXT:    retq
@@ -1453,7 +1926,18 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X86-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vpor 8(%ebp), %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vmovd %xmm0, %eax
+; X86-AVX2-NEXT:    testb %al, %al
 ; X86-AVX2-NEXT:    sete %al
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -1466,7 +1950,18 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; X64-AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vptest %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovd %xmm0, %eax
+; X64-AVX2-NEXT:    testb %al, %al
 ; X64-AVX2-NEXT:    sete %al
 ; X64-AVX2-NEXT:    vzeroupper
 ; X64-AVX2-NEXT:    retq
@@ -1474,8 +1969,20 @@ define i1 @test_v128i8(<128 x i8> %a0) {
 ; AVX512-LABEL: test_v128i8:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
-; AVX512-NEXT:    vptestmd %zmm0, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testb %al, %al
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -1559,13 +2066,23 @@ define i1 @trunc_v2i64(<2 x i64> %a0) {
 }
 
 define i1 @mask_v8i32(<8 x i32> %a0) {
-; SSE2-LABEL: mask_v8i32:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    orps %xmm1, %xmm0
-; SSE2-NEXT:    movmskps %xmm0, %eax
-; SSE2-NEXT:    testl %eax, %eax
-; SSE2-NEXT:    sete %al
-; SSE2-NEXT:    ret{{[l|q]}}
+; X86-SSE2-LABEL: mask_v8i32:
+; X86-SSE2:       # %bb.0:
+; X86-SSE2-NEXT:    orps %xmm1, %xmm0
+; X86-SSE2-NEXT:    andnps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
+; X86-SSE2-NEXT:    movmskps %xmm0, %eax
+; X86-SSE2-NEXT:    xorl $15, %eax
+; X86-SSE2-NEXT:    sete %al
+; X86-SSE2-NEXT:    retl
+;
+; X64-SSE2-LABEL: mask_v8i32:
+; X64-SSE2:       # %bb.0:
+; X64-SSE2-NEXT:    orps %xmm1, %xmm0
+; X64-SSE2-NEXT:    andnps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; X64-SSE2-NEXT:    movmskps %xmm0, %eax
+; X64-SSE2-NEXT:    xorl $15, %eax
+; X64-SSE2-NEXT:    sete %al
+; X64-SSE2-NEXT:    retq
 ;
 ; X86-SSE4-LABEL: mask_v8i32:
 ; X86-SSE4:       # %bb.0:
@@ -1581,12 +2098,47 @@ define i1 @mask_v8i32(<8 x i32> %a0) {
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
-; AVX-LABEL: mask_v8i32:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vtestps %ymm0, %ymm0
-; AVX-NEXT:    sete %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; AVX1-LABEL: mask_v8i32:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testl $-2147483648, %eax # imm = 0x80000000
+; AVX1-NEXT:    sete %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
+;
+; AVX2-LABEL: mask_v8i32:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testl $-2147483648, %eax # imm = 0x80000000
+; AVX2-NEXT:    sete %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
+;
+; AVX512-LABEL: mask_v8i32:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl $-2147483648, %eax # imm = 0x80000000
+; AVX512-NEXT:    sete %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i32 @llvm.vector.reduce.or.v8i32(<8 x i32> %a0)
   %2 = and i32 %1, 2147483648
   %3 = icmp eq i32 %2, 0
@@ -1594,14 +2146,25 @@ define i1 @mask_v8i32(<8 x i32> %a0) {
 }
 
 define i1 @mask_v8i32_2(<8 x i32> %a0) {
-; SSE2-LABEL: mask_v8i32_2:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    por %xmm1, %xmm0
-; SSE2-NEXT:    paddd %xmm0, %xmm0
-; SSE2-NEXT:    movmskps %xmm0, %eax
-; SSE2-NEXT:    testl %eax, %eax
-; SSE2-NEXT:    sete %al
-; SSE2-NEXT:    ret{{[l|q]}}
+; X86-SSE2-LABEL: mask_v8i32_2:
+; X86-SSE2:       # %bb.0:
+; X86-SSE2-NEXT:    por %xmm1, %xmm0
+; X86-SSE2-NEXT:    paddd %xmm0, %xmm0
+; X86-SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
+; X86-SSE2-NEXT:    movmskps %xmm0, %eax
+; X86-SSE2-NEXT:    xorl $15, %eax
+; X86-SSE2-NEXT:    sete %al
+; X86-SSE2-NEXT:    retl
+;
+; X64-SSE2-LABEL: mask_v8i32_2:
+; X64-SSE2:       # %bb.0:
+; X64-SSE2-NEXT:    por %xmm1, %xmm0
+; X64-SSE2-NEXT:    paddd %xmm0, %xmm0
+; X64-SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; X64-SSE2-NEXT:    movmskps %xmm0, %eax
+; X64-SSE2-NEXT:    xorl $15, %eax
+; X64-SSE2-NEXT:    sete %al
+; X64-SSE2-NEXT:    retq
 ;
 ; X86-SSE4-LABEL: mask_v8i32_2:
 ; X86-SSE4:       # %bb.0:
@@ -1617,40 +2180,44 @@ define i1 @mask_v8i32_2(<8 x i32> %a0) {
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
-; X86-AVX1-LABEL: mask_v8i32_2:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0
-; X86-AVX1-NEXT:    sete %al
-; X86-AVX1-NEXT:    vzeroupper
-; X86-AVX1-NEXT:    retl
+; AVX1-LABEL: mask_v8i32_2:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testl $1073741824, %eax # imm = 0x40000000
+; AVX1-NEXT:    sete %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
 ;
-; X64-AVX1-LABEL: mask_v8i32_2:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
-; X64-AVX1-NEXT:    sete %al
-; X64-AVX1-NEXT:    vzeroupper
-; X64-AVX1-NEXT:    retq
-;
-; X86-AVX2-LABEL: mask_v8i32_2:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [1073741824,1073741824,1073741824,1073741824,1073741824,1073741824,1073741824,1073741824]
-; X86-AVX2-NEXT:    vptest %ymm1, %ymm0
-; X86-AVX2-NEXT:    sete %al
-; X86-AVX2-NEXT:    vzeroupper
-; X86-AVX2-NEXT:    retl
-;
-; X64-AVX2-LABEL: mask_v8i32_2:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [4611686019501129728,4611686019501129728,4611686019501129728,4611686019501129728]
-; X64-AVX2-NEXT:    vptest %ymm1, %ymm0
-; X64-AVX2-NEXT:    sete %al
-; X64-AVX2-NEXT:    vzeroupper
-; X64-AVX2-NEXT:    retq
+; AVX2-LABEL: mask_v8i32_2:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testl $1073741824, %eax # imm = 0x40000000
+; AVX2-NEXT:    sete %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: mask_v8i32_2:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [4611686019501129728,4611686019501129728,4611686019501129728,4611686019501129728]
-; AVX512-NEXT:    vptest %ymm1, %ymm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl $1073741824, %eax # imm = 0x40000000
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -1662,34 +2229,59 @@ define i1 @mask_v8i32_2(<8 x i32> %a0) {
 
 
 define i1 @signtest_v8i32(<8 x i32> %a0) {
-; SSE2-LABEL: signtest_v8i32:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    orps %xmm1, %xmm0
-; SSE2-NEXT:    movmskps %xmm0, %eax
-; SSE2-NEXT:    testl %eax, %eax
-; SSE2-NEXT:    sete %al
-; SSE2-NEXT:    ret{{[l|q]}}
+; SSE-LABEL: signtest_v8i32:
+; SSE:       # %bb.0:
+; SSE-NEXT:    por %xmm1, %xmm0
+; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; SSE-NEXT:    por %xmm0, %xmm1
+; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
+; SSE-NEXT:    por %xmm1, %xmm0
+; SSE-NEXT:    movd %xmm0, %eax
+; SSE-NEXT:    testl %eax, %eax
+; SSE-NEXT:    setns %al
+; SSE-NEXT:    ret{{[l|q]}}
 ;
-; X86-SSE4-LABEL: signtest_v8i32:
-; X86-SSE4:       # %bb.0:
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
-; X86-SSE4-NEXT:    sete %al
-; X86-SSE4-NEXT:    retl
+; AVX1-LABEL: signtest_v8i32:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testl %eax, %eax
+; AVX1-NEXT:    setns %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
 ;
-; X64-SSE4-LABEL: signtest_v8i32:
-; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-SSE4-NEXT:    sete %al
-; X64-SSE4-NEXT:    retq
+; AVX2-LABEL: signtest_v8i32:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testl %eax, %eax
+; AVX2-NEXT:    setns %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
 ;
-; AVX-LABEL: signtest_v8i32:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vtestps %ymm0, %ymm0
-; AVX-NEXT:    sete %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; AVX512-LABEL: signtest_v8i32:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testl %eax, %eax
+; AVX512-NEXT:    setns %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i32 @llvm.vector.reduce.or.v8i32(<8 x i32> %a0)
   %2 = icmp sgt i32 %1, -1
   ret i1 %2
@@ -1699,117 +2291,158 @@ define i1 @signtest_v4i64(<4 x i64> %a0) {
 ; X86-SSE2-LABEL: signtest_v4i64:
 ; X86-SSE2:       # %bb.0:
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[3,3,3,3]
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
 ; X86-SSE2-NEXT:    movd %xmm0, %eax
 ; X86-SSE2-NEXT:    testl %eax, %eax
 ; X86-SSE2-NEXT:    setns %al
 ; X86-SSE2-NEXT:    retl
 ;
-; X64-SSE2-LABEL: signtest_v4i64:
-; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; X64-SSE2-NEXT:    por %xmm0, %xmm1
-; X64-SSE2-NEXT:    movq %xmm1, %rax
-; X64-SSE2-NEXT:    testq %rax, %rax
-; X64-SSE2-NEXT:    setns %al
-; X64-SSE2-NEXT:    retq
+; X64-SSE-LABEL: signtest_v4i64:
+; X64-SSE:       # %bb.0:
+; X64-SSE-NEXT:    por %xmm1, %xmm0
+; X64-SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-SSE-NEXT:    por %xmm0, %xmm1
+; X64-SSE-NEXT:    movq %xmm1, %rax
+; X64-SSE-NEXT:    testq %rax, %rax
+; X64-SSE-NEXT:    setns %al
+; X64-SSE-NEXT:    retq
 ;
 ; X86-SSE4-LABEL: signtest_v4i64:
 ; X86-SSE4:       # %bb.0:
 ; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
-; X86-SSE4-NEXT:    sete %al
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    pextrd $1, %xmm1, %eax
+; X86-SSE4-NEXT:    testl %eax, %eax
+; X86-SSE4-NEXT:    setns %al
 ; X86-SSE4-NEXT:    retl
 ;
-; X64-SSE4-LABEL: signtest_v4i64:
-; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-SSE4-NEXT:    sete %al
-; X64-SSE4-NEXT:    retq
+; X86-AVX1-LABEL: signtest_v4i64:
+; X86-AVX1:       # %bb.0:
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm0, %xmm1, %xmm0
+; X86-AVX1-NEXT:    vextractps $1, %xmm0, %eax
+; X86-AVX1-NEXT:    testl %eax, %eax
+; X86-AVX1-NEXT:    setns %al
+; X86-AVX1-NEXT:    vzeroupper
+; X86-AVX1-NEXT:    retl
 ;
-; AVX-LABEL: signtest_v4i64:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vtestpd %ymm0, %ymm0
-; AVX-NEXT:    sete %al
-; AVX-NEXT:    vzeroupper
-; AVX-NEXT:    ret{{[l|q]}}
+; X64-AVX1-LABEL: signtest_v4i64:
+; X64-AVX1:       # %bb.0:
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovq %xmm0, %rax
+; X64-AVX1-NEXT:    testq %rax, %rax
+; X64-AVX1-NEXT:    setns %al
+; X64-AVX1-NEXT:    vzeroupper
+; X64-AVX1-NEXT:    retq
+;
+; X86-AVX2-LABEL: signtest_v4i64:
+; X86-AVX2:       # %bb.0:
+; X86-AVX2-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vorps %xmm0, %xmm1, %xmm0
+; X86-AVX2-NEXT:    vextractps $1, %xmm0, %eax
+; X86-AVX2-NEXT:    testl %eax, %eax
+; X86-AVX2-NEXT:    setns %al
+; X86-AVX2-NEXT:    vzeroupper
+; X86-AVX2-NEXT:    retl
+;
+; X64-AVX2-LABEL: signtest_v4i64:
+; X64-AVX2:       # %bb.0:
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovq %xmm0, %rax
+; X64-AVX2-NEXT:    testq %rax, %rax
+; X64-AVX2-NEXT:    setns %al
+; X64-AVX2-NEXT:    vzeroupper
+; X64-AVX2-NEXT:    retq
+;
+; AVX512-LABEL: signtest_v4i64:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovq %xmm0, %rax
+; AVX512-NEXT:    testq %rax, %rax
+; AVX512-NEXT:    setns %al
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
   %1 = call i64 @llvm.vector.reduce.or.v4i64(<4 x i64> %a0)
   %2 = icmp sgt i64 %1, -1
   ret i1 %2
 }
 
 define i1 @trunc_v16i16(<16 x i16> %a0) {
-; X86-SSE2-LABEL: trunc_v16i16:
-; X86-SSE2:       # %bb.0:
-; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X86-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X86-SSE2-NEXT:    pmovmskb %xmm1, %eax
-; X86-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
-; X86-SSE2-NEXT:    setne %al
-; X86-SSE2-NEXT:    retl
+; SSE-LABEL: trunc_v16i16:
+; SSE:       # %bb.0:
+; SSE-NEXT:    por %xmm1, %xmm0
+; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; SSE-NEXT:    por %xmm0, %xmm1
+; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
+; SSE-NEXT:    por %xmm1, %xmm0
+; SSE-NEXT:    movdqa %xmm0, %xmm1
+; SSE-NEXT:    psrld $16, %xmm1
+; SSE-NEXT:    por %xmm0, %xmm1
+; SSE-NEXT:    movd %xmm1, %eax
+; SSE-NEXT:    testb %al, %al
+; SSE-NEXT:    setne %al
+; SSE-NEXT:    ret{{[l|q]}}
 ;
-; X64-SSE2-LABEL: trunc_v16i16:
-; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm1
-; X64-SSE2-NEXT:    pcmpeqb %xmm0, %xmm1
-; X64-SSE2-NEXT:    pmovmskb %xmm1, %eax
-; X64-SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
-; X64-SSE2-NEXT:    setne %al
-; X64-SSE2-NEXT:    retq
+; AVX1-LABEL: trunc_v16i16:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX1-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    testb %al, %al
+; AVX1-NEXT:    setne %al
+; AVX1-NEXT:    vzeroupper
+; AVX1-NEXT:    ret{{[l|q]}}
 ;
-; X86-SSE4-LABEL: trunc_v16i16:
-; X86-SSE4:       # %bb.0:
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
-; X86-SSE4-NEXT:    setne %al
-; X86-SSE4-NEXT:    retl
-;
-; X64-SSE4-LABEL: trunc_v16i16:
-; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-SSE4-NEXT:    setne %al
-; X64-SSE4-NEXT:    retq
-;
-; X86-AVX1-LABEL: trunc_v16i16:
-; X86-AVX1:       # %bb.0:
-; X86-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0
-; X86-AVX1-NEXT:    setne %al
-; X86-AVX1-NEXT:    vzeroupper
-; X86-AVX1-NEXT:    retl
-;
-; X64-AVX1-LABEL: trunc_v16i16:
-; X64-AVX1:       # %bb.0:
-; X64-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
-; X64-AVX1-NEXT:    setne %al
-; X64-AVX1-NEXT:    vzeroupper
-; X64-AVX1-NEXT:    retq
-;
-; X86-AVX2-LABEL: trunc_v16i16:
-; X86-AVX2:       # %bb.0:
-; X86-AVX2-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0
-; X86-AVX2-NEXT:    setne %al
-; X86-AVX2-NEXT:    vzeroupper
-; X86-AVX2-NEXT:    retl
-;
-; X64-AVX2-LABEL: trunc_v16i16:
-; X64-AVX2:       # %bb.0:
-; X64-AVX2-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
-; X64-AVX2-NEXT:    setne %al
-; X64-AVX2-NEXT:    vzeroupper
-; X64-AVX2-NEXT:    retq
+; AVX2-LABEL: trunc_v16i16:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX2-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX2-NEXT:    vmovd %xmm0, %eax
+; AVX2-NEXT:    testb %al, %al
+; AVX2-NEXT:    setne %al
+; AVX2-NEXT:    vzeroupper
+; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: trunc_v16i16:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testb %al, %al
 ; AVX512-NEXT:    setne %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
@@ -1830,15 +2463,15 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X86-SSE2-NEXT:    andl $-16, %esp
 ; X86-SSE2-NEXT:    subl $16, %esp
 ; X86-SSE2-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE2-NEXT:    por %xmm3, %xmm1
 ; X86-SSE2-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE2-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE2-NEXT:    por %xmm2, %xmm0
-; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    psllw $7, %xmm0
-; X86-SSE2-NEXT:    pmovmskb %xmm0, %eax
+; X86-SSE2-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE2-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE2-NEXT:    por %xmm3, %xmm1
+; X86-SSE2-NEXT:    por %xmm0, %xmm1
+; X86-SSE2-NEXT:    psllw $7, %xmm1
+; X86-SSE2-NEXT:    pmovmskb %xmm1, %eax
 ; X86-SSE2-NEXT:    testl %eax, %eax
 ; X86-SSE2-NEXT:    sete %al
 ; X86-SSE2-NEXT:    movl %ebp, %esp
@@ -1848,15 +2481,15 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ;
 ; X64-SSE2-LABEL: mask_v128i8:
 ; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    por %xmm7, %xmm3
-; X64-SSE2-NEXT:    por %xmm5, %xmm1
-; X64-SSE2-NEXT:    por %xmm3, %xmm1
 ; X64-SSE2-NEXT:    por %xmm6, %xmm2
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0
 ; X64-SSE2-NEXT:    por %xmm2, %xmm0
-; X64-SSE2-NEXT:    por %xmm1, %xmm0
-; X64-SSE2-NEXT:    psllw $7, %xmm0
-; X64-SSE2-NEXT:    pmovmskb %xmm0, %eax
+; X64-SSE2-NEXT:    por %xmm7, %xmm3
+; X64-SSE2-NEXT:    por %xmm5, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    por %xmm0, %xmm1
+; X64-SSE2-NEXT:    psllw $7, %xmm1
+; X64-SSE2-NEXT:    pmovmskb %xmm1, %eax
 ; X64-SSE2-NEXT:    testl %eax, %eax
 ; X64-SSE2-NEXT:    sete %al
 ; X64-SSE2-NEXT:    retq
@@ -1871,14 +2504,14 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X86-SSE4-NEXT:    andl $-16, %esp
 ; X86-SSE4-NEXT:    subl $16, %esp
 ; X86-SSE4-NEXT:    movdqa 8(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
-; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
-; X86-SSE4-NEXT:    por %xmm3, %xmm1
 ; X86-SSE4-NEXT:    por 56(%ebp), %xmm2
 ; X86-SSE4-NEXT:    por 24(%ebp), %xmm0
 ; X86-SSE4-NEXT:    por %xmm2, %xmm0
-; X86-SSE4-NEXT:    por %xmm1, %xmm0
-; X86-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
+; X86-SSE4-NEXT:    por 72(%ebp), %xmm3
+; X86-SSE4-NEXT:    por 40(%ebp), %xmm1
+; X86-SSE4-NEXT:    por %xmm3, %xmm1
+; X86-SSE4-NEXT:    por %xmm0, %xmm1
+; X86-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}, %xmm1
 ; X86-SSE4-NEXT:    sete %al
 ; X86-SSE4-NEXT:    movl %ebp, %esp
 ; X86-SSE4-NEXT:    popl %ebp
@@ -1887,14 +2520,14 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ;
 ; X64-SSE4-LABEL: mask_v128i8:
 ; X64-SSE4:       # %bb.0:
-; X64-SSE4-NEXT:    por %xmm7, %xmm3
-; X64-SSE4-NEXT:    por %xmm5, %xmm1
-; X64-SSE4-NEXT:    por %xmm3, %xmm1
 ; X64-SSE4-NEXT:    por %xmm6, %xmm2
 ; X64-SSE4-NEXT:    por %xmm4, %xmm0
 ; X64-SSE4-NEXT:    por %xmm2, %xmm0
-; X64-SSE4-NEXT:    por %xmm1, %xmm0
-; X64-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; X64-SSE4-NEXT:    por %xmm7, %xmm3
+; X64-SSE4-NEXT:    por %xmm5, %xmm1
+; X64-SSE4-NEXT:    por %xmm3, %xmm1
+; X64-SSE4-NEXT:    por %xmm0, %xmm1
+; X64-SSE4-NEXT:    ptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
 ; X64-SSE4-NEXT:    sete %al
 ; X64-SSE4-NEXT:    retq
 ;
@@ -1910,7 +2543,18 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X86-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X86-AVX1-NEXT:    vorps 8(%ebp), %ymm1, %ymm1
 ; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X86-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0
+; X86-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X86-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X86-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX1-NEXT:    vmovd %xmm0, %eax
+; X86-AVX1-NEXT:    testb $1, %al
 ; X86-AVX1-NEXT:    sete %al
 ; X86-AVX1-NEXT:    movl %ebp, %esp
 ; X86-AVX1-NEXT:    popl %ebp
@@ -1923,7 +2567,18 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X64-AVX1-NEXT:    vorps %ymm3, %ymm1, %ymm1
 ; X64-AVX1-NEXT:    vorps %ymm2, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
-; X64-AVX1-NEXT:    vptest {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0
+; X64-AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
+; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X64-AVX1-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX1-NEXT:    vmovd %xmm0, %eax
+; X64-AVX1-NEXT:    testb $1, %al
 ; X64-AVX1-NEXT:    sete %al
 ; X64-AVX1-NEXT:    vzeroupper
 ; X64-AVX1-NEXT:    retq
@@ -1940,8 +2595,18 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X86-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X86-AVX2-NEXT:    vpor 8(%ebp), %ymm1, %ymm1
 ; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vpbroadcastd {{.*#+}} ymm1 = [16843009,16843009,16843009,16843009,16843009,16843009,16843009,16843009]
-; X86-AVX2-NEXT:    vptest %ymm1, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X86-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X86-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vmovd %xmm0, %eax
+; X86-AVX2-NEXT:    testb $1, %al
 ; X86-AVX2-NEXT:    sete %al
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -1954,8 +2619,18 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; X64-AVX2-NEXT:    vpor %ymm3, %ymm1, %ymm1
 ; X64-AVX2-NEXT:    vpor %ymm2, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vpbroadcastq {{.*#+}} ymm1 = [72340172838076673,72340172838076673,72340172838076673,72340172838076673]
-; X64-AVX2-NEXT:    vptest %ymm1, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; X64-AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vmovd %xmm0, %eax
+; X64-AVX2-NEXT:    testb $1, %al
 ; X64-AVX2-NEXT:    sete %al
 ; X64-AVX2-NEXT:    vzeroupper
 ; X64-AVX2-NEXT:    retq
@@ -1963,8 +2638,20 @@ define i1 @mask_v128i8(<128 x i8> %a0) {
 ; AVX512-LABEL: mask_v128i8:
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
-; AVX512-NEXT:    vptestmd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm0, %k0
-; AVX512-NEXT:    kortestw %k0, %k0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrld $16, %xmm0, %xmm1
+; AVX512-NEXT:    vporq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpsrlw $8, %xmm0, %xmm1
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    testb $1, %al
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq

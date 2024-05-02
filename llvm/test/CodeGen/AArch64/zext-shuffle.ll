@@ -76,11 +76,9 @@ define <2 x i64> @v2i64_37(<4 x i32> %a, <4 x i32> %b) {
 define <4 x i64> @v2i64_i16_04812(<16 x i16> %a) {
 ; CHECK-LABEL: v2i64_i16_04812:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    movi v2.2d, #0x00ffff0000ffff
-; CHECK-NEXT:    uzp1 v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    movi v2.2d, #0x0000000000ffff
 ; CHECK-NEXT:    and v0.16b, v0.16b, v2.16b
-; CHECK-NEXT:    ushll2 v1.2d, v0.4s, #0
-; CHECK-NEXT:    ushll v0.2d, v0.2s, #0
+; CHECK-NEXT:    and v1.16b, v1.16b, v2.16b
 ; CHECK-NEXT:    ret
   %s1 = shufflevector <16 x i16> %a, <16 x i16> undef, <4 x i32> <i32 0, i32 4, i32 8, i32 12>
   %z1 = zext <4 x i16> %s1 to <4 x i64>
@@ -104,11 +102,11 @@ define <4 x i64> @v2i64_i16_15913(<16 x i16> %a) {
 define <4 x i64> @v2i64_i16_261014(<16 x i16> %a) {
 ; CHECK-LABEL: v2i64_i16_261014:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    movi v2.2d, #0x00ffff0000ffff
-; CHECK-NEXT:    uzp2 v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    movi v2.2d, #0x0000000000ffff
+; CHECK-NEXT:    ushr v0.2d, v0.2d, #32
+; CHECK-NEXT:    ushr v1.2d, v1.2d, #32
 ; CHECK-NEXT:    and v0.16b, v0.16b, v2.16b
-; CHECK-NEXT:    ushll2 v1.2d, v0.4s, #0
-; CHECK-NEXT:    ushll v0.2d, v0.2s, #0
+; CHECK-NEXT:    and v1.16b, v1.16b, v2.16b
 ; CHECK-NEXT:    ret
   %s1 = shufflevector <16 x i16> %a, <16 x i16> undef, <4 x i32> <i32 2, i32 6, i32 10, i32 14>
   %z1 = zext <4 x i16> %s1 to <4 x i64>

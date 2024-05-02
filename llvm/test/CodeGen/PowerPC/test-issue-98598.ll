@@ -47,8 +47,8 @@ define i64 @compare64(i32 %conv1) {
 ; CHECK-32BIT-LABEL: compare64:
 ; CHECK-32BIT:       # %bb.0: # %entry
 ; CHECK-32BIT-NEXT:    addic r3, r3, -1
-; CHECK-32BIT-NEXT:    subfe r3, r3, r3
-; CHECK-32BIT-NEXT:    mr r4, r3
+; CHECK-32BIT-NEXT:    subfe r4, r3, r3
+; CHECK-32BIT-NEXT:    srawi r3, r4, 31
 ; CHECK-32BIT-NEXT:    blr
 ;
 ; CHECK-64BIT-LABEL: compare64:

@@ -45,8 +45,13 @@ define i1 @basic_eq_i64_3x5(i64 %arg) {
 ; CHECK-LABEL: basic_eq_i64_3x5:
 ; CHECK:       ; %bb.0: ; %entry
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_and_b32_e32 v0, 0x7fff, v0
-; CHECK-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
+; CHECK-NEXT:    v_lshrrev_b32_e32 v1, 5, v0
+; CHECK-NEXT:    v_or_b32_e32 v1, v0, v1
+; CHECK-NEXT:    v_lshrrev_b32_e32 v0, 10, v0
+; CHECK-NEXT:    v_or_b32_e32 v0, v1, v0
+; CHECK-NEXT:    v_and_b32_e32 v0, 31, v0
+; CHECK-NEXT:    v_mov_b32_e32 v1, 0
+; CHECK-NEXT:    v_cmp_eq_u64_e32 vcc, 0, v[0:1]
 ; CHECK-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
 entry:

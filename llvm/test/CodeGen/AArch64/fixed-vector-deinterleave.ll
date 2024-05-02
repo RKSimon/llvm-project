@@ -3,21 +3,12 @@
 ; RUN: llc -mtriple=aarch64-none-linux-gnu -global-isel -global-isel-abort=0 %s -o - | FileCheck %s --check-prefixes=CHECK,CHECK-GI
 
 define {<2 x half>, <2 x half>} @vector_deinterleave_v2f16_v4f16(<4 x half> %vec) {
-; CHECK-SD-LABEL: vector_deinterleave_v2f16_v4f16:
-; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    dup v1.2s, v0.s[1]
-; CHECK-SD-NEXT:    zip1 v2.4h, v0.4h, v1.4h
-; CHECK-SD-NEXT:    trn2 v1.4h, v0.4h, v1.4h
-; CHECK-SD-NEXT:    fmov d0, d2
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: vector_deinterleave_v2f16_v4f16:
-; CHECK-GI:       // %bb.0:
-; CHECK-GI-NEXT:    uzp1 v2.4h, v0.4h, v0.4h
-; CHECK-GI-NEXT:    uzp2 v1.4h, v0.4h, v0.4h
-; CHECK-GI-NEXT:    fmov d0, d2
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: vector_deinterleave_v2f16_v4f16:
+; CHECK:       // %bb.0:
+; CHECK-NEXT:    uzp1 v2.4h, v0.4h, v0.4h
+; CHECK-NEXT:    uzp2 v1.4h, v0.4h, v0.4h
+; CHECK-NEXT:    fmov d0, d2
+; CHECK-NEXT:    ret
   %retval = call {<2 x half>, <2 x half>} @llvm.vector.deinterleave2.v4f16(<4 x half> %vec)
   ret {<2 x half>, <2 x half>}   %retval
 }

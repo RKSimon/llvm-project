@@ -7,30 +7,29 @@
 define <4 x i32> @callee(i32 signext %count, ...) {
   ; CHECK-LABEL: name: callee
   ; CHECK: bb.0.entry:
-  ; CHECK:   liveins: $x4, $x5, $x6, $x7, $x8, $x9, $x10
-  ; CHECK:   [[COPY:%[0-9]+]]:g8rc = COPY $x10
-  ; CHECK:   [[COPY1:%[0-9]+]]:g8rc = COPY $x9
-  ; CHECK:   [[COPY2:%[0-9]+]]:g8rc = COPY $x8
-  ; CHECK:   [[COPY3:%[0-9]+]]:g8rc = COPY $x7
-  ; CHECK:   [[COPY4:%[0-9]+]]:g8rc = COPY $x6
-  ; CHECK:   [[COPY5:%[0-9]+]]:g8rc = COPY $x5
-  ; CHECK:   [[COPY6:%[0-9]+]]:g8rc = COPY $x4
-  ; CHECK:   STD [[COPY6]], 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0)
-  ; CHECK:   STD [[COPY5]], 8, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 8)
-  ; CHECK:   STD [[COPY4]], 16, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 16)
-  ; CHECK:   STD [[COPY3]], 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
-  ; CHECK:   STD [[COPY2]], 32, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 32)
-  ; CHECK:   STD [[COPY1]], 40, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 40)
-  ; CHECK:   STD [[COPY]], 48, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 48)
-  ; CHECK:   LIFETIME_START %stack.0.arg_list
-  ; CHECK:   [[ADDI8_:%[0-9]+]]:g8rc = ADDI8 %fixed-stack.0, 0
-  ; CHECK:   STD killed [[ADDI8_]], 0, %stack.0.arg_list :: (store (s64) into %ir.arg_list)
-  ; CHECK:   [[ADDI8_1:%[0-9]+]]:g8rc = ADDI8 %fixed-stack.0, 15
-  ; CHECK:   [[RLDICR:%[0-9]+]]:g8rc = RLDICR killed [[ADDI8_1]], 0, 59
-  ; CHECK:   [[LXVW4X:%[0-9]+]]:vsrc = LXVW4X $zero8, killed [[RLDICR]] :: (load (s128) from %ir.argp.cur.aligned)
-  ; CHECK:   LIFETIME_END %stack.0.arg_list
-  ; CHECK:   $v2 = COPY [[LXVW4X]]
-  ; CHECK:   BLR8 implicit $lr8, implicit $rm, implicit $v2
+  ; CHECK-NEXT:   liveins: $x4, $x5, $x6, $x7, $x8, $x9, $x10
+  ; CHECK-NEXT: {{  $}}
+  ; CHECK-NEXT:   [[COPY:%[0-9]+]]:g8rc = COPY $x10
+  ; CHECK-NEXT:   [[COPY1:%[0-9]+]]:g8rc = COPY $x9
+  ; CHECK-NEXT:   [[COPY2:%[0-9]+]]:g8rc = COPY $x8
+  ; CHECK-NEXT:   [[COPY3:%[0-9]+]]:g8rc = COPY $x7
+  ; CHECK-NEXT:   [[COPY4:%[0-9]+]]:g8rc = COPY $x6
+  ; CHECK-NEXT:   [[COPY5:%[0-9]+]]:g8rc = COPY $x5
+  ; CHECK-NEXT:   [[COPY6:%[0-9]+]]:g8rc = COPY $x4
+  ; CHECK-NEXT:   STD [[COPY]], 48, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 48)
+  ; CHECK-NEXT:   STD [[COPY1]], 40, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 40)
+  ; CHECK-NEXT:   STD [[COPY2]], 32, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 32)
+  ; CHECK-NEXT:   STD [[COPY3]], 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
+  ; CHECK-NEXT:   STD [[COPY4]], 16, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 16)
+  ; CHECK-NEXT:   STD [[COPY5]], 8, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 8)
+  ; CHECK-NEXT:   STD [[COPY6]], 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0)
+  ; CHECK-NEXT:   LIFETIME_START %stack.0.arg_list
+  ; CHECK-NEXT:   [[ADDI8_:%[0-9]+]]:g8rc = ADDI8 %fixed-stack.0, 15
+  ; CHECK-NEXT:   [[RLDICR:%[0-9]+]]:g8rc = RLDICR killed [[ADDI8_]], 0, 59
+  ; CHECK-NEXT:   [[LXVW4X:%[0-9]+]]:vsrc = LXVW4X $zero8, killed [[RLDICR]] :: (load (s128) from %ir.argp.cur.aligned)
+  ; CHECK-NEXT:   LIFETIME_END %stack.0.arg_list
+  ; CHECK-NEXT:   $v2 = COPY [[LXVW4X]]
+  ; CHECK-NEXT:   BLR8 implicit $lr8, implicit $rm, implicit $v2
 entry:
   %arg_list = alloca ptr, align 8
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %arg_list)

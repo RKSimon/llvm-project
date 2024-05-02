@@ -9,22 +9,25 @@ define double @fnmadd_non_trivial(ptr %p0, ptr %p1, ptr %dst, double %mul425) {
 ; CHECK-LABEL: fnmadd_non_trivial:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a3, -2047
-; CHECK-NEXT:    lui a4, 8201
 ; CHECK-NEXT:    slli a3, a3, 51
-; CHECK-NEXT:    slli a4, a4, 37
 ; CHECK-NEXT:    fmv.d.x fa4, a3
-; CHECK-NEXT:    fmv.d.x fa5, a4
-; CHECK-NEXT:    li a3, -1025
-; CHECK-NEXT:    fmadd.d fa3, fa0, fa5, fa4
-; CHECK-NEXT:    fnmsub.d fa5, fa0, fa5, fa4
+; CHECK-NEXT:    lui a3, 8201
+; CHECK-NEXT:    lui a4, 2049
+; CHECK-NEXT:    slli a3, a3, 37
+; CHECK-NEXT:    fmv.d.x fa5, a3
+; CHECK-NEXT:    slli a4, a4, 39
+; CHECK-NEXT:    fmv.d.x fa3, a4
+; CHECK-NEXT:    li a3, 1023
+; CHECK-NEXT:    fmadd.d fa2, fa0, fa5, fa4
+; CHECK-NEXT:    fmadd.d fa5, fa0, fa5, fa3
 ; CHECK-NEXT:    slli a3, a3, 52
-; CHECK-NEXT:    fmv.d.x fa2, a3
+; CHECK-NEXT:    fmv.d.x fa3, a3
 ; CHECK-NEXT:    fmv.d.x fa1, zero
-; CHECK-NEXT:    fmadd.d fa3, fa3, fa1, fa2
-; CHECK-NEXT:    fmadd.d fa2, fa5, fa1, fa2
-; CHECK-NEXT:    fnmadd.d fa5, fa0, fa1, fa3
+; CHECK-NEXT:    fnmsub.d fa2, fa2, fa1, fa3
+; CHECK-NEXT:    fmadd.d fa3, fa5, fa1, fa3
+; CHECK-NEXT:    fnmsub.d fa5, fa0, fa1, fa2
 ; CHECK-NEXT:    lui a3, %hi(.LCPI0_0)
-; CHECK-NEXT:    fnmadd.d fa3, fa2, fa1, fa0
+; CHECK-NEXT:    fmsub.d fa3, fa3, fa1, fa0
 ; CHECK-NEXT:    ld a3, %lo(.LCPI0_0)(a3)
 ; CHECK-NEXT:    fmul.d fa4, fa0, fa4
 ; CHECK-NEXT:    sd a3, 0(a2)

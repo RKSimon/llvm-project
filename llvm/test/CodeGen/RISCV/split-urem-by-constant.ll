@@ -407,10 +407,10 @@ define iXLen2 @test_urem_12(iXLen2 %x) nounwind {
 ; RV32-NEXT:    andi a2, a2, -2
 ; RV32-NEXT:    add a2, a2, a3
 ; RV32-NEXT:    sub a1, a1, a2
-; RV32-NEXT:    slli a1, a1, 2
+; RV32-NEXT:    slli a2, a1, 2
 ; RV32-NEXT:    andi a0, a0, 3
-; RV32-NEXT:    or a0, a1, a0
-; RV32-NEXT:    li a1, 0
+; RV32-NEXT:    or a0, a2, a0
+; RV32-NEXT:    srli a1, a1, 30
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_urem_12:
@@ -431,10 +431,10 @@ define iXLen2 @test_urem_12(iXLen2 %x) nounwind {
 ; RV64-NEXT:    andi a2, a2, -2
 ; RV64-NEXT:    add a2, a2, a3
 ; RV64-NEXT:    sub a1, a1, a2
-; RV64-NEXT:    slli a1, a1, 2
+; RV64-NEXT:    slli a2, a1, 2
 ; RV64-NEXT:    andi a0, a0, 3
-; RV64-NEXT:    or a0, a1, a0
-; RV64-NEXT:    li a1, 0
+; RV64-NEXT:    or a0, a2, a0
+; RV64-NEXT:    srli a1, a1, 62
 ; RV64-NEXT:    ret
   %a = urem iXLen2 %x, 12
   ret iXLen2 %a
@@ -481,10 +481,10 @@ define iXLen2 @test_urem_7_shl_30(iXLen2 %x) nounwind {
 ; RV64-NEXT:    sub a2, a2, a3
 ; RV64-NEXT:    add a1, a1, a2
 ; RV64-NEXT:    slli a0, a0, 34
-; RV64-NEXT:    slli a1, a1, 30
+; RV64-NEXT:    slli a2, a1, 30
 ; RV64-NEXT:    srli a0, a0, 34
-; RV64-NEXT:    or a0, a1, a0
-; RV64-NEXT:    li a1, 0
+; RV64-NEXT:    or a0, a2, a0
+; RV64-NEXT:    srli a1, a1, 34
 ; RV64-NEXT:    ret
   %a = urem iXLen2 %x, u0x1C0000000
   ret iXLen2 %a
@@ -522,10 +522,10 @@ define iXLen2 @test_urem_3_shl_32(iXLen2 %x) nounwind {
 ; RV64-NEXT:    add a2, a2, a3
 ; RV64-NEXT:    sub a1, a1, a2
 ; RV64-NEXT:    slli a0, a0, 32
-; RV64-NEXT:    slli a1, a1, 32
+; RV64-NEXT:    slli a2, a1, 32
 ; RV64-NEXT:    srli a0, a0, 32
-; RV64-NEXT:    or a0, a1, a0
-; RV64-NEXT:    li a1, 0
+; RV64-NEXT:    or a0, a2, a0
+; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    ret
   %a = urem iXLen2 %x, u0x300000000
   ret iXLen2 %a
@@ -562,12 +562,12 @@ define iXLen2 @test_urem_7_shl_60(iXLen2 %x) nounwind {
 ; RV64-NEXT:    add a1, a2, a1
 ; RV64-NEXT:    mulhu a2, a1, a4
 ; RV64-NEXT:    slli a3, a2, 3
+; RV64-NEXT:    sub a2, a2, a3
 ; RV64-NEXT:    add a1, a1, a2
-; RV64-NEXT:    sub a1, a1, a3
-; RV64-NEXT:    slli a1, a1, 60
+; RV64-NEXT:    slli a2, a1, 60
 ; RV64-NEXT:    and a0, a0, a5
-; RV64-NEXT:    or a0, a1, a0
-; RV64-NEXT:    li a1, 0
+; RV64-NEXT:    or a0, a2, a0
+; RV64-NEXT:    srli a1, a1, 4
 ; RV64-NEXT:    ret
   %a = urem iXLen2 %x, u0x7000000000000000
   ret iXLen2 %a

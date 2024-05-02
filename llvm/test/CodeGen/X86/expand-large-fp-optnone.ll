@@ -71,7 +71,7 @@ define double @main(i224 %0) #0 {
 ; CHECK-NEXT:    orl $64, %eax
 ; CHECK-NEXT:    testq %rbx, %rbx
 ; CHECK-NEXT:    cmovnel %r14d, %eax
-; CHECK-NEXT:    subl $-128, %eax
+; CHECK-NEXT:    orl $128, %eax
 ; CHECK-NEXT:    orq %r8, %r10
 ; CHECK-NEXT:    cmovnel %r11d, %eax
 ; CHECK-NEXT:    movl $224, %r11d
@@ -110,21 +110,22 @@ define double @main(i224 %0) #0 {
 ; CHECK-NEXT:    movb $-87, %r8b
 ; CHECK-NEXT:    subb %al, %r8b
 ; CHECK-NEXT:    movb %r8b, %bl
-; CHECK-NEXT:    shrb $6, %bl
+; CHECK-NEXT:    andb $-64, %bl
+; CHECK-NEXT:    shrb $3, %bl
 ; CHECK-NEXT:    movzbl %bl, %r12d
 ; CHECK-NEXT:    movq $0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, (%rsp)
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movq -24(%rsp,%r12,8), %rbx
-; CHECK-NEXT:    movq -32(%rsp,%r12,8), %r13
+; CHECK-NEXT:    movq -24(%rsp,%r12), %rbx
+; CHECK-NEXT:    movq -32(%rsp,%r12), %r13
 ; CHECK-NEXT:    movq %rcx, %rbp
 ; CHECK-NEXT:    movb %r8b, %cl
 ; CHECK-NEXT:    movq %r13, %r14
 ; CHECK-NEXT:    shrdq %cl, %rbx, %r14
 ; CHECK-NEXT:    movq %r14, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; CHECK-NEXT:    movq -48(%rsp,%r12,8), %r15
-; CHECK-NEXT:    movq -40(%rsp,%r12,8), %r12
+; CHECK-NEXT:    movq -48(%rsp,%r12), %r15
+; CHECK-NEXT:    movq -40(%rsp,%r12), %r12
 ; CHECK-NEXT:    movb %r8b, %cl
 ; CHECK-NEXT:    movq %r12, %r14
 ; CHECK-NEXT:    shrdq %cl, %r13, %r14
@@ -142,8 +143,8 @@ define double @main(i224 %0) #0 {
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movb %al, %cl
+; CHECK-NEXT:    andb $-64, %cl
 ; CHECK-NEXT:    shrb $3, %cl
-; CHECK-NEXT:    andb $24, %cl
 ; CHECK-NEXT:    negb %cl
 ; CHECK-NEXT:    movsbq %cl, %rdx
 ; CHECK-NEXT:    movq -80(%rsp,%rdx), %rsi
@@ -206,8 +207,8 @@ define double @main(i224 %0) #0 {
 ; CHECK-NEXT:    movq $0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    addb $85, %al
 ; CHECK-NEXT:    movb %al, %cl
+; CHECK-NEXT:    andb $-64, %cl
 ; CHECK-NEXT:    shrb $3, %cl
-; CHECK-NEXT:    andb $24, %cl
 ; CHECK-NEXT:    negb %cl
 ; CHECK-NEXT:    movsbq %cl, %rcx
 ; CHECK-NEXT:    movq 48(%rsp,%rcx), %rdx

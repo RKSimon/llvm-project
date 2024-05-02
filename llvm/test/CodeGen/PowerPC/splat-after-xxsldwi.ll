@@ -7,10 +7,9 @@ define <4 x i8> @backsmith_pure_1(<8 x i32> %0) {
 ; CHECK-LABEL: backsmith_pure_1:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    ld r3, L..C0(r2) # %const.0
-; CHECK-NEXT:    xxsldwi vs34, vs35, vs35, 1
-; CHECK-NEXT:    lxvw4x vs36, 0, r3
+; CHECK-NEXT:    lxvw4x vs34, 0, r3
+; CHECK-NEXT:    vperm v2, v3, v3, v2
 ; CHECK-NEXT:    vspltb v3, v3, 3
-; CHECK-NEXT:    vperm v2, v2, v2, v4
 ; CHECK-NEXT:    xxland vs34, vs35, vs34
 ; CHECK-NEXT:    blr
 entry:

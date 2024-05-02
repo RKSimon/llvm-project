@@ -529,7 +529,8 @@ define void @br_cc_i128_imm(i128 %0) {
 ; CHECK-NEXT:    cmpu.l %s0, %s0, (58)0
 ; CHECK-NEXT:    cmov.l.gt %s2, (63)0, %s0
 ; CHECK-NEXT:    cmov.l.eq %s4, %s2, %s1
-; CHECK-NEXT:    brne.w 0, %s4, .LBB23_2
+; CHECK-NEXT:    and %s0, 1, %s4
+; CHECK-NEXT:    brne.w 0, %s0, .LBB23_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
@@ -558,7 +559,8 @@ define void @br_cc_u128_imm(i128 %0) {
 ; CHECK-NEXT:    cmpu.l %s0, %s0, (58)0
 ; CHECK-NEXT:    cmov.l.gt %s2, (63)0, %s0
 ; CHECK-NEXT:    cmov.l.eq %s4, %s2, %s1
-; CHECK-NEXT:    brne.w 0, %s4, .LBB24_2
+; CHECK-NEXT:    and %s0, 1, %s4
+; CHECK-NEXT:    brne.w 0, %s0, .LBB24_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
@@ -652,7 +654,7 @@ define void @br_cc_quad_imm(fp128 %0) {
 define void @br_cc_imm_i1(i1 zeroext %0) {
 ; CHECK-LABEL: br_cc_imm_i1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    breq.w 0, %s0, .LBB28_2
+; CHECK-NEXT:    breq.l 0, %s0, .LBB28_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
@@ -862,7 +864,8 @@ define void @br_cc_imm_i128(i128 %0) {
 ; CHECK-NEXT:    cmov.l.lt %s3, (63)0, %s0
 ; CHECK-NEXT:    cmpu.l %s0, %s1, (0)0
 ; CHECK-NEXT:    cmov.l.eq %s4, %s3, %s0
-; CHECK-NEXT:    brne.w 0, %s4, .LBB37_2
+; CHECK-NEXT:    and %s0, 1, %s4
+; CHECK-NEXT:    brne.w 0, %s0, .LBB37_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
@@ -892,7 +895,8 @@ define void @br_cc_imm_u128(i128 %0) {
 ; CHECK-NEXT:    cmov.l.lt %s3, (63)0, %s0
 ; CHECK-NEXT:    cmpu.l %s0, %s1, (0)0
 ; CHECK-NEXT:    cmov.l.eq %s4, %s3, %s0
-; CHECK-NEXT:    brne.w 0, %s4, .LBB38_2
+; CHECK-NEXT:    and %s0, 1, %s4
+; CHECK-NEXT:    brne.w 0, %s0, .LBB38_2
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop

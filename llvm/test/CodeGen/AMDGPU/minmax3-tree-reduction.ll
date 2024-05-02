@@ -316,10 +316,9 @@ define float @v_maximum3_tree_unbalanced_f32(float %a, float %b, float %c, float
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_maximum_f32 v0, v0, v1
-; GFX1250-NEXT:    v_maximum_f32 v1, v2, v3
+; GFX1250-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_maximum3_f32 v0, v0, v1, v4
+; GFX1250-NEXT:    v_maximum3_f32 v0, v0, v3, v4
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
   %ab = call float @llvm.maximum.f32(float %a, float %b)
   %cd = call float @llvm.maximum.f32(float %c, float %d)
@@ -396,12 +395,11 @@ define float @v_maximum3_tree8_asymmetric_use(float %a, float %b, float %c, floa
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
 ; GFX1250-NEXT:    v_maximum3_f32 v4, v4, v5, v6
-; GFX1250-NEXT:    v_maximum_f32 v0, v0, v1
-; GFX1250-NEXT:    v_maximum_f32 v1, v2, v3
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1250-NEXT:    v_maximum_f32 v2, v4, v7
 ; GFX1250-NEXT:    v_maximum3_f32 v0, v0, v1, v2
-; GFX1250-NEXT:    global_store_b32 v[8:9], v2, off
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX1250-NEXT:    v_maximum_f32 v1, v4, v7
+; GFX1250-NEXT:    v_maximum3_f32 v0, v0, v3, v1
+; GFX1250-NEXT:    global_store_b32 v[8:9], v1, off
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
                                                float %e, float %f, float %g, float %h,
                                                ptr addrspace(1) %out) {

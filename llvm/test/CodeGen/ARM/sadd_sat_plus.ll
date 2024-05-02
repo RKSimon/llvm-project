@@ -56,9 +56,10 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ; CHECK-T1-NEXT:    .save {r4, r5, r7, lr}
 ; CHECK-T1-NEXT:    push {r4, r5, r7, lr}
 ; CHECK-T1-NEXT:    mov r3, r0
-; CHECK-T1-NEXT:    ldr r4, [sp, #20]
+; CHECK-T1-NEXT:    add r0, sp, #16
+; CHECK-T1-NEXT:    ldr r4, [r0, #4]
 ; CHECK-T1-NEXT:    ldr r5, [sp, #16]
-; CHECK-T1-NEXT:    adds r0, r0, r5
+; CHECK-T1-NEXT:    adds r0, r3, r5
 ; CHECK-T1-NEXT:    mov r0, r1
 ; CHECK-T1-NEXT:    adcs r0, r4
 ; CHECK-T1-NEXT:    asrs r0, r0, #31
@@ -83,12 +84,12 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ;
 ; CHECK-T2-LABEL: func64:
 ; CHECK-T2:       @ %bb.0:
-; CHECK-T2-NEXT:    ldrd r3, r2, [sp]
-; CHECK-T2-NEXT:    adds r0, r0, r3
-; CHECK-T2-NEXT:    adcs r1, r2
+; CHECK-T2-NEXT:    ldrd r2, r3, [sp]
+; CHECK-T2-NEXT:    adds r0, r0, r2
+; CHECK-T2-NEXT:    mov.w r2, #-2147483648
+; CHECK-T2-NEXT:    adcs r1, r3
 ; CHECK-T2-NEXT:    it vs
 ; CHECK-T2-NEXT:    asrvs r0, r1, #31
-; CHECK-T2-NEXT:    mov.w r2, #-2147483648
 ; CHECK-T2-NEXT:    it vs
 ; CHECK-T2-NEXT:    eorvs.w r1, r2, r1, asr #31
 ; CHECK-T2-NEXT:    bx lr
@@ -139,6 +140,7 @@ define signext i16 @func16(i16 signext %x, i16 signext %y, i16 signext %z) nounw
 ; CHECK-T2NODSP-NEXT:    sxth r1, r1
 ; CHECK-T2NODSP-NEXT:    add r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #16, r0
+; CHECK-T2NODSP-NEXT:    sxth r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func16:
@@ -185,6 +187,7 @@ define signext i8 @func8(i8 signext %x, i8 signext %y, i8 signext %z) nounwind {
 ; CHECK-T2NODSP-NEXT:    sxtb r1, r1
 ; CHECK-T2NODSP-NEXT:    add r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #8, r0
+; CHECK-T2NODSP-NEXT:    sxtb r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func8:
@@ -232,6 +235,7 @@ define signext i4 @func4(i4 signext %x, i4 signext %y, i4 signext %z) nounwind {
 ; CHECK-T2NODSP-NEXT:    lsls r1, r1, #28
 ; CHECK-T2NODSP-NEXT:    add.w r0, r0, r1, asr #28
 ; CHECK-T2NODSP-NEXT:    ssat r0, #4, r0
+; CHECK-T2NODSP-NEXT:    sbfx r0, r0, #0, #4
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func4:

@@ -7,17 +7,19 @@ target triple = "nvptx64-nvidia-cuda"
 define <2 x float> @fma_non_coalescable(ptr addrspace(3) %p, <2 x float> %a, <2 x float> %c) {
 ; CHECK-LABEL: fma_non_coalescable(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<11>;
-; CHECK-NEXT:    .reg .b64 %rd<2>;
+; CHECK-NEXT:    .reg .b32 %r<9>;
+; CHECK-NEXT:    .reg .b64 %rd<5>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [fma_non_coalescable_param_0];
 ; CHECK-NEXT:    ld.shared.v4.b32 {%r1, %r2, %r3, %r4}, [%rd1];
 ; CHECK-NEXT:    ld.param.v2.b32 {%r5, %r6}, [fma_non_coalescable_param_1];
-; CHECK-NEXT:    ld.param.v2.b32 {%r7, %r8}, [fma_non_coalescable_param_2];
-; CHECK-NEXT:    fma.rn.f32 %r9, %r6, %r3, %r8;
-; CHECK-NEXT:    fma.rn.f32 %r10, %r5, %r1, %r7;
-; CHECK-NEXT:    st.param.v2.b32 [func_retval0], {%r10, %r9};
+; CHECK-NEXT:    ld.param.b64 %rd2, [fma_non_coalescable_param_2];
+; CHECK-NEXT:    mul.f32 %r7, %r6, %r3;
+; CHECK-NEXT:    mul.f32 %r8, %r5, %r1;
+; CHECK-NEXT:    mov.b64 %rd3, {%r8, %r7};
+; CHECK-NEXT:    add.f32x2 %rd4, %rd3, %rd2;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
 ; CHECK-NEXT:    ret;
   %ld  = load <4 x float>, ptr addrspace(3) %p, align 16
   %e0  = extractelement <4 x float> %ld, i32 0
@@ -35,8 +37,8 @@ define <2 x float> @fma_constant_and_dynamic_index(i32 %idx, ptr addrspace(3) %p
 ; CHECK-NEXT:    .local .align 8 .b8 __local_depot1[16];
 ; CHECK-NEXT:    .reg .b64 %SP;
 ; CHECK-NEXT:    .reg .b64 %SPL;
-; CHECK-NEXT:    .reg .b32 %r<9>;
-; CHECK-NEXT:    .reg .b64 %rd<9>;
+; CHECK-NEXT:    .reg .b32 %r<7>;
+; CHECK-NEXT:    .reg .b64 %rd<12>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    mov.b64 %SPL, __local_depot1;
@@ -53,10 +55,12 @@ define <2 x float> @fma_constant_and_dynamic_index(i32 %idx, ptr addrspace(3) %p
 ; CHECK-NEXT:    st.b64 [%SP+8], %rd8;
 ; CHECK-NEXT:    st.b64 [%SP], %rd7;
 ; CHECK-NEXT:    ld.b32 %r4, [%rd5];
-; CHECK-NEXT:    ld.param.v2.b32 {%r5, %r6}, [fma_constant_and_dynamic_index_param_3];
-; CHECK-NEXT:    fma.rn.f32 %r7, %r2, %r1, %r5;
-; CHECK-NEXT:    fma.rn.f32 %r8, %r3, %r4, %r6;
-; CHECK-NEXT:    st.param.v2.b32 [func_retval0], {%r7, %r8};
+; CHECK-NEXT:    ld.param.b64 %rd9, [fma_constant_and_dynamic_index_param_3];
+; CHECK-NEXT:    mul.f32 %r5, %r2, %r1;
+; CHECK-NEXT:    mul.f32 %r6, %r3, %r4;
+; CHECK-NEXT:    mov.b64 %rd10, {%r5, %r6};
+; CHECK-NEXT:    add.f32x2 %rd11, %rd10, %rd9;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd11;
 ; CHECK-NEXT:    ret;
   %ld  = load <4 x float>, ptr addrspace(3) %p, align 16
   %e0  = extractelement <4 x float> %ld, i32 0
@@ -71,17 +75,19 @@ define <2 x float> @fma_constant_and_dynamic_index(i32 %idx, ptr addrspace(3) %p
 define <2 x float> @fma_shufflevector_non_coalescable(ptr addrspace(3) %p, <2 x float> %a, <2 x float> %c) {
 ; CHECK-LABEL: fma_shufflevector_non_coalescable(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<11>;
-; CHECK-NEXT:    .reg .b64 %rd<2>;
+; CHECK-NEXT:    .reg .b32 %r<9>;
+; CHECK-NEXT:    .reg .b64 %rd<5>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [fma_shufflevector_non_coalescable_param_0];
 ; CHECK-NEXT:    ld.shared.v4.b32 {%r1, %r2, %r3, %r4}, [%rd1];
 ; CHECK-NEXT:    ld.param.v2.b32 {%r5, %r6}, [fma_shufflevector_non_coalescable_param_1];
-; CHECK-NEXT:    ld.param.v2.b32 {%r7, %r8}, [fma_shufflevector_non_coalescable_param_2];
-; CHECK-NEXT:    fma.rn.f32 %r9, %r6, %r3, %r8;
-; CHECK-NEXT:    fma.rn.f32 %r10, %r5, %r1, %r7;
-; CHECK-NEXT:    st.param.v2.b32 [func_retval0], {%r10, %r9};
+; CHECK-NEXT:    ld.param.b64 %rd2, [fma_shufflevector_non_coalescable_param_2];
+; CHECK-NEXT:    mul.f32 %r7, %r6, %r3;
+; CHECK-NEXT:    mul.f32 %r8, %r5, %r1;
+; CHECK-NEXT:    mov.b64 %rd3, {%r8, %r7};
+; CHECK-NEXT:    add.f32x2 %rd4, %rd3, %rd2;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
 ; CHECK-NEXT:    ret;
   %ld  = load <4 x float>, ptr addrspace(3) %p, align 16
   %bv  = shufflevector <4 x float> %ld, <4 x float> poison, <2 x i32> <i32 0, i32 2>
@@ -93,18 +99,20 @@ define <2 x float> @fma_shufflevector_non_coalescable(ptr addrspace(3) %p, <2 x 
 define <2 x float> @fma_mixed_extract_and_scalar(ptr addrspace(3) %p, float %s, <2 x float> %a, <2 x float> %c) {
 ; CHECK-LABEL: fma_mixed_extract_and_scalar(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<12>;
-; CHECK-NEXT:    .reg .b64 %rd<2>;
+; CHECK-NEXT:    .reg .b32 %r<10>;
+; CHECK-NEXT:    .reg .b64 %rd<5>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [fma_mixed_extract_and_scalar_param_0];
 ; CHECK-NEXT:    ld.shared.v4.b32 {%r1, %r2, %r3, %r4}, [%rd1];
 ; CHECK-NEXT:    ld.param.b32 %r5, [fma_mixed_extract_and_scalar_param_1];
 ; CHECK-NEXT:    ld.param.v2.b32 {%r6, %r7}, [fma_mixed_extract_and_scalar_param_2];
-; CHECK-NEXT:    ld.param.v2.b32 {%r8, %r9}, [fma_mixed_extract_and_scalar_param_3];
-; CHECK-NEXT:    fma.rn.f32 %r10, %r7, %r5, %r9;
-; CHECK-NEXT:    fma.rn.f32 %r11, %r6, %r3, %r8;
-; CHECK-NEXT:    st.param.v2.b32 [func_retval0], {%r11, %r10};
+; CHECK-NEXT:    ld.param.b64 %rd2, [fma_mixed_extract_and_scalar_param_3];
+; CHECK-NEXT:    mul.f32 %r8, %r7, %r5;
+; CHECK-NEXT:    mul.f32 %r9, %r6, %r3;
+; CHECK-NEXT:    mov.b64 %rd3, {%r9, %r8};
+; CHECK-NEXT:    add.f32x2 %rd4, %rd3, %rd2;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
 ; CHECK-NEXT:    ret;
   %ld  = load <4 x float>, ptr addrspace(3) %p, align 16
   %e2  = extractelement <4 x float> %ld, i32 2
@@ -265,20 +273,20 @@ define <2 x float> @fma_both_dynamic_indices(i32 %i0, i32 %i1, ptr addrspace(3) 
 ; CHECK-NEXT:    ld.param.b32 %rd1, [fma_both_dynamic_indices_param_0];
 ; CHECK-NEXT:    and.b64 %rd2, %rd1, 3;
 ; CHECK-NEXT:    shl.b64 %rd3, %rd2, 2;
-; CHECK-NEXT:    add.u64 %rd4, %SP, 16;
+; CHECK-NEXT:    add.u64 %rd4, %SP, 0;
 ; CHECK-NEXT:    add.s64 %rd5, %rd4, %rd3;
 ; CHECK-NEXT:    ld.param.b32 %rd6, [fma_both_dynamic_indices_param_1];
 ; CHECK-NEXT:    and.b64 %rd7, %rd6, 3;
 ; CHECK-NEXT:    shl.b64 %rd8, %rd7, 2;
-; CHECK-NEXT:    add.u64 %rd9, %SP, 0;
+; CHECK-NEXT:    add.u64 %rd9, %SP, 16;
 ; CHECK-NEXT:    add.s64 %rd10, %rd9, %rd8;
 ; CHECK-NEXT:    ld.param.b64 %rd11, [fma_both_dynamic_indices_param_2];
 ; CHECK-NEXT:    ld.shared.v2.b64 {%rd12, %rd13}, [%rd11];
-; CHECK-NEXT:    st.b64 [%SP+24], %rd13;
-; CHECK-NEXT:    st.b64 [%SP+16], %rd12;
-; CHECK-NEXT:    ld.b32 %r1, [%rd5];
 ; CHECK-NEXT:    st.b64 [%SP+8], %rd13;
 ; CHECK-NEXT:    st.b64 [%SP], %rd12;
+; CHECK-NEXT:    ld.b32 %r1, [%rd5];
+; CHECK-NEXT:    st.b64 [%SP+24], %rd13;
+; CHECK-NEXT:    st.b64 [%SP+16], %rd12;
 ; CHECK-NEXT:    ld.b32 %r2, [%rd10];
 ; CHECK-NEXT:    ld.param.b64 %rd14, [fma_both_dynamic_indices_param_3];
 ; CHECK-NEXT:    ld.param.b64 %rd15, [fma_both_dynamic_indices_param_4];

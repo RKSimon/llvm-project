@@ -10,17 +10,18 @@
 define <4 x i32> @split_spill(double %d1, double %d2, double %d3, ...) {
   ; CHECK-LABEL: name: split_spill
   ; CHECK: bb.0.entry:
-  ; CHECK:   liveins: $r9, $r10
-  ; CHECK:   [[COPY:%[0-9]+]]:gprc = COPY $r10
-  ; CHECK:   [[COPY1:%[0-9]+]]:gprc = COPY $r9
-  ; CHECK:   STW [[COPY1]], 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 16)
-  ; CHECK:   STW [[COPY]], 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
-  ; CHECK:   LIFETIME_START %stack.0.arg_list
-  ; CHECK:   [[ADDI:%[0-9]+]]:gprc = ADDI %fixed-stack.0, 0
-  ; CHECK:   [[LXVW4X:%[0-9]+]]:vsrc = LXVW4X $zero, killed [[ADDI]] :: (load (s128) from %ir.argp.cur.aligned)
-  ; CHECK:   LIFETIME_END %stack.0.arg_list
-  ; CHECK:   $v2 = COPY [[LXVW4X]]
-  ; CHECK:   BLR implicit $lr, implicit $rm, implicit $v2
+  ; CHECK-NEXT:   liveins: $r9, $r10
+  ; CHECK-NEXT: {{  $}}
+  ; CHECK-NEXT:   [[COPY:%[0-9]+]]:gprc = COPY $r10
+  ; CHECK-NEXT:   [[COPY1:%[0-9]+]]:gprc = COPY $r9
+  ; CHECK-NEXT:   STW [[COPY]], 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
+  ; CHECK-NEXT:   STW [[COPY1]], 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 16)
+  ; CHECK-NEXT:   LIFETIME_START %stack.0.arg_list
+  ; CHECK-NEXT:   [[ADDI:%[0-9]+]]:gprc = ADDI %fixed-stack.0, 0
+  ; CHECK-NEXT:   [[LXVW4X:%[0-9]+]]:vsrc = LXVW4X $zero, killed [[ADDI]] :: (load (s128) from %ir.argp.cur.aligned)
+  ; CHECK-NEXT:   LIFETIME_END %stack.0.arg_list
+  ; CHECK-NEXT:   $v2 = COPY [[LXVW4X]]
+  ; CHECK-NEXT:   BLR implicit $lr, implicit $rm, implicit $v2
 entry:
   %arg_list = alloca ptr, align 4
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %arg_list)

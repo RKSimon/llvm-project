@@ -15,12 +15,14 @@ define void @extract_multiple_v16i8(ptr addrspace(1) %out) {
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX9-NEXT:    ds_read_b128 v[2:5], v2
-; GFX9-NEXT:    s_mov_b32 s0, 0xc0c0004
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX9-NEXT:    v_perm_b32 v2, v2, v3, s0
-; GFX9-NEXT:    v_perm_b32 v3, v4, v5, s0
-; GFX9-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
-; GFX9-NEXT:    v_or_b32_e32 v2, v2, v3
+; GFX9-NEXT:    v_and_b32_e32 v4, 0xff, v4
+; GFX9-NEXT:    v_lshlrev_b32_e32 v5, 24, v5
+; GFX9-NEXT:    v_lshlrev_b32_e32 v3, 8, v3
+; GFX9-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
+; GFX9-NEXT:    v_or_b32_e32 v4, v5, v4
+; GFX9-NEXT:    v_or_b32_sdwa v2, v2, v3 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:DWORD
+; GFX9-NEXT:    v_or_b32_sdwa v2, v2, v4 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
 ; GFX9-NEXT:    global_store_dword v[0:1], v2, off
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
@@ -32,10 +34,14 @@ define void @extract_multiple_v16i8(ptr addrspace(1) %out) {
 ; GFX12-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX12-NEXT:    ds_load_b128 v[2:5], v2
 ; GFX12-NEXT:    s_wait_dscnt 0x0
-; GFX12-NEXT:    v_perm_b32 v4, v4, v5, 0xc0c0004
-; GFX12-NEXT:    v_perm_b32 v2, v2, v3, 0xc0c0004
+; GFX12-NEXT:    v_and_b32_e32 v4, 0xff, v4
+; GFX12-NEXT:    v_dual_lshlrev_b32 v3, 8, v3 :: v_dual_lshlrev_b32 v5, 24, v5
+; GFX12-NEXT:    v_and_b32_e32 v2, 0xff, v2
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    v_dual_lshlrev_b32 v4, 16, v4 :: v_dual_bitop2_b32 v2, v2, v3 bitop3:0x54
+; GFX12-NEXT:    v_or_b32_e32 v3, v5, v4
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_lshlrev_b32_e32 v3, 16, v4
+; GFX12-NEXT:    v_and_b32_e32 v2, 0xffff, v2
 ; GFX12-NEXT:    v_or_b32_e32 v2, v2, v3
 ; GFX12-NEXT:    global_store_b32 v[0:1], v2, off
 ; GFX12-NEXT:    s_set_pc_i64 s[30:31]
@@ -67,10 +73,12 @@ define void @extract_multiple_v8i8(ptr addrspace(1) %out) {
 ; GFX9-NEXT:    v_readfirstlane_b32 s0, v3
 ; GFX9-NEXT:    s_and_b32 s1, s0, 0xff
 ; GFX9-NEXT:    s_lshr_b32 s0, s0, 24
-; GFX9-NEXT:    s_lshl_b32 s0, s0, 8
-; GFX9-NEXT:    s_or_b32 s0, s1, s0
-; GFX9-NEXT:    s_lshl_b32 s0, s0, 16
-; GFX9-NEXT:    v_or_b32_sdwa v2, v2, s0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
+; GFX9-NEXT:    s_lshl_b32 s1, s1, 16
+; GFX9-NEXT:    s_lshl_b32 s0, s0, 24
+; GFX9-NEXT:    s_or_b32 s0, s0, s1
+; GFX9-NEXT:    s_mov_b32 s1, 0xc0c0104
+; GFX9-NEXT:    v_perm_b32 v2, v2, v2, s1
+; GFX9-NEXT:    v_or_b32_e32 v2, s0, v2
 ; GFX9-NEXT:    global_store_dword v[0:1], v2, off
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
@@ -83,7 +91,7 @@ define void @extract_multiple_v8i8(ptr addrspace(1) %out) {
 ; GFX12-NEXT:    ds_load_b64 v[2:3], v2
 ; GFX12-NEXT:    s_wait_dscnt 0x0
 ; GFX12-NEXT:    v_readfirstlane_b32 s0, v3
-; GFX12-NEXT:    v_and_b32_e32 v2, 0xffff, v2
+; GFX12-NEXT:    v_perm_b32 v2, v2, v2, 0xc0c0104
 ; GFX12-NEXT:    s_lshr_b32 s1, s0, 16
 ; GFX12-NEXT:    s_and_b32 s0, s0, 0xff
 ; GFX12-NEXT:    s_and_b32 s1, s1, 0xff00

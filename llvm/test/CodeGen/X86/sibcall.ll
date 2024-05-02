@@ -1081,14 +1081,14 @@ declare void @f1_64(i64, i64, i64, i64, i64, i64, i64)
 define void @stack_arg_const_64(i64, i64, i64, i64, i64, i64, i64) {
 ; X86-LABEL: stack_arg_const_64:
 ; X86:       # %bb.0:
-; X86-NEXT:    movaps {{.*#+}} xmm0 = [1,0,4,0]
+; X86-NEXT:    movaps {{.*#+}} xmm0 = [16,0,23,0]
 ; X86-NEXT:    movaps %xmm0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movaps {{.*#+}} xmm0 = [8,0,15,0]
 ; X86-NEXT:    movaps %xmm0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movaps {{.*#+}} xmm0 = [16,0,23,0]
+; X86-NEXT:    movaps {{.*#+}} xmm0 = [1,0,4,0]
 ; X86-NEXT:    movaps %xmm0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $42, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $42, {{[0-9]+}}(%esp)
 ; X86-NEXT:    jmp f1_64@PLT # TAILCALL
 ;
 ; X64-LABEL: stack_arg_const_64:
@@ -1123,9 +1123,9 @@ define void @stack_arg_const_32(i32, i32, i32, i32, i32, i32, i32) {
 ; X86:       # %bb.0:
 ; X86-NEXT:    movaps {{.*#+}} xmm0 = [1,4,8,15]
 ; X86-NEXT:    movaps %xmm0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $42, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
 ; X86-NEXT:    jmp f1_32@PLT # TAILCALL
 ;
 ; X64-LABEL: stack_arg_const_32:

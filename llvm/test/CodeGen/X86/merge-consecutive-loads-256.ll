@@ -275,8 +275,8 @@ define <4 x i64> @merge_4i64_i64_23zz(ptr %ptr) nounwind uwtable noinline ssp {
 define <4 x i64> @merge_v4i64_i64_3210(ptr %ptr) nounwind uwtable noinline ssp {
 ; AVX1-LABEL: merge_v4i64_i64_3210:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vperm2f128 {{.*#+}} ymm0 = mem[2,3,0,1]
-; AVX1-NEXT:    vshufpd {{.*#+}} ymm0 = ymm0[1,0,3,2]
+; AVX1-NEXT:    vpermilpd {{.*#+}} ymm0 = mem[1,0,3,2]
+; AVX1-NEXT:    vperm2f128 {{.*#+}} ymm0 = ymm0[2,3,0,1]
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: merge_v4i64_i64_3210:
@@ -552,8 +552,8 @@ define <8 x i32> @merge_8i32_i32_1u3u5zu8(ptr %ptr) nounwind uwtable noinline ss
 define <8 x i32> @merge_8i32_i32_76543210(ptr %ptr) nounwind uwtable noinline ssp {
 ; AVX1-LABEL: merge_8i32_i32_76543210:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vperm2f128 {{.*#+}} ymm0 = mem[2,3,0,1]
-; AVX1-NEXT:    vshufps {{.*#+}} ymm0 = ymm0[3,2,1,0,7,6,5,4]
+; AVX1-NEXT:    vpermilps {{.*#+}} ymm0 = mem[3,2,1,0,7,6,5,4]
+; AVX1-NEXT:    vperm2f128 {{.*#+}} ymm0 = ymm0[2,3,0,1]
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: merge_8i32_i32_76543210:
@@ -571,8 +571,8 @@ define <8 x i32> @merge_8i32_i32_76543210(ptr %ptr) nounwind uwtable noinline ss
 ; X86-AVX-LABEL: merge_8i32_i32_76543210:
 ; X86-AVX:       # %bb.0:
 ; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-AVX-NEXT:    vperm2f128 {{.*#+}} ymm0 = mem[2,3,0,1]
-; X86-AVX-NEXT:    vshufps {{.*#+}} ymm0 = ymm0[3,2,1,0,7,6,5,4]
+; X86-AVX-NEXT:    vpermilps {{.*#+}} ymm0 = mem[3,2,1,0,7,6,5,4]
+; X86-AVX-NEXT:    vperm2f128 {{.*#+}} ymm0 = ymm0[2,3,0,1]
 ; X86-AVX-NEXT:    retl
   %ptr0 = getelementptr inbounds i32, ptr %ptr, i64 7
   %ptr1 = getelementptr inbounds i32, ptr %ptr, i64 6

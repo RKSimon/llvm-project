@@ -181,11 +181,11 @@ define arm_aapcs_vfpcc <8 x half> @shuffle2step_f16(<16 x half> %src) {
 ; CHECKFP16-NEXT:    sub sp, #32
 ; CHECKFP16-NEXT:    vmov q4, q1
 ; CHECKFP16-NEXT:    vshr.u32 q1, q1, #16
-; CHECKFP16-NEXT:    add r6, sp, #16
+; CHECKFP16-NEXT:    mov r6, sp
 ; CHECKFP16-NEXT:    vmov.u16 r0, q0[0]
 ; CHECKFP16-NEXT:    vstrh.32 q1, [r6, #8]
 ; CHECKFP16-NEXT:    vshr.u32 q1, q0, #16
-; CHECKFP16-NEXT:    mov r5, sp
+; CHECKFP16-NEXT:    add r5, sp, #16
 ; CHECKFP16-NEXT:    vstrh.32 q1, [r6]
 ; CHECKFP16-NEXT:    vstrh.32 q4, [r5, #8]
 ; CHECKFP16-NEXT:    vstrh.32 q0, [r5]
@@ -307,216 +307,214 @@ entry:
 define arm_aapcs_vfpcc <8 x half> @shuffle3step_f16(<32 x half> %src) {
 ; CHECKFP16-LABEL: shuffle3step_f16:
 ; CHECKFP16:       @ %bb.0: @ %entry
-; CHECKFP16-NEXT:    .save {r4, r5, r6, r7, r8, lr}
-; CHECKFP16-NEXT:    push.w {r4, r5, r6, r7, r8, lr}
+; CHECKFP16-NEXT:    .save {r4, r5, r6, r7, lr}
+; CHECKFP16-NEXT:    push {r4, r5, r6, r7, lr}
+; CHECKFP16-NEXT:    .pad #4
+; CHECKFP16-NEXT:    sub sp, #4
 ; CHECKFP16-NEXT:    .vsave {d8, d9, d10, d11, d12, d13, d14, d15}
 ; CHECKFP16-NEXT:    vpush {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECKFP16-NEXT:    .pad #64
-; CHECKFP16-NEXT:    sub sp, #64
-; CHECKFP16-NEXT:    vmov q6, q0
-; CHECKFP16-NEXT:    vmov.u16 r0, q2[2]
-; CHECKFP16-NEXT:    vmov.16 q0[6], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q2[5]
-; CHECKFP16-NEXT:    vmov.u16 r7, q6[0]
-; CHECKFP16-NEXT:    vmov.16 q0[7], r0
-; CHECKFP16-NEXT:    vmov.16 q7[0], r7
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[3]
-; CHECKFP16-NEXT:    vmov.16 q7[1], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[6]
-; CHECKFP16-NEXT:    vmov.16 q7[2], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q1[1]
-; CHECKFP16-NEXT:    vmov.16 q7[3], r0
-; CHECKFP16-NEXT:    vmov.u16 r8, q1[4]
-; CHECKFP16-NEXT:    vmov.16 q7[4], r8
-; CHECKFP16-NEXT:    vmov.u16 r0, q1[7]
-; CHECKFP16-NEXT:    vmov.16 q7[5], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[2]
-; CHECKFP16-NEXT:    vmov.f32 s0, s28
-; CHECKFP16-NEXT:    vmov.u16 r6, q1[3]
-; CHECKFP16-NEXT:    vmov.f32 s1, s29
-; CHECKFP16-NEXT:    vmov q5, q1
-; CHECKFP16-NEXT:    vmov.f32 s2, s30
-; CHECKFP16-NEXT:    vstrw.32 q2, [sp, #48] @ 16-byte Spill
-; CHECKFP16-NEXT:    vstrw.32 q0, [sp, #32] @ 16-byte Spill
-; CHECKFP16-NEXT:    vmov.u16 r5, q0[6]
+; CHECKFP16-NEXT:    .pad #48
+; CHECKFP16-NEXT:    sub sp, #48
+; CHECKFP16-NEXT:    vmov q7, q0
+; CHECKFP16-NEXT:    vmov.u16 r0, q0[2]
 ; CHECKFP16-NEXT:    vmov.16 q0[0], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[5]
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[5]
 ; CHECKFP16-NEXT:    vmov.16 q0[1], r0
 ; CHECKFP16-NEXT:    vmov.u16 r0, q1[0]
 ; CHECKFP16-NEXT:    vmov.16 q0[2], r0
-; CHECKFP16-NEXT:    vmov.16 q0[3], r6
-; CHECKFP16-NEXT:    vmov.f32 s2, s23
+; CHECKFP16-NEXT:    vmov.u16 r4, q1[3]
+; CHECKFP16-NEXT:    vmov q6, q1
+; CHECKFP16-NEXT:    vmov.16 q0[3], r4
+; CHECKFP16-NEXT:    vmov.f32 s2, s27
+; CHECKFP16-NEXT:    vstrw.32 q2, [sp, #16] @ 16-byte Spill
 ; CHECKFP16-NEXT:    vmov.u16 r0, q0[0]
+; CHECKFP16-NEXT:    vmov q4, q0
 ; CHECKFP16-NEXT:    vstrw.32 q0, [sp] @ 16-byte Spill
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[1]
-; CHECKFP16-NEXT:    vmov.16 q4[0], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[4]
-; CHECKFP16-NEXT:    vmov.16 q4[1], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[7]
-; CHECKFP16-NEXT:    vmov.16 q4[2], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q5[2]
-; CHECKFP16-NEXT:    vmov.16 q4[3], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q5[5]
-; CHECKFP16-NEXT:    vmov.16 q4[4], r0
+; CHECKFP16-NEXT:    mov r5, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[1]
+; CHECKFP16-NEXT:    vmov.16 q5[0], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[4]
+; CHECKFP16-NEXT:    vmov.16 q5[1], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[7]
+; CHECKFP16-NEXT:    vmov.16 q5[2], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q6[2]
+; CHECKFP16-NEXT:    vmov.16 q5[3], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q6[5]
+; CHECKFP16-NEXT:    vmov.u16 r7, q7[0]
+; CHECKFP16-NEXT:    vmov.16 q5[4], r0
 ; CHECKFP16-NEXT:    mov r0, r7
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[0]
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r0
+; CHECKFP16-NEXT:    mov r0, r6
+; CHECKFP16-NEXT:    bl __aeabi_fadd
+; CHECKFP16-NEXT:    bl __aeabi_f2h
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r5
+; CHECKFP16-NEXT:    bl __aeabi_fadd
+; CHECKFP16-NEXT:    bl __aeabi_f2h
+; CHECKFP16-NEXT:    vmov.16 q0[0], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q4[1]
+; CHECKFP16-NEXT:    vstrw.32 q0, [sp, #32] @ 16-byte Spill
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.16 q4[0], r7
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[3]
+; CHECKFP16-NEXT:    vmov.u16 r5, q6[4]
+; CHECKFP16-NEXT:    vmov.16 q4[1], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[6]
+; CHECKFP16-NEXT:    vmov.16 q4[2], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q6[1]
+; CHECKFP16-NEXT:    vmov.16 q4[3], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q6[7]
+; CHECKFP16-NEXT:    vmov.16 q4[4], r5
+; CHECKFP16-NEXT:    vmov.16 q4[5], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[1]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r7, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q4[0]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r0
-; CHECKFP16-NEXT:    mov r0, r7
-; CHECKFP16-NEXT:    bl __aeabi_fadd
-; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r4
-; CHECKFP16-NEXT:    bl __aeabi_fadd
-; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    mov r0, r5
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    vldrw.u32 q0, [sp, #48] @ 16-byte Reload
-; CHECKFP16-NEXT:    mov r5, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q0[0]
-; CHECKFP16-NEXT:    vmov.16 q1[5], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q0[3]
-; CHECKFP16-NEXT:    vmov.16 q1[6], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q0[6]
-; CHECKFP16-NEXT:    vmov.16 q1[7], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q1[6]
-; CHECKFP16-NEXT:    vstrw.32 q1, [sp, #16] @ 16-byte Spill
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r0
-; CHECKFP16-NEXT:    mov r0, r5
-; CHECKFP16-NEXT:    bl __aeabi_fadd
-; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vldrw.u32 q6, [sp] @ 16-byte Reload
-; CHECKFP16-NEXT:    mov r5, r0
-; CHECKFP16-NEXT:    vmov.16 q5[0], r4
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[1]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r4, r0
 ; CHECKFP16-NEXT:    vmov.u16 r0, q4[1]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r7, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q7[1]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r7
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r4
+; CHECKFP16-NEXT:    mov r1, r6
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vmov.16 q5[1], r0
+; CHECKFP16-NEXT:    vldrw.u32 q7, [sp, #32] @ 16-byte Reload
+; CHECKFP16-NEXT:    vldrw.u32 q6, [sp] @ 16-byte Reload
+; CHECKFP16-NEXT:    vmov.16 q7[1], r0
 ; CHECKFP16-NEXT:    vmov.u16 r0, q6[2]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q4[2]
+; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[2]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r7, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q7[2]
+; CHECKFP16-NEXT:    vmov.u16 r0, q4[2]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r7
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r4
+; CHECKFP16-NEXT:    mov r1, r6
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vmov.16 q5[2], r0
+; CHECKFP16-NEXT:    vmov.16 q7[2], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[3]
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r6, r0
 ; CHECKFP16-NEXT:    vmov.u16 r0, q4[3]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q7[3]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r4
+; CHECKFP16-NEXT:    mov r1, r6
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    mov r0, r6
-; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r6, r0
 ; CHECKFP16-NEXT:    mov r0, r4
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r6
+; CHECKFP16-NEXT:    mov r4, r0
+; CHECKFP16-NEXT:    mov r0, r6
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r4
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vmov.16 q5[3], r0
+; CHECKFP16-NEXT:    vmov.16 q7[3], r0
 ; CHECKFP16-NEXT:    vmov.u16 r0, q6[4]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r4, r0
-; CHECKFP16-NEXT:    mov r0, r8
+; CHECKFP16-NEXT:    mov r0, r5
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r6, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q4[4]
+; CHECKFP16-NEXT:    mov r5, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[4]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r0
-; CHECKFP16-NEXT:    mov r0, r6
+; CHECKFP16-NEXT:    mov r0, r5
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r4
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vldrw.u32 q0, [sp, #48] @ 16-byte Reload
-; CHECKFP16-NEXT:    vmov.16 q5[4], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q0[4]
-; CHECKFP16-NEXT:    vmov.u16 r4, q0[7]
-; CHECKFP16-NEXT:    vmov.16 q4[6], r0
-; CHECKFP16-NEXT:    vmov.16 q4[7], r4
-; CHECKFP16-NEXT:    vmov.f32 s18, s0
-; CHECKFP16-NEXT:    vmov.u16 r0, q4[5]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    vldrw.u32 q6, [sp, #16] @ 16-byte Reload
-; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.16 q7[4], r0
+; CHECKFP16-NEXT:    vstrw.32 q7, [sp, #32] @ 16-byte Spill
+; CHECKFP16-NEXT:    vldrw.u32 q7, [sp, #16] @ 16-byte Reload
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[4]
+; CHECKFP16-NEXT:    vmov.u16 r4, q7[7]
+; CHECKFP16-NEXT:    vmov.16 q6[6], r0
+; CHECKFP16-NEXT:    vmov.16 q6[7], r4
+; CHECKFP16-NEXT:    vmov.f32 s26, s28
 ; CHECKFP16-NEXT:    vmov.u16 r0, q6[5]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r7, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q7[5]
+; CHECKFP16-NEXT:    mov r5, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[0]
+; CHECKFP16-NEXT:    vmov.16 q5[5], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[3]
+; CHECKFP16-NEXT:    vmov.16 q5[6], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[6]
+; CHECKFP16-NEXT:    vmov.16 q5[7], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[5]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r7
-; CHECKFP16-NEXT:    bl __aeabi_fadd
-; CHECKFP16-NEXT:    bl __aeabi_f2h
+; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q4[5]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r6
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vmov.16 q5[5], r0
-; CHECKFP16-NEXT:    mov r0, r5
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r5, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q4[6]
-; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r0
-; CHECKFP16-NEXT:    mov r0, r5
+; CHECKFP16-NEXT:    mov r1, r5
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
 ; CHECKFP16-NEXT:    vldrw.u32 q0, [sp, #32] @ 16-byte Reload
-; CHECKFP16-NEXT:    vmov.16 q5[6], r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q0[7]
+; CHECKFP16-NEXT:    vmov.16 q0[5], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q6[6]
+; CHECKFP16-NEXT:    vstrw.32 q0, [sp, #32] @ 16-byte Spill
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r5, r0
-; CHECKFP16-NEXT:    vmov.u16 r0, q6[7]
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[2]
+; CHECKFP16-NEXT:    vmov.16 q4[6], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q7[5]
+; CHECKFP16-NEXT:    vmov.16 q4[7], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q4[6]
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r6, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[6]
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r0
+; CHECKFP16-NEXT:    mov r0, r6
+; CHECKFP16-NEXT:    bl __aeabi_fadd
+; CHECKFP16-NEXT:    bl __aeabi_f2h
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r5
+; CHECKFP16-NEXT:    bl __aeabi_fadd
+; CHECKFP16-NEXT:    bl __aeabi_f2h
+; CHECKFP16-NEXT:    vldrw.u32 q6, [sp, #32] @ 16-byte Reload
+; CHECKFP16-NEXT:    vmov.16 q6[6], r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q4[7]
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r5, r0
+; CHECKFP16-NEXT:    vmov.u16 r0, q5[7]
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r1, r0
 ; CHECKFP16-NEXT:    mov r0, r5
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    bl __aeabi_h2f
 ; CHECKFP16-NEXT:    mov r5, r0
 ; CHECKFP16-NEXT:    mov r0, r4
 ; CHECKFP16-NEXT:    bl __aeabi_h2f
-; CHECKFP16-NEXT:    mov r1, r0
+; CHECKFP16-NEXT:    mov r4, r0
 ; CHECKFP16-NEXT:    mov r0, r5
+; CHECKFP16-NEXT:    bl __aeabi_h2f
+; CHECKFP16-NEXT:    mov r1, r4
 ; CHECKFP16-NEXT:    bl __aeabi_fadd
 ; CHECKFP16-NEXT:    bl __aeabi_f2h
-; CHECKFP16-NEXT:    vmov.16 q5[7], r0
-; CHECKFP16-NEXT:    vmov q0, q5
-; CHECKFP16-NEXT:    add sp, #64
+; CHECKFP16-NEXT:    vmov q0, q6
+; CHECKFP16-NEXT:    vmov.16 q0[7], r0
+; CHECKFP16-NEXT:    add sp, #48
 ; CHECKFP16-NEXT:    vpop {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECKFP16-NEXT:    pop.w {r4, r5, r6, r7, r8, pc}
+; CHECKFP16-NEXT:    add sp, #4
+; CHECKFP16-NEXT:    pop {r4, r5, r6, r7, pc}
 ;
 ; CHECKFP-LABEL: shuffle3step_f16:
 ; CHECKFP:       @ %bb.0: @ %entry

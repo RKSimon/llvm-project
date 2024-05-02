@@ -347,9 +347,9 @@ define <8 x i16> @sdiv_v8i16(<8 x i16> %op1, <8 x i16> %op2) #0 {
 define void @sdiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: sdiv_v16i16:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    ldp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ptrue p0.s, vl4
-; VBITS_GE_128-NEXT:    ldr q3, [x1, #16]
+; VBITS_GE_128-NEXT:    ldr q3, [x1]
 ; VBITS_GE_128-NEXT:    cmeq v2.8h, v0.8h, #0
 ; VBITS_GE_128-NEXT:    cmeq v5.8h, v1.8h, #0
 ; VBITS_GE_128-NEXT:    bic v3.16b, v3.16b, v2.16b
@@ -359,7 +359,7 @@ define void @sdiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-NEXT:    sshll2 v4.4s, v2.8h, #0
 ; VBITS_GE_128-NEXT:    sshll v2.4s, v2.4h, #0
 ; VBITS_GE_128-NEXT:    sdiv z3.s, p0/m, z3.s, z4.s
-; VBITS_GE_128-NEXT:    ldr q4, [x1]
+; VBITS_GE_128-NEXT:    ldr q4, [x1, #16]
 ; VBITS_GE_128-NEXT:    bic v4.16b, v4.16b, v5.16b
 ; VBITS_GE_128-NEXT:    sub v4.8h, v4.8h, v5.8h
 ; VBITS_GE_128-NEXT:    sshll2 v5.4s, v1.8h, #0
@@ -371,7 +371,7 @@ define void @sdiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-NEXT:    sdiv z0.s, p0/m, z0.s, z2.s
 ; VBITS_GE_128-NEXT:    uzp1 v1.8h, v1.8h, v5.8h
 ; VBITS_GE_128-NEXT:    uzp1 v0.8h, v0.8h, v3.8h
-; VBITS_GE_128-NEXT:    stp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    stp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: sdiv_v16i16:
@@ -551,44 +551,44 @@ define void @sdiv_v8i32(ptr %a, ptr %b) vscale_range(2,0) #0 {
 define void @sdiv_v16i32(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: sdiv_v16i32:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    ldp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ptrue p0.s, vl4
-; VBITS_GE_128-NEXT:    cmeq v2.4s, v0.4s, #0
-; VBITS_GE_128-NEXT:    cmeq v3.4s, v1.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v2.4s, v1.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v3.4s, v0.4s, #0
 ; VBITS_GE_128-NEXT:    uzp1 v2.8h, v3.8h, v2.8h
-; VBITS_GE_128-NEXT:    ldp q3, q4, [x0, #32]
-; VBITS_GE_128-NEXT:    cmeq v5.4s, v4.4s, #0
-; VBITS_GE_128-NEXT:    cmeq v6.4s, v3.4s, #0
+; VBITS_GE_128-NEXT:    ldp q4, q3, [x0, #32]
+; VBITS_GE_128-NEXT:    cmeq v5.4s, v3.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v6.4s, v4.4s, #0
 ; VBITS_GE_128-NEXT:    mvn v2.16b, v2.16b
 ; VBITS_GE_128-NEXT:    uzp1 v5.8h, v6.8h, v5.8h
 ; VBITS_GE_128-NEXT:    xtn v2.8b, v2.8h
 ; VBITS_GE_128-NEXT:    mvn v5.16b, v5.16b
-; VBITS_GE_128-NEXT:    zip1 v7.8b, v2.8b, v0.8b
-; VBITS_GE_128-NEXT:    zip2 v2.8b, v2.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip2 v7.8b, v2.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip1 v2.8b, v2.8b, v0.8b
 ; VBITS_GE_128-NEXT:    xtn v5.8b, v5.8h
 ; VBITS_GE_128-NEXT:    ushll v6.4s, v7.4h, #0
-; VBITS_GE_128-NEXT:    ldp q7, q16, [x1]
+; VBITS_GE_128-NEXT:    ldp q16, q7, [x1]
 ; VBITS_GE_128-NEXT:    ushll v2.4s, v2.4h, #0
 ; VBITS_GE_128-NEXT:    shl v6.4s, v6.4s, #31
 ; VBITS_GE_128-NEXT:    shl v2.4s, v2.4s, #31
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z6.s, #0
-; VBITS_GE_128-NEXT:    zip2 v6.8b, v5.8b, v0.8b
-; VBITS_GE_128-NEXT:    zip1 v5.8b, v5.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip1 v6.8b, v5.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip2 v5.8b, v5.8b, v0.8b
 ; VBITS_GE_128-NEXT:    ushll v6.4s, v6.4h, #0
 ; VBITS_GE_128-NEXT:    ushll v5.4s, v5.4h, #0
 ; VBITS_GE_128-NEXT:    sdiv z1.s, p1/m, z1.s, z7.s
 ; VBITS_GE_128-NEXT:    shl v6.4s, v6.4s, #31
 ; VBITS_GE_128-NEXT:    shl v5.4s, v5.4s, #31
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z6.s, #0
-; VBITS_GE_128-NEXT:    ldr q6, [x1, #48]
+; VBITS_GE_128-NEXT:    ldr q6, [x1, #32]
 ; VBITS_GE_128-NEXT:    sdiv z4.s, p1/m, z4.s, z6.s
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z5.s, #0
-; VBITS_GE_128-NEXT:    ldr q5, [x1, #32]
+; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
 ; VBITS_GE_128-NEXT:    sdiv z3.s, p1/m, z3.s, z5.s
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z2.s, #0
 ; VBITS_GE_128-NEXT:    sdiv z0.s, p1/m, z0.s, z16.s
-; VBITS_GE_128-NEXT:    stp q3, q4, [x0, #32]
-; VBITS_GE_128-NEXT:    stp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    stp q4, q3, [x0, #32]
+; VBITS_GE_128-NEXT:    stp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: sdiv_v16i32:
@@ -716,47 +716,47 @@ define void @sdiv_v4i64(ptr %a, ptr %b) vscale_range(2,0) #0 {
 define void @sdiv_v8i64(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: sdiv_v8i64:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q2, [x0, #32]
+; VBITS_GE_128-NEXT:    ldp q2, q0, [x0, #32]
 ; VBITS_GE_128-NEXT:    ptrue p0.d, vl2
-; VBITS_GE_128-NEXT:    ldp q3, q0, [x0]
-; VBITS_GE_128-NEXT:    cmeq v4.2d, v2.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v5.2d, v1.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v6.2d, v0.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v7.2d, v3.2d, #0
+; VBITS_GE_128-NEXT:    ldp q1, q3, [x0]
+; VBITS_GE_128-NEXT:    cmeq v4.2d, v0.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v5.2d, v2.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v6.2d, v3.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v7.2d, v1.2d, #0
 ; VBITS_GE_128-NEXT:    uzp1 v4.4s, v5.4s, v4.4s
 ; VBITS_GE_128-NEXT:    uzp1 v5.4s, v7.4s, v6.4s
 ; VBITS_GE_128-NEXT:    uzp1 v4.8h, v5.8h, v4.8h
 ; VBITS_GE_128-NEXT:    mvn v4.16b, v4.16b
 ; VBITS_GE_128-NEXT:    xtn v4.8b, v4.8h
-; VBITS_GE_128-NEXT:    mov b5, v4.b[0]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[1]
+; VBITS_GE_128-NEXT:    mov b5, v4.b[2]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[3]
 ; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
-; VBITS_GE_128-NEXT:    ldp q5, q6, [x1]
+; VBITS_GE_128-NEXT:    ldp q6, q5, [x1]
 ; VBITS_GE_128-NEXT:    sdiv z3.d, p1/m, z3.d, z5.d
-; VBITS_GE_128-NEXT:    mov b5, v4.b[6]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[7]
-; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
-; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
-; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
-; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
-; VBITS_GE_128-NEXT:    sdiv z2.d, p1/m, z2.d, z5.d
 ; VBITS_GE_128-NEXT:    mov b5, v4.b[4]
 ; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[5]
 ; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
 ; VBITS_GE_128-NEXT:    ldr q5, [x1, #32]
-; VBITS_GE_128-NEXT:    sdiv z1.d, p1/m, z1.d, z5.d
-; VBITS_GE_128-NEXT:    mov b5, v4.b[2]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[3]
+; VBITS_GE_128-NEXT:    sdiv z2.d, p1/m, z2.d, z5.d
+; VBITS_GE_128-NEXT:    mov b5, v4.b[6]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[7]
+; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
+; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
+; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
+; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
+; VBITS_GE_128-NEXT:    sdiv z0.d, p1/m, z0.d, z5.d
+; VBITS_GE_128-NEXT:    mov b5, v4.b[0]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[1]
 ; VBITS_GE_128-NEXT:    ushll v4.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v4.2d, v4.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z4.d, #0
-; VBITS_GE_128-NEXT:    sdiv z0.d, p1/m, z0.d, z6.d
-; VBITS_GE_128-NEXT:    stp q1, q2, [x0, #32]
-; VBITS_GE_128-NEXT:    stp q3, q0, [x0]
+; VBITS_GE_128-NEXT:    sdiv z1.d, p1/m, z1.d, z6.d
+; VBITS_GE_128-NEXT:    stp q2, q0, [x0, #32]
+; VBITS_GE_128-NEXT:    stp q1, q3, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: sdiv_v8i64:
@@ -1189,9 +1189,9 @@ define <8 x i16> @udiv_v8i16(<8 x i16> %op1, <8 x i16> %op2) #0 {
 define void @udiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: udiv_v16i16:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    ldp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ptrue p0.s, vl4
-; VBITS_GE_128-NEXT:    ldr q3, [x1, #16]
+; VBITS_GE_128-NEXT:    ldr q3, [x1]
 ; VBITS_GE_128-NEXT:    cmeq v2.8h, v0.8h, #0
 ; VBITS_GE_128-NEXT:    cmeq v5.8h, v1.8h, #0
 ; VBITS_GE_128-NEXT:    bic v3.16b, v3.16b, v2.16b
@@ -1201,7 +1201,7 @@ define void @udiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-NEXT:    ushll2 v4.4s, v2.8h, #0
 ; VBITS_GE_128-NEXT:    ushll v2.4s, v2.4h, #0
 ; VBITS_GE_128-NEXT:    udiv z3.s, p0/m, z3.s, z4.s
-; VBITS_GE_128-NEXT:    ldr q4, [x1]
+; VBITS_GE_128-NEXT:    ldr q4, [x1, #16]
 ; VBITS_GE_128-NEXT:    bic v4.16b, v4.16b, v5.16b
 ; VBITS_GE_128-NEXT:    sub v4.8h, v4.8h, v5.8h
 ; VBITS_GE_128-NEXT:    ushll2 v5.4s, v1.8h, #0
@@ -1213,7 +1213,7 @@ define void @udiv_v16i16(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-NEXT:    udiv z0.s, p0/m, z0.s, z2.s
 ; VBITS_GE_128-NEXT:    uzp1 v1.8h, v1.8h, v5.8h
 ; VBITS_GE_128-NEXT:    uzp1 v0.8h, v0.8h, v3.8h
-; VBITS_GE_128-NEXT:    stp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    stp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: udiv_v16i16:
@@ -1393,44 +1393,44 @@ define void @udiv_v8i32(ptr %a, ptr %b) vscale_range(2,0) #0 {
 define void @udiv_v16i32(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: udiv_v16i32:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    ldp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ptrue p0.s, vl4
-; VBITS_GE_128-NEXT:    cmeq v2.4s, v0.4s, #0
-; VBITS_GE_128-NEXT:    cmeq v3.4s, v1.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v2.4s, v1.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v3.4s, v0.4s, #0
 ; VBITS_GE_128-NEXT:    uzp1 v2.8h, v3.8h, v2.8h
-; VBITS_GE_128-NEXT:    ldp q3, q4, [x0, #32]
-; VBITS_GE_128-NEXT:    cmeq v5.4s, v4.4s, #0
-; VBITS_GE_128-NEXT:    cmeq v6.4s, v3.4s, #0
+; VBITS_GE_128-NEXT:    ldp q4, q3, [x0, #32]
+; VBITS_GE_128-NEXT:    cmeq v5.4s, v3.4s, #0
+; VBITS_GE_128-NEXT:    cmeq v6.4s, v4.4s, #0
 ; VBITS_GE_128-NEXT:    mvn v2.16b, v2.16b
 ; VBITS_GE_128-NEXT:    uzp1 v5.8h, v6.8h, v5.8h
 ; VBITS_GE_128-NEXT:    xtn v2.8b, v2.8h
 ; VBITS_GE_128-NEXT:    mvn v5.16b, v5.16b
-; VBITS_GE_128-NEXT:    zip1 v7.8b, v2.8b, v0.8b
-; VBITS_GE_128-NEXT:    zip2 v2.8b, v2.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip2 v7.8b, v2.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip1 v2.8b, v2.8b, v0.8b
 ; VBITS_GE_128-NEXT:    xtn v5.8b, v5.8h
 ; VBITS_GE_128-NEXT:    ushll v6.4s, v7.4h, #0
-; VBITS_GE_128-NEXT:    ldp q7, q16, [x1]
+; VBITS_GE_128-NEXT:    ldp q16, q7, [x1]
 ; VBITS_GE_128-NEXT:    ushll v2.4s, v2.4h, #0
 ; VBITS_GE_128-NEXT:    shl v6.4s, v6.4s, #31
 ; VBITS_GE_128-NEXT:    shl v2.4s, v2.4s, #31
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z6.s, #0
-; VBITS_GE_128-NEXT:    zip2 v6.8b, v5.8b, v0.8b
-; VBITS_GE_128-NEXT:    zip1 v5.8b, v5.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip1 v6.8b, v5.8b, v0.8b
+; VBITS_GE_128-NEXT:    zip2 v5.8b, v5.8b, v0.8b
 ; VBITS_GE_128-NEXT:    ushll v6.4s, v6.4h, #0
 ; VBITS_GE_128-NEXT:    ushll v5.4s, v5.4h, #0
 ; VBITS_GE_128-NEXT:    udiv z1.s, p1/m, z1.s, z7.s
 ; VBITS_GE_128-NEXT:    shl v6.4s, v6.4s, #31
 ; VBITS_GE_128-NEXT:    shl v5.4s, v5.4s, #31
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z6.s, #0
-; VBITS_GE_128-NEXT:    ldr q6, [x1, #48]
+; VBITS_GE_128-NEXT:    ldr q6, [x1, #32]
 ; VBITS_GE_128-NEXT:    udiv z4.s, p1/m, z4.s, z6.s
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z5.s, #0
-; VBITS_GE_128-NEXT:    ldr q5, [x1, #32]
+; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
 ; VBITS_GE_128-NEXT:    udiv z3.s, p1/m, z3.s, z5.s
 ; VBITS_GE_128-NEXT:    cmpne p1.s, p0/z, z2.s, #0
 ; VBITS_GE_128-NEXT:    udiv z0.s, p1/m, z0.s, z16.s
-; VBITS_GE_128-NEXT:    stp q3, q4, [x0, #32]
-; VBITS_GE_128-NEXT:    stp q1, q0, [x0]
+; VBITS_GE_128-NEXT:    stp q4, q3, [x0, #32]
+; VBITS_GE_128-NEXT:    stp q0, q1, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: udiv_v16i32:
@@ -1558,47 +1558,47 @@ define void @udiv_v4i64(ptr %a, ptr %b) vscale_range(2,0) #0 {
 define void @udiv_v8i64(ptr %a, ptr %b) #0 {
 ; VBITS_GE_128-LABEL: udiv_v8i64:
 ; VBITS_GE_128:       // %bb.0:
-; VBITS_GE_128-NEXT:    ldp q1, q2, [x0, #32]
+; VBITS_GE_128-NEXT:    ldp q2, q0, [x0, #32]
 ; VBITS_GE_128-NEXT:    ptrue p0.d, vl2
-; VBITS_GE_128-NEXT:    ldp q3, q0, [x0]
-; VBITS_GE_128-NEXT:    cmeq v4.2d, v2.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v5.2d, v1.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v6.2d, v0.2d, #0
-; VBITS_GE_128-NEXT:    cmeq v7.2d, v3.2d, #0
+; VBITS_GE_128-NEXT:    ldp q1, q3, [x0]
+; VBITS_GE_128-NEXT:    cmeq v4.2d, v0.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v5.2d, v2.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v6.2d, v3.2d, #0
+; VBITS_GE_128-NEXT:    cmeq v7.2d, v1.2d, #0
 ; VBITS_GE_128-NEXT:    uzp1 v4.4s, v5.4s, v4.4s
 ; VBITS_GE_128-NEXT:    uzp1 v5.4s, v7.4s, v6.4s
 ; VBITS_GE_128-NEXT:    uzp1 v4.8h, v5.8h, v4.8h
 ; VBITS_GE_128-NEXT:    mvn v4.16b, v4.16b
 ; VBITS_GE_128-NEXT:    xtn v4.8b, v4.8h
-; VBITS_GE_128-NEXT:    mov b5, v4.b[0]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[1]
+; VBITS_GE_128-NEXT:    mov b5, v4.b[2]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[3]
 ; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
-; VBITS_GE_128-NEXT:    ldp q5, q6, [x1]
+; VBITS_GE_128-NEXT:    ldp q6, q5, [x1]
 ; VBITS_GE_128-NEXT:    udiv z3.d, p1/m, z3.d, z5.d
-; VBITS_GE_128-NEXT:    mov b5, v4.b[6]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[7]
-; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
-; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
-; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
-; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
-; VBITS_GE_128-NEXT:    udiv z2.d, p1/m, z2.d, z5.d
 ; VBITS_GE_128-NEXT:    mov b5, v4.b[4]
 ; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[5]
 ; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
 ; VBITS_GE_128-NEXT:    ldr q5, [x1, #32]
-; VBITS_GE_128-NEXT:    udiv z1.d, p1/m, z1.d, z5.d
-; VBITS_GE_128-NEXT:    mov b5, v4.b[2]
-; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[3]
+; VBITS_GE_128-NEXT:    udiv z2.d, p1/m, z2.d, z5.d
+; VBITS_GE_128-NEXT:    mov b5, v4.b[6]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[7]
+; VBITS_GE_128-NEXT:    ushll v5.2d, v5.2s, #0
+; VBITS_GE_128-NEXT:    shl v5.2d, v5.2d, #63
+; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z5.d, #0
+; VBITS_GE_128-NEXT:    ldr q5, [x1, #48]
+; VBITS_GE_128-NEXT:    udiv z0.d, p1/m, z0.d, z5.d
+; VBITS_GE_128-NEXT:    mov b5, v4.b[0]
+; VBITS_GE_128-NEXT:    mov v5.b[4], v4.b[1]
 ; VBITS_GE_128-NEXT:    ushll v4.2d, v5.2s, #0
 ; VBITS_GE_128-NEXT:    shl v4.2d, v4.2d, #63
 ; VBITS_GE_128-NEXT:    cmpne p1.d, p0/z, z4.d, #0
-; VBITS_GE_128-NEXT:    udiv z0.d, p1/m, z0.d, z6.d
-; VBITS_GE_128-NEXT:    stp q1, q2, [x0, #32]
-; VBITS_GE_128-NEXT:    stp q3, q0, [x0]
+; VBITS_GE_128-NEXT:    udiv z1.d, p1/m, z1.d, z6.d
+; VBITS_GE_128-NEXT:    stp q2, q0, [x0, #32]
+; VBITS_GE_128-NEXT:    stp q1, q3, [x0]
 ; VBITS_GE_128-NEXT:    ret
 ;
 ; VBITS_GE_256-LABEL: udiv_v8i64:

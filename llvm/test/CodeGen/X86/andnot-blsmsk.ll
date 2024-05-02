@@ -194,14 +194,21 @@ define i16 @fold_and_xor_neg_v1_16_negative(i16 %x, i16 %y) nounwind {
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
 ; X86-NEXT:    retl
 ;
-; X64-LABEL: fold_and_xor_neg_v1_16_negative:
-; X64:       # %bb.0:
-; X64-NEXT:    movl %edi, %eax
-; X64-NEXT:    negl %eax
-; X64-NEXT:    xorl %edi, %eax
-; X64-NEXT:    andl %esi, %eax
-; X64-NEXT:    # kill: def $ax killed $ax killed $eax
-; X64-NEXT:    retq
+; X64-NOBMI-LABEL: fold_and_xor_neg_v1_16_negative:
+; X64-NOBMI:       # %bb.0:
+; X64-NOBMI-NEXT:    movl %edi, %eax
+; X64-NOBMI-NEXT:    negl %eax
+; X64-NOBMI-NEXT:    xorl %edi, %eax
+; X64-NOBMI-NEXT:    andl %esi, %eax
+; X64-NOBMI-NEXT:    # kill: def $ax killed $ax killed $eax
+; X64-NOBMI-NEXT:    retq
+;
+; X64-BMI-LABEL: fold_and_xor_neg_v1_16_negative:
+; X64-BMI:       # %bb.0:
+; X64-BMI-NEXT:    blsmskl %edi, %eax
+; X64-BMI-NEXT:    andnl %esi, %eax, %eax
+; X64-BMI-NEXT:    # kill: def $ax killed $ax killed $eax
+; X64-BMI-NEXT:    retq
   %neg = sub i16 0, %x
   %xor = xor i16 %x, %neg
   %and = and i16 %xor, %y

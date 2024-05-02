@@ -15,11 +15,11 @@ define { half, half } @test_modf_f16(half %x) {
 ; GFX9-SDAG-LABEL: test_modf_f16:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7c00
+; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v2, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s4
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
 ; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7fff
 ; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s4, v2, v0
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
@@ -44,11 +44,11 @@ define half @test_modf_f16_only_use_fract(half %x) {
 ; GFX9-SDAG-LABEL: test_modf_f16_only_use_fract:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7c00
+; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v1, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s4
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v1, v1, 0, s[4:5]
 ; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7fff
 ; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s4, v1, v0
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
@@ -85,19 +85,19 @@ define { <2 x half>, <2 x half> } @test_modf_v2f16(<2 x half> %x) {
 ; GFX9-SDAG-LABEL: test_modf_v2f16:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7c00
+; GFX9-SDAG-NEXT:    s_movk_i32 s6, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v2, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; GFX9-SDAG-NEXT:    s_movk_i32 s5, 0x7fff
-; GFX9-SDAG-NEXT:    v_bfi_b32 v2, s5, v2, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; GFX9-SDAG-NEXT:    s_movk_i32 s7, 0x7fff
+; GFX9-SDAG-NEXT:    v_bfi_b32 v2, s7, v2, v0
 ; GFX9-SDAG-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v3, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v4, v0, v3
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v4, 0, v4, vcc
-; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s5, v4, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v4, v4, 0, s[4:5]
+; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s7, v4, v0
 ; GFX9-SDAG-NEXT:    v_pack_b32_f16 v0, v2, v0
 ; GFX9-SDAG-NEXT:    v_pack_b32_f16 v1, v1, v3
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
@@ -133,19 +133,19 @@ define <2 x half> @test_modf_v2f16_only_use_fract(<2 x half> %x) {
 ; GFX9-SDAG-LABEL: test_modf_v2f16_only_use_fract:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x7c00
+; GFX9-SDAG-NEXT:    s_movk_i32 s6, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v1, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
-; GFX9-SDAG-NEXT:    s_movk_i32 s5, 0x7fff
-; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s5, v1, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v1, v1, 0, s[4:5]
+; GFX9-SDAG-NEXT:    s_movk_i32 s7, 0x7fff
+; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s7, v1, v0
 ; GFX9-SDAG-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
 ; GFX9-SDAG-NEXT:    v_trunc_f16_e32 v2, v0
 ; GFX9-SDAG-NEXT:    v_sub_f16_e32 v2, v0, v2
-; GFX9-SDAG-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s5, v2, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s7, v2, v0
 ; GFX9-SDAG-NEXT:    v_pack_b32_f16 v0, v1, v0
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -201,11 +201,11 @@ define { float, float } @test_modf_f32(float %x) {
 ; GFX9-SDAG-LABEL: test_modf_f32:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v2, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
 ; GFX9-SDAG-NEXT:    s_brev_b32 s4, -2
 ; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s4, v2, v0
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
@@ -230,11 +230,11 @@ define float @test_modf_f32_only_use_fract(float %x) {
 ; GFX9-SDAG-LABEL: test_modf_f32_only_use_fract:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX9-SDAG-NEXT:    s_movk_i32 s4, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v1, v0
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v1, v0, v1
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v1, v1, 0, s[4:5]
 ; GFX9-SDAG-NEXT:    s_brev_b32 s4, -2
 ; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s4, v1, v0
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
@@ -271,18 +271,18 @@ define { <2 x float>, <2 x float> } @test_modf_v2f32(<2 x float> %x) {
 ; GFX9-SDAG-LABEL: test_modf_v2f32:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX9-SDAG-NEXT:    s_movk_i32 s6, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v2, v0
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v3, v0, v2
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v3, 0, v3, vcc
-; GFX9-SDAG-NEXT:    s_brev_b32 s5, -2
-; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s5, v3, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v3, v3, 0, s[4:5]
+; GFX9-SDAG-NEXT:    s_brev_b32 s7, -2
+; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s7, v3, v0
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v3, v1
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v4, v1, v3
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v1|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v4, 0, v4, vcc
-; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s5, v4, v1
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v1, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v4, v4, 0, s[4:5]
+; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s7, v4, v1
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-GISEL-LABEL: test_modf_v2f32:
@@ -311,18 +311,18 @@ define <2 x float> @test_modf_v2f32_only_use_fract(<2 x float> %x) {
 ; GFX9-SDAG-LABEL: test_modf_v2f32_only_use_fract:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX9-SDAG-NEXT:    s_movk_i32 s6, 0x204
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v2, v0
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v2, v0, v2
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; GFX9-SDAG-NEXT:    s_brev_b32 s5, -2
-; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s5, v2, v0
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; GFX9-SDAG-NEXT:    s_brev_b32 s7, -2
+; GFX9-SDAG-NEXT:    v_bfi_b32 v0, s7, v2, v0
 ; GFX9-SDAG-NEXT:    v_trunc_f32_e32 v2, v1
 ; GFX9-SDAG-NEXT:    v_sub_f32_e32 v2, v1, v2
-; GFX9-SDAG-NEXT:    v_cmp_neq_f32_e64 vcc, |v1|, s4
-; GFX9-SDAG-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s5, v2, v1
+; GFX9-SDAG-NEXT:    v_cmp_class_f32_e64 s[4:5], v1, s6
+; GFX9-SDAG-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; GFX9-SDAG-NEXT:    v_bfi_b32 v1, s7, v2, v1
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-GISEL-LABEL: test_modf_v2f32_only_use_fract:

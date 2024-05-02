@@ -198,14 +198,14 @@ define double @vararg(i32 %a, ...) {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    addi 3, 1, 55
 ; CHECK-NEXT:    std 4, 40(1)
-; CHECK-NEXT:    std 5, 48(1)
-; CHECK-NEXT:    std 6, 56(1)
-; CHECK-NEXT:    rldicr 3, 3, 0, 59
-; CHECK-NEXT:    std 7, 64(1)
-; CHECK-NEXT:    std 8, 72(1)
-; CHECK-NEXT:    std 9, 80(1)
-; CHECK-NEXT:    ori 4, 3, 8
 ; CHECK-NEXT:    std 10, 88(1)
+; CHECK-NEXT:    std 9, 80(1)
+; CHECK-NEXT:    rldicr 3, 3, 0, 59
+; CHECK-NEXT:    std 8, 72(1)
+; CHECK-NEXT:    std 7, 64(1)
+; CHECK-NEXT:    std 6, 56(1)
+; CHECK-NEXT:    ori 4, 3, 8
+; CHECK-NEXT:    std 5, 48(1)
 ; CHECK-NEXT:    std 4, -8(1)
 ; CHECK-NEXT:    lfd 1, 0(3)
 ; CHECK-NEXT:    addi 3, 3, 16

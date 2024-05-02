@@ -10,7 +10,7 @@ define i32 @f(i32 %x) nounwind {
 ; CHECK-NEXT:    sd ra, 8(sp) # 8-byte Folded Spill
 ; CHECK-NEXT:    sd s0, 0(sp) # 8-byte Folded Spill
 ; CHECK-NEXT:    mv s0, a0
-; CHECK-NEXT:    negw a0, a0
+; CHECK-NEXT:    li a0, 0
 ; CHECK-NEXT:    call use
 ; CHECK-NEXT:    li a0, 4
 ; CHECK-NEXT:    subw a0, a0, s0

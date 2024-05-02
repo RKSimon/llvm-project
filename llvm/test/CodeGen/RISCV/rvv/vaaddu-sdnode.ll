@@ -37,9 +37,13 @@ define <vscale x 8 x i8> @vaaddu_vx_nxv8i8_floor(<vscale x 8 x i8> %x, i8 %y) {
 define <vscale x 8 x i8> @vaaddu_vv_nxv8i8_floor_sexti16(<vscale x 8 x i8> %x, <vscale x 8 x i8> %y) {
 ; CHECK-LABEL: vaaddu_vv_nxv8i8_floor_sexti16:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    vsetvli a0, zero, e16, m2, ta, ma
+; CHECK-NEXT:    vsext.vf2 v10, v8
+; CHECK-NEXT:    vsext.vf2 v12, v9
 ; CHECK-NEXT:    csrwi vxrm, 2
-; CHECK-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; CHECK-NEXT:    vaadd.vv v8, v8, v9
+; CHECK-NEXT:    vaaddu.vv v10, v10, v12
+; CHECK-NEXT:    vsetvli zero, zero, e8, m1, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v10, 0
 ; CHECK-NEXT:    ret
   %xzv = sext <vscale x 8 x i8> %x to <vscale x 8 x i16>
   %yzv = sext <vscale x 8 x i8> %y to <vscale x 8 x i16>
@@ -52,9 +56,9 @@ define <vscale x 8 x i8> @vaaddu_vv_nxv8i8_floor_sexti16(<vscale x 8 x i8> %x, <
 define <vscale x 8 x i8> @vaaddu_vv_nxv8i8_floor_zexti32(<vscale x 8 x i8> %x, <vscale x 8 x i8> %y) {
 ; CHECK-LABEL: vaaddu_vv_nxv8i8_floor_zexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 2
 ; CHECK-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; CHECK-NEXT:    vaaddu.vv v8, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    vnsrl.wi v8, v10, 1
 ; CHECK-NEXT:    ret
   %xzv = zext <vscale x 8 x i8> %x to <vscale x 8 x i32>
   %yzv = zext <vscale x 8 x i8> %y to <vscale x 8 x i32>
@@ -243,9 +247,14 @@ define <vscale x 8 x i8> @vaaddu_vv_nxv8i8_ceil_sexti16(<vscale x 8 x i8> %x, <v
 define <vscale x 8 x i8> @vaaddu_vv_nxv8i8_ceil_zexti32(<vscale x 8 x i8> %x, <vscale x 8 x i8> %y) {
 ; CHECK-LABEL: vaaddu_vv_nxv8i8_ceil_zexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 0
 ; CHECK-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; CHECK-NEXT:    vaaddu.vv v8, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    li a0, 1
+; CHECK-NEXT:    csrwi vxrm, 2
+; CHECK-NEXT:    vsetvli zero, zero, e16, m2, ta, ma
+; CHECK-NEXT:    vaaddu.vx v10, v10, a0
+; CHECK-NEXT:    vsetvli zero, zero, e8, m1, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v10, 0
 ; CHECK-NEXT:    ret
   %xzv = zext <vscale x 8 x i8> %x to <vscale x 8 x i32>
   %yzv = zext <vscale x 8 x i8> %y to <vscale x 8 x i32>

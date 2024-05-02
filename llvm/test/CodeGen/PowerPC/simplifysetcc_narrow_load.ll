@@ -183,6 +183,7 @@ define i1 @test_48_16_8(ptr %y) {
 ; CHECK-LE-LABEL: test_48_16_8:
 ; CHECK-LE:       # %bb.0:
 ; CHECK-LE-NEXT:    lhz 3, 1(3)
+; CHECK-LE-NEXT:    slwi 3, 3, 8
 ; CHECK-LE-NEXT:    addic 4, 3, -1
 ; CHECK-LE-NEXT:    subfe 3, 4, 3
 ; CHECK-LE-NEXT:    blr
@@ -190,6 +191,7 @@ define i1 @test_48_16_8(ptr %y) {
 ; CHECK-BE-LABEL: test_48_16_8:
 ; CHECK-BE:       # %bb.0:
 ; CHECK-BE-NEXT:    lhz 3, 3(3)
+; CHECK-BE-NEXT:    slwi 3, 3, 8
 ; CHECK-BE-NEXT:    addic 4, 3, -1
 ; CHECK-BE-NEXT:    subfe 3, 4, 3
 ; CHECK-BE-NEXT:    blr
@@ -203,6 +205,7 @@ define i1 @test_48_16_16(ptr %y) {
 ; CHECK-LE-LABEL: test_48_16_16:
 ; CHECK-LE:       # %bb.0:
 ; CHECK-LE-NEXT:    lhz 3, 2(3)
+; CHECK-LE-NEXT:    slwi 3, 3, 16
 ; CHECK-LE-NEXT:    addic 4, 3, -1
 ; CHECK-LE-NEXT:    subfe 3, 4, 3
 ; CHECK-LE-NEXT:    blr
@@ -210,6 +213,7 @@ define i1 @test_48_16_16(ptr %y) {
 ; CHECK-BE-LABEL: test_48_16_16:
 ; CHECK-BE:       # %bb.0:
 ; CHECK-BE-NEXT:    lhz 3, 2(3)
+; CHECK-BE-NEXT:    slwi 3, 3, 16
 ; CHECK-BE-NEXT:    addic 4, 3, -1
 ; CHECK-BE-NEXT:    subfe 3, 4, 3
 ; CHECK-BE-NEXT:    blr
@@ -323,6 +327,7 @@ define i1 @test_24_8_8(ptr %y) {
 ; CHECK-LE-LABEL: test_24_8_8:
 ; CHECK-LE:       # %bb.0:
 ; CHECK-LE-NEXT:    lbz 3, 1(3)
+; CHECK-LE-NEXT:    slwi 3, 3, 8
 ; CHECK-LE-NEXT:    addic 4, 3, -1
 ; CHECK-LE-NEXT:    subfe 3, 4, 3
 ; CHECK-LE-NEXT:    blr
@@ -330,6 +335,7 @@ define i1 @test_24_8_8(ptr %y) {
 ; CHECK-BE-LABEL: test_24_8_8:
 ; CHECK-BE:       # %bb.0:
 ; CHECK-BE-NEXT:    lbz 3, 1(3)
+; CHECK-BE-NEXT:    slwi 3, 3, 8
 ; CHECK-BE-NEXT:    addic 4, 3, -1
 ; CHECK-BE-NEXT:    subfe 3, 4, 3
 ; CHECK-BE-NEXT:    blr
@@ -365,6 +371,7 @@ define i1 @test_24_8_16(ptr %y) {
 ; CHECK-LE-LABEL: test_24_8_16:
 ; CHECK-LE:       # %bb.0:
 ; CHECK-LE-NEXT:    lbz 3, 2(3)
+; CHECK-LE-NEXT:    slwi 3, 3, 16
 ; CHECK-LE-NEXT:    addic 4, 3, -1
 ; CHECK-LE-NEXT:    subfe 3, 4, 3
 ; CHECK-LE-NEXT:    blr
@@ -372,6 +379,7 @@ define i1 @test_24_8_16(ptr %y) {
 ; CHECK-BE-LABEL: test_24_8_16:
 ; CHECK-BE:       # %bb.0:
 ; CHECK-BE-NEXT:    lbz 3, 0(3)
+; CHECK-BE-NEXT:    slwi 3, 3, 16
 ; CHECK-BE-NEXT:    addic 4, 3, -1
 ; CHECK-BE-NEXT:    subfe 3, 4, 3
 ; CHECK-BE-NEXT:    blr

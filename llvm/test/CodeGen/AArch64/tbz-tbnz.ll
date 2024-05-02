@@ -199,11 +199,10 @@ if.end:
 define void @test8(i64 %val1, i64 %val2, i64 %val3) {
 ; CHECK-SD-LABEL: test8:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    and x8, x1, x2
-; CHECK-SD-NEXT:    and x9, x0, x1
-; CHECK-SD-NEXT:    cmn x8, #1
-; CHECK-SD-NEXT:    ccmp x9, #0, #0, gt
-; CHECK-SD-NEXT:    b.pl .LBB7_2
+; CHECK-SD-NEXT:    and x8, x0, x1
+; CHECK-SD-NEXT:    tst x1, x2
+; CHECK-SD-NEXT:    ccmn x8, #1, #0, pl
+; CHECK-SD-NEXT:    b.gt .LBB7_2
 ; CHECK-SD-NEXT:  // %bb.1: // %if.then2
 ; CHECK-SD-NEXT:    tst x0, x1, lsl #63
 ; CHECK-SD-NEXT:    b.mi .LBB7_3

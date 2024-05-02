@@ -165,9 +165,9 @@ define i1 @length3_eq(ptr %X, ptr %Y) nounwind {
 ; X64-NEXT:    movzwl (%rdi), %eax
 ; X64-NEXT:    xorw (%rsi), %ax
 ; X64-NEXT:    movzbl 2(%rdi), %ecx
-; X64-NEXT:    xorb 2(%rsi), %cl
-; X64-NEXT:    movzbl %cl, %ecx
-; X64-NEXT:    orw %ax, %cx
+; X64-NEXT:    movzbl 2(%rsi), %edx
+; X64-NEXT:    xorl %ecx, %edx
+; X64-NEXT:    orw %ax, %dx
 ; X64-NEXT:    setne %al
 ; X64-NEXT:    retq
   %m = tail call i32 @memcmp(ptr %X, ptr %Y, i64 3) nounwind
@@ -273,9 +273,9 @@ define i1 @length5_eq(ptr %X, ptr %Y) nounwind {
 ; X64-NEXT:    movl (%rdi), %eax
 ; X64-NEXT:    xorl (%rsi), %eax
 ; X64-NEXT:    movzbl 4(%rdi), %ecx
-; X64-NEXT:    xorb 4(%rsi), %cl
-; X64-NEXT:    movzbl %cl, %ecx
-; X64-NEXT:    orl %eax, %ecx
+; X64-NEXT:    movzbl 4(%rsi), %edx
+; X64-NEXT:    xorl %ecx, %edx
+; X64-NEXT:    orl %eax, %edx
 ; X64-NEXT:    setne %al
 ; X64-NEXT:    retq
   %m = tail call i32 @memcmp(ptr %X, ptr %Y, i64 5) nounwind
@@ -431,9 +431,9 @@ define i1 @length9_eq(ptr %X, ptr %Y) nounwind {
 ; X64-NEXT:    movq (%rdi), %rax
 ; X64-NEXT:    xorq (%rsi), %rax
 ; X64-NEXT:    movzbl 8(%rdi), %ecx
-; X64-NEXT:    xorb 8(%rsi), %cl
-; X64-NEXT:    movzbl %cl, %ecx
-; X64-NEXT:    orq %rax, %rcx
+; X64-NEXT:    movzbl 8(%rsi), %edx
+; X64-NEXT:    xorq %rcx, %rdx
+; X64-NEXT:    orq %rax, %rdx
 ; X64-NEXT:    sete %al
 ; X64-NEXT:    retq
   %m = tail call i32 @memcmp(ptr %X, ptr %Y, i64 9) nounwind
@@ -447,9 +447,9 @@ define i1 @length10_eq(ptr %X, ptr %Y) nounwind {
 ; X64-NEXT:    movq (%rdi), %rax
 ; X64-NEXT:    xorq (%rsi), %rax
 ; X64-NEXT:    movzwl 8(%rdi), %ecx
-; X64-NEXT:    xorw 8(%rsi), %cx
-; X64-NEXT:    movzwl %cx, %ecx
-; X64-NEXT:    orq %rax, %rcx
+; X64-NEXT:    movzwl 8(%rsi), %edx
+; X64-NEXT:    xorq %rcx, %rdx
+; X64-NEXT:    orq %rax, %rdx
 ; X64-NEXT:    sete %al
 ; X64-NEXT:    retq
   %m = tail call i32 @memcmp(ptr %X, ptr %Y, i64 10) nounwind
@@ -478,8 +478,9 @@ define i1 @length12_eq(ptr %X, ptr %Y) nounwind {
 ; X64-NEXT:    movq (%rdi), %rax
 ; X64-NEXT:    xorq (%rsi), %rax
 ; X64-NEXT:    movl 8(%rdi), %ecx
-; X64-NEXT:    xorl 8(%rsi), %ecx
-; X64-NEXT:    orq %rax, %rcx
+; X64-NEXT:    movl 8(%rsi), %edx
+; X64-NEXT:    xorq %rcx, %rdx
+; X64-NEXT:    orq %rax, %rdx
 ; X64-NEXT:    setne %al
 ; X64-NEXT:    retq
   %m = tail call i32 @memcmp(ptr %X, ptr %Y, i64 12) nounwind
@@ -1626,8 +1627,8 @@ define i1 @length48_eq(ptr %x, ptr %y) nounwind {
 ; X64-AVX1-NEXT:    vmovups (%rdi), %ymm0
 ; X64-AVX1-NEXT:    vmovups 32(%rdi), %xmm1
 ; X64-AVX1-NEXT:    vmovups 32(%rsi), %xmm2
-; X64-AVX1-NEXT:    vxorps (%rsi), %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vxorps %ymm2, %ymm1, %ymm1
+; X64-AVX1-NEXT:    vxorps (%rsi), %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vorps %ymm1, %ymm0, %ymm0
 ; X64-AVX1-NEXT:    vptest %ymm0, %ymm0
 ; X64-AVX1-NEXT:    sete %al
@@ -1639,8 +1640,8 @@ define i1 @length48_eq(ptr %x, ptr %y) nounwind {
 ; X64-AVX2-NEXT:    vmovdqu (%rdi), %ymm0
 ; X64-AVX2-NEXT:    vmovdqu 32(%rdi), %xmm1
 ; X64-AVX2-NEXT:    vmovdqu 32(%rsi), %xmm2
-; X64-AVX2-NEXT:    vpxor (%rsi), %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpxor %ymm2, %ymm1, %ymm1
+; X64-AVX2-NEXT:    vpxor (%rsi), %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
 ; X64-AVX2-NEXT:    vptest %ymm0, %ymm0
 ; X64-AVX2-NEXT:    sete %al
@@ -1652,8 +1653,8 @@ define i1 @length48_eq(ptr %x, ptr %y) nounwind {
 ; X64-AVX512-NEXT:    vmovdqu (%rdi), %ymm0
 ; X64-AVX512-NEXT:    vmovdqu 32(%rdi), %xmm1
 ; X64-AVX512-NEXT:    vmovdqu 32(%rsi), %xmm2
-; X64-AVX512-NEXT:    vpxor (%rsi), %ymm0, %ymm0
 ; X64-AVX512-NEXT:    vpxor %ymm2, %ymm1, %ymm1
+; X64-AVX512-NEXT:    vpxor (%rsi), %ymm0, %ymm0
 ; X64-AVX512-NEXT:    vpor %ymm1, %ymm0, %ymm0
 ; X64-AVX512-NEXT:    vptest %ymm0, %ymm0
 ; X64-AVX512-NEXT:    sete %al

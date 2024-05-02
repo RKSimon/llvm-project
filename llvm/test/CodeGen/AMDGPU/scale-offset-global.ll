@@ -356,22 +356,26 @@ entry:
 }
 
 define amdgpu_ps <3 x float> @global_load_b96_idxprom_range(ptr addrspace(1) align 4 inreg %p, ptr addrspace(1) align 4 %pp) {
-; GFX1250-LABEL: global_load_b96_idxprom_range:
-; GFX1250:       ; %bb.0: ; %entry
-; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    global_load_b32 v0, v[0:1], off
-; GFX1250-NEXT:    s_wait_loadcnt 0x0
-; GFX1250-NEXT:    global_load_b96 v[0:2], v0, s[0:1] scale_offset
-; GFX1250-NEXT:    s_wait_loadcnt 0x0
-; GFX1250-NEXT:    ; return to shader part epilog
+; GFX13-SDAG-LABEL: global_load_b96_idxprom_range:
+; GFX13-SDAG:       ; %bb.0: ; %entry
+; GFX13-SDAG-NEXT:    global_load_b32 v0, v[0:1], off
+; GFX13-SDAG-NEXT:    s_wait_loadcnt 0x0
+; GFX13-SDAG-NEXT:    v_mul_u32_u24_e32 v1, 12, v0
+; GFX13-SDAG-NEXT:    v_mul_hi_u32_u24_e32 v2, 12, v0
+; GFX13-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX13-SDAG-NEXT:    v_add_co_u32 v0, vcc_lo, s0, v1
+; GFX13-SDAG-NEXT:    v_add_co_ci_u32_e64 v1, null, s1, v2, vcc_lo
+; GFX13-SDAG-NEXT:    global_load_b96 v[0:2], v[0:1], off
+; GFX13-SDAG-NEXT:    s_wait_loadcnt 0x0
+; GFX13-SDAG-NEXT:    ; return to shader part epilog
 ;
-; GFX13-LABEL: global_load_b96_idxprom_range:
-; GFX13:       ; %bb.0: ; %entry
-; GFX13-NEXT:    global_load_b32 v0, v[0:1], off
-; GFX13-NEXT:    s_wait_loadcnt 0x0
-; GFX13-NEXT:    global_load_b96 v[0:2], v0, s[0:1] scale_offset
-; GFX13-NEXT:    s_wait_loadcnt 0x0
-; GFX13-NEXT:    ; return to shader part epilog
+; GFX13-GISEL-LABEL: global_load_b96_idxprom_range:
+; GFX13-GISEL:       ; %bb.0: ; %entry
+; GFX13-GISEL-NEXT:    global_load_b32 v0, v[0:1], off
+; GFX13-GISEL-NEXT:    s_wait_loadcnt 0x0
+; GFX13-GISEL-NEXT:    global_load_b96 v[0:2], v0, s[0:1] scale_offset
+; GFX13-GISEL-NEXT:    s_wait_loadcnt 0x0
+; GFX13-GISEL-NEXT:    ; return to shader part epilog
 entry:
   %idx = load i32, ptr addrspace(1) %pp, align 4, !range !0
   %idxprom = sext i32 %idx to i64
@@ -381,22 +385,26 @@ entry:
 }
 
 define amdgpu_ps <3 x float> @global_load_b96_idxprom_range_ioffset(ptr addrspace(1) align 4 inreg %p, ptr addrspace(1) align 4 %pp) {
-; GFX1250-LABEL: global_load_b96_idxprom_range_ioffset:
-; GFX1250:       ; %bb.0: ; %entry
-; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    global_load_b32 v0, v[0:1], off
-; GFX1250-NEXT:    s_wait_loadcnt 0x0
-; GFX1250-NEXT:    global_load_b96 v[0:2], v0, s[0:1] offset:192 scale_offset
-; GFX1250-NEXT:    s_wait_loadcnt 0x0
-; GFX1250-NEXT:    ; return to shader part epilog
+; GFX13-SDAG-LABEL: global_load_b96_idxprom_range_ioffset:
+; GFX13-SDAG:       ; %bb.0: ; %entry
+; GFX13-SDAG-NEXT:    global_load_b32 v0, v[0:1], off
+; GFX13-SDAG-NEXT:    s_wait_loadcnt 0x0
+; GFX13-SDAG-NEXT:    v_mul_u32_u24_e32 v1, 12, v0
+; GFX13-SDAG-NEXT:    v_mul_hi_u32_u24_e32 v2, 12, v0
+; GFX13-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX13-SDAG-NEXT:    v_add_co_u32 v0, vcc_lo, s0, v1
+; GFX13-SDAG-NEXT:    v_add_co_ci_u32_e64 v1, null, s1, v2, vcc_lo
+; GFX13-SDAG-NEXT:    global_load_b96 v[0:2], v[0:1], off offset:192
+; GFX13-SDAG-NEXT:    s_wait_loadcnt 0x0
+; GFX13-SDAG-NEXT:    ; return to shader part epilog
 ;
-; GFX13-LABEL: global_load_b96_idxprom_range_ioffset:
-; GFX13:       ; %bb.0: ; %entry
-; GFX13-NEXT:    global_load_b32 v0, v[0:1], off
-; GFX13-NEXT:    s_wait_loadcnt 0x0
-; GFX13-NEXT:    global_load_b96 v[0:2], v0, s[0:1] offset:192 scale_offset
-; GFX13-NEXT:    s_wait_loadcnt 0x0
-; GFX13-NEXT:    ; return to shader part epilog
+; GFX13-GISEL-LABEL: global_load_b96_idxprom_range_ioffset:
+; GFX13-GISEL:       ; %bb.0: ; %entry
+; GFX13-GISEL-NEXT:    global_load_b32 v0, v[0:1], off
+; GFX13-GISEL-NEXT:    s_wait_loadcnt 0x0
+; GFX13-GISEL-NEXT:    global_load_b96 v[0:2], v0, s[0:1] offset:192 scale_offset
+; GFX13-GISEL-NEXT:    s_wait_loadcnt 0x0
+; GFX13-GISEL-NEXT:    ; return to shader part epilog
 entry:
   %idx = load i32, ptr addrspace(1) %pp, align 4, !range !0
   %idxprom = sext i32 %idx to i64

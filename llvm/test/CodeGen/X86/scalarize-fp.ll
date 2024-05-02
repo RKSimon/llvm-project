@@ -735,15 +735,23 @@ define <8 x float> @splat0_fdiv_v8f32(<8 x float> %vx, <8 x float> %vy) {
 ;
 ; AVX1-LABEL: splat0_fdiv_v8f32:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vdivss %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vrcpss %xmm1, %xmm1, %xmm2
+; AVX1-NEXT:    vmulss %xmm2, %xmm0, %xmm3
+; AVX1-NEXT:    vmulss %xmm3, %xmm1, %xmm1
+; AVX1-NEXT:    vsubss %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmulss %xmm0, %xmm2, %xmm0
+; AVX1-NEXT:    vaddss %xmm0, %xmm3, %xmm0
 ; AVX1-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX1-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX512-LABEL: splat0_fdiv_v8f32:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vdivss %xmm1, %xmm0, %xmm0
-; AVX512-NEXT:    vbroadcastss %xmm0, %ymm0
+; AVX512-NEXT:    vrcpps %ymm1, %ymm2
+; AVX512-NEXT:    vmulps %ymm2, %ymm0, %ymm3
+; AVX512-NEXT:    vfmsub213ps {{.*#+}} ymm1 = (ymm3 * ymm1) - ymm0
+; AVX512-NEXT:    vfnmadd213ps {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm3
+; AVX512-NEXT:    vbroadcastss %xmm1, %ymm0
 ; AVX512-NEXT:    retq
   %b = fdiv fast <8 x float> %vx, %vy
   %r = shufflevector <8 x float> %b, <8 x float> undef, <8 x i32> zeroinitializer
@@ -828,13 +836,24 @@ define <8 x float> @splat0_fdiv_const_op1_v8f32(<8 x float> %vx) {
 ;
 ; AVX1-LABEL: splat0_fdiv_const_op1_v8f32:
 ; AVX1:       # %bb.0:
+; AVX1-NEXT:    vmovss {{.*#+}} xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX1-NEXT:    vrcpss %xmm1, %xmm1, %xmm1
+; AVX1-NEXT:    vmulss %xmm1, %xmm0, %xmm2
+; AVX1-NEXT:    vsubss %xmm2, %xmm0, %xmm0
+; AVX1-NEXT:    vmulss %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vaddss %xmm0, %xmm2, %xmm0
 ; AVX1-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX1-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX512-LABEL: splat0_fdiv_const_op1_v8f32:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vbroadcastss %xmm0, %ymm0
+; AVX512-NEXT:    vmovaps {{.*#+}} ymm1 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0,5.0E+0,6.0E+0,7.0E+0,8.0E+0]
+; AVX512-NEXT:    vrcpps %ymm1, %ymm2
+; AVX512-NEXT:    vmulps %ymm2, %ymm0, %ymm3
+; AVX512-NEXT:    vfmsub213ps {{.*#+}} ymm1 = (ymm3 * ymm1) - ymm0
+; AVX512-NEXT:    vfnmadd213ps {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm3
+; AVX512-NEXT:    vbroadcastss %xmm1, %ymm0
 ; AVX512-NEXT:    retq
   %b = fdiv fast <8 x float> %vx, <float 1.0, float 2.0, float 3.0, float 4.0, float 5.0, float 6.0, float 7.0, float 8.0>
   %r = shufflevector <8 x float> %b, <8 x float> undef, <8 x i32> zeroinitializer
@@ -852,16 +871,23 @@ define <8 x float> @splat0_fdiv_const_op0_v8f32(<8 x float> %vx) {
 ;
 ; AVX1-LABEL: splat0_fdiv_const_op0_v8f32:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vmovss {{.*#+}} xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; AVX1-NEXT:    vdivss %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vrcpss %xmm0, %xmm0, %xmm1
+; AVX1-NEXT:    vmulss %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vmovss {{.*#+}} xmm2 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX1-NEXT:    vsubss %xmm0, %xmm2, %xmm0
+; AVX1-NEXT:    vmulss %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vaddss %xmm0, %xmm1, %xmm0
 ; AVX1-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX1-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX512-LABEL: splat0_fdiv_const_op0_v8f32:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vmovss {{.*#+}} xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; AVX512-NEXT:    vdivss %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vrcpps %ymm0, %ymm1
+; AVX512-NEXT:    vmovaps {{.*#+}} ymm2 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0,5.0E+0,6.0E+0,7.0E+0,8.0E+0]
+; AVX512-NEXT:    vmulps %ymm2, %ymm1, %ymm3
+; AVX512-NEXT:    vfmsub213ps {{.*#+}} ymm0 = (ymm3 * ymm0) - ymm2
+; AVX512-NEXT:    vfnmadd213ps {{.*#+}} ymm0 = -(ymm1 * ymm0) + ymm3
 ; AVX512-NEXT:    vbroadcastss %xmm0, %ymm0
 ; AVX512-NEXT:    retq
   %b = fdiv fast <8 x float> <float 1.0, float 2.0, float 3.0, float 4.0, float 5.0, float 6.0, float 7.0, float 8.0>, %vx

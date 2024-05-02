@@ -712,8 +712,7 @@ define <8 x i32> @PR157382(ptr %p0, ptr %p1, ptr %p2) {
 ; AVX1-NEXT:    vpmovsxbw %xmm1, %xmm1
 ; AVX1-NEXT:    vpor %xmm1, %xmm3, %xmm1
 ; AVX1-NEXT:    vpmovsxwd %xmm1, %xmm2
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
-; AVX1-NEXT:    vpmovsxwd %xmm1, %xmm1
+; AVX1-NEXT:    vpunpckhwd {{.*#+}} xmm1 = xmm1[4,4,5,5,6,6,7,7]
 ; AVX1-NEXT:    vinsertf128 $1, %xmm1, %ymm2, %ymm1
 ; AVX1-NEXT:    vandps %ymm0, %ymm1, %ymm0
 ; AVX1-NEXT:    retq

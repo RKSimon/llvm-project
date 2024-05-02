@@ -74,8 +74,8 @@ define void @shl144sar2(ptr %p) #0 {
 ; CHECK-NEXT:    movswl (%eax), %ecx
 ; CHECK-NEXT:    shll $14, %ecx
 ; CHECK-NEXT:    movl %ecx, 16(%eax)
-; CHECK-NEXT:    movl $0, 8(%eax)
 ; CHECK-NEXT:    movl $0, 12(%eax)
+; CHECK-NEXT:    movl $0, 8(%eax)
 ; CHECK-NEXT:    movl $0, 4(%eax)
 ; CHECK-NEXT:    movl $0, (%eax)
 ; CHECK-NEXT:    retl

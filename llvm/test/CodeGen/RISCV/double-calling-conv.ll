@@ -184,10 +184,10 @@ define double @caller_double_stack() nounwind {
 ; RV32IFD-NEXT:    li a3, 0
 ; RV32IFD-NEXT:    li a5, 0
 ; RV32IFD-NEXT:    li a7, 0
-; RV32IFD-NEXT:    lui a0, 262510
+; RV32IFD-NEXT:    lui a0, 262574
 ; RV32IFD-NEXT:    addi t0, a0, 327
 ; RV32IFD-NEXT:    lui a0, 713032
-; RV32IFD-NEXT:    lui a2, 262574
+; RV32IFD-NEXT:    lui a2, 262510
 ; RV32IFD-NEXT:    addi t1, a0, -1311
 ; RV32IFD-NEXT:    addi t2, a2, 327
 ; RV32IFD-NEXT:    li a0, 1
@@ -195,9 +195,9 @@ define double @caller_double_stack() nounwind {
 ; RV32IFD-NEXT:    li a4, 3
 ; RV32IFD-NEXT:    li a6, 4
 ; RV32IFD-NEXT:    sw t1, 0(sp)
-; RV32IFD-NEXT:    sw t0, 4(sp)
+; RV32IFD-NEXT:    sw t2, 4(sp)
 ; RV32IFD-NEXT:    sw t1, 8(sp)
-; RV32IFD-NEXT:    sw t2, 12(sp)
+; RV32IFD-NEXT:    sw t0, 12(sp)
 ; RV32IFD-NEXT:    call callee_double_stack
 ; RV32IFD-NEXT:    lw ra, 28(sp) # 4-byte Folded Reload
 ; RV32IFD-NEXT:    addi sp, sp, 32
@@ -211,10 +211,10 @@ define double @caller_double_stack() nounwind {
 ; RV32IZFINXZDINX-NEXT:    li a3, 0
 ; RV32IZFINXZDINX-NEXT:    li a5, 0
 ; RV32IZFINXZDINX-NEXT:    li a7, 0
-; RV32IZFINXZDINX-NEXT:    lui a0, 262510
+; RV32IZFINXZDINX-NEXT:    lui a0, 262574
 ; RV32IZFINXZDINX-NEXT:    addi t0, a0, 327
 ; RV32IZFINXZDINX-NEXT:    lui a0, 713032
-; RV32IZFINXZDINX-NEXT:    lui a2, 262574
+; RV32IZFINXZDINX-NEXT:    lui a2, 262510
 ; RV32IZFINXZDINX-NEXT:    addi t1, a0, -1311
 ; RV32IZFINXZDINX-NEXT:    addi t2, a2, 327
 ; RV32IZFINXZDINX-NEXT:    li a0, 1
@@ -222,9 +222,9 @@ define double @caller_double_stack() nounwind {
 ; RV32IZFINXZDINX-NEXT:    li a4, 3
 ; RV32IZFINXZDINX-NEXT:    li a6, 4
 ; RV32IZFINXZDINX-NEXT:    sw t1, 0(sp)
-; RV32IZFINXZDINX-NEXT:    sw t0, 4(sp)
+; RV32IZFINXZDINX-NEXT:    sw t2, 4(sp)
 ; RV32IZFINXZDINX-NEXT:    sw t1, 8(sp)
-; RV32IZFINXZDINX-NEXT:    sw t2, 12(sp)
+; RV32IZFINXZDINX-NEXT:    sw t0, 12(sp)
 ; RV32IZFINXZDINX-NEXT:    call callee_double_stack
 ; RV32IZFINXZDINX-NEXT:    lw ra, 28(sp) # 4-byte Folded Reload
 ; RV32IZFINXZDINX-NEXT:    addi sp, sp, 32

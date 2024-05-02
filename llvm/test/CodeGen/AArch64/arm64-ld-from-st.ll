@@ -320,7 +320,7 @@ define i16 @Str16Ldr16(ptr nocapture %P, i16 %v, i64 %n) {
 ; CHECK-LABEL: Str16Ldr16:
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    mov x8, x0
-; CHECK-NEXT:    mov w0, w1
+; CHECK-NEXT:    and w0, w1, #0xffff
 ; CHECK-NEXT:    strh w1, [x8, #2]
 ; CHECK-NEXT:    ret
 entry:
@@ -334,9 +334,8 @@ entry:
 define i8 @Str16Ldr8_0(ptr nocapture %P, i16 %v, i64 %n) {
 ; CHECK-LABEL: Str16Ldr8_0:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov x8, x0
-; CHECK-NEXT:    mov w0, w1
-; CHECK-NEXT:    strh w1, [x8, #2]
+; CHECK-NEXT:    strh w1, [x0, #2]
+; CHECK-NEXT:    and w0, w1, #0xff
 ; CHECK-NEXT:    ret
 entry:
   %arrayidx0 = getelementptr inbounds i16, ptr %P, i64 1
@@ -680,7 +679,7 @@ define i16 @Unscaled_Str16Ldr16(ptr nocapture %P, i16 %v, i64 %n) {
 ; CHECK-LABEL: Unscaled_Str16Ldr16:
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    mov x8, x0
-; CHECK-NEXT:    mov w0, w1
+; CHECK-NEXT:    and w0, w1, #0xffff
 ; CHECK-NEXT:    sturh w1, [x8, #-2]
 ; CHECK-NEXT:    ret
 entry:
@@ -694,9 +693,8 @@ entry:
 define i8 @Unscaled_Str16Ldr8_0(ptr nocapture %P, i16 %v, i64 %n) {
 ; CHECK-LABEL: Unscaled_Str16Ldr8_0:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov x8, x0
-; CHECK-NEXT:    mov w0, w1
-; CHECK-NEXT:    sturh w1, [x8, #-2]
+; CHECK-NEXT:    sturh w1, [x0, #-2]
+; CHECK-NEXT:    and w0, w1, #0xff
 ; CHECK-NEXT:    ret
 entry:
   %arrayidx0 = getelementptr inbounds i16, ptr %P, i64 -1

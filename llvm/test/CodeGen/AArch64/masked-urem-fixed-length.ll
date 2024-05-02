@@ -378,26 +378,23 @@ define <3 x i10> @urem_v3i10(<3 x i10> %x, <3 x i10> %y, <3 x i1> %m) {
 ; NEON-NEXT:    bic v1.4h, #252, lsl #8
 ; NEON-NEXT:    mov v0.h[2], w8
 ; NEON-NEXT:    bic v2.4h, #252, lsl #8
-; NEON-NEXT:    umov w9, v2.h[0]
-; NEON-NEXT:    umov w12, v2.h[1]
-; NEON-NEXT:    umov w15, v2.h[2]
+; NEON-NEXT:    umov w8, v2.h[0]
+; NEON-NEXT:    umov w11, v2.h[1]
+; NEON-NEXT:    umov w14, v2.h[2]
 ; NEON-NEXT:    shl v0.4h, v0.4h, #15
 ; NEON-NEXT:    cmlt v0.4h, v0.4h, #0
 ; NEON-NEXT:    and v1.8b, v1.8b, v0.8b
 ; NEON-NEXT:    mvn v0.8b, v0.8b
 ; NEON-NEXT:    sub v0.4h, v1.4h, v0.4h
-; NEON-NEXT:    umov w8, v0.h[0]
-; NEON-NEXT:    umov w11, v0.h[1]
-; NEON-NEXT:    umov w14, v0.h[2]
-; NEON-NEXT:    and w8, w8, #0x3ff
-; NEON-NEXT:    and w11, w11, #0x3ff
-; NEON-NEXT:    and w14, w14, #0x3ff
-; NEON-NEXT:    udiv w10, w9, w8
-; NEON-NEXT:    udiv w13, w12, w11
-; NEON-NEXT:    msub w0, w10, w8, w9
-; NEON-NEXT:    udiv w16, w15, w14
-; NEON-NEXT:    msub w1, w13, w11, w12
-; NEON-NEXT:    msub w2, w16, w14, w15
+; NEON-NEXT:    umov w9, v0.h[0]
+; NEON-NEXT:    umov w12, v0.h[1]
+; NEON-NEXT:    umov w15, v0.h[2]
+; NEON-NEXT:    udiv w10, w8, w9
+; NEON-NEXT:    udiv w13, w11, w12
+; NEON-NEXT:    msub w0, w10, w9, w8
+; NEON-NEXT:    udiv w16, w14, w15
+; NEON-NEXT:    msub w1, w13, w12, w11
+; NEON-NEXT:    msub w2, w16, w15, w14
 ; NEON-NEXT:    ret
 ;
 ; SVE-LABEL: urem_v3i10:

@@ -286,8 +286,8 @@ define amdgpu_kernel void @v_bfi_dont_applied_for_scalar_ops(ptr addrspace(1) %o
 ; GCN-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x9
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
 ; GCN-NEXT:    s_mov_b64 s[4:5], s[2:3]
-; GCN-NEXT:    s_and_b32 s5, s5, 0xffff0000
 ; GCN-NEXT:    s_and_b32 s4, s4, 0xffff
+; GCN-NEXT:    s_and_b32 s5, s5, 0xffff0000
 ; GCN-NEXT:    s_or_b32 s4, s4, s5
 ; GCN-NEXT:    s_mov_b32 s3, 0xf000
 ; GCN-NEXT:    s_mov_b32 s2, -1

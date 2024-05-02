@@ -1047,9 +1047,8 @@ define <8 x i64> @vmul_vx_negpow2_v8i64_unmasked(<8 x i64> %va, i32 zeroext %evl
 define <8 x i64> @vmul_vshl_vx_v8i64(<8 x i64> %va, <8 x i1> %m, i32 zeroext %evl) {
 ; CHECK-LABEL: vmul_vshl_vx_v8i64:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    li a0, 56
 ; CHECK-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 3
-; CHECK-NEXT:    li a0, 7
 ; CHECK-NEXT:    vmul.vx v8, v8, a0
 ; CHECK-NEXT:    ret
   %elt.head1 = insertelement <8 x i64> poison, i64 3, i32 0
@@ -1064,9 +1063,8 @@ define <8 x i64> @vmul_vshl_vx_v8i64(<8 x i64> %va, <8 x i1> %m, i32 zeroext %ev
 define <8 x i64> @vmul_vshl_vx_v8i64_unmasked(<8 x i64> %va, i32 zeroext %evl) {
 ; CHECK-LABEL: vmul_vshl_vx_v8i64_unmasked:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    li a0, 56
 ; CHECK-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 3
-; CHECK-NEXT:    li a0, 7
 ; CHECK-NEXT:    vmul.vx v8, v8, a0
 ; CHECK-NEXT:    ret
   %head = insertelement <8 x i1> poison, i1 true, i32 0
@@ -1084,8 +1082,8 @@ define <8 x i64> @vmul_vshl_vv_v8i64(<8 x i64> %va, <8 x i64> %vb, <8 x i1> %m, 
 ; CHECK-LABEL: vmul_vshl_vv_v8i64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 7
 ; CHECK-NEXT:    vmul.vv v8, v8, v12
+; CHECK-NEXT:    vsll.vi v8, v8, 7
 ; CHECK-NEXT:    ret
   %elt.head = insertelement <8 x i64> poison, i64 7, i32 0
   %vc = shufflevector <8 x i64> %elt.head, <8 x i64> poison, <8 x i32> zeroinitializer
@@ -1098,8 +1096,8 @@ define <8 x i64> @vmul_vshl_vv_v8i64_unmasked(<8 x i64> %va, <8 x i64> %vb, i32 
 ; CHECK-LABEL: vmul_vshl_vv_v8i64_unmasked:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 7
 ; CHECK-NEXT:    vmul.vv v8, v8, v12
+; CHECK-NEXT:    vsll.vi v8, v8, 7
 ; CHECK-NEXT:    ret
   %head = insertelement <8 x i1> poison, i1 true, i32 0
   %m = shufflevector <8 x i1> %head, <8 x i1> poison, <8 x i32> zeroinitializer

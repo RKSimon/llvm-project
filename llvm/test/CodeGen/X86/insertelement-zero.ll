@@ -337,19 +337,22 @@ define <16 x i16> @insert_v16i16_z12345z789ABCDEz(<16 x i16> %a) {
 ; SSE2-LABEL: insert_v16i16_z12345z789ABCDEz:
 ; SSE2:       # %bb.0:
 ; SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; SSE2-NEXT:    xorl %eax, %eax
+; SSE2-NEXT:    pinsrw $7, %eax, %xmm1
 ; SSE2-NEXT:    retq
 ;
 ; SSE3-LABEL: insert_v16i16_z12345z789ABCDEz:
 ; SSE3:       # %bb.0:
 ; SSE3-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE3-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; SSE3-NEXT:    xorl %eax, %eax
+; SSE3-NEXT:    pinsrw $7, %eax, %xmm1
 ; SSE3-NEXT:    retq
 ;
 ; SSSE3-LABEL: insert_v16i16_z12345z789ABCDEz:
 ; SSSE3:       # %bb.0:
 ; SSSE3-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSSE3-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; SSSE3-NEXT:    xorl %eax, %eax
+; SSSE3-NEXT:    pinsrw $7, %eax, %xmm1
 ; SSSE3-NEXT:    retq
 ;
 ; SSE41-LABEL: insert_v16i16_z12345z789ABCDEz:
@@ -567,9 +570,7 @@ define i64 @fold_insertelement_to_and(i32 noundef %arg) {
 ; AVX2-LABEL: fold_insertelement_to_and:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpmovsxbq {{.*#+}} xmm0 = [0,77]
-; AVX2-NEXT:    vpaddq %xmm0, %xmm0, %xmm1
-; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
-; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; AVX2-NEXT:    vmovq %xmm0, %rax
 ; AVX2-NEXT:    retq
   %i = shufflevector <8 x i64> zeroinitializer, <8 x i64> splat (i64 77), <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 4, i32 8, i32 6, i32 10>

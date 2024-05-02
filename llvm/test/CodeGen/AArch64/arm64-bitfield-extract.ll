@@ -10,7 +10,7 @@
 define void @foo(ptr nocapture %x, ptr nocapture %y) nounwind optsize ssp {
 ; LLC-LABEL: foo:
 ; LLC:       // %bb.0:
-; LLC-NEXT:    ldr w8, [x0]
+; LLC-NEXT:    ldrb w8, [x0]
 ; LLC-NEXT:    ubfx w8, w8, #3, #1
 ; LLC-NEXT:    strb w8, [x1, #4]
 ; LLC-NEXT:    ret

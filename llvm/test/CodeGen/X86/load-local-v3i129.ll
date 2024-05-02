@@ -9,8 +9,8 @@ define void @_start() nounwind {
 ; CHECK-NEXT:    andq $-4, %rax
 ; CHECK-NEXT:    incq %rax
 ; CHECK-NEXT:    movq %rax, -40(%rsp)
-; CHECK-NEXT:    orq $-2, -56(%rsp)
 ; CHECK-NEXT:    movq $-1, -48(%rsp)
+; CHECK-NEXT:    orq $-2, -56(%rsp)
 ; CHECK-NEXT:    retq
 Entry:
   %y = alloca <3 x i129>, align 16

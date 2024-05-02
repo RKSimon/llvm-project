@@ -3059,6 +3059,11 @@ define <2 x i64> @test_mm_mul_epu32(<2 x i64> %a0, <2 x i64> %a1) nounwind {
 ;
 ; AVX1-LABEL: test_mm_mul_epu32:
 ; AVX1:       # %bb.0:
+; AVX1-NEXT:    vpxor %xmm2, %xmm2, %xmm2 # encoding: [0xc5,0xe9,0xef,0xd2]
+; AVX1-NEXT:    vpblendw $204, %xmm2, %xmm0, %xmm0 # encoding: [0xc4,0xe3,0x79,0x0e,0xc2,0xcc]
+; AVX1-NEXT:    # xmm0 = xmm0[0,1],xmm2[2,3],xmm0[4,5],xmm2[6,7]
+; AVX1-NEXT:    vpblendw $204, %xmm2, %xmm1, %xmm1 # encoding: [0xc4,0xe3,0x71,0x0e,0xca,0xcc]
+; AVX1-NEXT:    # xmm1 = xmm1[0,1],xmm2[2,3],xmm1[4,5],xmm2[6,7]
 ; AVX1-NEXT:    vpmuludq %xmm1, %xmm0, %xmm0 # encoding: [0xc5,0xf9,0xf4,0xc1]
 ; AVX1-NEXT:    ret{{[l|q]}} # encoding: [0xc3]
 ;

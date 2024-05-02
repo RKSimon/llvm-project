@@ -61,6 +61,7 @@ define void @set_rounding_dynamic(i32 %rm) nounwind {
 ;
 ; LA64-LABEL: set_rounding_dynamic:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    bstrpick.d $a0, $a0, 31, 0
 ; LA64-NEXT:    nor $a1, $a0, $zero
 ; LA64-NEXT:    bstrpick.d $a1, $a1, 1, 1
 ; LA64-NEXT:    xor $a0, $a0, $a1

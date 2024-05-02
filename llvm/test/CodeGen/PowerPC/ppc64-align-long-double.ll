@@ -27,8 +27,8 @@ define ppc_fp128 @test(ptr byval(%struct.S) %x) nounwind {
 ; CHECK-NEXT:    lfd 2, -8(1)
 ; CHECK-NEXT:    std 6, 72(1)
 ; CHECK-NEXT:    std 5, 64(1)
-; CHECK-NEXT:    std 3, 48(1)
 ; CHECK-NEXT:    std 4, 56(1)
+; CHECK-NEXT:    std 3, 48(1)
 ; CHECK-NEXT:    blr
 ;
 ; CHECK-VSX-LABEL: test:
@@ -39,8 +39,8 @@ define ppc_fp128 @test(ptr byval(%struct.S) %x) nounwind {
 ; CHECK-VSX-NEXT:    lfd 2, -8(1)
 ; CHECK-VSX-NEXT:    std 6, 72(1)
 ; CHECK-VSX-NEXT:    std 5, 64(1)
-; CHECK-VSX-NEXT:    std 3, 48(1)
 ; CHECK-VSX-NEXT:    std 4, 56(1)
+; CHECK-VSX-NEXT:    std 3, 48(1)
 ; CHECK-VSX-NEXT:    blr
 ;
 ; CHECK-P9-LABEL: test:
@@ -49,8 +49,8 @@ define ppc_fp128 @test(ptr byval(%struct.S) %x) nounwind {
 ; CHECK-P9-NEXT:    mtfprd 2, 6
 ; CHECK-P9-NEXT:    std 6, 72(1)
 ; CHECK-P9-NEXT:    std 5, 64(1)
-; CHECK-P9-NEXT:    std 3, 48(1)
 ; CHECK-P9-NEXT:    std 4, 56(1)
+; CHECK-P9-NEXT:    std 3, 48(1)
 ; CHECK-P9-NEXT:    blr
 entry:
   %b = getelementptr inbounds %struct.S, ptr %x, i32 0, i32 1

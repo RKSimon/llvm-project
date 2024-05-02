@@ -247,8 +247,7 @@ define i32 @fcvt_w_bf16_sat(bfloat %a) nounwind {
 ; CHECK32ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK32ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK32ZFBFMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECK32ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK32ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK32ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK32ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK32ZFBFMIN-NEXT:    ret
 ;
@@ -259,8 +258,7 @@ define i32 @fcvt_w_bf16_sat(bfloat %a) nounwind {
 ; RV32ID-NEXT:    fmv.w.x fa5, a0
 ; RV32ID-NEXT:    feq.s a0, fa5, fa5
 ; RV32ID-NEXT:    fcvt.w.s a1, fa5, rtz
-; RV32ID-NEXT:    seqz a0, a0
-; RV32ID-NEXT:    addi a0, a0, -1
+; RV32ID-NEXT:    neg a0, a0
 ; RV32ID-NEXT:    and a0, a0, a1
 ; RV32ID-NEXT:    ret
 ;
@@ -269,8 +267,7 @@ define i32 @fcvt_w_bf16_sat(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK64ZFBFMIN-NEXT:    ret
 ;
@@ -281,8 +278,7 @@ define i32 @fcvt_w_bf16_sat(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.w.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a0, a1
 ; RV64ID-NEXT:    ret
 start:
@@ -370,8 +366,7 @@ define i32 @fcvt_wu_bf16_sat(bfloat %a) nounwind {
 ; CHECK32ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK32ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK32ZFBFMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; CHECK32ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK32ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK32ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK32ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK32ZFBFMIN-NEXT:    ret
 ;
@@ -382,8 +377,7 @@ define i32 @fcvt_wu_bf16_sat(bfloat %a) nounwind {
 ; RV32ID-NEXT:    fmv.w.x fa5, a0
 ; RV32ID-NEXT:    feq.s a0, fa5, fa5
 ; RV32ID-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32ID-NEXT:    seqz a0, a0
-; RV32ID-NEXT:    addi a0, a0, -1
+; RV32ID-NEXT:    neg a0, a0
 ; RV32ID-NEXT:    and a0, a0, a1
 ; RV32ID-NEXT:    ret
 ;
@@ -392,8 +386,7 @@ define i32 @fcvt_wu_bf16_sat(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a1, a0
 ; CHECK64ZFBFMIN-NEXT:    slli a0, a0, 32
 ; CHECK64ZFBFMIN-NEXT:    srli a0, a0, 32
@@ -406,8 +399,7 @@ define i32 @fcvt_wu_bf16_sat(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a1, a0
 ; RV64ID-NEXT:    slli a0, a0, 32
 ; RV64ID-NEXT:    srli a0, a0, 32
@@ -585,8 +577,7 @@ define i64 @fcvt_l_bf16_sat(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK64ZFBFMIN-NEXT:    ret
 ;
@@ -597,8 +588,7 @@ define i64 @fcvt_l_bf16_sat(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a0, a1
 ; RV64ID-NEXT:    ret
 start:
@@ -734,8 +724,7 @@ define i64 @fcvt_lu_bf16_sat(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK64ZFBFMIN-NEXT:    ret
 ;
@@ -746,8 +735,7 @@ define i64 @fcvt_lu_bf16_sat(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a0, a1
 ; RV64ID-NEXT:    ret
 start:
@@ -1771,8 +1759,7 @@ define zeroext i32 @fcvt_wu_bf16_sat_zext(bfloat %a) nounwind {
 ; CHECK32ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK32ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK32ZFBFMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; CHECK32ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK32ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK32ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK32ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK32ZFBFMIN-NEXT:    ret
 ;
@@ -1783,8 +1770,7 @@ define zeroext i32 @fcvt_wu_bf16_sat_zext(bfloat %a) nounwind {
 ; RV32ID-NEXT:    fmv.w.x fa5, a0
 ; RV32ID-NEXT:    feq.s a0, fa5, fa5
 ; RV32ID-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32ID-NEXT:    seqz a0, a0
-; RV32ID-NEXT:    addi a0, a0, -1
+; RV32ID-NEXT:    neg a0, a0
 ; RV32ID-NEXT:    and a0, a0, a1
 ; RV32ID-NEXT:    ret
 ;
@@ -1793,8 +1779,7 @@ define zeroext i32 @fcvt_wu_bf16_sat_zext(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a1, a0
 ; CHECK64ZFBFMIN-NEXT:    slli a0, a0, 32
 ; CHECK64ZFBFMIN-NEXT:    srli a0, a0, 32
@@ -1807,8 +1792,7 @@ define zeroext i32 @fcvt_wu_bf16_sat_zext(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a1, a0
 ; RV64ID-NEXT:    slli a0, a0, 32
 ; RV64ID-NEXT:    srli a0, a0, 32
@@ -1824,8 +1808,7 @@ define signext i32 @fcvt_w_bf16_sat_sext(bfloat %a) nounwind {
 ; CHECK32ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK32ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK32ZFBFMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECK32ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK32ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK32ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK32ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK32ZFBFMIN-NEXT:    ret
 ;
@@ -1836,8 +1819,7 @@ define signext i32 @fcvt_w_bf16_sat_sext(bfloat %a) nounwind {
 ; RV32ID-NEXT:    fmv.w.x fa5, a0
 ; RV32ID-NEXT:    feq.s a0, fa5, fa5
 ; RV32ID-NEXT:    fcvt.w.s a1, fa5, rtz
-; RV32ID-NEXT:    seqz a0, a0
-; RV32ID-NEXT:    addi a0, a0, -1
+; RV32ID-NEXT:    neg a0, a0
 ; RV32ID-NEXT:    and a0, a0, a1
 ; RV32ID-NEXT:    ret
 ;
@@ -1846,8 +1828,7 @@ define signext i32 @fcvt_w_bf16_sat_sext(bfloat %a) nounwind {
 ; CHECK64ZFBFMIN-NEXT:    fcvt.s.bf16 fa5, fa0
 ; CHECK64ZFBFMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECK64ZFBFMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECK64ZFBFMIN-NEXT:    seqz a0, a0
-; CHECK64ZFBFMIN-NEXT:    addi a0, a0, -1
+; CHECK64ZFBFMIN-NEXT:    neg a0, a0
 ; CHECK64ZFBFMIN-NEXT:    and a0, a0, a1
 ; CHECK64ZFBFMIN-NEXT:    ret
 ;
@@ -1858,8 +1839,7 @@ define signext i32 @fcvt_w_bf16_sat_sext(bfloat %a) nounwind {
 ; RV64ID-NEXT:    fmv.w.x fa5, a0
 ; RV64ID-NEXT:    feq.s a0, fa5, fa5
 ; RV64ID-NEXT:    fcvt.w.s a1, fa5, rtz
-; RV64ID-NEXT:    seqz a0, a0
-; RV64ID-NEXT:    addi a0, a0, -1
+; RV64ID-NEXT:    neg a0, a0
 ; RV64ID-NEXT:    and a0, a0, a1
 ; RV64ID-NEXT:    ret
 start:

@@ -102,13 +102,13 @@ define inreg { fp128, fp128 } @f128_complex(fp128 %num) nounwind {
 ; SPARC32-NEXT:    call f128_complex_callee
 ; SPARC32-NEXT:    std %f0, [%fp+-16]
 ; SPARC32-NEXT:    sethi %hi(.LCPI2_0), %i0
-; SPARC32-NEXT:    ldd [%i0+%lo(.LCPI2_0)], %f8
-; SPARC32-NEXT:    add %i0, %lo(.LCPI2_0), %i0
-; SPARC32-NEXT:    ldd [%i0+8], %f12
+; SPARC32-NEXT:    add %i0, %lo(.LCPI2_0), %i1
+; SPARC32-NEXT:    ldd [%i1+8], %f8
+; SPARC32-NEXT:    ldd [%i0+%lo(.LCPI2_0)], %f12
 ; SPARC32-NEXT:    std %f4, [%fp+-96]
 ; SPARC32-NEXT:    std %f6, [%fp+-88] ! 16-byte Folded Spill
-; SPARC32-NEXT:    std %f8, [%fp+-80]
-; SPARC32-NEXT:    std %f12, [%fp+-72]
+; SPARC32-NEXT:    std %f8, [%fp+-72]
+; SPARC32-NEXT:    std %f12, [%fp+-80]
 ; SPARC32-NEXT:    std %f2, [%fp+-56]
 ; SPARC32-NEXT:    std %f0, [%fp+-64]
 ; SPARC32-NEXT:    add %fp, -48, %i0
@@ -136,13 +136,13 @@ define inreg { fp128, fp128 } @f128_complex(fp128 %num) nounwind {
 ; SPARC64-NEXT:    sethi %h44(.LCPI2_0), %i0
 ; SPARC64-NEXT:    add %i0, %m44(.LCPI2_0), %i0
 ; SPARC64-NEXT:    sllx %i0, 12, %i0
-; SPARC64-NEXT:    ldd [%i0+%l44(.LCPI2_0)], %f4
-; SPARC64-NEXT:    add %i0, %l44(.LCPI2_0), %i0
-; SPARC64-NEXT:    ldd [%i0+8], %f8
+; SPARC64-NEXT:    add %i0, %l44(.LCPI2_0), %i1
+; SPARC64-NEXT:    ldd [%i1+8], %f4
+; SPARC64-NEXT:    ldd [%i0+%l44(.LCPI2_0)], %f8
 ; SPARC64-NEXT:    std %f2, [%fp+2023]
 ; SPARC64-NEXT:    std %f0, [%fp+2015]
-; SPARC64-NEXT:    std %f4, [%fp+1999]
-; SPARC64-NEXT:    std %f8, [%fp+2007]
+; SPARC64-NEXT:    std %f4, [%fp+2007]
+; SPARC64-NEXT:    std %f8, [%fp+1999]
 ; SPARC64-NEXT:    add %fp, 2031, %o0
 ; SPARC64-NEXT:    add %fp, 2015, %o1
 ; SPARC64-NEXT:    call _Qp_add

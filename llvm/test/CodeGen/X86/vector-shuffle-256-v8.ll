@@ -3852,26 +3852,29 @@ entry:
 ; This test used to crash due to bad handling of concat_vectors after a bitcast
 ; in lowerVectorShuffleAsBroadcast.
 define <8 x float> @broadcast_concat_crash(<4 x float> %x, <4 x float> %y, float %z) {
-; AVX1OR2-LABEL: broadcast_concat_crash:
-; AVX1OR2:       # %bb.0: # %entry
-; AVX1OR2-NEXT:    vshufps {{.*#+}} xmm0 = xmm1[3,3,3,3]
-; AVX1OR2-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[2,3]
-; AVX1OR2-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
-; AVX1OR2-NEXT:    retq
+; AVX1-LABEL: broadcast_concat_crash:
+; AVX1:       # %bb.0: # %entry
+; AVX1-NEXT:    vshufps {{.*#+}} xmm0 = xmm1[3,3,1,1]
+; AVX1-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[2,3]
+; AVX1-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
+; AVX1-NEXT:    retq
 ;
-; AVX512VL-SLOW-LABEL: broadcast_concat_crash:
-; AVX512VL-SLOW:       # %bb.0: # %entry
-; AVX512VL-SLOW-NEXT:    vshufps {{.*#+}} xmm0 = xmm1[3,3,3,3]
-; AVX512VL-SLOW-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[2,3]
-; AVX512VL-SLOW-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
-; AVX512VL-SLOW-NEXT:    retq
+; AVX2-LABEL: broadcast_concat_crash:
+; AVX2:       # %bb.0: # %entry
+; AVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm1[3,3,1,1]
+; AVX2-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
+; AVX2-NEXT:    vbroadcastss %xmm2, %ymm1
+; AVX2-NEXT:    vblendps {{.*#+}} ymm0 = ymm0[0,1,2,3,4],ymm1[5],ymm0[6,7]
+; AVX2-NEXT:    retq
 ;
-; AVX512VL-FAST-LABEL: broadcast_concat_crash:
-; AVX512VL-FAST:       # %bb.0: # %entry
-; AVX512VL-FAST-NEXT:    vpmovsxbd {{.*#+}} xmm0 = [3,4,3,3]
-; AVX512VL-FAST-NEXT:    vpermi2ps %xmm2, %xmm1, %xmm0
-; AVX512VL-FAST-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
-; AVX512VL-FAST-NEXT:    retq
+; AVX512VL-LABEL: broadcast_concat_crash:
+; AVX512VL:       # %bb.0: # %entry
+; AVX512VL-NEXT:    # kill: def $xmm1 killed $xmm1 def $ymm1
+; AVX512VL-NEXT:    vbroadcastss %xmm2, %ymm2
+; AVX512VL-NEXT:    vbroadcasti128 {{.*#+}} ymm0 = [3,13,1,1,3,13,1,1]
+; AVX512VL-NEXT:    # ymm0 = mem[0,1,0,1]
+; AVX512VL-NEXT:    vpermi2ps %ymm2, %ymm1, %ymm0
+; AVX512VL-NEXT:    retq
 entry:
   %tmp = shufflevector <4 x float> %x, <4 x float> %y, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
   %bc = bitcast <8 x float> %tmp to <4 x i64>

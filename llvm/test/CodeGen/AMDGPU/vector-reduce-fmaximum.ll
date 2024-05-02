@@ -1385,9 +1385,9 @@ define float @test_vector_reduce_fmaximum_v4float(<4 x float> %v) {
 ; GFX1170-LABEL: test_vector_reduce_fmaximum_v4float:
 ; GFX1170:       ; %bb.0: ; %entry
 ; GFX1170-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX1170-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v2, v3
+; GFX1170-NEXT:    v_maximum_f32 v0, v0, v3
 ; GFX1170-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: test_vector_reduce_fmaximum_v4float:
@@ -1397,9 +1397,9 @@ define float @test_vector_reduce_fmaximum_v4float(<4 x float> %v) {
 ; GFX12-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
-; GFX12-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v2, v3
+; GFX12-NEXT:    v_maximum_f32 v0, v0, v3
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %res = call float @llvm.vector.reduce.fmaximum.v4float(<4 x float> %v)
@@ -1557,12 +1557,12 @@ define float @test_vector_reduce_fmaximum_v8float(<8 x float> %v) {
 ; GFX1170-LABEL: test_vector_reduce_fmaximum_v8float:
 ; GFX1170:       ; %bb.0: ; %entry
 ; GFX1170-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX1170-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v2, v3
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v4, v5
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v3, v4
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v5, v6
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v6, v7
+; GFX1170-NEXT:    v_maximum_f32 v0, v0, v7
 ; GFX1170-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: test_vector_reduce_fmaximum_v8float:
@@ -1572,12 +1572,12 @@ define float @test_vector_reduce_fmaximum_v8float(<8 x float> %v) {
 ; GFX12-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
-; GFX12-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v2, v3
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v4, v5
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v3, v4
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v5, v6
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v6, v7
+; GFX12-NEXT:    v_maximum_f32 v0, v0, v7
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %res = call float @llvm.vector.reduce.fmaximum.v8float(<8 x float> %v)
@@ -1871,18 +1871,18 @@ define float @test_vector_reduce_fmaximum_v16float(<16 x float> %v) {
 ; GFX1170-LABEL: test_vector_reduce_fmaximum_v16float:
 ; GFX1170:       ; %bb.0: ; %entry
 ; GFX1170-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX1170-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v2, v3
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v4, v5
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v3, v4
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v5, v6
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v6, v7
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v8, v9
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v7, v8
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v9, v10
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v10, v11
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v12, v13
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v11, v12
+; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v13, v14
 ; GFX1170-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1170-NEXT:    v_maximum3_f32 v0, v0, v14, v15
+; GFX1170-NEXT:    v_maximum_f32 v0, v0, v15
 ; GFX1170-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: test_vector_reduce_fmaximum_v16float:
@@ -1892,18 +1892,18 @@ define float @test_vector_reduce_fmaximum_v16float(<16 x float> %v) {
 ; GFX12-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
-; GFX12-NEXT:    v_maximum_f32 v0, v0, v1
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v1, v2
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v2, v3
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v4, v5
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v3, v4
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v5, v6
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v6, v7
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v8, v9
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v7, v8
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v9, v10
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v10, v11
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v12, v13
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v11, v12
+; GFX12-NEXT:    v_maximum3_f32 v0, v0, v13, v14
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-NEXT:    v_maximum3_f32 v0, v0, v14, v15
+; GFX12-NEXT:    v_maximum_f32 v0, v0, v15
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %res = call float @llvm.vector.reduce.fmaximum.v16float(<16 x float> %v)

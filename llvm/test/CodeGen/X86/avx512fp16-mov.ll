@@ -2425,7 +2425,9 @@ define <16 x i32> @pr52561(<16 x i32> %a, <16 x i32> %b) "min-legal-vector-width
 ; X64VL-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [112,112,112,112,112,112,112,112]
 ; X64VL-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
 ; X64VL-NEXT:    vpaddd %ymm2, %ymm1, %ymm1
-; X64VL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
+; X64VL-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X64VL-NEXT:    vpblendw {{.*#+}} ymm1 = ymm2[0,1,2,3,4,5],ymm1[6],ymm2[7,8,9,10,11,12,13],ymm1[14],ymm2[15]
+; X64VL-NEXT:    vpblendd {{.*#+}} ymm1 = ymm2[0,1,2,3],ymm1[4,5,6,7]
 ; X64VL-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X64VL-NEXT:    vmovsh {{.*#+}} xmm0 = xmm0[0],xmm2[1,2,3,4,5,6,7]
 ; X64VL-NEXT:    retq
@@ -2441,7 +2443,9 @@ define <16 x i32> @pr52561(<16 x i32> %a, <16 x i32> %b) "min-legal-vector-width
 ; X86-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [112,112,112,112,112,112,112,112]
 ; X86-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
 ; X86-NEXT:    vpaddd %ymm2, %ymm1, %ymm1
-; X86-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}, %ymm1, %ymm1
+; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X86-NEXT:    vpblendw {{.*#+}} ymm1 = ymm2[0,1,2,3,4,5],ymm1[6],ymm2[7,8,9,10,11,12,13],ymm1[14],ymm2[15]
+; X86-NEXT:    vpblendd {{.*#+}} ymm1 = ymm2[0,1,2,3],ymm1[4,5,6,7]
 ; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X86-NEXT:    vmovsh {{.*#+}} xmm0 = xmm0[0],xmm2[1,2,3,4,5,6,7]
 ; X86-NEXT:    movl %ebp, %esp
@@ -2463,8 +2467,9 @@ define <16 x i32> @pr52561(<16 x i32> %a, <16 x i32> %b) "min-legal-vector-width
 define <8 x i16> @pr59628_xmm(i16 %arg) {
 ; X64VL-LABEL: pr59628_xmm:
 ; X64VL:       # %bb.0:
-; X64VL-NEXT:    vmovw %edi, %xmm0
+; X64VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; X64VL-NEXT:    vpbroadcastw %edi, %xmm1
+; X64VL-NEXT:    vmovsh {{.*#+}} xmm0 = xmm1[0],xmm0[1,2,3,4,5,6,7]
 ; X64VL-NEXT:    vpcmpneqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
 ; X64VL-NEXT:    vmovdqu16 %xmm0, %xmm0 {%k1} {z}
 ; X64VL-NEXT:    retq
@@ -2481,8 +2486,11 @@ define <8 x i16> @pr59628_xmm(i16 %arg) {
 ;
 ; X64-NOVL-LABEL: pr59628_xmm:
 ; X64-NOVL:       # %bb.0:
-; X64-NOVL-NEXT:    vmovw %edi, %xmm0
-; X64-NOVL-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; X64-NOVL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; X64-NOVL-NEXT:    vmovd %edi, %xmm1
+; X64-NOVL-NEXT:    vpbroadcastw %xmm1, %xmm1
+; X64-NOVL-NEXT:    vmovsh {{.*#+}} xmm0 = xmm1[0],xmm0[1,2,3,4,5,6,7]
+; X64-NOVL-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
 ; X64-NOVL-NEXT:    vpandn %xmm0, %xmm1, %xmm0
 ; X64-NOVL-NEXT:    retq
   %I1 = insertelement <8 x i16> zeroinitializer, i16 %arg, i16 0

@@ -292,14 +292,16 @@ define <vscale x 4 x i32> @negative_test_no_sub_dot_inst(<vscale x 4 x i32> %acc
 define void @wide_fixed_umlslbt_i8_i16(ptr %acc.ptr, ptr %a.ptr, ptr %b.ptr, ptr %dest.ptr) #0 vscale_range(2,0) {
 ; CHECK-LABEL: wide_fixed_umlslbt_i8_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.b, vl32
-; CHECK-NEXT:    ptrue p1.h, vl16
-; CHECK-NEXT:    ld1b { z0.b }, p0/z, [x1]
-; CHECK-NEXT:    ld1b { z1.b }, p0/z, [x2]
-; CHECK-NEXT:    ld1h { z2.h }, p1/z, [x0]
-; CHECK-NEXT:    umlslb z2.h, z0.b, z1.b
-; CHECK-NEXT:    umlslt z2.h, z0.b, z1.b
-; CHECK-NEXT:    st1h { z2.h }, p1, [x3]
+; CHECK-NEXT:    ptrue p0.h, vl16
+; CHECK-NEXT:    mov w8, #16 // =0x10
+; CHECK-NEXT:    ld1b { z0.h }, p0/z, [x1]
+; CHECK-NEXT:    ld1b { z1.h }, p0/z, [x2]
+; CHECK-NEXT:    ld1h { z2.h }, p0/z, [x0]
+; CHECK-NEXT:    msb z0.h, p0/m, z1.h, z2.h
+; CHECK-NEXT:    ld1b { z1.h }, p0/z, [x1, x8]
+; CHECK-NEXT:    ld1b { z2.h }, p0/z, [x2, x8]
+; CHECK-NEXT:    mls z0.h, p0/m, z1.h, z2.h
+; CHECK-NEXT:    st1h { z0.h }, p0, [x3]
 ; CHECK-NEXT:    ret
   %a = load <32 x i8>, ptr %a.ptr
   %b = load <32 x i8>, ptr %b.ptr

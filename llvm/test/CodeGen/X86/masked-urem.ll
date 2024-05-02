@@ -11,39 +11,38 @@ define <4 x i32> @urem_v4i32(<4 x i32> %x, <4 x i32> %y, <4 x i1> %m) {
 ; SSE2-NEXT:    pslld $31, %xmm2
 ; SSE2-NEXT:    psrad $31, %xmm2
 ; SSE2-NEXT:    pand %xmm2, %xmm1
-; SSE2-NEXT:    paddd %xmm2, %xmm1
-; SSE2-NEXT:    pcmpeqd %xmm2, %xmm2
-; SSE2-NEXT:    psubd %xmm2, %xmm1
-; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[3,3,3,3]
-; SSE2-NEXT:    movd %xmm2, %ecx
-; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[3,3,3,3]
-; SSE2-NEXT:    movd %xmm2, %eax
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; SSE2-NEXT:    por %xmm1, %xmm2
+; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm2[3,3,3,3]
+; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
+; SSE2-NEXT:    movd %xmm1, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
-; SSE2-NEXT:    movd %edx, %xmm2
-; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm1[2,3,2,3]
+; SSE2-NEXT:    movd %edx, %xmm1
+; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
 ; SSE2-NEXT:    movd %xmm3, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm0[2,3,2,3]
 ; SSE2-NEXT:    movd %xmm3, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
 ; SSE2-NEXT:    movd %edx, %xmm3
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1]
-; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm1[0],xmm3[1],xmm1[1]
+; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    movd %xmm0, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
-; SSE2-NEXT:    movd %edx, %xmm2
-; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[1,1,1,1]
-; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    movd %edx, %xmm1
+; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[1,1,1,1]
+; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
 ; SSE2-NEXT:    movd %xmm0, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
 ; SSE2-NEXT:    movd %edx, %xmm0
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
-; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm3[0]
-; SSE2-NEXT:    movdqa %xmm2, %xmm0
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
+; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm3[0]
+; SSE2-NEXT:    movdqa %xmm1, %xmm0
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: urem_v4i32:
@@ -394,39 +393,38 @@ define <2 x i32> @urem_v2i32(<2 x i32> %x, <2 x i32> %y, <2 x i1> %m) {
 ; SSE2-NEXT:    pslld $31, %xmm2
 ; SSE2-NEXT:    psrad $31, %xmm2
 ; SSE2-NEXT:    pand %xmm2, %xmm1
-; SSE2-NEXT:    paddd %xmm2, %xmm1
-; SSE2-NEXT:    pcmpeqd %xmm2, %xmm2
-; SSE2-NEXT:    psubd %xmm2, %xmm1
-; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[3,3,3,3]
-; SSE2-NEXT:    movd %xmm2, %ecx
-; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[3,3,3,3]
-; SSE2-NEXT:    movd %xmm2, %eax
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; SSE2-NEXT:    por %xmm1, %xmm2
+; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm2[3,3,3,3]
+; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
+; SSE2-NEXT:    movd %xmm1, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
-; SSE2-NEXT:    movd %edx, %xmm2
-; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm1[2,3,2,3]
+; SSE2-NEXT:    movd %edx, %xmm1
+; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
 ; SSE2-NEXT:    movd %xmm3, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm0[2,3,2,3]
 ; SSE2-NEXT:    movd %xmm3, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
 ; SSE2-NEXT:    movd %edx, %xmm3
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1]
-; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm1[0],xmm3[1],xmm1[1]
+; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    movd %xmm0, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
-; SSE2-NEXT:    movd %edx, %xmm2
-; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[1,1,1,1]
-; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    movd %edx, %xmm1
+; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[1,1,1,1]
+; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
 ; SSE2-NEXT:    movd %xmm0, %eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divl %ecx
 ; SSE2-NEXT:    movd %edx, %xmm0
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
-; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm3[0]
-; SSE2-NEXT:    movdqa %xmm2, %xmm0
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
+; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm3[0]
+; SSE2-NEXT:    movdqa %xmm1, %xmm0
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: urem_v2i32:
@@ -535,48 +533,47 @@ define <4 x i16> @urem_v4i16(<4 x i16> %x, <4 x i16> %y, <4 x i1> %m) {
 ; SSE2-NEXT:    psllw $15, %xmm2
 ; SSE2-NEXT:    psraw $15, %xmm2
 ; SSE2-NEXT:    pand %xmm2, %xmm1
-; SSE2-NEXT:    paddw %xmm2, %xmm1
-; SSE2-NEXT:    pcmpeqd %xmm2, %xmm2
-; SSE2-NEXT:    psubw %xmm2, %xmm1
-; SSE2-NEXT:    pextrw $7, %xmm1, %ecx
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; SSE2-NEXT:    por %xmm1, %xmm2
+; SSE2-NEXT:    pextrw $7, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $7, %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
-; SSE2-NEXT:    pextrw $6, %xmm1, %ecx
-; SSE2-NEXT:    movd %edx, %xmm2
+; SSE2-NEXT:    pextrw $6, %xmm2, %ecx
+; SSE2-NEXT:    movd %edx, %xmm1
 ; SSE2-NEXT:    pextrw $6, %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
 ; SSE2-NEXT:    movd %edx, %xmm3
-; SSE2-NEXT:    pextrw $5, %xmm1, %ecx
+; SSE2-NEXT:    pextrw $5, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $5, %xmm0, %eax
-; SSE2-NEXT:    punpcklwd {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1],xmm3[2],xmm2[2],xmm3[3],xmm2[3]
+; SSE2-NEXT:    punpcklwd {{.*#+}} xmm3 = xmm3[0],xmm1[0],xmm3[1],xmm1[1],xmm3[2],xmm1[2],xmm3[3],xmm1[3]
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
 ; SSE2-NEXT:    movd %edx, %xmm4
-; SSE2-NEXT:    pextrw $4, %xmm1, %ecx
+; SSE2-NEXT:    pextrw $4, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $4, %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
-; SSE2-NEXT:    movd %edx, %xmm2
-; SSE2-NEXT:    punpcklwd {{.*#+}} xmm2 = xmm2[0],xmm4[0],xmm2[1],xmm4[1],xmm2[2],xmm4[2],xmm2[3],xmm4[3]
-; SSE2-NEXT:    pextrw $3, %xmm1, %ecx
+; SSE2-NEXT:    movd %edx, %xmm1
+; SSE2-NEXT:    punpcklwd {{.*#+}} xmm1 = xmm1[0],xmm4[0],xmm1[1],xmm4[1],xmm1[2],xmm4[2],xmm1[3],xmm4[3]
+; SSE2-NEXT:    pextrw $3, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $3, %xmm0, %eax
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm3[0],xmm2[1],xmm3[1]
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm3[0],xmm1[1],xmm3[1]
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
 ; SSE2-NEXT:    movd %edx, %xmm3
-; SSE2-NEXT:    pextrw $2, %xmm1, %ecx
+; SSE2-NEXT:    pextrw $2, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $2, %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
@@ -584,14 +581,14 @@ define <4 x i16> @urem_v4i16(<4 x i16> %x, <4 x i16> %y, <4 x i1> %m) {
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
 ; SSE2-NEXT:    movd %edx, %xmm4
 ; SSE2-NEXT:    punpcklwd {{.*#+}} xmm4 = xmm4[0],xmm3[0],xmm4[1],xmm3[1],xmm4[2],xmm3[2],xmm4[3],xmm3[3]
-; SSE2-NEXT:    pextrw $1, %xmm1, %ecx
+; SSE2-NEXT:    pextrw $1, %xmm2, %ecx
 ; SSE2-NEXT:    pextrw $1, %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
 ; SSE2-NEXT:    divw %cx
 ; SSE2-NEXT:    # kill: def $dx killed $dx def $edx
 ; SSE2-NEXT:    movd %edx, %xmm3
-; SSE2-NEXT:    movd %xmm1, %ecx
+; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    movd %xmm0, %eax
 ; SSE2-NEXT:    # kill: def $ax killed $ax killed $eax
 ; SSE2-NEXT:    xorl %edx, %edx
@@ -600,7 +597,7 @@ define <4 x i16> @urem_v4i16(<4 x i16> %x, <4 x i16> %y, <4 x i1> %m) {
 ; SSE2-NEXT:    movd %edx, %xmm0
 ; SSE2-NEXT:    punpcklwd {{.*#+}} xmm0 = xmm0[0],xmm3[0],xmm0[1],xmm3[1],xmm0[2],xmm3[2],xmm0[3],xmm3[3]
 ; SSE2-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm4[0],xmm0[1],xmm4[1]
-; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm2[0]
+; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm1[0]
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: urem_v4i16:
@@ -1053,18 +1050,18 @@ define <2 x i128> @urem_v2i128(<2 x i128> %x, <2 x i128> %y, <2 x i1> %m) nounwi
 define <3 x i10> @urem_v3i10(<3 x i10> %x, <3 x i10> %y, <3 x i1> %m) {
 ; SSE2-LABEL: urem_v3i10:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    movd %r8d, %xmm1
-; SSE2-NEXT:    movd %ecx, %xmm0
+; SSE2-NEXT:    movd %r8d, %xmm0
+; SSE2-NEXT:    movd %ecx, %xmm2
+; SSE2-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
+; SSE2-NEXT:    movd %r9d, %xmm0
+; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm0[0]
+; SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
+; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
-; SSE2-NEXT:    movd %r9d, %xmm1
+; SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm1[0]
-; SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
-; SSE2-NEXT:    movd {{.*#+}} xmm2 = mem[0],zero,zero,zero
-; SSE2-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm1[0],xmm2[1],xmm1[1]
-; SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
-; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm1[0]
-; SSE2-NEXT:    pslld $31, %xmm2
-; SSE2-NEXT:    psrad $31, %xmm2
+; SSE2-NEXT:    pslld $31, %xmm0
+; SSE2-NEXT:    psrad $31, %xmm0
 ; SSE2-NEXT:    movd %esi, %xmm3
 ; SSE2-NEXT:    movd %edi, %xmm1
 ; SSE2-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm3[0],xmm1[1],xmm3[1]
@@ -1072,11 +1069,10 @@ define <3 x i10> @urem_v3i10(<3 x i10> %x, <3 x i10> %y, <3 x i1> %m) {
 ; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm3[0]
 ; SSE2-NEXT:    movdqa {{.*#+}} xmm3 = [1023,1023,1023,1023]
 ; SSE2-NEXT:    pand %xmm3, %xmm1
-; SSE2-NEXT:    pand %xmm3, %xmm0
-; SSE2-NEXT:    pand %xmm2, %xmm0
-; SSE2-NEXT:    paddd %xmm2, %xmm0
-; SSE2-NEXT:    pcmpeqd %xmm2, %xmm2
-; SSE2-NEXT:    psubd %xmm2, %xmm0
+; SSE2-NEXT:    pand %xmm3, %xmm2
+; SSE2-NEXT:    pand %xmm0, %xmm2
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE2-NEXT:    por %xmm2, %xmm0
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
 ; SSE2-NEXT:    movd %xmm2, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[2,3,2,3]

@@ -447,6 +447,7 @@ define i8 @smaxv_v8i8(<8 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, gt
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -488,6 +489,7 @@ define i8 @smaxv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #9]
@@ -506,6 +508,7 @@ define i8 @smaxv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #14]
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
@@ -571,6 +574,7 @@ define i8 @smaxv_v32i8(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #23]
 ; NONEON-NOSVE-NEXT:    ldrsb w11, [sp, #7]
@@ -601,6 +605,7 @@ define i8 @smaxv_v32i8(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, gt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #28]
 ; NONEON-NOSVE-NEXT:    ldrsb w11, [sp, #12]
@@ -696,6 +701,7 @@ define i16 @smaxv_v8i16(<8 x i16> %a) {
 ; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, gt
+; NONEON-NOSVE-NEXT:    sxth w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -756,6 +762,7 @@ define i16 @smaxv_v16i16(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, gt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxth w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, gt
 ; NONEON-NOSVE-NEXT:    ldrsh w10, [sp, #30]
 ; NONEON-NOSVE-NEXT:    ldrsh w11, [sp, #14]
@@ -948,6 +955,7 @@ define i8 @sminv_v8i8(<8 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, lt
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -989,6 +997,7 @@ define i8 @sminv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #9]
@@ -1007,6 +1016,7 @@ define i8 @sminv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #14]
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
@@ -1072,6 +1082,7 @@ define i8 @sminv_v32i8(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #23]
 ; NONEON-NOSVE-NEXT:    ldrsb w11, [sp, #7]
@@ -1102,6 +1113,7 @@ define i8 @sminv_v32i8(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxtb w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, lt
 ; NONEON-NOSVE-NEXT:    ldrsb w10, [sp, #28]
 ; NONEON-NOSVE-NEXT:    ldrsb w11, [sp, #12]
@@ -1197,6 +1209,7 @@ define i16 @sminv_v8i16(<8 x i16> %a) {
 ; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, lt
+; NONEON-NOSVE-NEXT:    sxth w8, w8
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -1257,6 +1270,7 @@ define i16 @sminv_v16i16(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, lt
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    sxth w8, w8
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, lt
 ; NONEON-NOSVE-NEXT:    ldrsh w10, [sp, #30]
 ; NONEON-NOSVE-NEXT:    ldrsh w11, [sp, #14]
@@ -1449,6 +1463,7 @@ define i8 @umaxv_v8i8(<8 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -1490,6 +1505,7 @@ define i8 @umaxv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #9]
@@ -1508,6 +1524,7 @@ define i8 @umaxv_v16i8(<16 x i8> %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #14]
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
@@ -1543,66 +1560,68 @@ define i8 @umaxv_v32i8(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w9, w8
 ; NONEON-NOSVE-NEXT:    csel w8, w9, w8, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #18]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #18]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #2]
-; NONEON-NOSVE-NEXT:    cmp w9, w8
-; NONEON-NOSVE-NEXT:    csel w8, w9, w8, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w10, w8
+; NONEON-NOSVE-NEXT:    csel w8, w10, w8, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #19]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #3]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #20]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #20]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #4]
-; NONEON-NOSVE-NEXT:    cmp w8, w9
-; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w8, w10
+; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #21]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #5]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #22]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #22]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #6]
-; NONEON-NOSVE-NEXT:    cmp w8, w9
-; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w8, w10
+; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #23]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #7]
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #24]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #24]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #8]
-; NONEON-NOSVE-NEXT:    cmp w8, w9
-; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w8, w10
+; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #25]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #9]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #26]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #26]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #10]
-; NONEON-NOSVE-NEXT:    cmp w8, w9
-; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w8, w10
+; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #27]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #11]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrb w10, [sp, #28]
 ; NONEON-NOSVE-NEXT:    ldrb w11, [sp, #12]
@@ -1698,6 +1717,7 @@ define i16 @umaxv_v8i16(<8 x i16> %a) {
 ; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    cmp w8, w10
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xffff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w0, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
@@ -1728,26 +1748,26 @@ define i16 @umaxv_v16i16(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w9, w8
 ; NONEON-NOSVE-NEXT:    csel w8, w9, w8, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrh w10, [sp, #20]
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #20]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrh w11, [sp, #4]
-; NONEON-NOSVE-NEXT:    cmp w9, w8
-; NONEON-NOSVE-NEXT:    csel w8, w9, w8, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w10, w8
+; NONEON-NOSVE-NEXT:    csel w8, w10, w8, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrh w10, [sp, #22]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrh w11, [sp, #6]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
-; NONEON-NOSVE-NEXT:    ldrh w10, [sp, #24]
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #24]
+; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrh w11, [sp, #8]
-; NONEON-NOSVE-NEXT:    cmp w8, w9
-; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w8, w10
+; NONEON-NOSVE-NEXT:    csel w8, w8, w10, hi
+; NONEON-NOSVE-NEXT:    cmp w11, w9
 ; NONEON-NOSVE-NEXT:    ldrh w10, [sp, #26]
+; NONEON-NOSVE-NEXT:    csel w9, w11, w9, hi
 ; NONEON-NOSVE-NEXT:    ldrh w11, [sp, #10]
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
@@ -1758,6 +1778,7 @@ define i16 @umaxv_v16i16(ptr %a) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    cmp w11, w10
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xffff
 ; NONEON-NOSVE-NEXT:    csel w9, w11, w10, hi
 ; NONEON-NOSVE-NEXT:    ldrh w10, [sp, #30]
 ; NONEON-NOSVE-NEXT:    ldrh w11, [sp, #14]

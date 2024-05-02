@@ -99,16 +99,21 @@ define %S @negate(ptr nocapture readonly %this) nounwind {
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    xorl %edx, %edx
-; X64-NEXT:    subq (%rsi), %rdx
-; X64-NEXT:    movl $0, %edi
-; X64-NEXT:    sbbq 8(%rsi), %rdi
-; X64-NEXT:    movl $0, %r8d
-; X64-NEXT:    sbbq 16(%rsi), %r8
-; X64-NEXT:    sbbq 24(%rsi), %rcx
-; X64-NEXT:    movq %rdx, (%rax)
+; X64-NEXT:    subq (%rsi), %rcx
+; X64-NEXT:    setae %dl
+; X64-NEXT:    movq 8(%rsi), %rdi
+; X64-NEXT:    movq 16(%rsi), %r8
+; X64-NEXT:    notq %rdi
+; X64-NEXT:    addq %rdx, %rdi
+; X64-NEXT:    notq %r8
+; X64-NEXT:    adcq $0, %r8
+; X64-NEXT:    movq 24(%rsi), %rdx
+; X64-NEXT:    notq %rdx
+; X64-NEXT:    adcq $0, %rdx
+; X64-NEXT:    movq %rcx, (%rax)
 ; X64-NEXT:    movq %rdi, 8(%rax)
 ; X64-NEXT:    movq %r8, 16(%rax)
-; X64-NEXT:    movq %rcx, 24(%rax)
+; X64-NEXT:    movq %rdx, 24(%rax)
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: negate:
@@ -118,39 +123,48 @@ define %S @negate(ptr nocapture readonly %this) nounwind {
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    subl $12, %esp
-; X86-NEXT:    movl 36(%esp), %eax
-; X86-NEXT:    movl $0, (%esp) # 4-byte Folded Spill
-; X86-NEXT:    xorl %ecx, %ecx
-; X86-NEXT:    subl (%eax), %ecx
-; X86-NEXT:    movl %ecx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl $0, %ecx
-; X86-NEXT:    sbbl 4(%eax), %ecx
-; X86-NEXT:    movl %ecx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl $0, %edi
-; X86-NEXT:    sbbl 8(%eax), %edi
-; X86-NEXT:    movl $0, %ebx
-; X86-NEXT:    sbbl 12(%eax), %ebx
-; X86-NEXT:    movl $0, %ebp
-; X86-NEXT:    sbbl 16(%eax), %ebp
-; X86-NEXT:    movl $0, %edx
-; X86-NEXT:    sbbl 20(%eax), %edx
-; X86-NEXT:    movl $0, %ecx
-; X86-NEXT:    sbbl 24(%eax), %ecx
+; X86-NEXT:    movl 36(%esp), %ecx
+; X86-NEXT:    xorl %eax, %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    subl (%ecx), %edx
+; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
+; X86-NEXT:    sbbl 4(%ecx), %eax
+; X86-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
+; X86-NEXT:    setae %al
+; X86-NEXT:    movzbl %al, %eax
+; X86-NEXT:    movl 8(%ecx), %edi
+; X86-NEXT:    movl 12(%ecx), %edx
+; X86-NEXT:    movl %edx, (%esp) # 4-byte Spill
+; X86-NEXT:    notl %edi
+; X86-NEXT:    addl %eax, %edi
+; X86-NEXT:    movl 16(%ecx), %ebp
+; X86-NEXT:    movl 20(%ecx), %ebx
+; X86-NEXT:    movl 24(%ecx), %eax
+; X86-NEXT:    movl 28(%ecx), %ecx
+; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
+; X86-NEXT:    movl 32(%esp), %esi
+; X86-NEXT:    movl %edx, (%esi)
+; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
+; X86-NEXT:    movl %edx, 4(%esi)
+; X86-NEXT:    movl %esi, %edx
+; X86-NEXT:    movl %edi, 8(%esi)
 ; X86-NEXT:    movl (%esp), %esi # 4-byte Reload
-; X86-NEXT:    sbbl 28(%eax), %esi
-; X86-NEXT:    movl %esi, (%esp) # 4-byte Spill
-; X86-NEXT:    movl 32(%esp), %eax
-; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
-; X86-NEXT:    movl %esi, (%eax)
-; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
-; X86-NEXT:    movl %esi, 4(%eax)
-; X86-NEXT:    movl %edi, 8(%eax)
-; X86-NEXT:    movl %ebx, 12(%eax)
-; X86-NEXT:    movl %ebp, 16(%eax)
-; X86-NEXT:    movl %edx, 20(%eax)
-; X86-NEXT:    movl %ecx, 24(%eax)
-; X86-NEXT:    movl (%esp), %ecx # 4-byte Reload
-; X86-NEXT:    movl %ecx, 28(%eax)
+; X86-NEXT:    notl %esi
+; X86-NEXT:    adcl $0, %esi
+; X86-NEXT:    movl %esi, 12(%edx)
+; X86-NEXT:    notl %ebp
+; X86-NEXT:    adcl $0, %ebp
+; X86-NEXT:    movl %ebp, 16(%edx)
+; X86-NEXT:    notl %ebx
+; X86-NEXT:    adcl $0, %ebx
+; X86-NEXT:    movl %ebx, 20(%edx)
+; X86-NEXT:    notl %eax
+; X86-NEXT:    adcl $0, %eax
+; X86-NEXT:    movl %eax, 24(%edx)
+; X86-NEXT:    notl %ecx
+; X86-NEXT:    adcl $0, %ecx
+; X86-NEXT:    movl %ecx, 28(%edx)
+; X86-NEXT:    movl %edx, %eax
 ; X86-NEXT:    addl $12, %esp
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
@@ -197,13 +211,12 @@ define %S @sub(ptr nocapture readonly %this, %S %arg.b) nounwind {
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movq (%rsi), %rdi
-; X64-NEXT:    movq 8(%rsi), %r10
+; X64-NEXT:    xorl %r10d, %r10d
 ; X64-NEXT:    subq %rdx, %rdi
-; X64-NEXT:    setae %dl
-; X64-NEXT:    addb $-1, %dl
-; X64-NEXT:    adcq $0, %r10
+; X64-NEXT:    setae %r10b
+; X64-NEXT:    xorl %edx, %edx
+; X64-NEXT:    addq 8(%rsi), %r10
 ; X64-NEXT:    setb %dl
-; X64-NEXT:    movzbl %dl, %edx
 ; X64-NEXT:    notq %rcx
 ; X64-NEXT:    addq %r10, %rcx
 ; X64-NEXT:    adcq 16(%rsi), %rdx
@@ -1194,14 +1207,12 @@ define void @sub_U256_without_i128_or_recursive(ptr sret(%uint256) %0, ptr %1, p
 ; X64-NEXT:    movq 8(%rsi), %rdi
 ; X64-NEXT:    movq 16(%rsi), %r8
 ; X64-NEXT:    movq 24(%rsi), %rsi
-; X64-NEXT:    xorl %r9d, %r9d
 ; X64-NEXT:    subq 16(%rdx), %r8
-; X64-NEXT:    setb %r9b
-; X64-NEXT:    subq 24(%rdx), %rsi
+; X64-NEXT:    sbbq 24(%rdx), %rsi
 ; X64-NEXT:    subq (%rdx), %rcx
 ; X64-NEXT:    sbbq 8(%rdx), %rdi
 ; X64-NEXT:    sbbq $0, %r8
-; X64-NEXT:    sbbq %r9, %rsi
+; X64-NEXT:    sbbq $0, %rsi
 ; X64-NEXT:    movq %rcx, (%rax)
 ; X64-NEXT:    movq %rdi, 8(%rax)
 ; X64-NEXT:    movq %r8, 16(%rax)
@@ -1468,35 +1479,20 @@ define i1 @subcarry_ult_2x128(i128 %x0, i128 %x1, i128 %y0, i128 %y1) nounwind {
 
 ; i256 borrow chain - exercises the non-simple EVT path (i256->i128->i64/i32).
 define i1 @subcarry_ult_2x256(i256 %x0, i256 %x1, i256 %y0, i256 %y1) nounwind {
-; X64-SSE2-LABEL: subcarry_ult_2x256:
-; X64-SSE2:       # %bb.0:
-; X64-SSE2-NEXT:    movq 16(%rsp), %rax
-; X64-SSE2-NEXT:    movq 8(%rsp), %r10
-; X64-SSE2-NEXT:    cmpq 24(%rsp), %rdi
-; X64-SSE2-NEXT:    sbbq 32(%rsp), %rsi
-; X64-SSE2-NEXT:    sbbq 40(%rsp), %rdx
-; X64-SSE2-NEXT:    sbbq 48(%rsp), %rcx
-; X64-SSE2-NEXT:    sbbq 56(%rsp), %r8
-; X64-SSE2-NEXT:    sbbq 64(%rsp), %r9
-; X64-SSE2-NEXT:    sbbq 72(%rsp), %r10
-; X64-SSE2-NEXT:    sbbq 80(%rsp), %rax
-; X64-SSE2-NEXT:    setb %al
-; X64-SSE2-NEXT:    retq
-;
-; X64-AVX512-LABEL: subcarry_ult_2x256:
-; X64-AVX512:       # %bb.0:
-; X64-AVX512-NEXT:    movq 8(%rsp), %rax
-; X64-AVX512-NEXT:    movq 16(%rsp), %r10
-; X64-AVX512-NEXT:    cmpq 24(%rsp), %rdi
-; X64-AVX512-NEXT:    sbbq 32(%rsp), %rsi
-; X64-AVX512-NEXT:    sbbq 40(%rsp), %rdx
-; X64-AVX512-NEXT:    sbbq 48(%rsp), %rcx
-; X64-AVX512-NEXT:    sbbq 56(%rsp), %r8
-; X64-AVX512-NEXT:    sbbq 64(%rsp), %r9
-; X64-AVX512-NEXT:    sbbq 72(%rsp), %rax
-; X64-AVX512-NEXT:    sbbq 80(%rsp), %r10
-; X64-AVX512-NEXT:    setb %al
-; X64-AVX512-NEXT:    retq
+; X64-LABEL: subcarry_ult_2x256:
+; X64:       # %bb.0:
+; X64-NEXT:    movq 8(%rsp), %rax
+; X64-NEXT:    movq 16(%rsp), %r10
+; X64-NEXT:    cmpq 24(%rsp), %rdi
+; X64-NEXT:    sbbq 32(%rsp), %rsi
+; X64-NEXT:    sbbq 40(%rsp), %rdx
+; X64-NEXT:    sbbq 48(%rsp), %rcx
+; X64-NEXT:    sbbq 56(%rsp), %r8
+; X64-NEXT:    sbbq 64(%rsp), %r9
+; X64-NEXT:    sbbq 72(%rsp), %rax
+; X64-NEXT:    sbbq 80(%rsp), %r10
+; X64-NEXT:    setb %al
+; X64-NEXT:    retq
 ;
 ; X86-LABEL: subcarry_ult_2x256:
 ; X86:       # %bb.0:

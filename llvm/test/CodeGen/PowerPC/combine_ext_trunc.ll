@@ -8,9 +8,6 @@
 define i32 @pattern1(i32 %x, i32 %y){
 ; CHECK-LABEL: pattern1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    xori 5, 4, 65535
-; CHECK-NEXT:    xoris 5, 5, 65535
-; CHECK-NEXT:    and 3, 3, 5
 ; CHECK-NEXT:    or 3, 3, 4
 ; CHECK-NEXT:    blr
     %a = xor i32 %y, -1
@@ -23,9 +20,6 @@ define i32 @pattern1(i32 %x, i32 %y){
 define i32 @pattern2(i32 %x, i32 %y){
 ; CHECK-LABEL: pattern2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    xori 5, 4, 65535
-; CHECK-NEXT:    xoris 5, 5, 65535
-; CHECK-NEXT:    and 3, 5, 3
 ; CHECK-NEXT:    or 3, 3, 4
 ; CHECK-NEXT:    blr
     %a = xor i32 %y, -1
@@ -38,10 +32,8 @@ define i32 @pattern2(i32 %x, i32 %y){
 define i32 @pattern3(i1 %cond, i32 %x) {
 ; CHECK-LABEL: pattern3:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    andi. 3, 3, 1
-; CHECK-NEXT:    li 3, -1
-; CHECK-NEXT:    rldic 3, 3, 0, 32
-; CHECK-NEXT:    iselgt 3, 0, 3
+; CHECK-NEXT:    clrlwi 3, 3, 31
+; CHECK-NEXT:    addi 3, 3, -1
 ; CHECK-NEXT:    and 3, 3, 4
 ; CHECK-NEXT:    blr
   %sel = select i1 %cond, i32 0, i32 -1
@@ -53,11 +45,8 @@ define i32 @pattern3(i1 %cond, i32 %x) {
 define i32 @pattern4(i1 %cond, i32 %x) {
 ; CHECK-LABEL: pattern4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    andi. 3, 3, 1
-; CHECK-NEXT:    li 3, -1
-; CHECK-NEXT:    li 5, 0
-; CHECK-NEXT:    rldic 3, 3, 0, 32
-; CHECK-NEXT:    iselgt 3, 3, 5
+; CHECK-NEXT:    clrlwi 3, 3, 31
+; CHECK-NEXT:    neg 3, 3
 ; CHECK-NEXT:    or 3, 4, 3
 ; CHECK-NEXT:    blr
   %sel = select i1 %cond, i32 -1, i32 0

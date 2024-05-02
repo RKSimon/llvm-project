@@ -7,10 +7,57 @@ declare void @func()
 
 define void @test(ptr %p) personality ptr @__CxxFrameHandler3 {
 ; CHECK-LABEL: test:
-; CHECK:       .seh_proc "?dtor$1@?0?test@4HA"
-; CHECK-LABEL: $stateUnwindMap$test:
-; CHECK:       .word -1                           // ToState
-; CHECK:       .word "?dtor$1@?0?test@4HA"@IMGREL // Action
+; CHECK:       .Lfunc_begin0:
+; CHECK-NEXT:  .seh_proc test
+; CHECK-NEXT:    .seh_handler __CxxFrameHandler3, @unwind, @except
+; CHECK-NEXT:  // %bb.0:
+; CHECK-NEXT:    sub sp, sp, #48
+; CHECK-NEXT:    .seh_stackalloc 48
+; CHECK-NEXT:    stp x29, x30, [sp, #16] // 16-byte Folded Spill
+; CHECK-NEXT:    .seh_save_fplr 16
+; CHECK-NEXT:    add x29, sp, #16
+; CHECK-NEXT:    .seh_add_fp 16
+; CHECK-NEXT:    .seh_endprologue
+; CHECK-NEXT:    mov x1, #-2 // =0xfffffffffffffffe
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    stur x1, [x29, #16]
+; CHECK-NEXT:    stur x0, [x29, #-8] // 8-byte Folded Spill
+; CHECK-NEXT:    cbnz w8, .LBB0_2
+; CHECK-NEXT:  // %bb.1: // %bb
+; CHECK-NEXT:  .Ltmp0: // EH_LABEL
+; CHECK-NEXT:    bl func
+; CHECK-NEXT:  .Ltmp1: // EH_LABEL
+; CHECK-NEXT:  .LBB0_2: // %exit
+; CHECK-NEXT:    .seh_startepilogue
+; CHECK-NEXT:    ldp x29, x30, [sp, #16] // 16-byte Folded Reload
+; CHECK-NEXT:    .seh_save_fplr 16
+; CHECK-NEXT:    add sp, sp, #48
+; CHECK-NEXT:    .seh_stackalloc 48
+; CHECK-NEXT:    .seh_endepilogue
+; CHECK-NEXT:    ret
+; CHECK-NEXT:    .seh_endfunclet
+; CHECK-NEXT:    .seh_handlerdata
+; CHECK-NEXT:    .word $cppxdata$test@IMGREL
+; CHECK-NEXT:    .text
+; CHECK-NEXT:    .seh_endproc
+; CHECK-NEXT:    .def "?dtor$3@?0?test@4HA";
+; CHECK-NEXT:    .scl 3;
+; CHECK-NEXT:    .type 32;
+; CHECK-NEXT:    .endef
+; CHECK-NEXT:    .p2align 2
+; CHECK-NEXT:  "?dtor$3@?0?test@4HA":
+; CHECK-NEXT:  .seh_proc "?dtor$3@?0?test@4HA"
+; CHECK-NEXT:  .LBB0_3: // %unwind
+; CHECK-NEXT:    stp x29, x30, [sp, #-16]! // 16-byte Folded Spill
+; CHECK-NEXT:    .seh_save_fplr_x 16
+; CHECK-NEXT:    .seh_endprologue
+; CHECK-NEXT:    ldur x8, [x29, #-8] // 8-byte Folded Reload
+; CHECK-NEXT:    str wzr, [x8]
+; CHECK-NEXT:    .seh_startepilogue
+; CHECK-NEXT:    ldp x29, x30, [sp], #16 // 16-byte Folded Reload
+; CHECK-NEXT:    .seh_save_fplr_x 16
+; CHECK-NEXT:    .seh_endepilogue
+; CHECK-NEXT:    ret
 
   %v0 = load i32, ptr %p
   %v1 = load i32, ptr %p

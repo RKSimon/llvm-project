@@ -400,10 +400,10 @@ define <4 x half> @test_fmax_legacy_ugt_v4f16(<4 x half> %a, <4 x half> %b) #0 {
 ; SI-NEXT:    v_cmp_nle_f32_e32 vcc, v13, v12
 ; SI-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; SI-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; SI-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; SI-NEXT:    v_lshlrev_b32_e32 v2, 16, v5
 ; SI-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; SI-NEXT:    v_and_b32_e32 v1, 0xffff, v1
-; SI-NEXT:    v_or_b32_e32 v0, v0, v5
+; SI-NEXT:    v_or_b32_e32 v0, v0, v2
 ; SI-NEXT:    v_or_b32_e32 v1, v1, v4
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;

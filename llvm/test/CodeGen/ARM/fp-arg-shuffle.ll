@@ -10,15 +10,15 @@ define double @function1(double %a, double %b, double %c, double %d, double %e, 
 ; CHECK-NEXT:    vldr d16, [sp, #40]
 ; CHECK-NEXT:    vldr d17, [sp, #32]
 ; CHECK-NEXT:    vmov r12, lr, d16
-; CHECK-NEXT:    vldr d16, [sp, #16]
+; CHECK-NEXT:    vldr d16, [sp, #24]
 ; CHECK-NEXT:    vmov r4, r5, d17
-; CHECK-NEXT:    vldr d17, [sp, #24]
-; CHECK-NEXT:    str r3, [sp, #36]
-; CHECK-NEXT:    str r2, [sp, #32]
+; CHECK-NEXT:    vldr d17, [sp, #16]
 ; CHECK-NEXT:    str r1, [sp, #44]
 ; CHECK-NEXT:    str r0, [sp, #40]
-; CHECK-NEXT:    vstr d17, [sp, #16]
-; CHECK-NEXT:    vstr d16, [sp, #24]
+; CHECK-NEXT:    str r3, [sp, #36]
+; CHECK-NEXT:    str r2, [sp, #32]
+; CHECK-NEXT:    vstr d17, [sp, #24]
+; CHECK-NEXT:    vstr d16, [sp, #16]
 ; CHECK-NEXT:    mov r0, r12
 ; CHECK-NEXT:    mov r1, lr
 ; CHECK-NEXT:    mov r2, r4

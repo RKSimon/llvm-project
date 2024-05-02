@@ -165,13 +165,14 @@ define <8 x bfloat> @sitofp_v8i64_to_v8bf16(<8 x i64> %a) {
 ; BF16-NEXT:    vcvtsi2ss %r8, %xmm15, %xmm1
 ; BF16-NEXT:    vcvtneps2bf16 %xmm1, %xmm1
 ; BF16-NEXT:    vmovd %xmm1, %r8d
-; BF16-NEXT:    vpextrq $1, %xmm0, %r9
+; BF16-NEXT:    vmovq %xmm0, %r9
 ; BF16-NEXT:    vcvtsi2ss %r9, %xmm15, %xmm1
 ; BF16-NEXT:    vcvtneps2bf16 %xmm1, %xmm1
-; BF16-NEXT:    vmovq %xmm0, %r9
+; BF16-NEXT:    vpextrq $1, %xmm0, %r9
 ; BF16-NEXT:    vcvtsi2ss %r9, %xmm15, %xmm0
 ; BF16-NEXT:    vcvtneps2bf16 %xmm0, %xmm0
-; BF16-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1],xmm0[2],xmm1[2],xmm0[3],xmm1[3]
+; BF16-NEXT:    vmovd %xmm0, %r9d
+; BF16-NEXT:    vpinsrw $1, %r9d, %xmm1, %xmm0
 ; BF16-NEXT:    vpinsrw $2, %r8d, %xmm0, %xmm0
 ; BF16-NEXT:    vpinsrw $3, %edi, %xmm0, %xmm0
 ; BF16-NEXT:    vpinsrw $4, %esi, %xmm0, %xmm0
@@ -354,13 +355,14 @@ define <8 x bfloat> @uitofp_v8i64_to_v8bf16(<8 x i64> %a) {
 ; BF16-NEXT:    vcvtusi2ss %r8, %xmm15, %xmm1
 ; BF16-NEXT:    vcvtneps2bf16 %xmm1, %xmm1
 ; BF16-NEXT:    vmovd %xmm1, %r8d
-; BF16-NEXT:    vpextrq $1, %xmm0, %r9
+; BF16-NEXT:    vmovq %xmm0, %r9
 ; BF16-NEXT:    vcvtusi2ss %r9, %xmm15, %xmm1
 ; BF16-NEXT:    vcvtneps2bf16 %xmm1, %xmm1
-; BF16-NEXT:    vmovq %xmm0, %r9
+; BF16-NEXT:    vpextrq $1, %xmm0, %r9
 ; BF16-NEXT:    vcvtusi2ss %r9, %xmm15, %xmm0
 ; BF16-NEXT:    vcvtneps2bf16 %xmm0, %xmm0
-; BF16-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1],xmm0[2],xmm1[2],xmm0[3],xmm1[3]
+; BF16-NEXT:    vmovd %xmm0, %r9d
+; BF16-NEXT:    vpinsrw $1, %r9d, %xmm1, %xmm0
 ; BF16-NEXT:    vpinsrw $2, %r8d, %xmm0, %xmm0
 ; BF16-NEXT:    vpinsrw $3, %edi, %xmm0, %xmm0
 ; BF16-NEXT:    vpinsrw $4, %esi, %xmm0, %xmm0

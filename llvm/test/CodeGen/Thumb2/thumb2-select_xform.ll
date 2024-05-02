@@ -4,11 +4,11 @@
 define i32 @t1(i32 %a, i32 %b, i32 %c) nounwind {
 ; CHECK-LABEL: t1:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, r1
-; CHECK-NEXT:    mvn r1, #-2147483648
+; CHECK-NEXT:    mvn r0, #-2147483648
 ; CHECK-NEXT:    cmp r2, #10
-; CHECK-NEXT:    it le
-; CHECK-NEXT:    addle r0, r1
+; CHECK-NEXT:    it gt
+; CHECK-NEXT:    movgt r0, #0
+; CHECK-NEXT:    add r0, r1
 ; CHECK-NEXT:    bx lr
         %tmp1 = icmp sgt i32 %c, 10
         %tmp2 = select i1 %tmp1, i32 0, i32 2147483647
@@ -19,10 +19,11 @@ define i32 @t1(i32 %a, i32 %b, i32 %c) nounwind {
 define i32 @t2(i32 %a, i32 %b, i32 %c) nounwind {
 ; CHECK-LABEL: t2:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, r1
+; CHECK-NEXT:    mov.w r0, #-2147483648
 ; CHECK-NEXT:    cmp r2, #10
-; CHECK-NEXT:    it le
-; CHECK-NEXT:    addle.w r0, r0, #-2147483648
+; CHECK-NEXT:    it gt
+; CHECK-NEXT:    movgt r0, #0
+; CHECK-NEXT:    add r0, r1
 ; CHECK-NEXT:    bx lr
 
         %tmp1 = icmp sgt i32 %c, 10
@@ -34,10 +35,11 @@ define i32 @t2(i32 %a, i32 %b, i32 %c) nounwind {
 define i32 @t3(i32 %a, i32 %b, i32 %c, i32 %d) nounwind {
 ; CHECK-LABEL: t3:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, r1
+; CHECK-NEXT:    movs r0, #10
 ; CHECK-NEXT:    cmp r2, #10
-; CHECK-NEXT:    it le
-; CHECK-NEXT:    suble r0, #10
+; CHECK-NEXT:    it gt
+; CHECK-NEXT:    movgt r0, #0
+; CHECK-NEXT:    subs r0, r1, r0
 ; CHECK-NEXT:    bx lr
         %tmp1 = icmp sgt i32 %c, 10
         %tmp2 = select i1 %tmp1, i32 0, i32 10

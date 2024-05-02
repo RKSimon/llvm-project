@@ -48761,7 +48761,7 @@ define inreg <60 x half> @bitcast_v60i16_to_v60f16_scalar(<60 x i16> inreg %a, i
 ; VI-NEXT:    s_or_b32 s12, s12, s13
 ; VI-NEXT:    s_or_b32 s10, s10, s11
 ; VI-NEXT:    s_or_b32 s8, s8, s9
-; VI-NEXT:    s_or_b32 s6, s7, s6
+; VI-NEXT:    s_or_b32 s7, s7, s6
 ; VI-NEXT:    v_readlane_b32 s30, v30, 4
 ; VI-NEXT:    v_mov_b32_e32 v0, s4
 ; VI-NEXT:    v_mov_b32_e32 v1, s5
@@ -48792,7 +48792,7 @@ define inreg <60 x half> @bitcast_v60i16_to_v60f16_scalar(<60 x i16> inreg %a, i
 ; VI-NEXT:    v_mov_b32_e32 v26, s12
 ; VI-NEXT:    v_mov_b32_e32 v27, s10
 ; VI-NEXT:    v_mov_b32_e32 v28, s8
-; VI-NEXT:    v_mov_b32_e32 v29, s6
+; VI-NEXT:    v_mov_b32_e32 v29, s7
 ; VI-NEXT:    v_readlane_b32 s31, v30, 5
 ; VI-NEXT:    v_readlane_b32 s37, v30, 3
 ; VI-NEXT:    v_readlane_b32 s36, v30, 2

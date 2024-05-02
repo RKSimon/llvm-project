@@ -76,8 +76,10 @@ define void @freeze_bitcast_from_wider_elt(ptr %origin, ptr %dst) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
-; X86-NEXT:    vmovsd %xmm0, (%eax)
+; X86-NEXT:    movl (%ecx), %edx
+; X86-NEXT:    movl 4(%ecx), %ecx
+; X86-NEXT:    movl %ecx, 4(%eax)
+; X86-NEXT:    movl %edx, (%eax)
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: freeze_bitcast_from_wider_elt:
@@ -123,8 +125,10 @@ define void @freeze_bitcast_to_wider_elt(ptr %origin, ptr %dst) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
-; X86-NEXT:    vmovsd %xmm0, (%eax)
+; X86-NEXT:    movl (%ecx), %edx
+; X86-NEXT:    movl 4(%ecx), %ecx
+; X86-NEXT:    movl %ecx, 4(%eax)
+; X86-NEXT:    movl %edx, (%eax)
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: freeze_bitcast_to_wider_elt:
@@ -449,15 +453,18 @@ define void @freeze_two_buildvectors_only_one_frozen(ptr %origin0, ptr %origin1,
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl (%esi), %esi
 ; X86-NEXT:    andl $15, %esi
+; X86-NEXT:    movl (%edx), %edx
+; X86-NEXT:    andl $15, %edx
 ; X86-NEXT:    vmovd %esi, %xmm0
 ; X86-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,0,1,1]
 ; X86-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X86-NEXT:    vpblendw {{.*#+}} xmm0 = xmm1[0,1],xmm0[2,3],xmm1[4,5,6,7]
 ; X86-NEXT:    vbroadcastss {{.*#+}} xmm1 = [7,7,7,7]
 ; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; X86-NEXT:    vbroadcastss (%edx), %xmm2
 ; X86-NEXT:    vmovdqa %xmm0, (%ecx)
-; X86-NEXT:    vpand %xmm1, %xmm2, %xmm0
+; X86-NEXT:    vmovd %edx, %xmm0
+; X86-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,0,1]
+; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovdqa %xmm0, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
@@ -499,13 +506,16 @@ define void @freeze_two_buildvectors_one_undef_elt(ptr %origin0, ptr %origin1, p
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl (%esi), %esi
 ; X86-NEXT:    andl $15, %esi
+; X86-NEXT:    movl (%edx), %edx
+; X86-NEXT:    andl $15, %edx
 ; X86-NEXT:    vmovd %esi, %xmm0
 ; X86-NEXT:    vmovddup {{.*#+}} xmm1 = [7,0,7,0]
 ; X86-NEXT:    # xmm1 = mem[0,0]
 ; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; X86-NEXT:    vmovddup {{.*#+}} xmm2 = mem[0,0]
 ; X86-NEXT:    vmovdqa %xmm0, (%ecx)
-; X86-NEXT:    vpand %xmm1, %xmm2, %xmm0
+; X86-NEXT:    vmovd %edx, %xmm0
+; X86-NEXT:    vpslldq {{.*#+}} xmm0 = zero,zero,zero,zero,zero,zero,zero,zero,xmm0[0,1,2,3,4,5,6,7]
+; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovdqa %xmm0, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
@@ -812,16 +822,10 @@ define <2 x i32> @freeze_vselect_high_demanded(<4 x i32> %csrc, <2 x i32> %a, <2
 ;
 ; X64-LABEL: freeze_vselect_high_demanded:
 ; X64:       # %bb.0:
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm5 = [2147483647,2147483647,2147483647,2147483647]
-; X64-NEXT:    vpaddd %xmm5, %xmm0, %xmm6
-; X64-NEXT:    vpxor %xmm7, %xmm7, %xmm7
-; X64-NEXT:    vpblendd {{.*#+}} xmm0 = xmm6[0,1],xmm0[2,3]
-; X64-NEXT:    vpcmpgtd %xmm7, %xmm0, %xmm0
-; X64-NEXT:    vpaddd %xmm5, %xmm2, %xmm2
-; X64-NEXT:    vpbroadcastd {{.*#+}} xmm5 = [2147483648,2147483648,2147483648,2147483648]
-; X64-NEXT:    vpsubd %xmm5, %xmm4, %xmm4
-; X64-NEXT:    vpunpcklqdq {{.*#+}} xmm1 = xmm2[0],xmm1[0]
-; X64-NEXT:    vpunpcklqdq {{.*#+}} xmm2 = xmm4[0],xmm3[0]
+; X64-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X64-NEXT:    vpcmpgtd %xmm2, %xmm0, %xmm0
+; X64-NEXT:    vmovddup {{.*#+}} xmm1 = xmm1[0,0]
+; X64-NEXT:    vmovddup {{.*#+}} xmm2 = xmm3[0,0]
 ; X64-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X64-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[2,3,2,3]
 ; X64-NEXT:    retq

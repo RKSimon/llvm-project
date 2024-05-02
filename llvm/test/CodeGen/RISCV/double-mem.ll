@@ -116,12 +116,12 @@ define dso_local double @fld_fsd_global(double %a, double %b) nounwind {
 ; RV32IZFINXZDINX-NEXT:    fadd.d a0, a0, a2
 ; RV32IZFINXZDINX-NEXT:    lui a2, %hi(G)
 ; RV32IZFINXZDINX-NEXT:    addi a2, a2, %lo(G)
-; RV32IZFINXZDINX-NEXT:    lw zero, 0(a2)
 ; RV32IZFINXZDINX-NEXT:    lw zero, 4(a2)
+; RV32IZFINXZDINX-NEXT:    lw zero, 0(a2)
 ; RV32IZFINXZDINX-NEXT:    sw a0, 0(a2)
 ; RV32IZFINXZDINX-NEXT:    sw a1, 4(a2)
-; RV32IZFINXZDINX-NEXT:    lw zero, 72(a2)
 ; RV32IZFINXZDINX-NEXT:    lw zero, 76(a2)
+; RV32IZFINXZDINX-NEXT:    lw zero, 72(a2)
 ; RV32IZFINXZDINX-NEXT:    sw a0, 72(a2)
 ; RV32IZFINXZDINX-NEXT:    sw a1, 76(a2)
 ; RV32IZFINXZDINX-NEXT:    ret

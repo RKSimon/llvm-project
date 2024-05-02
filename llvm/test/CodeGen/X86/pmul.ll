@@ -1341,13 +1341,23 @@ define <2 x i64> @pmuldq_square(<2 x i64> %x) {
 }
 
 define <2 x i64> @pmuludq_square(<2 x i64> %x) {
-; SSE-LABEL: pmuludq_square:
-; SSE:       # %bb.0:
-; SSE-NEXT:    pmuludq %xmm0, %xmm0
-; SSE-NEXT:    retq
+; SSE2-LABEL: pmuludq_square:
+; SSE2:       # %bb.0:
+; SSE2-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE2-NEXT:    pmuludq %xmm0, %xmm0
+; SSE2-NEXT:    retq
+;
+; SSE41-LABEL: pmuludq_square:
+; SSE41:       # %bb.0:
+; SSE41-NEXT:    pxor %xmm1, %xmm1
+; SSE41-NEXT:    pblendw {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,3],xmm0[4,5],xmm1[6,7]
+; SSE41-NEXT:    pmuludq %xmm0, %xmm0
+; SSE41-NEXT:    retq
 ;
 ; AVX-LABEL: pmuludq_square:
 ; AVX:       # %bb.0:
+; AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; AVX-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1],xmm0[2],xmm1[3]
 ; AVX-NEXT:    vpmuludq %xmm0, %xmm0, %xmm0
 ; AVX-NEXT:    retq
   %1 = and <2 x i64> %x, <i64 4294967295, i64 4294967295>

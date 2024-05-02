@@ -6,18 +6,19 @@
 define i32 @t1(i32 %a, i32 %b, i32 %c) nounwind {
 ; ARM-LABEL: t1:
 ; ARM:       @ %bb.0:
-; ARM-NEXT:    mov r0, r1
+; ARM-NEXT:    mvn r0, #-2147483648
 ; ARM-NEXT:    cmp r2, #10
-; ARM-NEXT:    suble r0, r0, #-2147483647
+; ARM-NEXT:    movwgt r0, #0
+; ARM-NEXT:    add r0, r0, r1
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t1:
 ; T2:       @ %bb.0:
-; T2-NEXT:    mov r0, r1
-; T2-NEXT:    mvn r1, #-2147483648
+; T2-NEXT:    mvn r0, #-2147483648
 ; T2-NEXT:    cmp r2, #10
-; T2-NEXT:    it le
-; T2-NEXT:    addle r0, r1
+; T2-NEXT:    it gt
+; T2-NEXT:    movgt r0, #0
+; T2-NEXT:    add r0, r1
 ; T2-NEXT:    bx lr
   %tmp1 = icmp sgt i32 %c, 10
   %tmp2 = select i1 %tmp1, i32 0, i32 2147483647
@@ -28,17 +29,19 @@ define i32 @t1(i32 %a, i32 %b, i32 %c) nounwind {
 define i32 @t2(i32 %a, i32 %b, i32 %c, i32 %d) nounwind {
 ; ARM-LABEL: t2:
 ; ARM:       @ %bb.0:
-; ARM-NEXT:    mov r0, r1
+; ARM-NEXT:    mov r0, #10
 ; ARM-NEXT:    cmp r2, #10
-; ARM-NEXT:    suble r0, r0, #10
+; ARM-NEXT:    movwgt r0, #0
+; ARM-NEXT:    sub r0, r1, r0
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t2:
 ; T2:       @ %bb.0:
-; T2-NEXT:    mov r0, r1
+; T2-NEXT:    movs r0, #10
 ; T2-NEXT:    cmp r2, #10
-; T2-NEXT:    it le
-; T2-NEXT:    suble r0, #10
+; T2-NEXT:    it gt
+; T2-NEXT:    movgt r0, #0
+; T2-NEXT:    subs r0, r1, r0
 ; T2-NEXT:    bx lr
   %tmp1 = icmp sgt i32 %c, 10
   %tmp2 = select i1 %tmp1, i32 0, i32 10
@@ -50,16 +53,16 @@ define i32 @t3(i32 %a, i32 %b, i32 %x, i32 %y) nounwind {
 ; ARM-LABEL: t3:
 ; ARM:       @ %bb.0:
 ; ARM-NEXT:    cmp r0, r1
-; ARM-NEXT:    andge r3, r3, r2
-; ARM-NEXT:    mov r0, r3
+; ARM-NEXT:    mvnlt r2, #0
+; ARM-NEXT:    and r0, r2, r3
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t3:
 ; T2:       @ %bb.0:
 ; T2-NEXT:    cmp r0, r1
-; T2-NEXT:    it ge
-; T2-NEXT:    andge r3, r2
-; T2-NEXT:    mov r0, r3
+; T2-NEXT:    it lt
+; T2-NEXT:    movlt.w r2, #-1
+; T2-NEXT:    and.w r0, r2, r3
 ; T2-NEXT:    bx lr
   %cond = icmp slt i32 %a, %b
   %z = select i1 %cond, i32 -1, i32 %x
@@ -71,16 +74,16 @@ define i32 @t4(i32 %a, i32 %b, i32 %x, i32 %y) nounwind {
 ; ARM-LABEL: t4:
 ; ARM:       @ %bb.0:
 ; ARM-NEXT:    cmp r0, r1
-; ARM-NEXT:    orrge r3, r3, r2
-; ARM-NEXT:    mov r0, r3
+; ARM-NEXT:    movwlt r2, #0
+; ARM-NEXT:    orr r0, r2, r3
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t4:
 ; T2:       @ %bb.0:
 ; T2-NEXT:    cmp r0, r1
-; T2-NEXT:    it ge
-; T2-NEXT:    orrge r3, r2
-; T2-NEXT:    mov r0, r3
+; T2-NEXT:    it lt
+; T2-NEXT:    movlt r2, #0
+; T2-NEXT:    orr.w r0, r2, r3
 ; T2-NEXT:    bx lr
   %cond = icmp slt i32 %a, %b
   %z = select i1 %cond, i32 0, i32 %x
@@ -114,16 +117,16 @@ define i32 @t6(i32 %a, i32 %b, i32 %c, i32 %d) nounwind {
 ; ARM-LABEL: t6:
 ; ARM:       @ %bb.0:
 ; ARM-NEXT:    cmp r0, r1
-; ARM-NEXT:    eorlt r3, r3, r2
-; ARM-NEXT:    mov r0, r3
+; ARM-NEXT:    movge r2, #0
+; ARM-NEXT:    eor r0, r2, r3
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t6:
 ; T2:       @ %bb.0:
 ; T2-NEXT:    cmp r0, r1
-; T2-NEXT:    it lt
-; T2-NEXT:    eorlt r3, r2
-; T2-NEXT:    mov r0, r3
+; T2-NEXT:    it ge
+; T2-NEXT:    movge r2, #0
+; T2-NEXT:    eor.w r0, r2, r3
 ; T2-NEXT:    bx lr
   %cond = icmp slt i32 %a, %b
   %tmp1 = select i1 %cond, i32 %c, i32 0
@@ -134,17 +137,19 @@ define i32 @t6(i32 %a, i32 %b, i32 %c, i32 %d) nounwind {
 define i32 @t7(i32 %a, i32 %b, i32 %c) nounwind {
 ; ARM-LABEL: t7:
 ; ARM:       @ %bb.0: @ %entry
+; ARM-NEXT:    mvn r3, #0
 ; ARM-NEXT:    cmp r0, r1
-; ARM-NEXT:    andeq r2, r2, r2, lsl #1
-; ARM-NEXT:    mov r0, r2
+; ARM-NEXT:    lsleq r3, r2, #1
+; ARM-NEXT:    and r0, r2, r3
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t7:
 ; T2:       @ %bb.0: @ %entry
+; T2-NEXT:    mov.w r3, #-1
 ; T2-NEXT:    cmp r0, r1
 ; T2-NEXT:    it eq
-; T2-NEXT:    andeq.w r2, r2, r2, lsl #1
-; T2-NEXT:    mov r0, r2
+; T2-NEXT:    lsleq r3, r2, #1
+; T2-NEXT:    and.w r0, r2, r3
 ; T2-NEXT:    bx lr
 entry:
   %tmp1 = shl i32 %c, 1
@@ -316,15 +321,19 @@ entry:
 define i32 @t14(i32 %c, i32 %a) nounwind readnone ssp {
 ; ARM-LABEL: t14:
 ; ARM:       @ %bb.0: @ %entry
+; ARM-NEXT:    mov r2, #0
 ; ARM-NEXT:    cmp r1, #10
-; ARM-NEXT:    subgt r0, r0, #1
+; ARM-NEXT:    mvngt r2, #0
+; ARM-NEXT:    add r0, r2, r0
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t14:
 ; T2:       @ %bb.0: @ %entry
+; T2-NEXT:    movs r2, #0
 ; T2-NEXT:    cmp r1, #10
 ; T2-NEXT:    it gt
-; T2-NEXT:    subgt r0, #1
+; T2-NEXT:    movgt.w r2, #-1
+; T2-NEXT:    add r0, r2
 ; T2-NEXT:    bx lr
 entry:
   %cmp = icmp sgt i32 %a, 10
@@ -337,19 +346,19 @@ entry:
 define i32 @t15(i32 %p) {
 ; ARM-LABEL: t15:
 ; ARM:       @ %bb.0: @ %entry
-; ARM-NEXT:    mov r1, #3
+; ARM-NEXT:    mov r1, #2
 ; ARM-NEXT:    cmp r0, #8
-; ARM-NEXT:    movwgt r1, #0
-; ARM-NEXT:    mov r0, r1
+; ARM-NEXT:    movwgt r1, #1
+; ARM-NEXT:    eor r0, r1, #1
 ; ARM-NEXT:    bx lr
 ;
 ; T2-LABEL: t15:
 ; T2:       @ %bb.0: @ %entry
-; T2-NEXT:    movs r1, #3
+; T2-NEXT:    movs r1, #2
 ; T2-NEXT:    cmp r0, #8
 ; T2-NEXT:    it gt
-; T2-NEXT:    movgt r1, #0
-; T2-NEXT:    mov r0, r1
+; T2-NEXT:    movgt r1, #1
+; T2-NEXT:    eor r0, r1, #1
 ; T2-NEXT:    bx lr
 entry:
   %cmp = icmp sgt i32 %p, 8

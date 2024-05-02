@@ -247,36 +247,52 @@ entry:
 define arm_aapcs_vfpcc void @trunc_signed_unscaled_i64_i8(ptr %base, ptr %offptr, <8 x i64> %input) {
 ; CHECK-LABEL: trunc_signed_unscaled_i64_i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    .save {r4, r5, r7, lr}
-; CHECK-NEXT:    push {r4, r5, r7, lr}
-; CHECK-NEXT:    .vsave {d8, d9}
-; CHECK-NEXT:    vpush {d8, d9}
+; CHECK-NEXT:    .save {r4, r5, r6, lr}
+; CHECK-NEXT:    push {r4, r5, r6, lr}
+; CHECK-NEXT:    .vsave {d8, d9, d10, d11}
+; CHECK-NEXT:    vpush {d8, d9, d10, d11}
 ; CHECK-NEXT:    vldrb.s32 q4, [r1]
+; CHECK-NEXT:    vldrb.s32 q5, [r1, #4]
 ; CHECK-NEXT:    vmov r4, s0
 ; CHECK-NEXT:    vadd.i32 q4, q4, r0
-; CHECK-NEXT:    vmov r2, r3, d8
-; CHECK-NEXT:    vmov r12, lr, d9
-; CHECK-NEXT:    vldrb.s32 q4, [r1, #4]
-; CHECK-NEXT:    vadd.i32 q4, q4, r0
-; CHECK-NEXT:    vmov r0, r1, d8
-; CHECK-NEXT:    strh r4, [r2]
-; CHECK-NEXT:    vmov r2, s2
-; CHECK-NEXT:    vmov r4, r5, d9
-; CHECK-NEXT:    strh r2, [r3]
-; CHECK-NEXT:    vmov r2, s4
-; CHECK-NEXT:    strh.w r2, [r12]
-; CHECK-NEXT:    vmov r2, s6
-; CHECK-NEXT:    strh.w r2, [lr]
-; CHECK-NEXT:    vmov r2, s8
-; CHECK-NEXT:    strh r2, [r0]
-; CHECK-NEXT:    vmov r0, s10
-; CHECK-NEXT:    strh r0, [r1]
-; CHECK-NEXT:    vmov r0, s12
+; CHECK-NEXT:    vadd.i32 q5, q5, r0
+; CHECK-NEXT:    vmov r3, r2, d8
+; CHECK-NEXT:    vmov r1, r0, d9
+; CHECK-NEXT:    vmov.16 q4[0], r4
+; CHECK-NEXT:    vmov r4, s2
+; CHECK-NEXT:    vmov.16 q4[1], r4
+; CHECK-NEXT:    vmov r4, s4
+; CHECK-NEXT:    vmov.16 q4[2], r4
+; CHECK-NEXT:    vmov r4, s6
+; CHECK-NEXT:    vmov.16 q4[3], r4
+; CHECK-NEXT:    vmov r4, s8
+; CHECK-NEXT:    vmov.16 q4[4], r4
+; CHECK-NEXT:    vmov r4, s10
+; CHECK-NEXT:    vmov.16 q4[5], r4
+; CHECK-NEXT:    vmov r4, s12
+; CHECK-NEXT:    vmov lr, r12, d10
+; CHECK-NEXT:    vmov.16 q4[6], r4
+; CHECK-NEXT:    vmov r4, s14
+; CHECK-NEXT:    vmov.16 q4[7], r4
+; CHECK-NEXT:    vmov r4, r5, d11
+; CHECK-NEXT:    vmov.u16 r6, q4[0]
+; CHECK-NEXT:    strh r6, [r3]
+; CHECK-NEXT:    vmov.u16 r3, q4[1]
+; CHECK-NEXT:    strh r3, [r2]
+; CHECK-NEXT:    vmov.u16 r2, q4[2]
+; CHECK-NEXT:    strh r2, [r1]
+; CHECK-NEXT:    vmov.u16 r1, q4[3]
+; CHECK-NEXT:    strh r1, [r0]
+; CHECK-NEXT:    vmov.u16 r0, q4[4]
+; CHECK-NEXT:    strh.w r0, [lr]
+; CHECK-NEXT:    vmov.u16 r0, q4[5]
+; CHECK-NEXT:    strh.w r0, [r12]
+; CHECK-NEXT:    vmov.u16 r0, q4[6]
 ; CHECK-NEXT:    strh r0, [r4]
-; CHECK-NEXT:    vmov r0, s14
+; CHECK-NEXT:    vmov.u16 r0, q4[7]
 ; CHECK-NEXT:    strh r0, [r5]
-; CHECK-NEXT:    vpop {d8, d9}
-; CHECK-NEXT:    pop {r4, r5, r7, pc}
+; CHECK-NEXT:    vpop {d8, d9, d10, d11}
+; CHECK-NEXT:    pop {r4, r5, r6, pc}
 entry:
   %offs = load <8 x i8>, ptr %offptr, align 1
   %offs.sext = sext <8 x i8> %offs to <8 x i32>

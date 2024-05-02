@@ -168,6 +168,7 @@ define dso_local i64 @load_sext_zext_anyext_i1(ptr %a) nounwind {
 ; RV64I:       # %bb.0:
 ; RV64I-NEXT:    lbu a1, 1(a0)
 ; RV64I-NEXT:    lbu a2, 2(a0)
+; RV64I-NEXT:    andi a1, a1, 1
 ; RV64I-NEXT:    lbu zero, 0(a0)
 ; RV64I-NEXT:    sub a0, a2, a1
 ; RV64I-NEXT:    ret
@@ -190,6 +191,7 @@ define dso_local i16 @load_sext_zext_anyext_i1_i16(ptr %a) nounwind {
 ; RV64I:       # %bb.0:
 ; RV64I-NEXT:    lbu a1, 1(a0)
 ; RV64I-NEXT:    lbu a2, 2(a0)
+; RV64I-NEXT:    andi a1, a1, 1
 ; RV64I-NEXT:    lbu zero, 0(a0)
 ; RV64I-NEXT:    sub a0, a2, a1
 ; RV64I-NEXT:    ret

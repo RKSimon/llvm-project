@@ -426,7 +426,7 @@ define amdgpu_kernel void @v_extractelement_v8i16_dynamic_sgpr(ptr addrspace(1) 
 ; GCN-NEXT:    v_mov_b32_e32 v7, v5
 ; GCN-NEXT:    s_mov_b64 s[2:3], s[6:7]
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_lshrrev_b32_e32 v0, 16, v1
+; GCN-NEXT:    v_alignbit_b32 v0, v2, v1, 16
 ; GCN-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 3
@@ -537,28 +537,28 @@ define amdgpu_kernel void @v_extractelement_v16i16_dynamic_sgpr(ptr addrspace(1)
 ; GCN-NEXT:    buffer_load_dwordx4 v[1:4], v[8:9], s[4:7], 0 addr64
 ; GCN-NEXT:    buffer_load_dwordx4 v[5:8], v[8:9], s[4:7], 0 addr64 offset:16
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 1
-; GCN-NEXT:    v_lshlrev_b32_e32 v10, 1, v0
+; GCN-NEXT:    v_mov_b32_e32 v11, v9
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 2
-; GCN-NEXT:    v_mov_b32_e32 v11, v9
+; GCN-NEXT:    v_lshlrev_b32_e32 v10, 1, v0
 ; GCN-NEXT:    s_mov_b64 s[2:3], s[6:7]
 ; GCN-NEXT:    s_waitcnt vmcnt(1)
-; GCN-NEXT:    v_lshrrev_b32_e32 v0, 16, v1
-; GCN-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc
+; GCN-NEXT:    v_alignbit_b32 v9, v2, v1, 16
+; GCN-NEXT:    v_cndmask_b32_e32 v1, v1, v9, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 3
-; GCN-NEXT:    v_lshrrev_b32_e32 v9, 16, v2
-; GCN-NEXT:    v_cndmask_b32_e32 v0, v0, v2, vcc
+; GCN-NEXT:    v_lshrrev_b32_e32 v12, 16, v2
+; GCN-NEXT:    v_cndmask_b32_e32 v1, v1, v2, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 4
-; GCN-NEXT:    v_cndmask_b32_e32 v0, v0, v9, vcc
+; GCN-NEXT:    v_cndmask_b32_e32 v1, v1, v12, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 5
-; GCN-NEXT:    v_lshrrev_b32_e32 v12, 16, v3
-; GCN-NEXT:    v_cndmask_b32_e32 v0, v0, v3, vcc
+; GCN-NEXT:    v_alignbit_b32 v0, v4, v3, 16
+; GCN-NEXT:    v_cndmask_b32_e32 v1, v1, v3, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 6
-; GCN-NEXT:    v_cndmask_b32_e32 v0, v0, v12, vcc
+; GCN-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 7
 ; GCN-NEXT:    v_lshrrev_b32_e32 v13, 16, v4
@@ -569,7 +569,7 @@ define amdgpu_kernel void @v_extractelement_v16i16_dynamic_sgpr(ptr addrspace(1)
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 9
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_lshrrev_b32_e32 v14, 16, v5
+; GCN-NEXT:    v_alignbit_b32 v14, v6, v5, 16
 ; GCN-NEXT:    v_cndmask_b32_e32 v0, v0, v5, vcc
 ; GCN-NEXT:    s_cselect_b64 vcc, -1, 0
 ; GCN-NEXT:    s_cmp_eq_u32 s8, 10

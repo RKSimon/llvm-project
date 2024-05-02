@@ -441,12 +441,12 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MIPS2-NEXT:    addiu $sp, $sp, -32
 ; MIPS2-NEXT:    .cfi_def_cfa_offset 32
 ; MIPS2-NEXT:    lw $1, 60($sp)
-; MIPS2-NEXT:    srl $2, $1, 3
+; MIPS2-NEXT:    andi $2, $1, 96
 ; MIPS2-NEXT:    sw $7, 12($sp)
 ; MIPS2-NEXT:    sw $6, 8($sp)
 ; MIPS2-NEXT:    sw $5, 4($sp)
 ; MIPS2-NEXT:    sw $4, 0($sp)
-; MIPS2-NEXT:    andi $2, $2, 12
+; MIPS2-NEXT:    srl $2, $2, 3
 ; MIPS2-NEXT:    addiu $3, $sp, 0
 ; MIPS2-NEXT:    addu $4, $3, $2
 ; MIPS2-NEXT:    sw $zero, 28($sp)
@@ -480,12 +480,12 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MIPS32-NEXT:    addiu $sp, $sp, -32
 ; MIPS32-NEXT:    .cfi_def_cfa_offset 32
 ; MIPS32-NEXT:    lw $1, 60($sp)
-; MIPS32-NEXT:    srl $2, $1, 3
+; MIPS32-NEXT:    andi $2, $1, 96
 ; MIPS32-NEXT:    sw $7, 12($sp)
 ; MIPS32-NEXT:    sw $6, 8($sp)
 ; MIPS32-NEXT:    sw $5, 4($sp)
 ; MIPS32-NEXT:    sw $4, 0($sp)
-; MIPS32-NEXT:    andi $2, $2, 12
+; MIPS32-NEXT:    srl $2, $2, 3
 ; MIPS32-NEXT:    addiu $3, $sp, 0
 ; MIPS32-NEXT:    addu $4, $3, $2
 ; MIPS32-NEXT:    sw $zero, 28($sp)
@@ -519,12 +519,12 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MIPS32R2-NEXT:    addiu $sp, $sp, -32
 ; MIPS32R2-NEXT:    .cfi_def_cfa_offset 32
 ; MIPS32R2-NEXT:    lw $1, 60($sp)
-; MIPS32R2-NEXT:    srl $2, $1, 3
+; MIPS32R2-NEXT:    andi $2, $1, 96
 ; MIPS32R2-NEXT:    sw $7, 12($sp)
 ; MIPS32R2-NEXT:    sw $6, 8($sp)
 ; MIPS32R2-NEXT:    sw $5, 4($sp)
 ; MIPS32R2-NEXT:    sw $4, 0($sp)
-; MIPS32R2-NEXT:    andi $2, $2, 12
+; MIPS32R2-NEXT:    srl $2, $2, 3
 ; MIPS32R2-NEXT:    addiu $3, $sp, 0
 ; MIPS32R2-NEXT:    addu $4, $3, $2
 ; MIPS32R2-NEXT:    sw $zero, 28($sp)
@@ -558,12 +558,12 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MIPS32R6-NEXT:    addiu $sp, $sp, -32
 ; MIPS32R6-NEXT:    .cfi_def_cfa_offset 32
 ; MIPS32R6-NEXT:    lw $1, 60($sp)
-; MIPS32R6-NEXT:    srl $2, $1, 3
+; MIPS32R6-NEXT:    andi $2, $1, 96
 ; MIPS32R6-NEXT:    sw $7, 12($sp)
 ; MIPS32R6-NEXT:    sw $6, 8($sp)
 ; MIPS32R6-NEXT:    sw $5, 4($sp)
 ; MIPS32R6-NEXT:    sw $4, 0($sp)
-; MIPS32R6-NEXT:    andi $2, $2, 12
+; MIPS32R6-NEXT:    srl $2, $2, 3
 ; MIPS32R6-NEXT:    addiu $3, $sp, 0
 ; MIPS32R6-NEXT:    addu $4, $3, $2
 ; MIPS32R6-NEXT:    sw $zero, 28($sp)
@@ -691,8 +691,8 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MMR3-NEXT:    swp $6, 8($sp)
 ; MMR3-NEXT:    swp $4, 0($sp)
 ; MMR3-NEXT:    lw $2, 68($sp)
-; MMR3-NEXT:    srl16 $3, $2, 3
-; MMR3-NEXT:    andi $3, $3, 12
+; MMR3-NEXT:    andi $3, $2, 96
+; MMR3-NEXT:    srl16 $3, $3, 3
 ; MMR3-NEXT:    addiur1sp $4, 0
 ; MMR3-NEXT:    addu16 $4, $4, $3
 ; MMR3-NEXT:    lw16 $6, 8($4)
@@ -732,8 +732,8 @@ define signext i128 @shl_i128(i128 signext %a, i128 signext %b) {
 ; MMR6-NEXT:    sw $5, 4($sp)
 ; MMR6-NEXT:    sw $4, 0($sp)
 ; MMR6-NEXT:    lw $2, 60($sp)
-; MMR6-NEXT:    srl16 $3, $2, 3
-; MMR6-NEXT:    andi $3, $3, 12
+; MMR6-NEXT:    andi $3, $2, 96
+; MMR6-NEXT:    srl16 $3, $3, 3
 ; MMR6-NEXT:    addiu $4, $sp, 0
 ; MMR6-NEXT:    addu16 $4, $4, $3
 ; MMR6-NEXT:    lw16 $5, 8($4)

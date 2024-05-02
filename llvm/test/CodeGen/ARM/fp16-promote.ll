@@ -465,11 +465,12 @@ define i1 @test_fcmp_ueq(ptr %p, ptr %q) #0 {
 ; CHECK-NOVFP-NEXT:    mov r4, r0
 ; CHECK-NOVFP-NEXT:    bl __aeabi_fcmpeq
 ; CHECK-NOVFP-NEXT:    mov r6, r0
+; CHECK-NOVFP-NEXT:    cmp r0, #0
 ; CHECK-NOVFP-NEXT:    mov r0, r4
 ; CHECK-NOVFP-NEXT:    mov r1, r5
+; CHECK-NOVFP-NEXT:    movwne r6, #1
 ; CHECK-NOVFP-NEXT:    bl __aeabi_fcmpun
-; CHECK-NOVFP-NEXT:    orrs r0, r0, r6
-; CHECK-NOVFP-NEXT:    movwne r0, #1
+; CHECK-NOVFP-NEXT:    orr r0, r0, r6
 ; CHECK-NOVFP-NEXT:    pop {r4, r5, r6, pc}
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
@@ -1809,12 +1810,11 @@ define void @test_maximum(ptr %p) #0 {
 
 define void @test_copysign(ptr %p, ptr %q) #0 {
 ; CHECK-ALL-LABEL: test_copysign:
-; CHECK-ALL:         ldrh r2, [r0]
-; CHECK-ALL-NEXT:    ldrh r1, [r1]
-; CHECK-ALL-NEXT:    and r1, r1, #32768
-; CHECK-ALL-NEXT:    bfc r2, #15, #17
-; CHECK-ALL-NEXT:    orr r1, r2, r1
-; CHECK-ALL-NEXT:    strh r1, [r0]
+; CHECK-ALL:         ldrh r1, [r1]
+; CHECK-ALL-NEXT:    ldrh r2, [r0]
+; CHECK-ALL-NEXT:    lsr r1, r1, #15
+; CHECK-ALL-NEXT:    bfi r2, r1, #15, #17
+; CHECK-ALL-NEXT:    strh r2, [r0]
 ; CHECK-ALL-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2

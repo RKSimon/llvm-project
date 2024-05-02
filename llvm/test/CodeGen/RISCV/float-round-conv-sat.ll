@@ -13,8 +13,7 @@ define signext i32 @test_floor_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rdn
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -22,8 +21,7 @@ define signext i32 @test_floor_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rdn
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.floor.f32(float %x)
@@ -86,8 +84,7 @@ define i64 @test_floor_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0, rdn
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -142,8 +139,7 @@ define i64 @test_floor_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rdn
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.floor.f32(float %x)
@@ -156,8 +152,7 @@ define signext i32 @test_floor_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0, rdn
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -165,8 +160,7 @@ define signext i32 @test_floor_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0, rdn
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.floor.f32(float %x)
@@ -216,8 +210,7 @@ define i64 @test_floor_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rdn
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -259,8 +252,7 @@ define i64 @test_floor_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rdn
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.floor.f32(float %x)
@@ -273,8 +265,7 @@ define signext i32 @test_ceil_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rup
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -282,8 +273,7 @@ define signext i32 @test_ceil_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rup
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.ceil.f32(float %x)
@@ -346,8 +336,7 @@ define i64 @test_ceil_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0, rup
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -402,8 +391,7 @@ define i64 @test_ceil_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rup
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.ceil.f32(float %x)
@@ -416,8 +404,7 @@ define signext i32 @test_ceil_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0, rup
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -425,8 +412,7 @@ define signext i32 @test_ceil_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0, rup
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.ceil.f32(float %x)
@@ -476,8 +462,7 @@ define i64 @test_ceil_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rup
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -519,8 +504,7 @@ define i64 @test_ceil_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rup
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.ceil.f32(float %x)
@@ -533,8 +517,7 @@ define signext i32 @test_trunc_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rtz
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -542,8 +525,7 @@ define signext i32 @test_trunc_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.trunc.f32(float %x)
@@ -606,8 +588,7 @@ define i64 @test_trunc_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0, rtz
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -662,8 +643,7 @@ define i64 @test_trunc_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.trunc.f32(float %x)
@@ -676,8 +656,7 @@ define signext i32 @test_trunc_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0, rtz
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -685,8 +664,7 @@ define signext i32 @test_trunc_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0, rtz
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.trunc.f32(float %x)
@@ -736,8 +714,7 @@ define i64 @test_trunc_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rtz
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -779,8 +756,7 @@ define i64 @test_trunc_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.trunc.f32(float %x)
@@ -793,8 +769,7 @@ define signext i32 @test_round_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rmm
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -802,8 +777,7 @@ define signext i32 @test_round_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rmm
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.round.f32(float %x)
@@ -866,8 +840,7 @@ define i64 @test_round_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0, rmm
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -922,8 +895,7 @@ define i64 @test_round_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rmm
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.round.f32(float %x)
@@ -936,8 +908,7 @@ define signext i32 @test_round_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0, rmm
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -945,8 +916,7 @@ define signext i32 @test_round_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0, rmm
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.round.f32(float %x)
@@ -996,8 +966,7 @@ define i64 @test_round_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rmm
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -1039,8 +1008,7 @@ define i64 @test_round_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rmm
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.round.f32(float %x)
@@ -1053,8 +1021,7 @@ define signext i32 @test_roundeven_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rne
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -1062,8 +1029,7 @@ define signext i32 @test_roundeven_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rne
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.roundeven.f32(float %x)
@@ -1126,8 +1092,7 @@ define i64 @test_roundeven_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0, rne
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -1182,8 +1147,7 @@ define i64 @test_roundeven_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rne
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.roundeven.f32(float %x)
@@ -1196,8 +1160,7 @@ define signext i32 @test_roundeven_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0, rne
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -1205,8 +1168,7 @@ define signext i32 @test_roundeven_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0, rne
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.roundeven.f32(float %x)
@@ -1256,8 +1218,7 @@ define i64 @test_roundeven_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rne
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -1299,8 +1260,7 @@ define i64 @test_roundeven_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rne
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.roundeven.f32(float %x)
@@ -1313,8 +1273,7 @@ define signext i32 @test_rint_si32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.w.s a1, fa0
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -1322,8 +1281,7 @@ define signext i32 @test_rint_si32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.rint.f32(float %x)
@@ -1386,8 +1344,7 @@ define i64 @test_rint_si64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.l.s a1, fa0
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -1442,8 +1399,7 @@ define i64 @test_rint_si64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.l.s a0, a0
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.rint.f32(float %x)
@@ -1456,8 +1412,7 @@ define signext i32 @test_rint_ui32(float %x) {
 ; CHECKIF:       # %bb.0:
 ; CHECKIF-NEXT:    feq.s a0, fa0, fa0
 ; CHECKIF-NEXT:    fcvt.wu.s a1, fa0
-; CHECKIF-NEXT:    seqz a0, a0
-; CHECKIF-NEXT:    addi a0, a0, -1
+; CHECKIF-NEXT:    neg a0, a0
 ; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
@@ -1465,8 +1420,7 @@ define signext i32 @test_rint_ui32(float %x) {
 ; CHECKIZFINX:       # %bb.0:
 ; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
 ; CHECKIZFINX-NEXT:    fcvt.wu.s a0, a0
-; CHECKIZFINX-NEXT:    seqz a1, a1
-; CHECKIZFINX-NEXT:    addi a1, a1, -1
+; CHECKIZFINX-NEXT:    neg a1, a1
 ; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
   %a = call float @llvm.rint.f32(float %x)
@@ -1516,8 +1470,7 @@ define i64 @test_rint_ui64(float %x) nounwind {
 ; RV64IF:       # %bb.0:
 ; RV64IF-NEXT:    feq.s a0, fa0, fa0
 ; RV64IF-NEXT:    fcvt.lu.s a1, fa0
-; RV64IF-NEXT:    seqz a0, a0
-; RV64IF-NEXT:    addi a0, a0, -1
+; RV64IF-NEXT:    neg a0, a0
 ; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
@@ -1559,8 +1512,7 @@ define i64 @test_rint_ui64(float %x) nounwind {
 ; RV64IZFINX:       # %bb.0:
 ; RV64IZFINX-NEXT:    feq.s a1, a0, a0
 ; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0
-; RV64IZFINX-NEXT:    seqz a1, a1
-; RV64IZFINX-NEXT:    addi a1, a1, -1
+; RV64IZFINX-NEXT:    neg a1, a1
 ; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
   %a = call float @llvm.rint.f32(float %x)

@@ -187,8 +187,8 @@ define void @sgpr_scavenge_fi_stack_id(double %input, i1 %enter_fma_path, i1 %re
 ; CHECK-NEXT:    v_mul_f64 v[8:9], v[4:5], v[8:9]
 ; CHECK-NEXT:    buffer_store_dword v9, off, s[0:3], 0 offset:4
 ; CHECK-NEXT:    buffer_store_dword v8, off, s[0:3], 0
-; CHECK-NEXT:    buffer_store_dword v6, v7, s[0:3], 0 offen
 ; CHECK-NEXT:    buffer_store_dword v6, v7, s[0:3], 0 offen offset:4
+; CHECK-NEXT:    buffer_store_dword v6, v7, s[0:3], 0 offen
 ; CHECK-NEXT:    s_andn2_b64 exec, exec, s[94:95]
 ; CHECK-NEXT:    s_cbranch_execnz .LBB0_13
 ; CHECK-NEXT:  .LBB0_14: ; %Flow

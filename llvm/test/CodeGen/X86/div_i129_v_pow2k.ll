@@ -8,10 +8,10 @@ define i129 @v_sdiv_i129_v_pow2k(i129 %lhs) nounwind {
 ; X64-LABEL: v_sdiv_i129_v_pow2k:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdx, %rcx
-; X64-NEXT:    andl $1, %edx
-; X64-NEXT:    negq %rdx
-; X64-NEXT:    movl %edx, %eax
+; X64-NEXT:    movl %ecx, %eax
 ; X64-NEXT:    andl $1, %eax
+; X64-NEXT:    movq %rax, %rdx
+; X64-NEXT:    negq %rdx
 ; X64-NEXT:    shldq $32, %rdx, %rax
 ; X64-NEXT:    addq %rdi, %rax
 ; X64-NEXT:    adcq $0, %rsi
@@ -26,12 +26,10 @@ define i129 @v_sdiv_i129_v_pow2k(i129 %lhs) nounwind {
 ; X64-O0-LABEL: v_sdiv_i129_v_pow2k:
 ; X64-O0:       # %bb.0:
 ; X64-O0-NEXT:    movq %rdi, %rax
-; X64-O0-NEXT:    movl %edx, %ecx
-; X64-O0-NEXT:    andl $1, %ecx
-; X64-O0-NEXT:    movl %ecx, %edi
-; X64-O0-NEXT:    negq %rdi
-; X64-O0-NEXT:    movl %edi, %r8d
+; X64-O0-NEXT:    movl %edx, %r8d
 ; X64-O0-NEXT:    andl $1, %r8d
+; X64-O0-NEXT:    movl %r8d, %edi
+; X64-O0-NEXT:    negq %rdi
 ; X64-O0-NEXT:    # implicit-def: $rcx
 ; X64-O0-NEXT:    movl %r8d, %ecx
 ; X64-O0-NEXT:    shldq $32, %rdi, %rcx
@@ -228,20 +226,24 @@ define i129 @v_udiv_i129_v_pow2k(i129 %lhs) nounwind {
 ; X64-LABEL: v_udiv_i129_v_pow2k:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
-; X64-NEXT:    andl $1, %edx
 ; X64-NEXT:    shrdq $33, %rsi, %rax
-; X64-NEXT:    shldq $31, %rsi, %rdx
+; X64-NEXT:    shrq $33, %rsi
+; X64-NEXT:    shll $31, %edx
+; X64-NEXT:    orq %rsi, %rdx
 ; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    retq
 ;
 ; X64-O0-LABEL: v_udiv_i129_v_pow2k:
 ; X64-O0:       # %bb.0:
+; X64-O0-NEXT:    movq %rdx, %rcx
+; X64-O0-NEXT:    movq %rsi, %rdx
 ; X64-O0-NEXT:    movq %rdi, %rax
-; X64-O0-NEXT:    shrdq $33, %rsi, %rax
-; X64-O0-NEXT:    movl %edx, %ecx
-; X64-O0-NEXT:    andl $1, %ecx
-; X64-O0-NEXT:    movl %ecx, %edx
-; X64-O0-NEXT:    shldq $31, %rsi, %rdx
+; X64-O0-NEXT:    shrdq $33, %rdx, %rax
+; X64-O0-NEXT:    shrq $33, %rdx
+; X64-O0-NEXT:    # kill: def $ecx killed $ecx killed $rcx
+; X64-O0-NEXT:    shll $31, %ecx
+; X64-O0-NEXT:    # kill: def $rcx killed $ecx
+; X64-O0-NEXT:    orq %rcx, %rdx
 ; X64-O0-NEXT:    xorl %ecx, %ecx
 ; X64-O0-NEXT:    # kill: def $rcx killed $ecx
 ; X64-O0-NEXT:    retq
@@ -299,20 +301,24 @@ define i129 @v_udiv_exact_i129_v_pow2k(i129 %lhs) nounwind {
 ; X64-LABEL: v_udiv_exact_i129_v_pow2k:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
-; X64-NEXT:    andl $1, %edx
 ; X64-NEXT:    shrdq $33, %rsi, %rax
-; X64-NEXT:    shldq $31, %rsi, %rdx
+; X64-NEXT:    shrq $33, %rsi
+; X64-NEXT:    shll $31, %edx
+; X64-NEXT:    orq %rsi, %rdx
 ; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    retq
 ;
 ; X64-O0-LABEL: v_udiv_exact_i129_v_pow2k:
 ; X64-O0:       # %bb.0:
+; X64-O0-NEXT:    movq %rdx, %rcx
+; X64-O0-NEXT:    movq %rsi, %rdx
 ; X64-O0-NEXT:    movq %rdi, %rax
-; X64-O0-NEXT:    shrdq $33, %rsi, %rax
-; X64-O0-NEXT:    movl %edx, %ecx
-; X64-O0-NEXT:    andl $1, %ecx
-; X64-O0-NEXT:    movl %ecx, %edx
-; X64-O0-NEXT:    shldq $31, %rsi, %rdx
+; X64-O0-NEXT:    shrdq $33, %rdx, %rax
+; X64-O0-NEXT:    shrq $33, %rdx
+; X64-O0-NEXT:    # kill: def $ecx killed $ecx killed $rcx
+; X64-O0-NEXT:    shll $31, %ecx
+; X64-O0-NEXT:    # kill: def $rcx killed $ecx
+; X64-O0-NEXT:    orq %rcx, %rdx
 ; X64-O0-NEXT:    xorl %ecx, %ecx
 ; X64-O0-NEXT:    # kill: def $rcx killed $ecx
 ; X64-O0-NEXT:    retq

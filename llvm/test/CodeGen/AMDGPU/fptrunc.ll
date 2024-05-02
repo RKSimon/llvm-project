@@ -2585,9 +2585,10 @@ define <2 x half> @fabs_fptrunc_v2f32_to_v2f16(<2 x float> %x) {
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
 ; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NEXT:    v_and_b32_e32 v1, 0x7fff, v1
+; SI-NEXT:    v_and_b32_e32 v0, 0x7fff, v0
 ; SI-NEXT:    v_lshlrev_b32_e32 v1, 16, v1
 ; SI-NEXT:    v_or_b32_e32 v0, v0, v1
-; SI-NEXT:    v_and_b32_e32 v0, 0x7fff7fff, v0
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-SDAG-LABEL: fabs_fptrunc_v2f32_to_v2f16:

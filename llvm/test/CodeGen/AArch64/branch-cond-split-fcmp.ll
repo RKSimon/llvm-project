@@ -267,11 +267,12 @@ define i64 @test_or_select_fast (float %a, float %b) {
 ; CHECK-SD-LABEL: test_or_select_fast:
 ; CHECK-SD:       // %bb.0: // %bb1
 ; CHECK-SD-NEXT:    fcmp s0, #0.0
-; CHECK-SD-NEXT:    cset w8, ne
+; CHECK-SD-NEXT:    cset w8, eq
 ; CHECK-SD-NEXT:    fcmp s1, #0.0
 ; CHECK-SD-NEXT:    cset w9, ne
-; CHECK-SD-NEXT:    orr w8, w8, w9
-; CHECK-SD-NEXT:    tbz w8, #0, .LBB5_2
+; CHECK-SD-NEXT:    eor w9, w9, #0x1
+; CHECK-SD-NEXT:    and w8, w8, w9
+; CHECK-SD-NEXT:    tbnz w8, #0, .LBB5_2
 ; CHECK-SD-NEXT:  // %bb.1:
 ; CHECK-SD-NEXT:    mov x0, xzr
 ; CHECK-SD-NEXT:    ret
