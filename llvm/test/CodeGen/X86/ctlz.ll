@@ -811,15 +811,13 @@ define i8 @PR47603_trunc(i32 %0) {
 ;
 ; X86-CLZ-LABEL: PR47603_trunc:
 ; X86-CLZ:       # %bb.0:
-; X86-CLZ-NEXT:    lzcntl {{[0-9]+}}(%esp), %eax
-; X86-CLZ-NEXT:    xorb $31, %al
+; X86-CLZ-NEXT:    bsrl {{[0-9]+}}(%esp), %eax
 ; X86-CLZ-NEXT:    # kill: def $al killed $al killed $eax
 ; X86-CLZ-NEXT:    retl
 ;
 ; X64-CLZ-LABEL: PR47603_trunc:
 ; X64-CLZ:       # %bb.0:
-; X64-CLZ-NEXT:    lzcntl %edi, %eax
-; X64-CLZ-NEXT:    xorb $31, %al
+; X64-CLZ-NEXT:    bsrl %edi, %eax
 ; X64-CLZ-NEXT:    # kill: def $al killed $al killed $eax
 ; X64-CLZ-NEXT:    retq
 ;

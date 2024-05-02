@@ -30,8 +30,9 @@ define i1 @lshr_ctlz_cmpeq_one_i64(i64 %in) nounwind {
 ;
 ; X64-LZCNT-LABEL: lshr_ctlz_cmpeq_one_i64:
 ; X64-LZCNT:       # %bb.0:
-; X64-LZCNT-NEXT:    testq %rdi, %rdi
-; X64-LZCNT-NEXT:    sete %al
+; X64-LZCNT-NEXT:    lzcntq %rdi, %rax
+; X64-LZCNT-NEXT:    shrl $6, %eax
+; X64-LZCNT-NEXT:    # kill: def $al killed $al killed $rax
 ; X64-LZCNT-NEXT:    retq
   %ctlz = call i64 @llvm.ctlz.i64(i64 %in, i1 0)
   %lshr = lshr i64 %ctlz, 6
@@ -109,8 +110,9 @@ define i1 @lshr_ctlz_cmpne_zero_i64(i64 %in) nounwind {
 ;
 ; X64-LZCNT-LABEL: lshr_ctlz_cmpne_zero_i64:
 ; X64-LZCNT:       # %bb.0:
-; X64-LZCNT-NEXT:    testq %rdi, %rdi
-; X64-LZCNT-NEXT:    sete %al
+; X64-LZCNT-NEXT:    lzcntq %rdi, %rax
+; X64-LZCNT-NEXT:    shrl $6, %eax
+; X64-LZCNT-NEXT:    # kill: def $al killed $al killed $rax
 ; X64-LZCNT-NEXT:    retq
   %ctlz = call i64 @llvm.ctlz.i64(i64 %in, i1 0)
   %lshr = lshr i64 %ctlz, 6

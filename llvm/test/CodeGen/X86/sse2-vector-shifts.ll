@@ -332,11 +332,15 @@ define <4 x i32> @shl_zext_srl_v4i32(<4 x i16> %x) nounwind {
 }
 
 define <4 x i16> @sra_trunc_srl_v4i32(<4 x i32> %x) nounwind {
-; CHECK-LABEL: sra_trunc_srl_v4i32:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    psrad $19, %xmm0
-; CHECK-NEXT:    packssdw %xmm0, %xmm0
-; CHECK-NEXT:    retq
+; MASK-LABEL: sra_trunc_srl_v4i32:
+; MASK:       # %bb.0:
+; MASK-NEXT:    psrad $19, %xmm0
+; MASK-NEXT:    pextrw $6, %xmm0, %eax
+; MASK-NEXT:    pextrw $4, %xmm0, %ecx
+; MASK-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,2,2,3,4,5,6,7]
+; MASK-NEXT:    pinsrw $2, %ecx, %xmm0
+; MASK-NEXT:    pinsrw $3, %eax, %xmm0
+; MASK-NEXT:    retq
   %srl = lshr <4 x i32> %x, <i32 16, i32 16, i32 16, i32 16>
   %trunc = trunc <4 x i32> %srl to <4 x i16>
   %sra = ashr <4 x i16> %trunc, <i16 3, i16 3, i16 3, i16 3>
