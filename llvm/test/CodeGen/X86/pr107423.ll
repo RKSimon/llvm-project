@@ -16,8 +16,6 @@ define void @PR107423(<64 x i8> %arg, ptr %p0) {
 ; CHECK-NEXT:    vpaddb %xmm4, %xmm1, %xmm1
 ; CHECK-NEXT:    vpsllw $8, %xmm0, %xmm0
 ; CHECK-NEXT:    vpaddb %xmm2, %xmm0, %xmm0
-; CHECK-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; CHECK-NEXT:    vpaddb %xmm0, %xmm2, %xmm0
 ; CHECK-NEXT:    vpsllw $8, %xmm1, %xmm2
 ; CHECK-NEXT:    vpaddb %xmm1, %xmm2, %xmm1
 ; CHECK-NEXT:    vmovdqu %xmm0, (%rdi)

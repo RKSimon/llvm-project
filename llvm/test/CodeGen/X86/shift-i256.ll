@@ -18,8 +18,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %r9d, %eax
+; SSE-NEXT:    andb $-64, %al
 ; SSE-NEXT:    shrb $3, %al
-; SSE-NEXT:    andb $24, %al
 ; SSE-NEXT:    negb %al
 ; SSE-NEXT:    movsbq %al, %rax
 ; SSE-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -49,8 +49,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %r9d, %eax
+; AVX2-NEXT:    andb $-64, %al
 ; AVX2-NEXT:    shrb $3, %al
-; AVX2-NEXT:    andb $24, %al
 ; AVX2-NEXT:    negb %al
 ; AVX2-NEXT:    movsbq %al, %rdx
 ; AVX2-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -80,8 +80,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512F-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %r9d, %eax
+; AVX512F-NEXT:    andb $-64, %al
 ; AVX512F-NEXT:    shrb $3, %al
-; AVX512F-NEXT:    andb $24, %al
 ; AVX512F-NEXT:    negb %al
 ; AVX512F-NEXT:    movsbq %al, %rdx
 ; AVX512F-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -110,8 +110,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %r9d, %eax
+; AVX512VL-NEXT:    andb $-64, %al
 ; AVX512VL-NEXT:    shrb $3, %al
-; AVX512VL-NEXT:    andb $24, %al
 ; AVX512VL-NEXT:    negb %al
 ; AVX512VL-NEXT:    movsbq %al, %rax
 ; AVX512VL-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -141,8 +141,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %r9d, %eax
+; AVX512VBMI-NEXT:    andb $-64, %al
 ; AVX512VBMI-NEXT:    shrb $3, %al
-; AVX512VBMI-NEXT:    andb $24, %al
 ; AVX512VBMI-NEXT:    negb %al
 ; AVX512VBMI-NEXT:    movsbq %al, %rax
 ; AVX512VBMI-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -172,7 +172,7 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 44(%ebp), %ecx
+; X86-NEXT:    movzbl 44(%ebp), %ecx
 ; X86-NEXT:    movl 12(%ebp), %eax
 ; X86-NEXT:    movl 16(%ebp), %edx
 ; X86-NEXT:    movl 20(%ebp), %esi
@@ -198,8 +198,8 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $-32, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $28, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 68(%esp,%eax), %esi
@@ -239,7 +239,6 @@ define i256 @shl_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edi # 4-byte Reload
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shll %cl, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
 ; X86-NEXT:    shldl %cl, %edi, %esi
 ; X86-NEXT:    movl %esi, 4(%eax)
@@ -265,16 +264,17 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %r9d, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    movl %r9d, %ecx
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -48(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %r10, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r11
+; SSE-NEXT:    movq -72(%rsp,%rax), %r11
 ; SSE-NEXT:    shrdq %cl, %rsi, %r11
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    shrq %cl, %r10
@@ -286,22 +286,23 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX2-LABEL: lshr_i256:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
+; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %r9d, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    movl %r9d, %ecx
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r10
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r11
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r10
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r11
 ; AVX2-NEXT:    shrdq %cl, %r11, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -315,22 +316,23 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX512F-LABEL: lshr_i256:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
+; AVX512F-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %r9d, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    movl %r9d, %ecx
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r10
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r11
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r10
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r11
 ; AVX512F-NEXT:    shrdq %cl, %r11, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -343,23 +345,24 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX512VL-LABEL: lshr_i256:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
+; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %r9d, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    movl %r9d, %ecx
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %r10, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r11
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r11
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r11
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    shrxq %r9, %r10, %rcx
@@ -372,23 +375,24 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_i256:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
+; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %r9d, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    movl %r9d, %ecx
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %r10, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r11
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r11
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r11
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    shrxq %r9, %r10, %rcx
@@ -408,7 +412,7 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 44(%ebp), %ecx
+; X86-NEXT:    movzbl 44(%ebp), %ecx
 ; X86-NEXT:    movl 12(%ebp), %eax
 ; X86-NEXT:    movl 16(%ebp), %edx
 ; X86-NEXT:    movl 20(%ebp), %esi
@@ -434,30 +438,30 @@ define i256 @lshr_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -495,16 +499,17 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %r9d, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    movl %r9d, %ecx
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -48(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %r10, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r11
+; SSE-NEXT:    movq -72(%rsp,%rax), %r11
 ; SSE-NEXT:    shrdq %cl, %rsi, %r11
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    sarq %cl, %r10
@@ -526,15 +531,16 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX2-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %r9d, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    movl %r9d, %ecx
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r10
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r11
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r10
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r11
 ; AVX2-NEXT:    shrdq %cl, %r11, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -557,15 +563,16 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512F-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %r9d, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    movl %r9d, %ecx
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r10
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r11
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r10
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r11
 ; AVX512F-NEXT:    shrdq %cl, %r11, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -588,16 +595,17 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512VL-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %r9d, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    movl %r9d, %ecx
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %r10, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r11
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r11
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r11
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    sarxq %r9, %r10, %rcx
@@ -619,16 +627,17 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; AVX512VBMI-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %r8, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %r9d, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    movl %r9d, %ecx
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %r10, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r11
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r11
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r11
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    sarxq %r9, %r10, %rcx
@@ -647,7 +656,7 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 44(%ebp), %ecx
+; X86-NEXT:    movzbl 44(%ebp), %ecx
 ; X86-NEXT:    movl 12(%ebp), %eax
 ; X86-NEXT:    movl 16(%ebp), %edx
 ; X86-NEXT:    movl 20(%ebp), %esi
@@ -674,30 +683,30 @@ define i256 @ashr_i256(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    sarl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -734,8 +743,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
+; SSE-NEXT:    andb $-64, %al
 ; SSE-NEXT:    shrb $3, %al
-; SSE-NEXT:    andb $24, %al
 ; SSE-NEXT:    negb %al
 ; SSE-NEXT:    movsbq %al, %rax
 ; SSE-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -764,8 +773,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX2-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
+; AVX2-NEXT:    andb $-64, %al
 ; AVX2-NEXT:    shrb $3, %al
-; AVX2-NEXT:    andb $24, %al
 ; AVX2-NEXT:    negb %al
 ; AVX2-NEXT:    movsbq %al, %rdx
 ; AVX2-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -794,8 +803,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512F-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
+; AVX512F-NEXT:    andb $-64, %al
 ; AVX512F-NEXT:    shrb $3, %al
-; AVX512F-NEXT:    andb $24, %al
 ; AVX512F-NEXT:    negb %al
 ; AVX512F-NEXT:    movsbq %al, %rdx
 ; AVX512F-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -823,8 +832,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512VL-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
+; AVX512VL-NEXT:    andb $-64, %al
 ; AVX512VL-NEXT:    shrb $3, %al
-; AVX512VL-NEXT:    andb $24, %al
 ; AVX512VL-NEXT:    negb %al
 ; AVX512VL-NEXT:    movsbq %al, %rax
 ; AVX512VL-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -852,8 +861,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512VBMI-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
+; AVX512VBMI-NEXT:    andb $-64, %al
 ; AVX512VBMI-NEXT:    shrb $3, %al
-; AVX512VBMI-NEXT:    andb $24, %al
 ; AVX512VBMI-NEXT:    negb %al
 ; AVX512VBMI-NEXT:    movsbq %al, %rax
 ; AVX512VBMI-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -897,7 +906,7 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl 16(%ebp), %ecx
+; X86-NEXT:    movzbl 16(%ebp), %ecx
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %esi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
@@ -913,8 +922,8 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $-32, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $28, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 68(%esp,%eax), %esi
@@ -954,7 +963,6 @@ define i256 @shl_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edi # 4-byte Reload
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shll %cl, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
 ; X86-NEXT:    shldl %cl, %edi, %esi
 ; X86-NEXT:    movl %esi, 4(%eax)
@@ -982,15 +990,16 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r9
+; SSE-NEXT:    movq -48(%rsp,%rax), %r9
 ; SSE-NEXT:    shrdq %cl, %r9, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -72(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %rsi, %r10
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
@@ -1003,20 +1012,21 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX2-LABEL: lshr_i256_load:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    movq %rdx, %rcx
 ; AVX2-NEXT:    vmovups (%rsi), %ymm0
 ; AVX2-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX2-NEXT:    movq %rdx, %rcx
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX2-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -1030,20 +1040,21 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX512F-LABEL: lshr_i256_load:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    movq %rdx, %rcx
 ; AVX512F-NEXT:    vmovups (%rsi), %ymm0
 ; AVX512F-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512F-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512F-NEXT:    movq %rdx, %rcx
 ; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512F-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -1056,21 +1067,22 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX512VL-LABEL: lshr_i256_load:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    movq %rdx, %rcx
 ; AVX512VL-NEXT:    vmovups (%rsi), %ymm0
 ; AVX512VL-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512VL-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512VL-NEXT:    movq %rdx, %rcx
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VL-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    shrxq %rcx, %r9, %rcx
@@ -1083,21 +1095,22 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_i256_load:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    movq %rdx, %rcx
 ; AVX512VBMI-NEXT:    vmovups (%rsi), %ymm0
 ; AVX512VBMI-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512VBMI-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512VBMI-NEXT:    movq %rdx, %rcx
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VBMI-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    shrxq %rcx, %r9, %rcx
@@ -1132,7 +1145,7 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl 16(%ebp), %ecx
+; X86-NEXT:    movzbl 16(%ebp), %ecx
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %esi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
@@ -1148,30 +1161,30 @@ define i256 @lshr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -1213,15 +1226,16 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r9
+; SSE-NEXT:    movq -48(%rsp,%rax), %r9
 ; SSE-NEXT:    shrdq %cl, %r9, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -72(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %rsi, %r10
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
@@ -1247,14 +1261,15 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX2-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -1280,14 +1295,15 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512F-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512F-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -1313,15 +1329,16 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512VL-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VL-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    sarxq %rcx, %r9, %rcx
@@ -1346,15 +1363,16 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; AVX512VBMI-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VBMI-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    sarxq %rcx, %r9, %rcx
@@ -1388,7 +1406,7 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %esi, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl 16(%ebp), %ecx
+; X86-NEXT:    movzbl 16(%ebp), %ecx
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
@@ -1405,30 +1423,30 @@ define i256 @ashr_i256_load(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    sarl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -1902,8 +1920,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq $1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
+; SSE-NEXT:    andb $-64, %al
 ; SSE-NEXT:    shrb $3, %al
-; SSE-NEXT:    andb $24, %al
 ; SSE-NEXT:    negb %al
 ; SSE-NEXT:    movsbq %al, %rax
 ; SSE-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -1932,8 +1950,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; AVX2-NEXT:    vmovss {{.*#+}} xmm0 = [1,0,0,0]
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
+; AVX2-NEXT:    andb $-64, %al
 ; AVX2-NEXT:    shrb $3, %al
-; AVX2-NEXT:    andb $24, %al
 ; AVX2-NEXT:    negb %al
 ; AVX2-NEXT:    movsbq %al, %rdx
 ; AVX2-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -1960,8 +1978,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; AVX512F-NEXT:    vmovaps {{.*#+}} zmm0 = [0,0,0,0,1,0,0,0]
 ; AVX512F-NEXT:    vmovups %zmm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
+; AVX512F-NEXT:    andb $-64, %al
 ; AVX512F-NEXT:    shrb $3, %al
-; AVX512F-NEXT:    andb $24, %al
 ; AVX512F-NEXT:    negb %al
 ; AVX512F-NEXT:    movsbq %al, %rdx
 ; AVX512F-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -1989,8 +2007,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; AVX512VL-NEXT:    vmovaps {{.*#+}} xmm0 = [1,0,0,0]
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
+; AVX512VL-NEXT:    andb $-64, %al
 ; AVX512VL-NEXT:    shrb $3, %al
-; AVX512VL-NEXT:    andb $24, %al
 ; AVX512VL-NEXT:    negb %al
 ; AVX512VL-NEXT:    movsbq %al, %rax
 ; AVX512VL-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -2018,8 +2036,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; AVX512VBMI-NEXT:    vmovaps {{.*#+}} xmm0 = [1,0,0,0]
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
+; AVX512VBMI-NEXT:    andb $-64, %al
 ; AVX512VBMI-NEXT:    shrb $3, %al
-; AVX512VBMI-NEXT:    andb $24, %al
 ; AVX512VBMI-NEXT:    negb %al
 ; AVX512VBMI-NEXT:    movsbq %al, %rax
 ; AVX512VBMI-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -2048,7 +2066,7 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
@@ -2066,8 +2084,8 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $-32, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $28, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 68(%esp,%eax), %esi
@@ -2107,7 +2125,6 @@ define i256 @shl_1_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edi # 4-byte Reload
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shll %cl, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
 ; X86-NEXT:    shldl %cl, %edi, %esi
 ; X86-NEXT:    movl %esi, 4(%eax)
@@ -2134,15 +2151,16 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r9
+; SSE-NEXT:    movq -48(%rsp,%rax), %r9
 ; SSE-NEXT:    shrdq %cl, %r9, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -72(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %rsi, %r10
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
@@ -2155,20 +2173,21 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX2-LABEL: lshr_signbit_i256:
 ; AVX2:       # %bb.0:
+; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
-; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX2-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -2186,14 +2205,15 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ; AVX512F-NEXT:    vmovaps {{.*#+}} zmm0 = [0,0,0,9223372036854775808,0,0,0,0]
 ; AVX512F-NEXT:    vmovups %zmm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512F-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -2206,21 +2226,22 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX512VL-LABEL: lshr_signbit_i256:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
+; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VL-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    shrxq %rcx, %r9, %rcx
@@ -2233,21 +2254,22 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_signbit_i256:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
+; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VBMI-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    shrxq %rcx, %r9, %rcx
@@ -2267,7 +2289,7 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
@@ -2285,30 +2307,30 @@ define i256 @lshr_signbit_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -2348,15 +2370,16 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    movq $-1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r9
+; SSE-NEXT:    movq -48(%rsp,%rax), %r9
 ; SSE-NEXT:    shrdq %cl, %r9, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -72(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %rsi, %r10
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
@@ -2369,20 +2392,21 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX2-LABEL: ashr_signbit_i256:
 ; AVX2:       # %bb.0:
+; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX2-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
-; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX2-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -2400,14 +2424,15 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ; AVX512F-NEXT:    vmovaps {{.*#+}} zmm0 = [0,0,0,9223372036854775808,18446744073709551615,18446744073709551615,18446744073709551615,18446744073709551615]
 ; AVX512F-NEXT:    vmovups %zmm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512F-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -2420,21 +2445,22 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX512VL-LABEL: ashr_signbit_i256:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX512VL-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
+; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VL-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    sarxq %rcx, %r9, %rcx
@@ -2447,21 +2473,22 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ;
 ; AVX512VBMI-LABEL: ashr_signbit_i256:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX512VBMI-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    vmovaps {{.*#+}} ymm0 = [0,0,0,9223372036854775808]
+; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VBMI-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    sarxq %rcx, %r9, %rcx
@@ -2481,7 +2508,7 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
@@ -2499,30 +2526,30 @@ define i256 @ashr_signbit_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    sarl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -2560,8 +2587,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    movq $-1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq $-1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
+; SSE-NEXT:    andb $-64, %al
 ; SSE-NEXT:    shrb $3, %al
-; SSE-NEXT:    andb $24, %al
 ; SSE-NEXT:    negb %al
 ; SSE-NEXT:    movsbq %al, %rax
 ; SSE-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -2590,8 +2617,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; AVX2-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
+; AVX2-NEXT:    andb $-64, %al
 ; AVX2-NEXT:    shrb $3, %al
-; AVX2-NEXT:    andb $24, %al
 ; AVX2-NEXT:    negb %al
 ; AVX2-NEXT:    movsbq %al, %rdx
 ; AVX2-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -2618,8 +2645,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; AVX512F-NEXT:    vmovaps {{.*#+}} zmm0 = [0,0,0,0,18446744073709551615,18446744073709551615,18446744073709551615,18446744073709551615]
 ; AVX512F-NEXT:    vmovups %zmm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
+; AVX512F-NEXT:    andb $-64, %al
 ; AVX512F-NEXT:    shrb $3, %al
-; AVX512F-NEXT:    andb $24, %al
 ; AVX512F-NEXT:    negb %al
 ; AVX512F-NEXT:    movsbq %al, %rdx
 ; AVX512F-NEXT:    movq -32(%rsp,%rdx), %rsi
@@ -2647,8 +2674,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; AVX512VL-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX512VL-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
+; AVX512VL-NEXT:    andb $-64, %al
 ; AVX512VL-NEXT:    shrb $3, %al
-; AVX512VL-NEXT:    andb $24, %al
 ; AVX512VL-NEXT:    negb %al
 ; AVX512VL-NEXT:    movsbq %al, %rax
 ; AVX512VL-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -2676,8 +2703,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; AVX512VBMI-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX512VBMI-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
+; AVX512VBMI-NEXT:    andb $-64, %al
 ; AVX512VBMI-NEXT:    shrb $3, %al
-; AVX512VBMI-NEXT:    andb $24, %al
 ; AVX512VBMI-NEXT:    negb %al
 ; AVX512VBMI-NEXT:    movsbq %al, %rax
 ; AVX512VBMI-NEXT:    movq -32(%rsp,%rax), %rdx
@@ -2706,7 +2733,7 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
@@ -2724,8 +2751,8 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $-32, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $28, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 68(%esp,%eax), %esi
@@ -2765,7 +2792,6 @@ define i256 @shl_allbits_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edi # 4-byte Reload
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shll %cl, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %esi # 4-byte Reload
 ; X86-NEXT:    shldl %cl, %edi, %esi
 ; X86-NEXT:    movl %esi, 4(%eax)
@@ -2793,15 +2819,16 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    movq $-1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq $-1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %eax
-; SSE-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; SSE-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; SSE-NEXT:    movq -56(%rsp,%rax), %rdx
+; SSE-NEXT:    movq -64(%rsp,%rax), %rsi
 ; SSE-NEXT:    movq %rsi, %r8
 ; SSE-NEXT:    shrdq %cl, %rdx, %r8
-; SSE-NEXT:    movq -48(%rsp,%rax,8), %r9
+; SSE-NEXT:    movq -48(%rsp,%rax), %r9
 ; SSE-NEXT:    shrdq %cl, %r9, %rdx
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %r10
+; SSE-NEXT:    movq -72(%rsp,%rax), %r10
 ; SSE-NEXT:    shrdq %cl, %rsi, %r10
 ; SSE-NEXT:    movq %rdi, %rax
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
@@ -2814,20 +2841,21 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ;
 ; AVX2-LABEL: lshr_allbits_i256:
 ; AVX2:       # %bb.0:
+; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
-; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX2-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %eax
-; AVX2-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX2-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX2-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX2-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX2-NEXT:    movq %rsi, %r8
 ; AVX2-NEXT:    shrdq %cl, %rdx, %r8
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX2-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX2-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX2-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX2-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX2-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX2-NEXT:    movq %rdi, %rax
@@ -2845,14 +2873,15 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ; AVX512F-NEXT:    vmovaps {{.*#+}} zmm0 = [18446744073709551615,18446744073709551615,18446744073709551615,18446744073709551615,0,0,0,0]
 ; AVX512F-NEXT:    vmovups %zmm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %eax
-; AVX512F-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512F-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512F-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512F-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512F-NEXT:    movq %rsi, %r8
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512F-NEXT:    movq -72(%rsp,%rax,8), %r9
-; AVX512F-NEXT:    movq -48(%rsp,%rax,8), %r10
+; AVX512F-NEXT:    movq -72(%rsp,%rax), %r9
+; AVX512F-NEXT:    movq -48(%rsp,%rax), %r10
 ; AVX512F-NEXT:    shrdq %cl, %r10, %rdx
 ; AVX512F-NEXT:    shrdq %cl, %rsi, %r9
 ; AVX512F-NEXT:    movq %rdi, %rax
@@ -2865,21 +2894,22 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ;
 ; AVX512VL-LABEL: lshr_allbits_i256:
 ; AVX512VL:       # %bb.0:
+; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX512VL-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
-; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX512VL-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %eax
-; AVX512VL-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VL-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VL-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VL-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VL-NEXT:    movq %rsi, %r8
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VL-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VL-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VL-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VL-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VL-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VL-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VL-NEXT:    movq %rdi, %rax
 ; AVX512VL-NEXT:    shrxq %rcx, %r9, %rcx
@@ -2892,21 +2922,22 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_allbits_i256:
 ; AVX512VBMI:       # %bb.0:
+; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vpxor %xmm0, %xmm0, %xmm0
 ; AVX512VBMI-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
-; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vpcmpeqd %ymm0, %ymm0, %ymm0
 ; AVX512VBMI-NEXT:    vmovdqu %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %eax
-; AVX512VBMI-NEXT:    movq -56(%rsp,%rax,8), %rdx
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rax,8), %rsi
+; AVX512VBMI-NEXT:    movq -56(%rsp,%rax), %rdx
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rax), %rsi
 ; AVX512VBMI-NEXT:    movq %rsi, %r8
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %r8
-; AVX512VBMI-NEXT:    movq -48(%rsp,%rax,8), %r9
+; AVX512VBMI-NEXT:    movq -48(%rsp,%rax), %r9
 ; AVX512VBMI-NEXT:    shrdq %cl, %r9, %rdx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rax,8), %r10
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rax), %r10
 ; AVX512VBMI-NEXT:    shrdq %cl, %rsi, %r10
 ; AVX512VBMI-NEXT:    movq %rdi, %rax
 ; AVX512VBMI-NEXT:    shrxq %rcx, %r9, %rcx
@@ -2926,7 +2957,7 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $112, %esp
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
@@ -2944,30 +2975,30 @@ define i256 @lshr_allbits_i256(i256 %a0) nounwind {
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $-1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %eax
-; X86-NEXT:    movl 40(%esp,%eax,4), %edx
-; X86-NEXT:    movl 36(%esp,%eax,4), %esi
+; X86-NEXT:    movl 40(%esp,%eax), %edx
+; X86-NEXT:    movl 36(%esp,%eax), %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 44(%esp,%eax,4), %esi
+; X86-NEXT:    movl 44(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 48(%esp,%eax,4), %ebx
+; X86-NEXT:    movl 48(%esp,%eax), %ebx
 ; X86-NEXT:    shrdl %cl, %ebx, %esi
 ; X86-NEXT:    movl %esi, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 52(%esp,%eax,4), %edi
+; X86-NEXT:    movl 52(%esp,%eax), %edi
 ; X86-NEXT:    shrdl %cl, %edi, %ebx
-; X86-NEXT:    movl 56(%esp,%eax,4), %esi
+; X86-NEXT:    movl 56(%esp,%eax), %esi
 ; X86-NEXT:    shrdl %cl, %esi, %edi
-; X86-NEXT:    movl 32(%esp,%eax,4), %edx
+; X86-NEXT:    movl 32(%esp,%eax), %edx
 ; X86-NEXT:    movl %edx, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; X86-NEXT:    movl 60(%esp,%eax,4), %edx
+; X86-NEXT:    movl 60(%esp,%eax), %edx
 ; X86-NEXT:    shrdl %cl, %edx, %esi
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; X86-NEXT:    shrdl %cl, %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Folded Spill
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrl %cl, %edx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl %edx, 28(%eax)
@@ -3003,27 +3034,29 @@ define i64 @lshr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %r8d, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %ecx
-; SSE-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; SSE-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; SSE-NEXT:    movq -72(%rsp,%rcx), %rax
+; SSE-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; SSE-NEXT:    movl %r8d, %ecx
 ; SSE-NEXT:    shrdq %cl, %rdx, %rax
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: lshr_extract_i256_i64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
+; AVX2-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %r8d, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %ecx
-; AVX2-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; AVX2-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; AVX2-NEXT:    movq -72(%rsp,%rcx), %rax
+; AVX2-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; AVX2-NEXT:    movl %r8d, %ecx
 ; AVX2-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX2-NEXT:    vzeroupper
@@ -3031,34 +3064,36 @@ define i64 @lshr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX512F-LABEL: lshr_extract_i256_i64:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
+; AVX512F-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %r8d, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %ecx
-; AVX512F-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; AVX512F-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; AVX512F-NEXT:    movq -72(%rsp,%rcx), %rax
+; AVX512F-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; AVX512F-NEXT:    movl %r8d, %ecx
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512F-NEXT:    retq
 ;
 ; AVX512VL-LABEL: lshr_extract_i256_i64:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
+; AVX512VL-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %r8d, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %ecx
-; AVX512VL-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; AVX512VL-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; AVX512VL-NEXT:    movq -72(%rsp,%rcx), %rax
+; AVX512VL-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; AVX512VL-NEXT:    movl %r8d, %ecx
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512VL-NEXT:    vzeroupper
@@ -3066,17 +3101,18 @@ define i64 @lshr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_extract_i256_i64:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
-; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rsi, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
+; AVX512VBMI-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %r8d, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %ecx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rcx), %rax
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; AVX512VBMI-NEXT:    movl %r8d, %ecx
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512VBMI-NEXT:    vzeroupper
@@ -3090,7 +3126,7 @@ define i64 @lshr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $64, %esp
-; X86-NEXT:    movl 40(%ebp), %ecx
+; X86-NEXT:    movzbl 40(%ebp), %ecx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl 12(%ebp), %edx
 ; X86-NEXT:    movl 16(%ebp), %esi
@@ -3116,14 +3152,14 @@ define i64 @lshr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %edx
-; X86-NEXT:    movl 8(%esp,%edx,4), %esi
-; X86-NEXT:    movl (%esp,%edx,4), %eax
-; X86-NEXT:    movl 4(%esp,%edx,4), %edi
+; X86-NEXT:    movl 8(%esp,%edx), %esi
+; X86-NEXT:    movl (%esp,%edx), %eax
+; X86-NEXT:    movl 4(%esp,%edx), %edi
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shrdl %cl, %esi, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrdl %cl, %edi, %eax
 ; X86-NEXT:    leal -8(%ebp), %esp
 ; X86-NEXT:    popl %esi
@@ -3148,10 +3184,11 @@ define i64 @ashr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; CHECK-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %r8d, %eax
-; CHECK-NEXT:    shrb $6, %al
+; CHECK-NEXT:    andb $-64, %al
+; CHECK-NEXT:    shrb $3, %al
 ; CHECK-NEXT:    movzbl %al, %ecx
-; CHECK-NEXT:    movq -72(%rsp,%rcx,8), %rax
-; CHECK-NEXT:    movq -64(%rsp,%rcx,8), %rdx
+; CHECK-NEXT:    movq -72(%rsp,%rcx), %rax
+; CHECK-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; CHECK-NEXT:    movl %r8d, %ecx
 ; CHECK-NEXT:    shrdq %cl, %rdx, %rax
 ; CHECK-NEXT:    retq
@@ -3164,7 +3201,7 @@ define i64 @ashr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $64, %esp
-; X86-NEXT:    movl 40(%ebp), %ecx
+; X86-NEXT:    movzbl 40(%ebp), %ecx
 ; X86-NEXT:    movl 8(%ebp), %eax
 ; X86-NEXT:    movl 12(%ebp), %edx
 ; X86-NEXT:    movl 16(%ebp), %esi
@@ -3191,14 +3228,14 @@ define i64 @ashr_extract_i256_i64(i256 %a0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %edx
-; X86-NEXT:    movl 8(%esp,%edx,4), %esi
-; X86-NEXT:    movl (%esp,%edx,4), %eax
-; X86-NEXT:    movl 4(%esp,%edx,4), %edi
+; X86-NEXT:    movl 8(%esp,%edx), %esi
+; X86-NEXT:    movl (%esp,%edx), %eax
+; X86-NEXT:    movl 4(%esp,%edx), %edi
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shrdl %cl, %esi, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrdl %cl, %edi, %eax
 ; X86-NEXT:    leal -8(%ebp), %esp
 ; X86-NEXT:    popl %esi
@@ -3222,26 +3259,28 @@ define i64 @lshr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %edx
-; SSE-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; SSE-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; SSE-NEXT:    movq -72(%rsp,%rdx), %rax
+; SSE-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; SSE-NEXT:    shrdq %cl, %rdx, %rax
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: lshr_extract_load_i256_i64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vmovups (%rdi), %ymm0
 ; AVX2-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX2-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX2-NEXT:    movq %rsi, %rcx
 ; AVX2-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %edx
-; AVX2-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX2-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX2-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX2-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX2-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX2-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX2-NEXT:    vzeroupper
@@ -3249,32 +3288,34 @@ define i64 @lshr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX512F-LABEL: lshr_extract_load_i256_i64:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    movq %rsi, %rcx
 ; AVX512F-NEXT:    vmovups (%rdi), %ymm0
 ; AVX512F-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512F-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512F-NEXT:    movq %rsi, %rcx
 ; AVX512F-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512F-NEXT:    movl %ecx, %eax
-; AVX512F-NEXT:    shrb $6, %al
+; AVX512F-NEXT:    andb $-64, %al
+; AVX512F-NEXT:    shrb $3, %al
 ; AVX512F-NEXT:    movzbl %al, %edx
-; AVX512F-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX512F-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX512F-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX512F-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX512F-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX512F-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512F-NEXT:    retq
 ;
 ; AVX512VL-LABEL: lshr_extract_load_i256_i64:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vmovups (%rdi), %ymm0
 ; AVX512VL-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512VL-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512VL-NEXT:    movq %rsi, %rcx
 ; AVX512VL-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VL-NEXT:    movl %ecx, %eax
-; AVX512VL-NEXT:    shrb $6, %al
+; AVX512VL-NEXT:    andb $-64, %al
+; AVX512VL-NEXT:    shrb $3, %al
 ; AVX512VL-NEXT:    movzbl %al, %edx
-; AVX512VL-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX512VL-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX512VL-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX512VL-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX512VL-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX512VL-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512VL-NEXT:    vzeroupper
@@ -3282,16 +3323,17 @@ define i64 @lshr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ;
 ; AVX512VBMI-LABEL: lshr_extract_load_i256_i64:
 ; AVX512VBMI:       # %bb.0:
-; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vmovups (%rdi), %ymm0
 ; AVX512VBMI-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; AVX512VBMI-NEXT:    vmovups %ymm1, -{{[0-9]+}}(%rsp)
+; AVX512VBMI-NEXT:    movq %rsi, %rcx
 ; AVX512VBMI-NEXT:    vmovups %ymm0, -{{[0-9]+}}(%rsp)
 ; AVX512VBMI-NEXT:    movl %ecx, %eax
-; AVX512VBMI-NEXT:    shrb $6, %al
+; AVX512VBMI-NEXT:    andb $-64, %al
+; AVX512VBMI-NEXT:    shrb $3, %al
 ; AVX512VBMI-NEXT:    movzbl %al, %edx
-; AVX512VBMI-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX512VBMI-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX512VBMI-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX512VBMI-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX512VBMI-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX512VBMI-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512VBMI-NEXT:    vzeroupper
@@ -3321,7 +3363,7 @@ define i64 @lshr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %esi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
@@ -3337,14 +3379,14 @@ define i64 @lshr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %edx
-; X86-NEXT:    movl 24(%esp,%edx,4), %esi
-; X86-NEXT:    movl 16(%esp,%edx,4), %eax
-; X86-NEXT:    movl 20(%esp,%edx,4), %edi
+; X86-NEXT:    movl 24(%esp,%edx), %esi
+; X86-NEXT:    movl 16(%esp,%edx), %eax
+; X86-NEXT:    movl 20(%esp,%edx), %edi
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shrdl %cl, %esi, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrdl %cl, %edi, %eax
 ; X86-NEXT:    leal -12(%ebp), %esp
 ; X86-NEXT:    popl %esi
@@ -3374,10 +3416,11 @@ define i64 @ashr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movl %ecx, %eax
-; SSE-NEXT:    shrb $6, %al
+; SSE-NEXT:    andb $-64, %al
+; SSE-NEXT:    shrb $3, %al
 ; SSE-NEXT:    movzbl %al, %edx
-; SSE-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; SSE-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; SSE-NEXT:    movq -72(%rsp,%rdx), %rax
+; SSE-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; SSE-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; SSE-NEXT:    shrdq %cl, %rdx, %rax
 ; SSE-NEXT:    retq
@@ -3397,10 +3440,11 @@ define i64 @ashr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movl %ecx, %eax
-; AVX2-NEXT:    shrb $6, %al
+; AVX2-NEXT:    andb $-64, %al
+; AVX2-NEXT:    shrb $3, %al
 ; AVX2-NEXT:    movzbl %al, %edx
-; AVX2-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX2-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX2-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX2-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX2-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX2-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX2-NEXT:    retq
@@ -3420,10 +3464,11 @@ define i64 @ashr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX512-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    movq %rdx, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    movl %ecx, %eax
-; AVX512-NEXT:    shrb $6, %al
+; AVX512-NEXT:    andb $-64, %al
+; AVX512-NEXT:    shrb $3, %al
 ; AVX512-NEXT:    movzbl %al, %edx
-; AVX512-NEXT:    movq -72(%rsp,%rdx,8), %rax
-; AVX512-NEXT:    movq -64(%rsp,%rdx,8), %rdx
+; AVX512-NEXT:    movq -72(%rsp,%rdx), %rax
+; AVX512-NEXT:    movq -64(%rsp,%rdx), %rdx
 ; AVX512-NEXT:    # kill: def $cl killed $cl killed $rcx
 ; AVX512-NEXT:    shrdq %cl, %rdx, %rax
 ; AVX512-NEXT:    retq
@@ -3452,7 +3497,7 @@ define i64 @ashr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %esi, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    movzbl 12(%ebp), %ecx
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %edi, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %edx # 4-byte Reload
@@ -3469,14 +3514,14 @@ define i64 @ashr_extract_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    shrb $5, %al
+; X86-NEXT:    andb $-32, %al
+; X86-NEXT:    shrb $3, %al
 ; X86-NEXT:    movzbl %al, %edx
-; X86-NEXT:    movl 24(%esp,%edx,4), %esi
-; X86-NEXT:    movl 16(%esp,%edx,4), %eax
-; X86-NEXT:    movl 20(%esp,%edx,4), %edi
+; X86-NEXT:    movl 24(%esp,%edx), %esi
+; X86-NEXT:    movl 16(%esp,%edx), %eax
+; X86-NEXT:    movl 20(%esp,%edx), %edi
 ; X86-NEXT:    movl %edi, %edx
 ; X86-NEXT:    shrdl %cl, %esi, %edx
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    shrdl %cl, %edi, %eax
 ; X86-NEXT:    leal -12(%ebp), %esp
 ; X86-NEXT:    popl %esi
@@ -3518,6 +3563,7 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movaps (%rdi), %xmm0
 ; SSE-NEXT:    movq 16(%rdi), %rax
 ; SSE-NEXT:    movq 24(%rdi), %rcx
+; SSE-NEXT:    shll $6, %esi
 ; SSE-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
@@ -3526,9 +3572,9 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; SSE-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; SSE-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
-; SSE-NEXT:    andb $3, %sil
+; SSE-NEXT:    shrb $3, %sil
 ; SSE-NEXT:    movzbl %sil, %eax
-; SSE-NEXT:    movq -72(%rsp,%rax,8), %rax
+; SSE-NEXT:    movq -72(%rsp,%rax), %rax
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: ashr_extract_idx_load_i256_i64:
@@ -3536,6 +3582,7 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX2-NEXT:    vmovaps (%rdi), %xmm0
 ; AVX2-NEXT:    movq 16(%rdi), %rax
 ; AVX2-NEXT:    movq 24(%rdi), %rcx
+; AVX2-NEXT:    shll $6, %esi
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    vmovaps %xmm0, -{{[0-9]+}}(%rsp)
@@ -3544,9 +3591,9 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX2-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
-; AVX2-NEXT:    andb $3, %sil
+; AVX2-NEXT:    shrb $3, %sil
 ; AVX2-NEXT:    movzbl %sil, %eax
-; AVX2-NEXT:    movq -72(%rsp,%rax,8), %rax
+; AVX2-NEXT:    movq -72(%rsp,%rax), %rax
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: ashr_extract_idx_load_i256_i64:
@@ -3554,6 +3601,7 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX512-NEXT:    vmovaps (%rdi), %xmm0
 ; AVX512-NEXT:    movq 16(%rdi), %rax
 ; AVX512-NEXT:    movq 24(%rdi), %rcx
+; AVX512-NEXT:    shll $6, %esi
 ; AVX512-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    vmovaps %xmm0, -{{[0-9]+}}(%rsp)
@@ -3562,9 +3610,9 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; AVX512-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
 ; AVX512-NEXT:    movq %rcx, -{{[0-9]+}}(%rsp)
-; AVX512-NEXT:    andb $3, %sil
+; AVX512-NEXT:    shrb $3, %sil
 ; AVX512-NEXT:    movzbl %sil, %eax
-; AVX512-NEXT:    movq -72(%rsp,%rax,8), %rax
+; AVX512-NEXT:    movq -72(%rsp,%rax), %rax
 ; AVX512-NEXT:    retq
 ;
 ; X86-LABEL: ashr_extract_idx_load_i256_i64:
@@ -3596,7 +3644,8 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %ecx # 4-byte Reload
 ; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
-; X86-NEXT:    movzbl 12(%ebp), %ecx
+; X86-NEXT:    movl 12(%ebp), %ecx
+; X86-NEXT:    shll $6, %ecx
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    sarl $31, %eax
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
@@ -3607,9 +3656,10 @@ define i64 @ashr_extract_idx_load_i256_i64(ptr %p0, i256 %a1) nounwind {
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-NEXT:    andl $3, %ecx
-; X86-NEXT:    movl 16(%esp,%ecx,8), %eax
-; X86-NEXT:    movl 20(%esp,%ecx,8), %edx
+; X86-NEXT:    shrb $3, %cl
+; X86-NEXT:    movzbl %cl, %ecx
+; X86-NEXT:    movl 16(%esp,%ecx), %eax
+; X86-NEXT:    movl 20(%esp,%ecx), %edx
 ; X86-NEXT:    leal -12(%ebp), %esp
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi

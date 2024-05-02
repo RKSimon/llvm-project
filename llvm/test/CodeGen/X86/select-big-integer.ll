@@ -185,85 +185,82 @@ define void @test_not_i256(ptr %p0, ptr %p1, i1 zeroext %a2, ptr %p3) nounwind {
 define void @test_not_i512(ptr %p0, ptr %p1, i1 zeroext %a2, ptr %p3) nounwind {
 ; SSE2-LABEL: test_not_i512:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    movdqa (%rsi), %xmm3
-; SSE2-NEXT:    movdqa 16(%rsi), %xmm2
-; SSE2-NEXT:    movdqa 32(%rsi), %xmm1
-; SSE2-NEXT:    movdqa 48(%rsi), %xmm0
+; SSE2-NEXT:    movdqa (%rsi), %xmm0
+; SSE2-NEXT:    movdqa 16(%rsi), %xmm1
+; SSE2-NEXT:    movdqa 32(%rsi), %xmm2
+; SSE2-NEXT:    movdqa 48(%rsi), %xmm3
 ; SSE2-NEXT:    negl %edx
 ; SSE2-NEXT:    movd %edx, %xmm4
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm4 = xmm4[0,0,0,0]
-; SSE2-NEXT:    movdqa 48(%rdi), %xmm5
+; SSE2-NEXT:    movdqa (%rdi), %xmm5
 ; SSE2-NEXT:    pand %xmm4, %xmm5
 ; SSE2-NEXT:    pcmpeqd %xmm6, %xmm6
 ; SSE2-NEXT:    pxor %xmm4, %xmm6
 ; SSE2-NEXT:    pandn %xmm6, %xmm0
 ; SSE2-NEXT:    por %xmm5, %xmm0
-; SSE2-NEXT:    movdqa 32(%rdi), %xmm5
+; SSE2-NEXT:    movdqa 16(%rdi), %xmm5
 ; SSE2-NEXT:    pand %xmm4, %xmm5
 ; SSE2-NEXT:    pandn %xmm6, %xmm1
 ; SSE2-NEXT:    por %xmm5, %xmm1
-; SSE2-NEXT:    movdqa 16(%rdi), %xmm5
+; SSE2-NEXT:    movdqa 32(%rdi), %xmm5
 ; SSE2-NEXT:    pand %xmm4, %xmm5
 ; SSE2-NEXT:    pandn %xmm6, %xmm2
 ; SSE2-NEXT:    por %xmm5, %xmm2
-; SSE2-NEXT:    pand (%rdi), %xmm4
+; SSE2-NEXT:    pand 48(%rdi), %xmm4
 ; SSE2-NEXT:    pandn %xmm6, %xmm3
 ; SSE2-NEXT:    por %xmm4, %xmm3
-; SSE2-NEXT:    movdqa %xmm3, (%rcx)
-; SSE2-NEXT:    movdqa %xmm2, 16(%rcx)
-; SSE2-NEXT:    movdqa %xmm1, 32(%rcx)
-; SSE2-NEXT:    movdqa %xmm0, 48(%rcx)
+; SSE2-NEXT:    movdqa %xmm3, 48(%rcx)
+; SSE2-NEXT:    movdqa %xmm2, 32(%rcx)
+; SSE2-NEXT:    movdqa %xmm1, 16(%rcx)
+; SSE2-NEXT:    movdqa %xmm0, (%rcx)
 ; SSE2-NEXT:    retq
 ;
 ; SSE4-LABEL: test_not_i512:
 ; SSE4:       # %bb.0:
 ; SSE4-NEXT:    pcmpeqd %xmm1, %xmm1
-; SSE4-NEXT:    movdqa (%rsi), %xmm2
+; SSE4-NEXT:    movdqa 48(%rsi), %xmm2
 ; SSE4-NEXT:    pxor %xmm1, %xmm2
-; SSE4-NEXT:    movdqa 16(%rsi), %xmm3
+; SSE4-NEXT:    movdqa 32(%rsi), %xmm3
 ; SSE4-NEXT:    pxor %xmm1, %xmm3
-; SSE4-NEXT:    movdqa 32(%rsi), %xmm4
+; SSE4-NEXT:    movdqa 16(%rsi), %xmm4
 ; SSE4-NEXT:    pxor %xmm1, %xmm4
-; SSE4-NEXT:    pxor 48(%rsi), %xmm1
+; SSE4-NEXT:    pxor (%rsi), %xmm1
 ; SSE4-NEXT:    negl %edx
 ; SSE4-NEXT:    movd %edx, %xmm0
 ; SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
-; SSE4-NEXT:    blendvps %xmm0, 48(%rdi), %xmm1
-; SSE4-NEXT:    blendvps %xmm0, 32(%rdi), %xmm4
-; SSE4-NEXT:    blendvps %xmm0, 16(%rdi), %xmm3
-; SSE4-NEXT:    blendvps %xmm0, (%rdi), %xmm2
-; SSE4-NEXT:    movaps %xmm2, (%rcx)
-; SSE4-NEXT:    movaps %xmm3, 16(%rcx)
-; SSE4-NEXT:    movaps %xmm4, 32(%rcx)
-; SSE4-NEXT:    movaps %xmm1, 48(%rcx)
+; SSE4-NEXT:    blendvps %xmm0, (%rdi), %xmm1
+; SSE4-NEXT:    blendvps %xmm0, 16(%rdi), %xmm4
+; SSE4-NEXT:    blendvps %xmm0, 32(%rdi), %xmm3
+; SSE4-NEXT:    blendvps %xmm0, 48(%rdi), %xmm2
+; SSE4-NEXT:    movaps %xmm2, 48(%rcx)
+; SSE4-NEXT:    movaps %xmm3, 32(%rcx)
+; SSE4-NEXT:    movaps %xmm4, 16(%rcx)
+; SSE4-NEXT:    movaps %xmm1, (%rcx)
 ; SSE4-NEXT:    retq
 ;
 ; AVX1-LABEL: test_not_i512:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vmovaps (%rdi), %xmm0
-; AVX1-NEXT:    vmovaps (%rsi), %xmm1
-; AVX1-NEXT:    vmovaps 32(%rsi), %xmm2
-; AVX1-NEXT:    vinsertf128 $1, 48(%rsi), %ymm2, %ymm2
-; AVX1-NEXT:    vinsertf128 $1, 16(%rsi), %ymm1, %ymm1
-; AVX1-NEXT:    vmovaps 16(%rdi), %xmm3
-; AVX1-NEXT:    vxorps %xmm4, %xmm4, %xmm4
-; AVX1-NEXT:    vcmptrueps %ymm4, %ymm4, %ymm4
-; AVX1-NEXT:    vxorps %ymm4, %ymm1, %ymm1
-; AVX1-NEXT:    vxorps %ymm4, %ymm2, %ymm2
+; AVX1-NEXT:    vmovaps (%rsi), %xmm0
+; AVX1-NEXT:    vinsertf128 $1, 16(%rsi), %ymm0, %ymm0
+; AVX1-NEXT:    vmovaps 32(%rsi), %xmm1
+; AVX1-NEXT:    vinsertf128 $1, 48(%rsi), %ymm1, %ymm1
+; AVX1-NEXT:    vxorps %xmm2, %xmm2, %xmm2
+; AVX1-NEXT:    vcmptrueps %ymm2, %ymm2, %ymm2
+; AVX1-NEXT:    vxorps %ymm2, %ymm0, %ymm0
 ; AVX1-NEXT:    negl %edx
-; AVX1-NEXT:    vmovd %edx, %xmm4
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm4 = xmm4[0,0,0,0]
-; AVX1-NEXT:    vextractf128 $1, %ymm2, %xmm5
-; AVX1-NEXT:    vblendvps %xmm4, 48(%rdi), %xmm5, %xmm5
-; AVX1-NEXT:    vmovaps 32(%rdi), %xmm6
-; AVX1-NEXT:    vmovaps %xmm5, 48(%rcx)
-; AVX1-NEXT:    vblendvps %xmm4, %xmm6, %xmm2, %xmm2
+; AVX1-NEXT:    vmovd %edx, %xmm3
+; AVX1-NEXT:    vpshufd {{.*#+}} xmm3 = xmm3[0,0,0,0]
+; AVX1-NEXT:    vblendvps %xmm3, (%rdi), %xmm0, %xmm4
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm0
+; AVX1-NEXT:    vblendvps %xmm3, 16(%rdi), %xmm0, %xmm0
+; AVX1-NEXT:    vxorps %ymm2, %ymm1, %ymm1
+; AVX1-NEXT:    vblendvps %xmm3, 32(%rdi), %xmm1, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm1
+; AVX1-NEXT:    vblendvps %xmm3, 48(%rdi), %xmm1, %xmm1
+; AVX1-NEXT:    vmovaps %xmm1, 48(%rcx)
 ; AVX1-NEXT:    vmovaps %xmm2, 32(%rcx)
-; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm2
-; AVX1-NEXT:    vblendvps %xmm4, %xmm3, %xmm2, %xmm2
-; AVX1-NEXT:    vmovaps %xmm2, 16(%rcx)
-; AVX1-NEXT:    vblendvps %xmm4, %xmm0, %xmm1, %xmm0
-; AVX1-NEXT:    vmovaps %xmm0, (%rcx)
+; AVX1-NEXT:    vmovaps %xmm0, 16(%rcx)
+; AVX1-NEXT:    vmovaps %xmm4, (%rcx)
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    retq
 ;

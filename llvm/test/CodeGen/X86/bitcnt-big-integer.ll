@@ -123,16 +123,15 @@ define i32 @vector_ctpop_i128(<4 x i32> %v0) nounwind {
 define <2 x i32> @load_ctpop_v2i128(ptr %p0) nounwind {
 ; SSE-LABEL: load_ctpop_v2i128:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    popcntq 8(%rdi), %rax
-; SSE-NEXT:    popcntq (%rdi), %rcx
-; SSE-NEXT:    popcntq 24(%rdi), %rdx
+; SSE-NEXT:    popcntq 24(%rdi), %rax
+; SSE-NEXT:    popcntq 16(%rdi), %rcx
+; SSE-NEXT:    popcntq 8(%rdi), %rdx
 ; SSE-NEXT:    addl %eax, %ecx
 ; SSE-NEXT:    xorl %eax, %eax
-; SSE-NEXT:    popcntq 16(%rdi), %rax
+; SSE-NEXT:    popcntq (%rdi), %rax
 ; SSE-NEXT:    addl %edx, %eax
-; SSE-NEXT:    movd %eax, %xmm1
-; SSE-NEXT:    movd %ecx, %xmm0
-; SSE-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
+; SSE-NEXT:    movd %eax, %xmm0
+; SSE-NEXT:    pinsrd $1, %ecx, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: load_ctpop_v2i128:
@@ -211,28 +210,25 @@ define <2 x i32> @load_ctpop_v2i128(ptr %p0) nounwind {
 define <4 x i32> @load_ctpop_v4i128(ptr %p0) nounwind {
 ; SSE-LABEL: load_ctpop_v4i128:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    popcntq 8(%rdi), %rax
-; SSE-NEXT:    popcntq (%rdi), %rcx
-; SSE-NEXT:    popcntq 24(%rdi), %rdx
-; SSE-NEXT:    popcntq 16(%rdi), %rsi
-; SSE-NEXT:    addl %eax, %ecx
-; SSE-NEXT:    addl %edx, %esi
-; SSE-NEXT:    xorl %eax, %eax
-; SSE-NEXT:    popcntq 40(%rdi), %rax
-; SSE-NEXT:    xorl %edx, %edx
+; SSE-NEXT:    popcntq 56(%rdi), %rax
+; SSE-NEXT:    popcntq 40(%rdi), %rcx
 ; SSE-NEXT:    popcntq 32(%rdi), %rdx
-; SSE-NEXT:    popcntq 56(%rdi), %r8
-; SSE-NEXT:    addl %eax, %edx
-; SSE-NEXT:    xorl %eax, %eax
-; SSE-NEXT:    popcntq 48(%rdi), %rax
-; SSE-NEXT:    addl %r8d, %eax
-; SSE-NEXT:    movd %eax, %xmm0
-; SSE-NEXT:    movd %edx, %xmm1
-; SSE-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
-; SSE-NEXT:    movd %esi, %xmm2
-; SSE-NEXT:    movd %ecx, %xmm0
-; SSE-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[1],xmm2[1]
-; SSE-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm1[0]
+; SSE-NEXT:    popcntq 24(%rdi), %rsi
+; SSE-NEXT:    addl %ecx, %edx
+; SSE-NEXT:    xorl %ecx, %ecx
+; SSE-NEXT:    popcntq 16(%rdi), %rcx
+; SSE-NEXT:    addl %esi, %ecx
+; SSE-NEXT:    xorl %esi, %esi
+; SSE-NEXT:    popcntq 8(%rdi), %rsi
+; SSE-NEXT:    popcntq (%rdi), %r8
+; SSE-NEXT:    addl %esi, %r8d
+; SSE-NEXT:    xorl %esi, %esi
+; SSE-NEXT:    popcntq 48(%rdi), %rsi
+; SSE-NEXT:    movd %r8d, %xmm0
+; SSE-NEXT:    pinsrd $1, %ecx, %xmm0
+; SSE-NEXT:    pinsrd $2, %edx, %xmm0
+; SSE-NEXT:    addl %eax, %esi
+; SSE-NEXT:    pinsrd $3, %esi, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: load_ctpop_v4i128:
@@ -266,114 +262,104 @@ define <4 x i32> @load_ctpop_v4i128(ptr %p0) nounwind {
 ;
 ; AVX512F-LABEL: load_ctpop_v4i128:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    popcntq 24(%rdi), %rcx
-; AVX512F-NEXT:    popcntq 16(%rdi), %rax
-; AVX512F-NEXT:    addl %ecx, %eax
 ; AVX512F-NEXT:    popcntq 8(%rdi), %rcx
-; AVX512F-NEXT:    popcntq (%rdi), %rdx
-; AVX512F-NEXT:    popcntq 40(%rdi), %rsi
-; AVX512F-NEXT:    popcntq 32(%rdi), %r8
+; AVX512F-NEXT:    popcntq (%rdi), %rax
+; AVX512F-NEXT:    popcntq 24(%rdi), %rdx
+; AVX512F-NEXT:    popcntq 16(%rdi), %rsi
+; AVX512F-NEXT:    addl %ecx, %eax
+; AVX512F-NEXT:    addl %edx, %esi
+; AVX512F-NEXT:    popcntq 40(%rdi), %rcx
+; AVX512F-NEXT:    popcntq 32(%rdi), %rdx
+; AVX512F-NEXT:    popcntq 56(%rdi), %r8
 ; AVX512F-NEXT:    addl %ecx, %edx
-; AVX512F-NEXT:    addl %esi, %r8d
-; AVX512F-NEXT:    popcntq 56(%rdi), %rcx
-; AVX512F-NEXT:    popcntq 48(%rdi), %rsi
-; AVX512F-NEXT:    addl %ecx, %esi
+; AVX512F-NEXT:    popcntq 48(%rdi), %rcx
+; AVX512F-NEXT:    addl %r8d, %ecx
 ; AVX512F-NEXT:    vpbroadcastq {{.*#+}} xmm0 = [0,16,0,16]
-; AVX512F-NEXT:    vmovd %esi, %xmm1
-; AVX512F-NEXT:    vmovd %r8d, %xmm2
+; AVX512F-NEXT:    vmovd %ecx, %xmm1
+; AVX512F-NEXT:    vmovd %edx, %xmm2
 ; AVX512F-NEXT:    vpermt2d %zmm1, %zmm0, %zmm2
-; AVX512F-NEXT:    vmovd %edx, %xmm0
+; AVX512F-NEXT:    vmovd %esi, %xmm0
 ; AVX512F-NEXT:    vmovd %eax, %xmm1
-; AVX512F-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm1
-; AVX512F-NEXT:    vmovdqa {{.*#+}} xmm0 = [0,4,18,19]
-; AVX512F-NEXT:    vpermi2d %zmm2, %zmm1, %zmm0
-; AVX512F-NEXT:    # kill: def $xmm0 killed $xmm0 killed $zmm0
+; AVX512F-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
+; AVX512F-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0,1],xmm2[2,3]
 ; AVX512F-NEXT:    retq
 ;
 ; AVX512POPCNT-LABEL: load_ctpop_v4i128:
 ; AVX512POPCNT:       # %bb.0:
-; AVX512POPCNT-NEXT:    popcntq 24(%rdi), %rcx
-; AVX512POPCNT-NEXT:    popcntq 16(%rdi), %rax
-; AVX512POPCNT-NEXT:    addl %ecx, %eax
 ; AVX512POPCNT-NEXT:    popcntq 8(%rdi), %rcx
-; AVX512POPCNT-NEXT:    popcntq (%rdi), %rdx
-; AVX512POPCNT-NEXT:    popcntq 40(%rdi), %rsi
-; AVX512POPCNT-NEXT:    popcntq 32(%rdi), %r8
+; AVX512POPCNT-NEXT:    popcntq (%rdi), %rax
+; AVX512POPCNT-NEXT:    popcntq 24(%rdi), %rdx
+; AVX512POPCNT-NEXT:    popcntq 16(%rdi), %rsi
+; AVX512POPCNT-NEXT:    addl %ecx, %eax
+; AVX512POPCNT-NEXT:    addl %edx, %esi
+; AVX512POPCNT-NEXT:    popcntq 40(%rdi), %rcx
+; AVX512POPCNT-NEXT:    popcntq 32(%rdi), %rdx
+; AVX512POPCNT-NEXT:    popcntq 56(%rdi), %r8
 ; AVX512POPCNT-NEXT:    addl %ecx, %edx
-; AVX512POPCNT-NEXT:    addl %esi, %r8d
-; AVX512POPCNT-NEXT:    popcntq 56(%rdi), %rcx
-; AVX512POPCNT-NEXT:    popcntq 48(%rdi), %rsi
-; AVX512POPCNT-NEXT:    addl %ecx, %esi
+; AVX512POPCNT-NEXT:    popcntq 48(%rdi), %rcx
+; AVX512POPCNT-NEXT:    addl %r8d, %ecx
 ; AVX512POPCNT-NEXT:    vpbroadcastq {{.*#+}} xmm0 = [0,16,0,16]
-; AVX512POPCNT-NEXT:    vmovd %esi, %xmm1
-; AVX512POPCNT-NEXT:    vmovd %r8d, %xmm2
+; AVX512POPCNT-NEXT:    vmovd %ecx, %xmm1
+; AVX512POPCNT-NEXT:    vmovd %edx, %xmm2
 ; AVX512POPCNT-NEXT:    vpermt2d %zmm1, %zmm0, %zmm2
-; AVX512POPCNT-NEXT:    vmovd %edx, %xmm0
+; AVX512POPCNT-NEXT:    vmovd %esi, %xmm0
 ; AVX512POPCNT-NEXT:    vmovd %eax, %xmm1
-; AVX512POPCNT-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm1
-; AVX512POPCNT-NEXT:    vmovdqa {{.*#+}} xmm0 = [0,4,18,19]
-; AVX512POPCNT-NEXT:    vpermi2d %zmm2, %zmm1, %zmm0
-; AVX512POPCNT-NEXT:    # kill: def $xmm0 killed $xmm0 killed $zmm0
+; AVX512POPCNT-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
+; AVX512POPCNT-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0,1],xmm2[2,3]
 ; AVX512POPCNT-NEXT:    retq
 ;
 ; AVX512VL-LABEL: load_ctpop_v4i128:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    popcntq 24(%rdi), %rcx
-; AVX512VL-NEXT:    popcntq 16(%rdi), %rax
-; AVX512VL-NEXT:    addl %ecx, %eax
-; AVX512VL-NEXT:    xorl %ecx, %ecx
-; AVX512VL-NEXT:    popcntq 8(%rdi), %rcx
-; AVX512VL-NEXT:    popcntq (%rdi), %rdx
+; AVX512VL-NEXT:    popcntq 8(%rdi), %rax
+; AVX512VL-NEXT:    popcntq (%rdi), %rcx
+; AVX512VL-NEXT:    addl %eax, %ecx
+; AVX512VL-NEXT:    xorl %eax, %eax
+; AVX512VL-NEXT:    popcntq 24(%rdi), %rax
+; AVX512VL-NEXT:    popcntq 16(%rdi), %rdx
 ; AVX512VL-NEXT:    popcntq 40(%rdi), %rsi
-; AVX512VL-NEXT:    popcntq 32(%rdi), %r8
-; AVX512VL-NEXT:    addl %ecx, %edx
-; AVX512VL-NEXT:    addl %esi, %r8d
-; AVX512VL-NEXT:    xorl %ecx, %ecx
-; AVX512VL-NEXT:    popcntq 56(%rdi), %rcx
+; AVX512VL-NEXT:    addl %eax, %edx
+; AVX512VL-NEXT:    xorl %eax, %eax
+; AVX512VL-NEXT:    popcntq 32(%rdi), %rax
+; AVX512VL-NEXT:    addl %esi, %eax
 ; AVX512VL-NEXT:    xorl %esi, %esi
-; AVX512VL-NEXT:    popcntq 48(%rdi), %rsi
-; AVX512VL-NEXT:    addl %ecx, %esi
-; AVX512VL-NEXT:    vmovd %esi, %xmm0
-; AVX512VL-NEXT:    vmovd %r8d, %xmm1
-; AVX512VL-NEXT:    vpbroadcastq {{.*#+}} xmm2 = [0,4,0,4]
-; AVX512VL-NEXT:    vpermi2d %xmm0, %xmm1, %xmm2
+; AVX512VL-NEXT:    popcntq 56(%rdi), %rsi
+; AVX512VL-NEXT:    popcntq 48(%rdi), %rdi
+; AVX512VL-NEXT:    addl %esi, %edi
+; AVX512VL-NEXT:    vmovd %edi, %xmm0
+; AVX512VL-NEXT:    vpbroadcastq {{.*#+}} xmm1 = [0,4,0,4]
+; AVX512VL-NEXT:    vmovd %eax, %xmm2
+; AVX512VL-NEXT:    vpermi2d %xmm0, %xmm2, %xmm1
 ; AVX512VL-NEXT:    vmovd %edx, %xmm0
-; AVX512VL-NEXT:    vmovd %eax, %xmm1
-; AVX512VL-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm1
-; AVX512VL-NEXT:    vmovdqa {{.*#+}} xmm0 = [0,4,10,11]
-; AVX512VL-NEXT:    vpermi2d %ymm2, %ymm1, %ymm0
-; AVX512VL-NEXT:    # kill: def $xmm0 killed $xmm0 killed $ymm0
-; AVX512VL-NEXT:    vzeroupper
+; AVX512VL-NEXT:    vmovd %ecx, %xmm2
+; AVX512VL-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
+; AVX512VL-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,3]
 ; AVX512VL-NEXT:    retq
 ;
 ; AVX512VLPOPCNT-LABEL: load_ctpop_v4i128:
 ; AVX512VLPOPCNT:       # %bb.0:
-; AVX512VLPOPCNT-NEXT:    popcntq 24(%rdi), %rcx
-; AVX512VLPOPCNT-NEXT:    popcntq 16(%rdi), %rax
-; AVX512VLPOPCNT-NEXT:    addl %ecx, %eax
-; AVX512VLPOPCNT-NEXT:    xorl %ecx, %ecx
-; AVX512VLPOPCNT-NEXT:    popcntq 8(%rdi), %rcx
-; AVX512VLPOPCNT-NEXT:    popcntq (%rdi), %rdx
+; AVX512VLPOPCNT-NEXT:    popcntq 8(%rdi), %rax
+; AVX512VLPOPCNT-NEXT:    popcntq (%rdi), %rcx
+; AVX512VLPOPCNT-NEXT:    addl %eax, %ecx
+; AVX512VLPOPCNT-NEXT:    xorl %eax, %eax
+; AVX512VLPOPCNT-NEXT:    popcntq 24(%rdi), %rax
+; AVX512VLPOPCNT-NEXT:    popcntq 16(%rdi), %rdx
 ; AVX512VLPOPCNT-NEXT:    popcntq 40(%rdi), %rsi
-; AVX512VLPOPCNT-NEXT:    popcntq 32(%rdi), %r8
-; AVX512VLPOPCNT-NEXT:    addl %ecx, %edx
-; AVX512VLPOPCNT-NEXT:    addl %esi, %r8d
-; AVX512VLPOPCNT-NEXT:    xorl %ecx, %ecx
-; AVX512VLPOPCNT-NEXT:    popcntq 56(%rdi), %rcx
+; AVX512VLPOPCNT-NEXT:    addl %eax, %edx
+; AVX512VLPOPCNT-NEXT:    xorl %eax, %eax
+; AVX512VLPOPCNT-NEXT:    popcntq 32(%rdi), %rax
+; AVX512VLPOPCNT-NEXT:    addl %esi, %eax
 ; AVX512VLPOPCNT-NEXT:    xorl %esi, %esi
-; AVX512VLPOPCNT-NEXT:    popcntq 48(%rdi), %rsi
-; AVX512VLPOPCNT-NEXT:    addl %ecx, %esi
-; AVX512VLPOPCNT-NEXT:    vmovd %esi, %xmm0
-; AVX512VLPOPCNT-NEXT:    vmovd %r8d, %xmm1
-; AVX512VLPOPCNT-NEXT:    vpbroadcastq {{.*#+}} xmm2 = [0,4,0,4]
-; AVX512VLPOPCNT-NEXT:    vpermi2d %xmm0, %xmm1, %xmm2
+; AVX512VLPOPCNT-NEXT:    popcntq 56(%rdi), %rsi
+; AVX512VLPOPCNT-NEXT:    popcntq 48(%rdi), %rdi
+; AVX512VLPOPCNT-NEXT:    addl %esi, %edi
+; AVX512VLPOPCNT-NEXT:    vmovd %edi, %xmm0
+; AVX512VLPOPCNT-NEXT:    vpbroadcastq {{.*#+}} xmm1 = [0,4,0,4]
+; AVX512VLPOPCNT-NEXT:    vmovd %eax, %xmm2
+; AVX512VLPOPCNT-NEXT:    vpermi2d %xmm0, %xmm2, %xmm1
 ; AVX512VLPOPCNT-NEXT:    vmovd %edx, %xmm0
-; AVX512VLPOPCNT-NEXT:    vmovd %eax, %xmm1
-; AVX512VLPOPCNT-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm1
-; AVX512VLPOPCNT-NEXT:    vmovdqa {{.*#+}} xmm0 = [0,4,10,11]
-; AVX512VLPOPCNT-NEXT:    vpermi2d %ymm2, %ymm1, %ymm0
-; AVX512VLPOPCNT-NEXT:    # kill: def $xmm0 killed $xmm0 killed $ymm0
-; AVX512VLPOPCNT-NEXT:    vzeroupper
+; AVX512VLPOPCNT-NEXT:    vmovd %ecx, %xmm2
+; AVX512VLPOPCNT-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
+; AVX512VLPOPCNT-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,3]
 ; AVX512VLPOPCNT-NEXT:    retq
   %a0 = load <4 x i128>, ptr %p0
   %cnt = call <4 x i128> @llvm.ctpop.v4i128(<4 x i128> %a0)
@@ -635,52 +621,50 @@ define i32 @vector_ctpop_i256(<8 x i32> %v0) nounwind {
 define <2 x i32> @load_ctpop_v2i256_v2i32(ptr %p0) nounwind {
 ; SSE-LABEL: load_ctpop_v2i256_v2i32:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    popcntq 24(%rdi), %rax
-; SSE-NEXT:    popcntq 16(%rdi), %rcx
-; SSE-NEXT:    popcntq 8(%rdi), %rdx
+; SSE-NEXT:    popcntq 56(%rdi), %rax
+; SSE-NEXT:    popcntq 48(%rdi), %rcx
+; SSE-NEXT:    popcntq 40(%rdi), %rdx
 ; SSE-NEXT:    addl %eax, %ecx
 ; SSE-NEXT:    xorl %eax, %eax
-; SSE-NEXT:    popcntq (%rdi), %rax
+; SSE-NEXT:    popcntq 32(%rdi), %rax
 ; SSE-NEXT:    addl %edx, %eax
 ; SSE-NEXT:    xorl %edx, %edx
-; SSE-NEXT:    popcntq 56(%rdi), %rdx
-; SSE-NEXT:    popcntq 48(%rdi), %rsi
+; SSE-NEXT:    popcntq 24(%rdi), %rdx
+; SSE-NEXT:    popcntq 16(%rdi), %rsi
 ; SSE-NEXT:    addl %ecx, %eax
 ; SSE-NEXT:    addl %edx, %esi
 ; SSE-NEXT:    xorl %ecx, %ecx
-; SSE-NEXT:    popcntq 40(%rdi), %rcx
+; SSE-NEXT:    popcntq 8(%rdi), %rcx
 ; SSE-NEXT:    xorl %edx, %edx
-; SSE-NEXT:    popcntq 32(%rdi), %rdx
+; SSE-NEXT:    popcntq (%rdi), %rdx
 ; SSE-NEXT:    addl %ecx, %edx
 ; SSE-NEXT:    addl %esi, %edx
-; SSE-NEXT:    movd %edx, %xmm1
-; SSE-NEXT:    movd %eax, %xmm0
-; SSE-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
+; SSE-NEXT:    movd %edx, %xmm0
+; SSE-NEXT:    pinsrd $1, %eax, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX2-LABEL: load_ctpop_v2i256_v2i32:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    popcntq 24(%rdi), %rax
-; AVX2-NEXT:    popcntq 16(%rdi), %rcx
+; AVX2-NEXT:    popcntq 56(%rdi), %rax
+; AVX2-NEXT:    popcntq 48(%rdi), %rcx
 ; AVX2-NEXT:    addl %eax, %ecx
 ; AVX2-NEXT:    xorl %eax, %eax
-; AVX2-NEXT:    popcntq 8(%rdi), %rax
-; AVX2-NEXT:    popcntq (%rdi), %rdx
+; AVX2-NEXT:    popcntq 40(%rdi), %rax
+; AVX2-NEXT:    popcntq 32(%rdi), %rdx
 ; AVX2-NEXT:    addl %eax, %edx
 ; AVX2-NEXT:    addl %ecx, %edx
 ; AVX2-NEXT:    xorl %eax, %eax
-; AVX2-NEXT:    popcntq 56(%rdi), %rax
+; AVX2-NEXT:    popcntq 24(%rdi), %rax
 ; AVX2-NEXT:    xorl %ecx, %ecx
-; AVX2-NEXT:    popcntq 48(%rdi), %rcx
-; AVX2-NEXT:    popcntq 40(%rdi), %rsi
+; AVX2-NEXT:    popcntq 16(%rdi), %rcx
+; AVX2-NEXT:    popcntq 8(%rdi), %rsi
 ; AVX2-NEXT:    addl %eax, %ecx
 ; AVX2-NEXT:    xorl %eax, %eax
-; AVX2-NEXT:    popcntq 32(%rdi), %rax
+; AVX2-NEXT:    popcntq (%rdi), %rax
 ; AVX2-NEXT:    addl %esi, %eax
 ; AVX2-NEXT:    addl %ecx, %eax
 ; AVX2-NEXT:    vmovd %eax, %xmm0
-; AVX2-NEXT:    vmovd %edx, %xmm1
-; AVX2-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
+; AVX2-NEXT:    vpinsrd $1, %edx, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512F-LABEL: load_ctpop_v2i256_v2i32:
@@ -2198,7 +2182,7 @@ define i32 @test_ctlz_i512(i512 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %ebx
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    cmovnel %eax, %ebx
-; SSE-NEXT:    subl $-128, %ebx
+; SSE-NEXT:    orl $128, %ebx
 ; SSE-NEXT:    movq %r10, %rax
 ; SSE-NEXT:    orq %r11, %rax
 ; SSE-NEXT:    cmovnel %r14d, %ebx
@@ -2404,7 +2388,7 @@ define i32 @load_ctlz_i512(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %esi
 ; SSE-NEXT:    testq %r8, %r8
 ; SSE-NEXT:    cmovnel %r11d, %esi
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    orq %r9, %rax
 ; SSE-NEXT:    cmovnel %r10d, %esi
 ; SSE-NEXT:    bsrq %rdx, %rax
@@ -2560,7 +2544,7 @@ define i32 @vector_ctlz_i512(<16 x i32> %v0) nounwind {
 ; SSE-NEXT:    testq %rdi, %rdi
 ; SSE-NEXT:    cmovnel %r9d, %esi
 ; SSE-NEXT:    movq %xmm1, %rdi
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    ptest %xmm3, %xmm3
 ; SSE-NEXT:    cmovnel %r8d, %esi
 ; SSE-NEXT:    bsrq %rax, %r8
@@ -2713,7 +2697,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %ebx
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    cmovnel %r10d, %ebx
-; SSE-NEXT:    subl $-128, %ebx
+; SSE-NEXT:    orl $128, %ebx
 ; SSE-NEXT:    movq %rax, %r10
 ; SSE-NEXT:    orq %r11, %r10
 ; SSE-NEXT:    cmovnel %r14d, %ebx
@@ -2761,7 +2745,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    cmovnel %r8d, %edx
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %r8
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    orq %rax, %rsi
 ; SSE-NEXT:    cmovnel %r9d, %edx
 ; SSE-NEXT:    bsrq %r8, %rax
@@ -2778,7 +2762,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rcx, %rcx
 ; SSE-NEXT:    cmovnel %r9d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %r8, %rdi
 ; SSE-NEXT:    cmovnel %esi, %eax
 ; SSE-NEXT:    movdqa {{[0-9]+}}(%rsp), %xmm0
@@ -3080,7 +3064,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    cmovnel %r10d, %esi
 ; SSE-NEXT:    movq 80(%rdi), %r9
 ; SSE-NEXT:    movq 88(%rdi), %r10
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    orq %r8, %rdx
 ; SSE-NEXT:    cmovnel %r11d, %esi
 ; SSE-NEXT:    bsrq %r10, %rdx
@@ -3101,7 +3085,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    movq 48(%rdi), %rax
 ; SSE-NEXT:    movdqa 112(%rdi), %xmm0
 ; SSE-NEXT:    movdqa 96(%rdi), %xmm1
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    orq %r10, %r9
 ; SSE-NEXT:    cmovnel %r11d, %edx
 ; SSE-NEXT:    addl $256, %edx # imm = 0x100
@@ -3126,7 +3110,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    cmovnel %r9d, %esi
 ; SSE-NEXT:    movq 16(%rdi), %r8
 ; SSE-NEXT:    movq 24(%rdi), %r9
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    orq %r10, %rax
 ; SSE-NEXT:    cmovnel %r11d, %esi
 ; SSE-NEXT:    bsrq %r9, %rax
@@ -3544,7 +3528,7 @@ define i32 @test_ctlz_undef_i256(i256 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rsi, %rsi
 ; SSE-NEXT:    cmovnel %r9d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %rcx, %rdx
 ; SSE-NEXT:    cmovnel %r8d, %eax
 ; SSE-NEXT:    # kill: def $eax killed $eax killed $rax
@@ -3611,7 +3595,7 @@ define i32 @load_ctlz_undef_i256(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rdx, %rdx
 ; SSE-NEXT:    cmovnel %r9d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %rsi, %rcx
 ; SSE-NEXT:    cmovnel %r8d, %eax
 ; SSE-NEXT:    # kill: def $eax killed $eax killed $rax
@@ -3711,7 +3695,7 @@ define i32 @vector_ctlz_undef_i256(<8 x i32> %v0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rcx, %rcx
 ; SSE-NEXT:    cmovnel %esi, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    ptest %xmm1, %xmm1
 ; SSE-NEXT:    cmovnel %edx, %eax
 ; SSE-NEXT:    # kill: def $eax killed $eax killed $rax
@@ -3815,7 +3799,7 @@ define i32 @test_ctlz_undef_i512(i512 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %ebx
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    cmovnel %eax, %ebx
-; SSE-NEXT:    subl $-128, %ebx
+; SSE-NEXT:    orl $128, %ebx
 ; SSE-NEXT:    movq %r10, %rax
 ; SSE-NEXT:    orq %r11, %rax
 ; SSE-NEXT:    cmovnel %r14d, %ebx
@@ -3833,7 +3817,7 @@ define i32 @test_ctlz_undef_i512(i512 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rsi, %rsi
 ; SSE-NEXT:    cmovnel %r15d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %rcx, %rdx
 ; SSE-NEXT:    cmovnel %r14d, %eax
 ; SSE-NEXT:    addl $256, %eax # imm = 0x100
@@ -4018,7 +4002,7 @@ define i32 @load_ctlz_undef_i512(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %r8d
 ; SSE-NEXT:    testq %r11, %r11
 ; SSE-NEXT:    cmovnel %ebx, %r8d
-; SSE-NEXT:    subl $-128, %r8d
+; SSE-NEXT:    orl $128, %r8d
 ; SSE-NEXT:    orq %r9, %rax
 ; SSE-NEXT:    cmovnel %r10d, %r8d
 ; SSE-NEXT:    bsrq %rdx, %rax
@@ -4035,7 +4019,7 @@ define i32 @load_ctlz_undef_i512(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rsi, %rsi
 ; SSE-NEXT:    cmovnel %r10d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %rdx, %rcx
 ; SSE-NEXT:    cmovnel %r9d, %eax
 ; SSE-NEXT:    addl $256, %eax # imm = 0x100
@@ -4168,7 +4152,7 @@ define i32 @vector_ctlz_undef_i512(<16 x i32> %v0) nounwind {
 ; SSE-NEXT:    testq %rsi, %rsi
 ; SSE-NEXT:    cmovnel %r8d, %edx
 ; SSE-NEXT:    movq %xmm0, %rsi
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    ptest %xmm3, %xmm3
 ; SSE-NEXT:    movq %xmm1, %r8
 ; SSE-NEXT:    cmovnel %edi, %edx
@@ -4186,7 +4170,7 @@ define i32 @vector_ctlz_undef_i512(<16 x i32> %v0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rcx, %rcx
 ; SSE-NEXT:    cmovnel %edi, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    ptest %xmm1, %xmm1
 ; SSE-NEXT:    cmovnel %r8d, %eax
 ; SSE-NEXT:    addl $256, %eax # imm = 0x100
@@ -4317,7 +4301,7 @@ define i32 @test_ctlz_undef_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %r11d
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    cmovnel %r14d, %r11d
-; SSE-NEXT:    subl $-128, %r11d
+; SSE-NEXT:    orl $128, %r11d
 ; SSE-NEXT:    movq %rax, %r14
 ; SSE-NEXT:    orq %r10, %r14
 ; SSE-NEXT:    cmovnel %ebx, %r11d
@@ -4335,7 +4319,7 @@ define i32 @test_ctlz_undef_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %edi
 ; SSE-NEXT:    testq %rsi, %rsi
 ; SSE-NEXT:    cmovnel %ebx, %edi
-; SSE-NEXT:    subl $-128, %edi
+; SSE-NEXT:    orl $128, %edi
 ; SSE-NEXT:    orq %rcx, %rdx
 ; SSE-NEXT:    cmovnel %r14d, %edi
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %rcx
@@ -4364,7 +4348,7 @@ define i32 @test_ctlz_undef_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    cmovnel %r8d, %edx
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %r8
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %r9
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    orq %rax, %rsi
 ; SSE-NEXT:    cmovnel %r10d, %edx
 ; SSE-NEXT:    bsrq %r9, %rax
@@ -4381,7 +4365,7 @@ define i32 @test_ctlz_undef_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rcx, %rcx
 ; SSE-NEXT:    cmovnel %r10d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %r9, %r8
 ; SSE-NEXT:    cmovnel %esi, %eax
 ; SSE-NEXT:    movdqa {{[0-9]+}}(%rsp), %xmm0
@@ -4678,7 +4662,7 @@ define i32 @load_ctlz_undef_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    movq 80(%rdi), %r8
 ; SSE-NEXT:    cmovnel %r10d, %esi
 ; SSE-NEXT:    movq 88(%rdi), %r10
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    orq %r9, %rdx
 ; SSE-NEXT:    cmovnel %r11d, %esi
 ; SSE-NEXT:    bsrq %r10, %rdx
@@ -4697,7 +4681,7 @@ define i32 @load_ctlz_undef_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    cmovnel %r9d, %edx
 ; SSE-NEXT:    movq 40(%rdi), %r9
 ; SSE-NEXT:    movq 48(%rdi), %rax
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    orq %r10, %r8
 ; SSE-NEXT:    movq 56(%rdi), %r8
 ; SSE-NEXT:    movdqa 112(%rdi), %xmm0
@@ -4724,7 +4708,7 @@ define i32 @load_ctlz_undef_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    movq 16(%rdi), %r9
 ; SSE-NEXT:    cmovnel %r10d, %esi
 ; SSE-NEXT:    movq 24(%rdi), %r10
-; SSE-NEXT:    subl $-128, %esi
+; SSE-NEXT:    orl $128, %esi
 ; SSE-NEXT:    orq %r8, %rax
 ; SSE-NEXT:    cmovnel %r11d, %esi
 ; SSE-NEXT:    bsrq %r10, %rax
@@ -4741,7 +4725,7 @@ define i32 @load_ctlz_undef_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %eax
 ; SSE-NEXT:    testq %rcx, %rcx
 ; SSE-NEXT:    cmovnel %r11d, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    orq %r10, %r9
 ; SSE-NEXT:    cmovnel %r8d, %eax
 ; SSE-NEXT:    movdqa 32(%rdi), %xmm2

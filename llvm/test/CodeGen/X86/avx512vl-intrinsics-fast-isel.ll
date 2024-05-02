@@ -3145,12 +3145,18 @@ define <4 x i64> @test_mm256_mask_mul_epu32(<4 x i64> %__W, i8 zeroext %__M, <4 
 ; X86-LABEL: test_mm256_mask_mul_epu32:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    vpxor %xmm3, %xmm3, %xmm3
+; X86-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0],ymm3[1],ymm1[2],ymm3[3],ymm1[4],ymm3[5],ymm1[6],ymm3[7]
+; X86-NEXT:    vpblendd {{.*#+}} ymm2 = ymm2[0],ymm3[1],ymm2[2],ymm3[3],ymm2[4],ymm3[5],ymm2[6],ymm3[7]
 ; X86-NEXT:    kmovw %eax, %k1
 ; X86-NEXT:    vpmuludq %ymm1, %ymm2, %ymm0 {%k1}
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: test_mm256_mask_mul_epu32:
 ; X64:       # %bb.0: # %entry
+; X64-NEXT:    vpxor %xmm3, %xmm3, %xmm3
+; X64-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0],ymm3[1],ymm1[2],ymm3[3],ymm1[4],ymm3[5],ymm1[6],ymm3[7]
+; X64-NEXT:    vpblendd {{.*#+}} ymm2 = ymm2[0],ymm3[1],ymm2[2],ymm3[3],ymm2[4],ymm3[5],ymm2[6],ymm3[7]
 ; X64-NEXT:    kmovw %edi, %k1
 ; X64-NEXT:    vpmuludq %ymm1, %ymm2, %ymm0 {%k1}
 ; X64-NEXT:    retq
@@ -3168,12 +3174,18 @@ define <4 x i64> @test_mm256_maskz_mul_epu32(i8 zeroext %__M, <4 x i64> %__X, <4
 ; X86-LABEL: test_mm256_maskz_mul_epu32:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X86-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; X86-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
 ; X86-NEXT:    kmovw %eax, %k1
 ; X86-NEXT:    vpmuludq %ymm0, %ymm1, %ymm0 {%k1} {z}
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: test_mm256_maskz_mul_epu32:
 ; X64:       # %bb.0: # %entry
+; X64-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X64-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; X64-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
 ; X64-NEXT:    kmovw %edi, %k1
 ; X64-NEXT:    vpmuludq %ymm0, %ymm1, %ymm0 {%k1} {z}
 ; X64-NEXT:    retq
@@ -3191,12 +3203,18 @@ define <2 x i64> @test_mm_mask_mul_epu32(<2 x i64> %__W, i8 zeroext %__M, <2 x i
 ; X86-LABEL: test_mm_mask_mul_epu32:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    vpxor %xmm3, %xmm3, %xmm3
+; X86-NEXT:    vpblendd {{.*#+}} xmm1 = xmm1[0],xmm3[1],xmm1[2],xmm3[3]
+; X86-NEXT:    vpblendd {{.*#+}} xmm2 = xmm2[0],xmm3[1],xmm2[2],xmm3[3]
 ; X86-NEXT:    kmovw %eax, %k1
 ; X86-NEXT:    vpmuludq %xmm1, %xmm2, %xmm0 {%k1}
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: test_mm_mask_mul_epu32:
 ; X64:       # %bb.0: # %entry
+; X64-NEXT:    vpxor %xmm3, %xmm3, %xmm3
+; X64-NEXT:    vpblendd {{.*#+}} xmm1 = xmm1[0],xmm3[1],xmm1[2],xmm3[3]
+; X64-NEXT:    vpblendd {{.*#+}} xmm2 = xmm2[0],xmm3[1],xmm2[2],xmm3[3]
 ; X64-NEXT:    kmovw %edi, %k1
 ; X64-NEXT:    vpmuludq %xmm1, %xmm2, %xmm0 {%k1}
 ; X64-NEXT:    retq
@@ -3214,12 +3232,18 @@ define <2 x i64> @test_mm_maskz_mul_epu32(i8 zeroext %__M, <2 x i64> %__X, <2 x 
 ; X86-LABEL: test_mm_maskz_mul_epu32:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X86-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm2[1],xmm0[2],xmm2[3]
+; X86-NEXT:    vpblendd {{.*#+}} xmm1 = xmm1[0],xmm2[1],xmm1[2],xmm2[3]
 ; X86-NEXT:    kmovw %eax, %k1
 ; X86-NEXT:    vpmuludq %xmm0, %xmm1, %xmm0 {%k1} {z}
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: test_mm_maskz_mul_epu32:
 ; X64:       # %bb.0: # %entry
+; X64-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; X64-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm2[1],xmm0[2],xmm2[3]
+; X64-NEXT:    vpblendd {{.*#+}} xmm1 = xmm1[0],xmm2[1],xmm1[2],xmm2[3]
 ; X64-NEXT:    kmovw %edi, %k1
 ; X64-NEXT:    vpmuludq %xmm0, %xmm1, %xmm0 {%k1} {z}
 ; X64-NEXT:    retq

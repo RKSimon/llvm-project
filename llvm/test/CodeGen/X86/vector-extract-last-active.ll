@@ -107,10 +107,6 @@ define i32 @extract_last_active_v3i32(<3 x i32> %a, <3 x i1> %c) {
 ; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    cmpl %ecx, %eax
 ; CHECK-NEXT:    cmoval %eax, %ecx
-; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[3,3,3,3]
-; CHECK-NEXT:    movd %xmm0, %eax
-; CHECK-NEXT:    cmpl %eax, %ecx
-; CHECK-NEXT:    cmovbel %eax, %ecx
 ; CHECK-NEXT:    orl %esi, %edi
 ; CHECK-NEXT:    orl %edx, %edi
 ; CHECK-NEXT:    andb $1, %dil

@@ -1169,13 +1169,15 @@ define i1 @pow2_and_i128(i128 %num, i128 %shift) {
 define i32 @pow2_bswap(i32 %a0, i32 %a1) {
 ; CHECK-LABEL: pow2_bswap:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movl %esi, %eax
 ; CHECK-NEXT:    # kill: def $edi killed $edi def $rdi
 ; CHECK-NEXT:    notl %edi
 ; CHECK-NEXT:    shrl $31, %edi
-; CHECK-NEXT:    leal 4(,%rdi,4), %eax
-; CHECK-NEXT:    bswapl %eax
-; CHECK-NEXT:    decl %eax
-; CHECK-NEXT:    andl %esi, %eax
+; CHECK-NEXT:    leal 4(,%rdi,4), %ecx
+; CHECK-NEXT:    bswapl %ecx
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    divl %ecx
+; CHECK-NEXT:    movl %edx, %eax
 ; CHECK-NEXT:    retq
   %cmp = icmp sgt i32 0, %a0
   %sel = select i1 %cmp, i32 4, i32 8
@@ -1219,17 +1221,19 @@ define i32 @pow2_bswap_vec(<4 x i32> %a0, i32 %a1, ptr %p2) {
 define i32 @pow2_bitreverse(i32 %a0, i32 %a1) {
 ; CHECK-LABEL: pow2_bitreverse:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movl %esi, %eax
 ; CHECK-NEXT:    # kill: def $edi killed $edi def $rdi
 ; CHECK-NEXT:    notl %edi
 ; CHECK-NEXT:    shrl $31, %edi
-; CHECK-NEXT:    leal 4(,%rdi,4), %eax
-; CHECK-NEXT:    bswapl %eax
-; CHECK-NEXT:    movl %eax, %ecx
-; CHECK-NEXT:    shll $3, %eax
-; CHECK-NEXT:    leal (%rax,%rcx,2), %eax
-; CHECK-NEXT:    andl $805306368, %eax # imm = 0x30000000
-; CHECK-NEXT:    decl %eax
-; CHECK-NEXT:    andl %esi, %eax
+; CHECK-NEXT:    leal 4(,%rdi,4), %ecx
+; CHECK-NEXT:    bswapl %ecx
+; CHECK-NEXT:    movl %ecx, %edx
+; CHECK-NEXT:    shll $3, %ecx
+; CHECK-NEXT:    leal (%rcx,%rdx,2), %ecx
+; CHECK-NEXT:    andl $805306368, %ecx # imm = 0x30000000
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    divl %ecx
+; CHECK-NEXT:    movl %edx, %eax
 ; CHECK-NEXT:    retq
   %cmp = icmp sgt i32 0, %a0
   %sel = select i1 %cmp, i32 4, i32 8
@@ -1400,10 +1404,10 @@ define i8 @pow2_trunc_vec(<4 x i32> %x, <4 x i32> %a) {
 define i8 @pow2_truncc_vec_fail(<4 x i32> %x, <4 x i32> %a) {
 ; CHECK-LABEL: pow2_truncc_vec_fail:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
 ; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    movzbl %al, %eax
 ; CHECK-NEXT:    movd %xmm1, %ecx
+; CHECK-NEXT:    andl $78, %ecx
 ; CHECK-NEXT:    divb %cl
 ; CHECK-NEXT:    movzbl %ah, %eax
 ; CHECK-NEXT:    # kill: def $al killed $al killed $eax
