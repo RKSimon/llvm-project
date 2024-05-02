@@ -65,9 +65,8 @@ define <2 x i32> @main(ptr %0) {
 ; CHECK-NEXT:    vmin.vx v10, v10, a2
 ; CHECK-NEXT:    vmin.vx v10, v10, a1
 ; CHECK-NEXT:    vmin.vv v11, v8, v11
-; CHECK-NEXT:    vmv1r.v v8, v10
+; CHECK-NEXT:    vrgather.vi v8, v10, 0
 ; CHECK-NEXT:    vand.vv v9, v11, v9
-; CHECK-NEXT:    vslideup.vi v8, v10, 1
 ; CHECK-NEXT:    vse32.v v9, (a4)
 ; CHECK-NEXT:    sh zero, 0(zero)
 ; CHECK-NEXT:    ret

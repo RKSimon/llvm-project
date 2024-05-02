@@ -22,7 +22,7 @@ target triple = "hexagon"
 ; in the 250-280 range. This test was introduced to test a change that
 ; reduced stack usage from around 568 bytes to 280 bytes.
 ; After r308350 the stack size is ~300.
-; CHECK: allocframe(r29,#304):raw
+; CHECK: allocframe(r29,#392):raw
 define void @f0(ptr %a0, ptr %a1, ptr %a2) #0 {
 b0:
   %v0 = alloca ptr, align 4

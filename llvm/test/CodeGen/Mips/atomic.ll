@@ -1688,12 +1688,13 @@ define i32 @AtomicSwap32(i32 signext %newval) nounwind {
 ; MIPS4-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicSwap32)))
 ; MIPS4-NEXT:    sw $4, 12($sp)
 ; MIPS4-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS4-NEXT:    lw $3, 12($sp)
 ; MIPS4-NEXT:  .LBB6_1: # %entry
 ; MIPS4-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS4-NEXT:    ll $2, 0($1)
-; MIPS4-NEXT:    move $3, $4
-; MIPS4-NEXT:    sc $3, 0($1)
-; MIPS4-NEXT:    beqz $3, .LBB6_1
+; MIPS4-NEXT:    move $4, $3
+; MIPS4-NEXT:    sc $4, 0($1)
+; MIPS4-NEXT:    beqz $4, .LBB6_1
 ; MIPS4-NEXT:    nop
 ; MIPS4-NEXT:  # %bb.2: # %entry
 ; MIPS4-NEXT:    jr $ra
@@ -1707,12 +1708,13 @@ define i32 @AtomicSwap32(i32 signext %newval) nounwind {
 ; MIPS64-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicSwap32)))
 ; MIPS64-NEXT:    sw $4, 12($sp)
 ; MIPS64-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64-NEXT:    lw $3, 12($sp)
 ; MIPS64-NEXT:  .LBB6_1: # %entry
 ; MIPS64-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64-NEXT:    ll $2, 0($1)
-; MIPS64-NEXT:    move $3, $4
-; MIPS64-NEXT:    sc $3, 0($1)
-; MIPS64-NEXT:    beqz $3, .LBB6_1
+; MIPS64-NEXT:    move $4, $3
+; MIPS64-NEXT:    sc $4, 0($1)
+; MIPS64-NEXT:    beqz $4, .LBB6_1
 ; MIPS64-NEXT:    nop
 ; MIPS64-NEXT:  # %bb.2: # %entry
 ; MIPS64-NEXT:    jr $ra
@@ -1726,12 +1728,13 @@ define i32 @AtomicSwap32(i32 signext %newval) nounwind {
 ; MIPS64R2-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicSwap32)))
 ; MIPS64R2-NEXT:    sw $4, 12($sp)
 ; MIPS64R2-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64R2-NEXT:    lw $3, 12($sp)
 ; MIPS64R2-NEXT:  .LBB6_1: # %entry
 ; MIPS64R2-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64R2-NEXT:    ll $2, 0($1)
-; MIPS64R2-NEXT:    move $3, $4
-; MIPS64R2-NEXT:    sc $3, 0($1)
-; MIPS64R2-NEXT:    beqz $3, .LBB6_1
+; MIPS64R2-NEXT:    move $4, $3
+; MIPS64R2-NEXT:    sc $4, 0($1)
+; MIPS64R2-NEXT:    beqz $4, .LBB6_1
 ; MIPS64R2-NEXT:    nop
 ; MIPS64R2-NEXT:  # %bb.2: # %entry
 ; MIPS64R2-NEXT:    jr $ra
@@ -1745,12 +1748,13 @@ define i32 @AtomicSwap32(i32 signext %newval) nounwind {
 ; MIPS64R6-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicSwap32)))
 ; MIPS64R6-NEXT:    sw $4, 12($sp)
 ; MIPS64R6-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64R6-NEXT:    lw $3, 12($sp)
 ; MIPS64R6-NEXT:  .LBB6_1: # %entry
 ; MIPS64R6-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64R6-NEXT:    ll $2, 0($1)
-; MIPS64R6-NEXT:    move $3, $4
-; MIPS64R6-NEXT:    sc $3, 0($1)
-; MIPS64R6-NEXT:    beqzc $3, .LBB6_1
+; MIPS64R6-NEXT:    move $4, $3
+; MIPS64R6-NEXT:    sc $4, 0($1)
+; MIPS64R6-NEXT:    beqzc $4, .LBB6_1
 ; MIPS64R6-NEXT:    nop
 ; MIPS64R6-NEXT:  # %bb.2: # %entry
 ; MIPS64R6-NEXT:    jr $ra
@@ -2005,6 +2009,7 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS4-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicCmpSwap32)))
 ; MIPS4-NEXT:    sw $5, 12($sp)
 ; MIPS4-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS4-NEXT:    lw $3, 12($sp)
 ; MIPS4-NEXT:  .LBB7_1: # %entry
 ; MIPS4-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS4-NEXT:    ll $2, 0($1)
@@ -2012,9 +2017,9 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS4-NEXT:    nop
 ; MIPS4-NEXT:  # %bb.2: # %entry
 ; MIPS4-NEXT:    # in Loop: Header=BB7_1 Depth=1
-; MIPS4-NEXT:    move $3, $5
-; MIPS4-NEXT:    sc $3, 0($1)
-; MIPS4-NEXT:    beqz $3, .LBB7_1
+; MIPS4-NEXT:    move $5, $3
+; MIPS4-NEXT:    sc $5, 0($1)
+; MIPS4-NEXT:    beqz $5, .LBB7_1
 ; MIPS4-NEXT:    nop
 ; MIPS4-NEXT:  .LBB7_3: # %entry
 ; MIPS4-NEXT:    jr $ra
@@ -2028,6 +2033,7 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS64-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicCmpSwap32)))
 ; MIPS64-NEXT:    sw $5, 12($sp)
 ; MIPS64-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64-NEXT:    lw $3, 12($sp)
 ; MIPS64-NEXT:  .LBB7_1: # %entry
 ; MIPS64-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64-NEXT:    ll $2, 0($1)
@@ -2035,9 +2041,9 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS64-NEXT:    nop
 ; MIPS64-NEXT:  # %bb.2: # %entry
 ; MIPS64-NEXT:    # in Loop: Header=BB7_1 Depth=1
-; MIPS64-NEXT:    move $3, $5
-; MIPS64-NEXT:    sc $3, 0($1)
-; MIPS64-NEXT:    beqz $3, .LBB7_1
+; MIPS64-NEXT:    move $5, $3
+; MIPS64-NEXT:    sc $5, 0($1)
+; MIPS64-NEXT:    beqz $5, .LBB7_1
 ; MIPS64-NEXT:    nop
 ; MIPS64-NEXT:  .LBB7_3: # %entry
 ; MIPS64-NEXT:    jr $ra
@@ -2051,6 +2057,7 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS64R2-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicCmpSwap32)))
 ; MIPS64R2-NEXT:    sw $5, 12($sp)
 ; MIPS64R2-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64R2-NEXT:    lw $3, 12($sp)
 ; MIPS64R2-NEXT:  .LBB7_1: # %entry
 ; MIPS64R2-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64R2-NEXT:    ll $2, 0($1)
@@ -2058,9 +2065,9 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS64R2-NEXT:    nop
 ; MIPS64R2-NEXT:  # %bb.2: # %entry
 ; MIPS64R2-NEXT:    # in Loop: Header=BB7_1 Depth=1
-; MIPS64R2-NEXT:    move $3, $5
-; MIPS64R2-NEXT:    sc $3, 0($1)
-; MIPS64R2-NEXT:    beqz $3, .LBB7_1
+; MIPS64R2-NEXT:    move $5, $3
+; MIPS64R2-NEXT:    sc $5, 0($1)
+; MIPS64R2-NEXT:    beqz $5, .LBB7_1
 ; MIPS64R2-NEXT:    nop
 ; MIPS64R2-NEXT:  .LBB7_3: # %entry
 ; MIPS64R2-NEXT:    jr $ra
@@ -2074,15 +2081,16 @@ define i32 @AtomicCmpSwap32(i32 signext %oldval, i32 signext %newval) nounwind {
 ; MIPS64R6-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(AtomicCmpSwap32)))
 ; MIPS64R6-NEXT:    sw $5, 12($sp)
 ; MIPS64R6-NEXT:    ld $1, %got_disp(x)($1)
+; MIPS64R6-NEXT:    lw $3, 12($sp)
 ; MIPS64R6-NEXT:  .LBB7_1: # %entry
 ; MIPS64R6-NEXT:    # =>This Inner Loop Header: Depth=1
 ; MIPS64R6-NEXT:    ll $2, 0($1)
 ; MIPS64R6-NEXT:    bnec $2, $4, .LBB7_3
 ; MIPS64R6-NEXT:  # %bb.2: # %entry
 ; MIPS64R6-NEXT:    # in Loop: Header=BB7_1 Depth=1
-; MIPS64R6-NEXT:    move $3, $5
-; MIPS64R6-NEXT:    sc $3, 0($1)
-; MIPS64R6-NEXT:    beqzc $3, .LBB7_1
+; MIPS64R6-NEXT:    move $5, $3
+; MIPS64R6-NEXT:    sc $5, 0($1)
+; MIPS64R6-NEXT:    beqzc $5, .LBB7_1
 ; MIPS64R6-NEXT:    nop
 ; MIPS64R6-NEXT:  .LBB7_3: # %entry
 ; MIPS64R6-NEXT:    jr $ra

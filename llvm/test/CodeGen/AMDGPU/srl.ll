@@ -311,15 +311,15 @@ define amdgpu_kernel void @lshr_v4i64(ptr addrspace(1) %out, ptr addrspace(1) %i
 ; EG:       ; %bb.0:
 ; EG-NEXT:    ALU 0, @14, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    TEX 3 @6
-; EG-NEXT:    ALU 34, @15, KC0[CB0:0-32], KC1[]
+; EG-NEXT:    ALU 35, @15, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T1.XYZW, T3.X, 0
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T2.XYZW, T0.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    Fetch clause starting at 6:
-; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 32, #1
-; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 16, #1
-; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 48, #1
-; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 48, #1
+; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 32, #1
+; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 16, #1
 ; EG-NEXT:    ALU clause starting at 14:
 ; EG-NEXT:     MOV * T0.X, KC0[2].Z,
 ; EG-NEXT:    ALU clause starting at 15:
@@ -349,15 +349,16 @@ define amdgpu_kernel void @lshr_v4i64(ptr addrspace(1) %out, ptr addrspace(1) %i
 ; EG-NEXT:     AND_INT * T4.W, T1.X, literal.x,
 ; EG-NEXT:    32(4.484155e-44), 0(0.000000e+00)
 ; EG-NEXT:     CNDE_INT T1.X, PS, PV.W, PV.Y,
-; EG-NEXT:     ADD_INT T0.W, KC0[2].Y, literal.x,
-; EG-NEXT:     CNDE_INT * T2.W, T0.Z, T1.Y, 0.0,
-; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     LSHR T0.X, PV.W, literal.x,
-; EG-NEXT:     CNDE_INT T2.Y, T3.W, T3.Y, 0.0,
-; EG-NEXT:     CNDE_INT T1.W, T1.W, T4.Z, 0.0, BS:VEC_120/SCL_212
-; EG-NEXT:     LSHR * T3.X, KC0[2].Y, literal.x,
+; EG-NEXT:     CNDE_INT T2.W, T0.Z, T1.Y, 0.0,
+; EG-NEXT:     LSHR * T0.X, KC0[2].Y, literal.x,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
+; EG-NEXT:     CNDE_INT T2.Y, T3.W, T3.Y, 0.0,
+; EG-NEXT:     ADD_INT T0.W, KC0[2].Y, literal.x,
+; EG-NEXT:     CNDE_INT * T1.W, T1.W, T4.Z, 0.0,
+; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
+; EG-NEXT:     LSHR T3.X, PV.W, literal.x,
 ; EG-NEXT:     CNDE_INT * T1.Y, T4.W, T4.Y, 0.0,
+; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
   %b_ptr = getelementptr <4 x i64>, ptr addrspace(1) %in, i64 1
   %a = load <4 x i64>, ptr addrspace(1) %in
   %b = load <4 x i64>, ptr addrspace(1) %b_ptr

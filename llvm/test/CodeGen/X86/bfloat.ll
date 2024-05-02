@@ -2192,16 +2192,21 @@ define void @PR92471(ptr %0, ptr %1) nounwind {
 ; SSE2-LABEL: PR92471:
 ; SSE2:       # %bb.0:
 ; SSE2-NEXT:    movq {{.*#+}} xmm0 = mem[0],zero
-; SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
-; SSE2-NEXT:    pinsrw $2, 12(%rdi), %xmm1
+; SSE2-NEXT:    movl 8(%rdi), %eax
+; SSE2-NEXT:    movzwl %ax, %ecx
+; SSE2-NEXT:    shrl $16, %eax
+; SSE2-NEXT:    movd %ecx, %xmm1
+; SSE2-NEXT:    pinsrw $2, %eax, %xmm1
+; SSE2-NEXT:    pinsrw $4, 12(%rdi), %xmm1
 ; SSE2-NEXT:    pxor %xmm2, %xmm2
+; SSE2-NEXT:    punpckhwd {{.*#+}} xmm2 = xmm2[4],xmm1[4],xmm2[5],xmm1[5],xmm2[6],xmm1[6],xmm2[7],xmm1[7]
+; SSE2-NEXT:    pinsrw $6, %eax, %xmm1
+; SSE2-NEXT:    pslld $16, %xmm1
 ; SSE2-NEXT:    pxor %xmm3, %xmm3
-; SSE2-NEXT:    punpcklwd {{.*#+}} xmm3 = xmm3[0],xmm1[0],xmm3[1],xmm1[1],xmm3[2],xmm1[2],xmm3[3],xmm1[3]
-; SSE2-NEXT:    punpcklwd {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1],xmm2[2],xmm0[2],xmm2[3],xmm0[3]
-; SSE2-NEXT:    movdqu %xmm2, (%rsi)
-; SSE2-NEXT:    movq %xmm3, 16(%rsi)
-; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm3[2,3,2,3]
-; SSE2-NEXT:    movd %xmm0, 24(%rsi)
+; SSE2-NEXT:    punpcklwd {{.*#+}} xmm3 = xmm3[0],xmm0[0],xmm3[1],xmm0[1],xmm3[2],xmm0[2],xmm3[3],xmm0[3]
+; SSE2-NEXT:    movdqu %xmm3, (%rsi)
+; SSE2-NEXT:    movd %xmm2, 24(%rsi)
+; SSE2-NEXT:    movq %xmm1, 16(%rsi)
 ; SSE2-NEXT:    retq
 ;
 ; AVX-LABEL: PR92471:

@@ -31,10 +31,14 @@ entry:
 define void @udot_vl256(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(2,2) {
 ; CHECK-LABEL: udot_vl256:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s
 ; CHECK-NEXT:    ldr z0, [x0]
-; CHECK-NEXT:    ldr z1, [x1]
-; CHECK-NEXT:    ldr z2, [x2]
-; CHECK-NEXT:    udot z0.s, z1.h, z2.h
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x2]
+; CHECK-NEXT:    mla z0.s, p0/m, z1.s, z2.s
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x1, #1, mul vl]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x2, #1, mul vl]
+; CHECK-NEXT:    mla z0.s, p0/m, z1.s, z2.s
 ; CHECK-NEXT:    str z0, [x0]
 ; CHECK-NEXT:    ret
 entry:
@@ -52,10 +56,14 @@ entry:
 define void @sdot_vl256(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(2,2) {
 ; CHECK-LABEL: sdot_vl256:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s
 ; CHECK-NEXT:    ldr z0, [x0]
-; CHECK-NEXT:    ldr z1, [x1]
-; CHECK-NEXT:    ldr z2, [x2]
-; CHECK-NEXT:    sdot z0.s, z1.h, z2.h
+; CHECK-NEXT:    ld1sh { z1.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1sh { z2.s }, p0/z, [x2]
+; CHECK-NEXT:    mla z0.s, p0/m, z1.s, z2.s
+; CHECK-NEXT:    ld1sh { z1.s }, p0/z, [x1, #1, mul vl]
+; CHECK-NEXT:    ld1sh { z2.s }, p0/z, [x2, #1, mul vl]
+; CHECK-NEXT:    mla z0.s, p0/m, z1.s, z2.s
 ; CHECK-NEXT:    str z0, [x0]
 ; CHECK-NEXT:    ret
 entry:

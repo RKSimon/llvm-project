@@ -25,10 +25,10 @@ define zeroext i32 @orcb32_zext(i32 zeroext %a) nounwind {
 define signext i32 @orcb32_knownbits(i32 signext %a) nounwind {
 ; RV64ZBB-LABEL: orcb32_knownbits:
 ; RV64ZBB:       # %bb.0:
+; RV64ZBB-NEXT:    orc.b a0, a0
 ; RV64ZBB-NEXT:    lui a1, 1044480
 ; RV64ZBB-NEXT:    and a0, a0, a1
 ; RV64ZBB-NEXT:    lui a1, 4080
-; RV64ZBB-NEXT:    orc.b a0, a0
 ; RV64ZBB-NEXT:    addi a1, a1, 255
 ; RV64ZBB-NEXT:    or a0, a0, a1
 ; RV64ZBB-NEXT:    sext.w a0, a0
@@ -55,13 +55,13 @@ define i64 @orcb64(i64 %a) nounwind {
 define i64 @orcb64_knownbits(i64 %a) nounwind {
 ; RV64ZBB-LABEL: orcb64_knownbits:
 ; RV64ZBB:       # %bb.0:
+; RV64ZBB-NEXT:    orc.b a0, a0
 ; RV64ZBB-NEXT:    lui a1, 65535
 ; RV64ZBB-NEXT:    lui a2, 4080
 ; RV64ZBB-NEXT:    slli a1, a1, 12
 ; RV64ZBB-NEXT:    addi a2, a2, 255
 ; RV64ZBB-NEXT:    and a0, a0, a1
 ; RV64ZBB-NEXT:    slli a1, a2, 40
-; RV64ZBB-NEXT:    orc.b a0, a0
 ; RV64ZBB-NEXT:    add a1, a2, a1
 ; RV64ZBB-NEXT:    or a0, a0, a1
 ; RV64ZBB-NEXT:    ret

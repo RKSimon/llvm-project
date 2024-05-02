@@ -56,10 +56,10 @@ define i32 @selecti64i32(i64 %a) {
 ;
 ; RV64-LABEL: selecti64i32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srai a0, a0, 63
+; RV64-NEXT:    srli a0, a0, 63
+; RV64-NEXT:    xori a0, a0, 1
 ; RV64-NEXT:    lui a1, 524288
-; RV64-NEXT:    addiw a1, a1, -1
-; RV64-NEXT:    xor a0, a0, a1
+; RV64-NEXT:    subw a0, a1, a0
 ; RV64-NEXT:    ret
   %c = icmp sgt i64 %a, -1
   %s = select i1 %c, i32 2147483647, i32 -2147483648

@@ -54,10 +54,9 @@ define <2 x i16> @test_v8i16_v2i32_08(<8 x i16> %a, <8 x i16> %b) {
 define <2 x i16> @test_v4i16_v2i32_04(<4 x i16> %a, <4 x i16> %b) {
 ; CHECK-LABEL: test_v4i16_v2i32_04:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-NEXT:    mov h0, v0.h[0]
-; CHECK-NEXT:    mov v0.h[2], v1.h[0]
+; CHECK-NEXT:    zip1 v1.4h, v1.4h, v1.4h
+; CHECK-NEXT:    zip1 v0.4h, v0.4h, v0.4h
+; CHECK-NEXT:    zip1 v0.2s, v0.2s, v1.2s
 ; CHECK-NEXT:    add v0.2s, v0.2s, v0.2s
 ; CHECK-NEXT:    ret
   %c = shufflevector <4 x i16> %a, <4 x i16> %b, <2 x i32> <i32 0, i32 4>

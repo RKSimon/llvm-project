@@ -406,23 +406,23 @@ define void @test_srem_vec(ptr %X) nounwind {
 ; RV64-NEXT:    sd s3, 8(sp) # 8-byte Folded Spill
 ; RV64-NEXT:    sd s4, 0(sp) # 8-byte Folded Spill
 ; RV64-NEXT:    mv s0, a0
-; RV64-NEXT:    lbu a0, 12(a0)
-; RV64-NEXT:    ld s3, 0(s0)
-; RV64-NEXT:    lwu a1, 8(s0)
-; RV64-NEXT:    slli a0, a0, 32
+; RV64-NEXT:    ld s3, 0(a0)
+; RV64-NEXT:    lwu a0, 8(a0)
+; RV64-NEXT:    lbu a1, 12(s0)
 ; RV64-NEXT:    srli a2, s3, 2
-; RV64-NEXT:    or a0, a1, a0
-; RV64-NEXT:    slli a1, a1, 62
-; RV64-NEXT:    or a1, a1, a2
-; RV64-NEXT:    slli a2, s3, 31
-; RV64-NEXT:    slli a3, a0, 29
-; RV64-NEXT:    srai a0, a1, 31
-; RV64-NEXT:    srai s2, a3, 31
-; RV64-NEXT:    srai s4, a2, 31
-; RV64-NEXT:    li a1, 7
+; RV64-NEXT:    slli a3, a0, 62
+; RV64-NEXT:    or a2, a3, a2
+; RV64-NEXT:    slli a1, a1, 32
+; RV64-NEXT:    or a0, a0, a1
+; RV64-NEXT:    slli a1, s3, 31
+; RV64-NEXT:    srai s2, a2, 31
+; RV64-NEXT:    slli a0, a0, 29
+; RV64-NEXT:    srai a0, a0, 31
+; RV64-NEXT:    srai s4, a1, 31
+; RV64-NEXT:    li a1, -5
 ; RV64-NEXT:    call __moddi3
 ; RV64-NEXT:    mv s1, a0
-; RV64-NEXT:    li a1, -5
+; RV64-NEXT:    li a1, 7
 ; RV64-NEXT:    mv a0, s2
 ; RV64-NEXT:    call __moddi3
 ; RV64-NEXT:    slli a1, s4, 4
@@ -472,36 +472,36 @@ define void @test_srem_vec(ptr %X) nounwind {
 ; RV64-NEXT:    add a3, a4, a3
 ; RV64-NEXT:    slli a4, s3, 56
 ; RV64-NEXT:    add a4, a5, a4
-; RV64-NEXT:    slli a5, s3, 42
 ; RV64-NEXT:    add a1, a1, a2
-; RV64-NEXT:    slli a2, s3, 58
-; RV64-NEXT:    addi a0, a0, -2
-; RV64-NEXT:    addi s1, s1, -1
-; RV64-NEXT:    seqz a0, a0
-; RV64-NEXT:    seqz a6, s1
-; RV64-NEXT:    addi a6, a6, -1
+; RV64-NEXT:    slli a2, s3, 42
+; RV64-NEXT:    add a2, a3, a2
+; RV64-NEXT:    slli a3, s3, 58
 ; RV64-NEXT:    addi a0, a0, -1
-; RV64-NEXT:    add a3, a3, a5
-; RV64-NEXT:    slli a5, a0, 2
-; RV64-NEXT:    add a2, a4, a2
-; RV64-NEXT:    slli a4, a6, 31
+; RV64-NEXT:    addi s1, s1, -2
+; RV64-NEXT:    seqz a0, a0
+; RV64-NEXT:    seqz a5, s1
+; RV64-NEXT:    slli a5, a5, 2
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:    add a3, a4, a3
+; RV64-NEXT:    slli a4, a0, 31
 ; RV64-NEXT:    srli a4, a4, 62
-; RV64-NEXT:    or a4, a4, a5
+; RV64-NEXT:    or a4, a5, a4
 ; RV64-NEXT:    slli a5, s3, 44
-; RV64-NEXT:    add a3, a3, a5
-; RV64-NEXT:    slli a5, s3, 60
 ; RV64-NEXT:    add a2, a2, a5
-; RV64-NEXT:    slli a5, s3, 46
+; RV64-NEXT:    slli a5, s3, 60
 ; RV64-NEXT:    add a3, a3, a5
+; RV64-NEXT:    slli a5, s3, 46
 ; RV64-NEXT:    slli s3, s3, 62
-; RV64-NEXT:    add a2, a2, s3
+; RV64-NEXT:    add a2, a2, a5
 ; RV64-NEXT:    lui a5, %hi(.LCPI3_0)
 ; RV64-NEXT:    ld a5, %lo(.LCPI3_0)(a5)
-; RV64-NEXT:    slli a0, a0, 29
-; RV64-NEXT:    slli a6, a6, 33
-; RV64-NEXT:    srli a0, a0, 61
-; RV64-NEXT:    add a1, a1, a3
-; RV64-NEXT:    sub a2, a5, a2
+; RV64-NEXT:    slli a0, a0, 33
+; RV64-NEXT:    addi a4, a4, -4
+; RV64-NEXT:    add a3, a3, s3
+; RV64-NEXT:    slli a6, a4, 29
+; RV64-NEXT:    add a1, a1, a2
+; RV64-NEXT:    sub a2, a5, a3
+; RV64-NEXT:    srli a3, a6, 61
 ; RV64-NEXT:    sub a2, a2, a1
 ; RV64-NEXT:    slli a1, a2, 63
 ; RV64-NEXT:    srli a2, a2, 1
@@ -510,10 +510,10 @@ define void @test_srem_vec(ptr %X) nounwind {
 ; RV64-NEXT:    neg a1, a1
 ; RV64-NEXT:    slli a1, a1, 31
 ; RV64-NEXT:    srli a1, a1, 31
-; RV64-NEXT:    or a1, a1, a6
-; RV64-NEXT:    sd a1, 0(s0)
+; RV64-NEXT:    or a0, a1, a0
+; RV64-NEXT:    sd a0, 0(s0)
 ; RV64-NEXT:    sw a4, 8(s0)
-; RV64-NEXT:    sb a0, 12(s0)
+; RV64-NEXT:    sb a3, 12(s0)
 ; RV64-NEXT:    ld ra, 40(sp) # 8-byte Folded Reload
 ; RV64-NEXT:    ld s0, 32(sp) # 8-byte Folded Reload
 ; RV64-NEXT:    ld s1, 24(sp) # 8-byte Folded Reload
@@ -611,65 +611,63 @@ define void @test_srem_vec(ptr %X) nounwind {
 ; RV64M-NEXT:    lwu a2, 8(a0)
 ; RV64M-NEXT:    lbu a3, 12(a0)
 ; RV64M-NEXT:    lui a4, %hi(.LCPI3_0)
-; RV64M-NEXT:    lui a5, 699051
-; RV64M-NEXT:    addi a5, a5, -1365
-; RV64M-NEXT:    slli a6, a5, 32
-; RV64M-NEXT:    add a5, a5, a6
+; RV64M-NEXT:    lui a5, %hi(.LCPI3_1)
 ; RV64M-NEXT:    srli a6, a1, 2
 ; RV64M-NEXT:    slli a7, a2, 62
 ; RV64M-NEXT:    or a6, a7, a6
-; RV64M-NEXT:    lui a7, %hi(.LCPI3_1)
-; RV64M-NEXT:    slli a3, a3, 32
-; RV64M-NEXT:    or a2, a2, a3
-; RV64M-NEXT:    lui a3, %hi(.LCPI3_2)
+; RV64M-NEXT:    lui a7, %hi(.LCPI3_2)
 ; RV64M-NEXT:    ld a4, %lo(.LCPI3_0)(a4)
-; RV64M-NEXT:    ld a7, %lo(.LCPI3_1)(a7)
-; RV64M-NEXT:    ld a3, %lo(.LCPI3_2)(a3)
+; RV64M-NEXT:    ld a5, %lo(.LCPI3_1)(a5)
+; RV64M-NEXT:    ld a7, %lo(.LCPI3_2)(a7)
+; RV64M-NEXT:    slli a3, a3, 32
 ; RV64M-NEXT:    slli a1, a1, 31
+; RV64M-NEXT:    or a2, a2, a3
 ; RV64M-NEXT:    srai a1, a1, 31
-; RV64M-NEXT:    srai a6, a6, 31
+; RV64M-NEXT:    srai a3, a6, 31
 ; RV64M-NEXT:    slli a2, a2, 29
-; RV64M-NEXT:    mul a1, a1, a5
+; RV64M-NEXT:    mulh a6, a1, a7
 ; RV64M-NEXT:    srai a2, a2, 31
-; RV64M-NEXT:    mulh a5, a6, a7
-; RV64M-NEXT:    add a1, a1, a3
+; RV64M-NEXT:    mulh a5, a3, a5
+; RV64M-NEXT:    srli a7, a6, 63
 ; RV64M-NEXT:    mulh a4, a2, a4
+; RV64M-NEXT:    add a6, a6, a7
 ; RV64M-NEXT:    srli a7, a5, 63
 ; RV64M-NEXT:    srai a5, a5, 1
 ; RV64M-NEXT:    add a5, a5, a7
-; RV64M-NEXT:    slli a7, a1, 63
-; RV64M-NEXT:    srli a1, a1, 1
-; RV64M-NEXT:    or a1, a1, a7
 ; RV64M-NEXT:    srli a7, a4, 63
 ; RV64M-NEXT:    srai a4, a4, 1
 ; RV64M-NEXT:    add a4, a4, a7
-; RV64M-NEXT:    sltu a1, a3, a1
-; RV64M-NEXT:    add a6, a6, a5
+; RV64M-NEXT:    slli a7, a6, 1
+; RV64M-NEXT:    slli a6, a6, 2
+; RV64M-NEXT:    add a6, a6, a7
+; RV64M-NEXT:    add a3, a3, a5
 ; RV64M-NEXT:    slli a5, a5, 3
+; RV64M-NEXT:    sub a3, a3, a5
 ; RV64M-NEXT:    add a2, a2, a4
 ; RV64M-NEXT:    slli a4, a4, 2
-; RV64M-NEXT:    sub a3, a6, a5
-; RV64M-NEXT:    neg a1, a1
+; RV64M-NEXT:    sub a1, a1, a6
 ; RV64M-NEXT:    add a2, a2, a4
+; RV64M-NEXT:    seqz a1, a1
 ; RV64M-NEXT:    addi a3, a3, -1
-; RV64M-NEXT:    slli a1, a1, 31
 ; RV64M-NEXT:    seqz a3, a3
 ; RV64M-NEXT:    addi a2, a2, -2
-; RV64M-NEXT:    srli a1, a1, 31
+; RV64M-NEXT:    addi a1, a1, -1
 ; RV64M-NEXT:    seqz a2, a2
 ; RV64M-NEXT:    addi a3, a3, -1
-; RV64M-NEXT:    addi a2, a2, -1
+; RV64M-NEXT:    slli a1, a1, 31
+; RV64M-NEXT:    slli a2, a2, 2
+; RV64M-NEXT:    srli a1, a1, 31
 ; RV64M-NEXT:    slli a4, a3, 33
 ; RV64M-NEXT:    slli a3, a3, 31
 ; RV64M-NEXT:    or a1, a1, a4
-; RV64M-NEXT:    slli a4, a2, 2
 ; RV64M-NEXT:    srli a3, a3, 62
-; RV64M-NEXT:    slli a2, a2, 29
-; RV64M-NEXT:    or a3, a3, a4
-; RV64M-NEXT:    srli a2, a2, 61
+; RV64M-NEXT:    or a2, a2, a3
+; RV64M-NEXT:    addi a2, a2, -4
+; RV64M-NEXT:    slli a3, a2, 29
+; RV64M-NEXT:    srli a3, a3, 61
 ; RV64M-NEXT:    sd a1, 0(a0)
-; RV64M-NEXT:    sw a3, 8(a0)
-; RV64M-NEXT:    sb a2, 12(a0)
+; RV64M-NEXT:    sw a2, 8(a0)
+; RV64M-NEXT:    sb a3, 12(a0)
 ; RV64M-NEXT:    ret
 ;
 ; RV32MV-LABEL: test_srem_vec:

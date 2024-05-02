@@ -12,7 +12,11 @@
 define i32 @pat1(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: pat1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.w $a0, $a1, 19, 8
+; CHECK-NEXT:    bstrins.w $a0, $zero, 19, 8
+; CHECK-NEXT:    slli.w $a1, $a1, 8
+; CHECK-NEXT:    bstrpick.w $a1, $a1, 19, 8
+; CHECK-NEXT:    slli.w $a1, $a1, 8
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and1 = and i32 %a, -1048321  ; 0xfff000ff
   %shl = shl i32 %b, 8
@@ -24,7 +28,11 @@ define i32 @pat1(i32 %a, i32 %b) nounwind {
 define i32 @pat1_swap(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: pat1_swap:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.w $a0, $a1, 19, 8
+; CHECK-NEXT:    bstrins.w $a0, $zero, 19, 8
+; CHECK-NEXT:    slli.w $a1, $a1, 8
+; CHECK-NEXT:    bstrpick.w $a1, $a1, 19, 8
+; CHECK-NEXT:    slli.w $a1, $a1, 8
+; CHECK-NEXT:    or $a0, $a1, $a0
 ; CHECK-NEXT:    ret
   %and1 = and i32 %a, -1048321  ; 0xfff000ff
   %shl = shl i32 %b, 8
@@ -94,8 +102,9 @@ define i32 @pat3_swap(i32 %a, i32 %b) nounwind {
 define i32 @pat3_positive_mask0(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: pat3_positive_mask0:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srli.w $a1, $a1, 28
-; CHECK-NEXT:    bstrins.w $a0, $a1, 31, 28
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 27, 0
+; CHECK-NEXT:    bstrins.w $a1, $zero, 27, 0
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and1 = and i32 %a, 268435455  ; 0x0fffffff
   %and2 = and i32 %b, 4026531840 ; 0xf0000000
@@ -110,7 +119,9 @@ define i32 @pat3_positive_mask0(i32 %a, i32 %b) nounwind {
 define i32 @pat4(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: pat4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.w $a0, $a1, 31, 28
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 27, 0
+; CHECK-NEXT:    slli.w $a1, $a1, 28
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i32 %a, 268435455 ; 0x0fffffff
   %shl = shl i32 %b, 28
@@ -121,7 +132,9 @@ define i32 @pat4(i32 %a, i32 %b) nounwind {
 define i32 @pat4_swap(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: pat4_swap:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.w $a0, $a1, 31, 28
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 27, 0
+; CHECK-NEXT:    slli.w $a1, $a1, 28
+; CHECK-NEXT:    or $a0, $a1, $a0
 ; CHECK-NEXT:    ret
   %and = and i32 %a, 268435455 ; 0x0fffffff
   %shl = shl i32 %b, 28
@@ -149,9 +162,9 @@ define i32 @pat5(i32 %a) nounwind {
 define i32 @pat5_high_zeros(i32 %a) nounwind {
 ; CHECK-LABEL: pat5_high_zeros:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lu12i.w $a1, 1
-; CHECK-NEXT:    ori $a1, $a1, 564
-; CHECK-NEXT:    bstrins.w $a0, $a1, 31, 16
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 15, 0
+; CHECK-NEXT:    lu12i.w $a1, 74560
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i32 %a, 65535      ; 0x0000ffff
   %or = or i32 %and, 305397760  ; 0x12340000
@@ -165,10 +178,11 @@ define i32 @pat5_high_zeros(i32 %a) nounwind {
 define i32 @pat6(i32 %c) nounwind {
 ; CHECK-LABEL: pat6:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 23, 0
+; CHECK-NEXT:    slli.w $a0, $a0, 4
 ; CHECK-NEXT:    lu12i.w $a1, 65536
 ; CHECK-NEXT:    ori $a1, $a1, 2
-; CHECK-NEXT:    bstrins.w $a1, $a0, 27, 4
-; CHECK-NEXT:    move $a0, $a1
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i32 %c, 16777215  ; 0x00ffffff
   %shl = shl i32 %and, 4
@@ -181,10 +195,12 @@ define i32 @pat6(i32 %c) nounwind {
 define i32 @pat7(i32 %c) nounwind {
 ; CHECK-LABEL: pat7:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    slli.w $a0, $a0, 4
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 27, 4
+; CHECK-NEXT:    slli.w $a0, $a0, 4
 ; CHECK-NEXT:    lu12i.w $a1, 65536
 ; CHECK-NEXT:    ori $a1, $a1, 2
-; CHECK-NEXT:    bstrins.w $a1, $a0, 27, 4
-; CHECK-NEXT:    move $a0, $a1
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %shl = shl i32 %c, 4
   %and = and i32 %shl, 268435440 ; 0x0ffffff0
@@ -197,10 +213,11 @@ define i32 @pat7(i32 %c) nounwind {
 define i32 @pat8(i32 %c) nounwind {
 ; CHECK-LABEL: pat8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srli.w $a1, $a0, 4
-; CHECK-NEXT:    lu12i.w $a0, 65536
-; CHECK-NEXT:    ori $a0, $a0, 2
-; CHECK-NEXT:    bstrins.w $a0, $a1, 27, 4
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 27, 4
+; CHECK-NEXT:    slli.w $a0, $a0, 4
+; CHECK-NEXT:    lu12i.w $a1, 65536
+; CHECK-NEXT:    ori $a1, $a1, 2
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i32 %c, 268435440 ; 0x0ffffff0
   %or = or i32 %and, 268435458 ; 0x10000002
@@ -210,9 +227,9 @@ define i32 @pat8(i32 %c) nounwind {
 define i32 @pat9(i32 %a) {
 ; CHECK-LABEL: pat9:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lu12i.w $a1, -8
-; CHECK-NEXT:    ori $a1, $a1, 564
-; CHECK-NEXT:    bstrins.w $a0, $a1, 31, 16
+; CHECK-NEXT:    bstrpick.w $a0, $a0, 15, 0
+; CHECK-NEXT:    lu12i.w $a1, -515264
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i32 %a, 65535       ; 0x0000ffff
   %or = or i32 %and, -2110521344 ; 0x82340000

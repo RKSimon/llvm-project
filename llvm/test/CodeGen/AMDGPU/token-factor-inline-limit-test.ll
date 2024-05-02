@@ -4,24 +4,24 @@
 
 ; GCN-LABEL: {{^}}token_factor_inline_limit_test:
 
-; GCN-TFLID: v_mov_b32_e32 [[REG7:v[0-9]+]], 7
-; GCN-TFLID: buffer_store_dword [[REG7]], {{.*$}}
-; GCN-TFILD: v_mov_b32_e32 [[REG8:v[0-9]+]], 8
-; GCN-TFILD: buffer_store_dword [[REG8]], {{.*}} offset:4
-; GCN-TFILD: v_mov_b32_e32 [[REG9:v[0-9]+]], 9
-; GCN-TFILD: buffer_store_dword [[REG9]], {{.*}} offset:8
-; GCN-TFILD: v_mov_b32_e32 [[REG10:v[0-9]+]], 10
-; GCN-TFILD: buffer_store_dword [[REG10]], {{.*}} offset:12
-; GCN-TFILD: v_mov_b32_e32 [[REG11:v[0-9]+]], 11
-; GCN-TFILD: buffer_store_dword [[REG11]], {{.*}} offset:16
-; GCN-TFILD: v_mov_b32_e32 [[REG12:v[0-9]+]], 12
-; GCN-TFILD: buffer_store_dword [[REG12]], {{.*}} offset:20
-; GCN-TFILD: v_mov_b32_e32 [[REG13:v[0-9]+]], 13
-; GCN-TFILD: buffer_store_dword [[REG13]], {{.*}} offset:24
-; GCN-TFILD: v_mov_b32_e32 [[REG14:v[0-9]+]], 14
-; GCN-TFILD: buffer_store_dword [[REG14]], {{.*}} offset:28
 ; GCN-TFILD: v_mov_b32_e32 [[REG15:v[0-9]+]], 15
-; GCN-TFILD: buffer_store_dword [[REG15]], {{.*}} offset:32
+; GCN-TFILD: buffer_store_dword [[REG15]], off, s[0:3], s32 offset:32
+; GCN-TFILD: v_mov_b32_e32 [[REG14:v[0-9]+]], 14
+; GCN-TFILD: buffer_store_dword [[REG14]], off, s[0:3], s32 offset:28
+; GCN-TFILD: v_mov_b32_e32 [[REG13:v[0-9]+]], 13
+; GCN-TFILD: buffer_store_dword [[REG13]], off, s[0:3], s32 offset:24
+; GCN-TFILD: v_mov_b32_e32 [[REG12:v[0-9]+]], 12
+; GCN-TFILD: buffer_store_dword [[REG12]], off, s[0:3], s32 offset:20
+; GCN-TFILD: v_mov_b32_e32 [[REG11:v[0-9]+]], 11
+; GCN-TFILD: buffer_store_dword [[REG11]], off, s[0:3], s32 offset:16
+; GCN-TFILD: v_mov_b32_e32 [[REG10:v[0-9]+]], 10
+; GCN-TFILD: buffer_store_dword [[REG10]], off, s[0:3], s32 offset:12
+; GCN-TFILD: v_mov_b32_e32 [[REG9:v[0-9]+]], 9
+; GCN-TFILD: buffer_store_dword [[REG9]], off, s[0:3], s32 offset:8
+; GCN-TFILD: v_mov_b32_e32 [[REG8:v[0-9]+]], 8
+; GCN-TFILD: buffer_store_dword [[REG8]], off, s[0:3], s32 offset:4
+; GCN-TFILD: v_mov_b32_e32 [[REG7:v[0-9]+]], 7
+; GCN-TFILD: buffer_store_dword [[REG7]], off, s[0:3], s32
 
 ; GCN-TFIL7: v_mov_b32_e32 [[REG15:v[0-9]+]], 15
 ; GCN-TFIL7: buffer_store_dword [[REG15]], {{.*}} offset:32

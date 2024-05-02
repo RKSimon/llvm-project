@@ -15,15 +15,15 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; GCN-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; GCN-NEXT:    v_mov_b64_e32 v[0:1], 48
-; GCN-NEXT:    v_mov_b64_e32 v[2:3], 32
-; GCN-NEXT:    v_mov_b64_e32 v[4:5], 16
+; GCN-NEXT:    v_mov_b64_e32 v[0:1], 32
+; GCN-NEXT:    v_mov_b64_e32 v[2:3], 16
+; GCN-NEXT:    v_mov_b64_e32 v[4:5], 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    v_mov_b64_e32 v[8:9], s[24:25]
-; GCN-NEXT:    v_mov_b64_e32 v[10:11], s[26:27]
-; GCN-NEXT:    v_mov_b64_e32 v[12:13], s[28:29]
+; GCN-NEXT:    v_mov_b64_e32 v[6:7], s[24:25]
+; GCN-NEXT:    v_mov_b64_e32 v[8:9], s[26:27]
+; GCN-NEXT:    v_mov_b64_e32 v[10:11], s[28:29]
 ; GCN-NEXT:    v_accvgpr_write_b32 a0, s8
-; GCN-NEXT:    v_mov_b64_e32 v[14:15], s[30:31]
+; GCN-NEXT:    v_mov_b64_e32 v[12:13], s[30:31]
 ; GCN-NEXT:    v_accvgpr_write_b32 a1, s9
 ; GCN-NEXT:    v_accvgpr_write_b32 a2, s10
 ; GCN-NEXT:    v_accvgpr_write_b32 a3, s11
@@ -39,40 +39,38 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; GCN-NEXT:    v_accvgpr_write_b32 a13, s21
 ; GCN-NEXT:    v_accvgpr_write_b32 a14, s22
 ; GCN-NEXT:    v_accvgpr_write_b32 a15, s23
-; GCN-NEXT:    v_mov_b32_e32 v16, s16
-; GCN-NEXT:    v_mov_b32_e32 v17, s17
-; GCN-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[8:11], v[12:15], a[0:15]
-; GCN-NEXT:    v_mov_b32_e32 v18, s18
-; GCN-NEXT:    v_mov_b32_e32 v19, s19
-; GCN-NEXT:    v_mov_b32_e32 v8, s20
-; GCN-NEXT:    v_mov_b32_e32 v9, s21
-; GCN-NEXT:    v_mov_b32_e32 v10, s22
-; GCN-NEXT:    v_mov_b32_e32 v11, s23
-; GCN-NEXT:    v_mov_b64_e32 v[6:7], 0
-; GCN-NEXT:    s_nop 4
-; GCN-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off sc0 sc1
+; GCN-NEXT:    v_mov_b32_e32 v14, s20
+; GCN-NEXT:    v_mov_b32_e32 v15, s21
+; GCN-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[6:9], v[10:13], a[0:15]
+; GCN-NEXT:    v_mov_b32_e32 v16, s22
+; GCN-NEXT:    v_mov_b32_e32 v17, s23
+; GCN-NEXT:    v_mov_b32_e32 v6, s16
+; GCN-NEXT:    v_mov_b32_e32 v7, s17
+; GCN-NEXT:    v_mov_b32_e32 v8, s18
+; GCN-NEXT:    v_mov_b32_e32 v9, s19
+; GCN-NEXT:    s_nop 5
+; GCN-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off offset:16 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[2:3], a[24:27], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], a[24:27], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[4:5], a[20:23], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[2:3], a[20:23], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[6:7], a[16:19], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[4:5], a[16:19], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[2:3], v[16:19], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], v[14:17], off offset:16 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[0:1], v[8:11], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], v[6:9], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    v_mov_b32_e32 v0, s8
 ; GCN-NEXT:    v_mov_b32_e32 v1, s9
+; GCN-NEXT:    v_mov_b32_e32 v6, s12
+; GCN-NEXT:    v_mov_b32_e32 v7, s13
+; GCN-NEXT:    v_mov_b32_e32 v8, s14
+; GCN-NEXT:    v_mov_b32_e32 v9, s15
+; GCN-NEXT:    global_store_dwordx4 v[2:3], v[6:9], off sc0 sc1
+; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    v_mov_b32_e32 v2, s10
 ; GCN-NEXT:    v_mov_b32_e32 v3, s11
-; GCN-NEXT:    global_store_dwordx4 v[6:7], v[0:3], off sc0 sc1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    s_nop 0
-; GCN-NEXT:    v_mov_b32_e32 v0, s12
-; GCN-NEXT:    v_mov_b32_e32 v1, s13
-; GCN-NEXT:    v_mov_b32_e32 v2, s14
-; GCN-NEXT:    v_mov_b32_e32 v3, s15
 ; GCN-NEXT:    global_store_dwordx4 v[4:5], v[0:3], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    s_endpgm
@@ -87,15 +85,15 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; GCN-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; GCN-NEXT:    v_mov_b64_e32 v[0:1], 48
-; GCN-NEXT:    v_mov_b64_e32 v[2:3], 32
-; GCN-NEXT:    v_mov_b64_e32 v[4:5], 16
+; GCN-NEXT:    v_mov_b64_e32 v[0:1], 32
+; GCN-NEXT:    v_mov_b64_e32 v[2:3], 16
+; GCN-NEXT:    v_mov_b64_e32 v[4:5], 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    v_mov_b64_e32 v[8:9], s[24:25]
-; GCN-NEXT:    v_mov_b64_e32 v[10:11], s[26:27]
-; GCN-NEXT:    v_mov_b64_e32 v[12:13], s[28:29]
+; GCN-NEXT:    v_mov_b64_e32 v[6:7], s[24:25]
+; GCN-NEXT:    v_mov_b64_e32 v[8:9], s[26:27]
+; GCN-NEXT:    v_mov_b64_e32 v[10:11], s[28:29]
 ; GCN-NEXT:    v_accvgpr_write_b32 a0, s8
-; GCN-NEXT:    v_mov_b64_e32 v[14:15], s[30:31]
+; GCN-NEXT:    v_mov_b64_e32 v[12:13], s[30:31]
 ; GCN-NEXT:    v_accvgpr_write_b32 a1, s9
 ; GCN-NEXT:    v_accvgpr_write_b32 a2, s10
 ; GCN-NEXT:    v_accvgpr_write_b32 a3, s11
@@ -111,40 +109,38 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; GCN-NEXT:    v_accvgpr_write_b32 a13, s21
 ; GCN-NEXT:    v_accvgpr_write_b32 a14, s22
 ; GCN-NEXT:    v_accvgpr_write_b32 a15, s23
-; GCN-NEXT:    v_mov_b32_e32 v16, s16
-; GCN-NEXT:    v_mov_b32_e32 v17, s17
-; GCN-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[8:11], v[12:15], a[0:15] cbsz:2 abid:3 blgp:1
-; GCN-NEXT:    v_mov_b32_e32 v18, s18
-; GCN-NEXT:    v_mov_b32_e32 v19, s19
-; GCN-NEXT:    v_mov_b32_e32 v8, s20
-; GCN-NEXT:    v_mov_b32_e32 v9, s21
-; GCN-NEXT:    v_mov_b32_e32 v10, s22
-; GCN-NEXT:    v_mov_b32_e32 v11, s23
-; GCN-NEXT:    v_mov_b64_e32 v[6:7], 0
-; GCN-NEXT:    s_nop 4
-; GCN-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off sc0 sc1
+; GCN-NEXT:    v_mov_b32_e32 v14, s20
+; GCN-NEXT:    v_mov_b32_e32 v15, s21
+; GCN-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[6:9], v[10:13], a[0:15] cbsz:2 abid:3 blgp:1
+; GCN-NEXT:    v_mov_b32_e32 v16, s22
+; GCN-NEXT:    v_mov_b32_e32 v17, s23
+; GCN-NEXT:    v_mov_b32_e32 v6, s16
+; GCN-NEXT:    v_mov_b32_e32 v7, s17
+; GCN-NEXT:    v_mov_b32_e32 v8, s18
+; GCN-NEXT:    v_mov_b32_e32 v9, s19
+; GCN-NEXT:    s_nop 5
+; GCN-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off offset:16 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[2:3], a[24:27], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], a[24:27], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[4:5], a[20:23], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[2:3], a[20:23], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[6:7], a[16:19], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[4:5], a[16:19], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[2:3], v[16:19], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], v[14:17], off offset:16 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v[0:1], v[8:11], off sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v[0:1], v[6:9], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    v_mov_b32_e32 v0, s8
 ; GCN-NEXT:    v_mov_b32_e32 v1, s9
+; GCN-NEXT:    v_mov_b32_e32 v6, s12
+; GCN-NEXT:    v_mov_b32_e32 v7, s13
+; GCN-NEXT:    v_mov_b32_e32 v8, s14
+; GCN-NEXT:    v_mov_b32_e32 v9, s15
+; GCN-NEXT:    global_store_dwordx4 v[2:3], v[6:9], off sc0 sc1
+; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    v_mov_b32_e32 v2, s10
 ; GCN-NEXT:    v_mov_b32_e32 v3, s11
-; GCN-NEXT:    global_store_dwordx4 v[6:7], v[0:3], off sc0 sc1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    s_nop 0
-; GCN-NEXT:    v_mov_b32_e32 v0, s12
-; GCN-NEXT:    v_mov_b32_e32 v1, s13
-; GCN-NEXT:    v_mov_b32_e32 v2, s14
-; GCN-NEXT:    v_mov_b32_e32 v3, s15
 ; GCN-NEXT:    global_store_dwordx4 v[4:5], v[0:3], off sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    s_endpgm
@@ -290,13 +286,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd(<8 x bfloat> %arg
 ; GCN-NEXT:    v_mov_b32_e32 v19, s11
 ; GCN-NEXT:    global_store_dwordx4 v36, v[16:19], s[0:1] sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v36, v[8:11], s[0:1] offset:32 sc0 sc1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    global_store_dwordx4 v36, v[12:15], s[0:1] offset:48 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v36, v[0:3], s[0:1] sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v36, v[8:11], s[0:1] offset:32 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    global_store_dwordx4 v36, v[4:7], s[0:1] offset:16 sc0 sc1
+; GCN-NEXT:    s_waitcnt vmcnt(0)
+; GCN-NEXT:    global_store_dwordx4 v36, v[0:3], s[0:1] sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    s_endpgm
   %result = call <16 x float> @llvm.amdgcn.mfma.f32.32x32x16.bf16(<8 x bfloat> %arg0, <8 x bfloat> %arg1, <16 x float> %arg2, i32 0, i32 0, i32 0)
@@ -353,13 +349,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd__flags(<8 x bfloa
 ; GCN-NEXT:    v_mov_b32_e32 v19, s11
 ; GCN-NEXT:    global_store_dwordx4 v36, v[16:19], s[0:1] sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v36, v[8:11], s[0:1] offset:32 sc0 sc1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    global_store_dwordx4 v36, v[12:15], s[0:1] offset:48 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    global_store_dwordx4 v36, v[0:3], s[0:1] sc0 sc1
+; GCN-NEXT:    global_store_dwordx4 v36, v[8:11], s[0:1] offset:32 sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    global_store_dwordx4 v36, v[4:7], s[0:1] offset:16 sc0 sc1
+; GCN-NEXT:    s_waitcnt vmcnt(0)
+; GCN-NEXT:    global_store_dwordx4 v36, v[0:3], s[0:1] sc0 sc1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    s_endpgm
   %result = call <16 x float> @llvm.amdgcn.mfma.f32.32x32x16.bf16(<8 x bfloat> %arg0, <8 x bfloat> %arg1, <16 x float> %arg2, i32 1, i32 2, i32 3)

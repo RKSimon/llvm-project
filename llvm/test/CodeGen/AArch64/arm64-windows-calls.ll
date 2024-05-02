@@ -185,8 +185,8 @@ define void @call_copy_notcxx14aggregate() {
 ; CHECK-NEXT:    mov x0, sp
 ; CHECK-NEXT:    mov x1, x19
 ; CHECK-NEXT:    bl copy_notcxx14aggregate
-; CHECK-NEXT:    ldp d0, d1, [sp]
-; CHECK-NEXT:    stp d0, d1, [x19]
+; CHECK-NEXT:    ldp d1, d0, [sp]
+; CHECK-NEXT:    stp d1, d0, [x19]
 ; CHECK-NEXT:    .seh_startepilogue
 ; CHECK-NEXT:    ldr x30, [sp, #24] // 8-byte Reload
 ; CHECK-NEXT:    .seh_save_reg x30, 24

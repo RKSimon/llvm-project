@@ -274,11 +274,11 @@ define i128 @mad_i64_i32_sextops_i32_i128(i32 %arg0, i32 %arg1, i128 %arg2) #0 {
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NEXT:    v_ashrrev_i32_e32 v6, 31, v0
-; SI-NEXT:    v_mul_lo_u32 v11, v6, v1
+; SI-NEXT:    v_mul_lo_u32 v11, v1, v6
 ; SI-NEXT:    v_mul_hi_u32 v12, v0, v1
 ; SI-NEXT:    v_ashrrev_i32_e32 v7, 31, v1
 ; SI-NEXT:    v_mul_hi_u32 v14, v6, v1
-; SI-NEXT:    v_mul_lo_u32 v13, v0, v7
+; SI-NEXT:    v_mul_lo_u32 v13, v7, v0
 ; SI-NEXT:    v_mul_hi_u32 v10, v0, v7
 ; SI-NEXT:    v_add_i32_e32 v12, vcc, v11, v12
 ; SI-NEXT:    v_addc_u32_e32 v14, vcc, 0, v14, vcc

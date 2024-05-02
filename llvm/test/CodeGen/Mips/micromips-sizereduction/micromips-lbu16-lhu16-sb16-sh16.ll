@@ -30,7 +30,7 @@ if.end:
 define void @f2(ptr %p) {
 ; CHECK-LABEL: f2:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    lhu16 $2, 0($4)
+; CHECK-NEXT:    lbu16 $2, 0($4)
 ; CHECK-NEXT:    andi16 $2, $2, 2
 ; CHECK-NEXT:    bnezc $2, $BB1_2
 ; CHECK-NEXT:  # %bb.1: # %if.then

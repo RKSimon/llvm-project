@@ -89,9 +89,8 @@ define arm_aapcs_vfpcc <8 x i16> @bitcast_to_v8i1(i8 %b, <8 x i16> %a) {
 ; CHECK-BE:       @ %bb.0: @ %entry
 ; CHECK-BE-NEXT:    .pad #4
 ; CHECK-BE-NEXT:    sub sp, #4
-; CHECK-BE-NEXT:    uxtb r0, r0
-; CHECK-BE-NEXT:    vmov.i8 q1, #0x0
 ; CHECK-BE-NEXT:    rbit r0, r0
+; CHECK-BE-NEXT:    vmov.i8 q1, #0x0
 ; CHECK-BE-NEXT:    vmov.i8 q2, #0xff
 ; CHECK-BE-NEXT:    lsrs r0, r0, #24
 ; CHECK-BE-NEXT:    vmsr p0, r0
@@ -140,9 +139,8 @@ define arm_aapcs_vfpcc <16 x i8> @bitcast_to_v16i1(i16 %b, <16 x i8> %a) {
 ; CHECK-BE:       @ %bb.0: @ %entry
 ; CHECK-BE-NEXT:    .pad #4
 ; CHECK-BE-NEXT:    sub sp, #4
-; CHECK-BE-NEXT:    uxth r0, r0
-; CHECK-BE-NEXT:    vrev64.8 q1, q0
 ; CHECK-BE-NEXT:    rbit r0, r0
+; CHECK-BE-NEXT:    vrev64.8 q1, q0
 ; CHECK-BE-NEXT:    vmov.i32 q0, #0x0
 ; CHECK-BE-NEXT:    lsrs r0, r0, #16
 ; CHECK-BE-NEXT:    vmsr p0, r0

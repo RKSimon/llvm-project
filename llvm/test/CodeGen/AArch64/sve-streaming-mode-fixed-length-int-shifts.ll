@@ -191,88 +191,23 @@ define <16 x i8> @ashr_v16i8(<16 x i8> %op1, <16 x i8> %op2) {
 define void @ashr_v32i8(ptr %a, ptr %b) {
 ; CHECK-LABEL: ashr_v32i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.b, vl16
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    asrr z0.b, p0/m, z0.b, z1.b
 ; CHECK-NEXT:    asr z2.b, p0/m, z2.b, z3.b
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: ashr_v32i8:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #47]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #45]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #43]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #41]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #39]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #37]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #35]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #33]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #31]
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #15]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    asr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #79]
@@ -334,9 +269,73 @@ define void @ashr_v32i8(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #65]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #47]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #46]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #45]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #43]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #41]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #39]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #37]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #35]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #33]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsb w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <32 x i8>, ptr %a
@@ -471,56 +470,23 @@ define <8 x i16> @ashr_v8i16(<8 x i16> %op1, <8 x i16> %op2) {
 define void @ashr_v16i16(ptr %a, ptr %b) {
 ; CHECK-LABEL: ashr_v16i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    asrr z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    asr z2.h, p0/m, z2.h, z3.h
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: ashr_v16i16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #14]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    asr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #12]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #78]
@@ -550,9 +516,41 @@ define void @ashr_v16i16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #66]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #46]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrsh w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x i16>, ptr %a
@@ -626,23 +624,34 @@ define <4 x i32> @ashr_v4i32(<4 x i32> %op1, <4 x i32> %op2) {
 define void @ashr_v8i32(ptr %a, ptr %b) {
 ; CHECK-LABEL: ashr_v8i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    asrr z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    asr z2.s, p0/m, z2.s, z3.s
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: ashr_v8i32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    asr w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
+; NONEON-NOSVE-NEXT:    asr w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    asr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #40]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #60]
 ; NONEON-NOSVE-NEXT:    asr w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
@@ -653,21 +662,9 @@ define void @ashr_v8i32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    asr w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
 ; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
-; NONEON-NOSVE-NEXT:    asr w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
-; NONEON-NOSVE-NEXT:    asr w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
-; NONEON-NOSVE-NEXT:    asr w8, w9, w8
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x i32>, ptr %a
@@ -732,36 +729,35 @@ define <2 x i64> @ashr_v2i64(<2 x i64> %op1, <2 x i64> %op2) {
 define void @ashr_v4i64(ptr %a, ptr %b) {
 ; CHECK-LABEL: ashr_v4i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    asrr z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    asr z2.d, p0/m, z2.d, z3.d
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: ashr_v4i64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    asr x11, x10, x8
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
+; NONEON-NOSVE-NEXT:    asr x8, x9, x8
 ; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #56]
 ; NONEON-NOSVE-NEXT:    asr x11, x10, x8
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    asr x8, x9, x8
-; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
 ; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
-; NONEON-NOSVE-NEXT:    asr x11, x10, x8
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
-; NONEON-NOSVE-NEXT:    asr x8, x9, x8
-; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x i64>, ptr %a
@@ -957,88 +953,23 @@ define <16 x i8> @lshr_v16i8(<16 x i8> %op1, <16 x i8> %op2) {
 define void @lshr_v32i8(ptr %a, ptr %b) {
 ; CHECK-LABEL: lshr_v32i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.b, vl16
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lsrr z0.b, p0/m, z0.b, z1.b
 ; CHECK-NEXT:    lsr z2.b, p0/m, z2.b, z3.b
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: lshr_v32i8:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #47]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #45]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #43]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #41]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #39]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #37]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #35]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #33]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #31]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #79]
@@ -1100,9 +1031,73 @@ define void @lshr_v32i8(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #65]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #47]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #46]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #45]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #43]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #41]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #39]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #37]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #35]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #33]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <32 x i8>, ptr %a
@@ -1237,56 +1232,23 @@ define <8 x i16> @lshr_v8i16(<8 x i16> %op1, <8 x i16> %op2) {
 define void @lshr_v16i16(ptr %a, ptr %b) {
 ; CHECK-LABEL: lshr_v16i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lsrr z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    lsr z2.h, p0/m, z2.h, z3.h
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: lshr_v16i16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #14]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #12]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #78]
@@ -1316,9 +1278,41 @@ define void @lshr_v16i16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #66]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #46]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x i16>, ptr %a
@@ -1392,23 +1386,34 @@ define <4 x i32> @lshr_v4i32(<4 x i32> %op1, <4 x i32> %op2) {
 define void @lshr_v8i32(ptr %a, ptr %b) {
 ; CHECK-LABEL: lshr_v8i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lsrr z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    lsr z2.s, p0/m, z2.s, z3.s
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: lshr_v8i32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
+; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #40]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #60]
 ; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
@@ -1419,21 +1424,9 @@ define void @lshr_v8i32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
 ; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
-; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
-; NONEON-NOSVE-NEXT:    lsr w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
-; NONEON-NOSVE-NEXT:    lsr w8, w9, w8
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x i32>, ptr %a
@@ -1498,36 +1491,35 @@ define <2 x i64> @lshr_v2i64(<2 x i64> %op1, <2 x i64> %op2) {
 define void @lshr_v4i64(ptr %a, ptr %b) {
 ; CHECK-LABEL: lshr_v4i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lsrr z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    lsr z2.d, p0/m, z2.d, z3.d
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: lshr_v4i64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    lsr x11, x10, x8
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
+; NONEON-NOSVE-NEXT:    lsr x8, x9, x8
 ; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #56]
 ; NONEON-NOSVE-NEXT:    lsr x11, x10, x8
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    lsr x8, x9, x8
-; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
 ; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
-; NONEON-NOSVE-NEXT:    lsr x11, x10, x8
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
-; NONEON-NOSVE-NEXT:    lsr x8, x9, x8
-; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x i64>, ptr %a
@@ -1752,88 +1744,23 @@ define <16 x i8> @shl_v16i8(<16 x i8> %op1, <16 x i8> %op2) {
 define void @shl_v32i8(ptr %a, ptr %b) {
 ; CHECK-LABEL: shl_v32i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.b, vl16
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lslr z0.b, p0/m, z0.b, z1.b
 ; CHECK-NEXT:    lsl z2.b, p0/m, z2.b, z3.b
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shl_v32i8:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #47]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #45]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #43]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #41]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #39]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #37]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #35]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #33]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #31]
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #15]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #14]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #79]
@@ -1895,9 +1822,73 @@ define void @shl_v32i8(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #65]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #47]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #46]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #95]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #45]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #61]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #93]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #43]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #59]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #91]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #41]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #57]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #89]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #39]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #55]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #87]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #37]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #53]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #85]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #35]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #51]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #83]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #33]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #49]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrb w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #81]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <32 x i8>, ptr %a
@@ -2001,56 +1992,23 @@ define <8 x i16> @shl_v8i16(<8 x i16> %op1, <8 x i16> %op2) {
 define void @shl_v16i16(ptr %a, ptr %b) {
 ; CHECK-LABEL: shl_v16i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lslr z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    lsl z2.h, p0/m, z2.h, z3.h
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shl_v16i16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #46]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #44]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #42]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #40]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #38]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #36]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #34]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #14]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #12]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #78]
@@ -2080,9 +2038,41 @@ define void @shl_v16i16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #66]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #16]
 ; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #46]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #44]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #42]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #58]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #40]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #38]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #54]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #36]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #52]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #34]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #50]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldrh w9, [sp, #32]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #48]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x i16>, ptr %a
@@ -2156,23 +2146,34 @@ define <4 x i32> @shl_v4i32(<4 x i32> %op1, <4 x i32> %op2) {
 define void @shl_v8i32(ptr %a, ptr %b) {
 ; CHECK-LABEL: shl_v8i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lslr z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    lsl z2.s, p0/m, z2.s, z3.s
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shl_v8i32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
+; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
+; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
 ; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #40]
+; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #60]
 ; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
@@ -2183,21 +2184,9 @@ define void @shl_v8i32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp, #8]
 ; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #28]
-; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #24]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    ldp w9, w10, [sp]
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #72]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #20]
-; NONEON-NOSVE-NEXT:    lsl w11, w10, w8
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #16]
-; NONEON-NOSVE-NEXT:    lsl w8, w9, w8
-; NONEON-NOSVE-NEXT:    stp w8, w11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x i32>, ptr %a
@@ -2262,36 +2251,35 @@ define <2 x i64> @shl_v2i64(<2 x i64> %op1, <2 x i64> %op2) {
 define void @shl_v4i64(ptr %a, ptr %b) {
 ; CHECK-LABEL: shl_v4i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    lslr z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    lsl z2.d, p0/m, z2.d, z3.d
-; CHECK-NEXT:    stp q0, q2, [x0]
+; CHECK-NEXT:    stp q2, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shl_v4i64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
+; NONEON-NOSVE-NEXT:    lsl x11, x10, x8
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
+; NONEON-NOSVE-NEXT:    lsl x8, x9, x8
 ; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #56]
 ; NONEON-NOSVE-NEXT:    lsl x11, x10, x8
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    lsl x8, x9, x8
-; NONEON-NOSVE-NEXT:    ldp x9, x10, [sp]
 ; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #80]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #24]
-; NONEON-NOSVE-NEXT:    lsl x11, x10, x8
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #16]
-; NONEON-NOSVE-NEXT:    lsl x8, x9, x8
-; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x i64>, ptr %a

@@ -12806,18 +12806,12 @@ define ptr @test_v1f64_post_reg_st4lane(ptr %A, ptr %ptr, <1 x double> %B, <1 x 
 declare void @llvm.aarch64.neon.st4lane.v1f64.p0(<1 x double>, <1 x double>, <1 x double>, <1 x double>, i64, ptr)
 
 define <16 x i8> @test_v16i8_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v16i8_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.16b { v0 }, [x0], #1
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v16i8_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrb w8, [x0], #1
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.16b v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v16i8_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrb w8, [x0], #1
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.16b v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i8, ptr %bar
   %tmp2 = insertelement <16 x i8> <i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef>, i8 %tmp1, i32 0
   %tmp3 = insertelement <16 x i8> %tmp2, i8 %tmp1, i32 1
@@ -12876,18 +12870,12 @@ define <16 x i8> @test_v16i8_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <8 x i8> @test_v8i8_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v8i8_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.8b { v0 }, [x0], #1
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v8i8_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrb w8, [x0], #1
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.8b v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v8i8_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrb w8, [x0], #1
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.8b v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i8, ptr %bar
   %tmp2 = insertelement <8 x i8> <i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef, i8 undef>, i8 %tmp1, i32 0
   %tmp3 = insertelement <8 x i8> %tmp2, i8 %tmp1, i32 1
@@ -12930,18 +12918,12 @@ define <8 x i8> @test_v8i8_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <8 x i16> @test_v8i16_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v8i16_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.8h { v0 }, [x0], #2
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v8i16_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrh w8, [x0], #2
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.8h v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v8i16_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrh w8, [x0], #2
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.8h v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i16, ptr %bar
   %tmp2 = insertelement <8 x i16> <i16 undef, i16 undef, i16 undef, i16 undef, i16 undef, i16 undef, i16 undef, i16 undef>, i16 %tmp1, i32 0
   %tmp3 = insertelement <8 x i16> %tmp2, i16 %tmp1, i32 1
@@ -12985,18 +12967,12 @@ define <8 x i16> @test_v8i16_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <4 x i16> @test_v4i16_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v4i16_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.4h { v0 }, [x0], #2
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4i16_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrh w8, [x0], #2
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.4h v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4i16_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrh w8, [x0], #2
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.4h v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i16, ptr %bar
   %tmp2 = insertelement <4 x i16> <i16 undef, i16 undef, i16 undef, i16 undef>, i16 %tmp1, i32 0
   %tmp3 = insertelement <4 x i16> %tmp2, i16 %tmp1, i32 1
@@ -13032,18 +13008,12 @@ define <4 x i16> @test_v4i16_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <4 x i32> @test_v4i32_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v4i32_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.4s { v0 }, [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4i32_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr w8, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.4s v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4i32_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr w8, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.4s v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i32, ptr %bar
   %tmp2 = insertelement <4 x i32> <i32 undef, i32 undef, i32 undef, i32 undef>, i32 %tmp1, i32 0
   %tmp3 = insertelement <4 x i32> %tmp2, i32 %tmp1, i32 1
@@ -13079,18 +13049,12 @@ define <4 x i32> @test_v4i32_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <2 x i32> @test_v2i32_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v2i32_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.2s { v0 }, [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2i32_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr w8, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.2s v0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2i32_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr w8, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.2s v0, w8
+; CHECK-NEXT:    ret
   %tmp1 = load i32, ptr %bar
   %tmp2 = insertelement <2 x i32> <i32 undef, i32 undef>, i32 %tmp1, i32 0
   %tmp3 = insertelement <2 x i32> %tmp2, i32 %tmp1, i32 1
@@ -13122,18 +13086,12 @@ define <2 x i32> @test_v2i32_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <2 x i64> @test_v2i64_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v2i64_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.2d { v0 }, [x0], #8
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2i64_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr x8, [x0], #8
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.2d v0, x8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2i64_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr x8, [x0], #8
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.2d v0, x8
+; CHECK-NEXT:    ret
   %tmp1 = load i64, ptr %bar
   %tmp2 = insertelement <2 x i64> <i64 undef, i64 undef>, i64 %tmp1, i32 0
   %tmp3 = insertelement <2 x i64> %tmp2, i64 %tmp1, i32 1
@@ -13165,18 +13123,12 @@ define <2 x i64> @test_v2i64_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <4 x float> @test_v4f32_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v4f32_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.4s { v0 }, [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4f32_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr s0, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.4s v0, v0[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4f32_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr s0, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.4s v0, v0[0]
+; CHECK-NEXT:    ret
   %tmp1 = load float, ptr %bar
   %tmp2 = insertelement <4 x float> <float undef, float undef, float undef, float undef>, float %tmp1, i32 0
   %tmp3 = insertelement <4 x float> %tmp2, float %tmp1, i32 1
@@ -13212,18 +13164,12 @@ define <4 x float> @test_v4f32_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <2 x float> @test_v2f32_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v2f32_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.2s { v0 }, [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2f32_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr s0, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.2s v0, v0[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2f32_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr s0, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.2s v0, v0[0]
+; CHECK-NEXT:    ret
   %tmp1 = load float, ptr %bar
   %tmp2 = insertelement <2 x float> <float undef, float undef>, float %tmp1, i32 0
   %tmp3 = insertelement <2 x float> %tmp2, float %tmp1, i32 1
@@ -13255,18 +13201,12 @@ define <2 x float> @test_v2f32_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <2 x double> @test_v2f64_post_imm_ld1r(ptr %bar, ptr %ptr) {
-; CHECK-SD-LABEL: test_v2f64_post_imm_ld1r:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1r.2d { v0 }, [x0], #8
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2f64_post_imm_ld1r:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr d0, [x0], #8
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    dup.2d v0, v0[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2f64_post_imm_ld1r:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr d0, [x0], #8
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    dup.2d v0, v0[0]
+; CHECK-NEXT:    ret
   %tmp1 = load double, ptr %bar
   %tmp2 = insertelement <2 x double> <double undef, double undef>, double %tmp1, i32 0
   %tmp3 = insertelement <2 x double> %tmp2, double %tmp1, i32 1
@@ -13298,18 +13238,12 @@ define <2 x double> @test_v2f64_post_reg_ld1r(ptr %bar, ptr %ptr, i64 %inc) {
 }
 
 define <16 x i8> @test_v16i8_post_imm_ld1lane(ptr %bar, ptr %ptr, <16 x i8> %A) {
-; CHECK-SD-LABEL: test_v16i8_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.b { v0 }[1], [x0], #1
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v16i8_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrb w8, [x0], #1
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.b v0[1], w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v16i8_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrb w8, [x0], #1
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.b v0[1], w8
+; CHECK-NEXT:    ret
   %tmp1 = load i8, ptr %bar
   %tmp2 = insertelement <16 x i8> %A, i8 %tmp1, i32 1
   %tmp3 = getelementptr i8, ptr %bar, i64 1
@@ -13389,22 +13323,14 @@ define <16 x i8> @test_v16i8_post_reg_ld1lane_undef(ptr %bar, ptr %ptr, i64 %inc
 }
 
 define <8 x i8> @test_v8i8_post_imm_ld1lane(ptr %bar, ptr %ptr, <8 x i8> %A) {
-; CHECK-SD-LABEL: test_v8i8_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    ld1.b { v0 }[1], [x0], #1
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v8i8_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrb w8, [x0], #1
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.b v0[1], w8
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v8i8_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrb w8, [x0], #1
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.b v0[1], w8
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 killed $q0
+; CHECK-NEXT:    ret
   %tmp1 = load i8, ptr %bar
   %tmp2 = insertelement <8 x i8> %A, i8 %tmp1, i32 1
   %tmp3 = getelementptr i8, ptr %bar, i64 1
@@ -13437,18 +13363,12 @@ define <8 x i8> @test_v8i8_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <8 x i
 }
 
 define <8 x i16> @test_v8i16_post_imm_ld1lane(ptr %bar, ptr %ptr, <8 x i16> %A) {
-; CHECK-SD-LABEL: test_v8i16_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.h { v0 }[1], [x0], #2
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v8i16_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrh w8, [x0], #2
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.h v0[1], w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v8i16_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrh w8, [x0], #2
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.h v0[1], w8
+; CHECK-NEXT:    ret
   %tmp1 = load i16, ptr %bar
   %tmp2 = insertelement <8 x i16> %A, i16 %tmp1, i32 1
   %tmp3 = getelementptr i16, ptr %bar, i64 1
@@ -13478,22 +13398,14 @@ define <8 x i16> @test_v8i16_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <8 x
 }
 
 define <4 x i16> @test_v4i16_post_imm_ld1lane(ptr %bar, ptr %ptr, <4 x i16> %A) {
-; CHECK-SD-LABEL: test_v4i16_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    ld1.h { v0 }[1], [x0], #2
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4i16_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldrh w8, [x0], #2
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.h v0[1], w8
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4i16_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldrh w8, [x0], #2
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.h v0[1], w8
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 killed $q0
+; CHECK-NEXT:    ret
   %tmp1 = load i16, ptr %bar
   %tmp2 = insertelement <4 x i16> %A, i16 %tmp1, i32 1
   %tmp3 = getelementptr i16, ptr %bar, i64 1
@@ -13527,18 +13439,12 @@ define <4 x i16> @test_v4i16_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <4 x
 }
 
 define <4 x i32> @test_v4i32_post_imm_ld1lane(ptr %bar, ptr %ptr, <4 x i32> %A) {
-; CHECK-SD-LABEL: test_v4i32_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.s { v0 }[1], [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4i32_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr w8, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.s v0[1], w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4i32_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr w8, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.s v0[1], w8
+; CHECK-NEXT:    ret
   %tmp1 = load i32, ptr %bar
   %tmp2 = insertelement <4 x i32> %A, i32 %tmp1, i32 1
   %tmp3 = getelementptr i32, ptr %bar, i64 1
@@ -13568,22 +13474,14 @@ define <4 x i32> @test_v4i32_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <4 x
 }
 
 define <2 x i32> @test_v2i32_post_imm_ld1lane(ptr %bar, ptr %ptr, <2 x i32> %A) {
-; CHECK-SD-LABEL: test_v2i32_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    ld1.s { v0 }[1], [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2i32_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr w8, [x0], #4
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.s v0[1], w8
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2i32_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr w8, [x0], #4
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.s v0[1], w8
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 killed $q0
+; CHECK-NEXT:    ret
   %tmp1 = load i32, ptr %bar
   %tmp2 = insertelement <2 x i32> %A, i32 %tmp1, i32 1
   %tmp3 = getelementptr i32, ptr %bar, i64 1
@@ -13617,18 +13515,12 @@ define <2 x i32> @test_v2i32_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <2 x
 }
 
 define <2 x i64> @test_v2i64_post_imm_ld1lane(ptr %bar, ptr %ptr, <2 x i64> %A) {
-; CHECK-SD-LABEL: test_v2i64_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.d { v0 }[1], [x0], #8
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2i64_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr x8, [x0], #8
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.d v0[1], x8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2i64_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr x8, [x0], #8
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.d v0[1], x8
+; CHECK-NEXT:    ret
   %tmp1 = load i64, ptr %bar
   %tmp2 = insertelement <2 x i64> %A, i64 %tmp1, i32 1
   %tmp3 = getelementptr i64, ptr %bar, i64 1
@@ -13658,18 +13550,12 @@ define <2 x i64> @test_v2i64_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <2 x
 }
 
 define <4 x float> @test_v4f32_post_imm_ld1lane(ptr %bar, ptr %ptr, <4 x float> %A) {
-; CHECK-SD-LABEL: test_v4f32_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.s { v0 }[1], [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v4f32_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr s1, [x0], #4
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.s v0[1], v1[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v4f32_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr s1, [x0], #4
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.s v0[1], v1[0]
+; CHECK-NEXT:    ret
   %tmp1 = load float, ptr %bar
   %tmp2 = insertelement <4 x float> %A, float %tmp1, i32 1
   %tmp3 = getelementptr float, ptr %bar, i64 1
@@ -13699,22 +13585,14 @@ define <4 x float> @test_v4f32_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <4
 }
 
 define <2 x float> @test_v2f32_post_imm_ld1lane(ptr %bar, ptr %ptr, <2 x float> %A) {
-; CHECK-SD-LABEL: test_v2f32_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    ld1.s { v0 }[1], [x0], #4
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2f32_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr s1, [x0], #4
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 def $q0
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.s v0[1], v1[0]
-; CHECK-GI-NEXT:    ; kill: def $d0 killed $d0 killed $q0
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2f32_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr s1, [x0], #4
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.s v0[1], v1[0]
+; CHECK-NEXT:    ; kill: def $d0 killed $d0 killed $q0
+; CHECK-NEXT:    ret
   %tmp1 = load float, ptr %bar
   %tmp2 = insertelement <2 x float> %A, float %tmp1, i32 1
   %tmp3 = getelementptr float, ptr %bar, i64 1
@@ -13748,18 +13626,12 @@ define <2 x float> @test_v2f32_post_reg_ld1lane(ptr %bar, ptr %ptr, i64 %inc, <2
 }
 
 define <2 x double> @test_v2f64_post_imm_ld1lane(ptr %bar, ptr %ptr, <2 x double> %A) {
-; CHECK-SD-LABEL: test_v2f64_post_imm_ld1lane:
-; CHECK-SD:       ; %bb.0:
-; CHECK-SD-NEXT:    ld1.d { v0 }[1], [x0], #8
-; CHECK-SD-NEXT:    str x0, [x1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_v2f64_post_imm_ld1lane:
-; CHECK-GI:       ; %bb.0:
-; CHECK-GI-NEXT:    ldr d1, [x0], #8
-; CHECK-GI-NEXT:    str x0, [x1]
-; CHECK-GI-NEXT:    mov.d v0[1], v1[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_v2f64_post_imm_ld1lane:
+; CHECK:       ; %bb.0:
+; CHECK-NEXT:    ldr d1, [x0], #8
+; CHECK-NEXT:    str x0, [x1]
+; CHECK-NEXT:    mov.d v0[1], v1[0]
+; CHECK-NEXT:    ret
   %tmp1 = load double, ptr %bar
   %tmp2 = insertelement <2 x double> %A, double %tmp1, i32 1
   %tmp3 = getelementptr double, ptr %bar, i64 1

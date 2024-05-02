@@ -135,15 +135,15 @@ define void @test_v2halfp0a1(ptr noalias readonly %from, ptr %to) {
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_v2halfp0a1_param_0];
-; CHECK-NEXT:    ld.b8 %r1, [%rd1+1];
-; CHECK-NEXT:    ld.b8 %r2, [%rd1];
-; CHECK-NEXT:    ld.b8 %r3, [%rd1+3];
-; CHECK-NEXT:    ld.b8 %r4, [%rd1+2];
+; CHECK-NEXT:    ld.b8 %r1, [%rd1];
+; CHECK-NEXT:    ld.b8 %r2, [%rd1+1];
+; CHECK-NEXT:    ld.b8 %r3, [%rd1+2];
+; CHECK-NEXT:    ld.b8 %r4, [%rd1+3];
 ; CHECK-NEXT:    ld.param.b64 %rd2, [test_v2halfp0a1_param_1];
-; CHECK-NEXT:    st.b8 [%rd2+2], %r4;
-; CHECK-NEXT:    st.b8 [%rd2+3], %r3;
-; CHECK-NEXT:    st.b8 [%rd2], %r2;
-; CHECK-NEXT:    st.b8 [%rd2+1], %r1;
+; CHECK-NEXT:    st.b8 [%rd2+3], %r4;
+; CHECK-NEXT:    st.b8 [%rd2+2], %r3;
+; CHECK-NEXT:    st.b8 [%rd2+1], %r2;
+; CHECK-NEXT:    st.b8 [%rd2], %r1;
 ; CHECK-NEXT:    ret;
   %1 = load <2 x half>, ptr %from , align 1
   store <2 x half> %1, ptr %to , align 1
@@ -158,23 +158,23 @@ define void @test_v4halfp0a1(ptr noalias readonly %from, ptr %to) {
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_v4halfp0a1_param_0];
-; CHECK-NEXT:    ld.b8 %r1, [%rd1+1];
-; CHECK-NEXT:    ld.b8 %r2, [%rd1];
-; CHECK-NEXT:    ld.b8 %r3, [%rd1+3];
-; CHECK-NEXT:    ld.b8 %r4, [%rd1+2];
-; CHECK-NEXT:    ld.b8 %r5, [%rd1+5];
-; CHECK-NEXT:    ld.b8 %r6, [%rd1+4];
-; CHECK-NEXT:    ld.b8 %r7, [%rd1+7];
-; CHECK-NEXT:    ld.b8 %r8, [%rd1+6];
+; CHECK-NEXT:    ld.b8 %r1, [%rd1];
+; CHECK-NEXT:    ld.b8 %r2, [%rd1+1];
+; CHECK-NEXT:    ld.b8 %r3, [%rd1+2];
+; CHECK-NEXT:    ld.b8 %r4, [%rd1+3];
+; CHECK-NEXT:    ld.b8 %r5, [%rd1+4];
+; CHECK-NEXT:    ld.b8 %r6, [%rd1+5];
+; CHECK-NEXT:    ld.b8 %r7, [%rd1+6];
+; CHECK-NEXT:    ld.b8 %r8, [%rd1+7];
 ; CHECK-NEXT:    ld.param.b64 %rd2, [test_v4halfp0a1_param_1];
-; CHECK-NEXT:    st.b8 [%rd2+6], %r8;
-; CHECK-NEXT:    st.b8 [%rd2+7], %r7;
-; CHECK-NEXT:    st.b8 [%rd2+4], %r6;
-; CHECK-NEXT:    st.b8 [%rd2+5], %r5;
-; CHECK-NEXT:    st.b8 [%rd2+2], %r4;
-; CHECK-NEXT:    st.b8 [%rd2+3], %r3;
-; CHECK-NEXT:    st.b8 [%rd2], %r2;
-; CHECK-NEXT:    st.b8 [%rd2+1], %r1;
+; CHECK-NEXT:    st.b8 [%rd2+7], %r8;
+; CHECK-NEXT:    st.b8 [%rd2+6], %r7;
+; CHECK-NEXT:    st.b8 [%rd2+5], %r6;
+; CHECK-NEXT:    st.b8 [%rd2+4], %r5;
+; CHECK-NEXT:    st.b8 [%rd2+3], %r4;
+; CHECK-NEXT:    st.b8 [%rd2+2], %r3;
+; CHECK-NEXT:    st.b8 [%rd2+1], %r2;
+; CHECK-NEXT:    st.b8 [%rd2], %r1;
 ; CHECK-NEXT:    ret;
   %1 = load <4 x half>, ptr %from , align 1
   store <4 x half> %1, ptr %to , align 1

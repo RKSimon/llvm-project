@@ -934,9 +934,9 @@ define <6 x half> @v_repeat_divisor_v3f16_x2(<3 x half> %x, <3 x half> %y, <3 x 
 ; GFX9-NEXT:    v_pack_b32_f16 v5, v5, s4
 ; GFX9-NEXT:    v_pk_mul_f16 v0, v0, v4
 ; GFX9-NEXT:    v_pk_mul_f16 v1, v1, v5
-; GFX9-NEXT:    v_pk_mul_f16 v3, v3, v5
 ; GFX9-NEXT:    v_pk_mul_f16 v4, v2, v4
-; GFX9-NEXT:    v_alignbit_b32 v2, v3, v4, 16
+; GFX9-NEXT:    v_pk_mul_f16 v2, v3, v5
+; GFX9-NEXT:    v_alignbit_b32 v2, v2, v4, 16
 ; GFX9-NEXT:    v_pack_b32_f16 v1, v1, v4
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;

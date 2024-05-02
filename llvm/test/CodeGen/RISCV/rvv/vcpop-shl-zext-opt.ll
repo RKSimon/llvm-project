@@ -88,7 +88,7 @@ define dso_local void @test_store1(ptr nocapture noundef writeonly %dst, ptr noc
 ; RV64-NEXT:    addiw a4, a4, -8
 ; RV64-NEXT:    and a4, a3, a4
 ; RV64-NEXT:    slli a5, a4, 2
-; RV64-NEXT:    add a5, a5, a1
+; RV64-NEXT:    add a5, a1, a5
 ; RV64-NEXT:    mv a6, a1
 ; RV64-NEXT:  .LBB0_4: # %vector.body
 ; RV64-NEXT:    # =>This Inner Loop Header: Depth=1

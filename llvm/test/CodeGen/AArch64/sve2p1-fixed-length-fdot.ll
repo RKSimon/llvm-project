@@ -42,36 +42,25 @@ entry:
 }
 
 define void @fdot_wide_v8f32(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(2,0) {
-; SVE2-LABEL: fdot_wide_v8f32:
-; SVE2:       // %bb.0: // %entry
-; SVE2-NEXT:    ptrue p0.s, vl8
-; SVE2-NEXT:    mov x8, #8 // =0x8
-; SVE2-NEXT:    ld1h { z0.s }, p0/z, [x1]
-; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x2]
-; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
-; SVE2-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
-; SVE2-NEXT:    fcvt z0.s, p0/m, z0.h
-; SVE2-NEXT:    fcvt z1.s, p0/m, z1.h
-; SVE2-NEXT:    fcvt z2.s, p0/m, z2.h
-; SVE2-NEXT:    fcvt z3.s, p0/m, z3.h
-; SVE2-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    ld1w { z1.s }, p0/z, [x0]
-; SVE2-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
-; SVE2-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2-NEXT:    ret
-;
-; SVE2P1-LABEL: fdot_wide_v8f32:
-; SVE2P1:       // %bb.0: // %entry
-; SVE2P1-NEXT:    ptrue p0.s, vl8
-; SVE2P1-NEXT:    ptrue p1.h, vl16
-; SVE2P1-NEXT:    ld1w { z0.s }, p0/z, [x0]
-; SVE2P1-NEXT:    ld1h { z1.h }, p1/z, [x1]
-; SVE2P1-NEXT:    ld1h { z2.h }, p1/z, [x2]
-; SVE2P1-NEXT:    fdot z0.s, z1.h, z2.h
-; SVE2P1-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2P1-NEXT:    ret
+; CHECK-LABEL: fdot_wide_v8f32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s, vl8
+; CHECK-NEXT:    mov x8, #8 // =0x8
+; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x2]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
+; CHECK-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
+; CHECK-NEXT:    fcvt z0.s, p0/m, z0.h
+; CHECK-NEXT:    fcvt z1.s, p0/m, z1.h
+; CHECK-NEXT:    fcvt z2.s, p0/m, z2.h
+; CHECK-NEXT:    fcvt z3.s, p0/m, z3.h
+; CHECK-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x0]
+; CHECK-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
+; CHECK-NEXT:    st1w { z0.s }, p0, [x0]
+; CHECK-NEXT:    ret
 entry:
   %acc = load <8 x float>, ptr %accptr
   %a = load <16 x half>, ptr %aptr
@@ -85,36 +74,25 @@ entry:
 }
 
 define void @fdot_wide_v16f32(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(4,0) {
-; SVE2-LABEL: fdot_wide_v16f32:
-; SVE2:       // %bb.0: // %entry
-; SVE2-NEXT:    ptrue p0.s, vl16
-; SVE2-NEXT:    mov x8, #16 // =0x10
-; SVE2-NEXT:    ld1h { z0.s }, p0/z, [x1]
-; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x2]
-; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
-; SVE2-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
-; SVE2-NEXT:    fcvt z0.s, p0/m, z0.h
-; SVE2-NEXT:    fcvt z1.s, p0/m, z1.h
-; SVE2-NEXT:    fcvt z2.s, p0/m, z2.h
-; SVE2-NEXT:    fcvt z3.s, p0/m, z3.h
-; SVE2-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    ld1w { z1.s }, p0/z, [x0]
-; SVE2-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
-; SVE2-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2-NEXT:    ret
-;
-; SVE2P1-LABEL: fdot_wide_v16f32:
-; SVE2P1:       // %bb.0: // %entry
-; SVE2P1-NEXT:    ptrue p0.s, vl16
-; SVE2P1-NEXT:    ptrue p1.h, vl32
-; SVE2P1-NEXT:    ld1w { z0.s }, p0/z, [x0]
-; SVE2P1-NEXT:    ld1h { z1.h }, p1/z, [x1]
-; SVE2P1-NEXT:    ld1h { z2.h }, p1/z, [x2]
-; SVE2P1-NEXT:    fdot z0.s, z1.h, z2.h
-; SVE2P1-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2P1-NEXT:    ret
+; CHECK-LABEL: fdot_wide_v16f32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s, vl16
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x2]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
+; CHECK-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
+; CHECK-NEXT:    fcvt z0.s, p0/m, z0.h
+; CHECK-NEXT:    fcvt z1.s, p0/m, z1.h
+; CHECK-NEXT:    fcvt z2.s, p0/m, z2.h
+; CHECK-NEXT:    fcvt z3.s, p0/m, z3.h
+; CHECK-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x0]
+; CHECK-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
+; CHECK-NEXT:    st1w { z0.s }, p0, [x0]
+; CHECK-NEXT:    ret
 entry:
   %acc = load <16 x float>, ptr %accptr
   %a = load <32 x half>, ptr %aptr
@@ -128,36 +106,25 @@ entry:
 }
 
 define void @fdot_wide_v32f32(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(8,0) {
-; SVE2-LABEL: fdot_wide_v32f32:
-; SVE2:       // %bb.0: // %entry
-; SVE2-NEXT:    ptrue p0.s, vl32
-; SVE2-NEXT:    mov x8, #32 // =0x20
-; SVE2-NEXT:    ld1h { z0.s }, p0/z, [x1]
-; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x2]
-; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
-; SVE2-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
-; SVE2-NEXT:    fcvt z0.s, p0/m, z0.h
-; SVE2-NEXT:    fcvt z1.s, p0/m, z1.h
-; SVE2-NEXT:    fcvt z2.s, p0/m, z2.h
-; SVE2-NEXT:    fcvt z3.s, p0/m, z3.h
-; SVE2-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    ld1w { z1.s }, p0/z, [x0]
-; SVE2-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
-; SVE2-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2-NEXT:    ret
-;
-; SVE2P1-LABEL: fdot_wide_v32f32:
-; SVE2P1:       // %bb.0: // %entry
-; SVE2P1-NEXT:    ptrue p0.s, vl32
-; SVE2P1-NEXT:    ptrue p1.h, vl64
-; SVE2P1-NEXT:    ld1w { z0.s }, p0/z, [x0]
-; SVE2P1-NEXT:    ld1h { z1.h }, p1/z, [x1]
-; SVE2P1-NEXT:    ld1h { z2.h }, p1/z, [x2]
-; SVE2P1-NEXT:    fdot z0.s, z1.h, z2.h
-; SVE2P1-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2P1-NEXT:    ret
+; CHECK-LABEL: fdot_wide_v32f32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s, vl32
+; CHECK-NEXT:    mov x8, #32 // =0x20
+; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x2]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
+; CHECK-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
+; CHECK-NEXT:    fcvt z0.s, p0/m, z0.h
+; CHECK-NEXT:    fcvt z1.s, p0/m, z1.h
+; CHECK-NEXT:    fcvt z2.s, p0/m, z2.h
+; CHECK-NEXT:    fcvt z3.s, p0/m, z3.h
+; CHECK-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x0]
+; CHECK-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
+; CHECK-NEXT:    st1w { z0.s }, p0, [x0]
+; CHECK-NEXT:    ret
 entry:
   %acc = load <32 x float>, ptr %accptr
   %a = load <64 x half>, ptr %aptr
@@ -171,36 +138,25 @@ entry:
 }
 
 define void @fdot_wide_v64f32(ptr %accptr, ptr %aptr, ptr %bptr) vscale_range(16,0) {
-; SVE2-LABEL: fdot_wide_v64f32:
-; SVE2:       // %bb.0: // %entry
-; SVE2-NEXT:    ptrue p0.s, vl64
-; SVE2-NEXT:    mov x8, #64 // =0x40
-; SVE2-NEXT:    ld1h { z0.s }, p0/z, [x1]
-; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x2]
-; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
-; SVE2-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
-; SVE2-NEXT:    fcvt z0.s, p0/m, z0.h
-; SVE2-NEXT:    fcvt z1.s, p0/m, z1.h
-; SVE2-NEXT:    fcvt z2.s, p0/m, z2.h
-; SVE2-NEXT:    fcvt z3.s, p0/m, z3.h
-; SVE2-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    ld1w { z1.s }, p0/z, [x0]
-; SVE2-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
-; SVE2-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
-; SVE2-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2-NEXT:    ret
-;
-; SVE2P1-LABEL: fdot_wide_v64f32:
-; SVE2P1:       // %bb.0: // %entry
-; SVE2P1-NEXT:    ptrue p0.s, vl64
-; SVE2P1-NEXT:    ptrue p1.h, vl128
-; SVE2P1-NEXT:    ld1w { z0.s }, p0/z, [x0]
-; SVE2P1-NEXT:    ld1h { z1.h }, p1/z, [x1]
-; SVE2P1-NEXT:    ld1h { z2.h }, p1/z, [x2]
-; SVE2P1-NEXT:    fdot z0.s, z1.h, z2.h
-; SVE2P1-NEXT:    st1w { z0.s }, p0, [x0]
-; SVE2P1-NEXT:    ret
+; CHECK-LABEL: fdot_wide_v64f32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ptrue p0.s, vl64
+; CHECK-NEXT:    mov x8, #64 // =0x40
+; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1]
+; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x2]
+; CHECK-NEXT:    ld1h { z2.s }, p0/z, [x1, x8, lsl #1]
+; CHECK-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
+; CHECK-NEXT:    fcvt z0.s, p0/m, z0.h
+; CHECK-NEXT:    fcvt z1.s, p0/m, z1.h
+; CHECK-NEXT:    fcvt z2.s, p0/m, z2.h
+; CHECK-NEXT:    fcvt z3.s, p0/m, z3.h
+; CHECK-NEXT:    fmul z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x0]
+; CHECK-NEXT:    fmul z2.s, p0/m, z2.s, z3.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z1.s
+; CHECK-NEXT:    fadd z0.s, p0/m, z0.s, z2.s
+; CHECK-NEXT:    st1w { z0.s }, p0, [x0]
+; CHECK-NEXT:    ret
 entry:
   %acc = load <64 x float>, ptr %accptr
   %a = load <128 x half>, ptr %aptr
@@ -274,3 +230,6 @@ entry:
   %partial.reduce = call <2 x double> @llvm.vector.partial.reduce.fadd(<2 x double> %acc, <4 x double> %a)
   ret <2 x double> %partial.reduce
 }
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; SVE2: {{.*}}
+; SVE2P1: {{.*}}

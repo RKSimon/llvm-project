@@ -656,24 +656,28 @@ define i16 @scalar_i16_signed_reg_reg(i16 %a1, i16 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i16_signed_reg_reg:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebx
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    xorl %ebx, %ebx
-; X86-NEXT:    movl %eax, %ecx
-; X86-NEXT:    subw %dx, %ax
-; X86-NEXT:    setle %bl
-; X86-NEXT:    leal -1(%ebx,%ebx), %edx
-; X86-NEXT:    jg .LBB10_2
-; X86-NEXT:  # %bb.1:
-; X86-NEXT:    negl %eax
-; X86-NEXT:  .LBB10_2:
-; X86-NEXT:    movzwl %ax, %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    cmpw %ax, %cx
+; X86-NEXT:    setle %dl
+; X86-NEXT:    leal -1(%edx,%edx), %edx
+; X86-NEXT:    jg .LBB10_1
+; X86-NEXT:  # %bb.2:
+; X86-NEXT:    subl %ecx, %eax
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    jmp .LBB10_3
+; X86-NEXT:  .LBB10_1:
+; X86-NEXT:    movl %ecx, %esi
+; X86-NEXT:    subl %eax, %esi
+; X86-NEXT:  .LBB10_3:
+; X86-NEXT:    movzwl %si, %eax
 ; X86-NEXT:    shrl %eax
 ; X86-NEXT:    imull %edx, %eax
 ; X86-NEXT:    addl %ecx, %eax
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
   %t3 = icmp sgt i16 %a1, %a2 ; signed
   %t4 = select i1 %t3, i16 -1, i16 1
@@ -708,24 +712,28 @@ define i16 @scalar_i16_unsigned_reg_reg(i16 %a1, i16 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i16_unsigned_reg_reg:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebx
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    xorl %ebx, %ebx
-; X86-NEXT:    movl %eax, %ecx
-; X86-NEXT:    subw %dx, %ax
-; X86-NEXT:    setbe %bl
-; X86-NEXT:    leal -1(%ebx,%ebx), %edx
-; X86-NEXT:    ja .LBB11_2
-; X86-NEXT:  # %bb.1:
-; X86-NEXT:    negl %eax
-; X86-NEXT:  .LBB11_2:
-; X86-NEXT:    movzwl %ax, %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    cmpw %ax, %cx
+; X86-NEXT:    setbe %dl
+; X86-NEXT:    leal -1(%edx,%edx), %edx
+; X86-NEXT:    ja .LBB11_1
+; X86-NEXT:  # %bb.2:
+; X86-NEXT:    subl %ecx, %eax
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    jmp .LBB11_3
+; X86-NEXT:  .LBB11_1:
+; X86-NEXT:    movl %ecx, %esi
+; X86-NEXT:    subl %eax, %esi
+; X86-NEXT:  .LBB11_3:
+; X86-NEXT:    movzwl %si, %eax
 ; X86-NEXT:    shrl %eax
 ; X86-NEXT:    imull %edx, %eax
 ; X86-NEXT:    addl %ecx, %eax
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
   %t3 = icmp ugt i16 %a1, %a2
   %t4 = select i1 %t3, i16 -1, i16 1
@@ -762,25 +770,29 @@ define i16 @scalar_i16_signed_mem_reg(ptr %a1_addr, i16 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i16_signed_mem_reg:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebx
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movzwl (%eax), %eax
-; X86-NEXT:    xorl %ebx, %ebx
-; X86-NEXT:    movl %eax, %ecx
-; X86-NEXT:    subw %dx, %ax
-; X86-NEXT:    setle %bl
-; X86-NEXT:    leal -1(%ebx,%ebx), %edx
-; X86-NEXT:    jg .LBB12_2
-; X86-NEXT:  # %bb.1:
-; X86-NEXT:    negl %eax
-; X86-NEXT:  .LBB12_2:
-; X86-NEXT:    movzwl %ax, %eax
+; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzwl (%ecx), %ecx
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    cmpw %ax, %cx
+; X86-NEXT:    setle %dl
+; X86-NEXT:    leal -1(%edx,%edx), %edx
+; X86-NEXT:    jg .LBB12_1
+; X86-NEXT:  # %bb.2:
+; X86-NEXT:    subl %ecx, %eax
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    jmp .LBB12_3
+; X86-NEXT:  .LBB12_1:
+; X86-NEXT:    movl %ecx, %esi
+; X86-NEXT:    subl %eax, %esi
+; X86-NEXT:  .LBB12_3:
+; X86-NEXT:    movzwl %si, %eax
 ; X86-NEXT:    shrl %eax
 ; X86-NEXT:    imull %edx, %eax
 ; X86-NEXT:    addl %ecx, %eax
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
   %a1 = load i16, ptr %a1_addr
   %t3 = icmp sgt i16 %a1, %a2 ; signed
@@ -816,25 +828,29 @@ define i16 @scalar_i16_signed_reg_mem(i16 %a1, ptr %a2_addr) nounwind {
 ;
 ; X86-LABEL: scalar_i16_signed_reg_mem:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebx
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movzwl (%ecx), %edx
-; X86-NEXT:    xorl %ebx, %ebx
-; X86-NEXT:    movl %eax, %ecx
-; X86-NEXT:    subw %dx, %ax
-; X86-NEXT:    setle %bl
-; X86-NEXT:    leal -1(%ebx,%ebx), %edx
-; X86-NEXT:    jg .LBB13_2
-; X86-NEXT:  # %bb.1:
-; X86-NEXT:    negl %eax
-; X86-NEXT:  .LBB13_2:
-; X86-NEXT:    movzwl %ax, %eax
+; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl (%eax), %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    cmpw %ax, %cx
+; X86-NEXT:    setle %dl
+; X86-NEXT:    leal -1(%edx,%edx), %edx
+; X86-NEXT:    jg .LBB13_1
+; X86-NEXT:  # %bb.2:
+; X86-NEXT:    subl %ecx, %eax
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    jmp .LBB13_3
+; X86-NEXT:  .LBB13_1:
+; X86-NEXT:    movl %ecx, %esi
+; X86-NEXT:    subl %eax, %esi
+; X86-NEXT:  .LBB13_3:
+; X86-NEXT:    movzwl %si, %eax
 ; X86-NEXT:    shrl %eax
 ; X86-NEXT:    imull %edx, %eax
 ; X86-NEXT:    addl %ecx, %eax
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
   %a2 = load i16, ptr %a2_addr
   %t3 = icmp sgt i16 %a1, %a2 ; signed
@@ -870,26 +886,30 @@ define i16 @scalar_i16_signed_mem_mem(ptr %a1_addr, ptr %a2_addr) nounwind {
 ;
 ; X86-LABEL: scalar_i16_signed_mem_mem:
 ; X86:       # %bb.0:
-; X86-NEXT:    pushl %ebx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzwl (%ecx), %ecx
 ; X86-NEXT:    movzwl (%eax), %eax
-; X86-NEXT:    movzwl (%ecx), %edx
-; X86-NEXT:    xorl %ebx, %ebx
-; X86-NEXT:    movl %eax, %ecx
-; X86-NEXT:    subw %dx, %ax
-; X86-NEXT:    setle %bl
-; X86-NEXT:    leal -1(%ebx,%ebx), %edx
-; X86-NEXT:    jg .LBB14_2
-; X86-NEXT:  # %bb.1:
-; X86-NEXT:    negl %eax
-; X86-NEXT:  .LBB14_2:
-; X86-NEXT:    movzwl %ax, %eax
+; X86-NEXT:    xorl %edx, %edx
+; X86-NEXT:    cmpw %ax, %cx
+; X86-NEXT:    setle %dl
+; X86-NEXT:    leal -1(%edx,%edx), %edx
+; X86-NEXT:    jg .LBB14_1
+; X86-NEXT:  # %bb.2:
+; X86-NEXT:    subl %ecx, %eax
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    jmp .LBB14_3
+; X86-NEXT:  .LBB14_1:
+; X86-NEXT:    movl %ecx, %esi
+; X86-NEXT:    subl %eax, %esi
+; X86-NEXT:  .LBB14_3:
+; X86-NEXT:    movzwl %si, %eax
 ; X86-NEXT:    shrl %eax
 ; X86-NEXT:    imull %edx, %eax
 ; X86-NEXT:    addl %ecx, %eax
 ; X86-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
   %a1 = load i16, ptr %a1_addr
   %a2 = load i16, ptr %a2_addr

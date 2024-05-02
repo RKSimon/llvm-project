@@ -1404,7 +1404,7 @@ define amdgpu_kernel void @v_udiv_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(1)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; SI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; SI-NEXT:    v_rcp_f32_e32 v2, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; SI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -1433,7 +1433,7 @@ define amdgpu_kernel void @v_udiv_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; VI-NEXT:    v_rcp_f32_e32 v2, v0
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; VI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -1460,7 +1460,7 @@ define amdgpu_kernel void @v_udiv_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; GCN-NEXT:    v_mov_b32_e32 v1, s1
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
 ; GCN-NEXT:    v_cvt_f32_ubyte1_e32 v3, v2
-; GCN-NEXT:    v_rcp_iflag_f32_e32 v4, v3
+; GCN-NEXT:    v_rcp_f32_e32 v4, v3
 ; GCN-NEXT:    v_cvt_f32_ubyte0_e32 v2, v2
 ; GCN-NEXT:    v_mul_f32_e32 v4, v2, v4
 ; GCN-NEXT:    v_trunc_f32_e32 v4, v4
@@ -1481,7 +1481,7 @@ define amdgpu_kernel void @v_udiv_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; GFX1030-NEXT:    s_waitcnt vmcnt(0)
 ; GFX1030-NEXT:    v_cvt_f32_ubyte1_e32 v2, v1
 ; GFX1030-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
-; GFX1030-NEXT:    v_rcp_iflag_f32_e32 v3, v2
+; GFX1030-NEXT:    v_rcp_f32_e32 v3, v2
 ; GFX1030-NEXT:    v_mul_f32_e32 v3, v1, v3
 ; GFX1030-NEXT:    v_trunc_f32_e32 v3, v3
 ; GFX1030-NEXT:    v_fma_f32 v1, -v3, v2, v1

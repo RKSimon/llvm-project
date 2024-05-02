@@ -16,9 +16,9 @@ define signext i32 @sdiv2_32(i32 signext %0) {
 ; SFB:       # %bb.0:
 ; SFB-NEXT:    bgez a0, .LBB0_2
 ; SFB-NEXT:  # %bb.1:
-; SFB-NEXT:    addi a0, a0, 1
+; SFB-NEXT:    addiw a0, a0, 1
 ; SFB-NEXT:  .LBB0_2:
-; SFB-NEXT:    sraiw a0, a0, 1
+; SFB-NEXT:    srai a0, a0, 1
 ; SFB-NEXT:    ret
   %res = sdiv i32 %0, 2
   ret i32 %res
@@ -37,9 +37,9 @@ define signext i32 @sdivneg2_32(i32 signext %0) {
 ; SFB:       # %bb.0:
 ; SFB-NEXT:    bgez a0, .LBB1_2
 ; SFB-NEXT:  # %bb.1:
-; SFB-NEXT:    addi a0, a0, 1
+; SFB-NEXT:    addiw a0, a0, 1
 ; SFB-NEXT:  .LBB1_2:
-; SFB-NEXT:    sraiw a0, a0, 1
+; SFB-NEXT:    srai a0, a0, 1
 ; SFB-NEXT:    neg a0, a0
 ; SFB-NEXT:    ret
   %res = sdiv i32 %0, -2
@@ -193,9 +193,9 @@ define signext i32 @sdiv8_32(i32 signext %0) {
 ; SFB:       # %bb.0:
 ; SFB-NEXT:    bgez a0, .LBB8_2
 ; SFB-NEXT:  # %bb.1:
-; SFB-NEXT:    addi a0, a0, 7
+; SFB-NEXT:    addiw a0, a0, 7
 ; SFB-NEXT:  .LBB8_2:
-; SFB-NEXT:    sraiw a0, a0, 3
+; SFB-NEXT:    srai a0, a0, 3
 ; SFB-NEXT:    ret
   %res = sdiv i32 %0, 8
   ret i32 %res
@@ -215,9 +215,9 @@ define signext i32 @sdivneg8_32(i32 signext %0) {
 ; SFB:       # %bb.0:
 ; SFB-NEXT:    bgez a0, .LBB9_2
 ; SFB-NEXT:  # %bb.1:
-; SFB-NEXT:    addi a0, a0, 7
+; SFB-NEXT:    addiw a0, a0, 7
 ; SFB-NEXT:  .LBB9_2:
-; SFB-NEXT:    sraiw a0, a0, 3
+; SFB-NEXT:    srai a0, a0, 3
 ; SFB-NEXT:    neg a0, a0
 ; SFB-NEXT:    ret
   %res = sdiv i32 %0, -8

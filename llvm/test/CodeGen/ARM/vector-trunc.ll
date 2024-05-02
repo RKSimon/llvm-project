@@ -5,43 +5,13 @@
 define i32 @test(i64 %arg1) {
 ; LE-LABEL: test:
 ; LE:       @ %bb.0: @ %entry
-; LE-NEXT:    subs r0, r0, #1
-; LE-NEXT:    mov r2, #0
-; LE-NEXT:    sbcs r0, r1, #0
-; LE-NEXT:    vldr s0, .LCPI0_0
-; LE-NEXT:    movwhs r2, #1
-; LE-NEXT:    cmp r2, #0
-; LE-NEXT:    mvnne r2, #0
-; LE-NEXT:    vmov s1, r2
-; LE-NEXT:    vmovn.i32 d16, q0
-; LE-NEXT:    vmovn.i16 d16, q8
-; LE-NEXT:    vmov.u8 r0, d16[0]
-; LE-NEXT:    and r0, r0, #1
+; LE-NEXT:    mov r0, #1
 ; LE-NEXT:    bx lr
-; LE-NEXT:    .p2align 2
-; LE-NEXT:  @ %bb.1:
-; LE-NEXT:  .LCPI0_0:
-; LE-NEXT:    .long 0xffffffff @ float NaN
 ;
 ; BE-LABEL: test:
 ; BE:       @ %bb.0: @ %entry
-; BE-NEXT:    subs r1, r1, #1
-; BE-NEXT:    mov r2, #0
-; BE-NEXT:    sbcs r0, r0, #0
-; BE-NEXT:    vldr s0, .LCPI0_0
-; BE-NEXT:    movwhs r2, #1
-; BE-NEXT:    cmp r2, #0
-; BE-NEXT:    mvnne r2, #0
-; BE-NEXT:    vmov s1, r2
-; BE-NEXT:    vmovn.i32 d16, q0
-; BE-NEXT:    vmovn.i16 d16, q8
-; BE-NEXT:    vmov.u8 r0, d16[0]
-; BE-NEXT:    and r0, r0, #1
+; BE-NEXT:    mov r0, #1
 ; BE-NEXT:    bx lr
-; BE-NEXT:    .p2align 2
-; BE-NEXT:  @ %bb.1:
-; BE-NEXT:  .LCPI0_0:
-; BE-NEXT:    .long 0xffffffff @ float NaN
 entry:
   %insert_zero = insertelement <8 x i64> poison, i64 %arg1, i64 0
   %splat_zero = shufflevector <8 x i64> %insert_zero, <8 x i64> poison, <8 x i32> zeroinitializer

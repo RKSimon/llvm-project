@@ -732,7 +732,7 @@ define arm_aapcs_vfpcc void @gather_inc_v8i16_complex(ptr noalias nocapture read
 ; CHECK-NEXT:    vldrw.u32 q0, [r1]
 ; CHECK-NEXT:    vstrw.32 q0, [sp, #24] @ 16-byte Spill
 ; CHECK-NEXT:    vldrw.u32 q0, [r2]
-; CHECK-NEXT:    add r2, sp, #104
+; CHECK-NEXT:    add r2, sp, #72
 ; CHECK-NEXT:    vstrw.32 q0, [sp, #8] @ 16-byte Spill
 ; CHECK-NEXT:  .LBB14_2: @ %vector.ph
 ; CHECK-NEXT:    @ =>This Loop Header: Depth=1
@@ -760,7 +760,7 @@ define arm_aapcs_vfpcc void @gather_inc_v8i16_complex(ptr noalias nocapture read
 ; CHECK-NEXT:    vmov r6, r2, d4
 ; CHECK-NEXT:    ldrh r1, [r1]
 ; CHECK-NEXT:    ldrh.w r12, [r4]
-; CHECK-NEXT:    add r4, sp, #72
+; CHECK-NEXT:    add r4, sp, #104
 ; CHECK-NEXT:    ldrh.w r11, [r5]
 ; CHECK-NEXT:    ldrh r3, [r3]
 ; CHECK-NEXT:    ldrh r5, [r6]

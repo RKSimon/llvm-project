@@ -82,9 +82,7 @@ define <2 x i8> @i8_2(<2 x i8> %a, <2 x i8> %b) {
 ; MIPS64R5EB-NEXT:    ld.b $w1, 0($sp)
 ; MIPS64R5EB-NEXT:    addv.b $w0, $w1, $w0
 ; MIPS64R5EB-NEXT:    shf.b $w0, $w0, 177
-; MIPS64R5EB-NEXT:    copy_s.h $1, $w0[0]
-; MIPS64R5EB-NEXT:    sh $1, 44($sp)
-; MIPS64R5EB-NEXT:    lh $2, 44($sp)
+; MIPS64R5EB-NEXT:    copy_u.h $2, $w0[0]
 ; MIPS64R5EB-NEXT:    daddiu $sp, $sp, 48
 ; MIPS64R5EB-NEXT:    jr $ra
 ; MIPS64R5EB-NEXT:    nop
@@ -123,9 +121,7 @@ define <2 x i8> @i8_2(<2 x i8> %a, <2 x i8> %b) {
 ; MIPS64R5EL-NEXT:    ld.b $w0, 16($sp)
 ; MIPS64R5EL-NEXT:    ld.b $w1, 0($sp)
 ; MIPS64R5EL-NEXT:    addv.b $w0, $w1, $w0
-; MIPS64R5EL-NEXT:    copy_s.h $1, $w0[0]
-; MIPS64R5EL-NEXT:    sh $1, 44($sp)
-; MIPS64R5EL-NEXT:    lh $2, 44($sp)
+; MIPS64R5EL-NEXT:    copy_u.h $2, $w0[0]
 ; MIPS64R5EL-NEXT:    daddiu $sp, $sp, 48
 ; MIPS64R5EL-NEXT:    jr $ra
 ; MIPS64R5EL-NEXT:    nop
@@ -236,16 +232,16 @@ define <2 x i8> @i8x2_7(<2 x i8> %a, <2 x i8> %b, <2 x i8> %c, <2 x i8> %d, <2 x
 ; MIPS32R5EB-NEXT:    ld.b $w1, 48($sp)
 ; MIPS32R5EB-NEXT:    addv.b $w0, $w0, $w1
 ; MIPS32R5EB-NEXT:    lhu $1, 146($fp)
-; MIPS32R5EB-NEXT:    sh $1, 64($sp)
-; MIPS32R5EB-NEXT:    ld.b $w1, 64($sp)
+; MIPS32R5EB-NEXT:    sh $1, 96($sp)
+; MIPS32R5EB-NEXT:    ld.b $w1, 96($sp)
 ; MIPS32R5EB-NEXT:    addv.b $w0, $w0, $w1
 ; MIPS32R5EB-NEXT:    lhu $1, 150($fp)
 ; MIPS32R5EB-NEXT:    sh $1, 80($sp)
 ; MIPS32R5EB-NEXT:    ld.b $w1, 80($sp)
 ; MIPS32R5EB-NEXT:    addv.b $w0, $w0, $w1
 ; MIPS32R5EB-NEXT:    lhu $1, 154($fp)
-; MIPS32R5EB-NEXT:    sh $1, 96($sp)
-; MIPS32R5EB-NEXT:    ld.b $w1, 96($sp)
+; MIPS32R5EB-NEXT:    sh $1, 64($sp)
+; MIPS32R5EB-NEXT:    ld.b $w1, 64($sp)
 ; MIPS32R5EB-NEXT:    addv.b $w0, $w0, $w1
 ; MIPS32R5EB-NEXT:    shf.b $w0, $w0, 177
 ; MIPS32R5EB-NEXT:    copy_u.h $2, $w0[0]
@@ -281,9 +277,7 @@ define <2 x i8> @i8x2_7(<2 x i8> %a, <2 x i8> %b, <2 x i8> %c, <2 x i8> %d, <2 x
 ; MIPS64R5EB-NEXT:    ld.b $w1, 96($sp)
 ; MIPS64R5EB-NEXT:    addv.b $w0, $w0, $w1
 ; MIPS64R5EB-NEXT:    shf.b $w0, $w0, 177
-; MIPS64R5EB-NEXT:    copy_s.h $1, $w0[0]
-; MIPS64R5EB-NEXT:    sh $1, 124($sp)
-; MIPS64R5EB-NEXT:    lh $2, 124($sp)
+; MIPS64R5EB-NEXT:    copy_u.h $2, $w0[0]
 ; MIPS64R5EB-NEXT:    daddiu $sp, $sp, 128
 ; MIPS64R5EB-NEXT:    jr $ra
 ; MIPS64R5EB-NEXT:    nop
@@ -389,9 +383,7 @@ define <2 x i8> @i8x2_7(<2 x i8> %a, <2 x i8> %b, <2 x i8> %c, <2 x i8> %d, <2 x
 ; MIPS64R5EL-NEXT:    sh $10, 96($sp)
 ; MIPS64R5EL-NEXT:    ld.b $w1, 96($sp)
 ; MIPS64R5EL-NEXT:    addv.b $w0, $w0, $w1
-; MIPS64R5EL-NEXT:    copy_s.h $1, $w0[0]
-; MIPS64R5EL-NEXT:    sh $1, 124($sp)
-; MIPS64R5EL-NEXT:    lh $2, 124($sp)
+; MIPS64R5EL-NEXT:    copy_u.h $2, $w0[0]
 ; MIPS64R5EL-NEXT:    daddiu $sp, $sp, 128
 ; MIPS64R5EL-NEXT:    jr $ra
 ; MIPS64R5EL-NEXT:    nop
@@ -591,18 +583,16 @@ define <8 x i8> @i8_8(<8 x i8> %a, <8 x i8> %b) {
 ; MIPS64:       # %bb.0:
 ; MIPS64-NEXT:    dsrl $1, $5, 48
 ; MIPS64-NEXT:    sll $1, $1, 0
-; MIPS64-NEXT:    dsrl $2, $4, 48
-; MIPS64-NEXT:    sll $2, $2, 0
-; MIPS64-NEXT:    addu $1, $2, $1
-; MIPS64-NEXT:    dsrl $2, $5, 56
-; MIPS64-NEXT:    andi $1, $1, 255
-; MIPS64-NEXT:    sll $2, $2, 0
-; MIPS64-NEXT:    dsrl $3, $4, 56
+; MIPS64-NEXT:    srl $2, $1, 8
+; MIPS64-NEXT:    dsrl $3, $4, 48
 ; MIPS64-NEXT:    sll $3, $3, 0
-; MIPS64-NEXT:    addu $2, $3, $2
+; MIPS64-NEXT:    srl $6, $3, 8
+; MIPS64-NEXT:    addu $2, $6, $2
+; MIPS64-NEXT:    addu $1, $3, $1
+; MIPS64-NEXT:    andi $1, $1, 255
 ; MIPS64-NEXT:    dsrl $3, $5, 40
-; MIPS64-NEXT:    sll $2, $2, 24
 ; MIPS64-NEXT:    sll $1, $1, 16
+; MIPS64-NEXT:    sll $2, $2, 24
 ; MIPS64-NEXT:    sll $3, $3, 0
 ; MIPS64-NEXT:    dsrl $6, $4, 40
 ; MIPS64-NEXT:    sll $6, $6, 0
@@ -824,93 +814,89 @@ define <16 x i8> @i8_16(<16 x i8> %a, <16 x i8> %b) {
 ;
 ; MIPS64-LABEL: i8_16:
 ; MIPS64:       # %bb.0:
-; MIPS64-NEXT:    sll $1, $6, 0
-; MIPS64-NEXT:    dsrl $2, $6, 56
-; MIPS64-NEXT:    dsrl $3, $6, 48
-; MIPS64-NEXT:    dsrl $8, $4, 48
-; MIPS64-NEXT:    srl $9, $1, 16
-; MIPS64-NEXT:    sll $10, $4, 0
-; MIPS64-NEXT:    srl $11, $10, 16
-; MIPS64-NEXT:    dsrl $12, $7, 56
-; MIPS64-NEXT:    addu $13, $10, $1
-; MIPS64-NEXT:    addu $9, $11, $9
-; MIPS64-NEXT:    sll $2, $2, 0
-; MIPS64-NEXT:    dsrl $11, $7, 48
-; MIPS64-NEXT:    srl $14, $1, 8
-; MIPS64-NEXT:    srl $15, $10, 8
-; MIPS64-NEXT:    addu $14, $15, $14
-; MIPS64-NEXT:    dsrl $15, $4, 56
-; MIPS64-NEXT:    dsrl $24, $7, 40
+; MIPS64-NEXT:    dsrl $1, $6, 48
+; MIPS64-NEXT:    sll $2, $6, 0
+; MIPS64-NEXT:    dsrl $3, $4, 48
 ; MIPS64-NEXT:    sll $3, $3, 0
-; MIPS64-NEXT:    sll $8, $8, 0
-; MIPS64-NEXT:    sll $15, $15, 0
-; MIPS64-NEXT:    andi $9, $9, 255
-; MIPS64-NEXT:    addu $2, $15, $2
-; MIPS64-NEXT:    andi $13, $13, 255
-; MIPS64-NEXT:    sll $14, $14, 8
-; MIPS64-NEXT:    addu $3, $8, $3
-; MIPS64-NEXT:    sll $8, $11, 0
-; MIPS64-NEXT:    srl $1, $1, 24
-; MIPS64-NEXT:    sll $11, $12, 0
-; MIPS64-NEXT:    dsrl $12, $5, 56
-; MIPS64-NEXT:    dsrl $15, $5, 48
-; MIPS64-NEXT:    andi $3, $3, 255
-; MIPS64-NEXT:    dsrl $25, $6, 40
-; MIPS64-NEXT:    sll $15, $15, 0
-; MIPS64-NEXT:    srl $10, $10, 24
-; MIPS64-NEXT:    sll $12, $12, 0
-; MIPS64-NEXT:    or $13, $13, $14
-; MIPS64-NEXT:    sll $14, $24, 0
-; MIPS64-NEXT:    sll $2, $2, 24
-; MIPS64-NEXT:    addu $11, $12, $11
-; MIPS64-NEXT:    sll $9, $9, 16
-; MIPS64-NEXT:    addu $1, $10, $1
-; MIPS64-NEXT:    addu $8, $15, $8
-; MIPS64-NEXT:    sll $10, $25, 0
-; MIPS64-NEXT:    dsrl $12, $4, 40
-; MIPS64-NEXT:    sll $12, $12, 0
+; MIPS64-NEXT:    sll $1, $1, 0
+; MIPS64-NEXT:    srl $8, $2, 8
+; MIPS64-NEXT:    dsrl $9, $7, 48
+; MIPS64-NEXT:    srl $10, $2, 16
+; MIPS64-NEXT:    sll $11, $4, 0
+; MIPS64-NEXT:    srl $12, $11, 16
+; MIPS64-NEXT:    addu $13, $11, $2
 ; MIPS64-NEXT:    addu $10, $12, $10
-; MIPS64-NEXT:    sll $3, $3, 16
-; MIPS64-NEXT:    andi $8, $8, 255
-; MIPS64-NEXT:    sll $1, $1, 24
-; MIPS64-NEXT:    dsrl $12, $5, 40
-; MIPS64-NEXT:    sll $12, $12, 0
+; MIPS64-NEXT:    srl $12, $11, 8
+; MIPS64-NEXT:    addu $8, $12, $8
+; MIPS64-NEXT:    srl $12, $1, 8
+; MIPS64-NEXT:    srl $14, $3, 8
+; MIPS64-NEXT:    sll $9, $9, 0
+; MIPS64-NEXT:    dsrl $15, $5, 48
+; MIPS64-NEXT:    sll $15, $15, 0
+; MIPS64-NEXT:    srl $2, $2, 24
+; MIPS64-NEXT:    srl $11, $11, 24
+; MIPS64-NEXT:    andi $10, $10, 255
+; MIPS64-NEXT:    addu $2, $11, $2
+; MIPS64-NEXT:    addu $11, $15, $9
+; MIPS64-NEXT:    addu $12, $14, $12
+; MIPS64-NEXT:    andi $13, $13, 255
+; MIPS64-NEXT:    sll $8, $8, 8
+; MIPS64-NEXT:    addu $1, $3, $1
+; MIPS64-NEXT:    srl $3, $9, 8
+; MIPS64-NEXT:    dsrl $9, $7, 40
+; MIPS64-NEXT:    dsrl $14, $6, 40
+; MIPS64-NEXT:    srl $15, $15, 8
+; MIPS64-NEXT:    or $8, $13, $8
+; MIPS64-NEXT:    sll $9, $9, 0
+; MIPS64-NEXT:    sll $12, $12, 24
+; MIPS64-NEXT:    addu $3, $15, $3
+; MIPS64-NEXT:    andi $11, $11, 255
+; MIPS64-NEXT:    sll $2, $2, 24
+; MIPS64-NEXT:    sll $10, $10, 16
+; MIPS64-NEXT:    andi $1, $1, 255
+; MIPS64-NEXT:    dsrl $13, $5, 40
+; MIPS64-NEXT:    sll $13, $13, 0
+; MIPS64-NEXT:    sll $14, $14, 0
+; MIPS64-NEXT:    dsrl $15, $4, 40
+; MIPS64-NEXT:    sll $15, $15, 0
+; MIPS64-NEXT:    addu $14, $15, $14
+; MIPS64-NEXT:    sll $1, $1, 16
 ; MIPS64-NEXT:    dsrl $6, $6, 32
-; MIPS64-NEXT:    or $1, $1, $9
-; MIPS64-NEXT:    addu $9, $12, $14
-; MIPS64-NEXT:    sll $11, $11, 24
-; MIPS64-NEXT:    sll $8, $8, 16
-; MIPS64-NEXT:    dsrl $12, $7, 32
-; MIPS64-NEXT:    andi $13, $13, 65535
-; MIPS64-NEXT:    or $2, $2, $3
-; MIPS64-NEXT:    sll $3, $10, 8
+; MIPS64-NEXT:    or $2, $2, $10
+; MIPS64-NEXT:    addu $9, $13, $9
+; MIPS64-NEXT:    sll $10, $11, 16
+; MIPS64-NEXT:    sll $3, $3, 24
+; MIPS64-NEXT:    dsrl $11, $7, 32
+; MIPS64-NEXT:    andi $8, $8, 65535
+; MIPS64-NEXT:    or $1, $12, $1
+; MIPS64-NEXT:    sll $12, $14, 8
 ; MIPS64-NEXT:    sll $6, $6, 0
 ; MIPS64-NEXT:    dsrl $4, $4, 32
 ; MIPS64-NEXT:    sll $4, $4, 0
 ; MIPS64-NEXT:    addu $4, $4, $6
 ; MIPS64-NEXT:    andi $4, $4, 255
-; MIPS64-NEXT:    or $3, $4, $3
-; MIPS64-NEXT:    andi $3, $3, 65535
-; MIPS64-NEXT:    or $2, $3, $2
-; MIPS64-NEXT:    or $1, $13, $1
-; MIPS64-NEXT:    or $3, $11, $8
+; MIPS64-NEXT:    or $4, $4, $12
+; MIPS64-NEXT:    andi $4, $4, 65535
+; MIPS64-NEXT:    or $1, $4, $1
+; MIPS64-NEXT:    or $2, $8, $2
+; MIPS64-NEXT:    or $3, $3, $10
 ; MIPS64-NEXT:    sll $4, $9, 8
-; MIPS64-NEXT:    sll $6, $12, 0
+; MIPS64-NEXT:    sll $6, $11, 0
 ; MIPS64-NEXT:    dsrl $8, $5, 32
 ; MIPS64-NEXT:    sll $8, $8, 0
 ; MIPS64-NEXT:    addu $6, $8, $6
 ; MIPS64-NEXT:    andi $6, $6, 255
 ; MIPS64-NEXT:    or $4, $6, $4
 ; MIPS64-NEXT:    andi $4, $4, 65535
-; MIPS64-NEXT:    dsll $1, $1, 32
+; MIPS64-NEXT:    dsll $2, $2, 32
 ; MIPS64-NEXT:    or $3, $4, $3
 ; MIPS64-NEXT:    sll $4, $7, 0
 ; MIPS64-NEXT:    srl $6, $4, 24
 ; MIPS64-NEXT:    sll $5, $5, 0
 ; MIPS64-NEXT:    srl $7, $5, 24
 ; MIPS64-NEXT:    addu $8, $5, $4
-; MIPS64-NEXT:    dsll $2, $2, 32
-; MIPS64-NEXT:    dsrl $1, $1, 32
+; MIPS64-NEXT:    dsll $1, $1, 32
+; MIPS64-NEXT:    dsrl $2, $2, 32
 ; MIPS64-NEXT:    addu $6, $7, $6
 ; MIPS64-NEXT:    sll $6, $6, 24
 ; MIPS64-NEXT:    srl $7, $4, 16
@@ -918,7 +904,7 @@ define <16 x i8> @i8_16(<16 x i8> %a, <16 x i8> %b) {
 ; MIPS64-NEXT:    addu $7, $9, $7
 ; MIPS64-NEXT:    andi $7, $7, 255
 ; MIPS64-NEXT:    sll $7, $7, 16
-; MIPS64-NEXT:    or $2, $1, $2
+; MIPS64-NEXT:    or $2, $2, $1
 ; MIPS64-NEXT:    dsll $1, $3, 32
 ; MIPS64-NEXT:    or $3, $6, $7
 ; MIPS64-NEXT:    andi $6, $8, 255
@@ -2833,13 +2819,9 @@ define void @call_i8_2() {
 ; MIPS64R5EB-NEXT:    lui $1, %hi(%neg(%gp_rel(call_i8_2)))
 ; MIPS64R5EB-NEXT:    daddu $1, $1, $25
 ; MIPS64R5EB-NEXT:    daddiu $gp, $1, %lo(%neg(%gp_rel(call_i8_2)))
-; MIPS64R5EB-NEXT:    addiu $1, $zero, 1543
-; MIPS64R5EB-NEXT:    sh $1, 8($sp)
-; MIPS64R5EB-NEXT:    addiu $1, $zero, 3080
-; MIPS64R5EB-NEXT:    sh $1, 12($sp)
 ; MIPS64R5EB-NEXT:    ld $25, %call16(i8_2)($gp)
-; MIPS64R5EB-NEXT:    lh $4, 8($sp)
-; MIPS64R5EB-NEXT:    lh $5, 12($sp)
+; MIPS64R5EB-NEXT:    daddiu $4, $zero, 1543
+; MIPS64R5EB-NEXT:    daddiu $5, $zero, 3080
 ; MIPS64R5EB-NEXT:    jalr $25
 ; MIPS64R5EB-NEXT:    nop
 ; MIPS64R5EB-NEXT:    ld $1, %got_disp(gv2i8)($gp)
@@ -2919,13 +2901,9 @@ define void @call_i8_2() {
 ; MIPS64R5EL-NEXT:    lui $1, %hi(%neg(%gp_rel(call_i8_2)))
 ; MIPS64R5EL-NEXT:    daddu $1, $1, $25
 ; MIPS64R5EL-NEXT:    daddiu $gp, $1, %lo(%neg(%gp_rel(call_i8_2)))
-; MIPS64R5EL-NEXT:    addiu $1, $zero, 1798
-; MIPS64R5EL-NEXT:    sh $1, 8($sp)
-; MIPS64R5EL-NEXT:    addiu $1, $zero, 2060
-; MIPS64R5EL-NEXT:    sh $1, 12($sp)
 ; MIPS64R5EL-NEXT:    ld $25, %call16(i8_2)($gp)
-; MIPS64R5EL-NEXT:    lh $4, 8($sp)
-; MIPS64R5EL-NEXT:    lh $5, 12($sp)
+; MIPS64R5EL-NEXT:    daddiu $4, $zero, 1798
+; MIPS64R5EL-NEXT:    daddiu $5, $zero, 2060
 ; MIPS64R5EL-NEXT:    jalr $25
 ; MIPS64R5EL-NEXT:    nop
 ; MIPS64R5EL-NEXT:    ld $1, %got_disp(gv2i8)($gp)

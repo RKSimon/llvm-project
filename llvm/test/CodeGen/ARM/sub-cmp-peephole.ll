@@ -294,12 +294,9 @@ define i32 @cmp_ult0(i32 %a, i32 %b, i32 %x, i32 %y) {
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .save {r11, lr}
 ; CHECK-NEXT:    push {r11, lr}
-; CHECK-NEXT:    movw r0, :lower16:t
-; CHECK-NEXT:    movt r0, :upper16:t
-; CHECK-NEXT:    ldr r0, [r0]
-; CHECK-NEXT:    sub r0, r0, #17
+; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    bhs .LBB12_2
+; CHECK-NEXT:    bne .LBB12_2
 ; CHECK-NEXT:  @ %bb.1: @ %if.then
 ; CHECK-NEXT:    bl abort
 ; CHECK-NEXT:  .LBB12_2: @ %if.else

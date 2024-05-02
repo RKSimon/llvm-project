@@ -1483,13 +1483,15 @@ define i16 @test_ctlz_select_i16(i16 %0) {
 ; RV32I-NEXT:    and a2, a0, a3
 ; RV32I-NEXT:    srli a0, a0, 2
 ; RV32I-NEXT:    and a0, a0, a3
+; RV32I-NEXT:    lui a3, 1
 ; RV32I-NEXT:    add a0, a2, a0
 ; RV32I-NEXT:    srli a2, a0, 4
 ; RV32I-NEXT:    add a0, a0, a2
-; RV32I-NEXT:    andi a2, a0, 15
-; RV32I-NEXT:    slli a0, a0, 20
-; RV32I-NEXT:    srli a0, a0, 28
-; RV32I-NEXT:    add a0, a2, a0
+; RV32I-NEXT:    addi a2, a3, -241
+; RV32I-NEXT:    and a0, a0, a2
+; RV32I-NEXT:    srli a2, a0, 8
+; RV32I-NEXT:    add a0, a0, a2
+; RV32I-NEXT:    andi a0, a0, 31
 ; RV32I-NEXT:    j .LBB13_3
 ; RV32I-NEXT:  .LBB13_2:
 ; RV32I-NEXT:    li a0, 16
@@ -1517,13 +1519,15 @@ define i16 @test_ctlz_select_i16(i16 %0) {
 ; RV64I-NEXT:    and a2, a0, a3
 ; RV64I-NEXT:    srli a0, a0, 2
 ; RV64I-NEXT:    and a0, a0, a3
+; RV64I-NEXT:    lui a3, 1
 ; RV64I-NEXT:    add a0, a2, a0
 ; RV64I-NEXT:    srli a2, a0, 4
 ; RV64I-NEXT:    add a0, a0, a2
-; RV64I-NEXT:    andi a2, a0, 15
-; RV64I-NEXT:    slli a0, a0, 52
-; RV64I-NEXT:    srli a0, a0, 60
-; RV64I-NEXT:    add a0, a2, a0
+; RV64I-NEXT:    addi a2, a3, -241
+; RV64I-NEXT:    and a0, a0, a2
+; RV64I-NEXT:    srli a2, a0, 8
+; RV64I-NEXT:    add a0, a0, a2
+; RV64I-NEXT:    andi a0, a0, 31
 ; RV64I-NEXT:    j .LBB13_3
 ; RV64I-NEXT:  .LBB13_2:
 ; RV64I-NEXT:    li a0, 16
@@ -1705,12 +1709,15 @@ define i32 @test_ctlz_select_i32(i32 %0) {
 ; RV64I-NEXT:    srli a2, a0, 4
 ; RV64I-NEXT:    add a0, a0, a2
 ; RV64I-NEXT:    addi a2, a3, -241
-; RV64I-NEXT:    and a0, a0, a2
-; RV64I-NEXT:    slli a2, a0, 8
+; RV64I-NEXT:    and a2, a0, a2
+; RV64I-NEXT:    slli a0, a0, 8
+; RV64I-NEXT:    addi a3, a3, -256
+; RV64I-NEXT:    and a0, a0, a3
+; RV64I-NEXT:    add a0, a2, a0
+; RV64I-NEXT:    slli a2, a0, 48
+; RV64I-NEXT:    srli a2, a2, 32
 ; RV64I-NEXT:    add a0, a0, a2
-; RV64I-NEXT:    slli a2, a0, 16
-; RV64I-NEXT:    add a0, a0, a2
-; RV64I-NEXT:    srliw a0, a0, 24
+; RV64I-NEXT:    srli a0, a0, 24
 ; RV64I-NEXT:    j .LBB14_3
 ; RV64I-NEXT:  .LBB14_2:
 ; RV64I-NEXT:    li a0, 32

@@ -169,8 +169,9 @@ entry:
 define i128 @rotl_i128(i128 %a, i128 %c) {
 ; CHECK-SD-LABEL: rotl_i128:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    tst x2, #0x40
+; CHECK-SD-NEXT:    ubfx x8, x2, #6, #1
 ; CHECK-SD-NEXT:    mvn w12, w2
+; CHECK-SD-NEXT:    cmp w8, #0
 ; CHECK-SD-NEXT:    csel x8, x1, x0, ne
 ; CHECK-SD-NEXT:    csel x9, x0, x1, ne
 ; CHECK-SD-NEXT:    lsr x10, x9, #1
@@ -307,14 +308,13 @@ entry:
 define i8 @fshr_i8(i8 %a, i8 %b, i8 %c) {
 ; CHECK-SD-LABEL: fshr_i8:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    mov w8, #24 // =0x18
-; CHECK-SD-NEXT:    lsl w9, w1, #24
-; CHECK-SD-NEXT:    mvn w10, w2
-; CHECK-SD-NEXT:    bfxil w8, w2, #0, #3
-; CHECK-SD-NEXT:    lsl w11, w0, #1
-; CHECK-SD-NEXT:    and x10, x10, #0x7
-; CHECK-SD-NEXT:    lsr w8, w9, w8
-; CHECK-SD-NEXT:    lsl w9, w11, w10
+; CHECK-SD-NEXT:    lsl w8, w1, #24
+; CHECK-SD-NEXT:    mvn w9, w2
+; CHECK-SD-NEXT:    lsl w10, w0, #1
+; CHECK-SD-NEXT:    orr w11, w2, #0x18
+; CHECK-SD-NEXT:    and x9, x9, #0x7
+; CHECK-SD-NEXT:    lsr w8, w8, w11
+; CHECK-SD-NEXT:    lsl w9, w10, w9
 ; CHECK-SD-NEXT:    orr w0, w9, w8
 ; CHECK-SD-NEXT:    ret
 ;
@@ -363,14 +363,13 @@ entry:
 define i16 @fshr_i16(i16 %a, i16 %b, i16 %c) {
 ; CHECK-SD-LABEL: fshr_i16:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    mov w8, #16 // =0x10
-; CHECK-SD-NEXT:    lsl w9, w1, #16
-; CHECK-SD-NEXT:    mvn w10, w2
-; CHECK-SD-NEXT:    bfxil w8, w2, #0, #4
-; CHECK-SD-NEXT:    lsl w11, w0, #1
-; CHECK-SD-NEXT:    and x10, x10, #0xf
-; CHECK-SD-NEXT:    lsr w8, w9, w8
-; CHECK-SD-NEXT:    lsl w9, w11, w10
+; CHECK-SD-NEXT:    lsl w8, w1, #16
+; CHECK-SD-NEXT:    mvn w9, w2
+; CHECK-SD-NEXT:    lsl w10, w0, #1
+; CHECK-SD-NEXT:    orr w11, w2, #0x10
+; CHECK-SD-NEXT:    and x9, x9, #0xf
+; CHECK-SD-NEXT:    lsr w8, w8, w11
+; CHECK-SD-NEXT:    lsl w9, w10, w9
 ; CHECK-SD-NEXT:    orr w0, w9, w8
 ; CHECK-SD-NEXT:    ret
 ;
@@ -394,10 +393,11 @@ define i32 @fshl_i32(i32 %a, i32 %b, i32 %c) {
 ; CHECK-SD-LABEL: fshl_i32:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    lsr w8, w1, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsl w10, w0, w2
-; CHECK-SD-NEXT:    lsr w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w10, w8
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsl w9, w0, w9
+; CHECK-SD-NEXT:    lsr w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w9, w8
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: fshl_i32:
@@ -419,10 +419,11 @@ define i32 @fshr_i32(i32 %a, i32 %b, i32 %c) {
 ; CHECK-SD-LABEL: fshr_i32:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    lsl w8, w0, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsr w10, w1, w2
-; CHECK-SD-NEXT:    lsl w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w8, w10
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsr w9, w1, w9
+; CHECK-SD-NEXT:    lsl w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w8, w9
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: fshr_i32:
@@ -493,8 +494,9 @@ entry:
 define i128 @fshl_i128(i128 %a, i128 %b, i128 %c) {
 ; CHECK-SD-LABEL: fshl_i128:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    tst x4, #0x40
+; CHECK-SD-NEXT:    ubfx x8, x4, #6, #1
 ; CHECK-SD-NEXT:    mvn w11, w4
+; CHECK-SD-NEXT:    cmp w8, #0
 ; CHECK-SD-NEXT:    csel x8, x3, x0, ne
 ; CHECK-SD-NEXT:    csel x9, x2, x3, ne
 ; CHECK-SD-NEXT:    csel x12, x0, x1, ne
@@ -1784,29 +1786,31 @@ entry:
 define <2 x i128> @rotl_v2i128(<2 x i128> %a, <2 x i128> %c) {
 ; CHECK-SD-LABEL: rotl_v2i128:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    tst x4, #0x40
-; CHECK-SD-NEXT:    mvn w9, w4
+; CHECK-SD-NEXT:    ubfx x8, x4, #6, #1
+; CHECK-SD-NEXT:    ubfx x9, x6, #6, #1
+; CHECK-SD-NEXT:    mvn w10, w4
+; CHECK-SD-NEXT:    cmp w8, #0
 ; CHECK-SD-NEXT:    csel x8, x1, x0, ne
-; CHECK-SD-NEXT:    csel x10, x0, x1, ne
-; CHECK-SD-NEXT:    tst x6, #0x40
-; CHECK-SD-NEXT:    lsl x11, x8, x4
-; CHECK-SD-NEXT:    lsr x12, x10, #1
+; CHECK-SD-NEXT:    csel x11, x0, x1, ne
+; CHECK-SD-NEXT:    cmp w9, #0
+; CHECK-SD-NEXT:    lsl x9, x8, x4
+; CHECK-SD-NEXT:    lsr x12, x11, #1
 ; CHECK-SD-NEXT:    lsr x8, x8, #1
 ; CHECK-SD-NEXT:    csel x13, x3, x2, ne
 ; CHECK-SD-NEXT:    csel x14, x2, x3, ne
-; CHECK-SD-NEXT:    lsl x10, x10, x4
+; CHECK-SD-NEXT:    lsl x11, x11, x4
 ; CHECK-SD-NEXT:    lsr x15, x14, #1
 ; CHECK-SD-NEXT:    lsr x16, x13, #1
-; CHECK-SD-NEXT:    lsr x12, x12, x9
-; CHECK-SD-NEXT:    lsr x8, x8, x9
-; CHECK-SD-NEXT:    lsl x9, x13, x6
+; CHECK-SD-NEXT:    lsr x12, x12, x10
+; CHECK-SD-NEXT:    lsr x8, x8, x10
+; CHECK-SD-NEXT:    lsl x10, x13, x6
 ; CHECK-SD-NEXT:    mvn w13, w6
 ; CHECK-SD-NEXT:    lsr x15, x15, x13
 ; CHECK-SD-NEXT:    lsl x14, x14, x6
 ; CHECK-SD-NEXT:    lsr x13, x16, x13
-; CHECK-SD-NEXT:    orr x0, x11, x12
-; CHECK-SD-NEXT:    orr x1, x10, x8
-; CHECK-SD-NEXT:    orr x2, x9, x15
+; CHECK-SD-NEXT:    orr x0, x9, x12
+; CHECK-SD-NEXT:    orr x1, x11, x8
+; CHECK-SD-NEXT:    orr x2, x10, x15
 ; CHECK-SD-NEXT:    orr x3, x14, x13
 ; CHECK-SD-NEXT:    ret
 ;
@@ -2956,33 +2960,35 @@ define <2 x i128> @fshl_v2i128(<2 x i128> %a, <2 x i128> %b, <2 x i128> %c) {
 ; CHECK-SD-LABEL: fshl_v2i128:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    ldr x8, [sp]
-; CHECK-SD-NEXT:    ldr x10, [sp, #16]
-; CHECK-SD-NEXT:    tst x8, #0x40
-; CHECK-SD-NEXT:    mvn w13, w8
-; CHECK-SD-NEXT:    mvn w16, w10
-; CHECK-SD-NEXT:    csel x9, x5, x0, ne
-; CHECK-SD-NEXT:    csel x11, x4, x5, ne
+; CHECK-SD-NEXT:    ldr x9, [sp, #16]
+; CHECK-SD-NEXT:    ubfx x10, x8, #6, #1
+; CHECK-SD-NEXT:    ubfx x11, x9, #6, #1
+; CHECK-SD-NEXT:    mvn w16, w9
+; CHECK-SD-NEXT:    cmp w10, #0
+; CHECK-SD-NEXT:    mvn w10, w8
+; CHECK-SD-NEXT:    csel x12, x4, x5, ne
+; CHECK-SD-NEXT:    csel x13, x5, x0, ne
 ; CHECK-SD-NEXT:    csel x14, x0, x1, ne
-; CHECK-SD-NEXT:    lsl x12, x9, x8
-; CHECK-SD-NEXT:    lsr x11, x11, #1
-; CHECK-SD-NEXT:    lsr x9, x9, #1
-; CHECK-SD-NEXT:    tst x10, #0x40
+; CHECK-SD-NEXT:    cmp w11, #0
+; CHECK-SD-NEXT:    lsl x11, x13, x8
+; CHECK-SD-NEXT:    lsr x12, x12, #1
+; CHECK-SD-NEXT:    lsr x13, x13, #1
+; CHECK-SD-NEXT:    csel x15, x6, x7, ne
 ; CHECK-SD-NEXT:    lsl x8, x14, x8
 ; CHECK-SD-NEXT:    csel x14, x7, x2, ne
-; CHECK-SD-NEXT:    csel x15, x6, x7, ne
-; CHECK-SD-NEXT:    lsr x11, x11, x13
-; CHECK-SD-NEXT:    lsr x9, x9, x13
-; CHECK-SD-NEXT:    lsr x13, x15, #1
-; CHECK-SD-NEXT:    lsr x15, x14, #1
+; CHECK-SD-NEXT:    lsr x15, x15, #1
+; CHECK-SD-NEXT:    lsr x12, x12, x10
+; CHECK-SD-NEXT:    lsr x10, x13, x10
+; CHECK-SD-NEXT:    lsr x13, x14, #1
 ; CHECK-SD-NEXT:    csel x17, x2, x3, ne
-; CHECK-SD-NEXT:    lsl x14, x14, x10
-; CHECK-SD-NEXT:    orr x0, x12, x11
-; CHECK-SD-NEXT:    lsr x13, x13, x16
-; CHECK-SD-NEXT:    lsl x10, x17, x10
+; CHECK-SD-NEXT:    lsl x14, x14, x9
 ; CHECK-SD-NEXT:    lsr x15, x15, x16
-; CHECK-SD-NEXT:    orr x1, x8, x9
-; CHECK-SD-NEXT:    orr x2, x14, x13
-; CHECK-SD-NEXT:    orr x3, x10, x15
+; CHECK-SD-NEXT:    lsl x9, x17, x9
+; CHECK-SD-NEXT:    lsr x13, x13, x16
+; CHECK-SD-NEXT:    orr x0, x11, x12
+; CHECK-SD-NEXT:    orr x1, x8, x10
+; CHECK-SD-NEXT:    orr x2, x14, x15
+; CHECK-SD-NEXT:    orr x3, x9, x13
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: fshl_v2i128:

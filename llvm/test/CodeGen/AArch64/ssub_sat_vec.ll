@@ -115,8 +115,8 @@ define void @v4i8(ptr %px, ptr %py, ptr %pz) nounwind {
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    ldr s0, [x0]
 ; CHECK-SD-NEXT:    ldr s1, [x1]
-; CHECK-SD-NEXT:    ushll v0.8h, v0.8b, #0
-; CHECK-SD-NEXT:    ushll v1.8h, v1.8b, #0
+; CHECK-SD-NEXT:    sshll v0.8h, v0.8b, #0
+; CHECK-SD-NEXT:    sshll v1.8h, v1.8b, #0
 ; CHECK-SD-NEXT:    shl v1.4h, v1.4h, #8
 ; CHECK-SD-NEXT:    shl v0.4h, v0.4h, #8
 ; CHECK-SD-NEXT:    sqsub v0.4h, v0.4h, v1.4h
@@ -161,10 +161,10 @@ define void @v2i8(ptr %px, ptr %py, ptr %pz) nounwind {
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    ldr h0, [x0]
 ; CHECK-SD-NEXT:    ldr h1, [x1]
-; CHECK-SD-NEXT:    ushll v0.8h, v0.8b, #0
-; CHECK-SD-NEXT:    ushll v1.8h, v1.8b, #0
-; CHECK-SD-NEXT:    ushll v0.4s, v0.4h, #0
-; CHECK-SD-NEXT:    ushll v1.4s, v1.4h, #0
+; CHECK-SD-NEXT:    sshll v0.8h, v0.8b, #0
+; CHECK-SD-NEXT:    sshll v1.8h, v1.8b, #0
+; CHECK-SD-NEXT:    sshll v0.4s, v0.4h, #0
+; CHECK-SD-NEXT:    sshll v1.4s, v1.4h, #0
 ; CHECK-SD-NEXT:    shl v1.2s, v1.2s, #24
 ; CHECK-SD-NEXT:    shl v0.2s, v0.2s, #24
 ; CHECK-SD-NEXT:    sqsub v0.2s, v0.2s, v1.2s
@@ -214,8 +214,8 @@ define void @v2i16(ptr %px, ptr %py, ptr %pz) nounwind {
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    ldr s0, [x0]
 ; CHECK-SD-NEXT:    ldr s1, [x1]
-; CHECK-SD-NEXT:    ushll v0.4s, v0.4h, #0
-; CHECK-SD-NEXT:    ushll v1.4s, v1.4h, #0
+; CHECK-SD-NEXT:    sshll v0.4s, v0.4h, #0
+; CHECK-SD-NEXT:    sshll v1.4s, v1.4h, #0
 ; CHECK-SD-NEXT:    shl v1.2s, v1.2s, #16
 ; CHECK-SD-NEXT:    shl v0.2s, v0.2s, #16
 ; CHECK-SD-NEXT:    sqsub v0.2s, v0.2s, v1.2s

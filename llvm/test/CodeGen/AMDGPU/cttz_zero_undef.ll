@@ -569,9 +569,8 @@ define amdgpu_kernel void @v_cttz_zero_undef_i8_with_select(ptr addrspace(1) noa
 ; SI-NEXT:    s_mov_b32 s4, s0
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(0)
-; SI-NEXT:    v_ffbl_b32_e32 v1, v0
-; SI-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v0
-; SI-NEXT:    v_cndmask_b32_e32 v0, 32, v1, vcc
+; SI-NEXT:    v_ffbl_b32_e32 v0, v0
+; SI-NEXT:    v_min_u32_e32 v0, 32, v0
 ; SI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; SI-NEXT:    s_endpgm
 ;
@@ -660,9 +659,8 @@ define amdgpu_kernel void @v_cttz_zero_undef_i16_with_select(ptr addrspace(1) no
 ; SI-NEXT:    v_lshlrev_b32_e32 v0, 8, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_or_b32_e32 v0, v0, v1
-; SI-NEXT:    v_ffbl_b32_e32 v1, v0
-; SI-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v0
-; SI-NEXT:    v_cndmask_b32_e32 v0, 32, v1, vcc
+; SI-NEXT:    v_ffbl_b32_e32 v0, v0
+; SI-NEXT:    v_min_u32_e32 v0, 32, v0
 ; SI-NEXT:    buffer_store_short v0, off, s[4:7], 0
 ; SI-NEXT:    s_endpgm
 ;
@@ -683,7 +681,6 @@ define amdgpu_kernel void @v_cttz_zero_undef_i16_with_select(ptr addrspace(1) no
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_or_b32_e32 v0, v1, v0
 ; VI-NEXT:    v_ffbl_b32_e32 v1, v0
-; VI-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; VI-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v0
 ; VI-NEXT:    v_cndmask_b32_e32 v2, 32, v1, vcc
 ; VI-NEXT:    v_mov_b32_e32 v0, s0

@@ -993,9 +993,9 @@ define <3 x bfloat> @v_maximumnum_v3bf16(<3 x bfloat> %x, <3 x bfloat> %y) {
 ; GFX7-NEXT:    v_max_f32_e32 v2, v2, v5
 ; GFX7-NEXT:    v_max_f32_e32 v1, v1, v4
 ; GFX7-NEXT:    v_max_f32_e32 v0, v0, v3
-; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff0000, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff0000, v1
+; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX8-LABEL: v_maximumnum_v3bf16:
@@ -1488,9 +1488,9 @@ define <3 x bfloat> @v_maximumnum_v3bf16_nnan(<3 x bfloat> %x, <3 x bfloat> %y) 
 ; GFX7-NEXT:    v_max_f32_e32 v2, v2, v5
 ; GFX7-NEXT:    v_max_f32_e32 v1, v1, v4
 ; GFX7-NEXT:    v_max_f32_e32 v0, v0, v3
-; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff0000, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff0000, v1
+; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX8-LABEL: v_maximumnum_v3bf16_nnan:
@@ -12990,9 +12990,9 @@ define <3 x bfloat> @v_maximumnum_v3bf16_no_ieee(<3 x bfloat> %x, <3 x bfloat> %
 ; GFX7-NEXT:    v_max_f32_e32 v2, v2, v5
 ; GFX7-NEXT:    v_max_f32_e32 v1, v1, v4
 ; GFX7-NEXT:    v_max_f32_e32 v0, v0, v3
-; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    v_and_b32_e32 v0, 0xffff0000, v0
 ; GFX7-NEXT:    v_and_b32_e32 v1, 0xffff0000, v1
+; GFX7-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX8-LABEL: v_maximumnum_v3bf16_no_ieee:

@@ -837,7 +837,6 @@ define zeroext i1 @_Z26atomic_swap_relaxed_stk_i1b(i1 zeroext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB33_2:
-; CHECK-NEXT:    and %s0, %s0, (32)0
 ; CHECK-NEXT:    or %s1, 1, (0)1
 ; CHECK-NEXT:    lea %s2, 8(, %s11)
 ; CHECK-NEXT:    ts1am.w %s0, (%s2), %s1
@@ -876,7 +875,6 @@ define signext i8 @_Z26atomic_swap_relaxed_stk_i8c(i8 signext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB34_2:
-; CHECK-NEXT:    and %s0, %s0, (32)0
 ; CHECK-NEXT:    or %s1, 1, (0)1
 ; CHECK-NEXT:    lea %s2, 8(, %s11)
 ; CHECK-NEXT:    ts1am.w %s0, (%s2), %s1
@@ -907,7 +905,6 @@ define zeroext i8 @_Z26atomic_swap_relaxed_stk_u8h(i8 zeroext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB35_2:
-; CHECK-NEXT:    and %s0, %s0, (32)0
 ; CHECK-NEXT:    or %s1, 1, (0)1
 ; CHECK-NEXT:    lea %s2, 8(, %s11)
 ; CHECK-NEXT:    ts1am.w %s0, (%s2), %s1
@@ -937,7 +934,6 @@ define signext i16 @_Z27atomic_swap_relaxed_stk_i16s(i16 signext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB36_2:
-; CHECK-NEXT:    and %s0, %s0, (32)0
 ; CHECK-NEXT:    or %s1, 3, (0)1
 ; CHECK-NEXT:    lea %s2, 8(, %s11)
 ; CHECK-NEXT:    ts1am.w %s0, (%s2), %s1
@@ -968,7 +964,6 @@ define zeroext i16 @_Z27atomic_swap_relaxed_stk_u16t(i16 zeroext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB37_2:
-; CHECK-NEXT:    and %s0, %s0, (32)0
 ; CHECK-NEXT:    or %s1, 3, (0)1
 ; CHECK-NEXT:    lea %s2, 8(, %s11)
 ; CHECK-NEXT:    ts1am.w %s0, (%s2), %s1

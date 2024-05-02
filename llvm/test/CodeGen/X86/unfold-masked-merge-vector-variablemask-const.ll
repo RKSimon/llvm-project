@@ -85,9 +85,11 @@ define <4 x i32> @out_constant_varx_mone_invmask(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: out_constant_varx_mone_invmask:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rsi), %xmm0
-; CHECK-SSE1-NEXT:    orps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
+; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andnps (%rsi), %xmm1
+; CHECK-SSE1-NEXT:    orps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: out_constant_varx_mone_invmask:
@@ -187,12 +189,12 @@ define <4 x i32> @in_constant_varx_42(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: in_constant_varx_42:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
+; CHECK-SSE1-NEXT:    movaps {{.*#+}} xmm0 = [5.88545355E-44,5.88545355E-44,5.88545355E-44,5.88545355E-44]
 ; CHECK-SSE1-NEXT:    movaps (%rsi), %xmm1
-; CHECK-SSE1-NEXT:    andps %xmm0, %xmm1
-; CHECK-SSE1-NEXT:    andnps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-SSE1-NEXT:    orps %xmm1, %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_constant_varx_42:
@@ -263,10 +265,11 @@ define <4 x i32> @in_constant_varx_42_invmask(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
 ; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
-; CHECK-SSE1-NEXT:    andnps (%rsi), %xmm1
-; CHECK-SSE1-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-SSE1-NEXT:    orps %xmm1, %xmm0
+; CHECK-SSE1-NEXT:    movaps {{.*#+}} xmm1 = [5.88545355E-44,5.88545355E-44,5.88545355E-44,5.88545355E-44]
+; CHECK-SSE1-NEXT:    movaps (%rsi), %xmm2
+; CHECK-SSE1-NEXT:    xorps %xmm1, %xmm2
+; CHECK-SSE1-NEXT:    andnps %xmm2, %xmm0
+; CHECK-SSE1-NEXT:    xorps %xmm1, %xmm0
 ; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
@@ -299,9 +302,11 @@ define <4 x i32> @out_constant_mone_vary(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: out_constant_mone_vary:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
-; CHECK-SSE1-NEXT:    orps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
+; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andnps (%rdx), %xmm1
+; CHECK-SSE1-NEXT:    orps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: out_constant_mone_vary:
@@ -329,9 +334,11 @@ define <4 x i32> @in_constant_mone_vary(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: in_constant_mone_vary:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    orps (%rdx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
+; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andnps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_constant_mone_vary:
@@ -399,10 +406,13 @@ define <4 x i32> @in_constant_mone_vary_invmask(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: in_constant_mone_vary_invmask:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-SSE1-NEXT:    orps (%rdx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
+; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    xorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm2
+; CHECK-SSE1-NEXT:    andnps %xmm1, %xmm2
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm2
+; CHECK-SSE1-NEXT:    movaps %xmm2, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_constant_mone_vary_invmask:
@@ -469,12 +479,12 @@ define <4 x i32> @in_constant_42_vary(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: in_constant_42_vary:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
-; CHECK-SSE1-NEXT:    andnps (%rdx), %xmm1
-; CHECK-SSE1-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-SSE1-NEXT:    orps %xmm1, %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
+; CHECK-SSE1-NEXT:    movaps {{.*#+}} xmm1 = [5.88545355E-44,5.88545355E-44,5.88545355E-44,5.88545355E-44]
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_constant_42_vary:
@@ -544,12 +554,13 @@ define <4 x i32> @in_constant_42_vary_invmask(ptr%px, ptr%py, ptr%pmask) {
 ; CHECK-SSE1-LABEL: in_constant_42_vary_invmask:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm1
-; CHECK-SSE1-NEXT:    andps %xmm0, %xmm1
-; CHECK-SSE1-NEXT:    andnps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-SSE1-NEXT:    orps %xmm1, %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
+; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    movaps {{.*#+}} xmm2 = [5.88545355E-44,5.88545355E-44,5.88545355E-44,5.88545355E-44]
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm2
+; CHECK-SSE1-NEXT:    andnps %xmm2, %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_constant_42_vary_invmask:

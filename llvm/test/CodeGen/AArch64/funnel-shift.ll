@@ -21,10 +21,11 @@ define i32 @fshl_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-SD-LABEL: fshl_i32:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    lsr w8, w1, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsl w10, w0, w2
-; CHECK-SD-NEXT:    lsr w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w10, w8
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsl w9, w0, w9
+; CHECK-SD-NEXT:    lsr w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w9, w8
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: fshl_i32:
@@ -68,8 +69,9 @@ define i64 @fshl_i64(i64 %x, i64 %y, i64 %z) {
 define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK-SD-LABEL: fshl_i128:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    tst x4, #0x40
+; CHECK-SD-NEXT:    ubfx x8, x4, #6, #1
 ; CHECK-SD-NEXT:    mvn w11, w4
+; CHECK-SD-NEXT:    cmp w8, #0
 ; CHECK-SD-NEXT:    csel x8, x3, x0, ne
 ; CHECK-SD-NEXT:    csel x9, x2, x3, ne
 ; CHECK-SD-NEXT:    csel x12, x0, x1, ne
@@ -264,10 +266,11 @@ define i32 @fshr_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-SD-LABEL: fshr_i32:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    lsl w8, w0, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsr w10, w1, w2
-; CHECK-SD-NEXT:    lsl w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w8, w10
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsr w9, w1, w9
+; CHECK-SD-NEXT:    lsl w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w8, w9
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: fshr_i32:
@@ -664,10 +667,11 @@ define i32 @or_shl_fshl_simplify(i32 %x, i32 %y, i32 %s) {
 ; CHECK-SD-LABEL: or_shl_fshl_simplify:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    lsr w8, w0, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsl w10, w1, w2
-; CHECK-SD-NEXT:    lsr w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w10, w8
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsl w9, w1, w9
+; CHECK-SD-NEXT:    lsr w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w9, w8
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: or_shl_fshl_simplify:
@@ -690,10 +694,11 @@ define i32 @or_lshr_fshr_simplify(i32 %x, i32 %y, i32 %s) {
 ; CHECK-SD-LABEL: or_lshr_fshr_simplify:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    lsl w8, w0, #1
-; CHECK-SD-NEXT:    mvn w9, w2
-; CHECK-SD-NEXT:    lsr w10, w1, w2
-; CHECK-SD-NEXT:    lsl w8, w8, w9
-; CHECK-SD-NEXT:    orr w0, w8, w10
+; CHECK-SD-NEXT:    mov w9, w2
+; CHECK-SD-NEXT:    mvn w10, w2
+; CHECK-SD-NEXT:    lsr w9, w1, w9
+; CHECK-SD-NEXT:    lsl w8, w8, w10
+; CHECK-SD-NEXT:    orr w0, w8, w9
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: or_lshr_fshr_simplify:

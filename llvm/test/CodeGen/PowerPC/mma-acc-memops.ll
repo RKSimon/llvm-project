@@ -630,58 +630,204 @@ define dso_local void @testXLdStPair(i64 %SrcIdx, i64 %DstIdx) {
 ; LE-PWR9:       # %bb.0: # %entry
 ; LE-PWR9-NEXT:    addis r5, r2, g@toc@ha
 ; LE-PWR9-NEXT:    sldi r3, r3, 5
-; LE-PWR9-NEXT:    sldi r4, r4, 5
+; LE-PWR9-NEXT:    std r25, -56(r1) # 8-byte Folded Spill
 ; LE-PWR9-NEXT:    addi r5, r5, g@toc@l
-; LE-PWR9-NEXT:    add r6, r5, r3
-; LE-PWR9-NEXT:    lxvx vs1, r5, r3
-; LE-PWR9-NEXT:    lxv vs0, 16(r6)
-; LE-PWR9-NEXT:    add r6, r5, r4
-; LE-PWR9-NEXT:    stxvx vs1, r5, r4
-; LE-PWR9-NEXT:    stxv vs0, 16(r6)
+; LE-PWR9-NEXT:    std r26, -48(r1) # 8-byte Folded Spill
+; LE-PWR9-NEXT:    std r27, -40(r1) # 8-byte Folded Spill
+; LE-PWR9-NEXT:    std r28, -32(r1) # 8-byte Folded Spill
+; LE-PWR9-NEXT:    std r29, -24(r1) # 8-byte Folded Spill
+; LE-PWR9-NEXT:    mr r6, r5
+; LE-PWR9-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
+; LE-PWR9-NEXT:    sldi r4, r4, 5
+; LE-PWR9-NEXT:    lwzux r3, r6, r3
+; LE-PWR9-NEXT:    lhz r30, 18(r6)
+; LE-PWR9-NEXT:    lhz r29, 20(r6)
+; LE-PWR9-NEXT:    lhz r28, 22(r6)
+; LE-PWR9-NEXT:    lhz r27, 24(r6)
+; LE-PWR9-NEXT:    lhz r26, 26(r6)
+; LE-PWR9-NEXT:    lhz r25, 28(r6)
+; LE-PWR9-NEXT:    lhz r7, 4(r6)
+; LE-PWR9-NEXT:    lhz r8, 6(r6)
+; LE-PWR9-NEXT:    lhz r9, 8(r6)
+; LE-PWR9-NEXT:    lhz r10, 10(r6)
+; LE-PWR9-NEXT:    lhz r11, 12(r6)
+; LE-PWR9-NEXT:    lhz r12, 14(r6)
+; LE-PWR9-NEXT:    lhz r0, 16(r6)
+; LE-PWR9-NEXT:    lhz r6, 30(r6)
+; LE-PWR9-NEXT:    stwux r3, r4, r5
+; LE-PWR9-NEXT:    sth r25, 28(r4)
+; LE-PWR9-NEXT:    sth r26, 26(r4)
+; LE-PWR9-NEXT:    sth r27, 24(r4)
+; LE-PWR9-NEXT:    sth r28, 22(r4)
+; LE-PWR9-NEXT:    sth r29, 20(r4)
+; LE-PWR9-NEXT:    sth r30, 18(r4)
+; LE-PWR9-NEXT:    ld r30, -16(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    ld r29, -24(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    ld r28, -32(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    ld r27, -40(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    ld r26, -48(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    ld r25, -56(r1) # 8-byte Folded Reload
+; LE-PWR9-NEXT:    sth r6, 30(r4)
+; LE-PWR9-NEXT:    sth r0, 16(r4)
+; LE-PWR9-NEXT:    sth r12, 14(r4)
+; LE-PWR9-NEXT:    sth r11, 12(r4)
+; LE-PWR9-NEXT:    sth r10, 10(r4)
+; LE-PWR9-NEXT:    sth r9, 8(r4)
+; LE-PWR9-NEXT:    sth r8, 6(r4)
+; LE-PWR9-NEXT:    sth r7, 4(r4)
 ; LE-PWR9-NEXT:    blr
 ;
 ; LE-PWR8-LABEL: testXLdStPair:
 ; LE-PWR8:       # %bb.0: # %entry
 ; LE-PWR8-NEXT:    addis r5, r2, g@toc@ha
 ; LE-PWR8-NEXT:    sldi r3, r3, 5
-; LE-PWR8-NEXT:    li r7, 16
+; LE-PWR8-NEXT:    std r25, -56(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    std r26, -48(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    std r27, -40(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    std r28, -32(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    sldi r4, r4, 5
 ; LE-PWR8-NEXT:    addi r5, r5, g@toc@l
-; LE-PWR8-NEXT:    add r6, r5, r3
-; LE-PWR8-NEXT:    lxvd2x vs1, r5, r3
-; LE-PWR8-NEXT:    sldi r3, r4, 5
-; LE-PWR8-NEXT:    lxvd2x vs0, r6, r7
-; LE-PWR8-NEXT:    add r4, r5, r3
-; LE-PWR8-NEXT:    stxvd2x vs1, r5, r3
-; LE-PWR8-NEXT:    stxvd2x vs0, r4, r7
+; LE-PWR8-NEXT:    std r29, -24(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
+; LE-PWR8-NEXT:    mr r6, r5
+; LE-PWR8-NEXT:    lwzux r3, r6, r3
+; LE-PWR8-NEXT:    lhz r30, 18(r6)
+; LE-PWR8-NEXT:    lhz r29, 20(r6)
+; LE-PWR8-NEXT:    lhz r28, 22(r6)
+; LE-PWR8-NEXT:    lhz r27, 24(r6)
+; LE-PWR8-NEXT:    lhz r26, 26(r6)
+; LE-PWR8-NEXT:    lhz r25, 28(r6)
+; LE-PWR8-NEXT:    lhz r7, 4(r6)
+; LE-PWR8-NEXT:    lhz r8, 6(r6)
+; LE-PWR8-NEXT:    lhz r9, 8(r6)
+; LE-PWR8-NEXT:    lhz r10, 10(r6)
+; LE-PWR8-NEXT:    lhz r11, 12(r6)
+; LE-PWR8-NEXT:    lhz r12, 14(r6)
+; LE-PWR8-NEXT:    lhz r0, 16(r6)
+; LE-PWR8-NEXT:    lhz r6, 30(r6)
+; LE-PWR8-NEXT:    stwux r3, r4, r5
+; LE-PWR8-NEXT:    sth r25, 28(r4)
+; LE-PWR8-NEXT:    sth r26, 26(r4)
+; LE-PWR8-NEXT:    sth r27, 24(r4)
+; LE-PWR8-NEXT:    sth r28, 22(r4)
+; LE-PWR8-NEXT:    sth r29, 20(r4)
+; LE-PWR8-NEXT:    sth r30, 18(r4)
+; LE-PWR8-NEXT:    ld r30, -16(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    ld r29, -24(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    ld r28, -32(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    ld r27, -40(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    ld r26, -48(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    ld r25, -56(r1) # 8-byte Folded Reload
+; LE-PWR8-NEXT:    sth r6, 30(r4)
+; LE-PWR8-NEXT:    sth r0, 16(r4)
+; LE-PWR8-NEXT:    sth r12, 14(r4)
+; LE-PWR8-NEXT:    sth r11, 12(r4)
+; LE-PWR8-NEXT:    sth r10, 10(r4)
+; LE-PWR8-NEXT:    sth r9, 8(r4)
+; LE-PWR8-NEXT:    sth r8, 6(r4)
+; LE-PWR8-NEXT:    sth r7, 4(r4)
 ; LE-PWR8-NEXT:    blr
 ;
 ; BE-PWR9-LABEL: testXLdStPair:
 ; BE-PWR9:       # %bb.0: # %entry
 ; BE-PWR9-NEXT:    addis r5, r2, g@toc@ha
 ; BE-PWR9-NEXT:    sldi r3, r3, 5
-; BE-PWR9-NEXT:    sldi r4, r4, 5
+; BE-PWR9-NEXT:    std r25, -56(r1) # 8-byte Folded Spill
 ; BE-PWR9-NEXT:    addi r5, r5, g@toc@l
-; BE-PWR9-NEXT:    add r6, r5, r3
-; BE-PWR9-NEXT:    lxvx vs1, r5, r3
-; BE-PWR9-NEXT:    lxv vs0, 16(r6)
-; BE-PWR9-NEXT:    add r6, r5, r4
-; BE-PWR9-NEXT:    stxvx vs1, r5, r4
-; BE-PWR9-NEXT:    stxv vs0, 16(r6)
+; BE-PWR9-NEXT:    std r26, -48(r1) # 8-byte Folded Spill
+; BE-PWR9-NEXT:    std r27, -40(r1) # 8-byte Folded Spill
+; BE-PWR9-NEXT:    std r28, -32(r1) # 8-byte Folded Spill
+; BE-PWR9-NEXT:    std r29, -24(r1) # 8-byte Folded Spill
+; BE-PWR9-NEXT:    mr r6, r5
+; BE-PWR9-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
+; BE-PWR9-NEXT:    sldi r4, r4, 5
+; BE-PWR9-NEXT:    lwzux r3, r6, r3
+; BE-PWR9-NEXT:    lhz r30, 18(r6)
+; BE-PWR9-NEXT:    lhz r29, 20(r6)
+; BE-PWR9-NEXT:    lhz r28, 22(r6)
+; BE-PWR9-NEXT:    lhz r27, 24(r6)
+; BE-PWR9-NEXT:    lhz r26, 26(r6)
+; BE-PWR9-NEXT:    lhz r25, 28(r6)
+; BE-PWR9-NEXT:    lhz r7, 4(r6)
+; BE-PWR9-NEXT:    lhz r8, 6(r6)
+; BE-PWR9-NEXT:    lhz r9, 8(r6)
+; BE-PWR9-NEXT:    lhz r10, 10(r6)
+; BE-PWR9-NEXT:    lhz r11, 12(r6)
+; BE-PWR9-NEXT:    lhz r12, 14(r6)
+; BE-PWR9-NEXT:    lhz r0, 16(r6)
+; BE-PWR9-NEXT:    lhz r6, 30(r6)
+; BE-PWR9-NEXT:    stwux r3, r4, r5
+; BE-PWR9-NEXT:    sth r25, 28(r4)
+; BE-PWR9-NEXT:    sth r26, 26(r4)
+; BE-PWR9-NEXT:    sth r27, 24(r4)
+; BE-PWR9-NEXT:    sth r28, 22(r4)
+; BE-PWR9-NEXT:    sth r29, 20(r4)
+; BE-PWR9-NEXT:    sth r30, 18(r4)
+; BE-PWR9-NEXT:    ld r30, -16(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    ld r29, -24(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    ld r28, -32(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    ld r27, -40(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    ld r26, -48(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    ld r25, -56(r1) # 8-byte Folded Reload
+; BE-PWR9-NEXT:    sth r6, 30(r4)
+; BE-PWR9-NEXT:    sth r0, 16(r4)
+; BE-PWR9-NEXT:    sth r12, 14(r4)
+; BE-PWR9-NEXT:    sth r11, 12(r4)
+; BE-PWR9-NEXT:    sth r10, 10(r4)
+; BE-PWR9-NEXT:    sth r9, 8(r4)
+; BE-PWR9-NEXT:    sth r8, 6(r4)
+; BE-PWR9-NEXT:    sth r7, 4(r4)
 ; BE-PWR9-NEXT:    blr
 ;
 ; BE-PWR8-LABEL: testXLdStPair:
 ; BE-PWR8:       # %bb.0: # %entry
 ; BE-PWR8-NEXT:    addis r5, r2, g@toc@ha
 ; BE-PWR8-NEXT:    sldi r3, r3, 5
+; BE-PWR8-NEXT:    std r25, -56(r1) # 8-byte Folded Spill
+; BE-PWR8-NEXT:    std r26, -48(r1) # 8-byte Folded Spill
+; BE-PWR8-NEXT:    std r27, -40(r1) # 8-byte Folded Spill
+; BE-PWR8-NEXT:    std r28, -32(r1) # 8-byte Folded Spill
 ; BE-PWR8-NEXT:    sldi r4, r4, 5
 ; BE-PWR8-NEXT:    addi r5, r5, g@toc@l
-; BE-PWR8-NEXT:    add r6, r5, r3
-; BE-PWR8-NEXT:    lxvd2x vs0, r5, r3
-; BE-PWR8-NEXT:    li r3, 16
-; BE-PWR8-NEXT:    lxvd2x vs1, r6, r3
-; BE-PWR8-NEXT:    add r6, r5, r4
-; BE-PWR8-NEXT:    stxvd2x vs0, r5, r4
-; BE-PWR8-NEXT:    stxvd2x vs1, r6, r3
+; BE-PWR8-NEXT:    std r29, -24(r1) # 8-byte Folded Spill
+; BE-PWR8-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
+; BE-PWR8-NEXT:    mr r6, r5
+; BE-PWR8-NEXT:    lwzux r3, r6, r3
+; BE-PWR8-NEXT:    lhz r30, 18(r6)
+; BE-PWR8-NEXT:    lhz r29, 20(r6)
+; BE-PWR8-NEXT:    lhz r28, 22(r6)
+; BE-PWR8-NEXT:    lhz r27, 24(r6)
+; BE-PWR8-NEXT:    lhz r26, 26(r6)
+; BE-PWR8-NEXT:    lhz r25, 28(r6)
+; BE-PWR8-NEXT:    lhz r7, 4(r6)
+; BE-PWR8-NEXT:    lhz r8, 6(r6)
+; BE-PWR8-NEXT:    lhz r9, 8(r6)
+; BE-PWR8-NEXT:    lhz r10, 10(r6)
+; BE-PWR8-NEXT:    lhz r11, 12(r6)
+; BE-PWR8-NEXT:    lhz r12, 14(r6)
+; BE-PWR8-NEXT:    lhz r0, 16(r6)
+; BE-PWR8-NEXT:    lhz r6, 30(r6)
+; BE-PWR8-NEXT:    stwux r3, r4, r5
+; BE-PWR8-NEXT:    sth r25, 28(r4)
+; BE-PWR8-NEXT:    sth r26, 26(r4)
+; BE-PWR8-NEXT:    sth r27, 24(r4)
+; BE-PWR8-NEXT:    sth r28, 22(r4)
+; BE-PWR8-NEXT:    sth r29, 20(r4)
+; BE-PWR8-NEXT:    sth r30, 18(r4)
+; BE-PWR8-NEXT:    ld r30, -16(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    ld r29, -24(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    ld r28, -32(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    ld r27, -40(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    ld r26, -48(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    ld r25, -56(r1) # 8-byte Folded Reload
+; BE-PWR8-NEXT:    sth r6, 30(r4)
+; BE-PWR8-NEXT:    sth r0, 16(r4)
+; BE-PWR8-NEXT:    sth r12, 14(r4)
+; BE-PWR8-NEXT:    sth r11, 12(r4)
+; BE-PWR8-NEXT:    sth r10, 10(r4)
+; BE-PWR8-NEXT:    sth r9, 8(r4)
+; BE-PWR8-NEXT:    sth r8, 6(r4)
+; BE-PWR8-NEXT:    sth r7, 4(r4)
 ; BE-PWR8-NEXT:    blr
 entry:
   %arrayidx = getelementptr inbounds <256 x i1>, ptr @g, i64 %SrcIdx
