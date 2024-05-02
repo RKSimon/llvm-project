@@ -214,39 +214,39 @@ define <8 x i32> @test_compress_large(<8 x i32> %vec, <8 x i1> %mask) {
 ; CHECK-NEXT:    umov.b w13, v2[3]
 ; CHECK-NEXT:    mov x8, sp
 ; CHECK-NEXT:    umov.b w15, v2[4]
-; CHECK-NEXT:    str s0, [sp]
 ; CHECK-NEXT:    mov s3, v0[3]
+; CHECK-NEXT:    str s0, [sp]
+; CHECK-NEXT:    umov.b w16, v2[6]
 ; CHECK-NEXT:    and x10, x10, #0x1
 ; CHECK-NEXT:    and x14, x9, #0x1
 ; CHECK-NEXT:    bfi x11, x9, #2, #1
 ; CHECK-NEXT:    add x9, x14, x10
 ; CHECK-NEXT:    umov.b w10, v2[5]
+; CHECK-NEXT:    orr x14, x8, x9, lsl #2
 ; CHECK-NEXT:    st1.s { v0 }[1], [x11]
 ; CHECK-NEXT:    and x11, x12, #0x1
-; CHECK-NEXT:    orr x14, x8, x9, lsl #2
-; CHECK-NEXT:    and x12, x13, #0x1
 ; CHECK-NEXT:    add x9, x9, x11
-; CHECK-NEXT:    umov.b w11, v2[6]
-; CHECK-NEXT:    and x13, x15, #0x1
-; CHECK-NEXT:    add x12, x9, x12
+; CHECK-NEXT:    and x11, x13, #0x1
+; CHECK-NEXT:    and w12, w16, #0x1
 ; CHECK-NEXT:    st1.s { v0 }[2], [x14]
+; CHECK-NEXT:    add x11, x9, x11
+; CHECK-NEXT:    mov s0, v1[1]
 ; CHECK-NEXT:    str s3, [x8, x9, lsl #2]
-; CHECK-NEXT:    and x9, x10, #0x1
-; CHECK-NEXT:    add x10, x12, x13
-; CHECK-NEXT:    and x12, x12, #0x7
-; CHECK-NEXT:    add x9, x10, x9
-; CHECK-NEXT:    and x10, x10, #0x7
-; CHECK-NEXT:    str s1, [x8, x12, lsl #2]
-; CHECK-NEXT:    and x12, x9, #0x7
-; CHECK-NEXT:    mov s0, v1[3]
-; CHECK-NEXT:    and w11, w11, #0x1
-; CHECK-NEXT:    add x10, x8, x10, lsl #2
-; CHECK-NEXT:    add x12, x8, x12, lsl #2
-; CHECK-NEXT:    add w9, w9, w11
+; CHECK-NEXT:    and x9, x15, #0x1
+; CHECK-NEXT:    and x10, x10, #0x1
+; CHECK-NEXT:    add x9, x11, x9
+; CHECK-NEXT:    and x11, x11, #0x7
+; CHECK-NEXT:    add x10, x9, x10
+; CHECK-NEXT:    str s1, [x8, x11, lsl #2]
 ; CHECK-NEXT:    and x9, x9, #0x7
-; CHECK-NEXT:    st1.s { v1 }[1], [x10]
-; CHECK-NEXT:    st1.s { v1 }[2], [x12]
+; CHECK-NEXT:    add w11, w10, w12
+; CHECK-NEXT:    and x10, x10, #0x7
 ; CHECK-NEXT:    str s0, [x8, x9, lsl #2]
+; CHECK-NEXT:    and x11, x11, #0x7
+; CHECK-NEXT:    add x10, x8, x10, lsl #2
+; CHECK-NEXT:    add x8, x8, x11, lsl #2
+; CHECK-NEXT:    st1.s { v1 }[2], [x10]
+; CHECK-NEXT:    st1.s { v1 }[3], [x8]
 ; CHECK-NEXT:    ldp q0, q1, [sp], #32
 ; CHECK-NEXT:    ret
     %out = call <8 x i32> @llvm.experimental.vector.compress(<8 x i32> %vec, <8 x i1> %mask, <8 x i32> undef)

@@ -273,8 +273,9 @@ define void @test_with_vcombine(ptr %v) nounwind {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vld1.64 {d16, d17}, [r0:128]
 ; CHECK-NEXT:    vadd.f32 d18, d17, d17
-; CHECK-NEXT:    vrev64.32 d16, d16
-; CHECK-NEXT:    vrev64.32 d17, d18
+; CHECK-NEXT:    vext.32 q8, q8, q8, #2
+; CHECK-NEXT:    vext.32 q8, q8, q9, #2
+; CHECK-NEXT:    vrev64.32 q8, q8
 ; CHECK-NEXT:    vst1.64 {d16, d17}, [r0:128]
 ; CHECK-NEXT:    mov pc, lr
   %tmp1 = load <4 x float>, ptr %v, align 16

@@ -9,9 +9,20 @@ define i32 @test_sad_v16i8_zext(ptr nocapture readonly %a, ptr nocapture readonl
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    ldr q0, [x0]
 ; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    uabdl v2.8h, v1.8b, v0.8b
-; CHECK-NEXT:    uabal2 v2.8h, v1.16b, v0.16b
-; CHECK-NEXT:    uaddlv s0, v2.8h
+; CHECK-NEXT:    usubl2 v2.8h, v1.16b, v0.16b
+; CHECK-NEXT:    usubl v0.8h, v1.8b, v0.8b
+; CHECK-NEXT:    sshll v1.4s, v2.4h, #0
+; CHECK-NEXT:    sshll2 v3.4s, v0.8h, #0
+; CHECK-NEXT:    sshll2 v2.4s, v2.8h, #0
+; CHECK-NEXT:    sshll v0.4s, v0.4h, #0
+; CHECK-NEXT:    abs v1.4s, v1.4s
+; CHECK-NEXT:    abs v2.4s, v2.4s
+; CHECK-NEXT:    abs v3.4s, v3.4s
+; CHECK-NEXT:    abs v0.4s, v0.4s
+; CHECK-NEXT:    add v2.4s, v3.4s, v2.4s
+; CHECK-NEXT:    add v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    add v0.4s, v0.4s, v2.4s
+; CHECK-NEXT:    addv s0, v0.4s
 ; CHECK-NEXT:    fmov w0, s0
 ; CHECK-NEXT:    ret
 entry:
@@ -30,9 +41,20 @@ define i32 @test_sad_v16i8_sext(ptr nocapture readonly %a, ptr nocapture readonl
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    ldr q0, [x0]
 ; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    sabdl v2.8h, v1.8b, v0.8b
-; CHECK-NEXT:    sabal2 v2.8h, v1.16b, v0.16b
-; CHECK-NEXT:    uaddlv s0, v2.8h
+; CHECK-NEXT:    ssubl2 v2.8h, v1.16b, v0.16b
+; CHECK-NEXT:    ssubl v0.8h, v1.8b, v0.8b
+; CHECK-NEXT:    sshll v1.4s, v2.4h, #0
+; CHECK-NEXT:    sshll2 v3.4s, v0.8h, #0
+; CHECK-NEXT:    sshll2 v2.4s, v2.8h, #0
+; CHECK-NEXT:    sshll v0.4s, v0.4h, #0
+; CHECK-NEXT:    abs v1.4s, v1.4s
+; CHECK-NEXT:    abs v2.4s, v2.4s
+; CHECK-NEXT:    abs v3.4s, v3.4s
+; CHECK-NEXT:    abs v0.4s, v0.4s
+; CHECK-NEXT:    add v2.4s, v3.4s, v2.4s
+; CHECK-NEXT:    add v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    add v0.4s, v0.4s, v2.4s
+; CHECK-NEXT:    addv s0, v0.4s
 ; CHECK-NEXT:    fmov w0, s0
 ; CHECK-NEXT:    ret
 entry:
@@ -51,9 +73,13 @@ define i32 @test_sad_v16i8_two_step_zext(ptr noundef readonly %a, ptr noundef re
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    ldr q0, [x0]
 ; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    uabdl v2.8h, v1.8b, v0.8b
-; CHECK-NEXT:    uabal2 v2.8h, v1.16b, v0.16b
-; CHECK-NEXT:    uaddlv s0, v2.8h
+; CHECK-NEXT:    uabd v0.16b, v1.16b, v0.16b
+; CHECK-NEXT:    ushll2 v1.8h, v0.16b, #0
+; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
+; CHECK-NEXT:    uaddl2 v2.4s, v0.8h, v1.8h
+; CHECK-NEXT:    uaddl v0.4s, v0.4h, v1.4h
+; CHECK-NEXT:    add v0.4s, v0.4s, v2.4s
+; CHECK-NEXT:    addv s0, v0.4s
 ; CHECK-NEXT:    fmov w0, s0
 ; CHECK-NEXT:    ret
 entry:
@@ -73,9 +99,13 @@ define i32 @test_sad_v16i8_two_step_sext(ptr noundef readonly %a, ptr noundef re
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    ldr q0, [x0]
 ; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    sabdl v2.8h, v1.8b, v0.8b
-; CHECK-NEXT:    sabal2 v2.8h, v1.16b, v0.16b
-; CHECK-NEXT:    uaddlv s0, v2.8h
+; CHECK-NEXT:    sabd v0.16b, v1.16b, v0.16b
+; CHECK-NEXT:    ushll2 v1.8h, v0.16b, #0
+; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
+; CHECK-NEXT:    uaddl2 v2.4s, v0.8h, v1.8h
+; CHECK-NEXT:    uaddl v0.4s, v0.4h, v1.4h
+; CHECK-NEXT:    add v0.4s, v0.4s, v2.4s
+; CHECK-NEXT:    addv s0, v0.4s
 ; CHECK-NEXT:    fmov w0, s0
 ; CHECK-NEXT:    ret
 entry:

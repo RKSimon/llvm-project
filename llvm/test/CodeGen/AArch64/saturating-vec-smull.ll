@@ -9,7 +9,10 @@ define <2 x i16> @saturating_2xi16(<2 x i16> %a, <2 x i16> %b) {
 ; CHECK-NEXT:    shl v1.2s, v1.2s, #16
 ; CHECK-NEXT:    sshr v0.2s, v0.2s, #16
 ; CHECK-NEXT:    sshr v1.2s, v1.2s, #16
-; CHECK-NEXT:    sqdmulh v0.2s, v1.2s, v0.2s
+; CHECK-NEXT:    mul v0.2s, v1.2s, v0.2s
+; CHECK-NEXT:    movi v1.2s, #127, msl #8
+; CHECK-NEXT:    sshr v0.2s, v0.2s, #15
+; CHECK-NEXT:    smin v0.2s, v0.2s, v1.2s
 ; CHECK-NEXT:    ret
   %as = sext <2 x i16> %a to <2 x i32>
   %bs = sext <2 x i16> %b to <2 x i32>
@@ -163,11 +166,21 @@ define <4 x i16> @unsupported_shift_value_v4i16(<4 x i16> %a, <4 x i16> %b) {
 define <2 x i16> @extend_to_illegal_type(<2 x i16> %a, <2 x i16> %b) {
 ; CHECK-LABEL: extend_to_illegal_type:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v0.2s, v0.2s, #16
-; CHECK-NEXT:    shl v1.2s, v1.2s, #16
-; CHECK-NEXT:    sshr v0.2s, v0.2s, #16
-; CHECK-NEXT:    sshr v1.2s, v1.2s, #16
-; CHECK-NEXT:    sqdmulh v0.2s, v1.2s, v0.2s
+; CHECK-NEXT:    ushll v1.2d, v1.2s, #0
+; CHECK-NEXT:    ushll v0.2d, v0.2s, #0
+; CHECK-NEXT:    mov w8, #32767 // =0x7fff
+; CHECK-NEXT:    shl v0.2d, v0.2d, #48
+; CHECK-NEXT:    shl v1.2d, v1.2d, #48
+; CHECK-NEXT:    sshr v0.2d, v0.2d, #48
+; CHECK-NEXT:    sshr v1.2d, v1.2d, #48
+; CHECK-NEXT:    xtn v0.2s, v0.2d
+; CHECK-NEXT:    xtn v1.2s, v1.2d
+; CHECK-NEXT:    smull v0.2d, v1.2s, v0.2s
+; CHECK-NEXT:    dup v1.2d, x8
+; CHECK-NEXT:    sshr v0.2d, v0.2d, #15
+; CHECK-NEXT:    cmgt v2.2d, v1.2d, v0.2d
+; CHECK-NEXT:    bif v0.16b, v1.16b, v2.16b
+; CHECK-NEXT:    xtn v0.2s, v0.2d
 ; CHECK-NEXT:    ret
   %as = sext <2 x i16> %a to <2 x i48>
   %bs = sext <2 x i16> %b to <2 x i48>

@@ -329,7 +329,11 @@ define <4 x i32> @urhadd4s(ptr nocapture readonly %A, ptr nocapture readonly %B)
 define void @testLowerToSRHADD8b(<8 x i8> %src1, <8 x i8> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD8b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.8b v0, v0, v1
+; CHECK-NEXT:    sshll.8h v0, v0, #0
+; CHECK-NEXT:    sshll.8h v1, v1, #0
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.8h v0, v1, v0
+; CHECK-NEXT:    shrn.8b v0, v0, #1
 ; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <8 x i8> %src1 to <8 x i16>
@@ -345,7 +349,11 @@ define void @testLowerToSRHADD8b(<8 x i8> %src1, <8 x i8> %src2, ptr nocapture w
 define void @testLowerToSRHADD4h(<4 x i16> %src1, <4 x i16> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD4h:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.4h v0, v0, v1
+; CHECK-NEXT:    sshll.4s v0, v0, #0
+; CHECK-NEXT:    sshll.4s v1, v1, #0
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.4s v0, v1, v0
+; CHECK-NEXT:    shrn.4h v0, v0, #1
 ; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <4 x i16> %src1 to <4 x i32>
@@ -361,7 +369,11 @@ define void @testLowerToSRHADD4h(<4 x i16> %src1, <4 x i16> %src2, ptr nocapture
 define void @testLowerToSRHADD2s(<2 x i32> %src1, <2 x i32> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD2s:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.2s v0, v0, v1
+; CHECK-NEXT:    sshll.2d v0, v0, #0
+; CHECK-NEXT:    sshll.2d v1, v1, #0
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.2d v0, v1, v0
+; CHECK-NEXT:    shrn.2s v0, v0, #1
 ; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <2 x i32> %src1 to <2 x i64>
@@ -377,8 +389,17 @@ define void @testLowerToSRHADD2s(<2 x i32> %src1, <2 x i32> %src2, ptr nocapture
 define void @testLowerToSRHADD16b(<16 x i8> %src1, <16 x i8> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD16b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.16b v0, v0, v1
-; CHECK-NEXT:    str q0, [x0]
+; CHECK-NEXT:    sshll.8h v2, v0, #0
+; CHECK-NEXT:    sshll2.8h v0, v0, #0
+; CHECK-NEXT:    sshll.8h v3, v1, #0
+; CHECK-NEXT:    sshll2.8h v1, v1, #0
+; CHECK-NEXT:    mvn.16b v2, v2
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.8h v2, v3, v2
+; CHECK-NEXT:    sub.8h v0, v1, v0
+; CHECK-NEXT:    shrn.8b v1, v2, #1
+; CHECK-NEXT:    shrn2.16b v1, v0, #1
+; CHECK-NEXT:    str q1, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <16 x i8> %src1 to <16 x i16>
   %sextsrc2 = sext <16 x i8> %src2 to <16 x i16>
@@ -393,8 +414,17 @@ define void @testLowerToSRHADD16b(<16 x i8> %src1, <16 x i8> %src2, ptr nocaptur
 define void @testLowerToSRHADD8h(<8 x i16> %src1, <8 x i16> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD8h:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.8h v0, v0, v1
-; CHECK-NEXT:    str q0, [x0]
+; CHECK-NEXT:    sshll.4s v2, v0, #0
+; CHECK-NEXT:    sshll2.4s v0, v0, #0
+; CHECK-NEXT:    sshll.4s v3, v1, #0
+; CHECK-NEXT:    sshll2.4s v1, v1, #0
+; CHECK-NEXT:    mvn.16b v2, v2
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.4s v2, v3, v2
+; CHECK-NEXT:    sub.4s v0, v1, v0
+; CHECK-NEXT:    shrn.4h v1, v2, #1
+; CHECK-NEXT:    shrn2.8h v1, v0, #1
+; CHECK-NEXT:    str q1, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <8 x i16> %src1 to <8 x i32>
   %sextsrc2 = sext <8 x i16> %src2 to <8 x i32>
@@ -409,8 +439,17 @@ define void @testLowerToSRHADD8h(<8 x i16> %src1, <8 x i16> %src2, ptr nocapture
 define void @testLowerToSRHADD4s(<4 x i32> %src1, <4 x i32> %src2, ptr nocapture writeonly %dest) {
 ; CHECK-LABEL: testLowerToSRHADD4s:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd.4s v0, v0, v1
-; CHECK-NEXT:    str q0, [x0]
+; CHECK-NEXT:    sshll.2d v2, v0, #0
+; CHECK-NEXT:    sshll2.2d v0, v0, #0
+; CHECK-NEXT:    sshll.2d v3, v1, #0
+; CHECK-NEXT:    sshll2.2d v1, v1, #0
+; CHECK-NEXT:    mvn.16b v2, v2
+; CHECK-NEXT:    mvn.16b v0, v0
+; CHECK-NEXT:    sub.2d v2, v3, v2
+; CHECK-NEXT:    sub.2d v0, v1, v0
+; CHECK-NEXT:    shrn.2s v1, v2, #1
+; CHECK-NEXT:    shrn2.4s v1, v0, #1
+; CHECK-NEXT:    str q1, [x0]
 ; CHECK-NEXT:    ret
   %sextsrc1 = sext <4 x i32> %src1 to <4 x i64>
   %sextsrc2 = sext <4 x i32> %src2 to <4 x i64>
@@ -826,8 +865,8 @@ define <4 x i16> @hadd8_sext_asr(<4 x i8> %src1, <4 x i8> %src2) {
 define <4 x i16> @hadd8_zext_asr(<4 x i8> %src1, <4 x i8> %src2) {
 ; CHECK-LABEL: hadd8_zext_asr:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    bic.4h v0, #255, lsl #8
+; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    uhadd.4h v0, v0, v1
 ; CHECK-NEXT:    ret
   %zextsrc1 = zext <4 x i8> %src1 to <4 x i16>
@@ -856,8 +895,8 @@ define <4 x i16> @hadd8_sext_lsr(<4 x i8> %src1, <4 x i8> %src2) {
 define <4 x i16> @hadd8_zext_lsr(<4 x i8> %src1, <4 x i8> %src2) {
 ; CHECK-LABEL: hadd8_zext_lsr:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    bic.4h v0, #255, lsl #8
+; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    uhadd.4h v0, v0, v1
 ; CHECK-NEXT:    ret
   %zextsrc1 = zext <4 x i8> %src1 to <4 x i16>
@@ -951,8 +990,8 @@ define <4 x i16> @rhadd8_sext_asr(<4 x i8> %src1, <4 x i8> %src2) {
 define <4 x i16> @rhadd8_zext_asr(<4 x i8> %src1, <4 x i8> %src2) {
 ; CHECK-LABEL: rhadd8_zext_asr:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    bic.4h v0, #255, lsl #8
+; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    urhadd.4h v0, v0, v1
 ; CHECK-NEXT:    ret
   %zextsrc1 = zext <4 x i8> %src1 to <4 x i16>
@@ -985,8 +1024,8 @@ define <4 x i16> @rhadd8_sext_lsr(<4 x i8> %src1, <4 x i8> %src2) {
 define <4 x i16> @rhadd8_zext_lsr(<4 x i8> %src1, <4 x i8> %src2) {
 ; CHECK-LABEL: rhadd8_zext_lsr:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    bic.4h v0, #255, lsl #8
+; CHECK-NEXT:    bic.4h v1, #255, lsl #8
 ; CHECK-NEXT:    urhadd.4h v0, v0, v1
 ; CHECK-NEXT:    ret
   %zextsrc1 = zext <4 x i8> %src1 to <4 x i16>
@@ -1303,6 +1342,7 @@ define <8 x i8> @andmask2v8i8(<8 x i16> %src1, <8 x i16> %src2) {
 ; CHECK-LABEL: andmask2v8i8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    movi.8b v2, #7
+; CHECK-NEXT:    bic.8h v1, #255, lsl #8
 ; CHECK-NEXT:    xtn.8b v0, v0
 ; CHECK-NEXT:    xtn.8b v1, v1
 ; CHECK-NEXT:    and.8b v0, v0, v2
@@ -1379,7 +1419,7 @@ define <8 x i8> @sextmask2v8i8(<8 x i16> %src1, <8 x i8> %src2) {
 define <8 x i8> @sextmask3v8i8(<8 x i16> %src1, <8 x i8> %src2) {
 ; CHECK-LABEL: sextmask3v8i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ushr.8h v0, v0, #7
+; CHECK-NEXT:    sshr.8h v0, v0, #7
 ; CHECK-NEXT:    sshll.8h v1, v1, #0
 ; CHECK-NEXT:    shadd.8h v0, v0, v1
 ; CHECK-NEXT:    xtn.8b v0, v0
@@ -1395,8 +1435,8 @@ define <8 x i8> @sextmask3v8i8(<8 x i16> %src1, <8 x i8> %src2) {
 define <4 x i16> @ext_via_i19(<4 x i16> %a) {
 ; CHECK-LABEL: ext_via_i19:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    movi.4h v1, #1
-; CHECK-NEXT:    urhadd.4h v0, v0, v1
+; CHECK-NEXT:    movi.4h v1, #2
+; CHECK-NEXT:    uhadd.4h v0, v0, v1
 ; CHECK-NEXT:    ret
   %t3 = zext <4 x i16> %a to <4 x i32>
   %t4 = add <4 x i32> %t3, <i32 1, i32 1, i32 1, i32 1>

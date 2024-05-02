@@ -930,14 +930,16 @@ define i8 @scalar_i8_signed_reg_reg(i8 %a1, i8 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i8_signed_reg_reg:
 ; X86:       # %bb.0:
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movb {{[0-9]+}}(%esp), %ah
+; X86-NEXT:    movb %cl, %ah
+; X86-NEXT:    subb %dl, %ah
 ; X86-NEXT:    movb %cl, %al
-; X86-NEXT:    subb %ah, %al
+; X86-NEXT:    subb %dl, %al
 ; X86-NEXT:    setg %dl
 ; X86-NEXT:    jg .LBB15_2
 ; X86-NEXT:  # %bb.1:
-; X86-NEXT:    subb %cl, %ah
+; X86-NEXT:    negb %ah
 ; X86-NEXT:    movb %ah, %al
 ; X86-NEXT:  .LBB15_2:
 ; X86-NEXT:    negb %dl
@@ -977,14 +979,16 @@ define i8 @scalar_i8_unsigned_reg_reg(i8 %a1, i8 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i8_unsigned_reg_reg:
 ; X86:       # %bb.0:
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movb {{[0-9]+}}(%esp), %ah
+; X86-NEXT:    movb %cl, %ah
+; X86-NEXT:    subb %dl, %ah
 ; X86-NEXT:    movb %cl, %al
-; X86-NEXT:    subb %ah, %al
+; X86-NEXT:    subb %dl, %al
 ; X86-NEXT:    seta %dl
 ; X86-NEXT:    ja .LBB16_2
 ; X86-NEXT:  # %bb.1:
-; X86-NEXT:    subb %cl, %ah
+; X86-NEXT:    negb %ah
 ; X86-NEXT:    movb %ah, %al
 ; X86-NEXT:  .LBB16_2:
 ; X86-NEXT:    negb %dl
@@ -1027,15 +1031,17 @@ define i8 @scalar_i8_signed_mem_reg(ptr %a1_addr, i8 %a2) nounwind {
 ;
 ; X86-LABEL: scalar_i8_signed_mem_reg:
 ; X86:       # %bb.0:
-; X86-NEXT:    movb {{[0-9]+}}(%esp), %ah
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movzbl (%ecx), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl (%eax), %ecx
+; X86-NEXT:    movb %cl, %ah
+; X86-NEXT:    subb %dl, %ah
 ; X86-NEXT:    movb %cl, %al
-; X86-NEXT:    subb %ah, %al
+; X86-NEXT:    subb %dl, %al
 ; X86-NEXT:    setg %dl
 ; X86-NEXT:    jg .LBB17_2
 ; X86-NEXT:  # %bb.1:
-; X86-NEXT:    subb %cl, %ah
+; X86-NEXT:    negb %ah
 ; X86-NEXT:    movb %ah, %al
 ; X86-NEXT:  .LBB17_2:
 ; X86-NEXT:    negb %dl
@@ -1078,13 +1084,15 @@ define i8 @scalar_i8_signed_reg_mem(i8 %a1, ptr %a2_addr) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movb (%eax), %ah
+; X86-NEXT:    movzbl (%eax), %edx
+; X86-NEXT:    movb %cl, %ah
+; X86-NEXT:    subb %dl, %ah
 ; X86-NEXT:    movb %cl, %al
-; X86-NEXT:    subb %ah, %al
+; X86-NEXT:    subb %dl, %al
 ; X86-NEXT:    setg %dl
 ; X86-NEXT:    jg .LBB18_2
 ; X86-NEXT:  # %bb.1:
-; X86-NEXT:    subb %cl, %ah
+; X86-NEXT:    negb %ah
 ; X86-NEXT:    movb %ah, %al
 ; X86-NEXT:  .LBB18_2:
 ; X86-NEXT:    negb %dl
@@ -1129,13 +1137,15 @@ define i8 @scalar_i8_signed_mem_mem(ptr %a1_addr, ptr %a2_addr) nounwind {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movzbl (%ecx), %ecx
-; X86-NEXT:    movb (%eax), %ah
+; X86-NEXT:    movzbl (%eax), %edx
+; X86-NEXT:    movb %cl, %ah
+; X86-NEXT:    subb %dl, %ah
 ; X86-NEXT:    movb %cl, %al
-; X86-NEXT:    subb %ah, %al
+; X86-NEXT:    subb %dl, %al
 ; X86-NEXT:    setg %dl
 ; X86-NEXT:    jg .LBB19_2
 ; X86-NEXT:  # %bb.1:
-; X86-NEXT:    subb %cl, %ah
+; X86-NEXT:    negb %ah
 ; X86-NEXT:    movb %ah, %al
 ; X86-NEXT:  .LBB19_2:
 ; X86-NEXT:    negb %dl

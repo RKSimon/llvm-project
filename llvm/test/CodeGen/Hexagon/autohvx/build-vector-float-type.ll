@@ -11,243 +11,551 @@ define <32 x float> @f0(ptr %a0, ptr %a1) #0 {
 ; CHECK-LABEL: f0:
 ; CHECK:       // %bb.0: // %b0
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = ##.LCPI0_1
+; CHECK-NEXT:     allocframe(r29,#3968):raw
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0 = vxor(v0,v0)
+; CHECK-NEXT:     r4 = ##.LCPI0_0
 ; CHECK-NEXT:     r2 = memw(r0+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r29 = and(r29,#-128)
+; CHECK-NEXT:     r5 = ##.LCPI0_3
+; CHECK-NEXT:     v28 = vmem(r5+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = #120
+; CHECK-NEXT:     r3 = memw(r0+#4)
+; CHECK-NEXT:     v4 = vmem(r5+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = ##.LCPI0_4
+; CHECK-NEXT:     q1 = vcmp.eq(v28.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = ##.LCPI0_5
+; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     v6 = vmem(r5+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v27 = vsplat(r2)
+; CHECK-NEXT:     q3 = vcmp.eq(v4.b,v0.b)
+; CHECK-NEXT:     memw(r29+#0) = r3
 ; CHECK-NEXT:     r6 = memw(r0+#8)
+; CHECK-EMPTY:
+; CHECK-NEXT:    } :mem_noshuf
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = ##.LCPI0_6
+; CHECK-NEXT:     v8 = vmem(r5+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = v0
-; CHECK-NEXT:     r3 = memw(r0+#64)
+; CHECK-NEXT:     r5 = ##.LCPI0_7
+; CHECK-NEXT:     r2 = memw(r1+r6<<#2)
+; CHECK-NEXT:     v10 = vmem(r5+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_8
+; CHECK-NEXT:     memw(r29+#128) = r2
+; CHECK-NEXT:     r2 = memw(r0+#12)
+; CHECK-EMPTY:
+; CHECK-NEXT:    } :mem_noshuf
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v12 = vmem(r5+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = ##.LCPI0_2
+; CHECK-NEXT:     q0 = vcmp.eq(v1.b,v0.b)
+; CHECK-NEXT:     v1.cur = vmem(r4+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r4 = memw(r0+#4)
+; CHECK-NEXT:     memw(r29+#256) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r2 = memw(r0+#16)
+; CHECK-NEXT:     v2 = vmem(r29+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v2 = vlalign(v2,v2,#4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v29 = valign(v3,v3,r7)
+; CHECK-NEXT:     v1 = vmux(q0,v2,v27)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     v3.cur = vmem(r29+#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v1 = vmux(q1,v29,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v6.b,v0.b)
+; CHECK-NEXT:     memw(r29+#384) = r2
+; CHECK-NEXT:     r2 = memw(r0+#20)
+; CHECK-EMPTY:
+; CHECK-NEXT:    } :mem_noshuf
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #116
+; CHECK-NEXT:     q2 = vcmp.eq(v30.b,v0.b)
+; CHECK-NEXT:     v30.cur = vmem(r4+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #112
+; CHECK-NEXT:     v2 = valign(v31,v31,r4)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     v31.cur = vmem(r29+#2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v8.b,v0.b)
+; CHECK-NEXT:     memw(r29+#512) = r2
+; CHECK-NEXT:     r2 = memw(r0+#24)
+; CHECK-EMPTY:
+; CHECK-NEXT:    } :mem_noshuf
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #108
+; CHECK-NEXT:     v2 = valign(v5,v5,r4)
+; CHECK-NEXT:     v5.cur = vmem(r29+#3)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #104
+; CHECK-NEXT:     v2 = valign(v7,v7,r4)
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     v7.cur = vmem(r29+#4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v10.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#640) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v2 = valign(v9,v9,r4)
+; CHECK-NEXT:     q1 = vcmp.eq(v12.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r0+#28)
+; CHECK-NEXT:     v9.cur = vmem(r29+#5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #100
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     v14 = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_9
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#768) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v2 = valign(v11,v11,r4)
+; CHECK-NEXT:     q2 = vcmp.eq(v14.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r0+#32)
+; CHECK-NEXT:     v11.cur = vmem(r29+#6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #96
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     v16 = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_10
+; CHECK-NEXT:     q3 = vcmp.eq(v16.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     memw(r29+#896) = r2
+; CHECK-NEXT:     r2 = memw(r0+#36)
+; CHECK-EMPTY:
+; CHECK-NEXT:    } :mem_noshuf
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #92
+; CHECK-NEXT:     v2 = valign(v13,v13,r4)
+; CHECK-NEXT:     v13.cur = vmem(r29+#7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v18.b,v0.b)
+; CHECK-NEXT:     v18.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_11
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1024) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v15,v15,r4)
+; CHECK-NEXT:     r2 = memw(r0+#40)
+; CHECK-NEXT:     v15.cur = vmem(r5+#-8)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #88
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v20.b,v0.b)
+; CHECK-NEXT:     v20.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_12
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1152) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v17,v17,r4)
+; CHECK-NEXT:     r2 = memw(r0+#44)
+; CHECK-NEXT:     v17.cur = vmem(r5+#-7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #84
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v22.b,v0.b)
+; CHECK-NEXT:     v22.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_13
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1280) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v19,v19,r4)
+; CHECK-NEXT:     r2 = memw(r0+#48)
+; CHECK-NEXT:     v19.cur = vmem(r5+#-6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #80
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v24.b,v0.b)
+; CHECK-NEXT:     v24.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_14
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1408) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v21,v21,r4)
+; CHECK-NEXT:     r2 = memw(r0+#52)
+; CHECK-NEXT:     v21.cur = vmem(r5+#-5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #76
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v26.b,v0.b)
+; CHECK-NEXT:     v26.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_15
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1536) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v23,v23,r4)
+; CHECK-NEXT:     r2 = memw(r0+#56)
+; CHECK-NEXT:     v23.cur = vmem(r5+#-4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #72
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v28.b,v0.b)
+; CHECK-NEXT:     v28.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_16
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1664) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v25,v25,r4)
+; CHECK-NEXT:     r2 = memw(r0+#60)
+; CHECK-NEXT:     v25.cur = vmem(r5+#-3)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #68
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v30.b,v0.b)
+; CHECK-NEXT:     v30.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_17
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1792) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v27,v27,r4)
+; CHECK-NEXT:     r2 = memw(r0+#64)
+; CHECK-NEXT:     v27.cur = vmem(r5+#-2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #64
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v4.b,v0.b)
+; CHECK-NEXT:     v4.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_18
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#1920) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v29,v29,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#68)
+; CHECK-NEXT:     v29.cur = vmem(r5+#-1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
-; CHECK-NEXT:     r7 = memw(r1+r4<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#72)
+; CHECK-NEXT:     r4 = #60
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v6.b,v0.b)
+; CHECK-NEXT:     v6.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r6 = ##.LCPI0_19
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#2048) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#12)
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v31,v31,r4)
+; CHECK-NEXT:     r2 = memw(r0+#72)
+; CHECK-NEXT:     v31.cur = vmem(r5+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r4 = #56
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v8.b,v0.b)
+; CHECK-NEXT:     v8.cur = vmem(r6+#0)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = ##.LCPI0_20
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#2176) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v5,v5,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#76)
+; CHECK-NEXT:     v5.cur = vmem(r5+#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r4 = #52
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v10.b,v0.b)
+; CHECK-NEXT:     v10.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#16)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r6 = ##.LCPI0_21
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#80)
+; CHECK-NEXT:     memw(r29+#2304) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v7,v7,r4)
+; CHECK-NEXT:     r2 = memw(r0+#80)
+; CHECK-NEXT:     v7.cur = vmem(r5+#2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#20)
+; CHECK-NEXT:     r4 = #48
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v12.b,v0.b)
+; CHECK-NEXT:     v12.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r6 = ##.LCPI0_22
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#2432) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v9,v9,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#84)
+; CHECK-NEXT:     v9.cur = vmem(r5+#3)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r4 = #44
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v14.b,v0.b)
+; CHECK-NEXT:     v14.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#24)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r6 = ##.LCPI0_23
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#88)
+; CHECK-NEXT:     memw(r29+#2560) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v11,v11,r4)
+; CHECK-NEXT:     r2 = memw(r0+#88)
+; CHECK-NEXT:     v11.cur = vmem(r5+#4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#28)
+; CHECK-NEXT:     r4 = #40
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v16.b,v0.b)
+; CHECK-NEXT:     v16.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r6 = ##.LCPI0_24
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#2688) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v13,v13,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#92)
+; CHECK-NEXT:     v13.cur = vmem(r5+#5)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r4 = #36
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v18.b,v0.b)
+; CHECK-NEXT:     v18.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#32)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r6 = ##.LCPI0_25
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#96)
+; CHECK-NEXT:     memw(r29+#2816) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = add(r29,#2048)
+; CHECK-NEXT:     v2 = valign(v15,v15,r4)
+; CHECK-NEXT:     r2 = memw(r0+#96)
+; CHECK-NEXT:     v15.cur = vmem(r5+#6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#36)
+; CHECK-NEXT:     r4 = #32
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     q1 = vcmp.eq(v20.b,v0.b)
+; CHECK-NEXT:     v20.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r6 = ##.LCPI0_26
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#2944) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#4096)
+; CHECK-NEXT:     v2 = valign(v17,v17,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#100)
+; CHECK-NEXT:     v17.cur = vmem(r5+#7)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r4 = #28
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
+; CHECK-NEXT:     q2 = vcmp.eq(v22.b,v0.b)
+; CHECK-NEXT:     v22.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#40)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r6 = ##.LCPI0_27
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#104)
+; CHECK-NEXT:     memw(r29+#3072) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = add(r29,#4096)
+; CHECK-NEXT:     v2 = valign(v19,v19,r4)
+; CHECK-NEXT:     r2 = memw(r0+#104)
+; CHECK-NEXT:     v19.cur = vmem(r5+#-8)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#44)
+; CHECK-NEXT:     r4 = #24
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
+; CHECK-NEXT:     q3 = vcmp.eq(v24.b,v0.b)
+; CHECK-NEXT:     v24.cur = vmem(r6+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r6 = add(r29,#4096)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#3200) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = add(r29,#4096)
+; CHECK-NEXT:     v2 = valign(v21,v21,r4)
 ; CHECK-NEXT:     r2 = memw(r0+#108)
+; CHECK-NEXT:     v21.cur = vmem(r5+#-7)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r4 = #20
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#48)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#112)
+; CHECK-NEXT:     memw(r29+#3328) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = add(r29,#4096)
+; CHECK-NEXT:     v2 = valign(v23,v23,r4)
+; CHECK-NEXT:     r2 = memw(r0+#112)
+; CHECK-NEXT:     v23.cur = vmem(r5+#-6)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#52)
+; CHECK-NEXT:     r4 = #16
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#3456) = r2.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = ##.LCPI0_28
 ; CHECK-NEXT:     r2 = memw(r0+#116)
+; CHECK-NEXT:     v25 = vmem(r5+#-5)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     r5 = ##.LCPI0_29
+; CHECK-NEXT:     v2 = valign(v25,v25,r4)
+; CHECK-NEXT:     v26 = vmem(r5+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#56)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r4 = #12
+; CHECK-NEXT:     v1 = vmux(q3,v2,v1)
 ; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
-; CHECK-NEXT:     r3 = memw(r0+#120)
+; CHECK-NEXT:     memw(r29+#3584) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     v2 = valign(v27,v27,r4)
+; CHECK-NEXT:     q1 = vcmp.eq(v26.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r0+#120)
+; CHECK-NEXT:     v27.cur = vmem(r6+#-4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r1+r6<<#2)
-; CHECK-NEXT:     r6 = memw(r0+#60)
+; CHECK-NEXT:     r4 = #8
+; CHECK-NEXT:     r5 = add(r29,#4096)
+; CHECK-NEXT:     v1 = vmux(q1,v2,v1)
+; CHECK-NEXT:     v28 = vmem(r5+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r2 = #68
-; CHECK-NEXT:     r3 = memw(r1+r3<<#2)
-; CHECK-NEXT:     r5 = memw(r0+#124)
+; CHECK-NEXT:     q2 = vcmp.eq(v28.b,v0.b)
+; CHECK-NEXT:     r2 = memw(r1+r2<<#2)
+; CHECK-NEXT:     memw(r29+#3712) = r2.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r4 = memw(r1+r6<<#2)
+; CHECK-NEXT:     r2 = add(r29,#4096)
+; CHECK-NEXT:     v2 = valign(v29,v29,r4)
+; CHECK-NEXT:     r6 = memw(r0+#124)
+; CHECK-NEXT:     v29.cur = vmem(r5+#-3)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r0 = memw(r1+r5<<#2)
+; CHECK-NEXT:     r4 = ##.LCPI0_30
+; CHECK-NEXT:     v1 = vmux(q2,v2,v1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
+; CHECK-NEXT:     r0 = memw(r1+r6<<#2)
+; CHECK-NEXT:     memw(r29+#3840) = r0.new
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
+; CHECK-NEXT:     q3 = vcmp.eq(v30.b,v0.b)
+; CHECK-NEXT:     v30.cur = vmem(r4+#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r4)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     v0 = valign(v31,v31,#4)
+; CHECK-NEXT:     v31.cur = vmem(r2+#-2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r0)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = vror(v1,r2)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0 = vor(v1,v0)
-; CHECK-NEXT:     jumpr r31
+; CHECK-NEXT:     v0 = vmux(q3,v0,v1)
+; CHECK-NEXT:     r31:30 = dealloc_return(r30):raw
 ; CHECK-NEXT:    }
 b0:
   %v1 = load i32, ptr %a0, align 4
@@ -417,374 +725,1093 @@ define <64 x half> @f1(ptr %a0, ptr %a1) #0 {
 ; CHECK-LABEL: f1:
 ; CHECK:       // %bb.0: // %b0
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0 = vxor(v0,v0)
-; CHECK-NEXT:     r6 = memw(r0+#0)
-; CHECK-NEXT:     r2 = memw(r0+#16)
+; CHECK-NEXT:     r29 = add(r29,#-48)
+; CHECK-NEXT:     r4 = #0
+; CHECK-NEXT:     r2 = memw(r0+#0)
+; CHECK-NEXT:     r3 = memw(r0+#4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = v0
-; CHECK-NEXT:     r8 = memw(r0+#4)
-; CHECK-NEXT:     r4 = memw(r0+#24)
-; CHECK-NEXT:    }
+; CHECK-NEXT:     memd(r29+#40) = r17:16
+; CHECK-NEXT:    } // 8-byte Folded Spill
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r7 = memw(r0+#8)
-; CHECK-NEXT:     r3 = memw(r0+#20)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r5 = memw(r0+#28)
-; CHECK-NEXT:     r9 = memw(r0+#12)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:     r8 = memuh(r1+r8<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r8 = combine(r8.l,r6.l)
-; CHECK-NEXT:     r14 = memw(r0+#128)
-; CHECK-NEXT:     r6 = memuh(r1+r5<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r8)
-; CHECK-NEXT:     r5 = memw(r0+#136)
 ; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
+; CHECK-NEXT:     memd(r29+#32) = r19:18
+; CHECK-NEXT:    } // 8-byte Folded Spill
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.h = vsplat(r2)
+; CHECK-NEXT:     memd(r29+#24) = r21:20
+; CHECK-NEXT:     memd(r29+#16) = r23:22
+; CHECK-NEXT:    } // 8-byte Folded Spill
+; CHECK-NEXT:    {
+; CHECK-NEXT:     memd(r29+#8) = r25:24
+; CHECK-NEXT:     memd(r29+#0) = r27:26
+; CHECK-NEXT:    } // 8-byte Folded Spill
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = memuh(r1+r3<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
+; CHECK-NEXT:     r3 = vextract(v0,r4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r3.l,r2.l)
-; CHECK-NEXT:     r2 = combine(r6.l,r4.l)
-; CHECK-NEXT:     r12 = memw(r0+#132)
-; CHECK-NEXT:     r6 = memw(r0+#140)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r9 = memuh(r1+r9<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r7 = combine(r9.l,r7.l)
-; CHECK-NEXT:     r9 = memuh(r1+r14<<#1)
-; CHECK-NEXT:     r12 = memuh(r1+r12<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r7)
-; CHECK-NEXT:     r15 = combine(r12.l,r9.l)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r15)
-; CHECK-NEXT:     r5 = combine(r6.l,r5.l)
-; CHECK-NEXT:     r6 = memw(r0+#144)
-; CHECK-NEXT:     r4 = memw(r0+#32)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memw(r0+#148)
-; CHECK-NEXT:     r28 = memw(r0+#36)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r3)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:     r10 = memw(r0+#40)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r5)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r6 = combine(r7.l,r6.l)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memw(r0+#152)
-; CHECK-NEXT:     r9 = memuh(r1+r28<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r2)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r3 = memw(r0+#156)
-; CHECK-NEXT:     r5 = memw(r0+#44)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r6)
-; CHECK-NEXT:     r4 = combine(r9.l,r4.l)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r11 = memw(r0+#48)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:     r6 = memw(r0+#52)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r4)
-; CHECK-NEXT:     r3 = combine(r3.l,r7.l)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memw(r0+#160)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
-; CHECK-NEXT:     r2 = memw(r0+#164)
-; CHECK-NEXT:     r13 = memw(r0+#168)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r8 = memuh(r1+r10<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r2.l,r7.l)
-; CHECK-NEXT:     r5 = combine(r5.l,r8.l)
-; CHECK-NEXT:     r7 = memw(r0+#172)
-; CHECK-NEXT:     r9 = memuh(r1+r11<<#1)
+; CHECK-NEXT:     r2 = combine(r7.l,r3.l)
+; CHECK-NEXT:     r3 = #4
+; CHECK-NEXT:     r4 = memw(r0+#8)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     v1.w = vinsert(r5)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:     r14 = memw(r0+#176)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r6 = combine(r6.l,r9.l)
-; CHECK-NEXT:     r9 = memuh(r1+r13<<#1)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
+; CHECK-NEXT:     r6 = memuh(r1+r4<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r7 = combine(r7.l,r9.l)
+; CHECK-NEXT:     r4 = vextract(v0,r3)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r6.l)
 ; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r12 = memw(r0+#56)
-; CHECK-NEXT:     r15 = memw(r0+#180)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r7)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r3 = memw(r0+#60)
-; CHECK-NEXT:     r4 = memw(r0+#64)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r6)
-; CHECK-NEXT:     r7 = memuh(r1+r14<<#1)
-; CHECK-NEXT:     r28 = memuh(r1+r15<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r7 = combine(r28.l,r7.l)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r2 = memw(r0+#68)
-; CHECK-NEXT:     r6 = memw(r0+#184)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r7)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r8 = memuh(r1+r12<<#1)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r3.l,r8.l)
-; CHECK-NEXT:     r7 = memw(r0+#188)
-; CHECK-NEXT:     r5 = memw(r0+#72)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r3)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r2.l,r4.l)
-; CHECK-NEXT:     r4 = memw(r0+#76)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r2)
-; CHECK-NEXT:     r6 = combine(r7.l,r6.l)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
-; CHECK-NEXT:     r7 = memw(r0+#88)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r6)
-; CHECK-NEXT:     r4 = combine(r4.l,r5.l)
-; CHECK-NEXT:     r6 = memw(r0+#192)
-; CHECK-NEXT:     r10 = memw(r0+#80)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r5 = memw(r0+#92)
-; CHECK-NEXT:     r2 = memw(r0+#196)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r4)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r3 = memw(r0+#84)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r4 = combine(r5.l,r7.l)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
-; CHECK-NEXT:     r11 = memw(r0+#200)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
-; CHECK-NEXT:     r5 = memw(r0+#204)
-; CHECK-NEXT:     r8 = memuh(r1+r10<<#1)
+; CHECK-NEXT:     r7 = memw(r0+#12)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:     r7 = memuh(r1+r11<<#1)
+; CHECK-NEXT:     r2 = #124
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r3.l,r8.l)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:     r6 = memw(r0+#96)
+; CHECK-NEXT:     r7 = #8
+; CHECK-NEXT:     r4 = memuh(r1+r7<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r3)
-; CHECK-NEXT:     r5 = combine(r5.l,r7.l)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r3 = memw(r0+#208)
+; CHECK-NEXT:     v1 = vror(v0,r2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r5)
-; CHECK-NEXT:     r7 = memw(r0+#212)
-; CHECK-NEXT:     r2 = memw(r0+#100)
+; CHECK-NEXT:     r3 = vextract(v1,r3)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:     r5 = memw(r0+#104)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r4)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r4 = memw(r0+#108)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r7.l,r3.l)
-; CHECK-NEXT:     r7 = memw(r0+#216)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
+; CHECK-NEXT:     r3 = combine(r4.l,r3.l)
+; CHECK-NEXT:     r6 = memw(r0+#16)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r3)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
-; CHECK-NEXT:     r3 = memw(r0+#220)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
+; CHECK-NEXT:     r4 = memuh(r1+r6<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r2)
-; CHECK-NEXT:     r4 = combine(r4.l,r5.l)
-; CHECK-NEXT:     r2 = memw(r0+#224)
-; CHECK-NEXT:     r6 = memuh(r1+r7<<#1)
+; CHECK-NEXT:     r3:2 = combine(#120,#8)
+; CHECK-NEXT:     v28 = vror(v0,r2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v28,r7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = combine(r5.h,r4.l)
 ; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:     r5 = memw(r0+#228)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r3.l,r6.l)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r6 = memw(r0+#112)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r3)
-; CHECK-NEXT:     v1.w = vinsert(r4)
-; CHECK-NEXT:     r3 = memw(r0+#116)
-; CHECK-NEXT:     r4 = memw(r0+#232)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:     r7 = memuh(r1+r6<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r5.l,r2.l)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r5 = memw(r0+#236)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0.w = vinsert(r2)
-; CHECK-NEXT:     r2 = combine(r3.l,r7.l)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r3 = memw(r0+#240)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r2)
-; CHECK-NEXT:     r4 = memuh(r1+r4<<#1)
-; CHECK-NEXT:     r5 = memuh(r1+r5<<#1)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     r4 = combine(r5.l,r4.l)
-; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r2 = memw(r0+#120)
-; CHECK-NEXT:     r6 = memw(r0+#244)
+; CHECK-NEXT:     r6 = memw(r0+#20)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r4)
-; CHECK-NEXT:     v1 = valign(v1,v1,#4)
-; CHECK-NEXT:     r7 = memw(r0+#124)
-; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = #116
 ; CHECK-NEXT:     r5 = memuh(r1+r6<<#1)
-; CHECK-NEXT:     r6 = memw(r0+#248)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r5.l,r3.l)
+; CHECK-NEXT:     v29 = vror(v0,r3)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v29,r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = #12
+; CHECK-NEXT:     r5 = combine(r5.l,r6.l)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r5)
+; CHECK-NEXT:     r5 = memw(r0+#24)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v30 = vror(v0,r3)
+; CHECK-NEXT:     r6 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = vextract(v30,r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = combine(r7.h,r6.l)
 ; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:     r0 = memw(r0+#252)
-; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
+; CHECK-NEXT:     r5 = memw(r0+#28)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v31 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r8 = vextract(v31,r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = combine(r7.l,r8.l)
+; CHECK-NEXT:     r21 = memw(r0+#32)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r7)
+; CHECK-NEXT:     r7:6 = combine(#16,#60)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r8 = memuh(r1+r21<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v4 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r9 = vextract(v4,r7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r8 = combine(r9.h,r8.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r22 = memw(r0+#36)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r8)
+; CHECK-NEXT:     r8 = #112
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r9 = memuh(r1+r22<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v5 = vror(v0,r8)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r12 = vextract(v5,r7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r9 = combine(r9.l,r12.l)
+; CHECK-NEXT:     r23 = memw(r0+#40)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r9)
+; CHECK-NEXT:     r9 = #20
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r12 = memuh(r1+r23<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v6 = vror(v0,r8)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r13 = vextract(v6,r9)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r12 = combine(r13.h,r12.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r24 = memw(r0+#44)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r12)
+; CHECK-NEXT:     r12 = #108
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r13 = memuh(r1+r24<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v7 = vror(v0,r12)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r14 = vextract(v7,r9)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r13 = combine(r13.l,r14.l)
+; CHECK-NEXT:     r25 = memw(r0+#48)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r13)
+; CHECK-NEXT:     r13 = #24
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r14 = memuh(r1+r25<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v8 = vror(v0,r12)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r15 = vextract(v8,r13)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r14 = combine(r15.h,r14.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r26 = memw(r0+#52)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r14)
+; CHECK-NEXT:     r14 = #104
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r15 = memuh(r1+r26<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v9 = vror(v0,r14)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r28 = vextract(v9,r13)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r15 = combine(r15.l,r28.l)
+; CHECK-NEXT:     r27 = memw(r0+#56)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r15)
+; CHECK-NEXT:     r15 = #28
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r28 = memuh(r1+r27<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v10 = vror(v0,r14)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r10 = vextract(v10,r15)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r28 = combine(r10.h,r28.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r2 = memw(r0+#60)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r28)
+; CHECK-NEXT:     r28 = #100
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r10 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v11 = vror(v0,r28)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r11 = vextract(v11,r15)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r10 = combine(r10.l,r11.l)
+; CHECK-NEXT:     r3 = memw(r0+#64)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r10)
+; CHECK-NEXT:     r10 = #32
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r11 = memuh(r1+r3<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v12 = vror(v0,r28)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r3 = vextract(v12,r10)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r11 = combine(r3.h,r11.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r2 = memw(r0+#68)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r11)
+; CHECK-NEXT:     r11 = #96
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r16 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v13 = vror(v0,r11)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r23 = vextract(v13,r10)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r16 = combine(r16.l,r23.l)
+; CHECK-NEXT:     r22 = memw(r0+#72)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r16)
+; CHECK-NEXT:     r16 = #36
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r17 = memuh(r1+r22<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v14 = vror(v0,r11)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r21 = vextract(v14,r16)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r17 = combine(r21.h,r17.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r20 = memw(r0+#76)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r17)
+; CHECK-NEXT:     r17 = #92
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r18 = memuh(r1+r20<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v15 = vror(v0,r17)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v15,r16)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r18 = combine(r18.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#80)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r18)
+; CHECK-NEXT:     r18 = #40
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r19 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v16 = vror(v0,r17)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r3 = vextract(v16,r18)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r19 = combine(r3.h,r19.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r2 = memw(r0+#84)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r19)
+; CHECK-NEXT:     r19 = #88
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r20 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v17 = vror(v0,r19)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r23 = vextract(v17,r18)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r20 = combine(r20.l,r23.l)
+; CHECK-NEXT:     r22 = memw(r0+#88)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r20)
+; CHECK-NEXT:     r20 = #44
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r21 = memuh(r1+r22<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v18 = vror(v0,r19)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v18,r20)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r21 = combine(r5.h,r21.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r4 = memw(r0+#92)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r21)
+; CHECK-NEXT:     r21 = #84
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r22 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v19 = vror(v0,r21)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r3 = vextract(v19,r20)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r22 = combine(r22.l,r3.l)
+; CHECK-NEXT:     r2 = memw(r0+#96)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r22)
+; CHECK-NEXT:     r22 = #48
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r23 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v20 = vror(v0,r21)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v20,r22)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r23 = combine(r4.h,r23.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#100)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r23)
+; CHECK-NEXT:     r23 = #80
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r24 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v21 = vror(v0,r23)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r26 = vextract(v21,r22)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r24 = combine(r24.l,r26.l)
+; CHECK-NEXT:     r27 = memw(r0+#104)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r24)
+; CHECK-NEXT:     r24 = #52
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r25 = memuh(r1+r27<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v22 = vror(v0,r23)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = vextract(v22,r24)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r25 = combine(r2.h,r25.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r3 = memw(r0+#108)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r25)
+; CHECK-NEXT:     r25 = #76
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r26 = memuh(r1+r3<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v23 = vror(v0,r25)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v23,r24)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r26 = combine(r26.l,r4.l)
+; CHECK-NEXT:     r5 = memw(r0+#112)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r26)
+; CHECK-NEXT:     r26 = #56
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r27 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v24 = vror(v0,r25)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v24,r26)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r27.l)
+; CHECK-NEXT:     r27 = #72
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#116)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v25 = vror(v0,r27)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v25,r26)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r4.l)
+; CHECK-NEXT:     r5 = memw(r0+#120)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v26 = vror(v0,r27)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = vextract(v26,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.h,r4.l)
+; CHECK-NEXT:     r4 = #68
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#124)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = #64
+; CHECK-NEXT:     r3 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v27 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = vextract(v27,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r3 = combine(r3.l,r2.l)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r3)
-; CHECK-NEXT:     r7 = memuh(r1+r7<<#1)
-; CHECK-NEXT:     r6 = memuh(r1+r6<<#1)
+; CHECK-NEXT:     r3 = memw(r0+#128)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r3 = combine(r7.l,r2.l)
-; CHECK-NEXT:     r2 = #68
-; CHECK-NEXT:     r0 = memuh(r1+r0<<#1)
+; CHECK-NEXT:     v28 = vror(v0,r4)
+; CHECK-NEXT:     r3 = memuh(r1+r3<<#1)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1.w = vinsert(r3)
-; CHECK-NEXT:     r0 = combine(r0.l,r6.l)
+; CHECK-NEXT:     r2 = vextract(v28,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.h,r3.l)
 ; CHECK-NEXT:     v0 = valign(v0,v0,#4)
 ; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:     r2 = memw(r0+#132)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v29 = vror(v0,r5)
+; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r3 = vextract(v29,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r3.l)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:     r2 = memw(r0+#136)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v30 = vror(v0,r5)
+; CHECK-NEXT:     r2 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v30,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#140)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v31 = vror(v0,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v31,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#144)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v4 = vror(v0,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v4,r27)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r4 = memw(r0+#148)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v5 = vror(v0,r26)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v5,r27)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
+; CHECK-NEXT:     r5 = memw(r0+#152)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v6 = vror(v0,r26)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v6,r25)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r6 = memw(r0+#156)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v7 = vror(v0,r24)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v7,r25)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#160)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v8 = vror(v0,r24)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v8,r23)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r6.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#164)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v9 = vror(v0,r22)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v9,r23)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r4.l)
+; CHECK-NEXT:     r6 = memw(r0+#168)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v10 = vror(v0,r22)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v10,r21)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r4 = memw(r0+#172)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v11 = vror(v0,r20)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v11,r21)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
+; CHECK-NEXT:     r5 = memw(r0+#176)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v12 = vror(v0,r20)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v12,r19)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r6 = memw(r0+#180)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v13 = vror(v0,r18)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v13,r19)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#184)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v14 = vror(v0,r18)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v14,r17)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r6.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#188)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v15 = vror(v0,r16)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v15,r17)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r4.l)
+; CHECK-NEXT:     r6 = memw(r0+#192)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v16 = vror(v0,r16)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v16,r11)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r4 = memw(r0+#196)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v17 = vror(v0,r10)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v17,r11)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
+; CHECK-NEXT:     r5 = memw(r0+#200)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v18 = vror(v0,r10)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v18,r28)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r6 = memw(r0+#204)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v19 = vror(v0,r15)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v19,r28)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#208)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v20 = vror(v0,r15)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v20,r14)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r6.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r5 = memw(r0+#212)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v21 = vror(v0,r13)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v21,r14)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r4.l)
+; CHECK-NEXT:     r6 = memw(r0+#216)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v22 = vror(v0,r13)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v22,r12)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r4 = memw(r0+#220)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v23 = vror(v0,r9)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v23,r12)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
+; CHECK-NEXT:     r5 = memw(r0+#224)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v24 = vror(v0,r9)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r4 = vextract(v24,r8)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r4.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r6 = memw(r0+#228)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v25 = vror(v0,r7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v25,r8)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r4 = memw(r0+#232)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5:4 = combine(#116,#12)
+; CHECK-NEXT:     r2 = memuh(r1+r4<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v26 = vror(v0,r7)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v26,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r6.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r7 = memw(r0+#236)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r7<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v27 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = vextract(v27,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r6.l)
+; CHECK-NEXT:     r5 = memw(r0+#240)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r5<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5:4 = combine(#120,#8)
+; CHECK-NEXT:     v28 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r7 = vextract(v28,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r7.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:     r6 = memw(r0+#244)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r6 = #124
+; CHECK-NEXT:     r2 = memuh(r1+r6<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v29 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v29,r5)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r2.l,r5.l)
+; CHECK-NEXT:     r7 = memw(r0+#248)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = memuh(r1+r7<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v30 = vror(v0,r4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r5 = vextract(v30,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r2 = combine(r5.h,r2.l)
+; CHECK-NEXT:     v0 = valign(v0,v0,#4)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v0.w = vinsert(r2)
+; CHECK-NEXT:     r2 = memw(r0+#252)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     v31 = valign(v0,v0,#4)
+; CHECK-NEXT:     r0 = memuh(r1+r2<<#1)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r1 = vextract(v31,r6)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r0 = combine(r0.l,r1.l)
+; CHECK-NEXT:     r17:16 = memd(r29+#40)
+; CHECK-NEXT:     r19:18 = memd(r29+#32)
+; CHECK-NEXT:    } // 8-byte Folded Reload
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0.w = vinsert(r0)
-; CHECK-NEXT:    }
+; CHECK-NEXT:     r21:20 = memd(r29+#24)
+; CHECK-NEXT:     r23:22 = memd(r29+#16)
+; CHECK-NEXT:    } // 8-byte Folded Reload
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     v1 = vror(v1,r2)
-; CHECK-NEXT:    }
+; CHECK-NEXT:     r29 = add(r29,#48)
+; CHECK-NEXT:     r25:24 = memd(r29+#8)
+; CHECK-NEXT:     r27:26 = memd(r29+#0)
+; CHECK-NEXT:    } // 8-byte Folded Reload
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     v0 = valign(v0,v0,#4)
-; CHECK-NEXT:    }
-; CHECK-NEXT:    {
-; CHECK-NEXT:     v0 = vor(v1,v0)
 ; CHECK-NEXT:     jumpr r31
 ; CHECK-NEXT:    }
 b0:

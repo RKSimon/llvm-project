@@ -292,14 +292,13 @@ define i128 @test_smul_i128(i128 noundef %x, i128 noundef %y) {
 ; CHECK-NEXT:    adc x10, x13, x14
 ; CHECK-NEXT:    asr x12, x10, #63
 ; CHECK-NEXT:    adds x9, x9, x10
-; CHECK-NEXT:    adc x10, x11, x12
+; CHECK-NEXT:    asr x10, x1, #63
+; CHECK-NEXT:    adc x11, x11, x12
 ; CHECK-NEXT:    adds x9, x16, x9
-; CHECK-NEXT:    asr x11, x1, #63
-; CHECK-NEXT:    adc x8, x8, x10
-; CHECK-NEXT:    eor x8, x8, x11
-; CHECK-NEXT:    eor x9, x9, x11
-; CHECK-NEXT:    orr x8, x9, x8
-; CHECK-NEXT:    cbz x8, .LBB5_2
+; CHECK-NEXT:    adc x8, x8, x11
+; CHECK-NEXT:    cmp x9, x10
+; CHECK-NEXT:    ccmp x8, x10, #0, eq
+; CHECK-NEXT:    b.eq .LBB5_2
 ; CHECK-NEXT:  // %bb.1: // %if.then
 ; CHECK-NEXT:    str x30, [sp, #-16]! // 8-byte Folded Spill
 ; CHECK-NEXT:    .cfi_def_cfa_offset 16

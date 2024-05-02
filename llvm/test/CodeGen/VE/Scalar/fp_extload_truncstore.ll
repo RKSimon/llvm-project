@@ -205,7 +205,8 @@ define half @func_fp32fp16(ptr %fl.ptr, float %a) {
 ; CHECK-NEXT:    lea.sl %s12, __extendhfsf2@hi(, %s0)
 ; CHECK-NEXT:    or %s0, 0, %s19
 ; CHECK-NEXT:    bsic %s10, (, %s12)
-; CHECK-NEXT:    st2b %s19, (, %s18)
+; CHECK-NEXT:    and %s1, %s19, (32)0
+; CHECK-NEXT:    st2b %s1, (, %s18)
 ; CHECK-NEXT:    ld %s19, 296(, %s11) # 8-byte Folded Reload
 ; CHECK-NEXT:    ld %s18, 288(, %s11) # 8-byte Folded Reload
 ; CHECK-NEXT:    or %s11, 0, %s9

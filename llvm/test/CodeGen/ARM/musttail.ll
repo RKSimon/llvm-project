@@ -6,11 +6,11 @@ declare i32 @many_args_callee(i32 %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5)
 define i32 @many_args_tail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32  %5) {
 ; CHECK-LABEL: many_args_tail:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, #5
-; CHECK-NEXT:    mov r1, #2
-; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #6
+; CHECK-NEXT:    mov r1, #2
 ; CHECK-NEXT:    str r0, [sp, #4]
+; CHECK-NEXT:    mov r0, #5
+; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    mov r2, #3
 ; CHECK-NEXT:    mov r3, #4
@@ -22,11 +22,11 @@ define i32 @many_args_tail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32  %5) {
 define i32 @many_args_musttail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32  %5) {
 ; CHECK-LABEL: many_args_musttail:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, #5
-; CHECK-NEXT:    mov r1, #2
-; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #6
+; CHECK-NEXT:    mov r1, #2
 ; CHECK-NEXT:    str r0, [sp, #4]
+; CHECK-NEXT:    mov r0, #5
+; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    mov r2, #3
 ; CHECK-NEXT:    mov r3, #4
@@ -42,11 +42,11 @@ define i32 @many_args_musttail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32  %5)
 define i32 @more_args_tail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32 %5, i32 %6) {
 ; CHECK-LABEL: more_args_tail:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, #5
-; CHECK-NEXT:    mov r1, #2
-; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #6
+; CHECK-NEXT:    mov r1, #2
 ; CHECK-NEXT:    str r0, [sp, #4]
+; CHECK-NEXT:    mov r0, #5
+; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    mov r2, #3
 ; CHECK-NEXT:    mov r3, #4
@@ -60,11 +60,11 @@ define i32 @more_args_tail(i32 %0, i32 %1, i32 %2, i32 %3, i32  %4, i32 %5, i32 
 define i32 @different_args_tail(i64 %0, i64 %1, i64 %2) {
 ; CHECK-LABEL: different_args_tail:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    mov r0, #5
-; CHECK-NEXT:    mov r1, #2
-; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #6
+; CHECK-NEXT:    mov r1, #2
 ; CHECK-NEXT:    str r0, [sp, #4]
+; CHECK-NEXT:    mov r0, #5
+; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    mov r2, #3
 ; CHECK-NEXT:    mov r3, #4
@@ -173,17 +173,17 @@ define void @large_caller_new_value(%twenty_bytes* byval(%twenty_bytes) align 4 
 ; CHECK-NEXT:    sub sp, sp, #36
 ; CHECK-NEXT:    add r12, sp, #20
 ; CHECK-NEXT:    stm r12, {r0, r1, r2, r3}
-; CHECK-NEXT:    mov r0, #4
+; CHECK-NEXT:    mov r0, #0
 ; CHECK-NEXT:    add r1, sp, #36
-; CHECK-NEXT:    str r0, [sp, #16]
-; CHECK-NEXT:    mov r0, #3
-; CHECK-NEXT:    str r0, [sp, #12]
-; CHECK-NEXT:    mov r0, #2
-; CHECK-NEXT:    str r0, [sp, #8]
+; CHECK-NEXT:    str r0, [sp]
 ; CHECK-NEXT:    mov r0, #1
 ; CHECK-NEXT:    str r0, [sp, #4]
-; CHECK-NEXT:    mov r0, #0
-; CHECK-NEXT:    str r0, [sp]
+; CHECK-NEXT:    mov r0, #2
+; CHECK-NEXT:    str r0, [sp, #8]
+; CHECK-NEXT:    mov r0, #3
+; CHECK-NEXT:    str r0, [sp, #12]
+; CHECK-NEXT:    mov r0, #4
+; CHECK-NEXT:    str r0, [sp, #16]
 ; CHECK-NEXT:    mov r0, sp
 ; CHECK-NEXT:    add r0, r0, #16
 ; CHECK-NEXT:    mov r3, #3

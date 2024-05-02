@@ -220,25 +220,29 @@ define i32 @func4(i32 %x, i32 %y) nounwind {
 ; ARM-NEXT:    asrs r1, r0, #31
 ; ARM-NEXT:    asrs r3, r2, #31
 ; ARM-NEXT:    bl __aeabi_lmul
+; ARM-NEXT:    asrs r2, r0, #31
+; ARM-NEXT:    subs r2, r1, r2
+; ARM-NEXT:    subs r3, r2, #1
+; ARM-NEXT:    sbcs r2, r3
 ; ARM-NEXT:    cmp r1, #0
 ; ARM-NEXT:    bmi .LBB3_2
 ; ARM-NEXT:  @ %bb.1:
-; ARM-NEXT:    ldr r2, .LCPI3_0
-; ARM-NEXT:    b .LBB3_3
+; ARM-NEXT:    ldr r1, .LCPI3_0
+; ARM-NEXT:    cmp r2, #0
+; ARM-NEXT:    beq .LBB3_3
+; ARM-NEXT:    b .LBB3_4
 ; ARM-NEXT:  .LBB3_2:
-; ARM-NEXT:    movs r2, #1
-; ARM-NEXT:    lsls r2, r2, #31
+; ARM-NEXT:    movs r1, #1
+; ARM-NEXT:    lsls r1, r1, #31
+; ARM-NEXT:    cmp r2, #0
+; ARM-NEXT:    bne .LBB3_4
 ; ARM-NEXT:  .LBB3_3:
-; ARM-NEXT:    asrs r3, r0, #31
-; ARM-NEXT:    cmp r1, r3
-; ARM-NEXT:    bne .LBB3_5
-; ARM-NEXT:  @ %bb.4:
-; ARM-NEXT:    mov r2, r0
-; ARM-NEXT:  .LBB3_5:
-; ARM-NEXT:    mov r0, r2
+; ARM-NEXT:    mov r1, r0
+; ARM-NEXT:  .LBB3_4:
+; ARM-NEXT:    mov r0, r1
 ; ARM-NEXT:    pop {r7, pc}
 ; ARM-NEXT:    .p2align 2
-; ARM-NEXT:  @ %bb.6:
+; ARM-NEXT:  @ %bb.5:
 ; ARM-NEXT:  .LCPI3_0:
 ; ARM-NEXT:    .long 2147483647 @ 0x7fffffff
   %tmp = call i32 @llvm.smul.fix.sat.i32(i32 %x, i32 %y, i32 0)
@@ -345,25 +349,29 @@ define i4 @func6(i4 %x, i4 %y) nounwind {
 ; ARM-NEXT:    asrs r3, r1, #31
 ; ARM-NEXT:    mov r1, r4
 ; ARM-NEXT:    bl __aeabi_lmul
+; ARM-NEXT:    asrs r2, r0, #31
+; ARM-NEXT:    subs r2, r1, r2
+; ARM-NEXT:    subs r3, r2, #1
+; ARM-NEXT:    sbcs r2, r3
 ; ARM-NEXT:    cmp r1, #0
 ; ARM-NEXT:    bmi .LBB5_2
 ; ARM-NEXT:  @ %bb.1:
-; ARM-NEXT:    ldr r2, .LCPI5_0
-; ARM-NEXT:    b .LBB5_3
+; ARM-NEXT:    ldr r1, .LCPI5_0
+; ARM-NEXT:    cmp r2, #0
+; ARM-NEXT:    beq .LBB5_3
+; ARM-NEXT:    b .LBB5_4
 ; ARM-NEXT:  .LBB5_2:
-; ARM-NEXT:    movs r2, #1
-; ARM-NEXT:    lsls r2, r2, #31
+; ARM-NEXT:    movs r1, #1
+; ARM-NEXT:    lsls r1, r1, #31
+; ARM-NEXT:    cmp r2, #0
+; ARM-NEXT:    bne .LBB5_4
 ; ARM-NEXT:  .LBB5_3:
-; ARM-NEXT:    asrs r3, r0, #31
-; ARM-NEXT:    cmp r1, r3
-; ARM-NEXT:    bne .LBB5_5
-; ARM-NEXT:  @ %bb.4:
-; ARM-NEXT:    mov r2, r0
-; ARM-NEXT:  .LBB5_5:
-; ARM-NEXT:    asrs r0, r2, #28
+; ARM-NEXT:    mov r1, r0
+; ARM-NEXT:  .LBB5_4:
+; ARM-NEXT:    asrs r0, r1, #28
 ; ARM-NEXT:    pop {r4, pc}
 ; ARM-NEXT:    .p2align 2
-; ARM-NEXT:  @ %bb.6:
+; ARM-NEXT:  @ %bb.5:
 ; ARM-NEXT:  .LCPI5_0:
 ; ARM-NEXT:    .long 2147483647 @ 0x7fffffff
   %tmp = call i4 @llvm.smul.fix.sat.i4(i4 %x, i4 %y, i32 0)

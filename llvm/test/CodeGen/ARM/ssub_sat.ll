@@ -147,6 +147,7 @@ define signext i16 @func16(i16 signext %x, i16 signext %y) nounwind {
 ; CHECK-T2NODSP:       @ %bb.0:
 ; CHECK-T2NODSP-NEXT:    subs r0, r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #16, r0
+; CHECK-T2NODSP-NEXT:    sxth r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func16:
@@ -210,6 +211,7 @@ define signext i8 @func8(i8 signext %x, i8 signext %y) nounwind {
 ; CHECK-T2NODSP:       @ %bb.0:
 ; CHECK-T2NODSP-NEXT:    subs r0, r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #8, r0
+; CHECK-T2NODSP-NEXT:    sxtb r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func8:
@@ -266,6 +268,7 @@ define signext i4 @func3(i4 signext %x, i4 signext %y) nounwind {
 ; CHECK-T2NODSP:       @ %bb.0:
 ; CHECK-T2NODSP-NEXT:    subs r0, r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #4, r0
+; CHECK-T2NODSP-NEXT:    sbfx r0, r0, #0, #4
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func3:

@@ -218,15 +218,15 @@ define i128 @test_copysign_const(ppc_fp128 %x) nounwind  {
 ;
 ; PPC32-LABEL: test_copysign_const:
 ; PPC32:       # %bb.0: # %entry
-; PPC32-NEXT:    stwu 1, -32(1)
-; PPC32-NEXT:    stfd 1, 24(1)
+; PPC32-NEXT:    stwu 1, -16(1)
+; PPC32-NEXT:    stfd 1, 8(1)
 ; PPC32-NEXT:    li 6, 0
-; PPC32-NEXT:    lwz 3, 24(1)
+; PPC32-NEXT:    lwz 3, 8(1)
 ; PPC32-NEXT:    rlwinm 4, 3, 0, 0, 0
 ; PPC32-NEXT:    oris 3, 4, 16399
 ; PPC32-NEXT:    xoris 5, 4, 48304
 ; PPC32-NEXT:    li 4, 0
-; PPC32-NEXT:    addi 1, 1, 32
+; PPC32-NEXT:    addi 1, 1, 16
 ; PPC32-NEXT:    blr
 entry:
 	%0 = tail call ppc_fp128 @llvm.copysign.ppcf128(ppc_fp128 0xM400F000000000000BCB0000000000000, ppc_fp128 %x)

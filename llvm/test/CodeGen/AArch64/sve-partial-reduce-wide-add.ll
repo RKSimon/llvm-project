@@ -137,8 +137,8 @@ define <vscale x 2 x i32> @signed_wide_add_nxv4i16(<vscale x 2 x i32> %acc, <vsc
 ; CHECK-SVE2:       // %bb.0: // %entry
 ; CHECK-SVE2-NEXT:    ptrue p0.s
 ; CHECK-SVE2-NEXT:    sxth z1.s, p0/m, z1.s
-; CHECK-SVE2-NEXT:    saddwb z0.d, z0.d, z1.s
-; CHECK-SVE2-NEXT:    saddwt z0.d, z0.d, z1.s
+; CHECK-SVE2-NEXT:    uaddwb z0.d, z0.d, z1.s
+; CHECK-SVE2-NEXT:    uaddwt z0.d, z0.d, z1.s
 ; CHECK-SVE2-NEXT:    ret
 entry:
     %input.wide = sext <vscale x 4 x i16> %input to <vscale x 4 x i32>

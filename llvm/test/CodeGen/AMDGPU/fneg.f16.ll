@@ -624,15 +624,20 @@ define amdgpu_kernel void @v_extract_fneg_fold_v2f16(ptr addrspace(1) %in) #0 {
 ; CI:       ; %bb.0:
 ; CI-NEXT:    s_load_dwordx2 s[0:1], s[8:9], 0x0
 ; CI-NEXT:    s_add_i32 s12, s12, s17
-; CI-NEXT:    s_mov_b32 flat_scratch_lo, s13
 ; CI-NEXT:    s_lshr_b32 flat_scratch_hi, s12, 8
+; CI-NEXT:    s_mov_b32 flat_scratch_lo, s13
 ; CI-NEXT:    s_waitcnt lgkmcnt(0)
+; CI-NEXT:    s_add_u32 s2, s0, 2
 ; CI-NEXT:    v_mov_b32_e32 v0, s0
 ; CI-NEXT:    v_mov_b32_e32 v1, s1
-; CI-NEXT:    flat_load_dword v0, v[0:1]
-; CI-NEXT:    s_waitcnt vmcnt(0)
-; CI-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
+; CI-NEXT:    s_addc_u32 s3, s1, 0
+; CI-NEXT:    v_mov_b32_e32 v2, s2
+; CI-NEXT:    v_mov_b32_e32 v3, s3
+; CI-NEXT:    flat_load_ushort v0, v[0:1]
+; CI-NEXT:    flat_load_ushort v1, v[2:3]
+; CI-NEXT:    s_waitcnt vmcnt(1)
 ; CI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; CI-NEXT:    s_waitcnt vmcnt(0)
 ; CI-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; CI-NEXT:    v_mul_f32_e32 v0, -4.0, v0
 ; CI-NEXT:    v_sub_f32_e32 v1, 2.0, v1

@@ -17,8 +17,10 @@
 define i32 @test_mulhw(i32 %a, i32 %b) {
 ; CHECK-LABEL: test_mulhw:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    mulhw r3, r3, r4
-; CHECK-NEXT:    clrldi r3, r3, 32
+; CHECK-NEXT:    extsw r3, r3
+; CHECK-NEXT:    extsw r4, r4
+; CHECK-NEXT:    mulld r3, r3, r4
+; CHECK-NEXT:    rldicl r3, r3, 32, 32
 ; CHECK-NEXT:    blr
   %1 = sext i32 %a to i64
   %2 = sext i32 %b to i64
@@ -31,8 +33,10 @@ define i32 @test_mulhw(i32 %a, i32 %b) {
 define i32 @test_mulhu(i32 %a, i32 %b) {
 ; CHECK-LABEL: test_mulhu:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    mulhwu r3, r3, r4
 ; CHECK-NEXT:    clrldi r3, r3, 32
+; CHECK-NEXT:    clrldi r4, r4, 32
+; CHECK-NEXT:    mulld r3, r3, r4
+; CHECK-NEXT:    rldicl r3, r3, 32, 32
 ; CHECK-NEXT:    blr
   %1 = zext i32 %a to i64
   %2 = zext i32 %b to i64
@@ -73,8 +77,10 @@ define i64 @test_mulhdu(i64 %a, i64 %b) {
 define signext i32 @test_mulhw_signext(i32 %a, i32 %b) {
 ; CHECK-LABEL: test_mulhw_signext:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    mulhw r3, r3, r4
 ; CHECK-NEXT:    extsw r3, r3
+; CHECK-NEXT:    extsw r4, r4
+; CHECK-NEXT:    mulld r3, r3, r4
+; CHECK-NEXT:    sradi r3, r3, 32
 ; CHECK-NEXT:    blr
   %1 = sext i32 %a to i64
   %2 = sext i32 %b to i64
@@ -87,8 +93,10 @@ define signext i32 @test_mulhw_signext(i32 %a, i32 %b) {
 define zeroext i32 @test_mulhu_zeroext(i32 %a, i32 %b) {
 ; CHECK-LABEL: test_mulhu_zeroext:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    mulhwu r3, r3, r4
 ; CHECK-NEXT:    clrldi r3, r3, 32
+; CHECK-NEXT:    clrldi r4, r4, 32
+; CHECK-NEXT:    mulld r3, r3, r4
+; CHECK-NEXT:    rldicl r3, r3, 32, 32
 ; CHECK-NEXT:    blr
   %1 = zext i32 %a to i64
   %2 = zext i32 %b to i64

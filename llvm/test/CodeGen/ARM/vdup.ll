@@ -198,9 +198,9 @@ define <8 x i16> @v_shuffledupQ16(i16 %A) nounwind {
 define <4 x i32> @v_shuffledupQ32(i32 %A) nounwind {
 ; CHECK-LABEL: v_shuffledupQ32:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vdup.32 q8, r0
-; CHECK-NEXT:    vmov r0, r1, d16
-; CHECK-NEXT:    vmov r2, r3, d17
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    mov r2, r0
+; CHECK-NEXT:    mov r3, r0
 ; CHECK-NEXT:    mov pc, lr
 	%tmp1 = insertelement <4 x i32> undef, i32 %A, i32 0
 	%tmp2 = shufflevector <4 x i32> %tmp1, <4 x i32> undef, <4 x i32> zeroinitializer
@@ -382,11 +382,9 @@ define <4 x float> @tdupf(float %x, float %y) {
 define <4 x i32> @tduplane(<4 x i32> %invec) {
 ; CHECK-LABEL: tduplane:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov d16, r0, r1
+; CHECK-NEXT:    mov r0, r1
+; CHECK-NEXT:    mov r2, r1
 ; CHECK-NEXT:    mov r3, #255
-; CHECK-NEXT:    vmov.32 r0, d16[1]
-; CHECK-NEXT:    mov r1, r0
-; CHECK-NEXT:    mov r2, r0
 ; CHECK-NEXT:    mov pc, lr
   %in = extractelement <4 x i32> %invec, i32 1
   %1 = insertelement <4 x i32> undef, i32 %in, i32 0
@@ -399,9 +397,10 @@ define <4 x i32> @tduplane(<4 x i32> %invec) {
 define <2 x float> @check_f32(<4 x float> %v) nounwind {
 ; CHECK-LABEL: check_f32:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov d16, r2, r3
-; CHECK-NEXT:    vdup.32 d16, d16[1]
-; CHECK-NEXT:    vmov r0, r1, d16
+; CHECK-NEXT:    vmov d1, r2, r3
+; CHECK-NEXT:    vdup.32 d2, d1[1]
+; CHECK-NEXT:    vmov.f32 s5, s3
+; CHECK-NEXT:    vmov r0, r1, d2
 ; CHECK-NEXT:    mov pc, lr
   %x = extractelement <4 x float> %v, i32 3
   %1 = insertelement  <2 x float> undef, float %x, i32 0
@@ -412,8 +411,7 @@ define <2 x float> @check_f32(<4 x float> %v) nounwind {
 define <2 x i32> @check_i32(<4 x i32> %v) nounwind {
 ; CHECK-LABEL: check_i32:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov d16, r2, r3
-; CHECK-NEXT:    vdup.32 d16, d16[1]
+; CHECK-NEXT:    vdup.32 d16, r3
 ; CHECK-NEXT:    vmov r0, r1, d16
 ; CHECK-NEXT:    mov pc, lr
   %x = extractelement <4 x i32> %v, i32 3
@@ -426,7 +424,9 @@ define <4 x i16> @check_i16(<8 x i16> %v) nounwind {
 ; CHECK-LABEL: check_i16:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vmov d16, r0, r1
+; CHECK-NEXT:    vmov.u16 r0, d16[3]
 ; CHECK-NEXT:    vdup.16 d16, d16[3]
+; CHECK-NEXT:    vmov.16 d16[1], r0
 ; CHECK-NEXT:    vmov r0, r1, d16
 ; CHECK-NEXT:    mov pc, lr
   %x = extractelement <8 x i16> %v, i32 3
@@ -439,7 +439,9 @@ define <8 x i8> @check_i8(<16 x i8> %v) nounwind {
 ; CHECK-LABEL: check_i8:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    vmov d16, r0, r1
+; CHECK-NEXT:    vmov.u8 r0, d16[3]
 ; CHECK-NEXT:    vdup.8 d16, d16[3]
+; CHECK-NEXT:    vmov.8 d16[1], r0
 ; CHECK-NEXT:    vmov r0, r1, d16
 ; CHECK-NEXT:    mov pc, lr
   %x = extractelement <16 x i8> %v, i32 3

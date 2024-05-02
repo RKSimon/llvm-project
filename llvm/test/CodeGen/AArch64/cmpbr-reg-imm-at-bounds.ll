@@ -475,7 +475,8 @@ if.end:
 define void @ult_0_i32(i32 %a)  {
 ; CHECK-CMPBR-LABEL: ult_0_i32:
 ; CHECK-CMPBR:       ; %bb.0: ; %entry
-; CHECK-CMPBR-NEXT:    cbhi wzr, w0, LBB16_2
+; CHECK-CMPBR-NEXT:    mov w8, #1 ; =0x1
+; CHECK-CMPBR-NEXT:    cbz w8, LBB16_2
 ; CHECK-CMPBR-NEXT:  ; %bb.1: ; %if.end
 ; CHECK-CMPBR-NEXT:    ret
 ; CHECK-CMPBR-NEXT:  LBB16_2: ; %if.then
@@ -483,8 +484,8 @@ define void @ult_0_i32(i32 %a)  {
 ;
 ; CHECK-NO-CMPBR-LABEL: ult_0_i32:
 ; CHECK-NO-CMPBR:       ; %bb.0: ; %entry
-; CHECK-NO-CMPBR-NEXT:    cmp w0, #0
-; CHECK-NO-CMPBR-NEXT:    b.lo LBB16_2
+; CHECK-NO-CMPBR-NEXT:    mov w8, #1 ; =0x1
+; CHECK-NO-CMPBR-NEXT:    cbz w8, LBB16_2
 ; CHECK-NO-CMPBR-NEXT:  ; %bb.1: ; %if.end
 ; CHECK-NO-CMPBR-NEXT:    ret
 ; CHECK-NO-CMPBR-NEXT:  LBB16_2: ; %if.then
@@ -739,7 +740,7 @@ if.end:
 define void @uge_0_i32(i32 %a)  {
 ; CHECK-CMPBR-LABEL: uge_0_i32:
 ; CHECK-CMPBR:       ; %bb.0: ; %entry
-; CHECK-CMPBR-NEXT:    cbhs w0, wzr, LBB25_2
+; CHECK-CMPBR-NEXT:    cbz wzr, LBB25_2
 ; CHECK-CMPBR-NEXT:  ; %bb.1: ; %if.end
 ; CHECK-CMPBR-NEXT:    ret
 ; CHECK-CMPBR-NEXT:  LBB25_2: ; %if.then
@@ -747,8 +748,7 @@ define void @uge_0_i32(i32 %a)  {
 ;
 ; CHECK-NO-CMPBR-LABEL: uge_0_i32:
 ; CHECK-NO-CMPBR:       ; %bb.0: ; %entry
-; CHECK-NO-CMPBR-NEXT:    cmp w0, #0
-; CHECK-NO-CMPBR-NEXT:    b.hs LBB25_2
+; CHECK-NO-CMPBR-NEXT:    cbz wzr, LBB25_2
 ; CHECK-NO-CMPBR-NEXT:  ; %bb.1: ; %if.end
 ; CHECK-NO-CMPBR-NEXT:    ret
 ; CHECK-NO-CMPBR-NEXT:  LBB25_2: ; %if.then

@@ -12,12 +12,12 @@ define void @f(ptr nocapture %a, ptr nocapture %b, ptr nocapture %cc, ptr nocapt
 ; CHECK-NEXT:    adds x8, x9, x8
 ; CHECK-NEXT:    ldp x9, x14, [x3, #16]
 ; CHECK-NEXT:    adcs x10, x10, x11
+; CHECK-NEXT:    orr x11, x12, #0x100
 ; CHECK-NEXT:    stp x8, x10, [x0]
 ; CHECK-NEXT:    adcs x9, x13, x9
-; CHECK-NEXT:    adc x11, x12, x14
-; CHECK-NEXT:    orr x12, x12, #0x100
-; CHECK-NEXT:    stp x9, x11, [x0, #16]
-; CHECK-NEXT:    adc x11, x12, x14
+; CHECK-NEXT:    adc x12, x12, x14
+; CHECK-NEXT:    adc x11, x11, x14
+; CHECK-NEXT:    stp x9, x12, [x0, #16]
 ; CHECK-NEXT:    stp x9, x11, [x1, #16]
 ; CHECK-NEXT:    stp x8, x10, [x1]
 ; CHECK-NEXT:    ret

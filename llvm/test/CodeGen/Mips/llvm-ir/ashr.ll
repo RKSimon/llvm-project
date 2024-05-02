@@ -394,8 +394,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; MIPS-NEXT:    addiu $1, $sp, 0
 ; MIPS-NEXT:    addiu $1, $1, 16
 ; MIPS-NEXT:    lw $2, 60($sp)
-; MIPS-NEXT:    srl $3, $2, 3
-; MIPS-NEXT:    andi $3, $3, 12
+; MIPS-NEXT:    andi $3, $2, 96
+; MIPS-NEXT:    srl $3, $3, 3
 ; MIPS-NEXT:    subu $1, $1, $3
 ; MIPS-NEXT:    lw $3, 4($1)
 ; MIPS-NEXT:    lw $5, 8($1)
@@ -435,8 +435,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; MIPS32-NEXT:    addiu $1, $sp, 0
 ; MIPS32-NEXT:    addiu $1, $1, 16
 ; MIPS32-NEXT:    lw $2, 60($sp)
-; MIPS32-NEXT:    srl $3, $2, 3
-; MIPS32-NEXT:    andi $3, $3, 12
+; MIPS32-NEXT:    andi $3, $2, 96
+; MIPS32-NEXT:    srl $3, $3, 3
 ; MIPS32-NEXT:    subu $1, $1, $3
 ; MIPS32-NEXT:    lw $3, 4($1)
 ; MIPS32-NEXT:    lw $5, 8($1)
@@ -476,8 +476,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; 32R2-NEXT:    addiu $1, $sp, 0
 ; 32R2-NEXT:    addiu $1, $1, 16
 ; 32R2-NEXT:    lw $2, 60($sp)
-; 32R2-NEXT:    srl $3, $2, 3
-; 32R2-NEXT:    andi $3, $3, 12
+; 32R2-NEXT:    andi $3, $2, 96
+; 32R2-NEXT:    srl $3, $3, 3
 ; 32R2-NEXT:    subu $1, $1, $3
 ; 32R2-NEXT:    lw $3, 4($1)
 ; 32R2-NEXT:    lw $5, 8($1)
@@ -517,8 +517,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; 32R6-NEXT:    addiu $1, $sp, 0
 ; 32R6-NEXT:    addiu $1, $1, 16
 ; 32R6-NEXT:    lw $2, 60($sp)
-; 32R6-NEXT:    srl $3, $2, 3
-; 32R6-NEXT:    andi $3, $3, 12
+; 32R6-NEXT:    andi $3, $2, 96
+; 32R6-NEXT:    srl $3, $3, 3
 ; 32R6-NEXT:    subu $1, $1, $3
 ; 32R6-NEXT:    lw $3, 4($1)
 ; 32R6-NEXT:    lw $5, 8($1)
@@ -628,8 +628,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; MMR3-NEXT:    addiur1sp $2, 0
 ; MMR3-NEXT:    addiur2 $2, $2, 16
 ; MMR3-NEXT:    lw $3, 68($sp)
-; MMR3-NEXT:    srl16 $4, $3, 3
-; MMR3-NEXT:    andi $4, $4, 12
+; MMR3-NEXT:    andi $4, $3, 96
+; MMR3-NEXT:    srl16 $4, $4, 3
 ; MMR3-NEXT:    subu16 $5, $2, $4
 ; MMR3-NEXT:    lwp $6, 4($5)
 ; MMR3-NEXT:    andi16 $2, $3, 31
@@ -671,8 +671,8 @@ define signext i128 @ashr_i128(i128 signext %a, i128 signext %b) {
 ; MMR6-NEXT:    addiu $2, $sp, 0
 ; MMR6-NEXT:    addiur2 $2, $2, 16
 ; MMR6-NEXT:    lw $3, 68($sp)
-; MMR6-NEXT:    srl16 $4, $3, 3
-; MMR6-NEXT:    andi $4, $4, 12
+; MMR6-NEXT:    andi $4, $3, 96
+; MMR6-NEXT:    srl16 $4, $4, 3
 ; MMR6-NEXT:    subu16 $2, $2, $4
 ; MMR6-NEXT:    lw16 $4, 4($2)
 ; MMR6-NEXT:    lw16 $5, 8($2)

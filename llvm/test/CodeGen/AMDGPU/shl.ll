@@ -683,8 +683,8 @@ define amdgpu_kernel void @shl_v4i16(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; EG:       ; %bb.0:
 ; EG-NEXT:    ALU 3, @8, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    TEX 0 @6
-; EG-NEXT:    ALU 42, @12, KC0[CB0:0-32], KC1[]
-; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T10.XY, T0.X, 1
+; EG-NEXT:    ALU 28, @12, KC0[CB0:0-32], KC1[]
+; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T11.XY, T10.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    PAD
 ; EG-NEXT:    Fetch clause starting at 6:
@@ -701,43 +701,29 @@ define amdgpu_kernel void @shl_v4i16(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; EG-NEXT:     AND_INT T1.W, PV.W, literal.x,
 ; EG-NEXT:     AND_INT * T2.W, T0.Y, literal.y,
 ; EG-NEXT:    65535(9.183409e-41), -65536(nan)
-; EG-NEXT:     OR_INT * T1.W, PS, PV.W,
-; EG-NEXT:     MOV * T6.X, PV.W,
-; EG-NEXT:     MOV T0.X, PV.X,
-; EG-NEXT:     LSHR T1.W, T10.Z, literal.x,
-; EG-NEXT:     LSHR * T2.W, T10.X, literal.x,
-; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     LSHL T1.W, PS, PV.W,
-; EG-NEXT:     AND_INT * T2.W, PV.X, literal.x,
-; EG-NEXT:    65535(9.183409e-41), 0(0.000000e+00)
-; EG-NEXT:     LSHL * T1.W, PV.W, literal.x,
-; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     OR_INT * T1.W, T2.W, PV.W,
-; EG-NEXT:     MOV T6.X, PV.W,
-; EG-NEXT:     MOV * T0.X, T7.X,
-; EG-NEXT:     AND_INT * T1.W, T10.W, literal.x,
-; EG-NEXT:    65535(9.183409e-41), 0(0.000000e+00)
-; EG-NEXT:     LSHL T1.W, T10.Y, PV.W,
-; EG-NEXT:     AND_INT * T2.W, T0.X, literal.x,
-; EG-NEXT:    -65536(nan), 0(0.000000e+00)
-; EG-NEXT:     AND_INT * T1.W, PV.W, literal.x,
-; EG-NEXT:    65535(9.183409e-41), 0(0.000000e+00)
-; EG-NEXT:     OR_INT * T1.W, T2.W, PV.W,
-; EG-NEXT:     MOV * T7.X, PV.W,
-; EG-NEXT:     MOV T0.X, PV.X,
-; EG-NEXT:     LSHR T1.W, T10.W, literal.x,
-; EG-NEXT:     LSHR * T2.W, T10.Y, literal.x,
-; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     LSHL * T1.W, PS, PV.W,
-; EG-NEXT:     AND_INT T0.Z, T0.X, literal.x,
-; EG-NEXT:     LSHL T1.W, PV.W, literal.y,
+; EG-NEXT:     LSHR T0.X, T10.Z, literal.x,
+; EG-NEXT:     LSHR T0.Y, T10.X, literal.x,
+; EG-NEXT:     AND_INT T0.Z, T10.W, literal.y,
+; EG-NEXT:     LSHR T3.W, T10.W, literal.x,
+; EG-NEXT:     LSHR * T4.W, T10.Y, literal.x,
+; EG-NEXT:    16(2.242078e-44), 65535(9.183409e-41)
+; EG-NEXT:     LSHL T1.Y, PS, PV.W,
+; EG-NEXT:     LSHL T0.Z, T10.Y, PV.Z,
+; EG-NEXT:     LSHL T3.W, PV.Y, PV.X,
+; EG-NEXT:     OR_INT * T1.W, T2.W, T1.W,
+; EG-NEXT:     AND_INT T0.X, PS, literal.x,
+; EG-NEXT:     LSHL T0.Y, PV.W, literal.y,
+; EG-NEXT:     AND_INT T0.Z, PV.Z, literal.x,
+; EG-NEXT:     LSHL T1.W, PV.Y, literal.y,
 ; EG-NEXT:     ADD_INT * T0.W, KC0[2].Y, T0.W,
 ; EG-NEXT:    65535(9.183409e-41), 16(2.242078e-44)
-; EG-NEXT:     LSHR T0.X, PS, literal.x,
-; EG-NEXT:     OR_INT * T10.Y, PV.Z, PV.W,
+; EG-NEXT:     LSHR T10.X, PS, literal.x,
+; EG-NEXT:     OR_INT T11.Y, PV.Z, PV.W,
+; EG-NEXT:     OR_INT * T0.W, PV.X, PV.Y,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
-; EG-NEXT:     MOV T7.X, PV.Y,
-; EG-NEXT:     MOV * T10.X, T6.X,
+; EG-NEXT:     MOV T6.X, PV.W,
+; EG-NEXT:     MOV * T7.X, PV.Y,
+; EG-NEXT:     MOV * T11.X, PV.X,
   %tid = call i32 @llvm.amdgcn.workitem.id.x() #0
   %gep = getelementptr inbounds <4 x i16>, ptr addrspace(1) %in, i32 %tid
   %gep.out = getelementptr inbounds <4 x i16>, ptr addrspace(1) %out, i32 %tid
@@ -961,10 +947,10 @@ define amdgpu_kernel void @shl_v4i64(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T3.XYZW, T1.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    Fetch clause starting at 6:
-; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 32, #1
-; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 48, #1
-; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 16, #1
-; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T1.XYZW, T0.X, 48, #1
+; EG-NEXT:     VTX_READ_128 T2.XYZW, T0.X, 32, #1
+; EG-NEXT:     VTX_READ_128 T3.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 16, #1
 ; EG-NEXT:    ALU clause starting at 14:
 ; EG-NEXT:     MOV * T0.X, KC0[2].Z,
 ; EG-NEXT:    ALU clause starting at 15:
@@ -1009,13 +995,13 @@ define amdgpu_kernel void @shl_v4i64(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; EG-NEXT:     CNDE_INT * T2.W, T4.X, T7.X, T1.W,
 ; EG-NEXT:     CNDE_INT T3.X, T0.Z, T1.Y, 0.0,
 ; EG-NEXT:     CNDE_INT T2.Y, T0.Y, T0.W, T0.X,
+; EG-NEXT:     LSHR * T1.X, KC0[2].Y, literal.x,
+; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
+; EG-NEXT:     CNDE_INT * T2.Z, T4.X, T1.W, 0.0,
+; EG-NEXT:     CNDE_INT T2.X, T0.Y, T0.X, 0.0,
 ; EG-NEXT:     ADD_INT * T0.W, KC0[2].Y, literal.x,
 ; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     LSHR T1.X, PV.W, literal.x,
-; EG-NEXT:     CNDE_INT T2.Z, T4.X, T1.W, 0.0,
-; EG-NEXT:     CNDE_INT * T2.X, T0.Y, T0.X, 0.0,
-; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
-; EG-NEXT:     LSHR * T0.X, KC0[2].Y, literal.x,
+; EG-NEXT:     LSHR * T0.X, PV.W, literal.x,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
   %b_ptr = getelementptr <4 x i64>, ptr addrspace(1) %in, i64 1
   %a = load <4 x i64>, ptr addrspace(1) %in

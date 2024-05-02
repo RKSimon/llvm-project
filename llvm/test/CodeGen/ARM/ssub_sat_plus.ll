@@ -56,7 +56,8 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ; CHECK-T1:       @ %bb.0:
 ; CHECK-T1-NEXT:    .save {r4, r5, r7, lr}
 ; CHECK-T1-NEXT:    push {r4, r5, r7, lr}
-; CHECK-T1-NEXT:    ldr r2, [sp, #20]
+; CHECK-T1-NEXT:    add r2, sp, #16
+; CHECK-T1-NEXT:    ldr r2, [r2, #4]
 ; CHECK-T1-NEXT:    mov r5, r1
 ; CHECK-T1-NEXT:    eors r5, r2
 ; CHECK-T1-NEXT:    ldr r3, [sp, #16]
@@ -86,11 +87,10 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ;
 ; CHECK-T2-LABEL: func64:
 ; CHECK-T2:       @ %bb.0:
-; CHECK-T2-NEXT:    ldr r2, [sp]
-; CHECK-T2-NEXT:    ldr.w r12, [sp, #4]
-; CHECK-T2-NEXT:    subs r0, r0, r2
-; CHECK-T2-NEXT:    sbc.w r2, r1, r12
-; CHECK-T2-NEXT:    eor.w r3, r1, r12
+; CHECK-T2-NEXT:    ldrd r12, r2, [sp]
+; CHECK-T2-NEXT:    eor.w r3, r1, r2
+; CHECK-T2-NEXT:    subs.w r0, r0, r12
+; CHECK-T2-NEXT:    sbc.w r2, r1, r2
 ; CHECK-T2-NEXT:    eors r1, r2
 ; CHECK-T2-NEXT:    ands r1, r3
 ; CHECK-T2-NEXT:    it mi
@@ -152,6 +152,7 @@ define signext i16 @func16(i16 signext %x, i16 signext %y, i16 signext %z) nounw
 ; CHECK-T2NODSP-NEXT:    sxth r1, r1
 ; CHECK-T2NODSP-NEXT:    subs r0, r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #16, r0
+; CHECK-T2NODSP-NEXT:    sxth r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func16:
@@ -198,6 +199,7 @@ define signext i8 @func8(i8 signext %x, i8 signext %y, i8 signext %z) nounwind {
 ; CHECK-T2NODSP-NEXT:    sxtb r1, r1
 ; CHECK-T2NODSP-NEXT:    subs r0, r0, r1
 ; CHECK-T2NODSP-NEXT:    ssat r0, #8, r0
+; CHECK-T2NODSP-NEXT:    sxtb r0, r0
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func8:
@@ -245,6 +247,7 @@ define signext i4 @func4(i4 signext %x, i4 signext %y, i4 signext %z) nounwind {
 ; CHECK-T2NODSP-NEXT:    lsls r1, r1, #28
 ; CHECK-T2NODSP-NEXT:    sub.w r0, r0, r1, asr #28
 ; CHECK-T2NODSP-NEXT:    ssat r0, #4, r0
+; CHECK-T2NODSP-NEXT:    sbfx r0, r0, #0, #4
 ; CHECK-T2NODSP-NEXT:    bx lr
 ;
 ; CHECK-T2DSP-LABEL: func4:

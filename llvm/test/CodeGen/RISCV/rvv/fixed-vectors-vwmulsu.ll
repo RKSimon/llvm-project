@@ -869,9 +869,14 @@ define <2 x i64> @vwmulsu_vx_v2i64_i32(ptr %x, ptr %y) {
 define <8 x i16> @vwmulsu_vx_v8i16_i8_and(ptr %x, i16 %y) {
 ; CHECK-LABEL: vwmulsu_vx_v8i16_i8_and:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vle8.v v9, (a0)
-; CHECK-NEXT:    vwmulsu.vx v8, v9, a1
+; CHECK-NEXT:    vsetivli zero, 8, e16, m1, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
+; CHECK-NEXT:    vmv.s.x v9, a1
+; CHECK-NEXT:    li a0, 255
+; CHECK-NEXT:    vand.vx v9, v9, a0
+; CHECK-NEXT:    vrgather.vi v10, v9, 0
+; CHECK-NEXT:    vsext.vf2 v9, v8
+; CHECK-NEXT:    vmul.vv v8, v10, v9
 ; CHECK-NEXT:    ret
   %a = load <8 x i8>, ptr %x
   %b = and i16 %y, 255
@@ -885,10 +890,14 @@ define <8 x i16> @vwmulsu_vx_v8i16_i8_and(ptr %x, i16 %y) {
 define <8 x i16> @vwmulsu_vx_v8i16_i8_and1(ptr %x, i16 %y) {
 ; CHECK-LABEL: vwmulsu_vx_v8i16_i8_and1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vle8.v v9, (a0)
-; CHECK-NEXT:    andi a0, a1, 254
-; CHECK-NEXT:    vwmulsu.vx v8, v9, a0
+; CHECK-NEXT:    vsetivli zero, 8, e16, m1, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
+; CHECK-NEXT:    vmv.s.x v9, a1
+; CHECK-NEXT:    li a0, 254
+; CHECK-NEXT:    vand.vx v9, v9, a0
+; CHECK-NEXT:    vrgather.vi v10, v9, 0
+; CHECK-NEXT:    vsext.vf2 v9, v8
+; CHECK-NEXT:    vmul.vv v8, v10, v9
 ; CHECK-NEXT:    ret
   %a = load <8 x i8>, ptr %x
   %b = and i16 %y, 254
@@ -902,9 +911,15 @@ define <8 x i16> @vwmulsu_vx_v8i16_i8_and1(ptr %x, i16 %y) {
 define <4 x i32> @vwmulsu_vx_v4i32_i16_and(ptr %x, i32 %y) {
 ; CHECK-LABEL: vwmulsu_vx_v4i32_i16_and:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vle16.v v9, (a0)
-; CHECK-NEXT:    vwmulsu.vx v8, v9, a1
+; CHECK-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; CHECK-NEXT:    vle16.v v8, (a0)
+; CHECK-NEXT:    vmv.s.x v9, a1
+; CHECK-NEXT:    lui a0, 16
+; CHECK-NEXT:    addi a0, a0, -1
+; CHECK-NEXT:    vand.vx v9, v9, a0
+; CHECK-NEXT:    vrgather.vi v10, v9, 0
+; CHECK-NEXT:    vsext.vf2 v9, v8
+; CHECK-NEXT:    vmul.vv v8, v10, v9
 ; CHECK-NEXT:    ret
   %a = load <4 x i16>, ptr %x
   %b = and i32 %y, 65535
@@ -918,9 +933,15 @@ define <4 x i32> @vwmulsu_vx_v4i32_i16_and(ptr %x, i32 %y) {
 define <4 x i32> @vwmulsu_vx_v4i32_i16_zext(ptr %x, i16 %y) {
 ; CHECK-LABEL: vwmulsu_vx_v4i32_i16_zext:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vle16.v v9, (a0)
-; CHECK-NEXT:    vwmulsu.vx v8, v9, a1
+; CHECK-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; CHECK-NEXT:    vle16.v v8, (a0)
+; CHECK-NEXT:    vmv.s.x v9, a1
+; CHECK-NEXT:    lui a0, 16
+; CHECK-NEXT:    addi a0, a0, -1
+; CHECK-NEXT:    vand.vx v9, v9, a0
+; CHECK-NEXT:    vrgather.vi v10, v9, 0
+; CHECK-NEXT:    vsext.vf2 v9, v8
+; CHECK-NEXT:    vmul.vv v8, v10, v9
 ; CHECK-NEXT:    ret
   %a = load <4 x i16>, ptr %x
   %b = zext i16 %y to i32

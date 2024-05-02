@@ -210,21 +210,16 @@ define i16 @to_bits(half %x) nounwind {
 ; SPARC32-NEXT:    save %sp, -96, %sp
 ; SPARC32-NEXT:    call __truncsfhf2
 ; SPARC32-NEXT:    mov %i0, %o0
-; SPARC32-NEXT:    sethi 4194240, %i0
-; SPARC32-NEXT:    andn %o0, %i0, %i0
 ; SPARC32-NEXT:    ret
-; SPARC32-NEXT:    restore
+; SPARC32-NEXT:    restore %g0, %o0, %o0
 ;
 ; SPARC64-LABEL: to_bits:
 ; SPARC64:       ! %bb.0:
 ; SPARC64-NEXT:    save %sp, -176, %sp
 ; SPARC64-NEXT:    call __truncsfhf2
 ; SPARC64-NEXT:    nop
-; SPARC64-NEXT:    sethi 63, %i0
-; SPARC64-NEXT:    or %i0, 1023, %i0
-; SPARC64-NEXT:    and %o0, %i0, %i0
 ; SPARC64-NEXT:    ret
-; SPARC64-NEXT:    restore
+; SPARC64-NEXT:    restore %g0, %o0, %o0
     %res = bitcast half %x to i16
     ret i16 %res
 }

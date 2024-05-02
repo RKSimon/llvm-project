@@ -29,9 +29,10 @@ define i64 @selecti64i64(i64 %a) {
 define i32 @selecti64i32(i64 %a) {
 ; CHECK-LABEL: selecti64i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    sradi 3, 3, 63
-; CHECK-NEXT:    xori 3, 3, 65535
-; CHECK-NEXT:    xoris 3, 3, 32767
+; CHECK-NEXT:    rldicl 3, 3, 1, 63
+; CHECK-NEXT:    lis 4, -32768
+; CHECK-NEXT:    xori 3, 3, 1
+; CHECK-NEXT:    sub 3, 4, 3
 ; CHECK-NEXT:    blr
   %c = icmp sgt i64 %a, -1
   %s = select i1 %c, i32 2147483647, i32 -2147483648

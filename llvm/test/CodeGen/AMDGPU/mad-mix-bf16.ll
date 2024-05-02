@@ -525,7 +525,9 @@ define float @v_mad_mix_f32_preextractfabs_bf16hi_bf16lo_bf16lo(i32 %src0.arg, b
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_fma_mix_f32_bf16 v0, |v0|, v1, v2 op_sel:[1,0,0] op_sel_hi:[1,1,1]
+; GFX1250-NEXT:    v_and_b32_e32 v0, 0x7fff0000, v0
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX1250-NEXT:    v_fma_mix_f32_bf16 v0, v0, v1, v2 op_sel_hi:[0,1,1]
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
   %src0.arg.bc = bitcast i32 %src0.arg to <2 x bfloat>
   %fabs = call <2 x bfloat> @llvm.fabs.v2bf16(<2 x bfloat> %src0.arg.bc)
@@ -542,7 +544,9 @@ define float @v_mad_mix_f32_preextractfabsfneg_bf16hi_bf16lo_bf16lo(i32 %src0.ar
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_fma_mix_f32_bf16 v0, -|v0|, v1, v2 op_sel:[1,0,0] op_sel_hi:[1,1,1]
+; GFX1250-NEXT:    v_bfe_u32 v0, v0, 16, 15
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX1250-NEXT:    v_fma_mix_f32_bf16 v0, -v0, v1, v2 op_sel_hi:[1,1,1]
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
   %src0.arg.bc = bitcast i32 %src0.arg to <2 x bfloat>
   %fabs = call <2 x bfloat> @llvm.fabs.v2bf16(<2 x bfloat> %src0.arg.bc)
