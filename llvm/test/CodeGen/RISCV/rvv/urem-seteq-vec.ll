@@ -8,13 +8,11 @@ define <vscale x 1 x i16> @test_urem_vec_even_divisor_eq0(<vscale x 1 x i16> %x)
 ; RV32-NEXT:    lui a0, 1048571
 ; RV32-NEXT:    addi a0, a0, -1365
 ; RV32-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
-; RV32-NEXT:    vmul.vx v8, v8, a0
-; RV32-NEXT:    lui a0, 3
-; RV32-NEXT:    addi a0, a0, -1366
-; RV32-NEXT:    vsll.vi v9, v8, 15
-; RV32-NEXT:    vsrl.vi v8, v8, 1
-; RV32-NEXT:    vor.vv v8, v8, v9
-; RV32-NEXT:    vmsgtu.vx v0, v8, a0
+; RV32-NEXT:    vmulhu.vx v9, v8, a0
+; RV32-NEXT:    li a0, 6
+; RV32-NEXT:    vsrl.vi v9, v9, 2
+; RV32-NEXT:    vnmsub.vx v9, a0, v8
+; RV32-NEXT:    vmsne.vi v0, v9, 0
 ; RV32-NEXT:    vmv.v.i v8, 0
 ; RV32-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV32-NEXT:    ret
@@ -24,13 +22,11 @@ define <vscale x 1 x i16> @test_urem_vec_even_divisor_eq0(<vscale x 1 x i16> %x)
 ; RV64-NEXT:    lui a0, 1048571
 ; RV64-NEXT:    addi a0, a0, -1365
 ; RV64-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
-; RV64-NEXT:    vmul.vx v8, v8, a0
-; RV64-NEXT:    lui a0, 3
-; RV64-NEXT:    addi a0, a0, -1366
-; RV64-NEXT:    vsll.vi v9, v8, 15
-; RV64-NEXT:    vsrl.vi v8, v8, 1
-; RV64-NEXT:    vor.vv v8, v8, v9
-; RV64-NEXT:    vmsgtu.vx v0, v8, a0
+; RV64-NEXT:    vmulhu.vx v9, v8, a0
+; RV64-NEXT:    li a0, 6
+; RV64-NEXT:    vsrl.vi v9, v9, 2
+; RV64-NEXT:    vnmsub.vx v9, a0, v8
+; RV64-NEXT:    vmsne.vi v0, v9, 0
 ; RV64-NEXT:    vmv.v.i v8, 0
 ; RV64-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV64-NEXT:    ret
@@ -46,10 +42,11 @@ define <vscale x 1 x i16> @test_urem_vec_odd_divisor_eq0(<vscale x 1 x i16> %x) 
 ; RV32-NEXT:    lui a0, 1048573
 ; RV32-NEXT:    addi a0, a0, -819
 ; RV32-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
-; RV32-NEXT:    vmul.vx v8, v8, a0
-; RV32-NEXT:    lui a0, 3
-; RV32-NEXT:    addi a0, a0, 819
-; RV32-NEXT:    vmsgtu.vx v0, v8, a0
+; RV32-NEXT:    vmulhu.vx v9, v8, a0
+; RV32-NEXT:    li a0, 5
+; RV32-NEXT:    vsrl.vi v9, v9, 2
+; RV32-NEXT:    vnmsub.vx v9, a0, v8
+; RV32-NEXT:    vmsne.vi v0, v9, 0
 ; RV32-NEXT:    vmv.v.i v8, 0
 ; RV32-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV32-NEXT:    ret
@@ -59,10 +56,11 @@ define <vscale x 1 x i16> @test_urem_vec_odd_divisor_eq0(<vscale x 1 x i16> %x) 
 ; RV64-NEXT:    lui a0, 1048573
 ; RV64-NEXT:    addi a0, a0, -819
 ; RV64-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
-; RV64-NEXT:    vmul.vx v8, v8, a0
-; RV64-NEXT:    lui a0, 3
-; RV64-NEXT:    addi a0, a0, 819
-; RV64-NEXT:    vmsgtu.vx v0, v8, a0
+; RV64-NEXT:    vmulhu.vx v9, v8, a0
+; RV64-NEXT:    li a0, 5
+; RV64-NEXT:    vsrl.vi v9, v9, 2
+; RV64-NEXT:    vnmsub.vx v9, a0, v8
+; RV64-NEXT:    vmsne.vi v0, v9, 0
 ; RV64-NEXT:    vmv.v.i v8, 0
 ; RV64-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV64-NEXT:    ret
@@ -75,34 +73,28 @@ define <vscale x 1 x i16> @test_urem_vec_odd_divisor_eq0(<vscale x 1 x i16> %x) 
 define <vscale x 1 x i16> @test_urem_vec_even_divisor_eq1(<vscale x 1 x i16> %x) nounwind {
 ; RV32-LABEL: test_urem_vec_even_divisor_eq1:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    vsetvli a0, zero, e16, mf4, ta, ma
-; RV32-NEXT:    vadd.vi v8, v8, -1
 ; RV32-NEXT:    lui a0, 1048571
 ; RV32-NEXT:    addi a0, a0, -1365
-; RV32-NEXT:    vmul.vx v8, v8, a0
-; RV32-NEXT:    lui a0, 3
-; RV32-NEXT:    addi a0, a0, -1366
-; RV32-NEXT:    vsll.vi v9, v8, 15
-; RV32-NEXT:    vsrl.vi v8, v8, 1
-; RV32-NEXT:    vor.vv v8, v8, v9
-; RV32-NEXT:    vmsgtu.vx v0, v8, a0
+; RV32-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
+; RV32-NEXT:    vmulhu.vx v9, v8, a0
+; RV32-NEXT:    li a0, 6
+; RV32-NEXT:    vsrl.vi v9, v9, 2
+; RV32-NEXT:    vnmsub.vx v9, a0, v8
+; RV32-NEXT:    vmsne.vi v0, v9, 1
 ; RV32-NEXT:    vmv.v.i v8, 0
 ; RV32-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_urem_vec_even_divisor_eq1:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    vsetvli a0, zero, e16, mf4, ta, ma
-; RV64-NEXT:    vadd.vi v8, v8, -1
 ; RV64-NEXT:    lui a0, 1048571
 ; RV64-NEXT:    addi a0, a0, -1365
-; RV64-NEXT:    vmul.vx v8, v8, a0
-; RV64-NEXT:    lui a0, 3
-; RV64-NEXT:    addi a0, a0, -1366
-; RV64-NEXT:    vsll.vi v9, v8, 15
-; RV64-NEXT:    vsrl.vi v8, v8, 1
-; RV64-NEXT:    vor.vv v8, v8, v9
-; RV64-NEXT:    vmsgtu.vx v0, v8, a0
+; RV64-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
+; RV64-NEXT:    vmulhu.vx v9, v8, a0
+; RV64-NEXT:    li a0, 6
+; RV64-NEXT:    vsrl.vi v9, v9, 2
+; RV64-NEXT:    vnmsub.vx v9, a0, v8
+; RV64-NEXT:    vmsne.vi v0, v9, 1
 ; RV64-NEXT:    vmv.v.i v8, 0
 ; RV64-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV64-NEXT:    ret
@@ -115,28 +107,28 @@ define <vscale x 1 x i16> @test_urem_vec_even_divisor_eq1(<vscale x 1 x i16> %x)
 define <vscale x 1 x i16> @test_urem_vec_odd_divisor_eq1(<vscale x 1 x i16> %x) nounwind {
 ; RV32-LABEL: test_urem_vec_odd_divisor_eq1:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    vsetvli a0, zero, e16, mf4, ta, ma
-; RV32-NEXT:    vadd.vi v8, v8, -1
 ; RV32-NEXT:    lui a0, 1048573
 ; RV32-NEXT:    addi a0, a0, -819
-; RV32-NEXT:    vmul.vx v8, v8, a0
-; RV32-NEXT:    lui a0, 3
-; RV32-NEXT:    addi a0, a0, 818
-; RV32-NEXT:    vmsgtu.vx v0, v8, a0
+; RV32-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
+; RV32-NEXT:    vmulhu.vx v9, v8, a0
+; RV32-NEXT:    li a0, 5
+; RV32-NEXT:    vsrl.vi v9, v9, 2
+; RV32-NEXT:    vnmsub.vx v9, a0, v8
+; RV32-NEXT:    vmsne.vi v0, v9, 1
 ; RV32-NEXT:    vmv.v.i v8, 0
 ; RV32-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: test_urem_vec_odd_divisor_eq1:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    vsetvli a0, zero, e16, mf4, ta, ma
-; RV64-NEXT:    vadd.vi v8, v8, -1
 ; RV64-NEXT:    lui a0, 1048573
 ; RV64-NEXT:    addi a0, a0, -819
-; RV64-NEXT:    vmul.vx v8, v8, a0
-; RV64-NEXT:    lui a0, 3
-; RV64-NEXT:    addi a0, a0, 818
-; RV64-NEXT:    vmsgtu.vx v0, v8, a0
+; RV64-NEXT:    vsetvli a1, zero, e16, mf4, ta, ma
+; RV64-NEXT:    vmulhu.vx v9, v8, a0
+; RV64-NEXT:    li a0, 5
+; RV64-NEXT:    vsrl.vi v9, v9, 2
+; RV64-NEXT:    vnmsub.vx v9, a0, v8
+; RV64-NEXT:    vmsne.vi v0, v9, 1
 ; RV64-NEXT:    vmv.v.i v8, 0
 ; RV64-NEXT:    vmerge.vim v8, v8, -1, v0
 ; RV64-NEXT:    ret

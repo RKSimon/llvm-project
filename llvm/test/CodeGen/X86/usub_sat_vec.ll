@@ -1100,14 +1100,14 @@ define void @PR48223(ptr %p0) {
 ; SSE2-NEXT:    movdqa 32(%rdi), %xmm2
 ; SSE2-NEXT:    movdqa 48(%rdi), %xmm3
 ; SSE2-NEXT:    movdqa {{.*#+}} xmm4 = [64,64,64,64,64,64,64,64]
-; SSE2-NEXT:    psubusw %xmm4, %xmm1
 ; SSE2-NEXT:    psubusw %xmm4, %xmm0
-; SSE2-NEXT:    psubusw %xmm4, %xmm3
+; SSE2-NEXT:    psubusw %xmm4, %xmm1
 ; SSE2-NEXT:    psubusw %xmm4, %xmm2
-; SSE2-NEXT:    movdqa %xmm2, 32(%rdi)
+; SSE2-NEXT:    psubusw %xmm4, %xmm3
 ; SSE2-NEXT:    movdqa %xmm3, 48(%rdi)
-; SSE2-NEXT:    movdqa %xmm0, (%rdi)
+; SSE2-NEXT:    movdqa %xmm2, 32(%rdi)
 ; SSE2-NEXT:    movdqa %xmm1, 16(%rdi)
+; SSE2-NEXT:    movdqa %xmm0, (%rdi)
 ; SSE2-NEXT:    retq
 ;
 ; SSSE3-LABEL: PR48223:
@@ -1117,14 +1117,14 @@ define void @PR48223(ptr %p0) {
 ; SSSE3-NEXT:    movdqa 32(%rdi), %xmm2
 ; SSSE3-NEXT:    movdqa 48(%rdi), %xmm3
 ; SSSE3-NEXT:    movdqa {{.*#+}} xmm4 = [64,64,64,64,64,64,64,64]
-; SSSE3-NEXT:    psubusw %xmm4, %xmm1
 ; SSSE3-NEXT:    psubusw %xmm4, %xmm0
-; SSSE3-NEXT:    psubusw %xmm4, %xmm3
+; SSSE3-NEXT:    psubusw %xmm4, %xmm1
 ; SSSE3-NEXT:    psubusw %xmm4, %xmm2
-; SSSE3-NEXT:    movdqa %xmm2, 32(%rdi)
+; SSSE3-NEXT:    psubusw %xmm4, %xmm3
 ; SSSE3-NEXT:    movdqa %xmm3, 48(%rdi)
-; SSSE3-NEXT:    movdqa %xmm0, (%rdi)
+; SSSE3-NEXT:    movdqa %xmm2, 32(%rdi)
 ; SSSE3-NEXT:    movdqa %xmm1, 16(%rdi)
+; SSSE3-NEXT:    movdqa %xmm0, (%rdi)
 ; SSSE3-NEXT:    retq
 ;
 ; SSE41-LABEL: PR48223:
@@ -1134,14 +1134,14 @@ define void @PR48223(ptr %p0) {
 ; SSE41-NEXT:    movdqa 32(%rdi), %xmm2
 ; SSE41-NEXT:    movdqa 48(%rdi), %xmm3
 ; SSE41-NEXT:    pmovsxbw {{.*#+}} xmm4 = [64,64,64,64,64,64,64,64]
-; SSE41-NEXT:    psubusw %xmm4, %xmm1
 ; SSE41-NEXT:    psubusw %xmm4, %xmm0
-; SSE41-NEXT:    psubusw %xmm4, %xmm3
+; SSE41-NEXT:    psubusw %xmm4, %xmm1
 ; SSE41-NEXT:    psubusw %xmm4, %xmm2
-; SSE41-NEXT:    movdqa %xmm2, 32(%rdi)
+; SSE41-NEXT:    psubusw %xmm4, %xmm3
 ; SSE41-NEXT:    movdqa %xmm3, 48(%rdi)
-; SSE41-NEXT:    movdqa %xmm0, (%rdi)
+; SSE41-NEXT:    movdqa %xmm2, 32(%rdi)
 ; SSE41-NEXT:    movdqa %xmm1, 16(%rdi)
+; SSE41-NEXT:    movdqa %xmm0, (%rdi)
 ; SSE41-NEXT:    retq
 ;
 ; AVX1-LABEL: PR48223:
@@ -1151,14 +1151,14 @@ define void @PR48223(ptr %p0) {
 ; AVX1-NEXT:    vmovdqa 32(%rdi), %xmm2
 ; AVX1-NEXT:    vmovdqa 48(%rdi), %xmm3
 ; AVX1-NEXT:    vbroadcastss {{.*#+}} xmm4 = [64,64,64,64,64,64,64,64]
-; AVX1-NEXT:    vpsubusw %xmm4, %xmm3, %xmm3
-; AVX1-NEXT:    vpsubusw %xmm4, %xmm2, %xmm2
-; AVX1-NEXT:    vpsubusw %xmm4, %xmm1, %xmm1
 ; AVX1-NEXT:    vpsubusw %xmm4, %xmm0, %xmm0
-; AVX1-NEXT:    vmovdqa %xmm0, (%rdi)
-; AVX1-NEXT:    vmovdqa %xmm1, 16(%rdi)
-; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdi)
+; AVX1-NEXT:    vpsubusw %xmm4, %xmm1, %xmm1
+; AVX1-NEXT:    vpsubusw %xmm4, %xmm2, %xmm2
+; AVX1-NEXT:    vpsubusw %xmm4, %xmm3, %xmm3
 ; AVX1-NEXT:    vmovdqa %xmm3, 48(%rdi)
+; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdi)
+; AVX1-NEXT:    vmovdqa %xmm1, 16(%rdi)
+; AVX1-NEXT:    vmovdqa %xmm0, (%rdi)
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: PR48223:
@@ -1166,10 +1166,10 @@ define void @PR48223(ptr %p0) {
 ; AVX2-NEXT:    vmovdqa (%rdi), %ymm0
 ; AVX2-NEXT:    vmovdqa 32(%rdi), %ymm1
 ; AVX2-NEXT:    vpbroadcastw {{.*#+}} ymm2 = [64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64]
-; AVX2-NEXT:    vpsubusw %ymm2, %ymm1, %ymm1
 ; AVX2-NEXT:    vpsubusw %ymm2, %ymm0, %ymm0
-; AVX2-NEXT:    vmovdqa %ymm0, (%rdi)
+; AVX2-NEXT:    vpsubusw %ymm2, %ymm1, %ymm1
 ; AVX2-NEXT:    vmovdqa %ymm1, 32(%rdi)
+; AVX2-NEXT:    vmovdqa %ymm0, (%rdi)
 ; AVX2-NEXT:    vzeroupper
 ; AVX2-NEXT:    retq
 ;
@@ -1178,10 +1178,10 @@ define void @PR48223(ptr %p0) {
 ; AVX512F-NEXT:    vmovdqa (%rdi), %ymm0
 ; AVX512F-NEXT:    vmovdqa 32(%rdi), %ymm1
 ; AVX512F-NEXT:    vpbroadcastw {{.*#+}} ymm2 = [64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64]
-; AVX512F-NEXT:    vpsubusw %ymm2, %ymm1, %ymm1
 ; AVX512F-NEXT:    vpsubusw %ymm2, %ymm0, %ymm0
-; AVX512F-NEXT:    vmovdqa %ymm0, (%rdi)
+; AVX512F-NEXT:    vpsubusw %ymm2, %ymm1, %ymm1
 ; AVX512F-NEXT:    vmovdqa %ymm1, 32(%rdi)
+; AVX512F-NEXT:    vmovdqa %ymm0, (%rdi)
 ; AVX512F-NEXT:    vzeroupper
 ; AVX512F-NEXT:    retq
 ;

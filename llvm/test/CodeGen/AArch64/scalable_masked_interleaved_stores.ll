@@ -134,10 +134,10 @@ define void @foo_st2_nxv16i8_mul_use_mask(<vscale x 16 x i1> %mask, <vscale x 16
 define void @foo_st2_nxv16i8_mask_of_interleaved_ones(<vscale x 16 x i8> %val1, <vscale x 16 x i8> %val2, ptr %p) {
 ; CHECK-LABEL: foo_st2_nxv16i8_mask_of_interleaved_ones:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.b
-; CHECK-NEXT:    // kill: def $z1 killed $z1 killed $z0_z1 def $z0_z1
-; CHECK-NEXT:    // kill: def $z0 killed $z0 killed $z0_z1 def $z0_z1
-; CHECK-NEXT:    st2b { z0.b, z1.b }, p0, [x0]
+; CHECK-NEXT:    zip2 z2.b, z0.b, z1.b
+; CHECK-NEXT:    zip1 z0.b, z0.b, z1.b
+; CHECK-NEXT:    str z2, [x0, #1, mul vl]
+; CHECK-NEXT:    str z0, [x0]
 ; CHECK-NEXT:    ret
   %interleaved.mask = call <vscale x 32 x i1> @llvm.vector.interleave2.nxv32i1(<vscale x 16 x i1> splat(i1 1), <vscale x 16 x i1> splat(i1 1))
   %interleaved.value = call <vscale x 32 x i8> @llvm.vector.interleave2.nxv32i8(<vscale x 16 x i8> %val1, <vscale x 16 x i8> %val2)

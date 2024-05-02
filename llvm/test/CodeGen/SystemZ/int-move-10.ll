@@ -99,7 +99,7 @@ define dso_local void @f6() {
 define dso_local void @f7(ptr %Src) {
 ; CHECK-LABEL: f7:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lg %r0, 0(%r2)
+; CHECK-NEXT:    l %r0, 4(%r2)
 ; CHECK-NEXT:    larl %r1, D_align4
 ; CHECK-NEXT:    st %r0, 2(%r1)
 ; CHECK-NEXT:    br %r14
@@ -112,9 +112,8 @@ define dso_local void @f7(ptr %Src) {
 define dso_local void @f8(ptr %Src) {
 ; CHECK-LABEL: f8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lg %r0, 0(%r2)
 ; CHECK-NEXT:    larl %r1, F_align2
-; CHECK-NEXT:    sth %r0, 1(%r1)
+; CHECK-NEXT:    mvc 1(2,%r1), 6(%r2)
 ; CHECK-NEXT:    br %r14
   %L = load i64, ptr %Src
   %T = trunc i64 %L to i16
