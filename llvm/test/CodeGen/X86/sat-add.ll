@@ -383,10 +383,19 @@ define <16 x i8> @unsigned_sat_constant_v16i8_using_cmp_sum(<16 x i8> %x) {
 ; SSE-NEXT:    paddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_constant_v16i8_using_cmp_sum:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_constant_v16i8_using_cmp_sum:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_constant_v16i8_using_cmp_sum:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; AVX512-NEXT:    vpminub %xmm1, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqb %xmm2, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
+; AVX512-NEXT:    vpternlogq $222, %xmm2, %xmm1, %xmm0
+; AVX512-NEXT:    retq
   %a = add <16 x i8> %x, <i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42>
   %c = icmp ugt <16 x i8> %x, %a
   %r = select <16 x i1> %c, <16 x i8> <i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1>, <16 x i8> %a
@@ -399,10 +408,18 @@ define <16 x i8> @unsigned_sat_constant_v16i8_using_cmp_notval(<16 x i8> %x) {
 ; SSE-NEXT:    paddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_constant_v16i8_using_cmp_notval:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_constant_v16i8_using_cmp_notval:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_constant_v16i8_using_cmp_notval:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; AVX512-NEXT:    vpmaxub {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqb %xmm2, %xmm0, %xmm0
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    retq
   %a = add <16 x i8> %x, <i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42, i8 42>
   %c = icmp ugt <16 x i8> %x, <i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43, i8 -43>
   %r = select <16 x i1> %c, <16 x i8> <i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1>, <16 x i8> %a
@@ -441,10 +458,19 @@ define <8 x i16> @unsigned_sat_constant_v8i16_using_cmp_sum(<8 x i16> %x) {
 ; SSE-NEXT:    paddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_constant_v8i16_using_cmp_sum:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_constant_v8i16_using_cmp_sum:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_constant_v8i16_using_cmp_sum:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; AVX512-NEXT:    vpminuw %xmm1, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqw %xmm2, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
+; AVX512-NEXT:    vpternlogq $222, %xmm2, %xmm1, %xmm0
+; AVX512-NEXT:    retq
   %a = add <8 x i16> %x, <i16 42, i16 42, i16 42, i16 42, i16 42, i16 42, i16 42, i16 42>
   %c = icmp ugt <8 x i16> %x, %a
   %r = select <8 x i1> %c, <8 x i16> <i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1>, <8 x i16> %a
@@ -457,10 +483,18 @@ define <8 x i16> @unsigned_sat_constant_v8i16_using_cmp_notval(<8 x i16> %x) {
 ; SSE-NEXT:    paddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_constant_v8i16_using_cmp_notval:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_constant_v8i16_using_cmp_notval:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_constant_v8i16_using_cmp_notval:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
+; AVX512-NEXT:    vpmaxuw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqw %xmm2, %xmm0, %xmm0
+; AVX512-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    retq
   %a = add <8 x i16> %x, <i16 42, i16 42, i16 42, i16 42, i16 42, i16 42, i16 42, i16 42>
   %c = icmp ugt <8 x i16> %x, <i16 -43, i16 -43, i16 -43, i16 -43, i16 -43, i16 -43, i16 -43, i16 -43>
   %r = select <8 x i1> %c, <8 x i16> <i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1>, <8 x i16> %a
@@ -837,10 +871,19 @@ define <16 x i8> @unsigned_sat_variable_v16i8_using_cmp_sum(<16 x i8> %x, <16 x 
 ; SSE-NEXT:    paddusb %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_variable_v16i8_using_cmp_sum:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusb %xmm1, %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_variable_v16i8_using_cmp_sum:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusb %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_variable_v16i8_using_cmp_sum:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddb %xmm1, %xmm0, %xmm1
+; AVX512-NEXT:    vpminub %xmm1, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqb %xmm2, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
+; AVX512-NEXT:    vpternlogq $222, %xmm2, %xmm1, %xmm0
+; AVX512-NEXT:    retq
   %a = add <16 x i8> %x, %y
   %c = icmp ugt <16 x i8> %x, %a
   %r = select <16 x i1> %c, <16 x i8> <i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1>, <16 x i8> %a
@@ -934,10 +977,19 @@ define <8 x i16> @unsigned_sat_variable_v8i16_using_cmp_sum(<8 x i16> %x, <8 x i
 ; SSE-NEXT:    paddusw %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: unsigned_sat_variable_v8i16_using_cmp_sum:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vpaddusw %xmm1, %xmm0, %xmm0
-; AVX-NEXT:    retq
+; AVX2-LABEL: unsigned_sat_variable_v8i16_using_cmp_sum:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpaddusw %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: unsigned_sat_variable_v8i16_using_cmp_sum:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpaddw %xmm1, %xmm0, %xmm1
+; AVX512-NEXT:    vpminuw %xmm1, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqw %xmm2, %xmm0, %xmm2
+; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
+; AVX512-NEXT:    vpternlogq $222, %xmm2, %xmm1, %xmm0
+; AVX512-NEXT:    retq
   %a = add <8 x i16> %x, %y
   %c = icmp ugt <8 x i16> %x, %a
   %r = select <8 x i1> %c, <8 x i16> <i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1, i16 -1>, <8 x i16> %a

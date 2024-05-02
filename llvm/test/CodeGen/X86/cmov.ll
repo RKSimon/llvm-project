@@ -319,7 +319,7 @@ define i32 @smin(i32 %x) {
 ; CHECK-NEXT:    testl %edi, %edi
 ; CHECK-NEXT:    notl %edi
 ; CHECK-NEXT:    movl $-1, %eax
-; CHECK-NEXT:    cmovnsl %edi, %eax
+; CHECK-NEXT:    cmovgl %edi, %eax
 ; CHECK-NEXT:    retq
 ;
 ; NDD-LABEL: smin:
@@ -327,7 +327,7 @@ define i32 @smin(i32 %x) {
 ; NDD-NEXT:    notl %edi, %eax # encoding: [0x62,0xf4,0x7c,0x18,0xf7,0xd7]
 ; NDD-NEXT:    testl %edi, %edi # encoding: [0x85,0xff]
 ; NDD-NEXT:    movl $-1, %ecx # encoding: [0xb9,0xff,0xff,0xff,0xff]
-; NDD-NEXT:    cmovsl %ecx, %eax # EVEX TO LEGACY Compression encoding: [0x0f,0x48,0xc1]
+; NDD-NEXT:    cmovlel %ecx, %eax # EVEX TO LEGACY Compression encoding: [0x0f,0x4e,0xc1]
 ; NDD-NEXT:    retq # encoding: [0xc3]
   %not_x = xor i32 %x, -1
   %1 = icmp slt i32 %not_x, -1

@@ -368,11 +368,10 @@ define i8 @ccmp8ri_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ccmp8ri_zf_double_p:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpb $123, %dil
-; CHECK-NEXT:    setne %al
+; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0
-; CHECK-NEXT:    setp %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    setnp %cl
+; CHECK-NEXT:    orb %al, %cl
 ; CHECK-NEXT:    jne .LBB10_2
 ; CHECK-NEXT:  # %bb.1: # %if.then
 ; CHECK-NEXT:    movb %dil, (%rsi)
@@ -383,11 +382,10 @@ define i8 @ccmp8ri_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ccmp8ri_zf_double_p:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    cmpb $123, %dil
-; NDD-NEXT:    setne %al
+; NDD-NEXT:    sete %al
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0
-; NDD-NEXT:    setp %cl
-; NDD-NEXT:    andb %cl, %al
-; NDD-NEXT:    cmpb $1, %al
+; NDD-NEXT:    setnp %cl
+; NDD-NEXT:    orb %cl, %al
 ; NDD-NEXT:    jne .LBB10_2
 ; NDD-NEXT:  # %bb.1: # %if.then
 ; NDD-NEXT:    movb %dil, (%rsi)
@@ -412,11 +410,10 @@ define i8 @ccmp8ri_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ccmp8ri_zf_double_np:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpb $123, %dil
-; CHECK-NEXT:    setne %al
+; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0
-; CHECK-NEXT:    setnp %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    setp %cl
+; CHECK-NEXT:    orb %al, %cl
 ; CHECK-NEXT:    jne .LBB11_2
 ; CHECK-NEXT:  # %bb.1: # %if.then
 ; CHECK-NEXT:    movb %dil, (%rsi)
@@ -427,11 +424,10 @@ define i8 @ccmp8ri_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ccmp8ri_zf_double_np:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    cmpb $123, %dil
-; NDD-NEXT:    setne %al
+; NDD-NEXT:    sete %al
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0
-; NDD-NEXT:    setnp %cl
-; NDD-NEXT:    andb %cl, %al
-; NDD-NEXT:    cmpb $1, %al
+; NDD-NEXT:    setp %cl
+; NDD-NEXT:    orb %cl, %al
 ; NDD-NEXT:    jne .LBB11_2
 ; NDD-NEXT:  # %bb.1: # %if.then
 ; NDD-NEXT:    movb %dil, (%rsi)

@@ -17,8 +17,9 @@ define i8 @sbb8rr(i8 %a, i8 %b, i8 %x, i8 %y) nounwind {
 define i16 @sbb16rr(i16 %a, i16 %b, i16 %x, i16 %y) nounwind {
 ; CHECK-LABEL: sbb16rr:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    subl %esi, %edi, %eax # encoding: [0x62,0xf4,0x7c,0x18,0x29,0xf7]
 ; CHECK-NEXT:    cmpw %dx, %cx # encoding: [0x66,0x39,0xd1]
-; CHECK-NEXT:    sbbw %si, %di, %ax # encoding: [0x62,0xf4,0x7d,0x18,0x19,0xf7]
+; CHECK-NEXT:    sbbw $0, %ax # EVEX TO LEGACY Compression encoding: [0x66,0x83,0xd8,0x00]
 ; CHECK-NEXT:    retq # encoding: [0xc3]
   %s = sub i16 %a, %b
   %k = icmp ugt i16 %x, %y
@@ -229,8 +230,10 @@ define i8 @sbb8mr(i8 %a, ptr %ptr, i8 %x, i8 %y) nounwind {
 define i16 @sbb16mr(i16 %a, ptr %ptr, i16 %x, i16 %y) nounwind {
 ; CHECK-LABEL: sbb16mr:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzwl (%rsi), %eax # encoding: [0x0f,0xb7,0x06]
+; CHECK-NEXT:    subl %edi, %eax # EVEX TO LEGACY Compression encoding: [0x29,0xf8]
 ; CHECK-NEXT:    cmpw %dx, %cx # encoding: [0x66,0x39,0xd1]
-; CHECK-NEXT:    sbbw %di, (%rsi), %ax # encoding: [0x62,0xf4,0x7d,0x18,0x19,0x3e]
+; CHECK-NEXT:    sbbw $0, %ax # EVEX TO LEGACY Compression encoding: [0x66,0x83,0xd8,0x00]
 ; CHECK-NEXT:    retq # encoding: [0xc3]
   %b = load i16, ptr %ptr
   %s = sub i16 %b, %a
@@ -396,8 +399,11 @@ define void @sbb8mr_legacy(i8 %a, ptr %ptr, i8 %x, i8 %y) nounwind {
 define void @sbb16mr_legacy(i16 %a, ptr %ptr, i16 %x, i16 %y) nounwind {
 ; CHECK-LABEL: sbb16mr_legacy:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzwl (%rsi), %eax # encoding: [0x0f,0xb7,0x06]
+; CHECK-NEXT:    subl %edi, %eax # EVEX TO LEGACY Compression encoding: [0x29,0xf8]
 ; CHECK-NEXT:    cmpw %dx, %cx # encoding: [0x66,0x39,0xd1]
-; CHECK-NEXT:    sbbw %di, (%rsi) # encoding: [0x66,0x19,0x3e]
+; CHECK-NEXT:    sbbw $0, %ax # EVEX TO LEGACY Compression encoding: [0x66,0x83,0xd8,0x00]
+; CHECK-NEXT:    movw %ax, (%rsi) # encoding: [0x66,0x89,0x06]
 ; CHECK-NEXT:    retq # encoding: [0xc3]
   %b = load i16, ptr %ptr
   %s = sub i16 %b, %a

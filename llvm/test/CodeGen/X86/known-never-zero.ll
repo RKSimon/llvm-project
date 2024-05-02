@@ -1524,8 +1524,7 @@ define i32 @bitcast_maybe_zero(<2 x i16> %x) {
 define i32 @bitcast_from_float(float %x) {
 ; X86-LABEL: bitcast_from_float:
 ; X86:       # %bb.0:
-; X86-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
-; X86-NEXT:    movd %xmm0, %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    testl %eax, %eax
 ; X86-NEXT:    je .LBB51_1
 ; X86-NEXT:  # %bb.2: # %cond.false
@@ -1580,10 +1579,9 @@ define i32 @zext_maybe_zero(i16 %x) {
 ; X86-LABEL: zext_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    testw %ax, %ax
+; X86-NEXT:    testl %eax, %eax
 ; X86-NEXT:    je .LBB53_1
 ; X86-NEXT:  # %bb.2: # %cond.false
-; X86-NEXT:    movzwl %ax, %eax
 ; X86-NEXT:    rep bsfl %eax, %eax
 ; X86-NEXT:    retl
 ; X86-NEXT:  .LBB53_1:
@@ -1592,11 +1590,10 @@ define i32 @zext_maybe_zero(i16 %x) {
 ;
 ; X64-LABEL: zext_maybe_zero:
 ; X64:       # %bb.0:
-; X64-NEXT:    testw %di, %di
+; X64-NEXT:    andl $65535, %edi # imm = 0xFFFF
 ; X64-NEXT:    je .LBB53_1
 ; X64-NEXT:  # %bb.2: # %cond.false
-; X64-NEXT:    movzwl %di, %eax
-; X64-NEXT:    rep bsfl %eax, %eax
+; X64-NEXT:    rep bsfl %edi, %eax
 ; X64-NEXT:    retq
 ; X64-NEXT:  .LBB53_1:
 ; X64-NEXT:    movl $32, %eax

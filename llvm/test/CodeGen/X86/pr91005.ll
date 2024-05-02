@@ -10,10 +10,9 @@ define void @PR91005(ptr %0) minsize {
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    vbroadcastss {{.*#+}} xmm0 = [31744,31744,31744,31744]
 ; CHECK-NEXT:    vpcmpeqw %xmm0, %xmm0, %xmm0
-; CHECK-NEXT:    vpinsrw $0, {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; CHECK-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NEXT:    vcvtph2ps %xmm0, %xmm0
-; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; CHECK-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; CHECK-NEXT:    vmulss %xmm1, %xmm0, %xmm0
 ; CHECK-NEXT:    vcvtps2ph $4, %xmm0, %xmm0
 ; CHECK-NEXT:    vmovd %xmm0, %eax

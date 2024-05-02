@@ -11,17 +11,19 @@ define void  @t1(i32 %a, ptr %P) nounwind {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    shll $12, %ecx
-; X86-NEXT:    movd %ecx, %xmm0
-; X86-NEXT:    psllq $32, %xmm0
-; X86-NEXT:    movq %xmm0, (%eax)
+; X86-NEXT:    movd %ecx, %mm0
+; X86-NEXT:    pxor %mm1, %mm1
+; X86-NEXT:    punpckldq %mm0, %mm1 # mm1 = mm1[0],mm0[0]
+; X86-NEXT:    movq %mm1, (%eax)
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: t1:
 ; X64:       # %bb.0:
 ; X64-NEXT:    shll $12, %edi
-; X64-NEXT:    movd %edi, %xmm0
-; X64-NEXT:    psllq $32, %xmm0
-; X64-NEXT:    movq %xmm0, (%rsi)
+; X64-NEXT:    movd %edi, %mm0
+; X64-NEXT:    pxor %mm1, %mm1
+; X64-NEXT:    punpckldq %mm0, %mm1 # mm1 = mm1[0],mm0[0]
+; X64-NEXT:    movq %mm1, (%rsi)
 ; X64-NEXT:    retq
  %tmp12 = shl i32 %a, 12
  %tmp21 = insertelement <2 x i32> undef, i32 %tmp12, i32 1
