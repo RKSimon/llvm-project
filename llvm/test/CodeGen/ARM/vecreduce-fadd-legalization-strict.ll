@@ -204,13 +204,11 @@ define fp128 @test_v2f128(<2 x fp128> %a, fp128 %s) nounwind {
 ; CHECK-NEXT:    mov r2, r4
 ; CHECK-NEXT:    mov r3, r5
 ; CHECK-NEXT:    bl __addtf3
-; CHECK-NEXT:    ldr r4, [sp, #32]
-; CHECK-NEXT:    ldr r5, [sp, #40]
-; CHECK-NEXT:    ldr lr, [sp, #44]
-; CHECK-NEXT:    ldr r12, [sp, #36]
-; CHECK-NEXT:    stm sp, {r4, r12}
-; CHECK-NEXT:    str r5, [sp, #8]
-; CHECK-NEXT:    str lr, [sp, #12]
+; CHECK-NEXT:    add lr, sp, #36
+; CHECK-NEXT:    ldr r5, [sp, #32]
+; CHECK-NEXT:    str r5, [sp]
+; CHECK-NEXT:    ldm lr, {r4, r12, lr}
+; CHECK-NEXT:    stmib sp, {r4, r12, lr}
 ; CHECK-NEXT:    bl __addtf3
 ; CHECK-NEXT:    add sp, sp, #16
 ; CHECK-NEXT:    pop {r4, r5, r11, lr}
@@ -226,12 +224,11 @@ define fp128 @test_v2f128_neutral(<2 x fp128> %a) nounwind {
 ; CHECK-NEXT:    push {r4, r5, r11, lr}
 ; CHECK-NEXT:    .pad #16
 ; CHECK-NEXT:    sub sp, sp, #16
-; CHECK-NEXT:    ldr r12, [sp, #36]
-; CHECK-NEXT:    ldr lr, [sp, #32]
+; CHECK-NEXT:    ldr r12, [sp, #32]
 ; CHECK-NEXT:    ldr r4, [sp, #40]
 ; CHECK-NEXT:    ldr r5, [sp, #44]
-; CHECK-NEXT:    str lr, [sp]
-; CHECK-NEXT:    str r12, [sp, #4]
+; CHECK-NEXT:    ldr lr, [sp, #36]
+; CHECK-NEXT:    stm sp, {r12, lr}
 ; CHECK-NEXT:    str r4, [sp, #8]
 ; CHECK-NEXT:    str r5, [sp, #12]
 ; CHECK-NEXT:    bl __addtf3

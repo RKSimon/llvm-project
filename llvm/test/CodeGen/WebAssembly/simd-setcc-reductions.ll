@@ -7,8 +7,11 @@ define i32 @all_true_16_i8(<16 x i8> %v) {
 ; CHECK-LABEL: all_true_16_i8:
 ; CHECK:         .functype all_true_16_i8 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i8x16.all_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i8x16.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.eqz $push3=, $pop2
+; CHECK-NEXT:    return $pop3
   %1 = icmp eq <16 x i8> %v, zeroinitializer
   %2 = bitcast <16 x i1> %1 to i16
   %3 = icmp eq i16 %2, 0
@@ -21,8 +24,11 @@ define i32 @all_true_4_i32(<4 x i32> %v) {
 ; CHECK-LABEL: all_true_4_i32:
 ; CHECK:         .functype all_true_4_i32 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i32x4.all_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0
+; CHECK-NEXT:    i32x4.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i32x4.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.eqz $push3=, $pop2
+; CHECK-NEXT:    return $pop3
   %1 = icmp eq <4 x i32> %v, zeroinitializer
   %2 = bitcast <4 x i1> %1 to i4
   %3 = icmp eq i4 %2, 0
@@ -35,8 +41,11 @@ define i32 @all_true_8_i16(<8 x i16> %v) {
 ; CHECK-LABEL: all_true_8_i16:
 ; CHECK:         .functype all_true_8_i16 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i16x8.all_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i16x8.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i16x8.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.eqz $push3=, $pop2
+; CHECK-NEXT:    return $pop3
   %1 = icmp eq <8 x i16> %v, zeroinitializer
   %2 = bitcast <8 x i1> %1 to i8
   %3 = icmp eq i8 %2, 0
@@ -49,8 +58,11 @@ define i32 @all_true_2_i64(<2 x i64> %v) {
 ; CHECK-LABEL: all_true_2_i64:
 ; CHECK:         .functype all_true_2_i64 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i64x2.all_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0
+; CHECK-NEXT:    i64x2.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i64x2.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.eqz $push3=, $pop2
+; CHECK-NEXT:    return $pop3
   %1 = icmp eq <2 x i64> %v, zeroinitializer
   %2 = bitcast <2 x i1> %1 to i2
   %3 = icmp eq i2 %2, 0
@@ -63,17 +75,14 @@ define i32 @all_true_4_i64(<4 x i64> %v) {
 ; CHECK-LABEL: all_true_4_i64:
 ; CHECK:         .functype all_true_4_i64 (v128, v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.const $push9=, 0, 0
-; CHECK-NEXT:    local.tee $push8=, $2=, $pop9
-; CHECK-NEXT:    i64x2.eq $push1=, $0, $pop8
+; CHECK-NEXT:    v128.const $push6=, 0, 0
+; CHECK-NEXT:    local.tee $push5=, $2=, $pop6
+; CHECK-NEXT:    i64x2.eq $push1=, $0, $pop5
 ; CHECK-NEXT:    i64x2.eq $push0=, $1, $2
 ; CHECK-NEXT:    i8x16.shuffle $push2=, $pop1, $pop0, 0, 1, 2, 3, 8, 9, 10, 11, 16, 17, 18, 19, 24, 25, 26, 27
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    i32.const $push4=, -1
-; CHECK-NEXT:    i32.xor $push5=, $pop3, $pop4
-; CHECK-NEXT:    i32.const $push6=, 1
-; CHECK-NEXT:    i32.and $push7=, $pop5, $pop6
-; CHECK-NEXT:    return $pop7
+; CHECK-NEXT:    i32x4.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.eqz $push4=, $pop3
+; CHECK-NEXT:    return $pop4
   %1 = icmp eq <4 x i64> %v, zeroinitializer
   %2 = bitcast <4 x i1> %1 to i4
   %3 = icmp eq i4 %2, 0
@@ -89,8 +98,12 @@ define i32 @any_true_1_4_i32(<4 x i32> %v) {
 ; CHECK-LABEL: any_true_1_4_i32:
 ; CHECK:         .functype any_true_1_4_i32 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.any_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0
+; CHECK-NEXT:    i32x4.ne $push1=, $0, $pop0
+; CHECK-NEXT:    i32x4.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.const $push3=, 0
+; CHECK-NEXT:    i32.ne $push4=, $pop2, $pop3
+; CHECK-NEXT:    return $pop4
   %1 = icmp ne <4 x i32> %v, zeroinitializer
   %2 = bitcast <4 x i1> %1 to i4
   %3 = icmp ne i4 %2, 0
@@ -106,8 +119,12 @@ define i32 @any_true_2_4_i32(<4 x i32> %v) {
 ; CHECK-LABEL: any_true_2_4_i32:
 ; CHECK:         .functype any_true_2_4_i32 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.any_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0
+; CHECK-NEXT:    i32x4.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i32x4.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.const $push3=, 15
+; CHECK-NEXT:    i32.ne $push4=, $pop2, $pop3
+; CHECK-NEXT:    return $pop4
   %1 = icmp eq <4 x i32> %v, zeroinitializer
   %2 = bitcast <4 x i1> %1 to i4
   %3 = icmp ne i4 %2, -1
@@ -123,8 +140,12 @@ define i32 @all_true_2_4_i32(<4 x i32> %v) {
 ; CHECK-LABEL: all_true_2_4_i32:
 ; CHECK:         .functype all_true_2_4_i32 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i32x4.all_true $push0=, $0
-; CHECK-NEXT:    return $pop0
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0
+; CHECK-NEXT:    i32x4.ne $push1=, $0, $pop0
+; CHECK-NEXT:    i32x4.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.const $push3=, 15
+; CHECK-NEXT:    i32.eq $push4=, $pop2, $pop3
+; CHECK-NEXT:    return $pop4
   %1 = icmp ne <4 x i32> %v, zeroinitializer
   %2 = bitcast <4 x i1> %1 to i4
   %3 = icmp eq i4 %2, -1

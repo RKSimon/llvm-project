@@ -632,8 +632,7 @@ define i64 @select_noccmp2(i64 %v1, i64 %v2, i64 %v3, i64 %r) {
 ; SDISEL-NEXT:    cmp x0, #0
 ; SDISEL-NEXT:    ccmp x0, #13, #0, ge
 ; SDISEL-NEXT:    cset w8, gt
-; SDISEL-NEXT:    cmp w8, #0
-; SDISEL-NEXT:    csel x0, xzr, x3, ne
+; SDISEL-NEXT:    csel x0, xzr, x3, gt
 ; SDISEL-NEXT:    sbfx w8, w8, #0, #1
 ; SDISEL-NEXT:    adrp x9, _g@PAGE
 ; SDISEL-NEXT:    str w8, [x9, _g@PAGEOFF]

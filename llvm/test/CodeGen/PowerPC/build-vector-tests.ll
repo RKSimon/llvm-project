@@ -975,26 +975,53 @@ define <4 x i32> @fromDiffMemVarAi(ptr nocapture readonly %arr, i32 signext %ele
 ; P9BE-LABEL: fromDiffMemVarAi:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
-; P9BE-NEXT:    lxvx v2, r3, r4
+; P9BE-NEXT:    lwzux r4, r3, r4
+; P9BE-NEXT:    lwz r5, 4(r3)
+; P9BE-NEXT:    lwz r6, 8(r3)
+; P9BE-NEXT:    lwz r3, 12(r3)
+; P9BE-NEXT:    rldimi r3, r6, 32, 0
+; P9BE-NEXT:    rldimi r5, r4, 32, 0
+; P9BE-NEXT:    mtvsrdd v2, r5, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAi:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
-; P9LE-NEXT:    lxvx v2, r3, r4
+; P9LE-NEXT:    lwzux r4, r3, r4
+; P9LE-NEXT:    lwz r5, 4(r3)
+; P9LE-NEXT:    lwz r6, 8(r3)
+; P9LE-NEXT:    lwz r3, 12(r3)
+; P9LE-NEXT:    rldimi r4, r5, 32, 0
+; P9LE-NEXT:    rldimi r6, r3, 32, 0
+; P9LE-NEXT:    mtvsrdd v2, r6, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAi:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
-; P8BE-NEXT:    lxvw4x v2, r3, r4
+; P8BE-NEXT:    lwzux r4, r3, r4
+; P8BE-NEXT:    lwz r5, 4(r3)
+; P8BE-NEXT:    lwz r6, 8(r3)
+; P8BE-NEXT:    lwz r3, 12(r3)
+; P8BE-NEXT:    rldimi r3, r6, 32, 0
+; P8BE-NEXT:    rldimi r5, r4, 32, 0
+; P8BE-NEXT:    mtfprd f0, r3
+; P8BE-NEXT:    mtfprd f1, r5
+; P8BE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAi:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd v2, vs0
+; P8LE-NEXT:    lwzux r4, r3, r4
+; P8LE-NEXT:    lwz r5, 4(r3)
+; P8LE-NEXT:    lwz r6, 8(r3)
+; P8LE-NEXT:    lwz r3, 12(r3)
+; P8LE-NEXT:    rldimi r4, r5, 32, 0
+; P8LE-NEXT:    rldimi r6, r3, 32, 0
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r6
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -1023,50 +1050,53 @@ define <4 x i32> @fromDiffMemVarDi(ptr nocapture readonly %arr, i32 signext %ele
 ; P9BE-LABEL: fromDiffMemVarDi:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -12
-; P9BE-NEXT:    lxvx v2, r3, r4
-; P9BE-NEXT:    addis r3, r2, .LCPI9_0@toc@ha
-; P9BE-NEXT:    addi r3, r3, .LCPI9_0@toc@l
-; P9BE-NEXT:    lxv vs0, 0(r3)
-; P9BE-NEXT:    xxperm v2, v2, vs0
+; P9BE-NEXT:    lwzux r4, r3, r4
+; P9BE-NEXT:    lwz r5, -4(r3)
+; P9BE-NEXT:    lwz r6, -8(r3)
+; P9BE-NEXT:    lwz r3, -12(r3)
+; P9BE-NEXT:    rldimi r3, r6, 32, 0
+; P9BE-NEXT:    rldimi r5, r4, 32, 0
+; P9BE-NEXT:    mtvsrdd v2, r5, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDi:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    li r4, -12
-; P9LE-NEXT:    lxvx v2, r3, r4
-; P9LE-NEXT:    addis r3, r2, .LCPI9_0@toc@ha
-; P9LE-NEXT:    addi r3, r3, .LCPI9_0@toc@l
-; P9LE-NEXT:    lxv vs0, 0(r3)
-; P9LE-NEXT:    xxperm v2, v2, vs0
+; P9LE-NEXT:    lwzux r4, r3, r4
+; P9LE-NEXT:    lwz r5, -4(r3)
+; P9LE-NEXT:    lwz r6, -8(r3)
+; P9LE-NEXT:    lwz r3, -12(r3)
+; P9LE-NEXT:    rldimi r4, r5, 32, 0
+; P9LE-NEXT:    rldimi r6, r3, 32, 0
+; P9LE-NEXT:    mtvsrdd v2, r6, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDi:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -12
-; P8BE-NEXT:    lxvw4x v2, 0, r3
-; P8BE-NEXT:    addis r3, r2, .LCPI9_0@toc@ha
-; P8BE-NEXT:    addi r3, r3, .LCPI9_0@toc@l
-; P8BE-NEXT:    lxvw4x v3, 0, r3
-; P8BE-NEXT:    vperm v2, v2, v2, v3
+; P8BE-NEXT:    lwzux r4, r3, r4
+; P8BE-NEXT:    lwz r5, -4(r3)
+; P8BE-NEXT:    lwz r6, -8(r3)
+; P8BE-NEXT:    lwz r3, -12(r3)
+; P8BE-NEXT:    rldimi r3, r6, 32, 0
+; P8BE-NEXT:    rldimi r5, r4, 32, 0
+; P8BE-NEXT:    mtfprd f0, r3
+; P8BE-NEXT:    mtfprd f1, r5
+; P8BE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDi:
 ; P8LE:       # %bb.0: # %entry
-; P8LE-NEXT:    addis r5, r2, .LCPI9_0@toc@ha
 ; P8LE-NEXT:    sldi r4, r4, 2
-; P8LE-NEXT:    addi r5, r5, .LCPI9_0@toc@l
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    lxvd2x vs0, 0, r5
-; P8LE-NEXT:    addi r3, r3, -12
-; P8LE-NEXT:    lxvd2x v3, 0, r3
-; P8LE-NEXT:    xxswapd v2, vs0
-; P8LE-NEXT:    vperm v2, v3, v3, v2
+; P8LE-NEXT:    lwzux r4, r3, r4
+; P8LE-NEXT:    lwz r5, -4(r3)
+; P8LE-NEXT:    lwz r6, -8(r3)
+; P8LE-NEXT:    lwz r3, -12(r3)
+; P8LE-NEXT:    rldimi r4, r5, 32, 0
+; P8LE-NEXT:    rldimi r6, r3, 32, 0
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r6
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -1493,60 +1523,56 @@ define <4 x i32> @fromDiffMemVarAConvftoi(ptr nocapture readonly %arr, i32 signe
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
 ; P9BE-NEXT:    lfsux f0, r3, r4
-; P9BE-NEXT:    lfs f1, 12(r3)
-; P9BE-NEXT:    lfs f2, 4(r3)
-; P9BE-NEXT:    xxmrghd vs1, vs2, vs1
-; P9BE-NEXT:    xvcvdpsp v2, vs1
-; P9BE-NEXT:    lfs f1, 8(r3)
-; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
-; P9BE-NEXT:    xvcvdpsp v3, vs0
+; P9BE-NEXT:    lfs f1, 4(r3)
+; P9BE-NEXT:    lfs f2, 8(r3)
+; P9BE-NEXT:    lfs f3, 12(r3)
+; P9BE-NEXT:    xxmrghd vs1, vs1, vs3
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs2
+; P9BE-NEXT:    xvcvdpsxws v2, vs1
+; P9BE-NEXT:    xvcvdpsxws v3, vs0
 ; P9BE-NEXT:    vmrgew v2, v3, v2
-; P9BE-NEXT:    xvcvspsxws v2, v2
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAConvftoi:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
 ; P9LE-NEXT:    lfsux f0, r3, r4
-; P9LE-NEXT:    lfs f1, 8(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    lfs f1, 12(r3)
-; P9LE-NEXT:    xvcvdpsp v2, vs0
-; P9LE-NEXT:    lfs f0, 4(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    xvcvdpsp v3, vs0
+; P9LE-NEXT:    lfs f2, 8(r3)
+; P9LE-NEXT:    lfs f1, 4(r3)
+; P9LE-NEXT:    lfs f3, 12(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P9LE-NEXT:    xvcvdpsxws v2, vs0
+; P9LE-NEXT:    xxmrghd vs0, vs3, vs1
+; P9LE-NEXT:    xvcvdpsxws v3, vs0
 ; P9LE-NEXT:    vmrgew v2, v3, v2
-; P9LE-NEXT:    xvcvspsxws v2, v2
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAConvftoi:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
 ; P8BE-NEXT:    lfsux f0, r3, r4
-; P8BE-NEXT:    lfs f1, 12(r3)
-; P8BE-NEXT:    lfs f2, 4(r3)
-; P8BE-NEXT:    xxmrghd vs1, vs2, vs1
+; P8BE-NEXT:    lfs f1, 4(r3)
 ; P8BE-NEXT:    lfs f2, 8(r3)
-; P8BE-NEXT:    xvcvdpsp v2, vs1
+; P8BE-NEXT:    lfs f3, 12(r3)
+; P8BE-NEXT:    xxmrghd vs1, vs1, vs3
 ; P8BE-NEXT:    xxmrghd vs0, vs0, vs2
-; P8BE-NEXT:    xvcvdpsp v3, vs0
+; P8BE-NEXT:    xvcvdpsxws v2, vs1
+; P8BE-NEXT:    xvcvdpsxws v3, vs0
 ; P8BE-NEXT:    vmrgew v2, v3, v2
-; P8BE-NEXT:    xvcvspsxws v2, v2
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAConvftoi:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
 ; P8LE-NEXT:    lfsux f0, r3, r4
-; P8LE-NEXT:    lfs f1, 8(r3)
-; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    lfs f1, 4(r3)
-; P8LE-NEXT:    lfs f2, 12(r3)
-; P8LE-NEXT:    xvcvdpsp v2, vs0
-; P8LE-NEXT:    xxmrghd vs1, vs2, vs1
-; P8LE-NEXT:    xvcvdpsp v3, vs1
+; P8LE-NEXT:    lfs f2, 8(r3)
+; P8LE-NEXT:    lfs f3, 12(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P8LE-NEXT:    xxmrghd vs1, vs3, vs1
+; P8LE-NEXT:    xvcvdpsxws v2, vs0
+; P8LE-NEXT:    xvcvdpsxws v3, vs1
 ; P8LE-NEXT:    vmrgew v2, v3, v2
-; P8LE-NEXT:    xvcvspsxws v2, v2
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -1580,60 +1606,56 @@ define <4 x i32> @fromDiffMemVarDConvftoi(ptr nocapture readonly %arr, i32 signe
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
 ; P9BE-NEXT:    lfsux f0, r3, r4
-; P9BE-NEXT:    lfs f1, -12(r3)
-; P9BE-NEXT:    lfs f2, -4(r3)
-; P9BE-NEXT:    xxmrghd vs1, vs2, vs1
-; P9BE-NEXT:    xvcvdpsp v2, vs1
-; P9BE-NEXT:    lfs f1, -8(r3)
-; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
-; P9BE-NEXT:    xvcvdpsp v3, vs0
+; P9BE-NEXT:    lfs f1, -4(r3)
+; P9BE-NEXT:    lfs f2, -8(r3)
+; P9BE-NEXT:    lfs f3, -12(r3)
+; P9BE-NEXT:    xxmrghd vs1, vs1, vs3
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs2
+; P9BE-NEXT:    xvcvdpsxws v2, vs1
+; P9BE-NEXT:    xvcvdpsxws v3, vs0
 ; P9BE-NEXT:    vmrgew v2, v3, v2
-; P9BE-NEXT:    xvcvspsxws v2, v2
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDConvftoi:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
 ; P9LE-NEXT:    lfsux f0, r3, r4
-; P9LE-NEXT:    lfs f1, -8(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    lfs f1, -12(r3)
-; P9LE-NEXT:    xvcvdpsp v2, vs0
-; P9LE-NEXT:    lfs f0, -4(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    xvcvdpsp v3, vs0
+; P9LE-NEXT:    lfs f2, -8(r3)
+; P9LE-NEXT:    lfs f1, -4(r3)
+; P9LE-NEXT:    lfs f3, -12(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P9LE-NEXT:    xvcvdpsxws v2, vs0
+; P9LE-NEXT:    xxmrghd vs0, vs3, vs1
+; P9LE-NEXT:    xvcvdpsxws v3, vs0
 ; P9LE-NEXT:    vmrgew v2, v3, v2
-; P9LE-NEXT:    xvcvspsxws v2, v2
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDConvftoi:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
 ; P8BE-NEXT:    lfsux f0, r3, r4
-; P8BE-NEXT:    lfs f1, -12(r3)
-; P8BE-NEXT:    lfs f2, -4(r3)
-; P8BE-NEXT:    xxmrghd vs1, vs2, vs1
+; P8BE-NEXT:    lfs f1, -4(r3)
 ; P8BE-NEXT:    lfs f2, -8(r3)
-; P8BE-NEXT:    xvcvdpsp v2, vs1
+; P8BE-NEXT:    lfs f3, -12(r3)
+; P8BE-NEXT:    xxmrghd vs1, vs1, vs3
 ; P8BE-NEXT:    xxmrghd vs0, vs0, vs2
-; P8BE-NEXT:    xvcvdpsp v3, vs0
+; P8BE-NEXT:    xvcvdpsxws v2, vs1
+; P8BE-NEXT:    xvcvdpsxws v3, vs0
 ; P8BE-NEXT:    vmrgew v2, v3, v2
-; P8BE-NEXT:    xvcvspsxws v2, v2
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDConvftoi:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
 ; P8LE-NEXT:    lfsux f0, r3, r4
-; P8LE-NEXT:    lfs f1, -8(r3)
-; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    lfs f1, -4(r3)
-; P8LE-NEXT:    lfs f2, -12(r3)
-; P8LE-NEXT:    xvcvdpsp v2, vs0
-; P8LE-NEXT:    xxmrghd vs1, vs2, vs1
-; P8LE-NEXT:    xvcvdpsp v3, vs1
+; P8LE-NEXT:    lfs f2, -8(r3)
+; P8LE-NEXT:    lfs f3, -12(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P8LE-NEXT:    xxmrghd vs1, vs3, vs1
+; P8LE-NEXT:    xvcvdpsxws v2, vs0
+; P8LE-NEXT:    xvcvdpsxws v3, vs1
 ; P8LE-NEXT:    vmrgew v2, v3, v2
-; P8LE-NEXT:    xvcvspsxws v2, v2
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -2463,26 +2485,53 @@ define <4 x i32> @fromDiffMemVarAui(ptr nocapture readonly %arr, i32 signext %el
 ; P9BE-LABEL: fromDiffMemVarAui:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
-; P9BE-NEXT:    lxvx v2, r3, r4
+; P9BE-NEXT:    lwzux r4, r3, r4
+; P9BE-NEXT:    lwz r5, 4(r3)
+; P9BE-NEXT:    lwz r6, 8(r3)
+; P9BE-NEXT:    lwz r3, 12(r3)
+; P9BE-NEXT:    rldimi r3, r6, 32, 0
+; P9BE-NEXT:    rldimi r5, r4, 32, 0
+; P9BE-NEXT:    mtvsrdd v2, r5, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAui:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
-; P9LE-NEXT:    lxvx v2, r3, r4
+; P9LE-NEXT:    lwzux r4, r3, r4
+; P9LE-NEXT:    lwz r5, 4(r3)
+; P9LE-NEXT:    lwz r6, 8(r3)
+; P9LE-NEXT:    lwz r3, 12(r3)
+; P9LE-NEXT:    rldimi r4, r5, 32, 0
+; P9LE-NEXT:    rldimi r6, r3, 32, 0
+; P9LE-NEXT:    mtvsrdd v2, r6, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAui:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
-; P8BE-NEXT:    lxvw4x v2, r3, r4
+; P8BE-NEXT:    lwzux r4, r3, r4
+; P8BE-NEXT:    lwz r5, 4(r3)
+; P8BE-NEXT:    lwz r6, 8(r3)
+; P8BE-NEXT:    lwz r3, 12(r3)
+; P8BE-NEXT:    rldimi r3, r6, 32, 0
+; P8BE-NEXT:    rldimi r5, r4, 32, 0
+; P8BE-NEXT:    mtfprd f0, r3
+; P8BE-NEXT:    mtfprd f1, r5
+; P8BE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAui:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd v2, vs0
+; P8LE-NEXT:    lwzux r4, r3, r4
+; P8LE-NEXT:    lwz r5, 4(r3)
+; P8LE-NEXT:    lwz r6, 8(r3)
+; P8LE-NEXT:    lwz r3, 12(r3)
+; P8LE-NEXT:    rldimi r4, r5, 32, 0
+; P8LE-NEXT:    rldimi r6, r3, 32, 0
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r6
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -2511,50 +2560,53 @@ define <4 x i32> @fromDiffMemVarDui(ptr nocapture readonly %arr, i32 signext %el
 ; P9BE-LABEL: fromDiffMemVarDui:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -12
-; P9BE-NEXT:    lxvx v2, r3, r4
-; P9BE-NEXT:    addis r3, r2, .LCPI41_0@toc@ha
-; P9BE-NEXT:    addi r3, r3, .LCPI41_0@toc@l
-; P9BE-NEXT:    lxv vs0, 0(r3)
-; P9BE-NEXT:    xxperm v2, v2, vs0
+; P9BE-NEXT:    lwzux r4, r3, r4
+; P9BE-NEXT:    lwz r5, -4(r3)
+; P9BE-NEXT:    lwz r6, -8(r3)
+; P9BE-NEXT:    lwz r3, -12(r3)
+; P9BE-NEXT:    rldimi r3, r6, 32, 0
+; P9BE-NEXT:    rldimi r5, r4, 32, 0
+; P9BE-NEXT:    mtvsrdd v2, r5, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDui:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    li r4, -12
-; P9LE-NEXT:    lxvx v2, r3, r4
-; P9LE-NEXT:    addis r3, r2, .LCPI41_0@toc@ha
-; P9LE-NEXT:    addi r3, r3, .LCPI41_0@toc@l
-; P9LE-NEXT:    lxv vs0, 0(r3)
-; P9LE-NEXT:    xxperm v2, v2, vs0
+; P9LE-NEXT:    lwzux r4, r3, r4
+; P9LE-NEXT:    lwz r5, -4(r3)
+; P9LE-NEXT:    lwz r6, -8(r3)
+; P9LE-NEXT:    lwz r3, -12(r3)
+; P9LE-NEXT:    rldimi r4, r5, 32, 0
+; P9LE-NEXT:    rldimi r6, r3, 32, 0
+; P9LE-NEXT:    mtvsrdd v2, r6, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDui:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -12
-; P8BE-NEXT:    lxvw4x v2, 0, r3
-; P8BE-NEXT:    addis r3, r2, .LCPI41_0@toc@ha
-; P8BE-NEXT:    addi r3, r3, .LCPI41_0@toc@l
-; P8BE-NEXT:    lxvw4x v3, 0, r3
-; P8BE-NEXT:    vperm v2, v2, v2, v3
+; P8BE-NEXT:    lwzux r4, r3, r4
+; P8BE-NEXT:    lwz r5, -4(r3)
+; P8BE-NEXT:    lwz r6, -8(r3)
+; P8BE-NEXT:    lwz r3, -12(r3)
+; P8BE-NEXT:    rldimi r3, r6, 32, 0
+; P8BE-NEXT:    rldimi r5, r4, 32, 0
+; P8BE-NEXT:    mtfprd f0, r3
+; P8BE-NEXT:    mtfprd f1, r5
+; P8BE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDui:
 ; P8LE:       # %bb.0: # %entry
-; P8LE-NEXT:    addis r5, r2, .LCPI41_0@toc@ha
 ; P8LE-NEXT:    sldi r4, r4, 2
-; P8LE-NEXT:    addi r5, r5, .LCPI41_0@toc@l
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    lxvd2x vs0, 0, r5
-; P8LE-NEXT:    addi r3, r3, -12
-; P8LE-NEXT:    lxvd2x v3, 0, r3
-; P8LE-NEXT:    xxswapd v2, vs0
-; P8LE-NEXT:    vperm v2, v3, v3, v2
+; P8LE-NEXT:    lwzux r4, r3, r4
+; P8LE-NEXT:    lwz r5, -4(r3)
+; P8LE-NEXT:    lwz r6, -8(r3)
+; P8LE-NEXT:    lwz r3, -12(r3)
+; P8LE-NEXT:    rldimi r4, r5, 32, 0
+; P8LE-NEXT:    rldimi r6, r3, 32, 0
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r6
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -2981,60 +3033,56 @@ define <4 x i32> @fromDiffMemVarAConvftoui(ptr nocapture readonly %arr, i32 sign
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
 ; P9BE-NEXT:    lfsux f0, r3, r4
-; P9BE-NEXT:    lfs f1, 12(r3)
-; P9BE-NEXT:    lfs f2, 4(r3)
-; P9BE-NEXT:    xxmrghd vs1, vs2, vs1
-; P9BE-NEXT:    xvcvdpsp v2, vs1
-; P9BE-NEXT:    lfs f1, 8(r3)
-; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
-; P9BE-NEXT:    xvcvdpsp v3, vs0
+; P9BE-NEXT:    lfs f1, 4(r3)
+; P9BE-NEXT:    lfs f2, 8(r3)
+; P9BE-NEXT:    lfs f3, 12(r3)
+; P9BE-NEXT:    xxmrghd vs1, vs1, vs3
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs2
+; P9BE-NEXT:    xvcvdpuxws v2, vs1
+; P9BE-NEXT:    xvcvdpuxws v3, vs0
 ; P9BE-NEXT:    vmrgew v2, v3, v2
-; P9BE-NEXT:    xvcvspuxws v2, v2
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAConvftoui:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
 ; P9LE-NEXT:    lfsux f0, r3, r4
-; P9LE-NEXT:    lfs f1, 8(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    lfs f1, 12(r3)
-; P9LE-NEXT:    xvcvdpsp v2, vs0
-; P9LE-NEXT:    lfs f0, 4(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    xvcvdpsp v3, vs0
+; P9LE-NEXT:    lfs f2, 8(r3)
+; P9LE-NEXT:    lfs f1, 4(r3)
+; P9LE-NEXT:    lfs f3, 12(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P9LE-NEXT:    xvcvdpuxws v2, vs0
+; P9LE-NEXT:    xxmrghd vs0, vs3, vs1
+; P9LE-NEXT:    xvcvdpuxws v3, vs0
 ; P9LE-NEXT:    vmrgew v2, v3, v2
-; P9LE-NEXT:    xvcvspuxws v2, v2
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAConvftoui:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
 ; P8BE-NEXT:    lfsux f0, r3, r4
-; P8BE-NEXT:    lfs f1, 12(r3)
-; P8BE-NEXT:    lfs f2, 4(r3)
-; P8BE-NEXT:    xxmrghd vs1, vs2, vs1
+; P8BE-NEXT:    lfs f1, 4(r3)
 ; P8BE-NEXT:    lfs f2, 8(r3)
-; P8BE-NEXT:    xvcvdpsp v2, vs1
+; P8BE-NEXT:    lfs f3, 12(r3)
+; P8BE-NEXT:    xxmrghd vs1, vs1, vs3
 ; P8BE-NEXT:    xxmrghd vs0, vs0, vs2
-; P8BE-NEXT:    xvcvdpsp v3, vs0
+; P8BE-NEXT:    xvcvdpuxws v2, vs1
+; P8BE-NEXT:    xvcvdpuxws v3, vs0
 ; P8BE-NEXT:    vmrgew v2, v3, v2
-; P8BE-NEXT:    xvcvspuxws v2, v2
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAConvftoui:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
 ; P8LE-NEXT:    lfsux f0, r3, r4
-; P8LE-NEXT:    lfs f1, 8(r3)
-; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    lfs f1, 4(r3)
-; P8LE-NEXT:    lfs f2, 12(r3)
-; P8LE-NEXT:    xvcvdpsp v2, vs0
-; P8LE-NEXT:    xxmrghd vs1, vs2, vs1
-; P8LE-NEXT:    xvcvdpsp v3, vs1
+; P8LE-NEXT:    lfs f2, 8(r3)
+; P8LE-NEXT:    lfs f3, 12(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P8LE-NEXT:    xxmrghd vs1, vs3, vs1
+; P8LE-NEXT:    xvcvdpuxws v2, vs0
+; P8LE-NEXT:    xvcvdpuxws v3, vs1
 ; P8LE-NEXT:    vmrgew v2, v3, v2
-; P8LE-NEXT:    xvcvspuxws v2, v2
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -3069,60 +3117,56 @@ define <4 x i32> @fromDiffMemVarDConvftoui(ptr nocapture readonly %arr, i32 sign
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 2
 ; P9BE-NEXT:    lfsux f0, r3, r4
-; P9BE-NEXT:    lfs f1, -12(r3)
-; P9BE-NEXT:    lfs f2, -4(r3)
-; P9BE-NEXT:    xxmrghd vs1, vs2, vs1
-; P9BE-NEXT:    xvcvdpsp v2, vs1
-; P9BE-NEXT:    lfs f1, -8(r3)
-; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
-; P9BE-NEXT:    xvcvdpsp v3, vs0
+; P9BE-NEXT:    lfs f1, -4(r3)
+; P9BE-NEXT:    lfs f2, -8(r3)
+; P9BE-NEXT:    lfs f3, -12(r3)
+; P9BE-NEXT:    xxmrghd vs1, vs1, vs3
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs2
+; P9BE-NEXT:    xvcvdpuxws v2, vs1
+; P9BE-NEXT:    xvcvdpuxws v3, vs0
 ; P9BE-NEXT:    vmrgew v2, v3, v2
-; P9BE-NEXT:    xvcvspuxws v2, v2
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDConvftoui:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 2
 ; P9LE-NEXT:    lfsux f0, r3, r4
-; P9LE-NEXT:    lfs f1, -8(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    lfs f1, -12(r3)
-; P9LE-NEXT:    xvcvdpsp v2, vs0
-; P9LE-NEXT:    lfs f0, -4(r3)
-; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
-; P9LE-NEXT:    xvcvdpsp v3, vs0
+; P9LE-NEXT:    lfs f2, -8(r3)
+; P9LE-NEXT:    lfs f1, -4(r3)
+; P9LE-NEXT:    lfs f3, -12(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P9LE-NEXT:    xvcvdpuxws v2, vs0
+; P9LE-NEXT:    xxmrghd vs0, vs3, vs1
+; P9LE-NEXT:    xvcvdpuxws v3, vs0
 ; P9LE-NEXT:    vmrgew v2, v3, v2
-; P9LE-NEXT:    xvcvspuxws v2, v2
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDConvftoui:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 2
 ; P8BE-NEXT:    lfsux f0, r3, r4
-; P8BE-NEXT:    lfs f1, -12(r3)
-; P8BE-NEXT:    lfs f2, -4(r3)
-; P8BE-NEXT:    xxmrghd vs1, vs2, vs1
+; P8BE-NEXT:    lfs f1, -4(r3)
 ; P8BE-NEXT:    lfs f2, -8(r3)
-; P8BE-NEXT:    xvcvdpsp v2, vs1
+; P8BE-NEXT:    lfs f3, -12(r3)
+; P8BE-NEXT:    xxmrghd vs1, vs1, vs3
 ; P8BE-NEXT:    xxmrghd vs0, vs0, vs2
-; P8BE-NEXT:    xvcvdpsp v3, vs0
+; P8BE-NEXT:    xvcvdpuxws v2, vs1
+; P8BE-NEXT:    xvcvdpuxws v3, vs0
 ; P8BE-NEXT:    vmrgew v2, v3, v2
-; P8BE-NEXT:    xvcvspuxws v2, v2
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDConvftoui:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 2
 ; P8LE-NEXT:    lfsux f0, r3, r4
-; P8LE-NEXT:    lfs f1, -8(r3)
-; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    lfs f1, -4(r3)
-; P8LE-NEXT:    lfs f2, -12(r3)
-; P8LE-NEXT:    xvcvdpsp v2, vs0
-; P8LE-NEXT:    xxmrghd vs1, vs2, vs1
-; P8LE-NEXT:    xvcvdpsp v3, vs1
+; P8LE-NEXT:    lfs f2, -8(r3)
+; P8LE-NEXT:    lfs f3, -12(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs2, vs0
+; P8LE-NEXT:    xxmrghd vs1, vs3, vs1
+; P8LE-NEXT:    xvcvdpuxws v2, vs0
+; P8LE-NEXT:    xvcvdpuxws v3, vs1
 ; P8LE-NEXT:    vmrgew v2, v3, v2
-; P8LE-NEXT:    xvcvspuxws v2, v2
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -3934,26 +3978,37 @@ define <2 x i64> @fromDiffMemVarAll(ptr nocapture readonly %arr, i32 signext %el
 ; P9BE-LABEL: fromDiffMemVarAll:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    lxvx v2, r3, r4
+; P9BE-NEXT:    ldux r4, r3, r4
+; P9BE-NEXT:    ld r3, 8(r3)
+; P9BE-NEXT:    mtvsrdd v2, r4, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAll:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    lxvx v2, r3, r4
+; P9LE-NEXT:    ldux r4, r3, r4
+; P9LE-NEXT:    ld r3, 8(r3)
+; P9LE-NEXT:    mtvsrdd v2, r3, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAll:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    lxvd2x v2, r3, r4
+; P8BE-NEXT:    ldux r4, r3, r4
+; P8BE-NEXT:    ld r3, 8(r3)
+; P8BE-NEXT:    mtfprd f0, r4
+; P8BE-NEXT:    mtfprd f1, r3
+; P8BE-NEXT:    xxmrghd v2, vs0, vs1
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAll:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd v2, vs0
+; P8LE-NEXT:    ldux r4, r3, r4
+; P8LE-NEXT:    ld r3, 8(r3)
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r3
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -3972,35 +4027,37 @@ define <2 x i64> @fromDiffMemVarDll(ptr nocapture readonly %arr, i32 signext %el
 ; P9BE-LABEL: fromDiffMemVarDll:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -8
-; P9BE-NEXT:    lxvx v2, r3, r4
-; P9BE-NEXT:    xxswapd v2, v2
+; P9BE-NEXT:    ldux r4, r3, r4
+; P9BE-NEXT:    ld r3, -8(r3)
+; P9BE-NEXT:    mtvsrdd v2, r4, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDll:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    addi r3, r3, -8
-; P9LE-NEXT:    lxvd2x v2, 0, r3
+; P9LE-NEXT:    ldux r4, r3, r4
+; P9LE-NEXT:    ld r3, -8(r3)
+; P9LE-NEXT:    mtvsrdd v2, r3, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDll:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -8
-; P8BE-NEXT:    lxvd2x v2, 0, r3
-; P8BE-NEXT:    xxswapd v2, v2
+; P8BE-NEXT:    ldux r4, r3, r4
+; P8BE-NEXT:    ld r3, -8(r3)
+; P8BE-NEXT:    mtfprd f0, r4
+; P8BE-NEXT:    mtfprd f1, r3
+; P8BE-NEXT:    xxmrghd v2, vs0, vs1
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDll:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    addi r3, r3, -8
-; P8LE-NEXT:    lxvd2x v2, 0, r3
+; P8LE-NEXT:    ldux r4, r3, r4
+; P8LE-NEXT:    ld r3, -8(r3)
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r3
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -4684,29 +4741,36 @@ define <2 x i64> @fromDiffMemVarAConvdtoll(ptr nocapture readonly %arr, i32 sign
 ; P9BE-LABEL: fromDiffMemVarAConvdtoll:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    lxvx vs0, r3, r4
+; P9BE-NEXT:    lfdux f0, r3, r4
+; P9BE-NEXT:    lfd f1, 8(r3)
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P9BE-NEXT:    xvcvdpsxds v2, vs0
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAConvdtoll:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    lxvx vs0, r3, r4
+; P9LE-NEXT:    lfdux f0, r3, r4
+; P9LE-NEXT:    lfd f1, 8(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P9LE-NEXT:    xvcvdpsxds v2, vs0
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAConvdtoll:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    lxvd2x vs0, r3, r4
+; P8BE-NEXT:    lfdux f0, r3, r4
+; P8BE-NEXT:    lfd f1, 8(r3)
+; P8BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P8BE-NEXT:    xvcvdpsxds v2, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAConvdtoll:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd vs0, vs0
+; P8LE-NEXT:    lfdux f0, r3, r4
+; P8LE-NEXT:    lfd f1, 8(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    xvcvdpsxds v2, vs0
 ; P8LE-NEXT:    blr
 entry:
@@ -4728,38 +4792,36 @@ define <2 x i64> @fromDiffMemVarDConvdtoll(ptr nocapture readonly %arr, i32 sign
 ; P9BE-LABEL: fromDiffMemVarDConvdtoll:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -8
-; P9BE-NEXT:    lxvx vs0, r3, r4
-; P9BE-NEXT:    xxswapd vs0, vs0
+; P9BE-NEXT:    lfdux f0, r3, r4
+; P9BE-NEXT:    lfd f1, -8(r3)
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P9BE-NEXT:    xvcvdpsxds v2, vs0
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDConvdtoll:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    addi r3, r3, -8
-; P9LE-NEXT:    lxvd2x vs0, 0, r3
+; P9LE-NEXT:    lfdux f0, r3, r4
+; P9LE-NEXT:    lfd f1, -8(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P9LE-NEXT:    xvcvdpsxds v2, vs0
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDConvdtoll:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -8
-; P8BE-NEXT:    lxvd2x vs0, 0, r3
-; P8BE-NEXT:    xxswapd vs0, vs0
+; P8BE-NEXT:    lfdux f0, r3, r4
+; P8BE-NEXT:    lfd f1, -8(r3)
+; P8BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P8BE-NEXT:    xvcvdpsxds v2, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDConvdtoll:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    addi r3, r3, -8
-; P8LE-NEXT:    lxvd2x vs0, 0, r3
+; P8LE-NEXT:    lfdux f0, r3, r4
+; P8LE-NEXT:    lfd f1, -8(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    xvcvdpsxds v2, vs0
 ; P8LE-NEXT:    blr
 entry:
@@ -5088,26 +5150,37 @@ define <2 x i64> @fromDiffMemVarAull(ptr nocapture readonly %arr, i32 signext %e
 ; P9BE-LABEL: fromDiffMemVarAull:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    lxvx v2, r3, r4
+; P9BE-NEXT:    ldux r4, r3, r4
+; P9BE-NEXT:    ld r3, 8(r3)
+; P9BE-NEXT:    mtvsrdd v2, r4, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAull:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    lxvx v2, r3, r4
+; P9LE-NEXT:    ldux r4, r3, r4
+; P9LE-NEXT:    ld r3, 8(r3)
+; P9LE-NEXT:    mtvsrdd v2, r3, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAull:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    lxvd2x v2, r3, r4
+; P8BE-NEXT:    ldux r4, r3, r4
+; P8BE-NEXT:    ld r3, 8(r3)
+; P8BE-NEXT:    mtfprd f0, r4
+; P8BE-NEXT:    mtfprd f1, r3
+; P8BE-NEXT:    xxmrghd v2, vs0, vs1
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAull:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd v2, vs0
+; P8LE-NEXT:    ldux r4, r3, r4
+; P8LE-NEXT:    ld r3, 8(r3)
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r3
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -5126,35 +5199,37 @@ define <2 x i64> @fromDiffMemVarDull(ptr nocapture readonly %arr, i32 signext %e
 ; P9BE-LABEL: fromDiffMemVarDull:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -8
-; P9BE-NEXT:    lxvx v2, r3, r4
-; P9BE-NEXT:    xxswapd v2, v2
+; P9BE-NEXT:    ldux r4, r3, r4
+; P9BE-NEXT:    ld r3, -8(r3)
+; P9BE-NEXT:    mtvsrdd v2, r4, r3
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDull:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    addi r3, r3, -8
-; P9LE-NEXT:    lxvd2x v2, 0, r3
+; P9LE-NEXT:    ldux r4, r3, r4
+; P9LE-NEXT:    ld r3, -8(r3)
+; P9LE-NEXT:    mtvsrdd v2, r3, r4
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDull:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -8
-; P8BE-NEXT:    lxvd2x v2, 0, r3
-; P8BE-NEXT:    xxswapd v2, v2
+; P8BE-NEXT:    ldux r4, r3, r4
+; P8BE-NEXT:    ld r3, -8(r3)
+; P8BE-NEXT:    mtfprd f0, r4
+; P8BE-NEXT:    mtfprd f1, r3
+; P8BE-NEXT:    xxmrghd v2, vs0, vs1
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDull:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    addi r3, r3, -8
-; P8LE-NEXT:    lxvd2x v2, 0, r3
+; P8LE-NEXT:    ldux r4, r3, r4
+; P8LE-NEXT:    ld r3, -8(r3)
+; P8LE-NEXT:    mtfprd f0, r4
+; P8LE-NEXT:    mtfprd f1, r3
+; P8LE-NEXT:    xxmrghd v2, vs1, vs0
 ; P8LE-NEXT:    blr
 entry:
   %idxprom = sext i32 %elem to i64
@@ -5838,29 +5913,36 @@ define <2 x i64> @fromDiffMemVarAConvdtoull(ptr nocapture readonly %arr, i32 sig
 ; P9BE-LABEL: fromDiffMemVarAConvdtoull:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    lxvx vs0, r3, r4
+; P9BE-NEXT:    lfdux f0, r3, r4
+; P9BE-NEXT:    lfd f1, 8(r3)
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P9BE-NEXT:    xvcvdpuxds v2, vs0
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarAConvdtoull:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    lxvx vs0, r3, r4
+; P9LE-NEXT:    lfdux f0, r3, r4
+; P9LE-NEXT:    lfd f1, 8(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P9LE-NEXT:    xvcvdpuxds v2, vs0
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarAConvdtoull:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    lxvd2x vs0, r3, r4
+; P8BE-NEXT:    lfdux f0, r3, r4
+; P8BE-NEXT:    lfd f1, 8(r3)
+; P8BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P8BE-NEXT:    xvcvdpuxds v2, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarAConvdtoull:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    lxvd2x vs0, r3, r4
-; P8LE-NEXT:    xxswapd vs0, vs0
+; P8LE-NEXT:    lfdux f0, r3, r4
+; P8LE-NEXT:    lfd f1, 8(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    xvcvdpuxds v2, vs0
 ; P8LE-NEXT:    blr
 entry:
@@ -5882,38 +5964,36 @@ define <2 x i64> @fromDiffMemVarDConvdtoull(ptr nocapture readonly %arr, i32 sig
 ; P9BE-LABEL: fromDiffMemVarDConvdtoull:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE-NEXT:    sldi r4, r4, 3
-; P9BE-NEXT:    add r3, r3, r4
-; P9BE-NEXT:    li r4, -8
-; P9BE-NEXT:    lxvx vs0, r3, r4
-; P9BE-NEXT:    xxswapd vs0, vs0
+; P9BE-NEXT:    lfdux f0, r3, r4
+; P9BE-NEXT:    lfd f1, -8(r3)
+; P9BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P9BE-NEXT:    xvcvdpuxds v2, vs0
 ; P9BE-NEXT:    blr
 ;
 ; P9LE-LABEL: fromDiffMemVarDConvdtoull:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r4, 3
-; P9LE-NEXT:    add r3, r3, r4
-; P9LE-NEXT:    addi r3, r3, -8
-; P9LE-NEXT:    lxvd2x vs0, 0, r3
+; P9LE-NEXT:    lfdux f0, r3, r4
+; P9LE-NEXT:    lfd f1, -8(r3)
+; P9LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P9LE-NEXT:    xvcvdpuxds v2, vs0
 ; P9LE-NEXT:    blr
 ;
 ; P8BE-LABEL: fromDiffMemVarDConvdtoull:
 ; P8BE:       # %bb.0: # %entry
 ; P8BE-NEXT:    sldi r4, r4, 3
-; P8BE-NEXT:    add r3, r3, r4
-; P8BE-NEXT:    addi r3, r3, -8
-; P8BE-NEXT:    lxvd2x vs0, 0, r3
-; P8BE-NEXT:    xxswapd vs0, vs0
+; P8BE-NEXT:    lfdux f0, r3, r4
+; P8BE-NEXT:    lfd f1, -8(r3)
+; P8BE-NEXT:    xxmrghd vs0, vs0, vs1
 ; P8BE-NEXT:    xvcvdpuxds v2, vs0
 ; P8BE-NEXT:    blr
 ;
 ; P8LE-LABEL: fromDiffMemVarDConvdtoull:
 ; P8LE:       # %bb.0: # %entry
 ; P8LE-NEXT:    sldi r4, r4, 3
-; P8LE-NEXT:    add r3, r3, r4
-; P8LE-NEXT:    addi r3, r3, -8
-; P8LE-NEXT:    lxvd2x vs0, 0, r3
+; P8LE-NEXT:    lfdux f0, r3, r4
+; P8LE-NEXT:    lfd f1, -8(r3)
+; P8LE-NEXT:    xxmrghd vs0, vs1, vs0
 ; P8LE-NEXT:    xvcvdpuxds v2, vs0
 ; P8LE-NEXT:    blr
 entry:

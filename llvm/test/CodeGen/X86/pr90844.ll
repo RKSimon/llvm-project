@@ -22,10 +22,10 @@ define void @foo(ptr %0) {
 ; CHECK-LABEL: foo:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    vpbroadcastw {{.*#+}} ymm0 = [-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0,-0.0E+0]
-; CHECK-NEXT:    vpxor 32(%rdi), %ymm0, %ymm1
-; CHECK-NEXT:    vpxor (%rdi), %ymm0, %ymm0
-; CHECK-NEXT:    vmovdqa %ymm0, (%rdi)
-; CHECK-NEXT:    vmovdqa %ymm1, 32(%rdi)
+; CHECK-NEXT:    vpxor (%rdi), %ymm0, %ymm1
+; CHECK-NEXT:    vpxor 32(%rdi), %ymm0, %ymm0
+; CHECK-NEXT:    vmovdqa %ymm0, 32(%rdi)
+; CHECK-NEXT:    vmovdqa %ymm1, (%rdi)
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    retq
 entry:

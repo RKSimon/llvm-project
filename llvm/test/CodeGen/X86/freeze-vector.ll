@@ -407,15 +407,18 @@ define void @freeze_two_buildvectors_only_one_frozen(ptr %origin0, ptr %origin1,
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl (%esi), %esi
 ; X86-NEXT:    andl $15, %esi
+; X86-NEXT:    movl (%edx), %edx
+; X86-NEXT:    andl $15, %edx
 ; X86-NEXT:    vmovd %esi, %xmm0
 ; X86-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,0,1,1]
 ; X86-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X86-NEXT:    vpblendw {{.*#+}} xmm0 = xmm1[0,1],xmm0[2,3],xmm1[4,5,6,7]
 ; X86-NEXT:    vbroadcastss {{.*#+}} xmm1 = [7,7,7,7]
 ; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; X86-NEXT:    vbroadcastss (%edx), %xmm2
 ; X86-NEXT:    vmovdqa %xmm0, (%ecx)
-; X86-NEXT:    vpand %xmm1, %xmm2, %xmm0
+; X86-NEXT:    vmovd %edx, %xmm0
+; X86-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,0,1]
+; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovdqa %xmm0, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl
@@ -457,13 +460,16 @@ define void @freeze_two_buildvectors_one_undef_elt(ptr %origin0, ptr %origin1, p
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl (%esi), %esi
 ; X86-NEXT:    andl $15, %esi
+; X86-NEXT:    movl (%edx), %edx
+; X86-NEXT:    andl $15, %edx
 ; X86-NEXT:    vmovd %esi, %xmm0
 ; X86-NEXT:    vmovddup {{.*#+}} xmm1 = [7,0,7,0]
 ; X86-NEXT:    # xmm1 = mem[0,0]
 ; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
-; X86-NEXT:    vmovddup {{.*#+}} xmm2 = mem[0,0]
 ; X86-NEXT:    vmovdqa %xmm0, (%ecx)
-; X86-NEXT:    vpand %xmm1, %xmm2, %xmm0
+; X86-NEXT:    vmovd %edx, %xmm0
+; X86-NEXT:    vpslldq {{.*#+}} xmm0 = zero,zero,zero,zero,zero,zero,zero,zero,xmm0[0,1,2,3,4,5,6,7]
+; X86-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovdqa %xmm0, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl

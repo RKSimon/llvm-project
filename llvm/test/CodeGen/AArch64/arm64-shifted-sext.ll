@@ -34,8 +34,9 @@ entry:
 define signext i16 @extendedLeftShiftcharToshortBy8(i8 signext %a) nounwind readnone ssp {
 ; CHECK-LABEL: extendedLeftShiftcharToshortBy8:
 ; CHECK:       ; %bb.0: ; %entry
-; CHECK-NEXT:    add w8, w0, #1
-; CHECK-NEXT:    sbfiz w0, w8, #8, #8
+; CHECK-NEXT:    lsl w8, w0, #8
+; CHECK-NEXT:    add w8, w8, #256
+; CHECK-NEXT:    sxth w0, w8
 ; CHECK-NEXT:    ret
 entry:
   %inc = add i8 %a, 1
@@ -329,8 +330,9 @@ entry:
 define i64 @sign_extend_inreg_isdef32(i64) {
 ; CHECK-LABEL: sign_extend_inreg_isdef32:
 ; CHECK:       ; %bb.0:
-; CHECK-NEXT:    sbfx x8, x0, #32, #16
-; CHECK-NEXT:    mov w0, w8
+; CHECK-NEXT:    lsr x8, x0, #16
+; CHECK-NEXT:    and w8, w8, #0xffff0000
+; CHECK-NEXT:    asr w0, w8, #16
 ; CHECK-NEXT:    ret
   %2 = lshr i64 %0, 32
   %3 = shl i64 %2, 16

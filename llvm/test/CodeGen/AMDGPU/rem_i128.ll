@@ -2981,7 +2981,7 @@ define i128 @v_urem_i128_v_pow2k(i128 %lhs) {
 ; GFX9-O0-NEXT:    ; implicit-def: $sgpr4_sgpr5
 ; GFX9-O0-NEXT:    ; implicit-def: $sgpr4_sgpr5
 ; GFX9-O0-NEXT:    s_mov_b32 s6, 1
-; GFX9-O0-NEXT:    s_mov_b32 s4, -1
+; GFX9-O0-NEXT:    s_mov_b32 s4, 0
 ; GFX9-O0-NEXT:    ; kill: def $sgpr4 killed $sgpr4 def $sgpr4_sgpr5
 ; GFX9-O0-NEXT:    s_mov_b32 s5, s6
 ; GFX9-O0-NEXT:    s_mov_b32 s6, s5

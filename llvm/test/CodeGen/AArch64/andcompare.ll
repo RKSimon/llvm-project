@@ -2527,7 +2527,8 @@ define i1 @and_fcmp(float %0, float %1) {
 ; SDISEL:       // %bb.0:
 ; SDISEL-NEXT:    fcmp s1, s1
 ; SDISEL-NEXT:    fccmp s0, s0, #0, vs
-; SDISEL-NEXT:    cset w0, vs
+; SDISEL-NEXT:    cset w8, vs
+; SDISEL-NEXT:    and w0, w8, #0x1
 ; SDISEL-NEXT:    ret
 ;
 ; GISEL-LABEL: and_fcmp:

@@ -72,10 +72,12 @@ define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i16_i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sxth w8, w0
-; CHECK-NEXT:    sub w9, w1, w8
-; CHECK-NEXT:    subs w8, w8, w1
-; CHECK-NEXT:    csel w0, w8, w9, gt
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    sxth x8, w0
+; CHECK-NEXT:    sub x8, x8, w1, sxtw
+; CHECK-NEXT:    cmp x8, #0
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = sext i16 %a to i64
   %bext = sext i32 %b to i64
@@ -119,10 +121,12 @@ define i32 @abd_ext_i32(i32 %a, i32 %b) nounwind {
 define i32 @abd_ext_i32_i16(i32 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i32_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sxth w8, w1
-; CHECK-NEXT:    sub w9, w8, w0
-; CHECK-NEXT:    subs w8, w0, w8
-; CHECK-NEXT:    csel w0, w8, w9, gt
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    sxtw x8, w0
+; CHECK-NEXT:    sub x8, x8, w1, sxth
+; CHECK-NEXT:    cmp x8, #0
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = sext i32 %a to i64
   %bext = sext i16 %b to i64
@@ -576,9 +580,10 @@ define i16 @abd_select_i16(i16 %a, i16 %b) nounwind {
 define i32 @abd_select_i32(i32 %a, i32 %b) nounwind {
 ; CHECK-LABEL: abd_select_i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sub w8, w1, w0
-; CHECK-NEXT:    subs w9, w0, w1
-; CHECK-NEXT:    csel w0, w9, w8, gt
+; CHECK-NEXT:    cmp w0, w1
+; CHECK-NEXT:    csel w8, w0, w1, gt
+; CHECK-NEXT:    csel w9, w1, w0, gt
+; CHECK-NEXT:    sub w0, w8, w9
 ; CHECK-NEXT:    ret
   %cmp = icmp sgt i32 %a, %b
   %ab = select i1 %cmp, i32 %a, i32 %b
@@ -590,9 +595,10 @@ define i32 @abd_select_i32(i32 %a, i32 %b) nounwind {
 define i64 @abd_select_i64(i64 %a, i64 %b) nounwind {
 ; CHECK-LABEL: abd_select_i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sub x8, x1, x0
-; CHECK-NEXT:    subs x9, x0, x1
-; CHECK-NEXT:    csel x0, x9, x8, gt
+; CHECK-NEXT:    cmp x0, x1
+; CHECK-NEXT:    csel x8, x0, x1, ge
+; CHECK-NEXT:    csel x9, x1, x0, ge
+; CHECK-NEXT:    sub x0, x8, x9
 ; CHECK-NEXT:    ret
   %cmp = icmp sge i64 %a, %b
   %ab = select i1 %cmp, i64 %a, i64 %b

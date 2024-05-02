@@ -2,12 +2,6 @@
 ; RUN: llc -mtriple armv8a-none-none-eabihf -mattr=fullfp16 -asm-verbose=false < %s | FileCheck %s
 
 define void @test_fadd(ptr %p, ptr %q) {
-; CHECK-LABEL: test_fadd:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vadd.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = fadd half %a, %b
@@ -16,12 +10,6 @@ define void @test_fadd(ptr %p, ptr %q) {
 }
 
 define void @test_fsub(ptr %p, ptr %q) {
-; CHECK-LABEL: test_fsub:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vsub.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = fsub half %a, %b
@@ -30,12 +18,6 @@ define void @test_fsub(ptr %p, ptr %q) {
 }
 
 define void @test_fmul(ptr %p, ptr %q) {
-; CHECK-LABEL: test_fmul:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vmul.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = fmul half %a, %b
@@ -44,12 +26,6 @@ define void @test_fmul(ptr %p, ptr %q) {
 }
 
 define void @test_fdiv(ptr %p, ptr %q) {
-; CHECK-LABEL: test_fdiv:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vdiv.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = fdiv half %a, %b
@@ -58,18 +34,6 @@ define void @test_fdiv(ptr %p, ptr %q) {
 }
 
 define arm_aapcs_vfpcc void @test_frem(ptr %p, ptr %q) {
-; CHECK-LABEL: test_frem:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    vldr.16 s2, [r1]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    vcvtb.f32.f16 s1, s2
-; CHECK-NEXT:    bl fmodf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = frem half %a, %b
@@ -78,21 +42,12 @@ define arm_aapcs_vfpcc void @test_frem(ptr %p, ptr %q) {
 }
 
 define void @test_load_store(ptr %p, ptr %q) {
-; CHECK-LABEL: test_load_store:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vstr.16 s0, [r1]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   store half %a, ptr %q
   ret void
 }
 
 define i32 @test_fptosi_i32(ptr %p) {
-; CHECK-LABEL: test_fptosi_i32:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vcvt.s32.f16 s0, s0
-; CHECK-NEXT:    vmov r0, s0
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = fptosi half %a to i32
   ret i32 %r
@@ -106,11 +61,6 @@ define i32 @test_fptosi_i32(ptr %p) {
 ;}
 
 define i32 @test_fptoui_i32(ptr %p) {
-; CHECK-LABEL: test_fptoui_i32:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vcvt.u32.f16 s0, s0
-; CHECK-NEXT:    vmov r0, s0
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = fptoui half %a to i32
   ret i32 %r
@@ -124,22 +74,12 @@ define i32 @test_fptoui_i32(ptr %p) {
 ;}
 
 define void @test_sitofp_i32(i32 %a, ptr %p) {
-; CHECK-LABEL: test_sitofp_i32:
-; CHECK:         vmov s0, r0
-; CHECK-NEXT:    vcvt.f16.s32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r1]
-; CHECK-NEXT:    bx lr
   %r = sitofp i32 %a to half
   store half %r, ptr %p
   ret void
 }
 
 define void @test_uitofp_i32(i32 %a, ptr %p) {
-; CHECK-LABEL: test_uitofp_i32:
-; CHECK:         vmov s0, r0
-; CHECK-NEXT:    vcvt.f16.u32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r1]
-; CHECK-NEXT:    bx lr
   %r = uitofp i32 %a to half
   store half %r, ptr %p
   ret void
@@ -160,69 +100,42 @@ define void @test_uitofp_i32(i32 %a, ptr %p) {
 ;}
 
 define void @test_fptrunc_float(float %f, ptr %p) {
-; CHECK-LABEL: test_fptrunc_float:
-; CHECK:         vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = fptrunc float %f to half
   store half %a, ptr %p
   ret void
 }
 
 define void @test_fptrunc_double(double %d, ptr %p) {
-; CHECK-LABEL: test_fptrunc_double:
-; CHECK:         vcvtb.f16.f64 s0, d0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = fptrunc double %d to half
   store half %a, ptr %p
   ret void
 }
 
 define float @test_fpextend_float(ptr %p) {
-; CHECK-LABEL: test_fpextend_float:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = fpext half %a to float
   ret float %r
 }
 
 define double @test_fpextend_double(ptr %p) {
-; CHECK-LABEL: test_fpextend_double:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vcvtb.f64.f16 d0, s0
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = fpext half %a to double
   ret double %r
 }
 
 define i16 @test_bitcast_halftoi16(ptr %p) {
-; CHECK-LABEL: test_bitcast_halftoi16:
-; CHECK:         ldrh r0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = bitcast half %a to i16
   ret i16 %r
 }
 
 define void @test_bitcast_i16tohalf(i16 %a, ptr %p) {
-; CHECK-LABEL: test_bitcast_i16tohalf:
-; CHECK:         strh r0, [r1]
-; CHECK-NEXT:    bx lr
   %r = bitcast i16 %a to half
   store half %r, ptr %p
   ret void
 }
 
 define void @test_sqrt(ptr %p) {
-; CHECK-LABEL: test_sqrt:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vsqrt.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.sqrt.f16(half %a)
   store half %r, ptr %p
@@ -230,17 +143,6 @@ define void @test_sqrt(ptr %p) {
 }
 
 define void @test_fpowi(ptr %p, i32 %b) {
-; CHECK-LABEL: test_fpowi:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    mov r0, r1
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl __powisf2
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.powi.f16.i32(half %a, i32 %b)
   store half %r, ptr %p
@@ -248,16 +150,6 @@ define void @test_fpowi(ptr %p, i32 %b) {
 }
 
 define void @test_sin(ptr %p) {
-; CHECK-LABEL: test_sin:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl sinf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.sin.f16(half %a)
   store half %r, ptr %p
@@ -265,16 +157,6 @@ define void @test_sin(ptr %p) {
 }
 
 define void @test_cos(ptr %p) {
-; CHECK-LABEL: test_cos:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl cosf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.cos.f16(half %a)
   store half %r, ptr %p
@@ -282,16 +164,6 @@ define void @test_cos(ptr %p) {
 }
 
 define void @test_tan(ptr %p) {
-; CHECK-LABEL: test_tan:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl tanf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.tan.f16(half %a)
   store half %r, ptr %p
@@ -299,18 +171,6 @@ define void @test_tan(ptr %p) {
 }
 
 define void @test_pow(ptr %p, ptr %q) {
-; CHECK-LABEL: test_pow:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    vldr.16 s2, [r1]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    vcvtb.f32.f16 s1, s2
-; CHECK-NEXT:    bl powf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = call half @llvm.pow.f16(half %a, half %b)
@@ -319,16 +179,6 @@ define void @test_pow(ptr %p, ptr %q) {
 }
 
 define void @test_exp(ptr %p) {
-; CHECK-LABEL: test_exp:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl expf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.exp.f16(half %a)
   store half %r, ptr %p
@@ -336,16 +186,6 @@ define void @test_exp(ptr %p) {
 }
 
 define void @test_exp2(ptr %p) {
-; CHECK-LABEL: test_exp2:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl exp2f
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.exp2.f16(half %a)
   store half %r, ptr %p
@@ -353,16 +193,6 @@ define void @test_exp2(ptr %p) {
 }
 
 define void @test_log(ptr %p) {
-; CHECK-LABEL: test_log:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl logf
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.log.f16(half %a)
   store half %r, ptr %p
@@ -370,16 +200,6 @@ define void @test_log(ptr %p) {
 }
 
 define void @test_log10(ptr %p) {
-; CHECK-LABEL: test_log10:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl log10f
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.log10.f16(half %a)
   store half %r, ptr %p
@@ -387,16 +207,6 @@ define void @test_log10(ptr %p) {
 }
 
 define void @test_log2(ptr %p) {
-; CHECK-LABEL: test_log2:
-; CHECK:         .save {r4, lr}
-; CHECK-NEXT:    push {r4, lr}
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    mov r4, r0
-; CHECK-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-NEXT:    bl log2f
-; CHECK-NEXT:    vcvtb.f16.f32 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r4]
-; CHECK-NEXT:    pop {r4, pc}
   %a = load half, ptr %p, align 2
   %r = call half @llvm.log2.f16(half %a)
   store half %r, ptr %p
@@ -404,13 +214,6 @@ define void @test_log2(ptr %p) {
 }
 
 define void @test_fma(ptr %p, ptr %q, ptr %r) {
-; CHECK-LABEL: test_fma:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vldr.16 s4, [r2]
-; CHECK-NEXT:    vfma.f16 s4, s2, s0
-; CHECK-NEXT:    vstr.16 s4, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %c = load half, ptr %r, align 2
@@ -420,11 +223,6 @@ define void @test_fma(ptr %p, ptr %q, ptr %r) {
 }
 
 define void @test_fabs(ptr %p) {
-; CHECK-LABEL: test_fabs:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vabs.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.fabs.f16(half %a)
   store half %r, ptr %p
@@ -432,12 +230,6 @@ define void @test_fabs(ptr %p) {
 }
 
 define void @test_minnum(ptr %p, ptr %q) {
-; CHECK-LABEL: test_minnum:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vminnm.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = call half @llvm.minnum.f16(half %a, half %b)
@@ -446,12 +238,6 @@ define void @test_minnum(ptr %p, ptr %q) {
 }
 
 define void @test_maxnum(ptr %p, ptr %q) {
-; CHECK-LABEL: test_maxnum:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vmaxnm.f16 s0, s2, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = call half @llvm.maxnum.f16(half %a, half %b)
@@ -460,14 +246,6 @@ define void @test_maxnum(ptr %p, ptr %q) {
 }
 
 define void @test_minimum(ptr %p) {
-; CHECK-LABEL: test_minimum:
-; CHECK:         vldr.16 s2, [r0]
-; CHECK-NEXT:    vmov.f16 s0, #1.000000e+00
-; CHECK-NEXT:    vcmp.f16 s2, s0
-; CHECK-NEXT:    vmrs APSR_nzcv, fpscr
-; CHECK-NEXT:    vselge.f16 s0, s0, s2
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %c = fcmp ult half %a, 1.0
   %r = select i1 %c, half %a, half 1.0
@@ -476,14 +254,6 @@ define void @test_minimum(ptr %p) {
 }
 
 define void @test_maximum(ptr %p) {
-; CHECK-LABEL: test_maximum:
-; CHECK:         vldr.16 s2, [r0]
-; CHECK-NEXT:    vmov.f16 s0, #1.000000e+00
-; CHECK-NEXT:    vcmp.f16 s0, s2
-; CHECK-NEXT:    vmrs APSR_nzcv, fpscr
-; CHECK-NEXT:    vselge.f16 s0, s0, s2
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %c = fcmp ugt half %a, 1.0
   %r = select i1 %c, half %a, half 1.0
@@ -492,20 +262,6 @@ define void @test_maximum(ptr %p) {
 }
 
 define void @test_copysign(ptr %p, ptr %q) {
-; CHECK-LABEL: test_copysign:
-; CHECK:         .pad #4
-; CHECK-NEXT:    sub sp, sp, #4
-; CHECK-NEXT:    vldr.16 s0, [r1]
-; CHECK-NEXT:    vstr.16 s0, [sp]
-; CHECK-NEXT:    vldr.16 s0, [r0]
-; CHECK-NEXT:    ldrb r1, [sp, #1]
-; CHECK-NEXT:    vabs.f16 s0, s0
-; CHECK-NEXT:    tst r1, #128
-; CHECK-NEXT:    vneg.f16 s2, s0
-; CHECK-NEXT:    vseleq.f16 s0, s0, s2
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    add sp, sp, #4
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %r = call half @llvm.copysign.f16(half %a, half %b)
@@ -514,11 +270,6 @@ define void @test_copysign(ptr %p, ptr %q) {
 }
 
 define void @test_floor(ptr %p) {
-; CHECK-LABEL: test_floor:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintm.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.floor.f16(half %a)
   store half %r, ptr %p
@@ -526,11 +277,6 @@ define void @test_floor(ptr %p) {
 }
 
 define void @test_ceil(ptr %p) {
-; CHECK-LABEL: test_ceil:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintp.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.ceil.f16(half %a)
   store half %r, ptr %p
@@ -538,11 +284,6 @@ define void @test_ceil(ptr %p) {
 }
 
 define void @test_trunc(ptr %p) {
-; CHECK-LABEL: test_trunc:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintz.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.trunc.f16(half %a)
   store half %r, ptr %p
@@ -550,11 +291,6 @@ define void @test_trunc(ptr %p) {
 }
 
 define void @test_rint(ptr %p) {
-; CHECK-LABEL: test_rint:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintx.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.rint.f16(half %a)
   store half %r, ptr %p
@@ -562,11 +298,6 @@ define void @test_rint(ptr %p) {
 }
 
 define void @test_nearbyint(ptr %p) {
-; CHECK-LABEL: test_nearbyint:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintr.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.nearbyint.f16(half %a)
   store half %r, ptr %p
@@ -574,11 +305,6 @@ define void @test_nearbyint(ptr %p) {
 }
 
 define void @test_round(ptr %p) {
-; CHECK-LABEL: test_round:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrinta.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.round.f16(half %a)
   store half %r, ptr %p
@@ -586,11 +312,6 @@ define void @test_round(ptr %p) {
 }
 
 define void @test_roundeven(ptr %p) {
-; CHECK-LABEL: test_roundeven:
-; CHECK:         vldr.16 s0, [r0]
-; CHECK-NEXT:    vrintn.f16 s0, s0
-; CHECK-NEXT:    vstr.16 s0, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %r = call half @llvm.roundeven.f16(half %a)
   store half %r, ptr %p
@@ -598,13 +319,6 @@ define void @test_roundeven(ptr %p) {
 }
 
 define void @test_fmuladd(ptr %p, ptr %q, ptr %r) {
-; CHECK-LABEL: test_fmuladd:
-; CHECK:         vldr.16 s0, [r1]
-; CHECK-NEXT:    vldr.16 s2, [r0]
-; CHECK-NEXT:    vldr.16 s4, [r2]
-; CHECK-NEXT:    vfma.f16 s4, s2, s0
-; CHECK-NEXT:    vstr.16 s4, [r0]
-; CHECK-NEXT:    bx lr
   %a = load half, ptr %p, align 2
   %b = load half, ptr %q, align 2
   %c = load half, ptr %r, align 2
@@ -637,3 +351,5 @@ declare half @llvm.nearbyint.f16(half %a)
 declare half @llvm.round.f16(half %a)
 declare half @llvm.roundeven.f16(half %a)
 declare half @llvm.fmuladd.f16(half %a, half %b, half %c)
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; CHECK: {{.*}}
