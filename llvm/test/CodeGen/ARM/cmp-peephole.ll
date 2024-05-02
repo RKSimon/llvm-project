@@ -1265,9 +1265,9 @@ exit:
 define void @br_on_binop_lt_zero(i32 %a, i32 %b) {
 ; ARM-LABEL: br_on_binop_lt_zero:
 ; ARM:       @ %bb.0:
-; ARM-NEXT:    orr r1, r0, r1
+; ARM-NEXT:    mov r1, #1
 ; ARM-NEXT:    cmp r1, #0
-; ARM-NEXT:    bxhs lr
+; ARM-NEXT:    bxne lr
 ; ARM-NEXT:  .LBB46_1: @ %true_br
 ; ARM-NEXT:    push {r11, lr}
 ; ARM-NEXT:    bl consume
@@ -1277,9 +1277,9 @@ define void @br_on_binop_lt_zero(i32 %a, i32 %b) {
 ; THUMB-LABEL: br_on_binop_lt_zero:
 ; THUMB:       @ %bb.0:
 ; THUMB-NEXT:    push {r7, lr}
-; THUMB-NEXT:    orrs r1, r0
+; THUMB-NEXT:    movs r1, #1
 ; THUMB-NEXT:    cmp r1, #0
-; THUMB-NEXT:    bhs .LBB46_2
+; THUMB-NEXT:    bne .LBB46_2
 ; THUMB-NEXT:  @ %bb.1: @ %true_br
 ; THUMB-NEXT:    bl consume
 ; THUMB-NEXT:  .LBB46_2: @ %exit
@@ -1287,10 +1287,10 @@ define void @br_on_binop_lt_zero(i32 %a, i32 %b) {
 ;
 ; THUMB2-LABEL: br_on_binop_lt_zero:
 ; THUMB2:       @ %bb.0:
-; THUMB2-NEXT:    orrs r1, r0
+; THUMB2-NEXT:    movs r1, #1
 ; THUMB2-NEXT:    cmp r1, #0
-; THUMB2-NEXT:    it hs
-; THUMB2-NEXT:    bxhs lr
+; THUMB2-NEXT:    it ne
+; THUMB2-NEXT:    bxne lr
 ; THUMB2-NEXT:  .LBB46_1: @ %true_br
 ; THUMB2-NEXT:    push {r7, lr}
 ; THUMB2-NEXT:    bl consume
@@ -1570,9 +1570,9 @@ exit:
 define void @br_on_shift_lt_zero(i32 %a, i32 %b) {
 ; ARM-LABEL: br_on_shift_lt_zero:
 ; ARM:       @ %bb.0:
-; ARM-NEXT:    asr r1, r0, r1
+; ARM-NEXT:    mov r1, #1
 ; ARM-NEXT:    cmp r1, #0
-; ARM-NEXT:    bxhs lr
+; ARM-NEXT:    bxne lr
 ; ARM-NEXT:  .LBB53_1: @ %true_br
 ; ARM-NEXT:    push {r11, lr}
 ; ARM-NEXT:    bl consume
@@ -1582,10 +1582,9 @@ define void @br_on_shift_lt_zero(i32 %a, i32 %b) {
 ; THUMB-LABEL: br_on_shift_lt_zero:
 ; THUMB:       @ %bb.0:
 ; THUMB-NEXT:    push {r7, lr}
-; THUMB-NEXT:    mov r2, r0
-; THUMB-NEXT:    asrs r2, r1
-; THUMB-NEXT:    cmp r2, #0
-; THUMB-NEXT:    bhs .LBB53_2
+; THUMB-NEXT:    movs r1, #1
+; THUMB-NEXT:    cmp r1, #0
+; THUMB-NEXT:    bne .LBB53_2
 ; THUMB-NEXT:  @ %bb.1: @ %true_br
 ; THUMB-NEXT:    bl consume
 ; THUMB-NEXT:  .LBB53_2: @ %exit
@@ -1593,10 +1592,10 @@ define void @br_on_shift_lt_zero(i32 %a, i32 %b) {
 ;
 ; THUMB2-LABEL: br_on_shift_lt_zero:
 ; THUMB2:       @ %bb.0:
-; THUMB2-NEXT:    asr.w r1, r0, r1
+; THUMB2-NEXT:    movs r1, #1
 ; THUMB2-NEXT:    cmp r1, #0
-; THUMB2-NEXT:    it hs
-; THUMB2-NEXT:    bxhs lr
+; THUMB2-NEXT:    it ne
+; THUMB2-NEXT:    bxne lr
 ; THUMB2-NEXT:  .LBB53_1: @ %true_br
 ; THUMB2-NEXT:    push {r7, lr}
 ; THUMB2-NEXT:    bl consume

@@ -251,9 +251,11 @@ define amdgpu_kernel void @fold_mad64(ptr addrspace(1) %p) {
 ; GFX942:       ; %bb.0:
 ; GFX942-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x0
 ; GFX942-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX942-NEXT:    v_mul_hi_u32_u24_e32 v1, 12, v0
+; GFX942-NEXT:    v_mul_u32_u24_e32 v0, 12, v0
 ; GFX942-NEXT:    v_mov_b32_e32 v2, 1.0
 ; GFX942-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942-NEXT:    v_mad_u64_u32 v[0:1], s[0:1], v0, 12, s[0:1]
+; GFX942-NEXT:    v_lshl_add_u64 v[0:1], s[0:1], 0, v[0:1]
 ; GFX942-NEXT:    global_store_dword v[0:1], v2, off
 ; GFX942-NEXT:    s_endpgm
   %voffset32 = call i32 @llvm.amdgcn.workitem.id.x()
@@ -430,36 +432,20 @@ define ptr @gep_disjoint_or(ptr %base) {
 ; Check that AssertAlign nodes between ptradd nodes don't block offset folding,
 ; taken from preload-implicit-kernargs.ll
 define amdgpu_kernel void @random_incorrect_offset(ptr addrspace(1) inreg %out) {
-; GFX942_PTRADD-LABEL: random_incorrect_offset:
-; GFX942_PTRADD:       ; %bb.1:
-; GFX942_PTRADD-NEXT:    s_load_dwordx2 s[8:9], s[4:5], 0x0
-; GFX942_PTRADD-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_PTRADD-NEXT:    s_branch .LBB21_0
-; GFX942_PTRADD-NEXT:    .p2align 8
-; GFX942_PTRADD-NEXT:  ; %bb.2:
-; GFX942_PTRADD-NEXT:  .LBB21_0:
-; GFX942_PTRADD-NEXT:    s_load_dword s0, s[4:5], 0xa
-; GFX942_PTRADD-NEXT:    v_mov_b32_e32 v0, 0
-; GFX942_PTRADD-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_PTRADD-NEXT:    v_mov_b32_e32 v1, s0
-; GFX942_PTRADD-NEXT:    global_store_dword v0, v1, s[8:9]
-; GFX942_PTRADD-NEXT:    s_endpgm
-;
-; GFX942_LEGACY-LABEL: random_incorrect_offset:
-; GFX942_LEGACY:       ; %bb.1:
-; GFX942_LEGACY-NEXT:    s_load_dwordx2 s[8:9], s[4:5], 0x0
-; GFX942_LEGACY-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_LEGACY-NEXT:    s_branch .LBB21_0
-; GFX942_LEGACY-NEXT:    .p2align 8
-; GFX942_LEGACY-NEXT:  ; %bb.2:
-; GFX942_LEGACY-NEXT:  .LBB21_0:
-; GFX942_LEGACY-NEXT:    s_mov_b32 s0, 8
-; GFX942_LEGACY-NEXT:    s_load_dword s0, s[4:5], s0 offset:0x2
-; GFX942_LEGACY-NEXT:    v_mov_b32_e32 v0, 0
-; GFX942_LEGACY-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_LEGACY-NEXT:    v_mov_b32_e32 v1, s0
-; GFX942_LEGACY-NEXT:    global_store_dword v0, v1, s[8:9]
-; GFX942_LEGACY-NEXT:    s_endpgm
+; GFX942-LABEL: random_incorrect_offset:
+; GFX942:       ; %bb.1:
+; GFX942-NEXT:    s_load_dwordx2 s[8:9], s[4:5], 0x0
+; GFX942-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX942-NEXT:    s_branch .LBB21_0
+; GFX942-NEXT:    .p2align 8
+; GFX942-NEXT:  ; %bb.2:
+; GFX942-NEXT:  .LBB21_0:
+; GFX942-NEXT:    s_load_dword s0, s[4:5], 0xa
+; GFX942-NEXT:    v_mov_b32_e32 v0, 0
+; GFX942-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX942-NEXT:    v_mov_b32_e32 v1, s0
+; GFX942-NEXT:    global_store_dword v0, v1, s[8:9]
+; GFX942-NEXT:    s_endpgm
   %imp_arg_ptr = call ptr addrspace(4) @llvm.amdgcn.implicitarg.ptr()
   %gep = getelementptr i8, ptr addrspace(4) %imp_arg_ptr, i32 2
   %load = load i32, ptr addrspace(4) %gep

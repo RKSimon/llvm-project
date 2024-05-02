@@ -46,9 +46,8 @@ define i16 @test_anyext_pcd_i8_to_i16() nounwind {
 ; CHECK-LABEL: test_anyext_pcd_i8_to_i16:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    move.b (__unnamed_1+4,%pc), %d0
-; CHECK-NEXT:    and.l #255, %d0
+; CHECK-NEXT:    and.w #255, %d0
 ; CHECK-NEXT:    lsl.w #8, %d0
-; CHECK-NEXT:    ; kill: def $wd0 killed $wd0 killed $d0
 ; CHECK-NEXT:    rts
   %copyload = load i8, ptr getelementptr inbounds nuw (i8, ptr @0, i32 4)
   %insert_ext = zext i8 %copyload to i16

@@ -11,7 +11,7 @@ define <8 x i16> @same_const_one_replaced_i16x8(i16 %x) {
 ; CHECK-LABEL: same_const_one_replaced_i16x8:
 ; CHECK:         .functype same_const_one_replaced_i16x8 (i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.const $push0=, 42, 42, 42, 42, 42, 0, 42, 42
+; CHECK-NEXT:    v128.const $push0=, 42, 42, 42, 42, 42, 42, 42, 42
 ; CHECK-NEXT:    i16x8.replace_lane $push1=, $pop0, 5, $0
 ; CHECK-NEXT:    return $pop1
   %v = insertelement
@@ -39,7 +39,7 @@ define <4 x float> @same_const_one_replaced_f32x4(float %x) {
 ; CHECK-LABEL: same_const_one_replaced_f32x4:
 ; CHECK:         .functype same_const_one_replaced_f32x4 (f32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.const $push0=, 0x1.5p5, 0x1.5p5, 0x0p0, 0x1.5p5
+; CHECK-NEXT:    v128.const $push0=, 0x1.5p5, 0x1.5p5, 0x1.5p5, 0x1.5p5
 ; CHECK-NEXT:    f32x4.replace_lane $push1=, $pop0, 2, $0
 ; CHECK-NEXT:    return $pop1
   %v = insertelement
@@ -76,12 +76,15 @@ define <8 x i16> @splat_common_arg_i16x8(i16 %a, i16 %b, i16 %c) {
 ; CHECK-LABEL: splat_common_arg_i16x8:
 ; CHECK:         .functype splat_common_arg_i16x8 (i32, i32, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i16x8.splat $push0=, $2
-; CHECK-NEXT:    i16x8.replace_lane $push1=, $pop0, 0, $1
+; CHECK-NEXT:    i16x8.splat $push0=, $1
+; CHECK-NEXT:    i16x8.replace_lane $push1=, $pop0, 1, $2
 ; CHECK-NEXT:    i16x8.replace_lane $push2=, $pop1, 2, $0
-; CHECK-NEXT:    i16x8.replace_lane $push3=, $pop2, 4, $1
-; CHECK-NEXT:    i16x8.replace_lane $push4=, $pop3, 7, $1
-; CHECK-NEXT:    return $pop4
+; CHECK-NEXT:    i16x8.replace_lane $push3=, $pop2, 3, $2
+; CHECK-NEXT:    i16x8.replace_lane $push4=, $pop3, 4, $1
+; CHECK-NEXT:    i16x8.replace_lane $push5=, $pop4, 5, $2
+; CHECK-NEXT:    i16x8.replace_lane $push6=, $pop5, 6, $2
+; CHECK-NEXT:    i16x8.replace_lane $push7=, $pop6, 7, $1
+; CHECK-NEXT:    return $pop7
   %v0 = insertelement <8 x i16> undef, i16 %b, i32 0
   %v1 = insertelement <8 x i16> %v0, i16 %c, i32 1
   %v2 = insertelement <8 x i16> %v1, i16 %a, i32 2
@@ -283,12 +286,11 @@ define <4 x i32> @half_shuffle_i32x4(<4 x i32> %src) {
 ; CHECK-LABEL: half_shuffle_i32x4:
 ; CHECK:         .functype half_shuffle_i32x4 (v128) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i8x16.shuffle $push0=, $0, $0, 0, 1, 2, 3, 8, 9, 10, 11, 0, 1, 2, 3, 0, 1, 2, 3
-; CHECK-NEXT:    i32.const $push1=, 0
-; CHECK-NEXT:    i32x4.replace_lane $push2=, $pop0, 0, $pop1
-; CHECK-NEXT:    i32.const $push3=, 3
-; CHECK-NEXT:    i32x4.replace_lane $push4=, $pop2, 3, $pop3
-; CHECK-NEXT:    return $pop4
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle $push1=, $0, $pop0, 16, 17, 18, 19, 8, 9, 10, 11, 0, 1, 2, 3, 28, 29, 30, 31
+; CHECK-NEXT:    i32.const $push2=, 3
+; CHECK-NEXT:    i32x4.replace_lane $push3=, $pop1, 3, $pop2
+; CHECK-NEXT:    return $pop3
   %s0 = extractelement <4 x i32> %src, i32 0
   %s2 = extractelement <4 x i32> %src, i32 2
   %v0 = insertelement <4 x i32> undef, i32 0, i32 0
@@ -303,25 +305,28 @@ define <16 x i8> @mashup_swizzle_i8x16(<16 x i8> %src, <16 x i8> %mask, i8 %spla
 ; CHECK-LABEL: mashup_swizzle_i8x16:
 ; CHECK:         .functype mashup_swizzle_i8x16 (v128, v128, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    global.get $push12=, __stack_pointer
-; CHECK-NEXT:    i32.const $push13=, 16
-; CHECK-NEXT:    i32.sub $push16=, $pop12, $pop13
-; CHECK-NEXT:    local.tee $push15=, $3=, $pop16
-; CHECK-NEXT:    v128.store 0($pop15), $0
-; CHECK-NEXT:    i8x16.extract_lane_u $push7=, $1, 7
+; CHECK-NEXT:    global.get $push14=, __stack_pointer
+; CHECK-NEXT:    i32.const $push15=, 16
+; CHECK-NEXT:    i32.sub $push19=, $pop14, $pop15
+; CHECK-NEXT:    local.tee $push18=, $3=, $pop19
+; CHECK-NEXT:    v128.store 0($pop18), $0
+; CHECK-NEXT:    i8x16.extract_lane_u $push8=, $1, 7
 ; CHECK-NEXT:    i32.const $push1=, 15
-; CHECK-NEXT:    i32.and $push8=, $pop7, $pop1
-; CHECK-NEXT:    i32.or $push9=, $3, $pop8
+; CHECK-NEXT:    i32.and $push9=, $pop8, $pop1
+; CHECK-NEXT:    i32.or $push10=, $3, $pop9
 ; CHECK-NEXT:    i8x16.extract_lane_u $push0=, $1, 0
-; CHECK-NEXT:    i32.const $push14=, 15
-; CHECK-NEXT:    i32.and $push2=, $pop0, $pop14
+; CHECK-NEXT:    i32.const $push17=, 15
+; CHECK-NEXT:    i32.and $push2=, $pop0, $pop17
 ; CHECK-NEXT:    i32.or $push3=, $3, $pop2
-; CHECK-NEXT:    v128.const $push4=, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0
-; CHECK-NEXT:    v128.load8_lane $push5=, 0($pop3), $pop4, 0
-; CHECK-NEXT:    i8x16.replace_lane $push6=, $pop5, 3, $2
-; CHECK-NEXT:    v128.load8_lane $push10=, 0($pop9), $pop6, 7
-; CHECK-NEXT:    i8x16.replace_lane $push11=, $pop10, 12, $2
-; CHECK-NEXT:    return $pop11
+; CHECK-NEXT:    v128.load8_splat $push4=, 0($pop3)
+; CHECK-NEXT:    i8x16.replace_lane $push5=, $pop4, 3, $2
+; CHECK-NEXT:    i32.const $push6=, 42
+; CHECK-NEXT:    i8x16.replace_lane $push7=, $pop5, 4, $pop6
+; CHECK-NEXT:    v128.load8_lane $push11=, 0($pop10), $pop7, 7
+; CHECK-NEXT:    i8x16.replace_lane $push12=, $pop11, 12, $2
+; CHECK-NEXT:    i32.const $push16=, 42
+; CHECK-NEXT:    i8x16.replace_lane $push13=, $pop12, 14, $pop16
+; CHECK-NEXT:    return $pop13
   %m0 = extractelement <16 x i8> %mask, i32 0
   %s0 = extractelement <16 x i8> %src, i8 %m0
   %v0 = insertelement <16 x i8> undef, i8 %s0, i32 0
@@ -345,20 +350,23 @@ define <16 x i8> @mashup_const_i8x16(<16 x i8> %src, <16 x i8> %mask, i8 %splatt
 ; CHECK-LABEL: mashup_const_i8x16:
 ; CHECK:         .functype mashup_const_i8x16 (v128, v128, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    global.get $push8=, __stack_pointer
-; CHECK-NEXT:    i32.const $push9=, 16
-; CHECK-NEXT:    i32.sub $push11=, $pop8, $pop9
-; CHECK-NEXT:    local.tee $push10=, $3=, $pop11
-; CHECK-NEXT:    v128.store 0($pop10), $0
+; CHECK-NEXT:    global.get $push10=, __stack_pointer
+; CHECK-NEXT:    i32.const $push11=, 16
+; CHECK-NEXT:    i32.sub $push14=, $pop10, $pop11
+; CHECK-NEXT:    local.tee $push13=, $3=, $pop14
+; CHECK-NEXT:    v128.store 0($pop13), $0
 ; CHECK-NEXT:    i8x16.extract_lane_u $push0=, $1, 0
 ; CHECK-NEXT:    i32.const $push1=, 15
 ; CHECK-NEXT:    i32.and $push2=, $pop0, $pop1
 ; CHECK-NEXT:    i32.or $push3=, $3, $pop2
-; CHECK-NEXT:    v128.const $push4=, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0
-; CHECK-NEXT:    v128.load8_lane $push5=, 0($pop3), $pop4, 0
-; CHECK-NEXT:    i8x16.replace_lane $push6=, $pop5, 3, $2
-; CHECK-NEXT:    i8x16.replace_lane $push7=, $pop6, 12, $2
-; CHECK-NEXT:    return $pop7
+; CHECK-NEXT:    v128.load8_splat $push4=, 0($pop3)
+; CHECK-NEXT:    i8x16.replace_lane $push5=, $pop4, 3, $2
+; CHECK-NEXT:    i32.const $push6=, 42
+; CHECK-NEXT:    i8x16.replace_lane $push7=, $pop5, 4, $pop6
+; CHECK-NEXT:    i8x16.replace_lane $push8=, $pop7, 12, $2
+; CHECK-NEXT:    i32.const $push12=, 42
+; CHECK-NEXT:    i8x16.replace_lane $push9=, $pop8, 14, $pop12
+; CHECK-NEXT:    return $pop9
   %m0 = extractelement <16 x i8> %mask, i32 0
   %s0 = extractelement <16 x i8> %src, i8 %m0
   %v0 = insertelement <16 x i8> undef, i8 %s0, i32 0
@@ -378,20 +386,21 @@ define <16 x i8> @mashup_splat_i8x16(<16 x i8> %src, <16 x i8> %mask, i8 %splatt
 ; CHECK-LABEL: mashup_splat_i8x16:
 ; CHECK:         .functype mashup_splat_i8x16 (v128, v128, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    global.get $push8=, __stack_pointer
-; CHECK-NEXT:    i32.const $push9=, 16
-; CHECK-NEXT:    i32.sub $push11=, $pop8, $pop9
-; CHECK-NEXT:    local.tee $push10=, $3=, $pop11
-; CHECK-NEXT:    v128.store 0($pop10), $0
+; CHECK-NEXT:    global.get $push9=, __stack_pointer
+; CHECK-NEXT:    i32.const $push10=, 16
+; CHECK-NEXT:    i32.sub $push12=, $pop9, $pop10
+; CHECK-NEXT:    local.tee $push11=, $3=, $pop12
+; CHECK-NEXT:    v128.store 0($pop11), $0
 ; CHECK-NEXT:    i8x16.extract_lane_u $push0=, $1, 0
 ; CHECK-NEXT:    i32.const $push1=, 15
 ; CHECK-NEXT:    i32.and $push2=, $pop0, $pop1
 ; CHECK-NEXT:    i32.or $push3=, $3, $pop2
-; CHECK-NEXT:    i8x16.splat $push4=, $2
-; CHECK-NEXT:    v128.load8_lane $push5=, 0($pop3), $pop4, 0
+; CHECK-NEXT:    v128.load8_splat $push4=, 0($pop3)
+; CHECK-NEXT:    i8x16.replace_lane $push5=, $pop4, 3, $2
 ; CHECK-NEXT:    i32.const $push6=, 42
 ; CHECK-NEXT:    i8x16.replace_lane $push7=, $pop5, 4, $pop6
-; CHECK-NEXT:    return $pop7
+; CHECK-NEXT:    i8x16.replace_lane $push8=, $pop7, 12, $2
+; CHECK-NEXT:    return $pop8
   %m0 = extractelement <16 x i8> %mask, i32 0
   %s0 = extractelement <16 x i8> %src, i8 %m0
   %v0 = insertelement <16 x i8> undef, i8 %s0, i32 0
@@ -445,7 +454,7 @@ define <4 x i32> @load_zero_lane_i32x4(ptr %addr.a, ptr %addr.b, ptr %addr.c, pt
 ; CHECK-LABEL: load_zero_lane_i32x4:
 ; CHECK:         .functype load_zero_lane_i32x4 (i32, i32, i32, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.load32_zero $push0=, 0($0)
+; CHECK-NEXT:    v128.load32_splat $push0=, 0($0)
 ; CHECK-NEXT:    v128.load32_lane $push1=, 0($1), $pop0, 1
 ; CHECK-NEXT:    v128.load32_lane $push2=, 0($2), $pop1, 2
 ; CHECK-NEXT:    v128.load32_lane $push3=, 0($3), $pop2, 3
@@ -465,7 +474,7 @@ define <2 x i64> @load_zero_lane_i64x2(ptr %addr.a, ptr %addr.b) {
 ; CHECK-LABEL: load_zero_lane_i64x2:
 ; CHECK:         .functype load_zero_lane_i64x2 (i32, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.load64_zero $push0=, 0($0)
+; CHECK-NEXT:    v128.load64_splat $push0=, 0($0)
 ; CHECK-NEXT:    v128.load64_lane $push1=, 0($1), $pop0, 1
 ; CHECK-NEXT:    return $pop1
   %a = load i64, ptr %addr.a
@@ -479,7 +488,7 @@ define <4 x float> @load_zero_lane_f32x4(ptr %addr.a, ptr %addr.b, ptr %addr.c, 
 ; CHECK-LABEL: load_zero_lane_f32x4:
 ; CHECK:         .functype load_zero_lane_f32x4 (i32, i32, i32, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.load32_zero $push0=, 0($0)
+; CHECK-NEXT:    v128.load32_splat $push0=, 0($0)
 ; CHECK-NEXT:    v128.load32_lane $push1=, 0($1), $pop0, 1
 ; CHECK-NEXT:    v128.load32_lane $push2=, 0($2), $pop1, 2
 ; CHECK-NEXT:    v128.load32_lane $push3=, 0($3), $pop2, 3
@@ -513,7 +522,7 @@ define <2 x double> @load_zero_lane_f64x2(ptr %addr.a, ptr %addr.b) {
 ; CHECK-LABEL: load_zero_lane_f64x2:
 ; CHECK:         .functype load_zero_lane_f64x2 (i32, i32) -> (v128)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    v128.load64_zero $push0=, 0($0)
+; CHECK-NEXT:    v128.load64_splat $push0=, 0($0)
 ; CHECK-NEXT:    v128.load64_lane $push1=, 0($1), $pop0, 1
 ; CHECK-NEXT:    return $pop1
   %a = load double, ptr %addr.a

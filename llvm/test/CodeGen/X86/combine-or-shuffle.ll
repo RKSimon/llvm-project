@@ -631,31 +631,23 @@ define <4 x float> @test24(<4 x float> %a0, <4 x float> %a1) {
 define <4 x float> @test25(<4 x float> %a0) {
 ; SSE2-LABEL: test25:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[1,2],mem[0,3]
-; SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[2,0,1,3]
+; SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE2-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE2-NEXT:    retq
 ;
 ; SSE4-LABEL: test25:
 ; SSE4:       # %bb.0:
-; SSE4-NEXT:    blendps {{.*#+}} xmm0 = mem[0],xmm0[1,2],mem[3]
+; SSE4-NEXT:    xorps %xmm1, %xmm1
+; SSE4-NEXT:    blendps {{.*#+}} xmm0 = xmm1[0],xmm0[1,2],xmm1[3]
+; SSE4-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; SSE4-NEXT:    retq
 ;
-; AVX1-LABEL: test25:
-; AVX1:       # %bb.0:
-; AVX1-NEXT:    vblendps {{.*#+}} xmm0 = mem[0],xmm0[1,2],mem[3]
-; AVX1-NEXT:    retq
-;
-; AVX2-LABEL: test25:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX2-NEXT:    vblendps {{.*#+}} xmm0 = xmm1[0],xmm0[1,2],xmm1[3]
-; AVX2-NEXT:    retq
-;
-; AVX512-LABEL: test25:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vbroadcastss {{.*#+}} xmm1 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-; AVX512-NEXT:    vblendps {{.*#+}} xmm0 = xmm1[0],xmm0[1,2],xmm1[3]
-; AVX512-NEXT:    retq
+; AVX-LABEL: test25:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vxorps %xmm1, %xmm1, %xmm1
+; AVX-NEXT:    vblendps {{.*#+}} xmm0 = xmm1[0],xmm0[1,2],xmm1[3]
+; AVX-NEXT:    vorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX-NEXT:    retq
   %bc1 = bitcast <4 x float> %a0 to <4 x i32>
   %bc2 = bitcast <4 x float> <float 1.0, float 1.0, float 1.0, float 1.0> to <4 x i32>
   %and1 = and <4 x i32> %bc1, <i32 0, i32 -1, i32 -1, i32 0>

@@ -6,18 +6,18 @@
 define <4 x i64> @should_not_be_optimized(ptr %ptr, ptr %dst) {
 ; LA32-LABEL: should_not_be_optimized:
 ; LA32:       # %bb.0:
-; LA32-NEXT:    ld.w $a2, $a0, 0
-; LA32-NEXT:    ld.w $a0, $a0, 4
-; LA32-NEXT:    st.w $a2, $a1, 0
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 0
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 1
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 2
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 3
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 4
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 5
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 6
-; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 7
-; LA32-NEXT:    st.w $a0, $a1, 4
+; LA32-NEXT:    ld.w $a2, $a0, 4
+; LA32-NEXT:    ld.w $a0, $a0, 0
+; LA32-NEXT:    st.w $a2, $a1, 4
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 0
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 1
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 2
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 3
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 4
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 5
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a0, 6
+; LA32-NEXT:    xvinsgr2vr.w $xr0, $a2, 7
+; LA32-NEXT:    st.w $a0, $a1, 0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: should_not_be_optimized:

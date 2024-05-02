@@ -102,7 +102,7 @@ define i16 @test_i16_smin(i16 %a) nounwind {
 ; X64-LABEL: test_i16_smin:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movswl %di, %eax
-; X64-NEXT:    sarl $15, %eax
+; X64-NEXT:    shrl $15, %eax
 ; X64-NEXT:    andl %edi, %eax
 ; X64-NEXT:    # kill: def $ax killed $ax killed $eax
 ; X64-NEXT:    retq
