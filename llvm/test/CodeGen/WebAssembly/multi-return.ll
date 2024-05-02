@@ -39,10 +39,10 @@ define i128 @test1() {
 ; CHECK-NEXT:    local.tee $push5=, $2=, $pop6
 ; CHECK-NEXT:    global.set __stack_pointer, $pop5
 ; CHECK-NEXT:    call return_multi_multi, $2
-; CHECK-NEXT:    i64.load $1=, 24($2)
-; CHECK-NEXT:    i64.load $push0=, 16($2)
-; CHECK-NEXT:    i64.store 0($0), $pop0
-; CHECK-NEXT:    i64.store 8($0), $1
+; CHECK-NEXT:    i64.load $1=, 16($2)
+; CHECK-NEXT:    i64.load $push0=, 24($2)
+; CHECK-NEXT:    i64.store 8($0), $pop0
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push3=, 96
 ; CHECK-NEXT:    i32.add $push4=, $2, $pop3
 ; CHECK-NEXT:    global.set __stack_pointer, $pop4
@@ -62,14 +62,14 @@ define i192 @test2() {
 ; CHECK-NEXT:    local.tee $push7=, $3=, $pop8
 ; CHECK-NEXT:    global.set __stack_pointer, $pop7
 ; CHECK-NEXT:    call return_multi_multi, $3
-; CHECK-NEXT:    i64.load $1=, 40($3)
-; CHECK-NEXT:    i64.load $2=, 32($3)
+; CHECK-NEXT:    i64.load $1=, 32($3)
+; CHECK-NEXT:    i64.load $2=, 40($3)
 ; CHECK-NEXT:    i32.const $push0=, 48
 ; CHECK-NEXT:    i32.add $push1=, $3, $pop0
 ; CHECK-NEXT:    i64.load $push2=, 0($pop1)
 ; CHECK-NEXT:    i64.store 16($0), $pop2
-; CHECK-NEXT:    i64.store 0($0), $2
-; CHECK-NEXT:    i64.store 8($0), $1
+; CHECK-NEXT:    i64.store 8($0), $2
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push5=, 96
 ; CHECK-NEXT:    i32.add $push6=, $3, $pop5
 ; CHECK-NEXT:    global.set __stack_pointer, $pop6
@@ -89,10 +89,10 @@ define i128 @test3() {
 ; CHECK-NEXT:    local.tee $push5=, $2=, $pop6
 ; CHECK-NEXT:    global.set __stack_pointer, $pop5
 ; CHECK-NEXT:    call return_multi_multi, $2
-; CHECK-NEXT:    i64.load $1=, 72($2)
-; CHECK-NEXT:    i64.load $push0=, 64($2)
-; CHECK-NEXT:    i64.store 0($0), $pop0
-; CHECK-NEXT:    i64.store 8($0), $1
+; CHECK-NEXT:    i64.load $1=, 64($2)
+; CHECK-NEXT:    i64.load $push0=, 72($2)
+; CHECK-NEXT:    i64.store 8($0), $pop0
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push3=, 96
 ; CHECK-NEXT:    i32.add $push4=, $2, $pop3
 ; CHECK-NEXT:    global.set __stack_pointer, $pop4
@@ -135,12 +135,12 @@ define { i64, i128 } @test5() {
 ; CHECK-NEXT:    local.tee $push5=, $3=, $pop6
 ; CHECK-NEXT:    global.set __stack_pointer, $pop5
 ; CHECK-NEXT:    call return_multi_multi, $3
-; CHECK-NEXT:    i64.load $1=, 24($3)
+; CHECK-NEXT:    i64.load $1=, 0($3)
 ; CHECK-NEXT:    i64.load $2=, 16($3)
-; CHECK-NEXT:    i64.load $push0=, 0($3)
-; CHECK-NEXT:    i64.store 0($0), $pop0
+; CHECK-NEXT:    i64.load $push0=, 24($3)
+; CHECK-NEXT:    i64.store 24($0), $pop0
 ; CHECK-NEXT:    i64.store 16($0), $2
-; CHECK-NEXT:    i64.store 24($0), $1
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push3=, 96
 ; CHECK-NEXT:    i32.add $push4=, $3, $pop3
 ; CHECK-NEXT:    global.set __stack_pointer, $pop4
@@ -163,14 +163,14 @@ define { i128, i128 } @test6() {
 ; CHECK-NEXT:    local.tee $push5=, $4=, $pop6
 ; CHECK-NEXT:    global.set __stack_pointer, $pop5
 ; CHECK-NEXT:    call return_multi_multi, $4
-; CHECK-NEXT:    i64.load $1=, 24($4)
-; CHECK-NEXT:    i64.load $2=, 16($4)
-; CHECK-NEXT:    i64.load $3=, 72($4)
-; CHECK-NEXT:    i64.load $push0=, 64($4)
-; CHECK-NEXT:    i64.store 16($0), $pop0
-; CHECK-NEXT:    i64.store 24($0), $3
-; CHECK-NEXT:    i64.store 0($0), $2
-; CHECK-NEXT:    i64.store 8($0), $1
+; CHECK-NEXT:    i64.load $1=, 16($4)
+; CHECK-NEXT:    i64.load $2=, 24($4)
+; CHECK-NEXT:    i64.load $3=, 64($4)
+; CHECK-NEXT:    i64.load $push0=, 72($4)
+; CHECK-NEXT:    i64.store 24($0), $pop0
+; CHECK-NEXT:    i64.store 16($0), $3
+; CHECK-NEXT:    i64.store 8($0), $2
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push3=, 96
 ; CHECK-NEXT:    i32.add $push4=, $4, $pop3
 ; CHECK-NEXT:    global.set __stack_pointer, $pop4
@@ -193,16 +193,16 @@ define { i64, i192 } @test7() {
 ; CHECK-NEXT:    local.tee $push7=, $4=, $pop8
 ; CHECK-NEXT:    global.set __stack_pointer, $pop7
 ; CHECK-NEXT:    call return_multi_multi, $4
+; CHECK-NEXT:    i64.load $1=, 0($4)
+; CHECK-NEXT:    i64.load $2=, 32($4)
+; CHECK-NEXT:    i64.load $3=, 40($4)
 ; CHECK-NEXT:    i32.const $push0=, 48
 ; CHECK-NEXT:    i32.add $push1=, $4, $pop0
-; CHECK-NEXT:    i64.load $1=, 0($pop1)
-; CHECK-NEXT:    i64.load $2=, 40($4)
-; CHECK-NEXT:    i64.load $3=, 32($4)
-; CHECK-NEXT:    i64.load $push2=, 0($4)
-; CHECK-NEXT:    i64.store 0($0), $pop2
-; CHECK-NEXT:    i64.store 32($0), $1
-; CHECK-NEXT:    i64.store 16($0), $3
-; CHECK-NEXT:    i64.store 24($0), $2
+; CHECK-NEXT:    i64.load $push2=, 0($pop1)
+; CHECK-NEXT:    i64.store 32($0), $pop2
+; CHECK-NEXT:    i64.store 24($0), $3
+; CHECK-NEXT:    i64.store 16($0), $2
+; CHECK-NEXT:    i64.store 0($0), $1
 ; CHECK-NEXT:    i32.const $push5=, 96
 ; CHECK-NEXT:    i32.add $push6=, $4, $pop5
 ; CHECK-NEXT:    global.set __stack_pointer, $pop6
@@ -228,21 +228,21 @@ define { i128, i192, i128, i64 } @test8() {
 ; CHECK-NEXT:    i32.const $push0=, 48
 ; CHECK-NEXT:    i32.add $push1=, $8, $pop0
 ; CHECK-NEXT:    i64.load $1=, 0($pop1)
-; CHECK-NEXT:    i64.load $2=, 72($8)
-; CHECK-NEXT:    i64.load $3=, 64($8)
-; CHECK-NEXT:    i64.load $4=, 40($8)
-; CHECK-NEXT:    i64.load $5=, 32($8)
-; CHECK-NEXT:    i64.load $6=, 24($8)
-; CHECK-NEXT:    i64.load $7=, 16($8)
+; CHECK-NEXT:    i64.load $2=, 64($8)
+; CHECK-NEXT:    i64.load $3=, 72($8)
+; CHECK-NEXT:    i64.load $4=, 32($8)
+; CHECK-NEXT:    i64.load $5=, 40($8)
+; CHECK-NEXT:    i64.load $6=, 16($8)
+; CHECK-NEXT:    i64.load $7=, 24($8)
 ; CHECK-NEXT:    i64.load $push2=, 0($8)
 ; CHECK-NEXT:    i64.store 64($0), $pop2
-; CHECK-NEXT:    i64.store 48($0), $7
-; CHECK-NEXT:    i64.store 56($0), $6
+; CHECK-NEXT:    i64.store 56($0), $7
+; CHECK-NEXT:    i64.store 48($0), $6
 ; CHECK-NEXT:    i64.store 32($0), $1
-; CHECK-NEXT:    i64.store 16($0), $5
-; CHECK-NEXT:    i64.store 24($0), $4
-; CHECK-NEXT:    i64.store 0($0), $3
-; CHECK-NEXT:    i64.store 8($0), $2
+; CHECK-NEXT:    i64.store 24($0), $5
+; CHECK-NEXT:    i64.store 16($0), $4
+; CHECK-NEXT:    i64.store 8($0), $3
+; CHECK-NEXT:    i64.store 0($0), $2
 ; CHECK-NEXT:    i32.const $push5=, 96
 ; CHECK-NEXT:    i32.add $push6=, $8, $pop5
 ; CHECK-NEXT:    global.set __stack_pointer, $pop6

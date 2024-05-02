@@ -251,8 +251,10 @@ entry:
 define <8 x i16> @nonsplat_shuffleinsert(i8 %src, <8 x i8> %b) {
 ; CHECK-SD-LABEL: nonsplat_shuffleinsert:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    dup v1.8b, w0
-; CHECK-SD-NEXT:    smull v0.8h, v1.8b, v0.8b
+; CHECK-SD-NEXT:    sxtb w8, w0
+; CHECK-SD-NEXT:    sshll v0.8h, v0.8b, #0
+; CHECK-SD-NEXT:    dup v1.8h, w8
+; CHECK-SD-NEXT:    mul v0.8h, v1.8h, v0.8h
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: nonsplat_shuffleinsert:
@@ -318,8 +320,9 @@ define void @typei1_orig(i64 %a, ptr %p, ptr %q) {
 ; CHECK-SD-NEXT:    dup v1.8h, w8
 ; CHECK-SD-NEXT:    cmtst v0.8h, v0.8h, v0.8h
 ; CHECK-SD-NEXT:    cmeq v1.8h, v1.8h, #0
-; CHECK-SD-NEXT:    bic v0.16b, v0.16b, v1.16b
 ; CHECK-SD-NEXT:    xtn v0.8b, v0.8h
+; CHECK-SD-NEXT:    uzp1 v1.16b, v1.16b, v1.16b
+; CHECK-SD-NEXT:    bic v0.16b, v0.16b, v1.16b
 ; CHECK-SD-NEXT:    str q0, [x1]
 ; CHECK-SD-NEXT:    ret
 ;

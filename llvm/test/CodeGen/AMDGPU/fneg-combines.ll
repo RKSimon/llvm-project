@@ -560,7 +560,7 @@ define amdgpu_kernel void @v_fneg_add_fneg_fneg_f32(ptr addrspace(1) %out, ptr a
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NSZ-NEXT:    flat_load_dword v1, v[2:3] glc
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0)
-; SI-NSZ-NEXT:    v_add_f32_e32 v2, v0, v1
+; SI-NSZ-NEXT:    v_add_f32_e32 v2, v1, v0
 ; SI-NSZ-NEXT:    v_mov_b32_e32 v0, s0
 ; SI-NSZ-NEXT:    v_mov_b32_e32 v1, s1
 ; SI-NSZ-NEXT:    flat_store_dword v[0:1], v2
@@ -607,7 +607,7 @@ define amdgpu_kernel void @v_fneg_add_fneg_fneg_f32(ptr addrspace(1) %out, ptr a
 ; VI-NSZ-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NSZ-NEXT:    flat_load_dword v1, v[2:3] glc
 ; VI-NSZ-NEXT:    s_waitcnt vmcnt(0)
-; VI-NSZ-NEXT:    v_add_f32_e32 v2, v0, v1
+; VI-NSZ-NEXT:    v_add_f32_e32 v2, v1, v0
 ; VI-NSZ-NEXT:    v_mov_b32_e32 v0, s0
 ; VI-NSZ-NEXT:    v_mov_b32_e32 v1, s1
 ; VI-NSZ-NEXT:    flat_store_dword v[0:1], v2

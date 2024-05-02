@@ -1341,7 +1341,8 @@ define i8 @uaddo.selectboth.i8(i8 %a, i8 %b) {
 ; SDAG-NEXT:    and w9, w0, #0xff
 ; SDAG-NEXT:    mov w8, #10 // =0xa
 ; SDAG-NEXT:    add w9, w9, w1, uxtb
-; SDAG-NEXT:    tst w9, #0x100
+; SDAG-NEXT:    lsr w10, w9, #8
+; SDAG-NEXT:    cmp w10, #0
 ; SDAG-NEXT:    csel w0, w9, w8, ne
 ; SDAG-NEXT:    ret
 ;
@@ -1350,7 +1351,8 @@ define i8 @uaddo.selectboth.i8(i8 %a, i8 %b) {
 ; FAST-NEXT:    and w9, w0, #0xff
 ; FAST-NEXT:    mov w8, #10 // =0xa
 ; FAST-NEXT:    add w9, w9, w1, uxtb
-; FAST-NEXT:    tst w9, #0x100
+; FAST-NEXT:    lsr w10, w9, #8
+; FAST-NEXT:    cmp w10, #0
 ; FAST-NEXT:    csel w0, w9, w8, ne
 ; FAST-NEXT:    ret
 ;
@@ -1411,7 +1413,8 @@ define i16 @uaddo.selectboth.i16(i16 %a, i16 %b) {
 ; SDAG-NEXT:    and w9, w0, #0xffff
 ; SDAG-NEXT:    mov w8, #10 // =0xa
 ; SDAG-NEXT:    add w9, w9, w1, uxth
-; SDAG-NEXT:    tst w9, #0x10000
+; SDAG-NEXT:    lsr w10, w9, #16
+; SDAG-NEXT:    cmp w10, #0
 ; SDAG-NEXT:    csel w0, w9, w8, ne
 ; SDAG-NEXT:    ret
 ;
@@ -1420,7 +1423,8 @@ define i16 @uaddo.selectboth.i16(i16 %a, i16 %b) {
 ; FAST-NEXT:    and w9, w0, #0xffff
 ; FAST-NEXT:    mov w8, #10 // =0xa
 ; FAST-NEXT:    add w9, w9, w1, uxth
-; FAST-NEXT:    tst w9, #0x10000
+; FAST-NEXT:    lsr w10, w9, #16
+; FAST-NEXT:    cmp w10, #0
 ; FAST-NEXT:    csel w0, w9, w8, ne
 ; FAST-NEXT:    ret
 ;

@@ -215,7 +215,7 @@ define i32 @orgeps(i32 %i, ptr %x, ptr %y) {
 ; CHECK-T1-LABEL: orgeps:
 ; CHECK-T1:       @ %bb.0: @ %entry
 ; CHECK-T1-NEXT:    lsls r0, r0, #3
-; CHECK-T1-NEXT:    adds r0, r1, r0
+; CHECK-T1-NEXT:    adds r0, r0, r1
 ; CHECK-T1-NEXT:    ldr r1, [r0, #4]
 ; CHECK-T1-NEXT:    ldr r0, [r0, #8]
 ; CHECK-T1-NEXT:    adds r0, r0, r1

@@ -236,10 +236,11 @@ define signext i32 @test_byval_4Byte(ptr byval(%struct.S4) align 1 %s, ptr byval
   ; 32BIT: bb.0.entry:
   ; 32BIT-NEXT:   liveins: $r3, $r4
   ; 32BIT-NEXT: {{  $}}
-  ; 32BIT-NEXT:   STW renamable $r3, 0, %fixed-stack.2 :: (store (s32) into %fixed-stack.2, align 8)
-  ; 32BIT-NEXT:   renamable $r3 = RLWINM killed renamable $r3, 0, 24, 31
-  ; 32BIT-NEXT:   renamable $r3 = nsw ADD4 renamable $r4, killed renamable $r3
-  ; 32BIT-NEXT:   STW killed renamable $r4, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0)
+  ; 32BIT-NEXT:   renamable $r5 = COPY $r3
+  ; 32BIT-NEXT:   STW renamable $r4, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0)
+  ; 32BIT-NEXT:   renamable $r3 = RLWINM $r3, 0, 24, 31
+  ; 32BIT-NEXT:   renamable $r3 = nsw ADD4 killed renamable $r4, killed renamable $r3
+  ; 32BIT-NEXT:   STW killed renamable $r5, 0, %fixed-stack.2 :: (store (s32) into %fixed-stack.2, align 8)
   ; 32BIT-NEXT:   BLR implicit $lr, implicit $rm, implicit $r3
   ;
   ; 64BIT-LABEL: name: test_byval_4Byte
@@ -440,26 +441,28 @@ define zeroext i8 @test_byval_32Byte(ptr byval(%struct.S32) align 1 %s) {
   ; 32BIT: bb.0.entry:
   ; 32BIT-NEXT:   liveins: $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10
   ; 32BIT-NEXT: {{  $}}
+  ; 32BIT-NEXT:   renamable $r11 = COPY $r3
   ; 32BIT-NEXT:   STW killed renamable $r8, 20, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 20)
-  ; 32BIT-NEXT:   STW killed renamable $r3, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 8)
-  ; 32BIT-NEXT:   STW killed renamable $r4, 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
-  ; 32BIT-NEXT:   STW killed renamable $r5, 8, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 8, align 8)
-  ; 32BIT-NEXT:   STW killed renamable $r6, 12, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 12)
-  ; 32BIT-NEXT:   STW killed renamable $r7, 16, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 16, align 8)
-  ; 32BIT-NEXT:   renamable $r3 = LBZ 21, %fixed-stack.0 :: (dereferenceable load (s8) from %ir.arrayidx)
-  ; 32BIT-NEXT:   STW killed renamable $r9, 24, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 24, align 8)
   ; 32BIT-NEXT:   STW killed renamable $r10, 28, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 28)
+  ; 32BIT-NEXT:   STW killed renamable $r9, 24, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 24, align 8)
+  ; 32BIT-NEXT:   STW killed renamable $r7, 16, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 16, align 8)
+  ; 32BIT-NEXT:   STW killed renamable $r6, 12, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 12)
+  ; 32BIT-NEXT:   STW killed renamable $r5, 8, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 8, align 8)
+  ; 32BIT-NEXT:   renamable $r3 = LBZ 21, %fixed-stack.0 :: (dereferenceable load (s8) from %ir.arrayidx)
+  ; 32BIT-NEXT:   STW killed renamable $r4, 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
+  ; 32BIT-NEXT:   STW killed renamable $r11, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 8)
   ; 32BIT-NEXT:   BLR implicit $lr, implicit $rm, implicit $r3
   ;
   ; 64BIT-LABEL: name: test_byval_32Byte
   ; 64BIT: bb.0.entry:
   ; 64BIT-NEXT:   liveins: $x3, $x4, $x5, $x6
   ; 64BIT-NEXT: {{  $}}
+  ; 64BIT-NEXT:   renamable $x7 = COPY $x3
   ; 64BIT-NEXT:   STD killed renamable $x5, 16, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 16, align 16)
-  ; 64BIT-NEXT:   STD killed renamable $x3, 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0, align 16)
+  ; 64BIT-NEXT:   STD killed renamable $x6, 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
   ; 64BIT-NEXT:   renamable $x3 = LBZ8 21, %fixed-stack.0 :: (dereferenceable load (s8) from %ir.arrayidx)
   ; 64BIT-NEXT:   STD killed renamable $x4, 8, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 8)
-  ; 64BIT-NEXT:   STD killed renamable $x6, 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
+  ; 64BIT-NEXT:   STD killed renamable $x7, 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0, align 16)
   ; 64BIT-NEXT:   BLR8 implicit $lr8, implicit $rm, implicit $x3
 entry:
   %arrayidx = getelementptr inbounds %struct.S32, ptr %s, i32 0, i32 0, i32 21
@@ -522,13 +525,13 @@ define double @test_byval_31Byte(ptr byval(%struct.S31) align 1 %s) {
   ; 32BIT-NEXT: {{  $}}
   ; 32BIT-NEXT:   STW killed renamable $r8, 20, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 20)
   ; 32BIT-NEXT:   STW killed renamable $r7, 16, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 16, align 8)
-  ; 32BIT-NEXT:   STW killed renamable $r3, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 8)
-  ; 32BIT-NEXT:   STW killed renamable $r4, 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
-  ; 32BIT-NEXT:   STW killed renamable $r5, 8, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 8, align 8)
-  ; 32BIT-NEXT:   STW killed renamable $r6, 12, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 12)
-  ; 32BIT-NEXT:   renamable $f1 = LFD 16, %fixed-stack.0 :: (dereferenceable load (s64) from %ir.gep)
-  ; 32BIT-NEXT:   STW killed renamable $r9, 24, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 24, align 8)
   ; 32BIT-NEXT:   STW killed renamable $r10, 28, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 28)
+  ; 32BIT-NEXT:   STW killed renamable $r9, 24, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 24, align 8)
+  ; 32BIT-NEXT:   STW killed renamable $r6, 12, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 12)
+  ; 32BIT-NEXT:   STW killed renamable $r5, 8, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 8, align 8)
+  ; 32BIT-NEXT:   renamable $f1 = LFD 16, %fixed-stack.0 :: (dereferenceable load (s64) from %ir.gep)
+  ; 32BIT-NEXT:   STW killed renamable $r4, 4, %fixed-stack.0 :: (store (s32) into %fixed-stack.0 + 4)
+  ; 32BIT-NEXT:   STW killed renamable $r3, 0, %fixed-stack.0 :: (store (s32) into %fixed-stack.0, align 8)
   ; 32BIT-NEXT:   BLR implicit $lr, implicit $rm, implicit $f1
   ;
   ; 64BIT-LABEL: name: test_byval_31Byte
@@ -536,10 +539,10 @@ define double @test_byval_31Byte(ptr byval(%struct.S31) align 1 %s) {
   ; 64BIT-NEXT:   liveins: $x3, $x4, $x5, $x6
   ; 64BIT-NEXT: {{  $}}
   ; 64BIT-NEXT:   STD killed renamable $x5, 16, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 16, align 16)
-  ; 64BIT-NEXT:   STD killed renamable $x3, 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0, align 16)
+  ; 64BIT-NEXT:   STD killed renamable $x6, 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
   ; 64BIT-NEXT:   renamable $f1 = LFD 16, %fixed-stack.0 :: (dereferenceable load (s64) from %ir.gep, align 16)
   ; 64BIT-NEXT:   STD killed renamable $x4, 8, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 8)
-  ; 64BIT-NEXT:   STD killed renamable $x6, 24, %fixed-stack.0 :: (store (s64) into %fixed-stack.0 + 24)
+  ; 64BIT-NEXT:   STD killed renamable $x3, 0, %fixed-stack.0 :: (store (s64) into %fixed-stack.0, align 16)
   ; 64BIT-NEXT:   BLR8 implicit $lr8, implicit $rm, implicit $f1
 entry:
   %gep = getelementptr inbounds %struct.S31, ptr %s, i32 0, i32 3

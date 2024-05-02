@@ -364,18 +364,18 @@ define void @nxv4f64(ptr %ldptr, ptr %stptr) {
 define void @v8i32(ptr %ldptr, ptr %stptr) {
 ; CHECK-LABEL: v8i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0, #64]
-; CHECK-NEXT:    ldp q3, q2, [x0, #32]
-; CHECK-NEXT:    stp q0, q1, [x1, #64]
-; CHECK-NEXT:    stp q3, q2, [x1, #32]
+; CHECK-NEXT:    ldp q1, q0, [x0, #64]
+; CHECK-NEXT:    ldp q2, q3, [x0, #32]
+; CHECK-NEXT:    stp q1, q0, [x1, #64]
+; CHECK-NEXT:    stp q2, q3, [x1, #32]
 ; CHECK-NEXT:    ret
 ;
 ; CHECK-128-LABEL: v8i32:
 ; CHECK-128:       // %bb.0:
-; CHECK-128-NEXT:    ldp q0, q1, [x0, #64]
-; CHECK-128-NEXT:    ldp q3, q2, [x0, #32]
-; CHECK-128-NEXT:    stp q0, q1, [x1, #64]
-; CHECK-128-NEXT:    stp q3, q2, [x1, #32]
+; CHECK-128-NEXT:    ldp q1, q0, [x0, #64]
+; CHECK-128-NEXT:    ldp q2, q3, [x0, #32]
+; CHECK-128-NEXT:    stp q1, q0, [x1, #64]
+; CHECK-128-NEXT:    stp q2, q3, [x1, #32]
 ; CHECK-128-NEXT:    ret
 ;
 ; CHECK-256-LABEL: v8i32:

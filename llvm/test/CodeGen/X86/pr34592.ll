@@ -23,7 +23,7 @@ define <16 x i64> @pluto(<16 x i64> %arg, <16 x i64> %arg1, <16 x i64> %arg2, <1
 ; CHECK-O0-NEXT:    vmovaps 80(%rbp), %ymm11
 ; CHECK-O0-NEXT:    vmovaps 48(%rbp), %ymm11
 ; CHECK-O0-NEXT:    vmovaps 16(%rbp), %ymm11
-; CHECK-O0-NEXT:    vpblendd {{.*#+}} ymm0 = ymm6[0,1,2,3,4,5],ymm0[6,7]
+; CHECK-O0-NEXT:    vpblendd {{.*#+}} ymm0 = ymm6[0,1,2,3],ymm0[4,5,6,7]
 ; CHECK-O0-NEXT:    vxorps %xmm3, %xmm3, %xmm3
 ; CHECK-O0-NEXT:    vpunpcklqdq {{.*#+}} ymm2 = ymm2[0],ymm1[0],ymm2[2],ymm1[2]
 ; CHECK-O0-NEXT:    vpermq {{.*#+}} ymm2 = ymm2[0,2,1,3]
@@ -54,7 +54,7 @@ define <16 x i64> @pluto(<16 x i64> %arg, <16 x i64> %arg1, <16 x i64> %arg2, <1
 ; CHECK-O3-NEXT:    subq $32, %rsp
 ; CHECK-O3-NEXT:    vmovdqa 208(%rbp), %ymm3
 ; CHECK-O3-NEXT:    vmovdqa 144(%rbp), %ymm0
-; CHECK-O3-NEXT:    vpblendd {{.*#+}} ymm1 = ymm6[0,1,2,3,4,5],ymm2[6,7]
+; CHECK-O3-NEXT:    vpblendd {{.*#+}} ymm1 = ymm6[0,1,2,3],ymm2[4,5,6,7]
 ; CHECK-O3-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; CHECK-O3-NEXT:    vpunpcklqdq {{.*#+}} ymm0 = ymm0[0],ymm3[0],ymm0[2],ymm3[2]
 ; CHECK-O3-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,2,1,3]

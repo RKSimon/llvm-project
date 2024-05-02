@@ -65,14 +65,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x1f32_rewrite_vgpr_mfma(ptr addrsp
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 1
-; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[0:1] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[28:31], s[0:1] offset:112
-; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] offset:64
+; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[0:1] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[20:23], s[0:1] offset:80
-; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32
+; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] offset:64
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48
-; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1]
+; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16
+; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1]
 ; CHECK-NEXT:    s_endpgm
 bb:
   %id = call i32 @llvm.amdgcn.workitem.id.x()
@@ -112,14 +112,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x1f32_rewrite_vgpr_mfma_noshuffle(
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 0
-; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[0:1] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[28:31], s[0:1] offset:112
-; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] offset:64
+; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[0:1] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[20:23], s[0:1] offset:80
-; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32
+; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] offset:64
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48
-; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1]
+; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16
+; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1]
 ; CHECK-NEXT:    s_endpgm
 bb:
   %id = call i32 @llvm.amdgcn.workitem.id.x()
@@ -650,14 +650,14 @@ define amdgpu_kernel void @test_rewrite_mfma_direct_copy_from_agpr_class(ptr add
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 7
 ; CHECK-NEXT:    s_nop 1
-; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[2:3] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[28:31], s[2:3] offset:112
-; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[2:3] offset:64
+; CHECK-NEXT:    global_store_dwordx4 v32, v[24:27], s[2:3] offset:96
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[20:23], s[2:3] offset:80
-; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[2:3] offset:32
+; CHECK-NEXT:    global_store_dwordx4 v32, v[16:19], s[2:3] offset:64
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[12:15], s[2:3] offset:48
-; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[2:3]
+; CHECK-NEXT:    global_store_dwordx4 v32, v[8:11], s[2:3] offset:32
 ; CHECK-NEXT:    global_store_dwordx4 v32, v[4:7], s[2:3] offset:16
+; CHECK-NEXT:    global_store_dwordx4 v32, v[0:3], s[2:3]
 ; CHECK-NEXT:    s_endpgm
   %src2 = call <32 x float> asm sideeffect "; def $0", "=a"()
   %mai0 = call <32 x float> @llvm.amdgcn.mfma.f32.32x32x1f32(float 2.0, float 4.0, <32 x float> %src2, i32 0, i32 0, i32 0)

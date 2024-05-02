@@ -4,11 +4,11 @@
 define void @test(ptr %a0) #0 {
 ; CHECK-LABEL: test:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vmovdqu (%rdi), %ymm0
-; CHECK-NEXT:    vmovq {{.*#+}} xmm1 = [0,4,0,0]
-; CHECK-NEXT:    vpblendd {{.*#+}} ymm0 = mem[0],ymm0[1,2,3,4,5,6,7]
-; CHECK-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[0,4,u,u,u,u,u,u,u,u,u,u,u,u,u,u,16,20,u,u,u,u,u,u,u,u,u,u,u,u,u,u]
-; CHECK-NEXT:    vpermd %ymm0, %ymm1, %ymm0
+; CHECK-NEXT:    vmovq {{.*#+}} xmm0 = [0,4,0,0]
+; CHECK-NEXT:    vmovdqu (%rdi), %ymm1
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm1 = mem[0],ymm1[1,2,3,4,5,6,7]
+; CHECK-NEXT:    vpshufb {{.*#+}} ymm1 = ymm1[0,4,u,u,u,u,u,u,u,u,u,u,u,u,u,u,16,20,u,u,u,u,u,u,u,u,u,u,u,u,u,u]
+; CHECK-NEXT:    vpermd %ymm1, %ymm0, %ymm0
 ; CHECK-NEXT:    vpternlogq {{.*#+}} xmm0 = ~xmm0
 ; CHECK-NEXT:    vpextrb $1, %xmm0, (%rax)
 ; CHECK-NEXT:    vpextrb $4, %xmm0, (%rax)

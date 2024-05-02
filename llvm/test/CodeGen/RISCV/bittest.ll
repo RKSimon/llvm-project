@@ -1019,9 +1019,9 @@ define i64 @bit_31_nz_select_i64(i64 %a, i64 %b, i64 %c) {
 ;
 ; RV64-LABEL: bit_31_nz_select_i64:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slli a3, a0, 32
+; RV64-NEXT:    srliw a3, a0, 31
 ; RV64-NEXT:    mv a0, a1
-; RV64-NEXT:    bltz a3, .LBB30_2
+; RV64-NEXT:    bnez a3, .LBB30_2
 ; RV64-NEXT:  # %bb.1:
 ; RV64-NEXT:    mv a0, a2
 ; RV64-NEXT:  .LBB30_2:
@@ -1388,7 +1388,8 @@ define void @bit_24_nz_branch_i32(i32 signext %0) {
 define void @bit_31_z_branch_i32(i32 signext %0) {
 ; RV32-LABEL: bit_31_z_branch_i32:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    bltz a0, .LBB43_2
+; RV32-NEXT:    srli a0, a0, 31
+; RV32-NEXT:    bnez a0, .LBB43_2
 ; RV32-NEXT:  # %bb.1:
 ; RV32-NEXT:    tail bar
 ; RV32-NEXT:  .LBB43_2:
@@ -1610,7 +1611,8 @@ define void @bit_24_nz_branch_i64(i64 %0) {
 define void @bit_31_z_branch_i64(i64 %0) {
 ; RV32-LABEL: bit_31_z_branch_i64:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    bltz a0, .LBB51_2
+; RV32-NEXT:    srli a0, a0, 31
+; RV32-NEXT:    bnez a0, .LBB51_2
 ; RV32-NEXT:  # %bb.1:
 ; RV32-NEXT:    tail bar
 ; RV32-NEXT:  .LBB51_2:
@@ -1788,7 +1790,8 @@ define void @bit_62_nz_branch_i64(i64 %0) {
 define void @bit_63_z_branch_i64(i64 %0) {
 ; RV32-LABEL: bit_63_z_branch_i64:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    bltz a1, .LBB57_2
+; RV32-NEXT:    srli a1, a1, 31
+; RV32-NEXT:    bnez a1, .LBB57_2
 ; RV32-NEXT:  # %bb.1:
 ; RV32-NEXT:    tail bar
 ; RV32-NEXT:  .LBB57_2:
@@ -1796,7 +1799,8 @@ define void @bit_63_z_branch_i64(i64 %0) {
 ;
 ; RV64-LABEL: bit_63_z_branch_i64:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    bltz a0, .LBB57_2
+; RV64-NEXT:    srli a0, a0, 63
+; RV64-NEXT:    bnez a0, .LBB57_2
 ; RV64-NEXT:  # %bb.1:
 ; RV64-NEXT:    tail bar
 ; RV64-NEXT:  .LBB57_2:
