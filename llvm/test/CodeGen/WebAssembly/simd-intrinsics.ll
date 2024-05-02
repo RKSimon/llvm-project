@@ -490,8 +490,16 @@ declare <4 x i32> @llvm.fptosi.sat.v4i32.v4f64(<4 x double>)
 define <4 x i32> @trunc_sat_s_zero_v4i32_2(<2 x double> %x) {
 ; SDAG-LABEL: trunc_sat_s_zero_v4i32_2:
 ; SDAG:         .functype trunc_sat_s_zero_v4i32_2 (v128) -> (v128)
-; SDAG-NEXT:    i32x4.trunc_sat_f64x2_s_zero $push0=, $0
-; SDAG-NEXT:    return $pop0
+; SDAG-NEXT:    f64.const $push2=, 0x0p0
+; SDAG-NEXT:    i32.trunc_sat_f64_s $push3=, $pop2
+; SDAG-NEXT:    i32x4.splat $push4=, $pop3
+; SDAG-NEXT:    f64x2.extract_lane $push0=, $0, 0
+; SDAG-NEXT:    i32.trunc_sat_f64_s $push1=, $pop0
+; SDAG-NEXT:    i32x4.replace_lane $push5=, $pop4, 0, $pop1
+; SDAG-NEXT:    f64x2.extract_lane $push6=, $0, 1
+; SDAG-NEXT:    i32.trunc_sat_f64_s $push7=, $pop6
+; SDAG-NEXT:    i32x4.replace_lane $push8=, $pop5, 1, $pop7
+; SDAG-NEXT:    return $pop8
 ;
 ; FAST-ISEL-LABEL: trunc_sat_s_zero_v4i32_2:
 ; FAST-ISEL:         .functype trunc_sat_s_zero_v4i32_2 (v128) -> (v128)
@@ -532,8 +540,16 @@ declare <4 x i32> @llvm.fptoui.sat.v4i32.v4f64(<4 x double>)
 define <4 x i32> @trunc_sat_u_zero_v4i32_2(<2 x double> %x) {
 ; SDAG-LABEL: trunc_sat_u_zero_v4i32_2:
 ; SDAG:         .functype trunc_sat_u_zero_v4i32_2 (v128) -> (v128)
-; SDAG-NEXT:    i32x4.trunc_sat_f64x2_u_zero $push0=, $0
-; SDAG-NEXT:    return $pop0
+; SDAG-NEXT:    f64.const $push2=, 0x0p0
+; SDAG-NEXT:    i32.trunc_sat_f64_u $push3=, $pop2
+; SDAG-NEXT:    i32x4.splat $push4=, $pop3
+; SDAG-NEXT:    f64x2.extract_lane $push0=, $0, 0
+; SDAG-NEXT:    i32.trunc_sat_f64_u $push1=, $pop0
+; SDAG-NEXT:    i32x4.replace_lane $push5=, $pop4, 0, $pop1
+; SDAG-NEXT:    f64x2.extract_lane $push6=, $0, 1
+; SDAG-NEXT:    i32.trunc_sat_f64_u $push7=, $pop6
+; SDAG-NEXT:    i32x4.replace_lane $push8=, $pop5, 1, $pop7
+; SDAG-NEXT:    return $pop8
 ;
 ; FAST-ISEL-LABEL: trunc_sat_u_zero_v4i32_2:
 ; FAST-ISEL:         .functype trunc_sat_u_zero_v4i32_2 (v128) -> (v128)

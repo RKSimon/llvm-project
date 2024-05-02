@@ -223,18 +223,23 @@ define <vscale x 16 x i8> @uabd_b(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) 
 define <vscale x 16 x i8> @uabd_b_promoted_ops(<vscale x 16 x i1> %a, <vscale x 16 x i1> %b) {
 ; CHECK-LABEL: uabd_b_promoted_ops:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; CHECK-NEXT:    vmxor.mm v0, v0, v8
-; CHECK-NEXT:    vmv.v.i v8, 0
-; CHECK-NEXT:    vmerge.vim v8, v8, 1, v0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, mu
+; CHECK-NEXT:    vmv.v.i v10, 0
+; CHECK-NEXT:    vmerge.vim v10, v10, 1, v0
+; CHECK-NEXT:    vmv1r.v v0, v8
+; CHECK-NEXT:    vadd.vi v10, v10, -1, v0.t
+; CHECK-NEXT:    vrsub.vi v8, v10, 0
+; CHECK-NEXT:    vmax.vv v8, v10, v8
 ; CHECK-NEXT:    ret
 ;
 ; ZVABD-LABEL: uabd_b_promoted_ops:
 ; ZVABD:       # %bb.0:
-; ZVABD-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; ZVABD-NEXT:    vmxor.mm v0, v0, v8
-; ZVABD-NEXT:    vmv.v.i v8, 0
-; ZVABD-NEXT:    vmerge.vim v8, v8, 1, v0
+; ZVABD-NEXT:    vsetvli a0, zero, e8, m2, ta, mu
+; ZVABD-NEXT:    vmv.v.i v10, 0
+; ZVABD-NEXT:    vmerge.vim v10, v10, 1, v0
+; ZVABD-NEXT:    vmv1r.v v0, v8
+; ZVABD-NEXT:    vadd.vi v10, v10, -1, v0.t
+; ZVABD-NEXT:    vabs.v v8, v10
 ; ZVABD-NEXT:    ret
   %a.zext = zext <vscale x 16 x i1> %a to <vscale x 16 x i8>
   %b.zext = zext <vscale x 16 x i1> %b to <vscale x 16 x i8>
@@ -444,20 +449,24 @@ define <vscale x 4 x i32> @uabd_non_matching_promoted_ops(<vscale x 4 x i8> %a, 
 define <vscale x 4 x i32> @uabd_non_matching_promotion(<vscale x 4 x i8> %a, <vscale x 4 x i8> %b) {
 ; CHECK-LABEL: uabd_non_matching_promotion:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; CHECK-NEXT:    vzext.vf4 v10, v8
-; CHECK-NEXT:    vsext.vf4 v12, v9
-; CHECK-NEXT:    vmin.vv v8, v10, v12
-; CHECK-NEXT:    vmax.vv v10, v10, v12
-; CHECK-NEXT:    vsub.vv v8, v10, v8
+; CHECK-NEXT:    vsetvli a0, zero, e16, m1, ta, ma
+; CHECK-NEXT:    vsext.vf2 v10, v9
+; CHECK-NEXT:    vzext.vf2 v9, v8
+; CHECK-NEXT:    vmin.vv v8, v9, v10
+; CHECK-NEXT:    vmax.vv v9, v9, v10
+; CHECK-NEXT:    vsub.vv v10, v9, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vzext.vf2 v8, v10
 ; CHECK-NEXT:    ret
 ;
 ; ZVABD-LABEL: uabd_non_matching_promotion:
 ; ZVABD:       # %bb.0:
-; ZVABD-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; ZVABD-NEXT:    vzext.vf4 v10, v8
-; ZVABD-NEXT:    vsext.vf4 v12, v9
-; ZVABD-NEXT:    vabd.vv v8, v10, v12
+; ZVABD-NEXT:    vsetvli a0, zero, e16, m1, ta, ma
+; ZVABD-NEXT:    vsext.vf2 v10, v9
+; ZVABD-NEXT:    vzext.vf2 v9, v8
+; ZVABD-NEXT:    vabd.vv v10, v9, v10
+; ZVABD-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; ZVABD-NEXT:    vzext.vf2 v8, v10
 ; ZVABD-NEXT:    ret
   %a.zext = zext <vscale x 4 x i8> %a to <vscale x 4 x i32>
   %b.zext = sext <vscale x 4 x i8> %b to <vscale x 4 x i32>

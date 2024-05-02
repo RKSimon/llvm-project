@@ -52,7 +52,10 @@ define void @f4(i32 %a, i32 %b) {
 define void @f5(ptr %p) {
 ; CHECK-LABEL: f5:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    testb $4, 10(%rdi)
+; CHECK-NEXT:    movzbl 10(%rdi), %eax
+; CHECK-NEXT:    andb $4, %al
+; CHECK-NEXT:    shrb $2, %al
+; CHECK-NEXT:    testb %al, %al
 ; CHECK-NEXT:  .Ltmp4:
 ; CHECK-NEXT:    jne .Ltmp4
 ; CHECK-NEXT:    retq

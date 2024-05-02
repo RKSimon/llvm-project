@@ -9,24 +9,26 @@ define void @test_sext_mul_splat(ptr %src, ptr %dst, i16 signext %scale, i32 %n)
 ; CHECK:         .cfi_startproc
 ; CHECK-NEXT:  // %bb.0: // %entry
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r2 = combine(r2.l,r2.l)
+; CHECK-NEXT:     r5:4 = combine(r2,r2)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    .p2align 4
 ; CHECK-NEXT:  .LBB0_1: // %loop
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     r3 = add(r3,#-1)
-; CHECK-NEXT:     r4 = memw(r0++#4)
+; CHECK-NEXT:     r2 = memw(r0++#4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r7:6 = vsxthw(r2)
 ; CHECK-NEXT:     p0 = cmp.eq(r3,#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r5:4 = vmpyh(r4,r2):sat
+; CHECK-NEXT:     r7 = mpyi(r7,r5)
+; CHECK-NEXT:     r6 = mpyi(r6,r4)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     if (!p0) jump:nt .LBB0_1
-; CHECK-NEXT:     memd(r1++#8) = r5:4
+; CHECK-NEXT:     memd(r1++#8) = r7:6
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:  // %bb.2: // %exit
 ; CHECK-NEXT:    {

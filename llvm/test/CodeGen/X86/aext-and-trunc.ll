@@ -17,7 +17,7 @@ define i32 @zext_and_trunc_i32(i32 %x) {
 ;
 ; X86-LABEL: zext_and_trunc_i32:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    andl $7, %eax
 ; X86-NEXT:    retl
   %trunc = trunc i32 %x to i8
@@ -37,7 +37,7 @@ define i32 @zext_and_trunc_i64(i64 %x) {
 ;
 ; X86-LABEL: zext_and_trunc_i64:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    andl $15, %eax
 ; X86-NEXT:    retl
   %trunc = trunc i64 %x to i8

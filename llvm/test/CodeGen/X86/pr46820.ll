@@ -13,9 +13,10 @@ define <23 x float> @load23(ptr %p) {
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    vmovups (%rsi), %zmm0
 ; CHECK-NEXT:    vmovaps 64(%rsi), %xmm1
-; CHECK-NEXT:    vmovdqa 80(%rsi), %xmm2
-; CHECK-NEXT:    vextractps $2, %xmm2, 88(%rdi)
-; CHECK-NEXT:    vmovq %xmm2, 80(%rdi)
+; CHECK-NEXT:    vmovss {{.*#+}} xmm2 = mem[0],zero,zero,zero
+; CHECK-NEXT:    vmovss %xmm2, 88(%rdi)
+; CHECK-NEXT:    movq 80(%rsi), %rcx
+; CHECK-NEXT:    movq %rcx, 80(%rdi)
 ; CHECK-NEXT:    vmovaps %xmm1, 64(%rdi)
 ; CHECK-NEXT:    vmovaps %zmm0, (%rdi)
 ; CHECK-NEXT:    vzeroupper

@@ -38,10 +38,13 @@ define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_setne:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    mov w8, #13 // =0xd
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    and w8, w8, #0xf
-; CHECK-NEXT:    cmp w8, #3
-; CHECK-NEXT:    cset w0, hi
+; CHECK-NEXT:    and w9, w0, #0xf
+; CHECK-NEXT:    mul w8, w9, w8
+; CHECK-NEXT:    lsr w8, w8, #6
+; CHECK-NEXT:    orr w8, w8, w8, lsl #2
+; CHECK-NEXT:    sub w8, w0, w8
+; CHECK-NEXT:    tst w8, #0xf
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %urem = urem i4 %X, 5
   %cmp = icmp ne i4 %urem, 0

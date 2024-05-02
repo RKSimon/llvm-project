@@ -571,7 +571,7 @@ define double @fabs_v4f64(<4 x double> %x) nounwind {
 define float @fmaxnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 ; X64-LABEL: fmaxnum_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
+; X64-NEXT:    vmaxps %xmm0, %xmm1, %xmm2
 ; X64-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X64-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X64-NEXT:    retq
@@ -579,7 +579,7 @@ define float @fmaxnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 ; X86-LABEL: fmaxnum_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
+; X86-NEXT:    vmaxps %xmm0, %xmm1, %xmm2
 ; X86-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovss %xmm0, (%esp)
@@ -594,7 +594,7 @@ define float @fmaxnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 define double @fmaxnum_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 ; X64-LABEL: fmaxnum_v4f64:
 ; X64:       # %bb.0:
-; X64-NEXT:    vmaxsd %xmm0, %xmm1, %xmm2
+; X64-NEXT:    vmaxpd %xmm0, %xmm1, %xmm2
 ; X64-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
 ; X64-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
 ; X64-NEXT:    vzeroupper
@@ -606,7 +606,7 @@ define double @fmaxnum_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 ; X86-NEXT:    movl %esp, %ebp
 ; X86-NEXT:    andl $-8, %esp
 ; X86-NEXT:    subl $8, %esp
-; X86-NEXT:    vmaxsd %xmm0, %xmm1, %xmm2
+; X86-NEXT:    vmaxpd %xmm0, %xmm1, %xmm2
 ; X86-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovlpd %xmm0, (%esp)
@@ -623,7 +623,7 @@ define double @fmaxnum_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 define float @fminnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 ; X64-LABEL: fminnum_v4f32:
 ; X64:       # %bb.0:
-; X64-NEXT:    vminss %xmm0, %xmm1, %xmm2
+; X64-NEXT:    vminps %xmm0, %xmm1, %xmm2
 ; X64-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X64-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X64-NEXT:    retq
@@ -631,7 +631,7 @@ define float @fminnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 ; X86-LABEL: fminnum_v4f32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
-; X86-NEXT:    vminss %xmm0, %xmm1, %xmm2
+; X86-NEXT:    vminps %xmm0, %xmm1, %xmm2
 ; X86-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovss %xmm0, (%esp)
@@ -646,7 +646,7 @@ define float @fminnum_v4f32(<4 x float> %x, <4 x float> %y) nounwind {
 define double @fminnum_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 ; X64-LABEL: fminnum_v4f64:
 ; X64:       # %bb.0:
-; X64-NEXT:    vminsd %xmm0, %xmm1, %xmm2
+; X64-NEXT:    vminpd %xmm0, %xmm1, %xmm2
 ; X64-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
 ; X64-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
 ; X64-NEXT:    vzeroupper
@@ -658,7 +658,7 @@ define double @fminnum_v4f64(<4 x double> %x, <4 x double> %y) nounwind {
 ; X86-NEXT:    movl %esp, %ebp
 ; X86-NEXT:    andl $-8, %esp
 ; X86-NEXT:    subl $8, %esp
-; X86-NEXT:    vminsd %xmm0, %xmm1, %xmm2
+; X86-NEXT:    vminpd %xmm0, %xmm1, %xmm2
 ; X86-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovlpd %xmm0, (%esp)

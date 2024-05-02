@@ -22,6 +22,8 @@ define dso_local signext i32 @test_32byte_vector() nounwind {
 ; CHECK-LE-NEXT:    subfic r0, r0, -96
 ; CHECK-LE-NEXT:    stdux r1, r1, r0
 ; CHECK-LE-NEXT:    addis r3, r2, .LCPI0_0@toc@ha
+; CHECK-LE-NEXT:    std r29, -24(r30) # 8-byte Folded Spill
+; CHECK-LE-NEXT:    addi r29, r1, 32
 ; CHECK-LE-NEXT:    addi r3, r3, .LCPI0_0@toc@l
 ; CHECK-LE-NEXT:    lxvd2x vs0, 0, r3
 ; CHECK-LE-NEXT:    addi r3, r1, 48
@@ -29,11 +31,14 @@ define dso_local signext i32 @test_32byte_vector() nounwind {
 ; CHECK-LE-NEXT:    addis r3, r2, .LCPI0_1@toc@ha
 ; CHECK-LE-NEXT:    addi r3, r3, .LCPI0_1@toc@l
 ; CHECK-LE-NEXT:    lxvd2x vs0, 0, r3
-; CHECK-LE-NEXT:    addi r3, r1, 32
-; CHECK-LE-NEXT:    stxvd2x vs0, 0, r3
+; CHECK-LE-NEXT:    mr r3, r29
+; CHECK-LE-NEXT:    stxvd2x vs0, 0, r29
 ; CHECK-LE-NEXT:    bl test
 ; CHECK-LE-NEXT:    nop
-; CHECK-LE-NEXT:    lwa r3, 32(r1)
+; CHECK-LE-NEXT:    lxvd2x vs0, 0, r29
+; CHECK-LE-NEXT:    ld r29, -24(r30) # 8-byte Folded Reload
+; CHECK-LE-NEXT:    mffprwz r3, f0
+; CHECK-LE-NEXT:    extsw r3, r3
 ; CHECK-LE-NEXT:    mr r1, r30
 ; CHECK-LE-NEXT:    ld r0, 16(r1)
 ; CHECK-LE-NEXT:    ld r30, -16(r1)
@@ -93,16 +98,21 @@ define dso_local signext i32 @test_32byte_aligned_vector() nounwind {
 ; CHECK-LE-NEXT:    mr r30, r1
 ; CHECK-LE-NEXT:    std r0, 16(r1)
 ; CHECK-LE-NEXT:    clrldi r0, r1, 59
-; CHECK-LE-NEXT:    subfic r0, r0, -64
+; CHECK-LE-NEXT:    subfic r0, r0, -96
 ; CHECK-LE-NEXT:    stdux r1, r1, r0
 ; CHECK-LE-NEXT:    addis r3, r2, .LCPI1_0@toc@ha
+; CHECK-LE-NEXT:    std r29, -24(r30) # 8-byte Folded Spill
+; CHECK-LE-NEXT:    addi r29, r1, 32
 ; CHECK-LE-NEXT:    addi r3, r3, .LCPI1_0@toc@l
 ; CHECK-LE-NEXT:    lxvd2x vs0, 0, r3
-; CHECK-LE-NEXT:    addi r3, r1, 32
-; CHECK-LE-NEXT:    stxvd2x vs0, 0, r3
+; CHECK-LE-NEXT:    mr r3, r29
+; CHECK-LE-NEXT:    stxvd2x vs0, 0, r29
 ; CHECK-LE-NEXT:    bl test1
 ; CHECK-LE-NEXT:    nop
-; CHECK-LE-NEXT:    lwa r3, 32(r1)
+; CHECK-LE-NEXT:    lxvd2x vs0, 0, r29
+; CHECK-LE-NEXT:    ld r29, -24(r30) # 8-byte Folded Reload
+; CHECK-LE-NEXT:    mffprwz r3, f0
+; CHECK-LE-NEXT:    extsw r3, r3
 ; CHECK-LE-NEXT:    mr r1, r30
 ; CHECK-LE-NEXT:    ld r0, 16(r1)
 ; CHECK-LE-NEXT:    ld r30, -16(r1)

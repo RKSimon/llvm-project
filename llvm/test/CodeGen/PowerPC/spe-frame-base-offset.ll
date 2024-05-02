@@ -42,10 +42,10 @@ define void @store_unaligned_in_range(double %x) {
 ; CHECK-NEXT:    .cfi_offset lr, 4
 ; CHECK-NEXT:    evmergelo 3, 3, 4
 ; CHECK-NEXT:    evstdd 3, 8(1)
-; CHECK-NEXT:    lwz 3, 8(1)
-; CHECK-NEXT:    stw 3, 17(1)
 ; CHECK-NEXT:    lwz 3, 12(1)
 ; CHECK-NEXT:    stw 3, 21(1)
+; CHECK-NEXT:    lwz 3, 8(1)
+; CHECK-NEXT:    stw 3, 17(1)
 ; CHECK-NEXT:    addi 3, 1, 16
 ; CHECK-NEXT:    bl use
 ; CHECK-NEXT:    lwz 0, 36(1)
@@ -69,10 +69,10 @@ define void @store_unaligned_offset_248(double %x) {
 ; CHECK-NEXT:    .cfi_offset lr, 4
 ; CHECK-NEXT:    evmergelo 3, 3, 4
 ; CHECK-NEXT:    evstdd 3, 16(1)
-; CHECK-NEXT:    lwz 3, 16(1)
-; CHECK-NEXT:    stw 3, 273(1)
 ; CHECK-NEXT:    lwz 3, 20(1)
 ; CHECK-NEXT:    stw 3, 277(1)
+; CHECK-NEXT:    lwz 3, 16(1)
+; CHECK-NEXT:    stw 3, 273(1)
 ; CHECK-NEXT:    addi 3, 1, 24
 ; CHECK-NEXT:    bl use
 ; CHECK-NEXT:    lwz 0, 292(1)
@@ -146,10 +146,10 @@ define double @load_unaligned_in_range() {
 ; CHECK-NEXT:    .cfi_offset lr, 4
 ; CHECK-NEXT:    addi 3, 1, 16
 ; CHECK-NEXT:    bl use
-; CHECK-NEXT:    lwz 3, 17(1)
-; CHECK-NEXT:    stw 3, 8(1)
 ; CHECK-NEXT:    lwz 3, 21(1)
 ; CHECK-NEXT:    stw 3, 12(1)
+; CHECK-NEXT:    lwz 3, 17(1)
+; CHECK-NEXT:    stw 3, 8(1)
 ; CHECK-NEXT:    evldd 4, 8(1)
 ; CHECK-NEXT:    evmergehi 3, 4, 4
 ; CHECK-NEXT:    lwz 0, 36(1)
@@ -173,10 +173,10 @@ define double @load_unaligned_offset_248() {
 ; CHECK-NEXT:    .cfi_offset lr, 4
 ; CHECK-NEXT:    addi 3, 1, 16
 ; CHECK-NEXT:    bl use
-; CHECK-NEXT:    lwz 3, 265(1)
-; CHECK-NEXT:    stw 3, 8(1)
 ; CHECK-NEXT:    lwz 3, 269(1)
 ; CHECK-NEXT:    stw 3, 12(1)
+; CHECK-NEXT:    lwz 3, 265(1)
+; CHECK-NEXT:    stw 3, 8(1)
 ; CHECK-NEXT:    evldd 4, 8(1)
 ; CHECK-NEXT:    evmergehi 3, 4, 4
 ; CHECK-NEXT:    lwz 0, 276(1)

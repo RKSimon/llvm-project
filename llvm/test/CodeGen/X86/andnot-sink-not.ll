@@ -2407,9 +2407,11 @@ define <4 x i32> @and_sink_not_splat_v4i32(<4 x i32> %x, i32 %m, i1 zeroext %con
 ; X86-SSE2-NEXT:    cmpb $0, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    je .LBB16_2
 ; X86-SSE2-NEXT:  # %bb.1: # %mask
-; X86-SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE2-NEXT:    notl %eax
+; X86-SSE2-NEXT:    movd %eax, %xmm1
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; X86-SSE2-NEXT:    pandn %xmm0, %xmm1
+; X86-SSE2-NEXT:    pand %xmm0, %xmm1
 ; X86-SSE2-NEXT:    movdqa %xmm1, %xmm0
 ; X86-SSE2-NEXT:  .LBB16_2: # %identity
 ; X86-SSE2-NEXT:    retl
@@ -2447,9 +2449,10 @@ define <4 x i32> @and_sink_not_splat_v4i32(<4 x i32> %x, i32 %m, i1 zeroext %con
 ; X64-NOAVX2-NEXT:    testl %esi, %esi
 ; X64-NOAVX2-NEXT:    je .LBB16_2
 ; X64-NOAVX2-NEXT:  # %bb.1: # %mask
+; X64-NOAVX2-NEXT:    notl %edi
 ; X64-NOAVX2-NEXT:    movd %edi, %xmm1
 ; X64-NOAVX2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; X64-NOAVX2-NEXT:    pandn %xmm0, %xmm1
+; X64-NOAVX2-NEXT:    pand %xmm0, %xmm1
 ; X64-NOAVX2-NEXT:    movdqa %xmm1, %xmm0
 ; X64-NOAVX2-NEXT:  .LBB16_2: # %identity
 ; X64-NOAVX2-NEXT:    retq
@@ -2459,9 +2462,10 @@ define <4 x i32> @and_sink_not_splat_v4i32(<4 x i32> %x, i32 %m, i1 zeroext %con
 ; X64-AVX2-NEXT:    testl %esi, %esi
 ; X64-AVX2-NEXT:    je .LBB16_2
 ; X64-AVX2-NEXT:  # %bb.1: # %mask
+; X64-AVX2-NEXT:    notl %edi
 ; X64-AVX2-NEXT:    vmovd %edi, %xmm1
 ; X64-AVX2-NEXT:    vpbroadcastd %xmm1, %xmm1
-; X64-AVX2-NEXT:    vpandn %xmm0, %xmm1, %xmm0
+; X64-AVX2-NEXT:    vpand %xmm0, %xmm1, %xmm0
 ; X64-AVX2-NEXT:  .LBB16_2: # %identity
 ; X64-AVX2-NEXT:    retq
   %a = xor i32 %m, -1
@@ -2565,10 +2569,11 @@ define <4 x i32> @and_sink_not_splat_v4i32_swapped(<4 x i32> %x, i32 %m, i1 zero
 ; X86-SSE2-NEXT:    cmpb $0, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    je .LBB17_2
 ; X86-SSE2-NEXT:  # %bb.1: # %mask
-; X86-SSE2-NEXT:    movd {{.*#+}} xmm1 = mem[0],zero,zero,zero
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE2-NEXT:    notl %eax
+; X86-SSE2-NEXT:    movd %eax, %xmm1
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; X86-SSE2-NEXT:    pandn %xmm0, %xmm1
-; X86-SSE2-NEXT:    movdqa %xmm1, %xmm0
+; X86-SSE2-NEXT:    pand %xmm1, %xmm0
 ; X86-SSE2-NEXT:  .LBB17_2: # %identity
 ; X86-SSE2-NEXT:    retl
 ;
@@ -2605,10 +2610,10 @@ define <4 x i32> @and_sink_not_splat_v4i32_swapped(<4 x i32> %x, i32 %m, i1 zero
 ; X64-NOAVX2-NEXT:    testl %esi, %esi
 ; X64-NOAVX2-NEXT:    je .LBB17_2
 ; X64-NOAVX2-NEXT:  # %bb.1: # %mask
+; X64-NOAVX2-NEXT:    notl %edi
 ; X64-NOAVX2-NEXT:    movd %edi, %xmm1
 ; X64-NOAVX2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; X64-NOAVX2-NEXT:    pandn %xmm0, %xmm1
-; X64-NOAVX2-NEXT:    movdqa %xmm1, %xmm0
+; X64-NOAVX2-NEXT:    pand %xmm1, %xmm0
 ; X64-NOAVX2-NEXT:  .LBB17_2: # %identity
 ; X64-NOAVX2-NEXT:    retq
 ;
@@ -2617,9 +2622,10 @@ define <4 x i32> @and_sink_not_splat_v4i32_swapped(<4 x i32> %x, i32 %m, i1 zero
 ; X64-AVX2-NEXT:    testl %esi, %esi
 ; X64-AVX2-NEXT:    je .LBB17_2
 ; X64-AVX2-NEXT:  # %bb.1: # %mask
+; X64-AVX2-NEXT:    notl %edi
 ; X64-AVX2-NEXT:    vmovd %edi, %xmm1
 ; X64-AVX2-NEXT:    vpbroadcastd %xmm1, %xmm1
-; X64-AVX2-NEXT:    vpandn %xmm0, %xmm1, %xmm0
+; X64-AVX2-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; X64-AVX2-NEXT:  .LBB17_2: # %identity
 ; X64-AVX2-NEXT:    retq
   %a = xor i32 %m, -1
@@ -2853,9 +2859,10 @@ define <4 x i64> @and_sink_not_splat_v4i64(<4 x i64> %x, i64 %m, i1 zeroext %con
 ; X64-AVX2-NEXT:    testl %esi, %esi
 ; X64-AVX2-NEXT:    je .LBB18_2
 ; X64-AVX2-NEXT:  # %bb.1: # %mask
+; X64-AVX2-NEXT:    notq %rdi
 ; X64-AVX2-NEXT:    vmovq %rdi, %xmm1
 ; X64-AVX2-NEXT:    vpbroadcastq %xmm1, %ymm1
-; X64-AVX2-NEXT:    vpandn %ymm0, %ymm1, %ymm0
+; X64-AVX2-NEXT:    vpand %ymm0, %ymm1, %ymm0
 ; X64-AVX2-NEXT:  .LBB18_2: # %identity
 ; X64-AVX2-NEXT:    retq
   %a = xor i64 %m, -1
@@ -3095,9 +3102,10 @@ define <4 x i64> @and_sink_not_splat_v4i64_swapped(<4 x i64> %x, i64 %m, i1 zero
 ; X64-AVX2-NEXT:    testl %esi, %esi
 ; X64-AVX2-NEXT:    je .LBB19_2
 ; X64-AVX2-NEXT:  # %bb.1: # %mask
+; X64-AVX2-NEXT:    notq %rdi
 ; X64-AVX2-NEXT:    vmovq %rdi, %xmm1
 ; X64-AVX2-NEXT:    vpbroadcastq %xmm1, %ymm1
-; X64-AVX2-NEXT:    vpandn %ymm0, %ymm1, %ymm0
+; X64-AVX2-NEXT:    vpand %ymm1, %ymm0, %ymm0
 ; X64-AVX2-NEXT:  .LBB19_2: # %identity
 ; X64-AVX2-NEXT:    retq
   %a = xor i64 %m, -1

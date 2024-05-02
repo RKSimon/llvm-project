@@ -561,12 +561,12 @@ define void @test_stack(ptr noalias nocapture sret(%struct.S6) %agg.result, ptr 
 ; CHECK-NEXT:    movl %ecx, 28(%rdi)
 ; CHECK-NEXT:    movaps {{[0-9]+}}(%rsp), %xmm0
 ; CHECK-NEXT:    movq {{[0-9]+}}(%rsp), %rcx
-; CHECK-NEXT:    movl {{[0-9]+}}(%rsp), %edx
-; CHECK-NEXT:    movl {{[0-9]+}}(%rsp), %esi
-; CHECK-NEXT:    movaps %xmm0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movl %edx, {{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movl %esi, {{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movl {{[0-9]+}}(%rsp), %ecx
+; CHECK-NEXT:    movl %ecx, {{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movl {{[0-9]+}}(%rsp), %ecx
+; CHECK-NEXT:    movl %ecx, {{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    retq
 ;
 ; DISABLED-LABEL: test_stack:
@@ -579,8 +579,8 @@ define void @test_stack(ptr noalias nocapture sret(%struct.S6) %agg.result, ptr 
 ; DISABLED-NEXT:    movups %xmm0, 16(%rdi)
 ; DISABLED-NEXT:    movaps {{[0-9]+}}(%rsp), %xmm0
 ; DISABLED-NEXT:    movaps {{[0-9]+}}(%rsp), %xmm1
-; DISABLED-NEXT:    movaps %xmm0, {{[0-9]+}}(%rsp)
 ; DISABLED-NEXT:    movaps %xmm1, {{[0-9]+}}(%rsp)
+; DISABLED-NEXT:    movaps %xmm0, {{[0-9]+}}(%rsp)
 ; DISABLED-NEXT:    retq
 ;
 ; AVX-LABEL: test_stack:
@@ -1236,8 +1236,8 @@ define void @test_atomic_store_only(ptr noalias %s1, ptr noalias %s2, i32 %x) no
 ; SSE-NEXT:    pushq %rax
 ; SSE-NEXT:    movq %rsi, %rax
 ; SSE-NEXT:    movl %edx, 4(%rdi)
-; SSE-NEXT:    movq 8(%rdi), %rdx
 ; SSE-NEXT:    movq (%rdi), %rsi
+; SSE-NEXT:    movq 8(%rdi), %rdx
 ; SSE-NEXT:    movq %rax, %rdi
 ; SSE-NEXT:    xorl %ecx, %ecx
 ; SSE-NEXT:    callq __atomic_store_16@PLT

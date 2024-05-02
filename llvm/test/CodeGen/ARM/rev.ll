@@ -4,10 +4,37 @@
 ; RUN: llc -mtriple=thumbv7m-none-eabi %s -o - | FileCheck %s --check-prefixes=CHECK,CHECK-V7
 
 define i32 @test1(i32 %X) nounwind {
-; CHECK-LABEL: test1:
-; CHECK:       @ %bb.0:
-; CHECK-NEXT:    rev16 r0, r0
-; CHECK-NEXT:    bx lr
+; CHECK-ARM-LABEL: test1:
+; CHECK-ARM:       @ %bb.0:
+; CHECK-ARM-NEXT:    mov r1, #16711680
+; CHECK-ARM-NEXT:    and r2, r0, #16711680
+; CHECK-ARM-NEXT:    and r1, r1, r0, lsr #8
+; CHECK-ARM-NEXT:    orr r1, r1, r2, lsl #8
+; CHECK-ARM-NEXT:    lsl r2, r0, #8
+; CHECK-ARM-NEXT:    lsr r0, r0, #8
+; CHECK-ARM-NEXT:    uxth r2, r2
+; CHECK-ARM-NEXT:    orr r1, r1, r2
+; CHECK-ARM-NEXT:    uxtb r0, r0
+; CHECK-ARM-NEXT:    orr r0, r1, r0
+; CHECK-ARM-NEXT:    bx lr
+;
+; CHECK-V6-LABEL: test1:
+; CHECK-V6:       @ %bb.0:
+; CHECK-V6-NEXT:    rev16 r0, r0
+; CHECK-V6-NEXT:    bx lr
+;
+; CHECK-V7-LABEL: test1:
+; CHECK-V7:       @ %bb.0:
+; CHECK-V7-NEXT:    mov.w r1, #16711680
+; CHECK-V7-NEXT:    and r2, r0, #16711680
+; CHECK-V7-NEXT:    and.w r1, r1, r0, lsr #8
+; CHECK-V7-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7-NEXT:    lsls r2, r0, #8
+; CHECK-V7-NEXT:    uxth r2, r2
+; CHECK-V7-NEXT:    add r1, r2
+; CHECK-V7-NEXT:    ubfx r0, r0, #8, #8
+; CHECK-V7-NEXT:    add r0, r1
+; CHECK-V7-NEXT:    bx lr
   %tmp1 = lshr i32 %X, 8
   %X15 = bitcast i32 %X to i32
   %tmp4 = shl i32 %X15, 8
@@ -51,10 +78,30 @@ entry:
 declare i16 @llvm.bswap.i16(i16) nounwind readnone
 
 define i32 @test4(i16 zeroext %a) nounwind {
-; CHECK-LABEL: test4:
-; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    revsh r0, r0
-; CHECK-NEXT:    bx lr
+; CHECK-ARM-LABEL: test4:
+; CHECK-ARM:       @ %bb.0: @ %entry
+; CHECK-ARM-NEXT:    lsl r1, r0, #8
+; CHECK-ARM-NEXT:    uxtb16 r1, r1
+; CHECK-ARM-NEXT:    orr r0, r1, r0, lsl #24
+; CHECK-ARM-NEXT:    asr r0, r0, #16
+; CHECK-ARM-NEXT:    bx lr
+;
+; CHECK-V6-LABEL: test4:
+; CHECK-V6:       @ %bb.0: @ %entry
+; CHECK-V6-NEXT:    lsls r1, r0, #24
+; CHECK-V6-NEXT:    lsrs r0, r0, #8
+; CHECK-V6-NEXT:    lsls r0, r0, #16
+; CHECK-V6-NEXT:    adds r0, r1, r0
+; CHECK-V6-NEXT:    asrs r0, r0, #16
+; CHECK-V6-NEXT:    bx lr
+;
+; CHECK-V7-LABEL: test4:
+; CHECK-V7:       @ %bb.0: @ %entry
+; CHECK-V7-NEXT:    mov.w r1, #16711680
+; CHECK-V7-NEXT:    and.w r1, r1, r0, lsl #8
+; CHECK-V7-NEXT:    orr.w r0, r1, r0, lsl #24
+; CHECK-V7-NEXT:    asrs r0, r0, #16
+; CHECK-V7-NEXT:    bx lr
 entry:
   %conv = zext i16 %a to i32
   %shr9 = lshr i16 %a, 8
@@ -97,10 +144,37 @@ entry:
 
 ; rdar://9609108
 define i32 @test6(i32 %x) nounwind readnone {
-; CHECK-LABEL: test6:
-; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    rev16 r0, r0
-; CHECK-NEXT:    bx lr
+; CHECK-ARM-LABEL: test6:
+; CHECK-ARM:       @ %bb.0: @ %entry
+; CHECK-ARM-NEXT:    mov r1, #16711680
+; CHECK-ARM-NEXT:    and r2, r0, #16711680
+; CHECK-ARM-NEXT:    and r1, r1, r0, lsr #8
+; CHECK-ARM-NEXT:    orr r1, r1, r2, lsl #8
+; CHECK-ARM-NEXT:    lsr r2, r0, #8
+; CHECK-ARM-NEXT:    lsl r0, r0, #8
+; CHECK-ARM-NEXT:    uxtb r2, r2
+; CHECK-ARM-NEXT:    orr r1, r1, r2
+; CHECK-ARM-NEXT:    uxth r0, r0
+; CHECK-ARM-NEXT:    orr r0, r1, r0
+; CHECK-ARM-NEXT:    bx lr
+;
+; CHECK-V6-LABEL: test6:
+; CHECK-V6:       @ %bb.0: @ %entry
+; CHECK-V6-NEXT:    rev16 r0, r0
+; CHECK-V6-NEXT:    bx lr
+;
+; CHECK-V7-LABEL: test6:
+; CHECK-V7:       @ %bb.0: @ %entry
+; CHECK-V7-NEXT:    mov.w r1, #16711680
+; CHECK-V7-NEXT:    and r2, r0, #16711680
+; CHECK-V7-NEXT:    and.w r1, r1, r0, lsr #8
+; CHECK-V7-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7-NEXT:    ubfx r2, r0, #8, #8
+; CHECK-V7-NEXT:    lsls r0, r0, #8
+; CHECK-V7-NEXT:    add r1, r2
+; CHECK-V7-NEXT:    uxth r0, r0
+; CHECK-V7-NEXT:    add r0, r1
+; CHECK-V7-NEXT:    bx lr
 entry:
   %and = shl i32 %x, 8
   %shl = and i32 %and, 65280
@@ -143,10 +217,32 @@ entry:
 }
 
 define i32 @test8(i32 %a) nounwind readnone {
-; CHECK-LABEL: test8:
-; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    revsh r0, r0
-; CHECK-NEXT:    bx lr
+; CHECK-ARM-LABEL: test8:
+; CHECK-ARM:       @ %bb.0: @ %entry
+; CHECK-ARM-NEXT:    lsl r1, r0, #8
+; CHECK-ARM-NEXT:    uxtb16 r1, r1
+; CHECK-ARM-NEXT:    orr r0, r1, r0, lsl #24
+; CHECK-ARM-NEXT:    asr r0, r0, #16
+; CHECK-ARM-NEXT:    bx lr
+;
+; CHECK-V6-LABEL: test8:
+; CHECK-V6:       @ %bb.0: @ %entry
+; CHECK-V6-NEXT:    movs r1, #255
+; CHECK-V6-NEXT:    lsls r1, r1, #16
+; CHECK-V6-NEXT:    lsls r2, r0, #8
+; CHECK-V6-NEXT:    ands r2, r1
+; CHECK-V6-NEXT:    lsls r0, r0, #24
+; CHECK-V6-NEXT:    adds r0, r0, r2
+; CHECK-V6-NEXT:    asrs r0, r0, #16
+; CHECK-V6-NEXT:    bx lr
+;
+; CHECK-V7-LABEL: test8:
+; CHECK-V7:       @ %bb.0: @ %entry
+; CHECK-V7-NEXT:    mov.w r1, #16711680
+; CHECK-V7-NEXT:    and.w r1, r1, r0, lsl #8
+; CHECK-V7-NEXT:    orr.w r0, r1, r0, lsl #24
+; CHECK-V7-NEXT:    asrs r0, r0, #16
+; CHECK-V7-NEXT:    bx lr
 entry:
   %and = lshr i32 %a, 8
   %shr4 = and i32 %and, 255

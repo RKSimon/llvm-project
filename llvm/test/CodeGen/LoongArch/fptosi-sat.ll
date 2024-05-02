@@ -857,8 +857,11 @@ define i64 @fptosi_nanguard_f32_to_i64(float %a) nounwind {
 ;
 ; LA64D-LABEL: fptosi_nanguard_f32_to_i64:
 ; LA64D:       # %bb.0: # %entry
+; LA64D-NEXT:    fcmp.cun.s $fcc0, $fa0, $fa0
 ; LA64D-NEXT:    ftintrz.l.s $fa0, $fa0
 ; LA64D-NEXT:    movfr2gr.d $a0, $fa0
+; LA64D-NEXT:    movcf2gr $a1, $fcc0
+; LA64D-NEXT:    masknez $a0, $a0, $a1
 ; LA64D-NEXT:    ret
 entry:
   %c = fcmp uno float %a, 0.0
@@ -933,8 +936,11 @@ define i64 @fptosi_nanguard_f64_to_i64(double %a) nounwind {
 ;
 ; LA64D-LABEL: fptosi_nanguard_f64_to_i64:
 ; LA64D:       # %bb.0: # %entry
+; LA64D-NEXT:    fcmp.cun.d $fcc0, $fa0, $fa0
 ; LA64D-NEXT:    ftintrz.l.d $fa0, $fa0
 ; LA64D-NEXT:    movfr2gr.d $a0, $fa0
+; LA64D-NEXT:    movcf2gr $a1, $fcc0
+; LA64D-NEXT:    masknez $a0, $a0, $a1
 ; LA64D-NEXT:    ret
 entry:
   %c = fcmp uno double %a, 0.0

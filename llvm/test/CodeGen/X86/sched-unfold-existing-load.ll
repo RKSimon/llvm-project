@@ -26,9 +26,9 @@ define void @existing_load(i64 %a, ptr %p, ptr %q) {
 ;
 ; FAST-LABEL: existing_load:
 ; FAST:       # %bb.0:
-; FAST-NEXT:    cmpl $0, val(%rip)
 ; FAST-NEXT:    movl $1, other(%rip)
 ; FAST-NEXT:    movl val(%rip), %eax
+; FAST-NEXT:    cmpl $0, val(%rip)
 ; FAST-NEXT:    setne %cl
 ; FAST-NEXT:    testq %rdi, %rdi
 ; FAST-NEXT:    setne (%rdx)

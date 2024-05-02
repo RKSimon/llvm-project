@@ -437,15 +437,21 @@ define i32 @cls_i32_knownbits_4(i32 signext %x) {
 define i32 @cls_i32_knownbits_no_overestimate(i32 signext %x) {
 ; RV32-LABEL: cls_i32_knownbits_no_overestimate:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    srai a0, a0, 15
-; RV32-NEXT:    cls a0, a0
+; RV32-NEXT:    srai a1, a0, 15
+; RV32-NEXT:    srai a0, a0, 31
+; RV32-NEXT:    xor a0, a1, a0
+; RV32-NEXT:    clz a0, a0
+; RV32-NEXT:    addi a0, a0, -1
 ; RV32-NEXT:    ori a0, a0, 16
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: cls_i32_knownbits_no_overestimate:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srli a0, a0, 15
-; RV64-NEXT:    clsw a0, a0
+; RV64-NEXT:    srli a1, a0, 15
+; RV64-NEXT:    srli a0, a0, 31
+; RV64-NEXT:    xor a0, a1, a0
+; RV64-NEXT:    clzw a0, a0
+; RV64-NEXT:    addi a0, a0, -1
 ; RV64-NEXT:    ori a0, a0, 16
 ; RV64-NEXT:    ret
   %ashr = ashr i32 %x, 15
@@ -1048,12 +1054,13 @@ define i8 @ushlsati_i8(i8 %a) {
 ;
 ; RV64-LABEL: ushlsati_i8:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slli a1, a0, 56
-; RV64-NEXT:    srli a1, a1, 59
-; RV64-NEXT:    seqz a1, a1
-; RV64-NEXT:    slli a0, a0, 61
-; RV64-NEXT:    addi a1, a1, -1
-; RV64-NEXT:    or a0, a1, a0
+; RV64-NEXT:    slli a1, a0, 61
+; RV64-NEXT:    slli a0, a0, 56
+; RV64-NEXT:    srli a2, a1, 5
+; RV64-NEXT:    xor a0, a0, a2
+; RV64-NEXT:    seqz a0, a0
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:    or a0, a0, a1
 ; RV64-NEXT:    srli a0, a0, 56
 ; RV64-NEXT:    ret
  %ushlsat = tail call i8 @llvm.ushl.sat.i8(i8 %a, i8 5)
@@ -1071,12 +1078,13 @@ define i16 @ushlsati_i16(i16 %a) {
 ;
 ; RV64-LABEL: ushlsati_i16:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    slli a1, a0, 48
-; RV64-NEXT:    srli a1, a1, 54
-; RV64-NEXT:    seqz a1, a1
-; RV64-NEXT:    slli a0, a0, 58
-; RV64-NEXT:    addi a1, a1, -1
-; RV64-NEXT:    or a0, a1, a0
+; RV64-NEXT:    slli a1, a0, 58
+; RV64-NEXT:    slli a0, a0, 48
+; RV64-NEXT:    srli a2, a1, 10
+; RV64-NEXT:    xor a0, a0, a2
+; RV64-NEXT:    seqz a0, a0
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:    or a0, a0, a1
 ; RV64-NEXT:    srli a0, a0, 48
 ; RV64-NEXT:    ret
  %ushlsat = tail call i16 @llvm.ushl.sat.i16(i16 %a, i16 10)
@@ -1092,11 +1100,13 @@ define i32 @ushlsati_i32(i32 %a) {
 ;
 ; RV64-LABEL: ushlsati_i32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    srliw a1, a0, 11
-; RV64-NEXT:    seqz a1, a1
-; RV64-NEXT:    slli a0, a0, 53
-; RV64-NEXT:    addi a1, a1, -1
-; RV64-NEXT:    or a0, a1, a0
+; RV64-NEXT:    slli a1, a0, 53
+; RV64-NEXT:    slli a0, a0, 32
+; RV64-NEXT:    srli a2, a1, 21
+; RV64-NEXT:    xor a0, a0, a2
+; RV64-NEXT:    seqz a0, a0
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:    or a0, a0, a1
 ; RV64-NEXT:    srli a0, a0, 32
 ; RV64-NEXT:    ret
  %ushlsat = tail call i32 @llvm.ushl.sat.i32(i32 %a, i32 21)
@@ -3783,13 +3793,22 @@ define i8 @usati_i8_from_i32(i32 %x) {
 define i12 @usati_i12_from_i32(i32 %x) {
 ; RV32-LABEL: usati_i12_from_i32:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    usati a0, a0, 12
+; RV32-NEXT:    srli a1, a0, 12
+; RV32-NEXT:    beqz a1, .LBB203_2
+; RV32-NEXT:  # %bb.1:
+; RV32-NEXT:    srli a0, a0, 31
+; RV32-NEXT:    addi a0, a0, -1
+; RV32-NEXT:  .LBB203_2:
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: usati_i12_from_i32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    sext.w a0, a0
-; RV64-NEXT:    usati a0, a0, 12
+; RV64-NEXT:    srliw a1, a0, 12
+; RV64-NEXT:    beqz a1, .LBB203_2
+; RV64-NEXT:  # %bb.1:
+; RV64-NEXT:    srliw a0, a0, 31
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:  .LBB203_2:
 ; RV64-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 4095
   %cmp2 = icmp sgt i32 %x, -1
@@ -3802,13 +3821,22 @@ define i12 @usati_i12_from_i32(i32 %x) {
 define i16 @usati_i16_from_i32(i32 %x) {
 ; RV32-LABEL: usati_i16_from_i32:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    usati a0, a0, 16
+; RV32-NEXT:    srli a1, a0, 16
+; RV32-NEXT:    beqz a1, .LBB204_2
+; RV32-NEXT:  # %bb.1:
+; RV32-NEXT:    srli a0, a0, 31
+; RV32-NEXT:    addi a0, a0, -1
+; RV32-NEXT:  .LBB204_2:
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: usati_i16_from_i32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    sext.w a0, a0
-; RV64-NEXT:    usati a0, a0, 16
+; RV64-NEXT:    srliw a1, a0, 16
+; RV64-NEXT:    beqz a1, .LBB204_2
+; RV64-NEXT:  # %bb.1:
+; RV64-NEXT:    srliw a0, a0, 31
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:  .LBB204_2:
 ; RV64-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 65535
   %cmp2 = icmp sgt i32 %x, -1
@@ -3821,13 +3849,22 @@ define i16 @usati_i16_from_i32(i32 %x) {
 define i24 @usati_i24_from_i32(i32 %x) {
 ; RV32-LABEL: usati_i24_from_i32:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    usati a0, a0, 24
+; RV32-NEXT:    srli a1, a0, 24
+; RV32-NEXT:    beqz a1, .LBB205_2
+; RV32-NEXT:  # %bb.1:
+; RV32-NEXT:    srli a0, a0, 31
+; RV32-NEXT:    addi a0, a0, -1
+; RV32-NEXT:  .LBB205_2:
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: usati_i24_from_i32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    sext.w a0, a0
-; RV64-NEXT:    usati a0, a0, 24
+; RV64-NEXT:    srliw a1, a0, 24
+; RV64-NEXT:    beqz a1, .LBB205_2
+; RV64-NEXT:  # %bb.1:
+; RV64-NEXT:    srliw a0, a0, 31
+; RV64-NEXT:    addi a0, a0, -1
+; RV64-NEXT:  .LBB205_2:
 ; RV64-NEXT:    ret
   %cmp1 = icmp ugt i32 %x, 16777215
   %cmp2 = icmp sgt i32 %x, -1

@@ -33,23 +33,23 @@ define void @foo1(ptr %a, ptr readonly %b, ptr readonly %c) #0 {
 ; CHECK-NEXT:    rlwinm 8, 12, 29, 28, 29
 ; CHECK-NEXT:    lwzux 9, 8, 7
 ; CHECK-NEXT:    subfic 12, 10, 32
-; CHECK-NEXT:    lwz 11, 8(8)
+; CHECK-NEXT:    lwz 11, 4(8)
 ; CHECK-NEXT:    slw 9, 9, 10
-; CHECK-NEXT:    lwz 0, 4(8)
+; CHECK-NEXT:    lwz 0, 8(8)
 ; CHECK-NEXT:    lwz 8, 12(8)
 ; CHECK-NEXT:    srw 30, 11, 12
-; CHECK-NEXT:    slw 29, 0, 10
-; CHECK-NEXT:    srw 0, 0, 12
+; CHECK-NEXT:    srw 29, 0, 12
+; CHECK-NEXT:    slw 0, 0, 10
 ; CHECK-NEXT:    srw 12, 8, 12
-; CHECK-NEXT:    slw 11, 11, 10
 ; CHECK-NEXT:    slw 8, 8, 10
+; CHECK-NEXT:    slw 11, 11, 10
 ; CHECK-NEXT:    stw 8, 12(3)
-; CHECK-NEXT:    or 8, 11, 12
+; CHECK-NEXT:    or 8, 0, 12
 ; CHECK-NEXT:    stw 8, 8(3)
-; CHECK-NEXT:    or 8, 9, 0
-; CHECK-NEXT:    stw 8, 0(3)
-; CHECK-NEXT:    or 8, 29, 30
+; CHECK-NEXT:    or 8, 11, 29
 ; CHECK-NEXT:    stw 8, 4(3)
+; CHECK-NEXT:    or 8, 9, 30
+; CHECK-NEXT:    stw 8, 0(3)
 ; CHECK-NEXT:    bdnz .LBB0_1
 ; CHECK-NEXT:  # %bb.2: # %for.end
 ; CHECK-NEXT:    lwz 30, 56(1) # 4-byte Folded Reload
@@ -104,19 +104,19 @@ define void @foo2(ptr %a, ptr readonly %b, ptr readonly %c) #0 {
 ; CHECK-NEXT:    sub 7, 6, 8
 ; CHECK-NEXT:    lwz 8, 4(7)
 ; CHECK-NEXT:    lwz 9, 0(7)
-; CHECK-NEXT:    lwz 11, 12(7)
+; CHECK-NEXT:    lwz 11, 8(7)
 ; CHECK-NEXT:    srw 0, 8, 10
-; CHECK-NEXT:    lwz 7, 8(7)
+; CHECK-NEXT:    lwz 7, 12(7)
 ; CHECK-NEXT:    slw 30, 9, 12
 ; CHECK-NEXT:    slw 8, 8, 12
-; CHECK-NEXT:    srw 11, 11, 10
-; CHECK-NEXT:    slw 12, 7, 12
+; CHECK-NEXT:    slw 12, 11, 12
 ; CHECK-NEXT:    srw 7, 7, 10
-; CHECK-NEXT:    or 7, 8, 7
-; CHECK-NEXT:    stw 7, 8(3)
-; CHECK-NEXT:    or 7, 12, 11
-; CHECK-NEXT:    sraw 9, 9, 10
+; CHECK-NEXT:    srw 11, 11, 10
+; CHECK-NEXT:    or 7, 12, 7
 ; CHECK-NEXT:    stw 7, 12(3)
+; CHECK-NEXT:    or 7, 8, 11
+; CHECK-NEXT:    sraw 9, 9, 10
+; CHECK-NEXT:    stw 7, 8(3)
 ; CHECK-NEXT:    or 7, 30, 0
 ; CHECK-NEXT:    stw 9, 0(3)
 ; CHECK-NEXT:    stw 7, 4(3)
@@ -174,19 +174,19 @@ define void @foo3(ptr %a, ptr readonly %b, ptr readonly %c) #0 {
 ; CHECK-NEXT:    stw 9, 36(1)
 ; CHECK-NEXT:    lwz 9, 4(8)
 ; CHECK-NEXT:    lwz 10, 0(8)
-; CHECK-NEXT:    lwz 12, 12(8)
+; CHECK-NEXT:    lwz 12, 8(8)
 ; CHECK-NEXT:    srw 30, 9, 11
-; CHECK-NEXT:    lwz 8, 8(8)
+; CHECK-NEXT:    lwz 8, 12(8)
 ; CHECK-NEXT:    slw 29, 10, 0
 ; CHECK-NEXT:    slw 9, 9, 0
-; CHECK-NEXT:    srw 12, 12, 11
-; CHECK-NEXT:    slw 0, 8, 0
+; CHECK-NEXT:    slw 0, 12, 0
 ; CHECK-NEXT:    srw 8, 8, 11
-; CHECK-NEXT:    or 8, 9, 8
-; CHECK-NEXT:    stw 8, 8(3)
-; CHECK-NEXT:    or 8, 0, 12
-; CHECK-NEXT:    srw 10, 10, 11
+; CHECK-NEXT:    srw 12, 12, 11
+; CHECK-NEXT:    or 8, 0, 8
 ; CHECK-NEXT:    stw 8, 12(3)
+; CHECK-NEXT:    or 8, 9, 12
+; CHECK-NEXT:    srw 10, 10, 11
+; CHECK-NEXT:    stw 8, 8(3)
 ; CHECK-NEXT:    or 8, 29, 30
 ; CHECK-NEXT:    stw 10, 0(3)
 ; CHECK-NEXT:    stw 8, 4(3)

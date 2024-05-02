@@ -19,7 +19,6 @@ define void @snippet1_i8(ptr %ret, ptr %a) nounwind {
 ; RV32-NEXT:    li a2, 255
 ; RV32-NEXT:    bgeu a2, a1, .LBB0_2
 ; RV32-NEXT:  # %bb.1:
-; RV32-NEXT:    slli a1, a1, 16
 ; RV32-NEXT:    srli a1, a1, 31
 ; RV32-NEXT:    addi a1, a1, -1
 ; RV32-NEXT:  .LBB0_2:
@@ -38,7 +37,6 @@ define void @snippet1_i8(ptr %ret, ptr %a) nounwind {
 ; RV64-NEXT:    li a2, 255
 ; RV64-NEXT:    bgeu a2, a1, .LBB0_2
 ; RV64-NEXT:  # %bb.1:
-; RV64-NEXT:    slli a1, a1, 48
 ; RV64-NEXT:    srli a1, a1, 63
 ; RV64-NEXT:    addi a1, a1, -1
 ; RV64-NEXT:  .LBB0_2:
@@ -74,7 +72,6 @@ define void @snippet2_i8(i8 zeroext %x, i8 zeroext %y, ptr %p, ptr %q) nounwind 
 ; RV32-NEXT:    sh a4, 0(a2)
 ; RV32-NEXT:    bgeu a1, a0, .LBB1_2
 ; RV32-NEXT:  # %bb.1:
-; RV32-NEXT:    slli a0, a0, 16
 ; RV32-NEXT:    srli a0, a0, 31
 ; RV32-NEXT:    addi a0, a0, -1
 ; RV32-NEXT:  .LBB1_2:
@@ -92,7 +89,6 @@ define void @snippet2_i8(i8 zeroext %x, i8 zeroext %y, ptr %p, ptr %q) nounwind 
 ; RV64-NEXT:    sh a4, 0(a2)
 ; RV64-NEXT:    bgeu a1, a0, .LBB1_2
 ; RV64-NEXT:  # %bb.1:
-; RV64-NEXT:    slli a0, a0, 48
 ; RV64-NEXT:    srli a0, a0, 63
 ; RV64-NEXT:    addi a0, a0, -1
 ; RV64-NEXT:  .LBB1_2:

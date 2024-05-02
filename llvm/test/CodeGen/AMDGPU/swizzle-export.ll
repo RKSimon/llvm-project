@@ -106,9 +106,9 @@ define amdgpu_vs void @main2(<4 x float> inreg %reg0, <4 x float> inreg %reg1) {
 ; EG-LABEL: main2:
 ; EG:       ; %bb.0: ; %main_body
 ; EG-NEXT:    CALL_FS
-; EG-NEXT:    ALU 11, @6, KC0[CB0:0-32], KC1[]
+; EG-NEXT:    ALU 10, @6, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    EXPORT T1.XY__
-; EG-NEXT:    EXPORT T0.ZXY0
+; EG-NEXT:    EXPORT T0.XYZ0
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    PAD
 ; EG-NEXT:    ALU clause starting at 6:
@@ -117,13 +117,12 @@ define amdgpu_vs void @main2(<4 x float> inreg %reg0, <4 x float> inreg %reg1) {
 ; EG-NEXT:     FRACT * T0.W, PV.W,
 ; EG-NEXT:     ADD * T0.W, PV.W, literal.x,
 ; EG-NEXT:    -1090519040(-5.000000e-01), 0(0.000000e+00)
-; EG-NEXT:     COS * T0.Z, PV.W,
+; EG-NEXT:     COS * T0.X, PV.W,
+; EG-NEXT:     MOV * T0.Z, KC0[0].Y,
 ; EG-NEXT:     ADD T1.X, T1.X, literal.x,
-; EG-NEXT:     MOV T0.Y, KC0[0].Y,
-; EG-NEXT:     MOV * T0.X, KC0[0].X,
-; EG-NEXT:    1075838976(2.500000e+00), 0(0.000000e+00)
-; EG-NEXT:     MUL_IEEE * T1.Y, T1.Y, literal.x,
-; EG-NEXT:    1080033280(3.500000e+00), 0(0.000000e+00)
+; EG-NEXT:     MOV T0.Y, KC0[0].X,
+; EG-NEXT:     MUL_IEEE * T1.Y, T1.Y, literal.y,
+; EG-NEXT:    1075838976(2.500000e+00), 1080033280(3.500000e+00)
 main_body:
   %0 = extractelement <4 x float> %reg1, i32 0
   %1 = extractelement <4 x float> %reg1, i32 1

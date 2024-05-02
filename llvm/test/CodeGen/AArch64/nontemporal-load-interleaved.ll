@@ -185,9 +185,10 @@ define void @test_ldnp_interleaved_load2_v4f16(ptr %ptr, ptr %out0, ptr %out1) {
 ; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load2_v4f16:
 ; CHECK-LE-IADISABLED:       // %bb.0: // %entry
 ; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0]
-; CHECK-LE-IADISABLED-NEXT:    uzp1 v1.8h, v0.8h, v0.8h
-; CHECK-LE-IADISABLED-NEXT:    uzp2 v0.8h, v0.8h, v0.8h
-; CHECK-LE-IADISABLED-NEXT:    str d1, [x1]
+; CHECK-LE-IADISABLED-NEXT:    mov d1, v0.d[1]
+; CHECK-LE-IADISABLED-NEXT:    uzp1 v2.4h, v0.4h, v1.4h
+; CHECK-LE-IADISABLED-NEXT:    uzp2 v0.4h, v0.4h, v1.4h
+; CHECK-LE-IADISABLED-NEXT:    str d2, [x1]
 ; CHECK-LE-IADISABLED-NEXT:    str d0, [x2]
 ; CHECK-LE-IADISABLED-NEXT:    ret
 ;
@@ -201,9 +202,10 @@ define void @test_ldnp_interleaved_load2_v4f16(ptr %ptr, ptr %out0, ptr %out1) {
 ; CHECK-BE-IADISABLED-LABEL: test_ldnp_interleaved_load2_v4f16:
 ; CHECK-BE-IADISABLED:       // %bb.0: // %entry
 ; CHECK-BE-IADISABLED-NEXT:    ld1 { v0.8h }, [x0]
-; CHECK-BE-IADISABLED-NEXT:    uzp1 v1.8h, v0.8h, v0.8h
-; CHECK-BE-IADISABLED-NEXT:    uzp2 v0.8h, v0.8h, v0.8h
-; CHECK-BE-IADISABLED-NEXT:    st1 { v1.4h }, [x1]
+; CHECK-BE-IADISABLED-NEXT:    mov d1, v0.d[1]
+; CHECK-BE-IADISABLED-NEXT:    uzp1 v2.4h, v0.4h, v1.4h
+; CHECK-BE-IADISABLED-NEXT:    uzp2 v0.4h, v0.4h, v1.4h
+; CHECK-BE-IADISABLED-NEXT:    st1 { v2.4h }, [x1]
 ; CHECK-BE-IADISABLED-NEXT:    st1 { v0.4h }, [x2]
 ; CHECK-BE-IADISABLED-NEXT:    ret
 entry:
@@ -2870,13 +2872,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v2i64_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v2i64_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v2i64_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v2i64_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v2i64_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -2899,13 +2917,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v4i32_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v4i32_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v4i32_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v4i32_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v4i32_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -2928,13 +2962,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v8i16_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v8i16_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v8i16_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v8i16_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v8i16_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -2957,13 +3007,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v16i8_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v16i8_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.16b, v1.16b, v2.16b }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v16i8_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.16b, v1.16b, v2.16b }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v16i8_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.16b, v1.16b, v2.16b }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v16i8_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -2986,13 +3052,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v2f64_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v2f64_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v2f64_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v2f64_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.2d, v1.2d, v2.2d }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v2f64_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -3015,13 +3097,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v4f32_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v4f32_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v4f32_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v4f32_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.4s, v1.4s, v2.4s }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v4f32_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry
@@ -3044,13 +3142,29 @@ entry:
 
 
 define void @test_ldnp_interleaved_load3_v8f16_intrinsic(ptr %ptr, ptr %out0, ptr %out1, ptr %out2) {
-; CHECK-LE-LABEL: test_ldnp_interleaved_load3_v8f16_intrinsic:
-; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x0]
-; CHECK-LE-NEXT:    str q0, [x1]
-; CHECK-LE-NEXT:    str q1, [x2]
-; CHECK-LE-NEXT:    str q2, [x3]
-; CHECK-LE-NEXT:    ret
+; CHECK-LE-IAENABLED-LABEL: test_ldnp_interleaved_load3_v8f16_intrinsic:
+; CHECK-LE-IAENABLED:       // %bb.0: // %entry
+; CHECK-LE-IAENABLED-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x0]
+; CHECK-LE-IAENABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IAENABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IAENABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IAENABLED-NEXT:    ret
+;
+; CHECK-LE-IADISABLED-LABEL: test_ldnp_interleaved_load3_v8f16_intrinsic:
+; CHECK-LE-IADISABLED:       // %bb.0: // %entry
+; CHECK-LE-IADISABLED-NEXT:    sub sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    .cfi_def_cfa_offset 48
+; CHECK-LE-IADISABLED-NEXT:    ldr q0, [x0, #32]
+; CHECK-LE-IADISABLED-NEXT:    ldnp q1, q2, [x0]
+; CHECK-LE-IADISABLED-NEXT:    mov x8, sp
+; CHECK-LE-IADISABLED-NEXT:    stp q2, q0, [sp, #16]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [sp]
+; CHECK-LE-IADISABLED-NEXT:    ld3 { v0.8h, v1.8h, v2.8h }, [x8]
+; CHECK-LE-IADISABLED-NEXT:    str q0, [x1]
+; CHECK-LE-IADISABLED-NEXT:    str q1, [x2]
+; CHECK-LE-IADISABLED-NEXT:    str q2, [x3]
+; CHECK-LE-IADISABLED-NEXT:    add sp, sp, #48
+; CHECK-LE-IADISABLED-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_ldnp_interleaved_load3_v8f16_intrinsic:
 ; CHECK-BE:       // %bb.0: // %entry

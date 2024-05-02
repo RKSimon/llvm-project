@@ -19,10 +19,11 @@ define void @test_dec_select(ptr nocapture %0, ptr readnone %1) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    lock decq (%rdi)
 ; CHECK-NEXT:    sete %al
+; CHECK-NEXT:    notb %al
 ; CHECK-NEXT:    testq %rsi, %rsi
-; CHECK-NEXT:    setne %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    sete %cl
+; CHECK-NEXT:    orb %al, %cl
+; CHECK-NEXT:    testb $1, %cl
 ; CHECK-NEXT:    je func2 # TAILCALL
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    retq
@@ -45,10 +46,11 @@ define void @test_dec_select_commute(ptr nocapture %0, ptr readnone %1) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    lock decq (%rdi)
 ; CHECK-NEXT:    sete %al
+; CHECK-NEXT:    notb %al
 ; CHECK-NEXT:    testq %rsi, %rsi
-; CHECK-NEXT:    setne %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    sete %cl
+; CHECK-NEXT:    orb %al, %cl
+; CHECK-NEXT:    testb $1, %cl
 ; CHECK-NEXT:    je func2 # TAILCALL
 ; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    retq

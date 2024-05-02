@@ -21,9 +21,10 @@ define bfloat @fptrunc_f32(float %x) nounwind {
 ; SSE2:       # %bb.0:
 ; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm0, %xmm0
 ; SSE2-NEXT:    cmovnpl %ecx, %eax

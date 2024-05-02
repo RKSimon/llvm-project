@@ -1060,9 +1060,9 @@ define signext i32 @bug(i32 signext %x) {
 ; CHECK-NEXT:    sllw a1, a1, a2
 ; CHECK-NEXT:    neg a2, a3
 ; CHECK-NEXT:    andi a2, a2, -2
-; CHECK-NEXT:    not a1, a1
+; CHECK-NEXT:    srai a1, a1, 31
 ; CHECK-NEXT:    add a0, a0, a2
-; CHECK-NEXT:    srli a1, a1, 31
+; CHECK-NEXT:    not a1, a1
 ; CHECK-NEXT:    addw a0, a0, a1
 ; CHECK-NEXT:  .LBB18_5: # %cleanup
 ; CHECK-NEXT:    ret
@@ -1102,11 +1102,12 @@ define signext i32 @bug(i32 signext %x) {
 ; NOREMOVAL-NEXT:    sllw a1, a1, a2
 ; NOREMOVAL-NEXT:    neg a2, a3
 ; NOREMOVAL-NEXT:    andi a2, a2, -2
-; NOREMOVAL-NEXT:    not a1, a1
+; NOREMOVAL-NEXT:    srai a1, a1, 31
 ; NOREMOVAL-NEXT:    add a0, a0, a2
-; NOREMOVAL-NEXT:    srli a1, a1, 31
-; NOREMOVAL-NEXT:    addw a0, a0, a1
+; NOREMOVAL-NEXT:    not a1, a1
+; NOREMOVAL-NEXT:    add a0, a0, a1
 ; NOREMOVAL-NEXT:  .LBB18_5: # %cleanup
+; NOREMOVAL-NEXT:    sext.w a0, a0
 ; NOREMOVAL-NEXT:    ret
 entry:
   %tobool.not = icmp eq i32 %x, 0

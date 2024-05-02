@@ -38229,18 +38229,18 @@ define inreg <52 x half> @bitcast_v52i16_to_v52f16_scalar(<52 x i16> inreg %a, i
 ; VI-NEXT:  .LBB57_2: ; %end
 ; VI-NEXT:    s_and_b32 s28, 0xffff, s28
 ; VI-NEXT:    s_lshl_b32 s15, s15, 16
-; VI-NEXT:    s_or_b32 s15, s28, s15
-; VI-NEXT:    s_and_b32 s28, 0xffff, s29
+; VI-NEXT:    s_or_b32 s28, s28, s15
+; VI-NEXT:    s_and_b32 s15, 0xffff, s29
 ; VI-NEXT:    s_lshl_b32 s14, s14, 16
 ; VI-NEXT:    s_and_b32 s27, 0xffff, s27
 ; VI-NEXT:    s_lshl_b32 s42, s42, 16
-; VI-NEXT:    s_or_b32 s14, s28, s14
-; VI-NEXT:    s_and_b32 s28, 0xffff, s75
+; VI-NEXT:    s_or_b32 s15, s15, s14
+; VI-NEXT:    s_and_b32 s14, 0xffff, s75
 ; VI-NEXT:    s_lshl_b32 s29, s76, 16
 ; VI-NEXT:    s_and_b32 s26, 0xffff, s26
 ; VI-NEXT:    s_lshl_b32 s45, s45, 16
 ; VI-NEXT:    s_or_b32 s27, s27, s42
-; VI-NEXT:    s_or_b32 s28, s28, s29
+; VI-NEXT:    s_or_b32 s14, s14, s29
 ; VI-NEXT:    s_and_b32 s29, 0xffff, s72
 ; VI-NEXT:    s_lshl_b32 s42, s73, 16
 ; VI-NEXT:    s_and_b32 s25, 0xffff, s25
@@ -38317,9 +38317,9 @@ define inreg <52 x half> @bitcast_v52i16_to_v52f16_scalar(<52 x i16> inreg %a, i
 ; VI-NEXT:    v_mov_b32_e32 v9, s25
 ; VI-NEXT:    v_mov_b32_e32 v10, s26
 ; VI-NEXT:    v_mov_b32_e32 v11, s27
-; VI-NEXT:    v_mov_b32_e32 v12, s15
-; VI-NEXT:    v_mov_b32_e32 v13, s14
-; VI-NEXT:    v_mov_b32_e32 v14, s28
+; VI-NEXT:    v_mov_b32_e32 v12, s28
+; VI-NEXT:    v_mov_b32_e32 v13, s15
+; VI-NEXT:    v_mov_b32_e32 v14, s14
 ; VI-NEXT:    v_mov_b32_e32 v15, s29
 ; VI-NEXT:    v_mov_b32_e32 v16, s42
 ; VI-NEXT:    v_mov_b32_e32 v17, s45

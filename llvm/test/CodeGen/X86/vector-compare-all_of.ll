@@ -1296,29 +1296,25 @@ define i1 @bool_reduction_v8i32(<8 x i32> %x, <8 x i32> %y) {
 }
 
 define i1 @bool_reduction_v16i16(<16 x i16> %x, <16 x i16> %y) {
-; SSE2-LABEL: bool_reduction_v16i16:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    pcmpeqb %xmm3, %xmm1
-; SSE2-NEXT:    pcmpeqb %xmm2, %xmm0
-; SSE2-NEXT:    pand %xmm1, %xmm0
-; SSE2-NEXT:    pmovmskb %xmm0, %eax
-; SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
-; SSE2-NEXT:    sete %al
-; SSE2-NEXT:    retq
-;
-; SSE42-LABEL: bool_reduction_v16i16:
-; SSE42:       # %bb.0:
-; SSE42-NEXT:    pxor %xmm3, %xmm1
-; SSE42-NEXT:    pxor %xmm2, %xmm0
-; SSE42-NEXT:    por %xmm1, %xmm0
-; SSE42-NEXT:    ptest %xmm0, %xmm0
-; SSE42-NEXT:    sete %al
-; SSE42-NEXT:    retq
+; SSE-LABEL: bool_reduction_v16i16:
+; SSE:       # %bb.0:
+; SSE-NEXT:    pcmpeqw %xmm3, %xmm1
+; SSE-NEXT:    pcmpeqw %xmm2, %xmm0
+; SSE-NEXT:    packsswb %xmm1, %xmm0
+; SSE-NEXT:    pmovmskb %xmm0, %eax
+; SSE-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
+; SSE-NEXT:    sete %al
+; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: bool_reduction_v16i16:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm3
+; AVX1-NEXT:    vpcmpeqw %xmm2, %xmm3, %xmm2
+; AVX1-NEXT:    vpcmpeqw %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpacksswb %xmm2, %xmm0, %xmm0
+; AVX1-NEXT:    vpmovmskb %xmm0, %eax
+; AVX1-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
 ; AVX1-NEXT:    sete %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    retq
@@ -1347,27 +1343,31 @@ define i1 @bool_reduction_v16i16(<16 x i16> %x, <16 x i16> %y) {
 define i1 @bool_reduction_v32i8(<32 x i8> %x, <32 x i8> %y) {
 ; SSE2-LABEL: bool_reduction_v32i8:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    pcmpeqb %xmm3, %xmm1
 ; SSE2-NEXT:    pcmpeqb %xmm2, %xmm0
-; SSE2-NEXT:    pand %xmm1, %xmm0
-; SSE2-NEXT:    pmovmskb %xmm0, %eax
-; SSE2-NEXT:    xorl $65535, %eax # imm = 0xFFFF
+; SSE2-NEXT:    pcmpeqb %xmm3, %xmm1
+; SSE2-NEXT:    pand %xmm0, %xmm1
+; SSE2-NEXT:    pmovmskb %xmm1, %eax
+; SSE2-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
 ; SSE2-NEXT:    sete %al
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: bool_reduction_v32i8:
 ; SSE42:       # %bb.0:
-; SSE42-NEXT:    pxor %xmm3, %xmm1
 ; SSE42-NEXT:    pxor %xmm2, %xmm0
-; SSE42-NEXT:    por %xmm1, %xmm0
-; SSE42-NEXT:    ptest %xmm0, %xmm0
+; SSE42-NEXT:    pxor %xmm3, %xmm1
+; SSE42-NEXT:    por %xmm0, %xmm1
+; SSE42-NEXT:    ptest %xmm1, %xmm1
 ; SSE42-NEXT:    sete %al
 ; SSE42-NEXT:    retq
 ;
 ; AVX1-LABEL: bool_reduction_v32i8:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vxorps %ymm1, %ymm0, %ymm0
-; AVX1-NEXT:    vptest %ymm0, %ymm0
+; AVX1-NEXT:    vpxor %xmm1, %xmm0, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm1
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm0
+; AVX1-NEXT:    vpxor %xmm1, %xmm0, %xmm0
+; AVX1-NEXT:    vpor %xmm2, %xmm0, %xmm0
+; AVX1-NEXT:    vptest %xmm0, %xmm0
 ; AVX1-NEXT:    sete %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    retq
@@ -1405,47 +1405,38 @@ define i1 @select_v2i8(ptr %s0, ptr %s1) {
 ; SSE2-NEXT:    punpcklbw {{.*#+}} xmm1 = xmm1[0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]
 ; SSE2-NEXT:    pshuflw {{.*#+}} xmm0 = xmm1[0,0,1,1,4,5,6,7]
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,1,1]
-; SSE2-NEXT:    movmskpd %xmm0, %eax
-; SSE2-NEXT:    cmpl $3, %eax
-; SSE2-NEXT:    sete %al
+; SSE2-NEXT:    movmskpd %xmm0, %ecx
+; SSE2-NEXT:    movl %ecx, %eax
+; SSE2-NEXT:    shrb %al
+; SSE2-NEXT:    andb %cl, %al
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: select_v2i8:
 ; SSE42:       # %bb.0:
-; SSE42-NEXT:    movzwl (%rdi), %eax
-; SSE42-NEXT:    movd %eax, %xmm0
-; SSE42-NEXT:    movzwl (%rsi), %eax
-; SSE42-NEXT:    movd %eax, %xmm1
-; SSE42-NEXT:    pcmpeqb %xmm0, %xmm1
-; SSE42-NEXT:    pmovsxbq %xmm1, %xmm0
-; SSE42-NEXT:    movmskpd %xmm0, %eax
-; SSE42-NEXT:    cmpl $3, %eax
-; SSE42-NEXT:    sete %al
+; SSE42-NEXT:    pmovzxbq {{.*#+}} xmm0 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero
+; SSE42-NEXT:    pmovzxbq {{.*#+}} xmm1 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero
+; SSE42-NEXT:    pcmpeqq %xmm0, %xmm1
+; SSE42-NEXT:    movmskpd %xmm1, %ecx
+; SSE42-NEXT:    movl %ecx, %eax
+; SSE42-NEXT:    shrb %al
+; SSE42-NEXT:    andb %cl, %al
 ; SSE42-NEXT:    retq
 ;
 ; AVX1OR2-LABEL: select_v2i8:
 ; AVX1OR2:       # %bb.0:
-; AVX1OR2-NEXT:    movzwl (%rdi), %eax
-; AVX1OR2-NEXT:    vmovd %eax, %xmm0
-; AVX1OR2-NEXT:    movzwl (%rsi), %eax
-; AVX1OR2-NEXT:    vmovd %eax, %xmm1
-; AVX1OR2-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
-; AVX1OR2-NEXT:    vpmovsxbq %xmm0, %xmm0
-; AVX1OR2-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
-; AVX1OR2-NEXT:    vtestpd %xmm1, %xmm0
-; AVX1OR2-NEXT:    setb %al
+; AVX1OR2-NEXT:    vpmovzxbq {{.*#+}} xmm0 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero
+; AVX1OR2-NEXT:    vpmovzxbq {{.*#+}} xmm1 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero
+; AVX1OR2-NEXT:    vpcmpeqq %xmm1, %xmm0, %xmm0
+; AVX1OR2-NEXT:    vmovmskpd %xmm0, %ecx
+; AVX1OR2-NEXT:    movl %ecx, %eax
+; AVX1OR2-NEXT:    shrb %al
+; AVX1OR2-NEXT:    andb %cl, %al
 ; AVX1OR2-NEXT:    retq
 ;
 ; AVX512-LABEL: select_v2i8:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    movzwl (%rdi), %eax
-; AVX512-NEXT:    vmovd %eax, %xmm0
 ; AVX512-NEXT:    movzwl (%rsi), %eax
-; AVX512-NEXT:    vmovd %eax, %xmm1
-; AVX512-NEXT:    vpcmpeqb %xmm1, %xmm0, %k0
-; AVX512-NEXT:    knotw %k0, %k0
-; AVX512-NEXT:    kmovd %k0, %eax
-; AVX512-NEXT:    testb $3, %al
+; AVX512-NEXT:    cmpw %ax, (%rdi)
 ; AVX512-NEXT:    sete %al
 ; AVX512-NEXT:    retq
   %v0 = load <2 x i8>, ptr %s0, align 1
@@ -1485,7 +1476,7 @@ define i1 @PR116977(<32 x i8> %a, <32 x i8> %b, <32 x i8> %v) {
 ; AVX1-NEXT:    vpand %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vpand %xmm0, %xmm2, %xmm0
 ; AVX1-NEXT:    vpmovmskb %xmm0, %eax
-; AVX1-NEXT:    xorl $65535, %eax # imm = 0xFFFF
+; AVX1-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
 ; AVX1-NEXT:    sete %al
 ; AVX1-NEXT:    vzeroupper
 ; AVX1-NEXT:    retq

@@ -2253,19 +2253,11 @@ define hidden void @four_bytes_split_op(ptr noalias nocapture noundef writeonly 
 ; CHECK-NEXT:    local.tee 13
 ; CHECK-NEXT:    local.get 11
 ; CHECK-NEXT:    local.get 12
-; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 3, 7, 11, 15, 19, 23, 27, 31
 ; CHECK-NEXT:    local.get 9
 ; CHECK-NEXT:    local.get 10
-; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 3, 7, 11, 15, 19, 23, 27, 31
 ; CHECK-NEXT:    i8x16.sub
-; CHECK-NEXT:    local.get 11
-; CHECK-NEXT:    local.get 12
-; CHECK-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
-; CHECK-NEXT:    local.get 9
-; CHECK-NEXT:    local.get 10
-; CHECK-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
-; CHECK-NEXT:    i8x16.sub
-; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 16, 17, 18, 19, 20, 21, 22, 23
 ; CHECK-NEXT:    local.tee 9
 ; CHECK-NEXT:    i8x16.shuffle 4, 12, 20, 28, 5, 13, 21, 29, 6, 14, 22, 30, 7, 15, 23, 31
 ; CHECK-NEXT:    v128.store 16:p2align=0
@@ -3336,7 +3328,7 @@ define hidden void @four_bytes_into_four_ints_same_op(ptr noalias nocapture noun
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
 ; CHECK-NEXT:    i32x4.add
 ; CHECK-NEXT:    local.tee 16
-; CHECK-NEXT:    i8x16.shuffle 8, 9, 10, 11, 24, 25, 26, 27, 0, 1, 2, 3, 0, 1, 2, 3
+; CHECK-NEXT:    i8x16.shuffle 12, 13, 14, 15, 28, 29, 30, 31, 0, 1, 2, 3, 0, 1, 2, 3
 ; CHECK-NEXT:    local.get 9
 ; CHECK-NEXT:    local.get 9
 ; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -3371,27 +3363,18 @@ define hidden void @four_bytes_into_four_ints_same_op(ptr noalias nocapture noun
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
 ; CHECK-NEXT:    i32x4.add
 ; CHECK-NEXT:    local.tee 9
-; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 8, 9, 10, 11, 24, 25, 26, 27
-; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; CHECK-NEXT:    v128.store 32:p2align=2
-; CHECK-NEXT:    local.get 7
-; CHECK-NEXT:    local.get 15
-; CHECK-NEXT:    local.get 16
-; CHECK-NEXT:    i8x16.shuffle 12, 13, 14, 15, 28, 29, 30, 31, 0, 1, 2, 3, 0, 1, 2, 3
-; CHECK-NEXT:    local.get 17
-; CHECK-NEXT:    local.get 9
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 12, 13, 14, 15, 28, 29, 30, 31
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
 ; CHECK-NEXT:    v128.store 48:p2align=2
 ; CHECK-NEXT:    local.get 7
 ; CHECK-NEXT:    local.get 15
 ; CHECK-NEXT:    local.get 16
-; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 16, 17, 18, 19, 0, 1, 2, 3, 0, 1, 2, 3
+; CHECK-NEXT:    i8x16.shuffle 8, 9, 10, 11, 24, 25, 26, 27, 0, 1, 2, 3, 0, 1, 2, 3
 ; CHECK-NEXT:    local.get 17
 ; CHECK-NEXT:    local.get 9
-; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 16, 17, 18, 19
+; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 8, 9, 10, 11, 24, 25, 26, 27
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
-; CHECK-NEXT:    v128.store 0:p2align=2
+; CHECK-NEXT:    v128.store 32:p2align=2
 ; CHECK-NEXT:    local.get 7
 ; CHECK-NEXT:    local.get 15
 ; CHECK-NEXT:    local.get 16
@@ -3401,6 +3384,15 @@ define hidden void @four_bytes_into_four_ints_same_op(ptr noalias nocapture noun
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23
 ; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
 ; CHECK-NEXT:    v128.store 16:p2align=2
+; CHECK-NEXT:    local.get 7
+; CHECK-NEXT:    local.get 15
+; CHECK-NEXT:    local.get 16
+; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 16, 17, 18, 19, 0, 1, 2, 3, 0, 1, 2, 3
+; CHECK-NEXT:    local.get 17
+; CHECK-NEXT:    local.get 9
+; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 16, 17, 18, 19
+; CHECK-NEXT:    i8x16.shuffle 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31
+; CHECK-NEXT:    v128.store 0:p2align=2
 ; CHECK-NEXT:    local.get 5
 ; CHECK-NEXT:    i32.const 16
 ; CHECK-NEXT:    i32.add
@@ -4357,19 +4349,11 @@ define hidden void @scale_uv_row_down2_linear(ptr nocapture noundef readonly %0,
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    v128.load 16:p2align=0
 ; CHECK-NEXT:    local.tee 9
-; CHECK-NEXT:    i8x16.shuffle 0, 4, 8, 12, 16, 20, 24, 28, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle 0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25, 28, 29
 ; CHECK-NEXT:    local.get 8
 ; CHECK-NEXT:    local.get 9
-; CHECK-NEXT:    i8x16.shuffle 2, 6, 10, 14, 18, 22, 26, 30, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.shuffle 2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31
 ; CHECK-NEXT:    i8x16.avgr_u
-; CHECK-NEXT:    local.get 8
-; CHECK-NEXT:    local.get 9
-; CHECK-NEXT:    i8x16.shuffle 1, 5, 9, 13, 17, 21, 25, 29, 0, 0, 0, 0, 0, 0, 0, 0
-; CHECK-NEXT:    local.get 8
-; CHECK-NEXT:    local.get 9
-; CHECK-NEXT:    i8x16.shuffle 3, 7, 11, 15, 19, 23, 27, 31, 0, 0, 0, 0, 0, 0, 0, 0
-; CHECK-NEXT:    i8x16.avgr_u
-; CHECK-NEXT:    i8x16.shuffle 0, 16, 1, 17, 2, 18, 3, 19, 4, 20, 5, 21, 6, 22, 7, 23
 ; CHECK-NEXT:    v128.store 0:p2align=0
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    i32.const 32
@@ -10095,14 +10079,14 @@ define hidden void @mac_3d_i8(ptr dead_on_unwind noalias writable writeonly sret
 ; CHECK-NEXT:    end_loop
 ; CHECK-NEXT:    end_block
 ; CHECK-NEXT:    local.get 0
-; CHECK-NEXT:    local.get 4
-; CHECK-NEXT:    i32.store8 2
-; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 5
 ; CHECK-NEXT:    i32.store8 1
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 6
 ; CHECK-NEXT:    i32.store8 0
+; CHECK-NEXT:    local.get 0
+; CHECK-NEXT:    local.get 4
+; CHECK-NEXT:    i32.store8 2
 ; CHECK-NEXT:    return
   %5 = icmp eq i32 %3, 0
   br i1 %5, label %6, label %12
@@ -10414,14 +10398,14 @@ define hidden void @mac_4d_i8(ptr dead_on_unwind noalias writable writeonly sret
 ; CHECK-NEXT:    end_loop
 ; CHECK-NEXT:    end_block
 ; CHECK-NEXT:    local.get 0
-; CHECK-NEXT:    local.get 5
-; CHECK-NEXT:    i32.store8 3
-; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 6
 ; CHECK-NEXT:    i32.store8 2
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 7
 ; CHECK-NEXT:    i32.store8 1
+; CHECK-NEXT:    local.get 0
+; CHECK-NEXT:    local.get 5
+; CHECK-NEXT:    i32.store8 3
 ; CHECK-NEXT:  .LBB46_8:
 ; CHECK-NEXT:    end_block
 ; CHECK-NEXT:    local.get 0
@@ -10931,14 +10915,14 @@ define hidden void @mac_4d_i64(ptr dead_on_unwind noalias writable sret(%struct.
 ; CHECK-NEXT:    end_loop
 ; CHECK-NEXT:    end_block
 ; CHECK-NEXT:    local.get 0
-; CHECK-NEXT:    local.get 5
-; CHECK-NEXT:    i64.store 24
-; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 6
 ; CHECK-NEXT:    i64.store 16
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 7
 ; CHECK-NEXT:    i64.store 8
+; CHECK-NEXT:    local.get 0
+; CHECK-NEXT:    local.get 5
+; CHECK-NEXT:    i64.store 24
 ; CHECK-NEXT:  .LBB48_8:
 ; CHECK-NEXT:    end_block
 ; CHECK-NEXT:    local.get 0

@@ -15,7 +15,7 @@ define void @foo32(ptr %ptr) nounwind {
 ; CHECK-LABEL: foo32:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movl $bit_mask32, %eax
-; CHECK-NEXT:    movl (%rdi), %ecx
+; CHECK-NEXT:    movzbl (%rdi), %ecx
 ; CHECK-NEXT:    btl %ecx, %eax
 ; CHECK-NEXT:    jae .LBB0_1
 ; CHECK-NEXT:  # %bb.2: # %f
@@ -44,7 +44,7 @@ define void @foo64(ptr %ptr) nounwind {
 ; CHECK-LABEL: foo64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movabsq $bit_mask64, %rax
-; CHECK-NEXT:    movl (%rdi), %ecx
+; CHECK-NEXT:    movzbl (%rdi), %ecx
 ; CHECK-NEXT:    btq %rcx, %rax
 ; CHECK-NEXT:    jae .LBB1_1
 ; CHECK-NEXT:  # %bb.2: # %f

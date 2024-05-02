@@ -113,7 +113,8 @@ define <3 x i1> @test_srem_vec(<3 x i33> %X) nounwind {
 ; CHECK-NEXT:    orrs r6, r0
 ; CHECK-NEXT:    subs r0, r6, #1
 ; CHECK-NEXT:    sbcs r6, r0
-; CHECK-NEXT:    ldr r0, [sp, #36]
+; CHECK-NEXT:    add r0, sp, #32
+; CHECK-NEXT:    ldr r0, [r0, #4]
 ; CHECK-NEXT:    ands r0, r5
 ; CHECK-NEXT:    rsbs r1, r0, #0
 ; CHECK-NEXT:    movs r0, #8

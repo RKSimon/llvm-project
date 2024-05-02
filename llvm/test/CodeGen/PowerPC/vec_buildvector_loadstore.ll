@@ -8,17 +8,81 @@
 define void @foo() nounwind ssp {
 ; CHECK-LABEL: foo:
 ; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    stwu 1, -112(1)
 ; CHECK-NEXT:    li 3, a@l
 ; CHECK-NEXT:    lis 4, a@ha
+; CHECK-NEXT:    li 5, .LCPI0_0@l
 ; CHECK-NEXT:    lvx 2, 4, 3
-; CHECK-NEXT:    li 3, .LCPI0_0@l
-; CHECK-NEXT:    lis 4, .LCPI0_0@ha
-; CHECK-NEXT:    lvx 3, 4, 3
-; CHECK-NEXT:    vxor 4, 4, 4
+; CHECK-NEXT:    lis 3, .LCPI0_0@ha
+; CHECK-NEXT:    li 4, .LCPI0_1@l
+; CHECK-NEXT:    lvx 3, 3, 5
+; CHECK-NEXT:    lis 3, .LCPI0_1@ha
+; CHECK-NEXT:    li 5, .LCPI0_2@l
+; CHECK-NEXT:    lvx 4, 3, 4
+; CHECK-NEXT:    lis 3, .LCPI0_2@ha
+; CHECK-NEXT:    li 4, .LCPI0_3@l
+; CHECK-NEXT:    lvx 5, 3, 5
+; CHECK-NEXT:    lis 3, .LCPI0_3@ha
+; CHECK-NEXT:    li 5, .LCPI0_4@l
+; CHECK-NEXT:    lvx 0, 3, 4
+; CHECK-NEXT:    lis 3, .LCPI0_4@ha
+; CHECK-NEXT:    li 4, .LCPI0_5@l
+; CHECK-NEXT:    lvx 1, 3, 5
+; CHECK-NEXT:    lis 3, .LCPI0_5@ha
+; CHECK-NEXT:    li 5, .LCPI0_6@l
+; CHECK-NEXT:    lvx 6, 3, 4
+; CHECK-NEXT:    lis 3, .LCPI0_6@ha
+; CHECK-NEXT:    li 4, .LCPI0_7@l
+; CHECK-NEXT:    lvx 7, 3, 5
+; CHECK-NEXT:    lis 3, .LCPI0_7@ha
+; CHECK-NEXT:    lvx 8, 3, 4
+; CHECK-NEXT:    addi 3, 1, 96
+; CHECK-NEXT:    stvx 2, 0, 3
+; CHECK-NEXT:    li 3, .LCPI0_8@l
+; CHECK-NEXT:    lbz 4, 100(1)
+; CHECK-NEXT:    lis 5, .LCPI0_8@ha
+; CHECK-NEXT:    lvx 9, 5, 3
+; CHECK-NEXT:    vxor 10, 10, 10
+; CHECK-NEXT:    lis 5, .LCPI0_9@ha
+; CHECK-NEXT:    lbz 3, 101(1)
+; CHECK-NEXT:    vperm 3, 2, 10, 3
+; CHECK-NEXT:    stb 4, 80(1)
+; CHECK-NEXT:    addi 4, 1, 80
+; CHECK-NEXT:    lvx 11, 0, 4
+; CHECK-NEXT:    vand 3, 3, 4
+; CHECK-NEXT:    addi 4, 1, 16
+; CHECK-NEXT:    stb 3, 64(1)
+; CHECK-NEXT:    addi 3, 1, 64
+; CHECK-NEXT:    lvx 4, 0, 3
+; CHECK-NEXT:    li 3, 0
+; CHECK-NEXT:    stb 3, 16(1)
+; CHECK-NEXT:    vperm 3, 3, 11, 5
+; CHECK-NEXT:    lbz 3, 104(1)
+; CHECK-NEXT:    vperm 3, 3, 4, 0
+; CHECK-NEXT:    lvx 5, 0, 4
+; CHECK-NEXT:    stb 3, 48(1)
+; CHECK-NEXT:    addi 3, 1, 48
+; CHECK-NEXT:    lbz 4, 105(1)
+; CHECK-NEXT:    vperm 3, 3, 5, 1
+; CHECK-NEXT:    lvx 4, 0, 3
+; CHECK-NEXT:    li 3, .LCPI0_9@l
+; CHECK-NEXT:    lvx 0, 5, 3
+; CHECK-NEXT:    vperm 3, 3, 5, 6
+; CHECK-NEXT:    addi 3, 1, 32
+; CHECK-NEXT:    stb 4, 32(1)
+; CHECK-NEXT:    vperm 3, 3, 4, 7
+; CHECK-NEXT:    lis 4, .LCPI0_10@ha
+; CHECK-NEXT:    lvx 4, 0, 3
+; CHECK-NEXT:    li 3, .LCPI0_10@l
+; CHECK-NEXT:    lvx 1, 4, 3
 ; CHECK-NEXT:    li 3, c@l
+; CHECK-NEXT:    vperm 3, 3, 4, 8
 ; CHECK-NEXT:    lis 4, c@ha
-; CHECK-NEXT:    vperm 2, 4, 2, 3
+; CHECK-NEXT:    vperm 3, 3, 5, 9
+; CHECK-NEXT:    vperm 3, 3, 5, 0
+; CHECK-NEXT:    vperm 2, 3, 2, 1
 ; CHECK-NEXT:    stvx 2, 4, 3
+; CHECK-NEXT:    addi 1, 1, 112
 ; CHECK-NEXT:    blr
 entry:
     %tmp0 = load <16 x i8>, ptr @a, align 16

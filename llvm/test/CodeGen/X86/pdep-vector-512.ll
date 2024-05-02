@@ -19,17 +19,18 @@ define <64 x i8> @pdep_v64i8(<64 x i8> %val, <64 x i8> %mask) nounwind {
 ; AVX2-NEXT:    vpand %ymm4, %ymm8, %ymm8
 ; AVX2-NEXT:    vpxor %ymm7, %ymm8, %ymm7
 ; AVX2-NEXT:    vpsubb %ymm6, %ymm2, %ymm6
-; AVX2-NEXT:    vpor %ymm7, %ymm6, %ymm6
-; AVX2-NEXT:    vpxor %ymm5, %ymm6, %ymm6
-; AVX2-NEXT:    vpaddb %ymm6, %ymm6, %ymm8
-; AVX2-NEXT:    vpxor %ymm6, %ymm8, %ymm8
+; AVX2-NEXT:    vpor %ymm6, %ymm7, %ymm6
+; AVX2-NEXT:    vpxor %ymm5, %ymm6, %ymm8
+; AVX2-NEXT:    vpaddb %ymm8, %ymm8, %ymm9
+; AVX2-NEXT:    vpxor %ymm9, %ymm8, %ymm8
 ; AVX2-NEXT:    vpaddb %ymm8, %ymm8, %ymm9
 ; AVX2-NEXT:    vpaddb %ymm9, %ymm9, %ymm9
 ; AVX2-NEXT:    vpxor %ymm9, %ymm8, %ymm8
 ; AVX2-NEXT:    vpsllw $4, %ymm8, %ymm9
 ; AVX2-NEXT:    vpand %ymm4, %ymm9, %ymm9
 ; AVX2-NEXT:    vpxor %ymm9, %ymm8, %ymm8
-; AVX2-NEXT:    vpandn %ymm6, %ymm8, %ymm6
+; AVX2-NEXT:    vpor %ymm6, %ymm8, %ymm6
+; AVX2-NEXT:    vpxor %ymm5, %ymm6, %ymm6
 ; AVX2-NEXT:    vpaddb %ymm6, %ymm6, %ymm9
 ; AVX2-NEXT:    vpxor %ymm6, %ymm9, %ymm6
 ; AVX2-NEXT:    vpaddb %ymm6, %ymm6, %ymm9
@@ -79,32 +80,33 @@ define <64 x i8> @pdep_v64i8(<64 x i8> %val, <64 x i8> %mask) nounwind {
 ; AVX2-NEXT:    vpxor %ymm10, %ymm9, %ymm9
 ; AVX2-NEXT:    vpsubb %ymm2, %ymm3, %ymm2
 ; AVX2-NEXT:    vpor %ymm2, %ymm9, %ymm2
+; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm10
+; AVX2-NEXT:    vpaddb %ymm10, %ymm10, %ymm11
+; AVX2-NEXT:    vpxor %ymm11, %ymm10, %ymm10
+; AVX2-NEXT:    vpaddb %ymm10, %ymm10, %ymm11
+; AVX2-NEXT:    vpaddb %ymm11, %ymm11, %ymm11
+; AVX2-NEXT:    vpxor %ymm11, %ymm10, %ymm10
+; AVX2-NEXT:    vpsllw $4, %ymm10, %ymm11
+; AVX2-NEXT:    vpand %ymm4, %ymm11, %ymm11
+; AVX2-NEXT:    vpxor %ymm11, %ymm10, %ymm10
+; AVX2-NEXT:    vpor %ymm2, %ymm10, %ymm2
 ; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm2
 ; AVX2-NEXT:    vpaddb %ymm2, %ymm2, %ymm5
-; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm5
-; AVX2-NEXT:    vpaddb %ymm5, %ymm5, %ymm10
-; AVX2-NEXT:    vpaddb %ymm10, %ymm10, %ymm10
-; AVX2-NEXT:    vpxor %ymm5, %ymm10, %ymm5
-; AVX2-NEXT:    vpsllw $4, %ymm5, %ymm10
-; AVX2-NEXT:    vpand %ymm4, %ymm10, %ymm10
-; AVX2-NEXT:    vpxor %ymm5, %ymm10, %ymm5
-; AVX2-NEXT:    vpandn %ymm2, %ymm5, %ymm2
-; AVX2-NEXT:    vpaddb %ymm2, %ymm2, %ymm10
-; AVX2-NEXT:    vpxor %ymm2, %ymm10, %ymm2
-; AVX2-NEXT:    vpaddb %ymm2, %ymm2, %ymm10
-; AVX2-NEXT:    vpaddb %ymm10, %ymm10, %ymm10
-; AVX2-NEXT:    vpxor %ymm2, %ymm10, %ymm2
-; AVX2-NEXT:    vpsllw $4, %ymm2, %ymm10
-; AVX2-NEXT:    vpand %ymm4, %ymm10, %ymm10
-; AVX2-NEXT:    vpxor %ymm2, %ymm10, %ymm2
-; AVX2-NEXT:    vpand %ymm3, %ymm9, %ymm9
-; AVX2-NEXT:    vpxor %ymm3, %ymm9, %ymm10
-; AVX2-NEXT:    vpsrlw $1, %ymm9, %ymm11
+; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm2
+; AVX2-NEXT:    vpaddb %ymm2, %ymm2, %ymm5
+; AVX2-NEXT:    vpaddb %ymm5, %ymm5, %ymm5
+; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm2
+; AVX2-NEXT:    vpsllw $4, %ymm2, %ymm5
+; AVX2-NEXT:    vpand %ymm4, %ymm5, %ymm5
+; AVX2-NEXT:    vpxor %ymm5, %ymm2, %ymm2
+; AVX2-NEXT:    vpand %ymm3, %ymm9, %ymm5
+; AVX2-NEXT:    vpxor %ymm5, %ymm3, %ymm9
+; AVX2-NEXT:    vpsrlw $1, %ymm5, %ymm11
 ; AVX2-NEXT:    vpand %ymm6, %ymm11, %ymm6
-; AVX2-NEXT:    vpor %ymm6, %ymm10, %ymm6
-; AVX2-NEXT:    vpand %ymm6, %ymm5, %ymm5
-; AVX2-NEXT:    vpxor %ymm5, %ymm6, %ymm6
-; AVX2-NEXT:    vpsrlw $2, %ymm5, %ymm10
+; AVX2-NEXT:    vpor %ymm6, %ymm9, %ymm6
+; AVX2-NEXT:    vpand %ymm6, %ymm10, %ymm9
+; AVX2-NEXT:    vpxor %ymm6, %ymm9, %ymm6
+; AVX2-NEXT:    vpsrlw $2, %ymm9, %ymm10
 ; AVX2-NEXT:    vpand %ymm7, %ymm10, %ymm7
 ; AVX2-NEXT:    vpor %ymm7, %ymm6, %ymm6
 ; AVX2-NEXT:    vpand %ymm6, %ymm2, %ymm2
@@ -113,14 +115,14 @@ define <64 x i8> @pdep_v64i8(<64 x i8> %val, <64 x i8> %mask) nounwind {
 ; AVX2-NEXT:    vpand %ymm2, %ymm4, %ymm4
 ; AVX2-NEXT:    vpandn %ymm1, %ymm2, %ymm1
 ; AVX2-NEXT:    vpor %ymm4, %ymm1, %ymm1
-; AVX2-NEXT:    vpandn %ymm1, %ymm5, %ymm2
+; AVX2-NEXT:    vpandn %ymm1, %ymm9, %ymm2
 ; AVX2-NEXT:    vpsllw $2, %ymm1, %ymm1
-; AVX2-NEXT:    vpand %ymm5, %ymm8, %ymm4
+; AVX2-NEXT:    vpand %ymm9, %ymm8, %ymm4
 ; AVX2-NEXT:    vpand %ymm4, %ymm1, %ymm1
 ; AVX2-NEXT:    vpor %ymm1, %ymm2, %ymm1
-; AVX2-NEXT:    vpandn %ymm1, %ymm9, %ymm2
+; AVX2-NEXT:    vpandn %ymm1, %ymm5, %ymm2
 ; AVX2-NEXT:    vpaddb %ymm1, %ymm1, %ymm1
-; AVX2-NEXT:    vpand %ymm1, %ymm9, %ymm1
+; AVX2-NEXT:    vpand %ymm5, %ymm1, %ymm1
 ; AVX2-NEXT:    vpor %ymm1, %ymm2, %ymm1
 ; AVX2-NEXT:    vpand %ymm3, %ymm1, %ymm1
 ; AVX2-NEXT:    retq
@@ -139,18 +141,20 @@ define <64 x i8> @pdep_v64i8(<64 x i8> %val, <64 x i8> %mask) nounwind {
 ; AVX512-NEXT:    vpbroadcastd {{.*#+}} zmm5 = [240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240,240]
 ; AVX512-NEXT:    vpternlogq {{.*#+}} zmm4 = zmm3 ^ (zmm4 & zmm5)
 ; AVX512-NEXT:    vpsubb %zmm2, %zmm1, %zmm2
+; AVX512-NEXT:    vporq %zmm2, %zmm4, %zmm2
+; AVX512-NEXT:    vmovdqa64 %zmm2, %zmm3
+; AVX512-NEXT:    vpternlogq {{.*#+}} zmm3 = ~zmm3
+; AVX512-NEXT:    vpaddb %zmm3, %zmm3, %zmm6
+; AVX512-NEXT:    vpxorq %zmm6, %zmm3, %zmm3
+; AVX512-NEXT:    vpaddb %zmm3, %zmm3, %zmm6
+; AVX512-NEXT:    vpaddb %zmm6, %zmm6, %zmm6
+; AVX512-NEXT:    vpxorq %zmm6, %zmm3, %zmm3
+; AVX512-NEXT:    vpsllw $4, %zmm3, %zmm6
+; AVX512-NEXT:    vpternlogq {{.*#+}} zmm6 = zmm3 ^ (zmm6 & zmm5)
 ; AVX512-NEXT:    vpternlogd {{.*#+}} zmm3 = -1
-; AVX512-NEXT:    vpternlogq {{.*#+}} zmm3 = zmm3 ^ (zmm2 | zmm4)
+; AVX512-NEXT:    vpternlogq {{.*#+}} zmm3 = zmm3 ^ (zmm2 | zmm6)
 ; AVX512-NEXT:    vpaddb %zmm3, %zmm3, %zmm2
 ; AVX512-NEXT:    vpxorq %zmm2, %zmm3, %zmm2
-; AVX512-NEXT:    vpaddb %zmm2, %zmm2, %zmm6
-; AVX512-NEXT:    vpaddb %zmm6, %zmm6, %zmm6
-; AVX512-NEXT:    vpxorq %zmm6, %zmm2, %zmm2
-; AVX512-NEXT:    vpsllw $4, %zmm2, %zmm6
-; AVX512-NEXT:    vpternlogq {{.*#+}} zmm6 = zmm2 ^ (zmm6 & zmm5)
-; AVX512-NEXT:    vpandnq %zmm3, %zmm6, %zmm2
-; AVX512-NEXT:    vpaddb %zmm2, %zmm2, %zmm3
-; AVX512-NEXT:    vpxorq %zmm3, %zmm2, %zmm2
 ; AVX512-NEXT:    vpaddb %zmm2, %zmm2, %zmm3
 ; AVX512-NEXT:    vpaddb %zmm3, %zmm3, %zmm3
 ; AVX512-NEXT:    vpxorq %zmm3, %zmm2, %zmm2

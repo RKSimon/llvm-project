@@ -396,10 +396,10 @@ define <8 x i64> @xchg_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM60-NEXT:    atom.cta.global.exch.b64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.exch.b64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise xchg ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -995,10 +995,10 @@ define <8 x i64> @add_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    atom.cta.global.add.u64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.add.u64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise add ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -1624,10 +1624,10 @@ define <8 x i64> @sub_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    neg.s64 %rd24, %rd3;
 ; SM60-NEXT:    atom.cta.global.add.u64 %rd25, [%rd1+56], %rd24;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd23, %rd25};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd19, %rd21};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd15, %rd17};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd11, %rd13};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd19, %rd21};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd23, %rd25};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise sub ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -2069,10 +2069,10 @@ define <8 x i64> @and_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    atom.cta.global.and.b64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.and.b64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise and ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -2853,8 +2853,8 @@ define <8 x i64> @nand_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end75
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd40, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd34, %rd35};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd36, %rd37};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise nand ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -3288,10 +3288,10 @@ define <8 x i64> @or_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64> 
 ; SM60-NEXT:    atom.cta.global.or.b64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.or.b64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise or ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -3724,10 +3724,10 @@ define <8 x i64> @xor_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    atom.cta.global.xor.b64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.xor.b64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise xor ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -4356,10 +4356,10 @@ define <8 x i64> @max_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    atom.cta.global.max.s64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.max.s64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise max ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -4988,10 +4988,10 @@ define <8 x i64> @min_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM60-NEXT:    atom.cta.global.min.s64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.min.s64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise min ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -5595,10 +5595,10 @@ define <8 x i64> @umax_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM60-NEXT:    atom.cta.global.max.u64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.max.u64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise umax ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -6202,10 +6202,10 @@ define <8 x i64> @umin_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM60-NEXT:    atom.cta.global.min.u64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.min.u64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise umin ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -7013,8 +7013,8 @@ define <8 x i64> @uinc_wrap_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end75
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd40, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd34, %rd35};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd36, %rd37};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise uinc_wrap ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -7921,8 +7921,8 @@ define <8 x i64> @udec_wrap_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end75
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd48, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd46, %rd47};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd42, %rd43};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd46, %rd47};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd44, %rd45};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise udec_wrap ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -8918,8 +8918,8 @@ define <8 x i64> @usub_cond_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end75
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd40, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd34, %rd35};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd36, %rd37};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise usub_cond ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -9897,8 +9897,8 @@ define <8 x i64> @usub_sat_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end75
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd40, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd34, %rd35};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd38, %rd39};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd36, %rd37};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise usub_sat ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -15110,10 +15110,10 @@ define <8 x double> @fadd_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM60-NEXT:    atom.cta.global.add.f64 %rd16, [%rd1+48], %rd2;
 ; SM60-NEXT:    atom.cta.global.add.f64 %rd17, [%rd1+56], %rd3;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fadd ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
         ret <8 x double> %retval
@@ -15212,10 +15212,10 @@ define <8 x double> @fsub_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM60-NEXT:    neg.f64 %rd24, %rd3;
 ; SM60-NEXT:    atom.cta.global.add.f64 %rd25, [%rd1+56], %rd24;
 ; SM60-NEXT:    membar.cta;
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd23, %rd25};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd19, %rd21};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd15, %rd17};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd11, %rd13};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd19, %rd21};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd23, %rd25};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fsub ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
         ret <8 x double> %retval
@@ -15424,8 +15424,8 @@ define <8 x double> @fmin_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end69
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd32, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd30, %rd31};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd26, %rd27};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd30, %rd31};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd28, %rd29};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fmin ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15635,8 +15635,8 @@ define <8 x double> @fmax_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end69
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd32, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd30, %rd31};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd26, %rd27};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd30, %rd31};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd28, %rd29};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fmax ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15936,8 +15936,8 @@ define <8 x double> @fminimum_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end69
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd56, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd54, %rd55};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd50, %rd51};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd54, %rd55};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd52, %rd53};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fminimum ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -16237,8 +16237,8 @@ define <8 x double> @fmaximum_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <
 ; SM60-NEXT:  // %bb.16: // %atomicrmw.end69
 ; SM60-NEXT:    membar.cta;
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd56, %rd16};
-; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd54, %rd55};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0], {%rd50, %rd51};
+; SM60-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd54, %rd55};
 ; SM60-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd52, %rd53};
 ; SM60-NEXT:    ret;
         %retval = atomicrmw elementwise fmaximum ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel

@@ -8,9 +8,10 @@ define signext i32 @leaf1_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; AIX64:       # %bb.0: # %entry
 ; AIX64-NEXT:    stdu 1, -64(1)
 ; AIX64-NEXT:    stw 3, 60(1)
+; AIX64-NEXT:    lwz 3, 60(1)
+; AIX64-NEXT:    stw 4, 56(1)
 ; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 4, 56(1)
 ; AIX64-NEXT:    addi 1, 1, 64
 ; AIX64-NEXT:    blr
 ;
@@ -27,8 +28,9 @@ define signext i32 @leaf1_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; LE64:       # %bb.0: # %entry
 ; LE64-NEXT:    stdu 1, -48(1)
 ; LE64-NEXT:    stw 3, 44(1)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, 40(1)
+; LE64-NEXT:    lwz 3, 44(1)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    addi 1, 1, 48
 ; LE64-NEXT:    blr
@@ -50,9 +52,10 @@ define void @nonleaf1_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; AIX64-NEXT:    stdu 1, -128(1)
 ; AIX64-NEXT:    std 0, 144(1)
 ; AIX64-NEXT:    stw 3, 124(1)
+; AIX64-NEXT:    lwz 3, 124(1)
+; AIX64-NEXT:    stw 4, 120(1)
 ; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 4, 120(1)
 ; AIX64-NEXT:    bl .leaf2[PR]
 ; AIX64-NEXT:    nop
 ; AIX64-NEXT:    lwz 3, 124(1)
@@ -92,9 +95,10 @@ define void @nonleaf1_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; LE64-NEXT:    stdu 1, -48(1)
 ; LE64-NEXT:    std 0, 64(1)
 ; LE64-NEXT:    stw 3, 44(1)
+; LE64-NEXT:    lwz 3, 44(1)
+; LE64-NEXT:    stw 4, 40(1)
 ; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
-; LE64-NEXT:    stw 4, 40(1)
 ; LE64-NEXT:    bl leaf2
 ; LE64-NEXT:    nop
 ; LE64-NEXT:    lwz 3, 44(1)
@@ -129,12 +133,12 @@ define signext i32 @leaf3_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; AIX64-LABEL: leaf3_noredzone:
 ; AIX64:       # %bb.0: # %entry
 ; AIX64-NEXT:    stdu 1, -48(1)
-; AIX64-NEXT:    ld 6, 0(1)
-; AIX64-NEXT:    mr 5, 3
-; AIX64-NEXT:    add 3, 5, 4
+; AIX64-NEXT:    ld 5, 0(1)
+; AIX64-NEXT:    stw 3, 48(5)
+; AIX64-NEXT:    lwz 3, 48(5)
+; AIX64-NEXT:    stw 4, 52(5)
+; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 5, 48(6)
-; AIX64-NEXT:    stw 4, 52(6)
 ; AIX64-NEXT:    addi 1, 1, 48
 ; AIX64-NEXT:    blr
 ;
@@ -154,8 +158,9 @@ define signext i32 @leaf3_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; LE64-NEXT:    stdu 1, -32(1)
 ; LE64-NEXT:    ld 5, 0(1)
 ; LE64-NEXT:    stw 3, 48(5)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, 52(5)
+; LE64-NEXT:    lwz 3, 48(5)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    addi 1, 1, 32
 ; LE64-NEXT:    blr
@@ -178,12 +183,12 @@ define void @nonleaf2_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; AIX64-NEXT:    stdu 1, -128(1)
 ; AIX64-NEXT:    std 0, 144(1)
 ; AIX64-NEXT:    std 31, 120(1) # 8-byte Folded Spill
-; AIX64-NEXT:    add 5, 3, 4
 ; AIX64-NEXT:    ld 31, 0(1)
-; AIX64-NEXT:    extsw 5, 5
 ; AIX64-NEXT:    stw 3, 48(31)
-; AIX64-NEXT:    mr 3, 5
+; AIX64-NEXT:    lwz 3, 48(31)
 ; AIX64-NEXT:    stw 4, 52(31)
+; AIX64-NEXT:    add 3, 3, 4
+; AIX64-NEXT:    extsw 3, 3
 ; AIX64-NEXT:    bl .leaf2[PR]
 ; AIX64-NEXT:    nop
 ; AIX64-NEXT:    lwz 3, 48(31)
@@ -230,8 +235,9 @@ define void @nonleaf2_noredzone(i32 signext %a, i32 signext %b) #0 {
 ; LE64-NEXT:    std 0, 64(1)
 ; LE64-NEXT:    ld 30, 0(1)
 ; LE64-NEXT:    stw 3, 48(30)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, 52(30)
+; LE64-NEXT:    lwz 3, 48(30)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    bl leaf2
 ; LE64-NEXT:    nop
@@ -267,9 +273,10 @@ define signext i32 @leaf1_redzone(i32 signext %a, i32 signext %b) #1 {
 ; AIX64-LABEL: leaf1_redzone:
 ; AIX64:       # %bb.0: # %entry
 ; AIX64-NEXT:    stw 3, -4(1)
+; AIX64-NEXT:    lwz 3, -4(1)
+; AIX64-NEXT:    stw 4, -8(1)
 ; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 4, -8(1)
 ; AIX64-NEXT:    blr
 ;
 ; AIX32-LABEL: leaf1_redzone:
@@ -282,8 +289,9 @@ define signext i32 @leaf1_redzone(i32 signext %a, i32 signext %b) #1 {
 ; LE64-LABEL: leaf1_redzone:
 ; LE64:       # %bb.0: # %entry
 ; LE64-NEXT:    stw 3, -4(1)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, -8(1)
+; LE64-NEXT:    lwz 3, -4(1)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    blr
 entry:
@@ -304,9 +312,10 @@ define void @nonleaf1_redzone(i32 signext %a, i32 signext %b) #1 {
 ; AIX64-NEXT:    stdu 1, -128(1)
 ; AIX64-NEXT:    std 0, 144(1)
 ; AIX64-NEXT:    stw 3, 124(1)
+; AIX64-NEXT:    lwz 3, 124(1)
+; AIX64-NEXT:    stw 4, 120(1)
 ; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 4, 120(1)
 ; AIX64-NEXT:    bl .leaf2[PR]
 ; AIX64-NEXT:    nop
 ; AIX64-NEXT:    lwz 3, 124(1)
@@ -346,9 +355,10 @@ define void @nonleaf1_redzone(i32 signext %a, i32 signext %b) #1 {
 ; LE64-NEXT:    stdu 1, -48(1)
 ; LE64-NEXT:    std 0, 64(1)
 ; LE64-NEXT:    stw 3, 44(1)
+; LE64-NEXT:    lwz 3, 44(1)
+; LE64-NEXT:    stw 4, 40(1)
 ; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
-; LE64-NEXT:    stw 4, 40(1)
 ; LE64-NEXT:    bl leaf2
 ; LE64-NEXT:    nop
 ; LE64-NEXT:    lwz 3, 44(1)
@@ -381,12 +391,12 @@ define signext i32 @leaf3_redzone(i32 signext %a, i32 signext %b) #1 {
 ; AIX64-LABEL: leaf3_redzone:
 ; AIX64:       # %bb.0: # %entry
 ; AIX64-NEXT:    stdu 1, -48(1)
-; AIX64-NEXT:    ld 6, 0(1)
-; AIX64-NEXT:    mr 5, 3
-; AIX64-NEXT:    add 3, 5, 4
+; AIX64-NEXT:    ld 5, 0(1)
+; AIX64-NEXT:    stw 3, 48(5)
+; AIX64-NEXT:    lwz 3, 48(5)
+; AIX64-NEXT:    stw 4, 52(5)
+; AIX64-NEXT:    add 3, 3, 4
 ; AIX64-NEXT:    extsw 3, 3
-; AIX64-NEXT:    stw 5, 48(6)
-; AIX64-NEXT:    stw 4, 52(6)
 ; AIX64-NEXT:    addi 1, 1, 48
 ; AIX64-NEXT:    blr
 ;
@@ -406,8 +416,9 @@ define signext i32 @leaf3_redzone(i32 signext %a, i32 signext %b) #1 {
 ; LE64-NEXT:    stdu 1, -32(1)
 ; LE64-NEXT:    ld 5, 0(1)
 ; LE64-NEXT:    stw 3, 48(5)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, 52(5)
+; LE64-NEXT:    lwz 3, 48(5)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    addi 1, 1, 32
 ; LE64-NEXT:    blr
@@ -430,12 +441,12 @@ define void @nonleaf2_redzone(i32 signext %a, i32 signext %b) #1 {
 ; AIX64-NEXT:    stdu 1, -128(1)
 ; AIX64-NEXT:    std 0, 144(1)
 ; AIX64-NEXT:    std 31, 120(1) # 8-byte Folded Spill
-; AIX64-NEXT:    add 5, 3, 4
 ; AIX64-NEXT:    ld 31, 0(1)
-; AIX64-NEXT:    extsw 5, 5
 ; AIX64-NEXT:    stw 3, 48(31)
-; AIX64-NEXT:    mr 3, 5
+; AIX64-NEXT:    lwz 3, 48(31)
 ; AIX64-NEXT:    stw 4, 52(31)
+; AIX64-NEXT:    add 3, 3, 4
+; AIX64-NEXT:    extsw 3, 3
 ; AIX64-NEXT:    bl .leaf2[PR]
 ; AIX64-NEXT:    nop
 ; AIX64-NEXT:    lwz 3, 48(31)
@@ -482,8 +493,9 @@ define void @nonleaf2_redzone(i32 signext %a, i32 signext %b) #1 {
 ; LE64-NEXT:    std 0, 64(1)
 ; LE64-NEXT:    ld 30, 0(1)
 ; LE64-NEXT:    stw 3, 48(30)
-; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    stw 4, 52(30)
+; LE64-NEXT:    lwz 3, 48(30)
+; LE64-NEXT:    add 3, 3, 4
 ; LE64-NEXT:    extsw 3, 3
 ; LE64-NEXT:    bl leaf2
 ; LE64-NEXT:    nop

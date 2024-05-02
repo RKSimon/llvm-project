@@ -56,33 +56,34 @@ define amdgpu_kernel void @truncstore_arg_v16i32_to_v16i8(ptr addrspace(1) %out,
 ; VI-LABEL: truncstore_arg_v16i32_to_v16i8:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; VI-NEXT:    v_mov_b32_e32 v0, 0xc0c0004
+; VI-NEXT:    v_mov_b32_e32 v4, 0x6050400
+; VI-NEXT:    v_mov_b32_e32 v0, 0xc0c0400
 ; VI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x24
 ; VI-NEXT:    s_waitcnt lgkmcnt(0)
-; VI-NEXT:    v_mov_b32_e32 v2, s23
-; VI-NEXT:    v_mov_b32_e32 v1, s21
-; VI-NEXT:    v_perm_b32 v2, s22, v2, v0
-; VI-NEXT:    v_perm_b32 v1, s20, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v2, s22
+; VI-NEXT:    v_mov_b32_e32 v1, s20
+; VI-NEXT:    v_perm_b32 v2, s23, v2, v4
+; VI-NEXT:    v_perm_b32 v1, s21, v1, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; VI-NEXT:    v_or_b32_e32 v3, v1, v2
-; VI-NEXT:    v_mov_b32_e32 v2, s19
-; VI-NEXT:    v_mov_b32_e32 v1, s17
-; VI-NEXT:    v_perm_b32 v2, s18, v2, v0
-; VI-NEXT:    v_perm_b32 v1, s16, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v2, s18
+; VI-NEXT:    v_mov_b32_e32 v1, s16
+; VI-NEXT:    v_perm_b32 v2, s19, v2, v4
+; VI-NEXT:    v_perm_b32 v1, s17, v1, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
-; VI-NEXT:    v_mov_b32_e32 v4, s15
+; VI-NEXT:    v_mov_b32_e32 v5, s14
 ; VI-NEXT:    v_or_b32_e32 v2, v1, v2
-; VI-NEXT:    v_mov_b32_e32 v1, s13
-; VI-NEXT:    v_perm_b32 v4, s14, v4, v0
-; VI-NEXT:    v_perm_b32 v1, s12, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v1, s12
+; VI-NEXT:    v_perm_b32 v5, s15, v5, v4
+; VI-NEXT:    v_perm_b32 v1, s13, v1, v0
+; VI-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; VI-NEXT:    v_or_b32_e32 v1, v1, v5
+; VI-NEXT:    v_mov_b32_e32 v5, s8
+; VI-NEXT:    v_perm_b32 v0, s9, v5, v0
+; VI-NEXT:    v_mov_b32_e32 v5, s10
+; VI-NEXT:    v_perm_b32 v4, s11, v5, v4
 ; VI-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; VI-NEXT:    v_or_b32_e32 v1, v1, v4
-; VI-NEXT:    v_mov_b32_e32 v4, s9
-; VI-NEXT:    v_mov_b32_e32 v5, s11
-; VI-NEXT:    v_perm_b32 v4, s8, v4, v0
-; VI-NEXT:    v_perm_b32 v0, s10, v5, v0
-; VI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
-; VI-NEXT:    v_or_b32_e32 v0, v4, v0
+; VI-NEXT:    v_or_b32_e32 v0, v0, v4
 ; VI-NEXT:    v_mov_b32_e32 v5, s1
 ; VI-NEXT:    v_mov_b32_e32 v4, s0
 ; VI-NEXT:    flat_store_dwordx4 v[4:5], v[0:3]
@@ -147,34 +148,35 @@ define amdgpu_kernel void @truncstore_arg_v16i64_to_v16i8(ptr addrspace(1) %out,
 ; VI-LABEL: truncstore_arg_v16i64_to_v16i8:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_load_dwordx16 s[16:31], s[4:5], 0xe4
-; VI-NEXT:    v_mov_b32_e32 v0, 0xc0c0004
 ; VI-NEXT:    s_load_dwordx2 s[34:35], s[4:5], 0x24
 ; VI-NEXT:    s_load_dwordx16 s[0:15], s[4:5], 0xa4
+; VI-NEXT:    v_mov_b32_e32 v4, 0x6050400
+; VI-NEXT:    v_mov_b32_e32 v0, 0xc0c0400
 ; VI-NEXT:    s_waitcnt lgkmcnt(0)
-; VI-NEXT:    v_mov_b32_e32 v2, s30
-; VI-NEXT:    v_mov_b32_e32 v1, s26
-; VI-NEXT:    v_perm_b32 v2, s28, v2, v0
-; VI-NEXT:    v_perm_b32 v1, s24, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v2, s28
+; VI-NEXT:    v_mov_b32_e32 v1, s24
+; VI-NEXT:    v_perm_b32 v2, s30, v2, v4
+; VI-NEXT:    v_perm_b32 v1, s26, v1, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; VI-NEXT:    v_or_b32_e32 v3, v1, v2
-; VI-NEXT:    v_mov_b32_e32 v2, s22
-; VI-NEXT:    v_mov_b32_e32 v1, s18
-; VI-NEXT:    v_perm_b32 v2, s20, v2, v0
-; VI-NEXT:    v_perm_b32 v1, s16, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v2, s20
+; VI-NEXT:    v_mov_b32_e32 v1, s16
+; VI-NEXT:    v_perm_b32 v2, s22, v2, v4
+; VI-NEXT:    v_perm_b32 v1, s18, v1, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
-; VI-NEXT:    v_mov_b32_e32 v4, s14
+; VI-NEXT:    v_mov_b32_e32 v5, s12
 ; VI-NEXT:    v_or_b32_e32 v2, v1, v2
-; VI-NEXT:    v_mov_b32_e32 v1, s10
-; VI-NEXT:    v_perm_b32 v4, s12, v4, v0
-; VI-NEXT:    v_perm_b32 v1, s8, v1, v0
+; VI-NEXT:    v_mov_b32_e32 v1, s8
+; VI-NEXT:    v_perm_b32 v5, s14, v5, v4
+; VI-NEXT:    v_perm_b32 v1, s10, v1, v0
+; VI-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; VI-NEXT:    v_or_b32_e32 v1, v1, v5
+; VI-NEXT:    v_mov_b32_e32 v5, s0
+; VI-NEXT:    v_perm_b32 v0, s2, v5, v0
+; VI-NEXT:    v_mov_b32_e32 v5, s4
+; VI-NEXT:    v_perm_b32 v4, s6, v5, v4
 ; VI-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; VI-NEXT:    v_or_b32_e32 v1, v1, v4
-; VI-NEXT:    v_mov_b32_e32 v4, s2
-; VI-NEXT:    v_mov_b32_e32 v5, s6
-; VI-NEXT:    v_perm_b32 v4, s0, v4, v0
-; VI-NEXT:    v_perm_b32 v0, s4, v5, v0
-; VI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
-; VI-NEXT:    v_or_b32_e32 v0, v4, v0
+; VI-NEXT:    v_or_b32_e32 v0, v0, v4
 ; VI-NEXT:    v_mov_b32_e32 v4, s34
 ; VI-NEXT:    v_mov_b32_e32 v5, s35
 ; VI-NEXT:    flat_store_dwordx4 v[4:5], v[0:3]
@@ -399,10 +401,12 @@ define void @truncstore_v6i32_to_v6i16(ptr addrspace(1) %out, <6 x i32> %val) {
 ; VI-LABEL: truncstore_v6i32_to_v6i16:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0x1000504
-; VI-NEXT:    v_perm_b32 v6, v6, v7, s4
-; VI-NEXT:    v_perm_b32 v5, v4, v5, s4
-; VI-NEXT:    v_perm_b32 v4, v2, v3, s4
+; VI-NEXT:    v_lshlrev_b32_e32 v7, 16, v7
+; VI-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; VI-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
+; VI-NEXT:    v_or_b32_sdwa v6, v6, v7 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
+; VI-NEXT:    v_or_b32_sdwa v5, v4, v5 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
+; VI-NEXT:    v_or_b32_sdwa v4, v2, v3 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
 ; VI-NEXT:    flat_store_dwordx3 v[0:1], v[4:6]
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    s_setpc_b64 s[30:31]
@@ -415,22 +419,25 @@ define void @global_fp_truncstore_v6f32_to_v6bf16(ptr addrspace(1) %ptr, <6 x fl
 ; SI-LABEL: global_fp_truncstore_v6f32_to_v6bf16:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_mul_f32_e32 v3, 1.0, v3
 ; SI-NEXT:    v_mul_f32_e32 v5, 1.0, v5
-; SI-NEXT:    v_lshrrev_b32_e32 v3, 16, v3
-; SI-NEXT:    v_mul_f32_e32 v2, 1.0, v2
-; SI-NEXT:    v_lshrrev_b32_e32 v5, 16, v5
 ; SI-NEXT:    v_mul_f32_e32 v4, 1.0, v4
-; SI-NEXT:    v_alignbit_b32 v3, v3, v2, 16
-; SI-NEXT:    v_mul_f32_e32 v2, 1.0, v7
-; SI-NEXT:    s_mov_b32 s6, 0
-; SI-NEXT:    v_alignbit_b32 v4, v5, v4, 16
+; SI-NEXT:    v_mul_f32_e32 v3, 1.0, v3
+; SI-NEXT:    v_mul_f32_e32 v2, 1.0, v2
+; SI-NEXT:    v_and_b32_e32 v5, 0xffff0000, v5
+; SI-NEXT:    v_lshrrev_b32_e32 v4, 16, v4
+; SI-NEXT:    v_and_b32_e32 v3, 0xffff0000, v3
 ; SI-NEXT:    v_lshrrev_b32_e32 v2, 16, v2
+; SI-NEXT:    v_or_b32_e32 v4, v4, v5
+; SI-NEXT:    v_or_b32_e32 v3, v2, v3
+; SI-NEXT:    v_mul_f32_e32 v2, 1.0, v7
 ; SI-NEXT:    v_mul_f32_e32 v5, 1.0, v6
+; SI-NEXT:    s_mov_b32 s6, 0
+; SI-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
+; SI-NEXT:    v_lshrrev_b32_e32 v5, 16, v5
 ; SI-NEXT:    s_mov_b32 s7, 0xf000
 ; SI-NEXT:    s_mov_b32 s4, s6
 ; SI-NEXT:    s_mov_b32 s5, s6
-; SI-NEXT:    v_alignbit_b32 v2, v2, v5, 16
+; SI-NEXT:    v_or_b32_e32 v2, v5, v2
 ; SI-NEXT:    buffer_store_dword v2, v[0:1], s[4:7], 0 addr64 offset:8
 ; SI-NEXT:    buffer_store_dwordx2 v[3:4], v[0:1], s[4:7], 0 addr64
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
@@ -439,48 +446,48 @@ define void @global_fp_truncstore_v6f32_to_v6bf16(ptr addrspace(1) %ptr, <6 x fl
 ; VI-LABEL: global_fp_truncstore_v6f32_to_v6bf16:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_bfe_u32 v9, v6, 16, 1
-; VI-NEXT:    v_add_u32_e32 v9, vcc, v9, v6
-; VI-NEXT:    v_add_u32_e32 v9, vcc, 0x7fff, v9
-; VI-NEXT:    v_or_b32_e32 v8, 0x400000, v6
-; VI-NEXT:    v_cmp_u_f32_e32 vcc, v6, v6
-; VI-NEXT:    v_cndmask_b32_e32 v6, v9, v8, vcc
 ; VI-NEXT:    v_bfe_u32 v9, v7, 16, 1
 ; VI-NEXT:    v_add_u32_e32 v9, vcc, v9, v7
 ; VI-NEXT:    v_add_u32_e32 v9, vcc, 0x7fff, v9
 ; VI-NEXT:    v_or_b32_e32 v8, 0x400000, v7
 ; VI-NEXT:    v_cmp_u_f32_e32 vcc, v7, v7
 ; VI-NEXT:    v_cndmask_b32_e32 v7, v9, v8, vcc
-; VI-NEXT:    v_bfe_u32 v8, v4, 16, 1
-; VI-NEXT:    v_add_u32_e32 v8, vcc, v8, v4
-; VI-NEXT:    v_lshrrev_b32_e32 v7, 16, v7
-; VI-NEXT:    v_add_u32_e32 v8, vcc, 0x7fff, v8
-; VI-NEXT:    v_alignbit_b32 v6, v7, v6, 16
-; VI-NEXT:    v_or_b32_e32 v7, 0x400000, v4
-; VI-NEXT:    v_cmp_u_f32_e32 vcc, v4, v4
-; VI-NEXT:    v_cndmask_b32_e32 v4, v8, v7, vcc
+; VI-NEXT:    v_bfe_u32 v9, v6, 16, 1
+; VI-NEXT:    v_add_u32_e32 v9, vcc, v9, v6
+; VI-NEXT:    v_add_u32_e32 v9, vcc, 0x7fff, v9
+; VI-NEXT:    v_or_b32_e32 v8, 0x400000, v6
+; VI-NEXT:    v_cmp_u_f32_e32 vcc, v6, v6
+; VI-NEXT:    v_cndmask_b32_e32 v6, v9, v8, vcc
 ; VI-NEXT:    v_bfe_u32 v8, v5, 16, 1
 ; VI-NEXT:    v_add_u32_e32 v8, vcc, v8, v5
+; VI-NEXT:    v_and_b32_e32 v7, 0xffff0000, v7
 ; VI-NEXT:    v_add_u32_e32 v8, vcc, 0x7fff, v8
+; VI-NEXT:    v_or_b32_sdwa v6, v6, v7 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    v_or_b32_e32 v7, 0x400000, v5
 ; VI-NEXT:    v_cmp_u_f32_e32 vcc, v5, v5
 ; VI-NEXT:    v_cndmask_b32_e32 v5, v8, v7, vcc
-; VI-NEXT:    v_bfe_u32 v7, v2, 16, 1
-; VI-NEXT:    v_add_u32_e32 v7, vcc, v7, v2
-; VI-NEXT:    v_lshrrev_b32_e32 v5, 16, v5
-; VI-NEXT:    v_add_u32_e32 v7, vcc, 0x7fff, v7
-; VI-NEXT:    v_alignbit_b32 v5, v5, v4, 16
-; VI-NEXT:    v_or_b32_e32 v4, 0x400000, v2
-; VI-NEXT:    v_cmp_u_f32_e32 vcc, v2, v2
-; VI-NEXT:    v_cndmask_b32_e32 v2, v7, v4, vcc
+; VI-NEXT:    v_bfe_u32 v8, v4, 16, 1
+; VI-NEXT:    v_add_u32_e32 v8, vcc, v8, v4
+; VI-NEXT:    v_add_u32_e32 v8, vcc, 0x7fff, v8
+; VI-NEXT:    v_or_b32_e32 v7, 0x400000, v4
+; VI-NEXT:    v_cmp_u_f32_e32 vcc, v4, v4
+; VI-NEXT:    v_cndmask_b32_e32 v4, v8, v7, vcc
 ; VI-NEXT:    v_bfe_u32 v7, v3, 16, 1
 ; VI-NEXT:    v_add_u32_e32 v7, vcc, v7, v3
+; VI-NEXT:    v_and_b32_e32 v5, 0xffff0000, v5
 ; VI-NEXT:    v_add_u32_e32 v7, vcc, 0x7fff, v7
+; VI-NEXT:    v_or_b32_sdwa v5, v4, v5 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    v_or_b32_e32 v4, 0x400000, v3
 ; VI-NEXT:    v_cmp_u_f32_e32 vcc, v3, v3
 ; VI-NEXT:    v_cndmask_b32_e32 v3, v7, v4, vcc
-; VI-NEXT:    v_lshrrev_b32_e32 v3, 16, v3
-; VI-NEXT:    v_alignbit_b32 v4, v3, v2, 16
+; VI-NEXT:    v_bfe_u32 v7, v2, 16, 1
+; VI-NEXT:    v_add_u32_e32 v7, vcc, v7, v2
+; VI-NEXT:    v_add_u32_e32 v7, vcc, 0x7fff, v7
+; VI-NEXT:    v_or_b32_e32 v4, 0x400000, v2
+; VI-NEXT:    v_cmp_u_f32_e32 vcc, v2, v2
+; VI-NEXT:    v_and_b32_e32 v3, 0xffff0000, v3
+; VI-NEXT:    v_cndmask_b32_e32 v2, v7, v4, vcc
+; VI-NEXT:    v_or_b32_sdwa v4, v2, v3 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    flat_store_dwordx3 v[0:1], v[4:6]
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    s_setpc_b64 s[30:31]

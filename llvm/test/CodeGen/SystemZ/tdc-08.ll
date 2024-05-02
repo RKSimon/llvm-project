@@ -17,32 +17,32 @@ define <4 x float> @f1(<4 x float> %x, <4 x float> %a, <4 x float> %b) {
 ; CHECK-NEXT:    risbg %r3, %r3, 33, 191, 32
 ; CHECK-NEXT:    risbg %r1, %r1, 33, 191, 32
 ; CHECK-NEXT:    cfi %r1, 2139095040
-; CHECK-NEXT:    la %r1, 196(%r15)
-; CHECK-NEXT:    je .LBB0_2
-; CHECK-NEXT:  # %bb.1:
 ; CHECK-NEXT:    la %r1, 164(%r15)
+; CHECK-NEXT:    jlh .LBB0_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    la %r1, 196(%r15)
 ; CHECK-NEXT:  .LBB0_2:
 ; CHECK-NEXT:    risbg %r2, %r2, 33, 191, 32
 ; CHECK-NEXT:    cfi %r3, 2139095040
-; CHECK-NEXT:    la %r3, 204(%r15)
-; CHECK-NEXT:    je .LBB0_4
-; CHECK-NEXT:  # %bb.3:
 ; CHECK-NEXT:    la %r3, 172(%r15)
+; CHECK-NEXT:    jlh .LBB0_4
+; CHECK-NEXT:  # %bb.3:
+; CHECK-NEXT:    la %r3, 204(%r15)
 ; CHECK-NEXT:  .LBB0_4:
 ; CHECK-NEXT:    cfi %r0, 2139095040
-; CHECK-NEXT:    la %r4, 212(%r15)
-; CHECK-NEXT:    je .LBB0_6
-; CHECK-NEXT:  # %bb.5:
 ; CHECK-NEXT:    la %r4, 180(%r15)
+; CHECK-NEXT:    jlh .LBB0_6
+; CHECK-NEXT:  # %bb.5:
+; CHECK-NEXT:    la %r4, 212(%r15)
 ; CHECK-NEXT:  .LBB0_6:
 ; CHECK-NEXT:    le %f0, 0(%r1)
 ; CHECK-NEXT:    le %f2, 0(%r3)
 ; CHECK-NEXT:    le %f4, 0(%r4)
 ; CHECK-NEXT:    cfi %r2, 2139095040
-; CHECK-NEXT:    la %r1, 220(%r15)
-; CHECK-NEXT:    je .LBB0_8
-; CHECK-NEXT:  # %bb.7:
 ; CHECK-NEXT:    la %r1, 188(%r15)
+; CHECK-NEXT:    jlh .LBB0_8
+; CHECK-NEXT:  # %bb.7:
+; CHECK-NEXT:    la %r1, 220(%r15)
 ; CHECK-NEXT:  .LBB0_8:
 ; CHECK-NEXT:    le %f6, 0(%r1)
 ; CHECK-NEXT:    br %r14

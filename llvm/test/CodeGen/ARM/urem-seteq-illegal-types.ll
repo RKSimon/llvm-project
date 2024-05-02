@@ -193,62 +193,74 @@ define i1 @test_urem_even(i27 %X) nounwind {
 define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ; ARM5-LABEL: test_urem_odd_setne:
 ; ARM5:       @ %bb.0:
-; ARM5-NEXT:    mov r1, #13
-; ARM5-NEXT:    mul r2, r0, r1
-; ARM5-NEXT:    mov r0, #0
-; ARM5-NEXT:    and r1, r2, #15
-; ARM5-NEXT:    cmp r1, #3
-; ARM5-NEXT:    movhi r0, #1
+; ARM5-NEXT:    and r1, r0, #15
+; ARM5-NEXT:    mov r2, #13
+; ARM5-NEXT:    mul r3, r1, r2
+; ARM5-NEXT:    lsr r1, r3, #6
+; ARM5-NEXT:    orr r1, r1, r1, lsl #2
+; ARM5-NEXT:    sub r0, r0, r1
+; ARM5-NEXT:    ands r0, r0, #15
+; ARM5-NEXT:    movne r0, #1
 ; ARM5-NEXT:    bx lr
 ;
 ; ARM6-LABEL: test_urem_odd_setne:
 ; ARM6:       @ %bb.0:
-; ARM6-NEXT:    mov r1, #13
-; ARM6-NEXT:    mul r0, r0, r1
 ; ARM6-NEXT:    and r1, r0, #15
-; ARM6-NEXT:    mov r0, #0
-; ARM6-NEXT:    cmp r1, #3
-; ARM6-NEXT:    movhi r0, #1
+; ARM6-NEXT:    mov r2, #13
+; ARM6-NEXT:    smulbb r1, r1, r2
+; ARM6-NEXT:    lsr r1, r1, #6
+; ARM6-NEXT:    orr r1, r1, r1, lsl #2
+; ARM6-NEXT:    sub r0, r0, r1
+; ARM6-NEXT:    ands r0, r0, #15
+; ARM6-NEXT:    movne r0, #1
 ; ARM6-NEXT:    bx lr
 ;
 ; ARM7-LABEL: test_urem_odd_setne:
 ; ARM7:       @ %bb.0:
-; ARM7-NEXT:    mov r1, #13
-; ARM7-NEXT:    mul r0, r0, r1
 ; ARM7-NEXT:    and r1, r0, #15
-; ARM7-NEXT:    mov r0, #0
-; ARM7-NEXT:    cmp r1, #3
-; ARM7-NEXT:    movwhi r0, #1
+; ARM7-NEXT:    mov r2, #13
+; ARM7-NEXT:    smulbb r1, r1, r2
+; ARM7-NEXT:    lsr r1, r1, #6
+; ARM7-NEXT:    orr r1, r1, r1, lsl #2
+; ARM7-NEXT:    sub r0, r0, r1
+; ARM7-NEXT:    ands r0, r0, #15
+; ARM7-NEXT:    movwne r0, #1
 ; ARM7-NEXT:    bx lr
 ;
 ; ARM8-LABEL: test_urem_odd_setne:
 ; ARM8:       @ %bb.0:
-; ARM8-NEXT:    mov r1, #13
-; ARM8-NEXT:    mul r0, r0, r1
 ; ARM8-NEXT:    and r1, r0, #15
-; ARM8-NEXT:    mov r0, #0
-; ARM8-NEXT:    cmp r1, #3
-; ARM8-NEXT:    movwhi r0, #1
+; ARM8-NEXT:    mov r2, #13
+; ARM8-NEXT:    smulbb r1, r1, r2
+; ARM8-NEXT:    lsr r1, r1, #6
+; ARM8-NEXT:    orr r1, r1, r1, lsl #2
+; ARM8-NEXT:    sub r0, r0, r1
+; ARM8-NEXT:    ands r0, r0, #15
+; ARM8-NEXT:    movwne r0, #1
 ; ARM8-NEXT:    bx lr
 ;
 ; NEON7-LABEL: test_urem_odd_setne:
 ; NEON7:       @ %bb.0:
-; NEON7-NEXT:    mov r1, #13
-; NEON7-NEXT:    mul r0, r0, r1
 ; NEON7-NEXT:    and r1, r0, #15
-; NEON7-NEXT:    mov r0, #0
-; NEON7-NEXT:    cmp r1, #3
-; NEON7-NEXT:    movwhi r0, #1
+; NEON7-NEXT:    mov r2, #13
+; NEON7-NEXT:    smulbb r1, r1, r2
+; NEON7-NEXT:    lsr r1, r1, #6
+; NEON7-NEXT:    orr r1, r1, r1, lsl #2
+; NEON7-NEXT:    sub r0, r0, r1
+; NEON7-NEXT:    ands r0, r0, #15
+; NEON7-NEXT:    movwne r0, #1
 ; NEON7-NEXT:    bx lr
 ;
 ; NEON8-LABEL: test_urem_odd_setne:
 ; NEON8:       @ %bb.0:
-; NEON8-NEXT:    mov r1, #13
-; NEON8-NEXT:    mul r0, r0, r1
 ; NEON8-NEXT:    and r1, r0, #15
-; NEON8-NEXT:    mov r0, #0
-; NEON8-NEXT:    cmp r1, #3
-; NEON8-NEXT:    movwhi r0, #1
+; NEON8-NEXT:    mov r2, #13
+; NEON8-NEXT:    smulbb r1, r1, r2
+; NEON8-NEXT:    lsr r1, r1, #6
+; NEON8-NEXT:    orr r1, r1, r1, lsl #2
+; NEON8-NEXT:    sub r0, r0, r1
+; NEON8-NEXT:    ands r0, r0, #15
+; NEON8-NEXT:    movwne r0, #1
 ; NEON8-NEXT:    bx lr
   %urem = urem i4 %X, 5
   %cmp = icmp ne i4 %urem, 0

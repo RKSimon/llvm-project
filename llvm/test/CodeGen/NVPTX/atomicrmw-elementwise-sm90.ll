@@ -258,37 +258,28 @@ define <4 x i32> @xchg_acq_rel_v4i32_global_cta(ptr addrspace(1) %addr, <4 x i32
 define <8 x i32> @xchg_acq_rel_v8i32_global_cta(ptr addrspace(1) %addr, <8 x i32> %val) {
 ; SM90-LABEL: xchg_acq_rel_v8i32_global_cta(
 ; SM90:       {
-; SM90-NEXT:    .reg .b32 %r<5>;
-; SM90-NEXT:    .reg .b64 %rd<16>;
+; SM90-NEXT:    .reg .b64 %rd<10>;
 ; SM90-EMPTY:
 ; SM90-NEXT:  // %bb.0:
 ; SM90-NEXT:    ld.param::func.b64 %rd1, [xchg_acq_rel_v8i32_global_cta_param_0];
-; SM90-NEXT:    ld.param::func.v4.b32 {%r1, %r2, %r3, %r4}, [xchg_acq_rel_v8i32_global_cta_param_1+16];
-; SM90-NEXT:    cvt.u64.u32 %rd2, %r3;
-; SM90-NEXT:    cvt.u64.u32 %rd3, %r4;
-; SM90-NEXT:    shl.b64 %rd4, %rd3, 32;
-; SM90-NEXT:    or.b64 %rd5, %rd2, %rd4;
-; SM90-NEXT:    cvt.u64.u32 %rd6, %r1;
-; SM90-NEXT:    cvt.u64.u32 %rd7, %r2;
-; SM90-NEXT:    shl.b64 %rd8, %rd7, 32;
-; SM90-NEXT:    or.b64 %rd9, %rd6, %rd8;
 ; SM90-NEXT:    fence.release.cta;
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd10, %rd11}, [xchg_acq_rel_v8i32_global_cta_param_1];
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd2, %rd3}, [xchg_acq_rel_v8i32_global_cta_param_1];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd10, %rd11};
+; SM90-NEXT:    mov.b128 amt, {%rd2, %rd3};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1], amt;
-; SM90-NEXT:    mov.b128 {%rd12, %rd13}, dst;
+; SM90-NEXT:    mov.b128 {%rd4, %rd5}, dst;
 ; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd6, %rd7}, [xchg_acq_rel_v8i32_global_cta_param_1+16];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd9, %rd5};
+; SM90-NEXT:    mov.b128 amt, {%rd6, %rd7};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+16], amt;
-; SM90-NEXT:    mov.b128 {%rd14, %rd15}, dst;
+; SM90-NEXT:    mov.b128 {%rd8, %rd9}, dst;
 ; SM90-NEXT:    }
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd14, %rd15};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd12, %rd13};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd8, %rd9};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd4, %rd5};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise xchg ptr  addrspace(1) %addr, <8 x i32> %val syncscope("block") acq_rel
         ret <8 x i32> %retval
@@ -339,23 +330,23 @@ define <4 x i64> @xchg_acq_rel_v4i64_global_cta(ptr addrspace(1) %addr, <4 x i64
 ; SM90-NEXT:  // %bb.0:
 ; SM90-NEXT:    ld.param::func.b64 %rd1, [xchg_acq_rel_v4i64_global_cta_param_0];
 ; SM90-NEXT:    fence.release.cta;
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd2, %rd3}, [xchg_acq_rel_v4i64_global_cta_param_1+16];
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd4, %rd5}, [xchg_acq_rel_v4i64_global_cta_param_1];
-; SM90-NEXT:    {
-; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd4, %rd5};
-; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1], amt;
-; SM90-NEXT:    mov.b128 {%rd6, %rd7}, dst;
-; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd2, %rd3}, [xchg_acq_rel_v4i64_global_cta_param_1];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
 ; SM90-NEXT:    mov.b128 amt, {%rd2, %rd3};
+; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1], amt;
+; SM90-NEXT:    mov.b128 {%rd4, %rd5}, dst;
+; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd6, %rd7}, [xchg_acq_rel_v4i64_global_cta_param_1+16];
+; SM90-NEXT:    {
+; SM90-NEXT:    .reg .b128 amt, dst;
+; SM90-NEXT:    mov.b128 amt, {%rd6, %rd7};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+16], amt;
 ; SM90-NEXT:    mov.b128 {%rd8, %rd9}, dst;
 ; SM90-NEXT:    }
 ; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd8, %rd9};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd6, %rd7};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd4, %rd5};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise xchg ptr  addrspace(1) %addr, <4 x i64> %val syncscope("block") acq_rel
         ret <4 x i64> %retval
@@ -369,39 +360,39 @@ define <8 x i64> @xchg_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM90-NEXT:  // %bb.0:
 ; SM90-NEXT:    ld.param::func.b64 %rd1, [xchg_acq_rel_v8i64_global_cta_param_0];
 ; SM90-NEXT:    fence.release.cta;
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd2, %rd3}, [xchg_acq_rel_v8i64_global_cta_param_1+48];
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd4, %rd5}, [xchg_acq_rel_v8i64_global_cta_param_1+32];
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd6, %rd7}, [xchg_acq_rel_v8i64_global_cta_param_1+16];
-; SM90-NEXT:    ld.param::func.v2.b64 {%rd8, %rd9}, [xchg_acq_rel_v8i64_global_cta_param_1];
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd2, %rd3}, [xchg_acq_rel_v8i64_global_cta_param_1];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd8, %rd9};
+; SM90-NEXT:    mov.b128 amt, {%rd2, %rd3};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1], amt;
-; SM90-NEXT:    mov.b128 {%rd10, %rd11}, dst;
+; SM90-NEXT:    mov.b128 {%rd4, %rd5}, dst;
 ; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd6, %rd7}, [xchg_acq_rel_v8i64_global_cta_param_1+16];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
 ; SM90-NEXT:    mov.b128 amt, {%rd6, %rd7};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+16], amt;
+; SM90-NEXT:    mov.b128 {%rd8, %rd9}, dst;
+; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd10, %rd11}, [xchg_acq_rel_v8i64_global_cta_param_1+32];
+; SM90-NEXT:    {
+; SM90-NEXT:    .reg .b128 amt, dst;
+; SM90-NEXT:    mov.b128 amt, {%rd10, %rd11};
+; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+32], amt;
 ; SM90-NEXT:    mov.b128 {%rd12, %rd13}, dst;
 ; SM90-NEXT:    }
+; SM90-NEXT:    ld.param::func.v2.b64 {%rd14, %rd15}, [xchg_acq_rel_v8i64_global_cta_param_1+48];
 ; SM90-NEXT:    {
 ; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd4, %rd5};
-; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+32], amt;
-; SM90-NEXT:    mov.b128 {%rd14, %rd15}, dst;
-; SM90-NEXT:    }
-; SM90-NEXT:    {
-; SM90-NEXT:    .reg .b128 amt, dst;
-; SM90-NEXT:    mov.b128 amt, {%rd2, %rd3};
+; SM90-NEXT:    mov.b128 amt, {%rd14, %rd15};
 ; SM90-NEXT:    atom.relaxed.cta.global.exch.b128 dst, [%rd1+48], amt;
 ; SM90-NEXT:    mov.b128 {%rd16, %rd17}, dst;
 ; SM90-NEXT:    }
 ; SM90-NEXT:    fence.acquire.cta;
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd8, %rd9};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd4, %rd5};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise xchg ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -970,10 +961,10 @@ define <8 x i64> @add_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    atom.relaxed.cta.global.add.u64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.u64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise add ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -1603,10 +1594,10 @@ define <8 x i64> @sub_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    neg.s64 %rd24, %rd3;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.u64 %rd25, [%rd1+56], %rd24;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd23, %rd25};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd19, %rd21};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd15, %rd17};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd11, %rd13};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd19, %rd21};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd23, %rd25};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise sub ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -2052,10 +2043,10 @@ define <8 x i64> @and_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    atom.relaxed.cta.global.and.b64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.and.b64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise and ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -2874,9 +2865,9 @@ define <8 x i64> @nand_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM90-NEXT:    @%p4 bra $L__BB79_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end21
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd46, %rd47};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd48, %rd49};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise nand ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -3314,10 +3305,10 @@ define <8 x i64> @or_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64> 
 ; SM90-NEXT:    atom.relaxed.cta.global.or.b64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.or.b64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise or ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -3754,10 +3745,10 @@ define <8 x i64> @xor_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    atom.relaxed.cta.global.xor.b64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.xor.b64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise xor ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -4361,10 +4352,10 @@ define <8 x i64> @max_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    atom.relaxed.cta.global.max.s64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.max.s64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise max ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -4968,10 +4959,10 @@ define <8 x i64> @min_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64>
 ; SM90-NEXT:    atom.relaxed.cta.global.min.s64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.min.s64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise min ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -5546,10 +5537,10 @@ define <8 x i64> @umax_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM90-NEXT:    atom.relaxed.cta.global.max.u64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.max.u64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise umax ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -6124,10 +6115,10 @@ define <8 x i64> @umin_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x i64
 ; SM90-NEXT:    atom.relaxed.cta.global.min.u64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.min.u64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise umin ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
         ret <8 x i64> %retval
@@ -6967,9 +6958,9 @@ define <8 x i64> @uinc_wrap_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM90-NEXT:    @%p12 bra $L__BB191_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end21
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd46, %rd47};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd48, %rd49};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise uinc_wrap ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -7903,9 +7894,9 @@ define <8 x i64> @udec_wrap_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM90-NEXT:    @%p20 bra $L__BB207_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end21
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd54, %rd55};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd56, %rd57};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise udec_wrap ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -8939,9 +8930,9 @@ define <8 x i64> @usub_cond_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 
 ; SM90-NEXT:    @%p12 bra $L__BB223_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end21
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd46, %rd47};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd48, %rd49};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise usub_cond ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -9907,9 +9898,9 @@ define <8 x i64> @usub_sat_acq_rel_v8i64_global_cta(ptr addrspace(1) %addr, <8 x
 ; SM90-NEXT:    @%p4 bra $L__BB239_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end21
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd46, %rd47};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd48, %rd49};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise usub_sat ptr  addrspace(1) %addr, <8 x i64> %val syncscope("block") acq_rel
@@ -14599,10 +14590,10 @@ define <8 x double> @fadd_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM90-NEXT:    atom.relaxed.cta.global.add.f64 %rd16, [%rd1+48], %rd2;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.f64 %rd17, [%rd1+56], %rd3;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd12, %rd13};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd10, %rd11};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd14, %rd15};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd16, %rd17};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fadd ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
         ret <8 x double> %retval
@@ -14701,10 +14692,10 @@ define <8 x double> @fsub_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM90-NEXT:    neg.f64 %rd24, %rd3;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.f64 %rd25, [%rd1+56], %rd24;
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd23, %rd25};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd19, %rd21};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd15, %rd17};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd11, %rd13};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd19, %rd21};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd23, %rd25};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fsub ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
         ret <8 x double> %retval
@@ -14936,9 +14927,9 @@ define <8 x double> @fmin_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM90-NEXT:    @%p4 bra $L__BB275_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end19
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd38, %rd39};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd40, %rd41};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fmin ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15171,9 +15162,9 @@ define <8 x double> @fmax_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <8 x 
 ; SM90-NEXT:    @%p4 bra $L__BB279_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end19
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd38, %rd39};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd40, %rd41};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fmax ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15496,9 +15487,9 @@ define <8 x double> @fminimum_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <
 ; SM90-NEXT:    @%p28 bra $L__BB283_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end19
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd62, %rd63};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd64, %rd65};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fminimum ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15821,9 +15812,9 @@ define <8 x double> @fmaximum_acq_rel_v8f64_global_cta(ptr addrspace(1) %addr, <
 ; SM90-NEXT:    @%p28 bra $L__BB287_7;
 ; SM90-NEXT:  // %bb.8: // %atomicrmw.end19
 ; SM90-NEXT:    fence.acquire.cta;
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
-; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0], {%rd62, %rd63};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+32], {%rd13, %rd14};
+; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+48], {%rd15, %rd16};
 ; SM90-NEXT:    st.param::func.v2.b64 [func_retval0+16], {%rd64, %rd65};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fmaximum ptr  addrspace(1) %addr, <8 x double> %val syncscope("block") acq_rel
@@ -15911,11 +15902,11 @@ define <8 x half> @fadd_acq_rel_v8f16_global_cta(ptr addrspace(1) %addr, <8 x ha
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs14, [%rd1+10], %rs4;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs15, [%rd1+12], %rs1;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs16, [%rd1+14], %rs2;
+; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    mov.b32 %r5, {%rs9, %rs10};
 ; SM90-NEXT:    mov.b32 %r6, {%rs11, %rs12};
 ; SM90-NEXT:    mov.b32 %r7, {%rs13, %rs14};
 ; SM90-NEXT:    mov.b32 %r8, {%rs15, %rs16};
-; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fadd ptr  addrspace(1) %addr, <8 x half> %val syncscope("block") acq_rel
@@ -16177,11 +16168,11 @@ define <8 x half> @fsub_acq_rel_v8f16_global_cta(ptr addrspace(1) %addr, <8 x ha
 ; SM90-NOFTZ-DISALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs22, [%rd1+12], %rs21;
 ; SM90-NOFTZ-DISALLOW-NEXT:    neg.f16 %rs23, %rs2;
 ; SM90-NOFTZ-DISALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs24, [%rd1+14], %rs23;
+; SM90-NOFTZ-DISALLOW-NEXT:    fence.acquire.cta;
 ; SM90-NOFTZ-DISALLOW-NEXT:    mov.b32 %r5, {%rs10, %rs12};
 ; SM90-NOFTZ-DISALLOW-NEXT:    mov.b32 %r6, {%rs14, %rs16};
 ; SM90-NOFTZ-DISALLOW-NEXT:    mov.b32 %r7, {%rs18, %rs20};
 ; SM90-NOFTZ-DISALLOW-NEXT:    mov.b32 %r8, {%rs22, %rs24};
-; SM90-NOFTZ-DISALLOW-NEXT:    fence.acquire.cta;
 ; SM90-NOFTZ-DISALLOW-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-NOFTZ-DISALLOW-NEXT:    ret;
 ;
@@ -16215,11 +16206,11 @@ define <8 x half> @fsub_acq_rel_v8f16_global_cta(ptr addrspace(1) %addr, <8 x ha
 ; SM90-NOFTZ-ALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs22, [%rd1+12], %rs21;
 ; SM90-NOFTZ-ALLOW-NEXT:    neg.f16 %rs23, %rs2;
 ; SM90-NOFTZ-ALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs24, [%rd1+14], %rs23;
+; SM90-NOFTZ-ALLOW-NEXT:    fence.acquire.cta;
 ; SM90-NOFTZ-ALLOW-NEXT:    mov.b32 %r5, {%rs10, %rs12};
 ; SM90-NOFTZ-ALLOW-NEXT:    mov.b32 %r6, {%rs14, %rs16};
 ; SM90-NOFTZ-ALLOW-NEXT:    mov.b32 %r7, {%rs18, %rs20};
 ; SM90-NOFTZ-ALLOW-NEXT:    mov.b32 %r8, {%rs22, %rs24};
-; SM90-NOFTZ-ALLOW-NEXT:    fence.acquire.cta;
 ; SM90-NOFTZ-ALLOW-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-NOFTZ-ALLOW-NEXT:    ret;
 ;
@@ -16253,11 +16244,11 @@ define <8 x half> @fsub_acq_rel_v8f16_global_cta(ptr addrspace(1) %addr, <8 x ha
 ; SM90-FTZ-DISALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs22, [%rd1+12], %rs21;
 ; SM90-FTZ-DISALLOW-NEXT:    neg.ftz.f16 %rs23, %rs2;
 ; SM90-FTZ-DISALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs24, [%rd1+14], %rs23;
+; SM90-FTZ-DISALLOW-NEXT:    fence.acquire.cta;
 ; SM90-FTZ-DISALLOW-NEXT:    mov.b32 %r5, {%rs10, %rs12};
 ; SM90-FTZ-DISALLOW-NEXT:    mov.b32 %r6, {%rs14, %rs16};
 ; SM90-FTZ-DISALLOW-NEXT:    mov.b32 %r7, {%rs18, %rs20};
 ; SM90-FTZ-DISALLOW-NEXT:    mov.b32 %r8, {%rs22, %rs24};
-; SM90-FTZ-DISALLOW-NEXT:    fence.acquire.cta;
 ; SM90-FTZ-DISALLOW-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-FTZ-DISALLOW-NEXT:    ret;
 ;
@@ -16291,11 +16282,11 @@ define <8 x half> @fsub_acq_rel_v8f16_global_cta(ptr addrspace(1) %addr, <8 x ha
 ; SM90-FTZ-ALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs22, [%rd1+12], %rs21;
 ; SM90-FTZ-ALLOW-NEXT:    neg.ftz.f16 %rs23, %rs2;
 ; SM90-FTZ-ALLOW-NEXT:    atom.relaxed.cta.global.add.noftz.f16 %rs24, [%rd1+14], %rs23;
+; SM90-FTZ-ALLOW-NEXT:    fence.acquire.cta;
 ; SM90-FTZ-ALLOW-NEXT:    mov.b32 %r5, {%rs10, %rs12};
 ; SM90-FTZ-ALLOW-NEXT:    mov.b32 %r6, {%rs14, %rs16};
 ; SM90-FTZ-ALLOW-NEXT:    mov.b32 %r7, {%rs18, %rs20};
 ; SM90-FTZ-ALLOW-NEXT:    mov.b32 %r8, {%rs22, %rs24};
-; SM90-FTZ-ALLOW-NEXT:    fence.acquire.cta;
 ; SM90-FTZ-ALLOW-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-FTZ-ALLOW-NEXT:    ret;
         %retval = atomicrmw elementwise fsub ptr  addrspace(1) %addr, <8 x half> %val syncscope("block") acq_rel
@@ -18927,11 +18918,11 @@ define <8 x bfloat> @fadd_acq_rel_v8bf16_global_cta(ptr addrspace(1) %addr, <8 x
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.bf16 %rs14, [%rd1+10], %rs4;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.bf16 %rs15, [%rd1+12], %rs1;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.bf16 %rs16, [%rd1+14], %rs2;
+; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    mov.b32 %r5, {%rs9, %rs10};
 ; SM90-NEXT:    mov.b32 %r6, {%rs11, %rs12};
 ; SM90-NEXT:    mov.b32 %r7, {%rs13, %rs14};
 ; SM90-NEXT:    mov.b32 %r8, {%rs15, %rs16};
-; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fadd ptr  addrspace(1) %addr, <8 x bfloat> %val syncscope("block") acq_rel
@@ -19034,11 +19025,11 @@ define <8 x bfloat> @fsub_acq_rel_v8bf16_global_cta(ptr addrspace(1) %addr, <8 x
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.bf16 %rs22, [%rd1+12], %rs21;
 ; SM90-NEXT:    neg.bf16 %rs23, %rs2;
 ; SM90-NEXT:    atom.relaxed.cta.global.add.noftz.bf16 %rs24, [%rd1+14], %rs23;
+; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    mov.b32 %r5, {%rs10, %rs12};
 ; SM90-NEXT:    mov.b32 %r6, {%rs14, %rs16};
 ; SM90-NEXT:    mov.b32 %r7, {%rs18, %rs20};
 ; SM90-NEXT:    mov.b32 %r8, {%rs22, %rs24};
-; SM90-NEXT:    fence.acquire.cta;
 ; SM90-NEXT:    st.param::func.v4.b32 [func_retval0], {%r5, %r6, %r7, %r8};
 ; SM90-NEXT:    ret;
         %retval = atomicrmw elementwise fsub ptr  addrspace(1) %addr, <8 x bfloat> %val syncscope("block") acq_rel

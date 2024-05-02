@@ -66,21 +66,21 @@ define amdgpu_kernel void @v6i8_arg(<6 x i8> %in) nounwind {
 ; GCN-LABEL: v6i8_arg:
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_load_dwordx2 s[0:1], s[8:9], 0x0
-; GCN-NEXT:    v_mov_b32_e32 v0, 0xc0c0104
+; GCN-NEXT:    v_mov_b32_e32 v0, 0x3020104
 ; GCN-NEXT:    v_mov_b32_e32 v3, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_and_b32 s2, s1, 0xff
-; GCN-NEXT:    v_mov_b32_e32 v1, s1
-; GCN-NEXT:    s_and_b32 s1, s0, 0xff
-; GCN-NEXT:    v_mov_b32_e32 v2, s0
+; GCN-NEXT:    s_and_b32 s2, s0, 0xff
+; GCN-NEXT:    v_mov_b32_e32 v1, s0
+; GCN-NEXT:    s_and_b32 s0, s1, 0xff
+; GCN-NEXT:    v_mov_b32_e32 v2, s1
 ; GCN-NEXT:    v_perm_b32 v4, s2, v1, v0
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x3020104
-; GCN-NEXT:    v_perm_b32 v5, s1, v2, v0
-; GCN-NEXT:    v_mov_b32_e32 v0, 0
+; GCN-NEXT:    v_mov_b32_e32 v0, 0xc0c0104
+; GCN-NEXT:    v_perm_b32 v5, s0, v2, v0
+; GCN-NEXT:    v_mov_b32_e32 v0, 4
 ; GCN-NEXT:    v_mov_b32_e32 v1, 0
-; GCN-NEXT:    v_mov_b32_e32 v2, 4
-; GCN-NEXT:    global_store_dword v[0:1], v5, off
-; GCN-NEXT:    global_store_short v[2:3], v4, off
+; GCN-NEXT:    v_mov_b32_e32 v2, 0
+; GCN-NEXT:    global_store_short v[0:1], v5, off
+; GCN-NEXT:    global_store_dword v[2:3], v4, off
 ; GCN-NEXT:    s_endpgm
   store <6 x i8> %in, ptr addrspace(1) null
   ret void
@@ -391,17 +391,16 @@ define amdgpu_kernel void @v3i15_arg(ptr addrspace(1) nocapture %out, <3 x i15> 
 ; GCN-LABEL: v3i15_arg:
 ; GCN:       ; %bb.0: ; %entry
 ; GCN-NEXT:    s_load_dwordx4 s[0:3], s[8:9], 0x0
+; GCN-NEXT:    s_mov_b32 s5, 0
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_and_b32 s4, s3, 0xffff
-; GCN-NEXT:    s_and_b32 s5, s2, 0x7fff
-; GCN-NEXT:    s_lshr_b32 s6, s2, 1
+; GCN-NEXT:    s_and_b32 s4, s3, 0x7fff
+; GCN-NEXT:    s_lshr_b32 s7, s2, 1
+; GCN-NEXT:    s_and_b32 s6, s2, 0x7fff
 ; GCN-NEXT:    s_lshl_b64 s[2:3], s[4:5], 30
-; GCN-NEXT:    s_and_b32 s4, s6, 0x3fff8000
-; GCN-NEXT:    s_and_b32 s6, s3, 0x1fff
-; GCN-NEXT:    s_or_b32 s4, s5, s4
-; GCN-NEXT:    s_mov_b32 s5, 0
-; GCN-NEXT:    v_mov_b32_e32 v1, s6
+; GCN-NEXT:    s_and_b32 s4, s7, 0x3fff8000
+; GCN-NEXT:    s_or_b32 s4, s6, s4
+; GCN-NEXT:    v_mov_b32_e32 v1, s3
 ; GCN-NEXT:    s_or_b64 s[2:3], s[4:5], s[2:3]
 ; GCN-NEXT:    global_store_short v0, v1, s[0:1] offset:4
 ; GCN-NEXT:    v_mov_b32_e32 v1, s2

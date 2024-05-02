@@ -25,8 +25,9 @@ define void @has_varargs(...) hybrid_patchable nounwind {
 ; CHECK-NEXT:  "#has_varargs$hp_target":               // @"#has_varargs$hp_target"
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:      sub sp, sp, #48
-; CHECK-NEXT:      stp x0, x1, [x4, #-32]!
+; CHECK-NEXT:      str x0, [x4, #-32]!
 ; CHECK-NEXT:      stp x2, x3, [x4, #16]
+; CHECK-NEXT:      str x1, [x4, #8]
 ; CHECK-NEXT:      str x4, [sp, #8]
 ; CHECK-NEXT:      add sp, sp, #48
 ; CHECK-NEXT:      ret

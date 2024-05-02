@@ -338,16 +338,16 @@ define void @vst2_v4i64(ptr %src, ptr %dst) {
 ; CHECK-NEXT:    vldrw.u32 q1, [r0]
 ; CHECK-NEXT:    vldrw.u32 q2, [r0, #48]
 ; CHECK-NEXT:    vldrw.u32 q3, [r0, #16]
-; CHECK-NEXT:    vmov.f64 d8, d2
-; CHECK-NEXT:    vmov.f64 d9, d0
-; CHECK-NEXT:    vmov.f64 d0, d3
-; CHECK-NEXT:    vstrw.32 q4, [r1]
-; CHECK-NEXT:    vmov.f64 d3, d4
-; CHECK-NEXT:    vstrw.32 q0, [r1, #16]
-; CHECK-NEXT:    vmov.f64 d2, d6
-; CHECK-NEXT:    vmov.f64 d4, d7
-; CHECK-NEXT:    vstrw.32 q1, [r1, #32]
-; CHECK-NEXT:    vstrw.32 q2, [r1, #48]
+; CHECK-NEXT:    vmov.f64 d8, d3
+; CHECK-NEXT:    vmov.f64 d9, d1
+; CHECK-NEXT:    vmov.f64 d3, d0
+; CHECK-NEXT:    vstrw.32 q4, [r1, #16]
+; CHECK-NEXT:    vmov.f64 d0, d7
+; CHECK-NEXT:    vstrw.32 q1, [r1]
+; CHECK-NEXT:    vmov.f64 d1, d5
+; CHECK-NEXT:    vmov.f64 d7, d4
+; CHECK-NEXT:    vstrw.32 q0, [r1, #48]
+; CHECK-NEXT:    vstrw.32 q3, [r1, #32]
 ; CHECK-NEXT:    vpop {d8, d9}
 ; CHECK-NEXT:    bx lr
 entry:
@@ -505,28 +505,21 @@ entry:
 define void @vst2_v4f16(ptr %src, ptr %dst) {
 ; CHECK-LABEL: vst2_v4f16:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    .vsave {d8, d9}
-; CHECK-NEXT:    vpush {d8, d9}
-; CHECK-NEXT:    ldrd r2, r12, [r0]
-; CHECK-NEXT:    ldrd r3, r0, [r0, #8]
-; CHECK-NEXT:    vmov.32 q2[0], r2
-; CHECK-NEXT:    vmov.32 q0[0], r3
-; CHECK-NEXT:    vmov q3, q2
-; CHECK-NEXT:    vmov q1, q0
-; CHECK-NEXT:    vmov.f32 s16, s8
-; CHECK-NEXT:    vmov.32 q3[1], r12
-; CHECK-NEXT:    vins.f16 s16, s0
-; CHECK-NEXT:    vmov.32 q1[1], r0
-; CHECK-NEXT:    vmovx.f16 s0, s0
-; CHECK-NEXT:    vmovx.f16 s17, s8
-; CHECK-NEXT:    vmovx.f16 s19, s13
-; CHECK-NEXT:    vins.f16 s17, s0
-; CHECK-NEXT:    vins.f16 s13, s5
-; CHECK-NEXT:    vmovx.f16 s0, s5
-; CHECK-NEXT:    vmov.f32 s18, s13
-; CHECK-NEXT:    vins.f16 s19, s0
-; CHECK-NEXT:    vstrh.16 q4, [r1]
-; CHECK-NEXT:    vpop {d8, d9}
+; CHECK-NEXT:    vldr s0, [r0]
+; CHECK-NEXT:    vldr s2, [r0, #4]
+; CHECK-NEXT:    vldr s4, [r0, #8]
+; CHECK-NEXT:    vmov.f32 s8, s0
+; CHECK-NEXT:    vldr s6, [r0, #12]
+; CHECK-NEXT:    vmov.f32 s10, s2
+; CHECK-NEXT:    vins.f16 s8, s4
+; CHECK-NEXT:    vmovx.f16 s9, s0
+; CHECK-NEXT:    vmovx.f16 s4, s4
+; CHECK-NEXT:    vmovx.f16 s0, s6
+; CHECK-NEXT:    vmovx.f16 s11, s2
+; CHECK-NEXT:    vins.f16 s9, s4
+; CHECK-NEXT:    vins.f16 s10, s6
+; CHECK-NEXT:    vins.f16 s11, s0
+; CHECK-NEXT:    vstrh.16 q2, [r1]
 ; CHECK-NEXT:    bx lr
 entry:
   %l1 = load <4 x half>, ptr %src, align 4
@@ -645,16 +638,16 @@ define void @vst2_v4f64(ptr %src, ptr %dst) {
 ; CHECK-NEXT:    vldrw.u32 q1, [r0]
 ; CHECK-NEXT:    vldrw.u32 q2, [r0, #48]
 ; CHECK-NEXT:    vldrw.u32 q3, [r0, #16]
-; CHECK-NEXT:    vmov.f64 d8, d2
-; CHECK-NEXT:    vmov.f64 d9, d0
-; CHECK-NEXT:    vmov.f64 d0, d3
-; CHECK-NEXT:    vstrw.32 q4, [r1]
-; CHECK-NEXT:    vmov.f64 d3, d4
-; CHECK-NEXT:    vstrw.32 q0, [r1, #16]
-; CHECK-NEXT:    vmov.f64 d2, d6
-; CHECK-NEXT:    vmov.f64 d4, d7
-; CHECK-NEXT:    vstrw.32 q1, [r1, #32]
-; CHECK-NEXT:    vstrw.32 q2, [r1, #48]
+; CHECK-NEXT:    vmov.f64 d8, d3
+; CHECK-NEXT:    vmov.f64 d9, d1
+; CHECK-NEXT:    vmov.f64 d3, d0
+; CHECK-NEXT:    vstrw.32 q4, [r1, #16]
+; CHECK-NEXT:    vmov.f64 d0, d7
+; CHECK-NEXT:    vstrw.32 q1, [r1]
+; CHECK-NEXT:    vmov.f64 d1, d5
+; CHECK-NEXT:    vmov.f64 d7, d4
+; CHECK-NEXT:    vstrw.32 q0, [r1, #48]
+; CHECK-NEXT:    vstrw.32 q3, [r1, #32]
 ; CHECK-NEXT:    vpop {d8, d9}
 ; CHECK-NEXT:    bx lr
 entry:

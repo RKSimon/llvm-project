@@ -57,24 +57,30 @@ define <4 x float> @partial_reduce_fmla_bf16_v4f32(<4 x float> %acc, <8 x bfloat
 ; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
 ;
-; AVX512BF16-NOVLX-LABEL: partial_reduce_fmla_bf16_v4f32:
-; AVX512BF16-NOVLX:       # %bb.0:
-; AVX512BF16-NOVLX-NEXT:    # kill: def $xmm2 killed $xmm2 def $zmm2
-; AVX512BF16-NOVLX-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
-; AVX512BF16-NOVLX-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
-; AVX512BF16-NOVLX-NEXT:    vdpbf16ps %zmm2, %zmm1, %zmm0
-; AVX512BF16-NOVLX-NEXT:    # kill: def $xmm0 killed $xmm0 killed $zmm0
-; AVX512BF16-NOVLX-NEXT:    vzeroupper
-; AVX512BF16-NOVLX-NEXT:    retq
-;
-; AVX512BF16-VLX-LABEL: partial_reduce_fmla_bf16_v4f32:
-; AVX512BF16-VLX:       # %bb.0:
-; AVX512BF16-VLX-NEXT:    vdpbf16ps %xmm2, %xmm1, %xmm0
-; AVX512BF16-VLX-NEXT:    retq
+; AVX512BF16-LABEL: partial_reduce_fmla_bf16_v4f32:
+; AVX512BF16:       # %bb.0:
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero
+; AVX512BF16-NEXT:    vpslld $16, %ymm1, %ymm1
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX512BF16-NEXT:    vpslld $16, %ymm2, %ymm2
+; AVX512BF16-NEXT:    vmulps %ymm2, %ymm1, %ymm1
+; AVX512BF16-NEXT:    vaddps %xmm1, %xmm0, %xmm0
+; AVX512BF16-NEXT:    vextractf128 $1, %ymm1, %xmm1
+; AVX512BF16-NEXT:    vaddps %xmm0, %xmm1, %xmm0
+; AVX512BF16-NEXT:    vzeroupper
+; AVX512BF16-NEXT:    retq
 ;
 ; AVX10-LABEL: partial_reduce_fmla_bf16_v4f32:
 ; AVX10:       # %bb.0:
-; AVX10-NEXT:    vdpbf16ps %xmm2, %xmm1, %xmm0
+; AVX10-NEXT:    vpmovzxwd {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero
+; AVX10-NEXT:    vpslld $16, %ymm1, %ymm1
+; AVX10-NEXT:    vpmovzxwd {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX10-NEXT:    vpslld $16, %ymm2, %ymm2
+; AVX10-NEXT:    vmulps %ymm2, %ymm1, %ymm1
+; AVX10-NEXT:    vaddps %xmm1, %xmm0, %xmm0
+; AVX10-NEXT:    vextractf128 $1, %ymm1, %xmm1
+; AVX10-NEXT:    vaddps %xmm0, %xmm1, %xmm0
+; AVX10-NEXT:    vzeroupper
 ; AVX10-NEXT:    retq
   %a.ext = fpext <8 x bfloat> %a to <8 x float>
   %b.ext = fpext <8 x bfloat> %b to <8 x float>
@@ -148,24 +154,47 @@ define <8 x float> @partial_reduce_fmla_bf16_v8f32(<8 x float> %acc, <16 x bfloa
 ; AVX512-NEXT:    vaddps %ymm1, %ymm0, %ymm0
 ; AVX512-NEXT:    retq
 ;
-; AVX512BF16-NOVLX-LABEL: partial_reduce_fmla_bf16_v8f32:
-; AVX512BF16-NOVLX:       # %bb.0:
-; AVX512BF16-NOVLX-NEXT:    # kill: def $ymm2 killed $ymm2 def $zmm2
-; AVX512BF16-NOVLX-NEXT:    # kill: def $ymm1 killed $ymm1 def $zmm1
-; AVX512BF16-NOVLX-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
-; AVX512BF16-NOVLX-NEXT:    vdpbf16ps %zmm2, %zmm1, %zmm0
-; AVX512BF16-NOVLX-NEXT:    # kill: def $ymm0 killed $ymm0 killed $zmm0
-; AVX512BF16-NOVLX-NEXT:    retq
+; AVX512BF16-LABEL: partial_reduce_fmla_bf16_v8f32:
+; AVX512BF16:       # %bb.0:
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm1 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm1, %zmm1
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm2 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm2, %zmm2
+; AVX512BF16-NEXT:    vmulps %zmm2, %zmm1, %zmm1
+; AVX512BF16-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; AVX512BF16-NEXT:    vextractf64x4 $1, %zmm1, %ymm1
+; AVX512BF16-NEXT:    vaddps %ymm0, %ymm1, %ymm0
+; AVX512BF16-NEXT:    retq
 ;
-; AVX512BF16-VLX-LABEL: partial_reduce_fmla_bf16_v8f32:
-; AVX512BF16-VLX:       # %bb.0:
-; AVX512BF16-VLX-NEXT:    vdpbf16ps %ymm2, %ymm1, %ymm0
-; AVX512BF16-VLX-NEXT:    retq
+; AVX10-512-LABEL: partial_reduce_fmla_bf16_v8f32:
+; AVX10-512:       # %bb.0:
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm1 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm1, %zmm1
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm2 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm2, %zmm2
+; AVX10-512-NEXT:    vmulps %zmm2, %zmm1, %zmm1
+; AVX10-512-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; AVX10-512-NEXT:    vextractf64x4 $1, %zmm1, %ymm1
+; AVX10-512-NEXT:    vaddps %ymm0, %ymm1, %ymm0
+; AVX10-512-NEXT:    retq
 ;
-; AVX10-LABEL: partial_reduce_fmla_bf16_v8f32:
-; AVX10:       # %bb.0:
-; AVX10-NEXT:    vdpbf16ps %ymm2, %ymm1, %ymm0
-; AVX10-NEXT:    retq
+; AVX10-256-LABEL: partial_reduce_fmla_bf16_v8f32:
+; AVX10-256:       # %bb.0:
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm3 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm3, %ymm3
+; AVX10-256-NEXT:    vextracti128 $1, %ymm1, %xmm1
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm1, %ymm1
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm4 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm4, %ymm4
+; AVX10-256-NEXT:    vmulps %ymm4, %ymm3, %ymm3
+; AVX10-256-NEXT:    vextracti128 $1, %ymm2, %xmm2
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm2, %ymm2
+; AVX10-256-NEXT:    vmulps %ymm2, %ymm1, %ymm1
+; AVX10-256-NEXT:    vaddps %ymm3, %ymm0, %ymm0
+; AVX10-256-NEXT:    vaddps %ymm1, %ymm0, %ymm0
+; AVX10-256-NEXT:    retq
   %a.ext = fpext <16 x bfloat> %a to <16 x float>
   %b.ext = fpext <16 x bfloat> %b to <16 x float>
   %mul = fmul <16 x float> %a.ext, %b.ext
@@ -296,18 +325,70 @@ define <16 x float> @partial_reduce_fmla_bf16_v16f32(<16 x float> %acc, <32 x bf
 ;
 ; AVX512BF16-LABEL: partial_reduce_fmla_bf16_v16f32:
 ; AVX512BF16:       # %bb.0:
-; AVX512BF16-NEXT:    vdpbf16ps %zmm2, %zmm1, %zmm0
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm3 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm3, %zmm3
+; AVX512BF16-NEXT:    vextracti64x4 $1, %zmm1, %ymm1
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm1 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm1, %zmm1
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm4 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm4, %zmm4
+; AVX512BF16-NEXT:    vmulps %zmm4, %zmm3, %zmm3
+; AVX512BF16-NEXT:    vextracti64x4 $1, %zmm2, %ymm2
+; AVX512BF16-NEXT:    vpmovzxwd {{.*#+}} zmm2 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX512BF16-NEXT:    vpslld $16, %zmm2, %zmm2
+; AVX512BF16-NEXT:    vmulps %zmm2, %zmm1, %zmm1
+; AVX512BF16-NEXT:    vaddps %zmm3, %zmm0, %zmm0
+; AVX512BF16-NEXT:    vaddps %zmm1, %zmm0, %zmm0
 ; AVX512BF16-NEXT:    retq
 ;
 ; AVX10-512-LABEL: partial_reduce_fmla_bf16_v16f32:
 ; AVX10-512:       # %bb.0:
-; AVX10-512-NEXT:    vdpbf16ps %zmm2, %zmm1, %zmm0
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm3 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm3, %zmm3
+; AVX10-512-NEXT:    vextracti64x4 $1, %zmm1, %ymm1
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm1 = ymm1[0],zero,ymm1[1],zero,ymm1[2],zero,ymm1[3],zero,ymm1[4],zero,ymm1[5],zero,ymm1[6],zero,ymm1[7],zero,ymm1[8],zero,ymm1[9],zero,ymm1[10],zero,ymm1[11],zero,ymm1[12],zero,ymm1[13],zero,ymm1[14],zero,ymm1[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm1, %zmm1
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm4 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm4, %zmm4
+; AVX10-512-NEXT:    vmulps %zmm4, %zmm3, %zmm3
+; AVX10-512-NEXT:    vextracti64x4 $1, %zmm2, %ymm2
+; AVX10-512-NEXT:    vpmovzxwd {{.*#+}} zmm2 = ymm2[0],zero,ymm2[1],zero,ymm2[2],zero,ymm2[3],zero,ymm2[4],zero,ymm2[5],zero,ymm2[6],zero,ymm2[7],zero,ymm2[8],zero,ymm2[9],zero,ymm2[10],zero,ymm2[11],zero,ymm2[12],zero,ymm2[13],zero,ymm2[14],zero,ymm2[15],zero
+; AVX10-512-NEXT:    vpslld $16, %zmm2, %zmm2
+; AVX10-512-NEXT:    vmulps %zmm2, %zmm1, %zmm1
+; AVX10-512-NEXT:    vaddps %zmm3, %zmm0, %zmm0
+; AVX10-512-NEXT:    vaddps %zmm1, %zmm0, %zmm0
 ; AVX10-512-NEXT:    retq
 ;
 ; AVX10-256-LABEL: partial_reduce_fmla_bf16_v16f32:
 ; AVX10-256:       # %bb.0:
-; AVX10-256-NEXT:    vdpbf16ps %ymm4, %ymm2, %ymm0
-; AVX10-256-NEXT:    vdpbf16ps %ymm5, %ymm3, %ymm1
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm6 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm6, %ymm6
+; AVX10-256-NEXT:    vextracti128 $1, %ymm2, %xmm2
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm2, %ymm2
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm7 = xmm3[0],zero,xmm3[1],zero,xmm3[2],zero,xmm3[3],zero,xmm3[4],zero,xmm3[5],zero,xmm3[6],zero,xmm3[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm7, %ymm7
+; AVX10-256-NEXT:    vextracti128 $1, %ymm3, %xmm3
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm3 = xmm3[0],zero,xmm3[1],zero,xmm3[2],zero,xmm3[3],zero,xmm3[4],zero,xmm3[5],zero,xmm3[6],zero,xmm3[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm3, %ymm3
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm8 = xmm4[0],zero,xmm4[1],zero,xmm4[2],zero,xmm4[3],zero,xmm4[4],zero,xmm4[5],zero,xmm4[6],zero,xmm4[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm8, %ymm8
+; AVX10-256-NEXT:    vmulps %ymm6, %ymm8, %ymm6
+; AVX10-256-NEXT:    vextracti128 $1, %ymm4, %xmm4
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm4 = xmm4[0],zero,xmm4[1],zero,xmm4[2],zero,xmm4[3],zero,xmm4[4],zero,xmm4[5],zero,xmm4[6],zero,xmm4[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm4, %ymm4
+; AVX10-256-NEXT:    vmulps %ymm4, %ymm2, %ymm2
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm4 = xmm5[0],zero,xmm5[1],zero,xmm5[2],zero,xmm5[3],zero,xmm5[4],zero,xmm5[5],zero,xmm5[6],zero,xmm5[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm4, %ymm4
+; AVX10-256-NEXT:    vmulps %ymm4, %ymm7, %ymm4
+; AVX10-256-NEXT:    vextracti128 $1, %ymm5, %xmm5
+; AVX10-256-NEXT:    vpmovzxwd {{.*#+}} ymm5 = xmm5[0],zero,xmm5[1],zero,xmm5[2],zero,xmm5[3],zero,xmm5[4],zero,xmm5[5],zero,xmm5[6],zero,xmm5[7],zero
+; AVX10-256-NEXT:    vpslld $16, %ymm5, %ymm5
+; AVX10-256-NEXT:    vmulps %ymm5, %ymm3, %ymm3
+; AVX10-256-NEXT:    vaddps %ymm6, %ymm0, %ymm0
+; AVX10-256-NEXT:    vaddps %ymm2, %ymm0, %ymm0
+; AVX10-256-NEXT:    vaddps %ymm4, %ymm1, %ymm1
+; AVX10-256-NEXT:    vaddps %ymm3, %ymm1, %ymm1
 ; AVX10-256-NEXT:    retq
   %a.ext = fpext <32 x bfloat> %a to <32 x float>
   %b.ext = fpext <32 x bfloat> %b to <32 x float>
@@ -357,8 +438,8 @@ define <2 x float> @partial_reduce_fmla_bf16_v2f32(<2 x float> %acc, <4 x bfloat
 ; AVX512BF16-LABEL: partial_reduce_fmla_bf16_v2f32:
 ; AVX512BF16:       # %bb.0:
 ; AVX512BF16-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX512BF16-NEXT:    vpunpcklwd {{.*#+}} xmm2 = xmm3[0],xmm2[0],xmm3[1],xmm2[1],xmm3[2],xmm2[2],xmm3[3],xmm2[3]
 ; AVX512BF16-NEXT:    vpunpcklwd {{.*#+}} xmm1 = xmm3[0],xmm1[0],xmm3[1],xmm1[1],xmm3[2],xmm1[2],xmm3[3],xmm1[3]
+; AVX512BF16-NEXT:    vpunpcklwd {{.*#+}} xmm2 = xmm3[0],xmm2[0],xmm3[1],xmm2[1],xmm3[2],xmm2[2],xmm3[3],xmm2[3]
 ; AVX512BF16-NEXT:    vmulps %xmm2, %xmm1, %xmm1
 ; AVX512BF16-NEXT:    vaddps %xmm1, %xmm0, %xmm0
 ; AVX512BF16-NEXT:    vshufpd {{.*#+}} xmm1 = xmm1[1,0]
@@ -368,8 +449,8 @@ define <2 x float> @partial_reduce_fmla_bf16_v2f32(<2 x float> %acc, <4 x bfloat
 ; AVX10-LABEL: partial_reduce_fmla_bf16_v2f32:
 ; AVX10:       # %bb.0:
 ; AVX10-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX10-NEXT:    vpunpcklwd {{.*#+}} xmm2 = xmm3[0],xmm2[0],xmm3[1],xmm2[1],xmm3[2],xmm2[2],xmm3[3],xmm2[3]
 ; AVX10-NEXT:    vpunpcklwd {{.*#+}} xmm1 = xmm3[0],xmm1[0],xmm3[1],xmm1[1],xmm3[2],xmm1[2],xmm3[3],xmm1[3]
+; AVX10-NEXT:    vpunpcklwd {{.*#+}} xmm2 = xmm3[0],xmm2[0],xmm3[1],xmm2[1],xmm3[2],xmm2[2],xmm3[3],xmm2[3]
 ; AVX10-NEXT:    vmulps %xmm2, %xmm1, %xmm1
 ; AVX10-NEXT:    vaddps %xmm1, %xmm0, %xmm0
 ; AVX10-NEXT:    vshufpd {{.*#+}} xmm1 = xmm1[1,0]
@@ -383,3 +464,6 @@ define <2 x float> @partial_reduce_fmla_bf16_v2f32(<2 x float> %acc, <4 x bfloat
 }
 
 attributes #0 = { "min-legal-vector-width"="256" }
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; AVX512BF16-NOVLX: {{.*}}
+; AVX512BF16-VLX: {{.*}}

@@ -86,13 +86,18 @@ define i64 @test_or_sub_on_rhs(i64 %a, i64 %b, i64 %c, i64 %d) nounwind {
 define float @test_negative_float(float %unrelated, float %x, float %y) nounwind {
 ; CHECK-LABEL: test_negative_float:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movaps %xmm2, %xmm3
-; CHECK-NEXT:    subss %xmm1, %xmm3
 ; CHECK-NEXT:    cmpltss %xmm2, %xmm0
-; CHECK-NEXT:    andnps %xmm3, %xmm0
-; CHECK-NEXT:    cmpltss %xmm1, %xmm2
-; CHECK-NEXT:    andnps %xmm0, %xmm2
+; CHECK-NEXT:    movaps %xmm2, %xmm3
+; CHECK-NEXT:    cmpltss %xmm1, %xmm3
+; CHECK-NEXT:    orps %xmm0, %xmm3
+; CHECK-NEXT:    movd %xmm3, %eax
+; CHECK-NEXT:    testb $1, %al
+; CHECK-NEXT:    xorps %xmm0, %xmm0
+; CHECK-NEXT:    jne .LBB4_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    subss %xmm1, %xmm2
 ; CHECK-NEXT:    movaps %xmm2, %xmm0
+; CHECK-NEXT:  .LBB4_2:
 ; CHECK-NEXT:    retq
   %cmp.nomatch1 = fcmp olt float %y, %x
   %cmp.nomatch2 = fcmp ogt float %y, %unrelated

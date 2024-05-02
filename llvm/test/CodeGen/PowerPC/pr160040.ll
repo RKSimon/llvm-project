@@ -5,11 +5,9 @@
 define i32 @test(i32 %arg) {
 ; CHECK-LABEL: test:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rlwinm 4, 3, 13, 19, 19
-; CHECK-NEXT:    rlwinm 3, 3, 2, 30, 30
-; CHECK-NEXT:    xori 4, 4, 4096
-; CHECK-NEXT:    xori 3, 3, 2
-; CHECK-NEXT:    rlwimi 3, 4, 0, 31, 29
+; CHECK-NEXT:    not 4, 3
+; CHECK-NEXT:    rlwinm 3, 4, 2, 30, 30
+; CHECK-NEXT:    rlwimi 3, 4, 13, 19, 19
 ; CHECK-NEXT:    blr
   %icmp = icmp sgt i32 %arg, -1
   %select = select i1 %icmp, i16 1, i16 0

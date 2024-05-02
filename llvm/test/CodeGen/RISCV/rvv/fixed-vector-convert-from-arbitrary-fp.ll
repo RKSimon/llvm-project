@@ -166,8 +166,8 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    fsd fs5, 40(sp) # 8-byte Folded Spill
 ; CHECK-NEXT:    mv s0, a0
 ; CHECK-NEXT:    lui a0, 524288
-; CHECK-NEXT:    vsetivli zero, 4, e8, mf2, ta, ma
-; CHECK-NEXT:    vslidedown.vi v9, v8, 4
+; CHECK-NEXT:    vsetivli zero, 1, e8, mf8, ta, ma
+; CHECK-NEXT:    vslidedown.vi v9, v8, 1
 ; CHECK-NEXT:    vmv.x.s a4, v9
 ; CHECK-NEXT:    slli a5, a4, 57
 ; CHECK-NEXT:    andi a3, a4, 3
@@ -217,8 +217,8 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:  # %bb.8:
 ; CHECK-NEXT:    mv t0, a6
 ; CHECK-NEXT:  .LBB1_9:
-; CHECK-NEXT:    vsetivli zero, 1, e8, mf8, ta, ma
-; CHECK-NEXT:    vslidedown.vi v10, v8, 1
+; CHECK-NEXT:    vsetivli zero, 2, e8, mf4, ta, ma
+; CHECK-NEXT:    vslidedown.vi v10, v8, 2
 ; CHECK-NEXT:    vmv.x.s a6, v10
 ; CHECK-NEXT:    slli a4, a6, 57
 ; CHECK-NEXT:    andi a5, a6, 3
@@ -226,7 +226,7 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw t0, 16(sp)
+; CHECK-NEXT:    sw t0, 36(sp)
 ; CHECK-NEXT:    and a6, a6, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_11
 ; CHECK-NEXT:  # %bb.10:
@@ -266,15 +266,18 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:  # %bb.17:
 ; CHECK-NEXT:    mv a6, t0
 ; CHECK-NEXT:  .LBB1_18:
-; CHECK-NEXT:    vslidedown.vi v10, v9, 1
-; CHECK-NEXT:    vmv.x.s t0, v10
+; CHECK-NEXT:    vsetivli zero, 4, e8, mf2, ta, ma
+; CHECK-NEXT:    vslidedown.vi v9, v8, 4
+; CHECK-NEXT:    vsetivli zero, 2, e8, mf4, ta, ma
+; CHECK-NEXT:    vslidedown.vi v11, v9, 2
+; CHECK-NEXT:    vmv.x.s t0, v11
 ; CHECK-NEXT:    slli a4, t0, 57
 ; CHECK-NEXT:    andi a5, t0, 3
 ; CHECK-NEXT:    srli a7, a4, 59
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a6, 36(sp)
+; CHECK-NEXT:    sw a6, 24(sp)
 ; CHECK-NEXT:    and a6, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_20
 ; CHECK-NEXT:  # %bb.19:
@@ -314,16 +317,14 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:  # %bb.26:
 ; CHECK-NEXT:    mv a6, t0
 ; CHECK-NEXT:  .LBB1_27:
-; CHECK-NEXT:    vsetivli zero, 2, e8, mf4, ta, ma
-; CHECK-NEXT:    vslidedown.vi v10, v8, 2
-; CHECK-NEXT:    vmv.x.s t0, v10
+; CHECK-NEXT:    vmv.x.s t0, v9
 ; CHECK-NEXT:    slli a4, t0, 57
 ; CHECK-NEXT:    andi a5, t0, 3
 ; CHECK-NEXT:    srli a7, a4, 59
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a6, 20(sp)
+; CHECK-NEXT:    sw a6, 8(sp)
 ; CHECK-NEXT:    and a6, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_29
 ; CHECK-NEXT:  # %bb.28:
@@ -363,15 +364,16 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:  # %bb.35:
 ; CHECK-NEXT:    mv a6, t0
 ; CHECK-NEXT:  .LBB1_36:
-; CHECK-NEXT:    vslidedown.vi v9, v9, 2
-; CHECK-NEXT:    vmv.x.s t0, v9
+; CHECK-NEXT:    vsetivli zero, 1, e8, mf8, ta, ma
+; CHECK-NEXT:    vslidedown.vi v10, v10, 1
+; CHECK-NEXT:    vmv.x.s t0, v10
 ; CHECK-NEXT:    slli a4, t0, 57
 ; CHECK-NEXT:    andi a5, t0, 3
 ; CHECK-NEXT:    srli a7, a4, 59
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a6, 24(sp)
+; CHECK-NEXT:    sw a6, 16(sp)
 ; CHECK-NEXT:    and a6, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_38
 ; CHECK-NEXT:  # %bb.37:
@@ -411,8 +413,7 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:  # %bb.44:
 ; CHECK-NEXT:    mv a6, t0
 ; CHECK-NEXT:  .LBB1_45:
-; CHECK-NEXT:    vsetivli zero, 1, e8, mf8, ta, ma
-; CHECK-NEXT:    vslidedown.vi v10, v10, 1
+; CHECK-NEXT:    vslidedown.vi v10, v11, 1
 ; CHECK-NEXT:    vmv.x.s t0, v10
 ; CHECK-NEXT:    slli a4, t0, 57
 ; CHECK-NEXT:    andi a5, t0, 3
@@ -420,7 +421,7 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a6, 8(sp)
+; CHECK-NEXT:    sw a6, 28(sp)
 ; CHECK-NEXT:    and a6, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_47
 ; CHECK-NEXT:  # %bb.46:
@@ -468,7 +469,7 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a7
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a6, 28(sp)
+; CHECK-NEXT:    sw a6, 12(sp)
 ; CHECK-NEXT:    and a6, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_56
 ; CHECK-NEXT:  # %bb.55:
@@ -515,7 +516,7 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    snez a4, a5
 ; CHECK-NEXT:    seqz t1, a6
 ; CHECK-NEXT:    and t1, t1, a4
-; CHECK-NEXT:    sw a7, 12(sp)
+; CHECK-NEXT:    sw a7, 20(sp)
 ; CHECK-NEXT:    and a0, t0, a0
 ; CHECK-NEXT:    bnez t1, .LBB1_65
 ; CHECK-NEXT:  # %bb.64:
@@ -556,25 +557,25 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    mv a1, a2
 ; CHECK-NEXT:  .LBB1_72:
 ; CHECK-NEXT:    sw a1, 32(sp)
-; CHECK-NEXT:    flw fa0, 16(sp)
-; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs0, fa0
 ; CHECK-NEXT:    flw fa0, 36(sp)
 ; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs1, fa0
-; CHECK-NEXT:    flw fa0, 20(sp)
-; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs2, fa0
+; CHECK-NEXT:    fmv.s fs0, fa0
 ; CHECK-NEXT:    flw fa0, 24(sp)
 ; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs3, fa0
+; CHECK-NEXT:    fmv.s fs1, fa0
 ; CHECK-NEXT:    flw fa0, 8(sp)
 ; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs4, fa0
+; CHECK-NEXT:    fmv.s fs2, fa0
+; CHECK-NEXT:    flw fa0, 16(sp)
+; CHECK-NEXT:    call __truncsfbf2
+; CHECK-NEXT:    fmv.s fs3, fa0
 ; CHECK-NEXT:    flw fa0, 28(sp)
 ; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    fmv.s fs5, fa0
+; CHECK-NEXT:    fmv.s fs4, fa0
 ; CHECK-NEXT:    flw fa0, 12(sp)
+; CHECK-NEXT:    call __truncsfbf2
+; CHECK-NEXT:    fmv.s fs5, fa0
+; CHECK-NEXT:    flw fa0, 20(sp)
 ; CHECK-NEXT:    call __truncsfbf2
 ; CHECK-NEXT:    fmv.x.w s1, fa0
 ; CHECK-NEXT:    fmv.x.w s2, fs5
@@ -585,15 +586,15 @@ define <8 x bfloat> @v8fp8e5m2_to_v8bf16(<8 x i8> %x) nounwind {
 ; CHECK-NEXT:    fmv.x.w s7, fs0
 ; CHECK-NEXT:    flw fa0, 32(sp)
 ; CHECK-NEXT:    call __truncsfbf2
-; CHECK-NEXT:    sh s6, 2(s0)
+; CHECK-NEXT:    sh s7, 2(s0)
 ; CHECK-NEXT:    fmv.x.w a0, fa0
 ; CHECK-NEXT:    sh a0, 0(s0)
-; CHECK-NEXT:    sh s4, 4(s0)
-; CHECK-NEXT:    sh s2, 6(s0)
-; CHECK-NEXT:    sh s7, 8(s0)
-; CHECK-NEXT:    sh s5, 10(s0)
-; CHECK-NEXT:    sh s3, 12(s0)
-; CHECK-NEXT:    sh s1, 14(s0)
+; CHECK-NEXT:    sh s6, 4(s0)
+; CHECK-NEXT:    sh s3, 6(s0)
+; CHECK-NEXT:    sh s4, 8(s0)
+; CHECK-NEXT:    sh s1, 10(s0)
+; CHECK-NEXT:    sh s5, 12(s0)
+; CHECK-NEXT:    sh s2, 14(s0)
 ; CHECK-NEXT:    ld ra, 152(sp) # 8-byte Folded Reload
 ; CHECK-NEXT:    ld s0, 144(sp) # 8-byte Folded Reload
 ; CHECK-NEXT:    ld s1, 136(sp) # 8-byte Folded Reload

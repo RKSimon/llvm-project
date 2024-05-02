@@ -1581,7 +1581,7 @@ define void @cmp_shifted_unsigned(i32 %in, i32 %lhs, i32 %rhs) #0 {
 ; CHECK-NEXT:    cmp w0, #0
 ; CHECK-NEXT:    mov w9, #128 // =0x80
 ; CHECK-NEXT:    csinc w8, w8, wzr, ne
-; CHECK-NEXT:    cmp wzr, w0, lsr #13
+; CHECK-NEXT:    tst w0, #0xffffe000
 ; CHECK-NEXT:    csel w0, w9, w8, ne
 ; CHECK-NEXT:    bl zoo
 ; CHECK-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload

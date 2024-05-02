@@ -544,16 +544,20 @@ define <4 x i8> @narrow_zero_bits_lshr_trunc(<4 x i16> %x, <4 x i16> %y) {
 define <4 x i16> @narrow_zero_bits_lshr_no_trunc(<4 x i16> %x, <4 x i16> %y) {
 ; RV32-LABEL: narrow_zero_bits_lshr_no_trunc:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    pzext.dh.b a0, a0
-; RV32-NEXT:    pzext.dh.b a2, a2
+; RV32-NEXT:    pli.h a4, 255
+; RV32-NEXT:    and a1, a1, a4
+; RV32-NEXT:    and a3, a3, a4
+; RV32-NEXT:    and a0, a0, a4
+; RV32-NEXT:    and a2, a2, a4
 ; RV32-NEXT:    psub.dh a0, a0, a2
 ; RV32-NEXT:    psrli.dh a0, a0, 1
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: narrow_zero_bits_lshr_no_trunc:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    pzext.h.b a0, a0
-; RV64-NEXT:    pzext.h.b a1, a1
+; RV64-NEXT:    pli.h a2, 255
+; RV64-NEXT:    and a0, a0, a2
+; RV64-NEXT:    and a1, a1, a2
 ; RV64-NEXT:    psub.h a0, a0, a1
 ; RV64-NEXT:    psrli.h a0, a0, 1
 ; RV64-NEXT:    ret

@@ -55,33 +55,29 @@ define <4 x x86_fp80> @fpext_v4bf16_v4f80(<4 x bfloat> %v) nounwind {
 ;
 ; X86-X87-LABEL: fpext_v4bf16_v4f80:
 ; X86-X87:       # %bb.0:
-; X86-X87-NEXT:    pushl %edi
-; X86-X87-NEXT:    pushl %esi
 ; X86-X87-NEXT:    subl $16, %esp
+; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-X87-NEXT:    shll $16, %ecx
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
-; X86-X87-NEXT:    shll $16, %edx
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %esi
-; X86-X87-NEXT:    shll $16, %esi
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
-; X86-X87-NEXT:    shll $16, %edi
-; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    movl %edi, (%esp)
-; X86-X87-NEXT:    movl %esi, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, (%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds (%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    fstpt 30(%eax)
 ; X86-X87-NEXT:    fstpt 20(%eax)
 ; X86-X87-NEXT:    fstpt 10(%eax)
 ; X86-X87-NEXT:    fstpt (%eax)
 ; X86-X87-NEXT:    addl $16, %esp
-; X86-X87-NEXT:    popl %esi
-; X86-X87-NEXT:    popl %edi
 ; X86-X87-NEXT:    retl $4
 ;
 ; X86-SSE2-LABEL: fpext_v4bf16_v4f80:
@@ -93,14 +89,14 @@ define <4 x x86_fp80> @fpext_v4bf16_v4f80(<4 x bfloat> %v) nounwind {
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
 ; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    movd %xmm0, (%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[3,3,3,3]
 ; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    movd %xmm1, (%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    movd %xmm1, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds (%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    fstpt (%eax)
 ; X86-SSE2-NEXT:    fstpt 30(%eax)
 ; X86-SSE2-NEXT:    fstpt 20(%eax)
@@ -141,12 +137,12 @@ define <2 x x86_fp80> @fpext_v2bf16_v2f80(<2 x bfloat> %v) nounwind {
 ; X86-X87-NEXT:    subl $8, %esp
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
-; X86-X87-NEXT:    shll $16, %ecx
-; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    movl %eax, (%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-X87-NEXT:    shll $16, %eax
+; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds (%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    addl $8, %esp
 ; X86-X87-NEXT:    retl
 ;
@@ -155,11 +151,11 @@ define <2 x x86_fp80> @fpext_v2bf16_v2f80(<2 x bfloat> %v) nounwind {
 ; X86-SSE2-NEXT:    subl $8, %esp
 ; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
 ; X86-SSE2-NEXT:    punpcklwd {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
-; X86-SSE2-NEXT:    movd %xmm1, (%esp)
+; X86-SSE2-NEXT:    movd %xmm1, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
-; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds (%esp)
+; X86-SSE2-NEXT:    movd %xmm0, (%esp)
 ; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds (%esp)
 ; X86-SSE2-NEXT:    fxch %st(1)
 ; X86-SSE2-NEXT:    addl $8, %esp
 ; X86-SSE2-NEXT:    retl
@@ -293,32 +289,32 @@ define <8 x x86_fp80> @fpext_v8bf16_v8f80(<8 x bfloat> %v) nounwind {
 ; X86-X87-LABEL: fpext_v8bf16_v8f80:
 ; X86-X87:       # %bb.0:
 ; X86-X87-NEXT:    subl $44, %esp
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, (%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    flds (%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, (%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    fstpt {{[-0-9]+}}(%e{{[sb]}}p) # 10-byte Folded Spill
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
@@ -326,7 +322,7 @@ define <8 x x86_fp80> @fpext_v8bf16_v8f80(<8 x bfloat> %v) nounwind {
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds (%esp)
 ; X86-X87-NEXT:    fstpt 70(%eax)
 ; X86-X87-NEXT:    fstpt 60(%eax)
 ; X86-X87-NEXT:    fstpt 50(%eax)
@@ -349,7 +345,7 @@ define <8 x x86_fp80> @fpext_v8bf16_v8f80(<8 x bfloat> %v) nounwind {
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm2[1,1,1,1]
 ; X86-SSE2-NEXT:    movd %xmm3, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm2[2,3,2,3]
-; X86-SSE2-NEXT:    movd %xmm3, {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    movd %xmm3, (%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm2[3,3,3,3]
 ; X86-SSE2-NEXT:    movd %xmm3, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    punpckhwd {{.*#+}} xmm1 = xmm1[4],xmm0[4],xmm1[5],xmm0[5],xmm1[6],xmm0[6],xmm1[7],xmm0[7]
@@ -360,16 +356,16 @@ define <8 x x86_fp80> @fpext_v8bf16_v8f80(<8 x bfloat> %v) nounwind {
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[3,3,3,3]
 ; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    movd %xmm2, {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    movd %xmm1, (%esp)
+; X86-SSE2-NEXT:    movd %xmm1, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    fstpt {{[-0-9]+}}(%e{{[sb]}}p) # 10-byte Folded Spill
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds (%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    fstpt 40(%eax)
 ; X86-SSE2-NEXT:    fstpt (%eax)
 ; X86-SSE2-NEXT:    fstpt 70(%eax)
@@ -653,34 +649,30 @@ define <4 x x86_fp80> @strict_fpext_v4bf16_v4f80(<4 x bfloat> %v) nounwind stric
 ;
 ; X86-X87-LABEL: strict_fpext_v4bf16_v4f80:
 ; X86-X87:       # %bb.0:
-; X86-X87-NEXT:    pushl %edi
-; X86-X87-NEXT:    pushl %esi
 ; X86-X87-NEXT:    subl $16, %esp
+; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-X87-NEXT:    shll $16, %ecx
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
-; X86-X87-NEXT:    shll $16, %edx
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %esi
-; X86-X87-NEXT:    shll $16, %esi
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
-; X86-X87-NEXT:    shll $16, %edi
-; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    movl %edi, (%esp)
-; X86-X87-NEXT:    movl %esi, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movl %edx, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, (%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds (%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    fstpt 30(%eax)
 ; X86-X87-NEXT:    fstpt 20(%eax)
 ; X86-X87-NEXT:    fstpt 10(%eax)
 ; X86-X87-NEXT:    fstpt (%eax)
 ; X86-X87-NEXT:    wait
 ; X86-X87-NEXT:    addl $16, %esp
-; X86-X87-NEXT:    popl %esi
-; X86-X87-NEXT:    popl %edi
 ; X86-X87-NEXT:    retl $4
 ;
 ; X86-SSE2-LABEL: strict_fpext_v4bf16_v4f80:
@@ -689,16 +681,16 @@ define <4 x x86_fp80> @strict_fpext_v4bf16_v4f80(<4 x bfloat> %v) nounwind stric
 ; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-SSE2-NEXT:    pxor %xmm1, %xmm1
 ; X86-SSE2-NEXT:    punpcklwd {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
-; X86-SSE2-NEXT:    movd %xmm1, (%esp)
+; X86-SSE2-NEXT:    movd %xmm1, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
 ; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    movd %xmm0, (%esp)
 ; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[3,3,3,3]
 ; X86-SSE2-NEXT:    movd %xmm0, {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds (%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    fstpt 30(%eax)
 ; X86-SSE2-NEXT:    fstpt 20(%eax)
@@ -729,6 +721,7 @@ define <4 x float> @strict_fpext_v4bf16_v4f32(<4 x bfloat> %v) nounwind strictfp
 ; X86-X87:       # %bb.0:
 ; X86-X87-NEXT:    pushl %edi
 ; X86-X87-NEXT:    pushl %esi
+; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-X87-NEXT:    shll $16, %ecx
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
@@ -737,7 +730,6 @@ define <4 x float> @strict_fpext_v4bf16_v4f32(<4 x bfloat> %v) nounwind strictfp
 ; X86-X87-NEXT:    shll $16, %esi
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
 ; X86-X87-NEXT:    shll $16, %edi
-; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movl %edi, 12(%eax)
 ; X86-X87-NEXT:    movl %esi, 8(%eax)
 ; X86-X87-NEXT:    movl %edx, 4(%eax)
@@ -774,6 +766,7 @@ define <4 x float> @fpext_v4bf16_v4f32(<4 x bfloat> %v) nounwind {
 ; X86-X87:       # %bb.0:
 ; X86-X87-NEXT:    pushl %edi
 ; X86-X87-NEXT:    pushl %esi
+; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-X87-NEXT:    shll $16, %ecx
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
@@ -782,7 +775,6 @@ define <4 x float> @fpext_v4bf16_v4f32(<4 x bfloat> %v) nounwind {
 ; X86-X87-NEXT:    shll $16, %esi
 ; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
 ; X86-X87-NEXT:    shll $16, %edi
-; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-X87-NEXT:    movl %edi, 12(%eax)
 ; X86-X87-NEXT:    movl %esi, 8(%eax)
 ; X86-X87-NEXT:    movl %edx, 4(%eax)
@@ -837,32 +829,32 @@ define <8 x double> @fpext_v8bf16_v8f64(<8 x bfloat> %v) nounwind {
 ; X86-X87-LABEL: fpext_v8bf16_v8f64:
 ; X86-X87:       # %bb.0:
 ; X86-X87-NEXT:    subl $40, %esp
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, (%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    shll $16, %eax
-; X86-X87-NEXT:    movl %eax, {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-X87-NEXT:    flds (%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-X87-NEXT:    shll $16, %ecx
+; X86-X87-NEXT:    movl %ecx, (%esp)
+; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    fstpl {{[-0-9]+}}(%e{{[sb]}}p) # 8-byte Folded Spill
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
@@ -870,7 +862,7 @@ define <8 x double> @fpext_v8bf16_v8f64(<8 x bfloat> %v) nounwind {
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
 ; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
-; X86-X87-NEXT:    flds {{[0-9]+}}(%esp)
+; X86-X87-NEXT:    flds (%esp)
 ; X86-X87-NEXT:    fstpl 56(%eax)
 ; X86-X87-NEXT:    fstpl 48(%eax)
 ; X86-X87-NEXT:    fstpl 40(%eax)

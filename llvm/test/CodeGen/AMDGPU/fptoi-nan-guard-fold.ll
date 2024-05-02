@@ -12,7 +12,9 @@ define i32 @nan_guard_fptosi_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_f32:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f32_e32 v0, v0
+; CHECK-NEXT:    v_cvt_i32_f32_e32 v1, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -24,7 +26,9 @@ define i32 @nan_guard_fptosi_ord_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_ord_f32:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f32_e32 v0, v0
+; CHECK-NEXT:    v_cvt_i32_f32_e32 v1, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp ord float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -36,7 +40,9 @@ define i32 @nan_guard_fptoui_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptoui_f32:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_u32_f32_e32 v0, v0
+; CHECK-NEXT:    v_cvt_u32_f32_e32 v1, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptoui float %x to i32
@@ -48,7 +54,9 @@ define i32 @nan_guard_fptoui_ord_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptoui_ord_f32:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_u32_f32_e32 v0, v0
+; CHECK-NEXT:    v_cvt_u32_f32_e32 v1, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp ord float %x, 0.000000e+00
   %conv = fptoui float %x to i32
@@ -60,8 +68,10 @@ define i32 @nan_guard_fptosi_and_mask(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f32_e32 v0, v0
-; CHECK-NEXT:    v_and_b32_e32 v0, 3, v0
+; CHECK-NEXT:    v_cvt_i32_f32_e32 v1, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_and_b32_e32 v1, 3, v1
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -75,8 +85,10 @@ define i32 @nan_guard_fptosi_and_mask_var(float %x, i32 %m) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask_var:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f32_e32 v0, v0
-; CHECK-NEXT:    v_and_b32_e32 v0, v0, v1
+; CHECK-NEXT:    v_cvt_i32_f32_e32 v2, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_and_b32_e32 v1, v2, v1
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -90,8 +102,10 @@ define i32 @nan_guard_fptosi_and_mask_commuted(float %x, i32 %m) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask_commuted:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f32_e32 v0, v0
-; CHECK-NEXT:    v_and_b32_e32 v0, v0, v1
+; CHECK-NEXT:    v_cvt_i32_f32_e32 v2, v0
+; CHECK-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
+; CHECK-NEXT:    v_and_b32_e32 v1, v1, v2
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -104,7 +118,9 @@ define i32 @nan_guard_fptosi_f64(double %x) {
 ; CHECK-LABEL: nan_guard_fptosi_f64:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_cvt_i32_f64_e32 v0, v[0:1]
+; CHECK-NEXT:    v_cvt_i32_f64_e32 v2, v[0:1]
+; CHECK-NEXT:    v_cmp_o_f64_e32 vcc, v[0:1], v[0:1]
+; CHECK-NEXT:    v_cndmask_b32_e32 v0, 0, v2, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %cmp = fcmp uno double %x, 0.000000e+00
   %conv = fptosi double %x to i32

@@ -60,48 +60,20 @@ define i4 @inserted_poison_first_mask_element(<4 x i128> %0) {
 ; MSA:       # %bb.0: # %start
 ; MSA-NEXT:    daddiu $sp, $sp, -16
 ; MSA-NEXT:    .cfi_def_cfa_offset 16
-; MSA-NEXT:    or $1, $10, $11
-; MSA-NEXT:    or $2, $8, $9
-; MSA-NEXT:    or $3, $4, $5
-; MSA-NEXT:    or $4, $6, $7
-; MSA-NEXT:    sltu $1, $zero, $1
+; MSA-NEXT:    or $2, $6, $7
+; MSA-NEXT:    or $1, $4, $5
 ; MSA-NEXT:    sltu $2, $zero, $2
-; MSA-NEXT:    sltu $3, $zero, $3
-; MSA-NEXT:    sltu $4, $zero, $4
-; MSA-NEXT:    dext $1, $1, 0, 32
-; MSA-NEXT:    dext $2, $2, 0, 32
-; MSA-NEXT:    dext $3, $3, 0, 32
-; MSA-NEXT:    dext $4, $4, 0, 32
-; MSA-NEXT:    dnegu $1, $1
-; MSA-NEXT:    dnegu $2, $2
-; MSA-NEXT:    dnegu $3, $3
-; MSA-NEXT:    dnegu $4, $4
-; MSA-NEXT:    fill.d $w1, $1
-; MSA-NEXT:    lui $1, %highest(.LCPI1_0)
-; MSA-NEXT:    fill.d $w0, $2
-; MSA-NEXT:    daddiu $1, $1, %higher(.LCPI1_0)
-; MSA-NEXT:    dsll $1, $1, 16
-; MSA-NEXT:    daddiu $1, $1, %hi(.LCPI1_0)
-; MSA-NEXT:    dsll $1, $1, 16
-; MSA-NEXT:    daddiu $1, $1, %lo(.LCPI1_0)
-; MSA-NEXT:    ld.w $w2, 0($1)
-; MSA-NEXT:    vshf.w $w2, $w1, $w0
-; MSA-NEXT:    fill.d $w0, $3
-; MSA-NEXT:    copy_s.w $3, $w0[0]
-; MSA-NEXT:    fill.d $w0, $4
-; MSA-NEXT:    copy_s.w $2, $w2[2]
-; MSA-NEXT:    copy_s.w $1, $w2[3]
-; MSA-NEXT:    splati.w $w0, $w0[0]
-; MSA-NEXT:    andi $2, $2, 1
-; MSA-NEXT:    sll $1, $1, 3
+; MSA-NEXT:    sltu $1, $zero, $1
+; MSA-NEXT:    sll $2, $2, 1
+; MSA-NEXT:    or $1, $1, $2
+; MSA-NEXT:    or $2, $8, $9
+; MSA-NEXT:    sltu $2, $zero, $2
 ; MSA-NEXT:    sll $2, $2, 2
-; MSA-NEXT:    copy_s.w $4, $w0[1]
-; MSA-NEXT:    andi $4, $4, 1
-; MSA-NEXT:    sll $4, $4, 1
-; MSA-NEXT:    subu $3, $4, $3
-; MSA-NEXT:    or $2, $3, $2
-; MSA-NEXT:    or $1, $2, $1
-; MSA-NEXT:    andi $2, $1, 15
+; MSA-NEXT:    or $1, $1, $2
+; MSA-NEXT:    or $2, $10, $11
+; MSA-NEXT:    sltu $2, $zero, $2
+; MSA-NEXT:    sll $2, $2, 3
+; MSA-NEXT:    or $2, $1, $2
 ; MSA-NEXT:    jr $ra
 ; MSA-NEXT:    daddiu $sp, $sp, 16
 start:
@@ -134,10 +106,10 @@ define void @splati_with_poison(ptr %res, ptr %a) {
 define void @shuffle_poison_middle(ptr %res, ptr %a, ptr %b) {
 ; NOMSA-LABEL: shuffle_poison_middle:
 ; NOMSA:       # %bb.0:
-; NOMSA-NEXT:    lw $1, 0($6)
-; NOMSA-NEXT:    sw $1, 12($4)
 ; NOMSA-NEXT:    ld $1, 4($5)
 ; NOMSA-NEXT:    sd $1, 4($4)
+; NOMSA-NEXT:    lw $1, 0($6)
+; NOMSA-NEXT:    sw $1, 12($4)
 ; NOMSA-NEXT:    lw $1, 0($5)
 ; NOMSA-NEXT:    jr $ra
 ; NOMSA-NEXT:    sw $1, 0($4)

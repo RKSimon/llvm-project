@@ -216,9 +216,10 @@ define void @memset_4(ptr %a, i128 %value) nounwind {
 ; RV32-BOTH-NEXT:    addi a2, a2, 1
 ; RV32-BOTH-NEXT:    seqz t0, a2
 ; RV32-BOTH-NEXT:    add a6, a6, t0
-; RV32-BOTH-NEXT:    sltiu t0, a2, 4
-; RV32-BOTH-NEXT:    seqz t1, a6
-; RV32-BOTH-NEXT:    and t0, t1, t0
+; RV32-BOTH-NEXT:    snez t0, a6
+; RV32-BOTH-NEXT:    sltiu t1, a2, 4
+; RV32-BOTH-NEXT:    addi t0, t0, -1
+; RV32-BOTH-NEXT:    and t0, t0, t1
 ; RV32-BOTH-NEXT:    add a7, a0, a7
 ; RV32-BOTH-NEXT:    sw a3, 0(a7)
 ; RV32-BOTH-NEXT:    sw a4, 4(a7)

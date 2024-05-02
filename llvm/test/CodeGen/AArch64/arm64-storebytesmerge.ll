@@ -17,10 +17,9 @@ define void @test(i1 %arg) local_unnamed_addr #0 {
 ; CHECK-NEXT:    tbnz w0, #0, .LBB0_1
 ; CHECK-NEXT:  // %bb.2: // %for.end705.i
 ; CHECK-NEXT:    str x30, [sp, #-16]! // 8-byte Folded Spill
-; CHECK-NEXT:    dup v0.4s, wzr
 ; CHECK-NEXT:    adrp x8, q
 ; CHECK-NEXT:    ldr x8, [x8, :lo12:q]
-; CHECK-NEXT:    str q0, [x8]
+; CHECK-NEXT:    stp xzr, xzr, [x8]
 ; CHECK-NEXT:    bl f
 entry:
   br label %for.body453.i

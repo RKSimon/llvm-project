@@ -33,10 +33,12 @@ define <2 x i16> @test_ret_const() #0 {
 define i16 @test_extract_0(<2 x i16> %a) #0 {
 ; COMMON-LABEL: test_extract_0(
 ; COMMON:       {
+; COMMON-NEXT:    .reg .b16 %rs<3>;
 ; COMMON-NEXT:    .reg .b32 %r<2>;
 ; COMMON-EMPTY:
 ; COMMON-NEXT:  // %bb.0:
-; COMMON-NEXT:    ld.param.b16 %r1, [test_extract_0_param_0];
+; COMMON-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_0_param_0];
+; COMMON-NEXT:    cvt.u32.u16 %r1, %rs1;
 ; COMMON-NEXT:    st.param.b32 [func_retval0], %r1;
 ; COMMON-NEXT:    ret;
   %e = extractelement <2 x i16> %a, i32 0
@@ -46,10 +48,12 @@ define i16 @test_extract_0(<2 x i16> %a) #0 {
 define i16 @test_extract_1(<2 x i16> %a) #0 {
 ; COMMON-LABEL: test_extract_1(
 ; COMMON:       {
+; COMMON-NEXT:    .reg .b16 %rs<3>;
 ; COMMON-NEXT:    .reg .b32 %r<2>;
 ; COMMON-EMPTY:
 ; COMMON-NEXT:  // %bb.0:
-; COMMON-NEXT:    ld.param.b16 %r1, [test_extract_1_param_0+2];
+; COMMON-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_1_param_0];
+; COMMON-NEXT:    cvt.u32.u16 %r1, %rs2;
 ; COMMON-NEXT:    st.param.b32 [func_retval0], %r1;
 ; COMMON-NEXT:    ret;
   %e = extractelement <2 x i16> %a, i32 1
@@ -940,12 +944,12 @@ define <2 x i16> @test_shufflevector(<2 x i16> %a) #0 {
 define <2 x i16> @test_insertelement(<2 x i16> %a, i16 %x) #0 {
 ; COMMON-LABEL: test_insertelement(
 ; COMMON:       {
-; COMMON-NEXT:    .reg .b16 %rs<3>;
+; COMMON-NEXT:    .reg .b16 %rs<4>;
 ; COMMON-EMPTY:
 ; COMMON-NEXT:  // %bb.0:
-; COMMON-NEXT:    ld.param.b16 %rs1, [test_insertelement_param_1];
-; COMMON-NEXT:    ld.param.b16 %rs2, [test_insertelement_param_0];
-; COMMON-NEXT:    st.param.v2.b16 [func_retval0], {%rs2, %rs1};
+; COMMON-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_insertelement_param_0];
+; COMMON-NEXT:    ld.param.b16 %rs3, [test_insertelement_param_1];
+; COMMON-NEXT:    st.param.v2.b16 [func_retval0], {%rs1, %rs3};
 ; COMMON-NEXT:    ret;
   %i = insertelement <2 x i16> %a, i16 %x, i64 1
   ret <2 x i16> %i

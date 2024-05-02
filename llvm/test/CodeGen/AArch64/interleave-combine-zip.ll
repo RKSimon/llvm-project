@@ -231,8 +231,8 @@ define void @interleave2_hi_halves_v16f32_256(<16 x float> %a, <16 x float> %b) 
 ; CHECK-NEXT:    // kill: def $q2 killed $q2 def $z2
 ; CHECK-NEXT:    // kill: def $q7 killed $q7 def $z7
 ; CHECK-NEXT:    // kill: def $q3 killed $q3 def $z3
-; CHECK-NEXT:    splice z6.d, p0, z6.d, z7.d
 ; CHECK-NEXT:    splice z2.d, p0, z2.d, z3.d
+; CHECK-NEXT:    splice z6.d, p0, z6.d, z7.d
 ; CHECK-NEXT:    zip1 z0.s, z2.s, z6.s
 ; CHECK-NEXT:    zip2 z1.s, z2.s, z6.s
 ; CHECK-NEXT:    // fake_use: $z0
@@ -248,18 +248,37 @@ define void @interleave2_hi_halves_v16f32_256(<16 x float> %a, <16 x float> %b) 
 define void @interleave2_hi_halves_v16f32_512(<16 x float> %a, <16 x float> %b) vscale_range(4, 4) nounwind {
 ; CHECK-LABEL: interleave2_hi_halves_v16f32_512:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s, vl4
+; CHECK-NEXT:    stp x29, x30, [sp, #-16]! // 16-byte Folded Spill
+; CHECK-NEXT:    sub x9, sp, #48
+; CHECK-NEXT:    mov x29, sp
+; CHECK-NEXT:    and sp, x9, #0xffffffffffffffe0
+; CHECK-NEXT:    ptrue p0.d, vl2
 ; CHECK-NEXT:    // kill: def $q6 killed $q6 def $z6
 ; CHECK-NEXT:    // kill: def $q2 killed $q2 def $z2
 ; CHECK-NEXT:    // kill: def $q7 killed $q7 def $z7
 ; CHECK-NEXT:    // kill: def $q3 killed $q3 def $z3
-; CHECK-NEXT:    splice z6.s, p0, z6.s, z7.s
-; CHECK-NEXT:    splice z2.s, p0, z2.s, z3.s
+; CHECK-NEXT:    mov x8, sp
+; CHECK-NEXT:    splice z6.d, p0, z6.d, z7.d
+; CHECK-NEXT:    splice z2.d, p0, z2.d, z3.d
 ; CHECK-NEXT:    ptrue p0.s, vl8
-; CHECK-NEXT:    splice z0.s, p0, z0.s, z6.s
-; CHECK-NEXT:    splice z1.s, p0, z1.s, z2.s
-; CHECK-NEXT:    zip2 z0.s, z1.s, z0.s
+; CHECK-NEXT:    mov z0.s, z6.s[7]
+; CHECK-NEXT:    mov z1.s, z2.s[7]
+; CHECK-NEXT:    mov z3.s, z6.s[6]
+; CHECK-NEXT:    mov z4.s, z2.s[6]
+; CHECK-NEXT:    stp s1, s0, [sp, #24]
+; CHECK-NEXT:    mov z0.s, z6.s[5]
+; CHECK-NEXT:    mov z1.s, z2.s[5]
+; CHECK-NEXT:    stp s4, s3, [sp, #16]
+; CHECK-NEXT:    mov z3.s, z6.s[4]
+; CHECK-NEXT:    mov z4.s, z2.s[4]
+; CHECK-NEXT:    stp s1, s0, [sp, #8]
+; CHECK-NEXT:    zip1 z0.s, z2.s, z6.s
+; CHECK-NEXT:    stp s4, s3, [sp]
+; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x8]
+; CHECK-NEXT:    splice z0.s, p0, z0.s, z1.s
 ; CHECK-NEXT:    // fake_use: $z0
+; CHECK-NEXT:    mov sp, x29
+; CHECK-NEXT:    ldp x29, x30, [sp], #16 // 16-byte Folded Reload
 ; CHECK-NEXT:    ret
   %al = call <8 x float> @llvm.vector.extract(<16 x float> %a, i64 8)
   %bl = call <8 x float> @llvm.vector.extract(<16 x float> %b, i64 8)

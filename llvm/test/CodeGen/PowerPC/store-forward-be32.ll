@@ -101,8 +101,8 @@ entry:
 define i32 @tc44(ptr noundef byval(%struct.ST) align 4 %s) {
 ; CHECK-LABEL: tc44:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 3, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -113,9 +113,10 @@ entry:
 define i32 @tc41(ptr noundef byval(%struct.ST) align 4 %s) {
 ; CHECK-LABEL: tc41:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srawi 3, 3, 24
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -127,9 +128,10 @@ entry:
 define i32 @tc42(ptr noundef byval(%struct.ST) align 4 %s) {
 ; CHECK-LABEL: tc42:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srawi 3, 3, 16
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -141,9 +143,10 @@ entry:
 define i32 @tc43(ptr noundef byval(%struct.ST) align 4 %s) {
 ; CHECK-LABEL: tc43:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srawi 3, 3, 8
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -155,8 +158,8 @@ entry:
 define i32 @utc44(ptr noundef byval(%struct.UST) align 4 %s) {
 ; CHECK-LABEL: utc44:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 3, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -167,9 +170,10 @@ entry:
 define i32 @utc41(ptr noundef byval(%struct.UST) align 4 %s) {
 ; CHECK-LABEL: utc41:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srwi 3, 3, 24
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -181,9 +185,10 @@ entry:
 define i32 @utc42(ptr noundef byval(%struct.UST) align 4 %s) {
 ; CHECK-LABEL: utc42:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srwi 3, 3, 16
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4
@@ -195,9 +200,10 @@ entry:
 define i32 @utc43(ptr noundef byval(%struct.UST) align 4 %s) {
 ; CHECK-LABEL: utc43:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 3, 24(1)
+; CHECK-NEXT:    mr 5, 3
 ; CHECK-NEXT:    srwi 3, 3, 8
 ; CHECK-NEXT:    stw 4, 28(1)
+; CHECK-NEXT:    stw 5, 24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s, align 4

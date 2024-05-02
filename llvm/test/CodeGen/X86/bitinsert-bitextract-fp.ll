@@ -111,10 +111,11 @@ define double @test_bitextract_double_b231_var(b231 %src, i32 %off) {
 ; CHECK-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %r8d, %eax
-; CHECK-NEXT:    shrb $6, %al
+; CHECK-NEXT:    andb $-64, %al
+; CHECK-NEXT:    shrb $3, %al
 ; CHECK-NEXT:    movzbl %al, %eax
-; CHECK-NEXT:    movq -72(%rsp,%rax,8), %rdx
-; CHECK-NEXT:    movq -64(%rsp,%rax,8), %rax
+; CHECK-NEXT:    movq -72(%rsp,%rax), %rdx
+; CHECK-NEXT:    movq -64(%rsp,%rax), %rax
 ; CHECK-NEXT:    movl %r8d, %ecx
 ; CHECK-NEXT:    shrdq %cl, %rax, %rdx
 ; CHECK-NEXT:    movq %rdx, %xmm0
@@ -287,18 +288,18 @@ define b231 @test_bitinsert_double_b231_var(b231 %base, double %val, i32 %off) {
 ; CHECK-NEXT:    .cfi_offset %r15, -16
 ; CHECK-NEXT:    movq %rcx, %r10
 ; CHECK-NEXT:    movq %rdi, %rax
-; CHECK-NEXT:    xorps %xmm1, %xmm1
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movsd %xmm0, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm1, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    xorps %xmm0, %xmm0
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %r9d, %ecx
+; CHECK-NEXT:    andb $-64, %cl
 ; CHECK-NEXT:    shrb $3, %cl
-; CHECK-NEXT:    andb $24, %cl
 ; CHECK-NEXT:    negb %cl
 ; CHECK-NEXT:    movsbq %cl, %rbx
 ; CHECK-NEXT:    movq -80(%rsp,%rbx), %r14

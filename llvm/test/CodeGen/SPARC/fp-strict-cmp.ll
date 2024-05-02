@@ -541,12 +541,12 @@ define void @fcmp_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V8-NEXT:    save %sp, -128, %sp
 ; V8-NEXT:    ldd [%i0+8], %f0
 ; V8-NEXT:    ldd [%i0], %f2
-; V8-NEXT:    ldd [%i1], %f4
-; V8-NEXT:    ldd [%i1+8], %f6
+; V8-NEXT:    ldd [%i1+8], %f4
+; V8-NEXT:    ldd [%i1], %f6
 ; V8-NEXT:    std %f0, [%fp+-8]
 ; V8-NEXT:    std %f2, [%fp+-16]
-; V8-NEXT:    std %f4, [%fp+-32]
-; V8-NEXT:    std %f6, [%fp+-24]
+; V8-NEXT:    std %f4, [%fp+-24]
+; V8-NEXT:    std %f6, [%fp+-32]
 ; V8-NEXT:    add %fp, -16, %o0
 ; V8-NEXT:    call _Q_cmp
 ; V8-NEXT:    add %fp, -32, %o1
@@ -577,12 +577,12 @@ define void @fcmp_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V8PLUS-NEXT:    save %sp, -128, %sp
 ; V8PLUS-NEXT:    ldd [%i0+8], %f0
 ; V8PLUS-NEXT:    ldd [%i0], %f2
-; V8PLUS-NEXT:    ldd [%i1], %f4
-; V8PLUS-NEXT:    ldd [%i1+8], %f6
+; V8PLUS-NEXT:    ldd [%i1+8], %f4
+; V8PLUS-NEXT:    ldd [%i1], %f6
 ; V8PLUS-NEXT:    std %f0, [%fp+-8]
 ; V8PLUS-NEXT:    std %f2, [%fp+-16]
-; V8PLUS-NEXT:    std %f4, [%fp+-32]
-; V8PLUS-NEXT:    std %f6, [%fp+-24]
+; V8PLUS-NEXT:    std %f4, [%fp+-24]
+; V8PLUS-NEXT:    std %f6, [%fp+-32]
 ; V8PLUS-NEXT:    add %fp, -16, %o0
 ; V8PLUS-NEXT:    call _Q_cmp
 ; V8PLUS-NEXT:    add %fp, -32, %o1
@@ -604,8 +604,8 @@ define void @fcmp_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V9-NEXT:    save %sp, -208, %sp
 ; V9-NEXT:    std %f2, [%fp+2039]
 ; V9-NEXT:    std %f0, [%fp+2031]
-; V9-NEXT:    std %f4, [%fp+2015]
 ; V9-NEXT:    std %f6, [%fp+2023]
+; V9-NEXT:    std %f4, [%fp+2015]
 ; V9-NEXT:    add %fp, 2031, %o0
 ; V9-NEXT:    call _Qp_cmp
 ; V9-NEXT:    add %fp, 2015, %o1
@@ -685,12 +685,12 @@ define void @fcmps_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V8-NEXT:    save %sp, -128, %sp
 ; V8-NEXT:    ldd [%i0+8], %f0
 ; V8-NEXT:    ldd [%i0], %f2
-; V8-NEXT:    ldd [%i1], %f4
-; V8-NEXT:    ldd [%i1+8], %f6
+; V8-NEXT:    ldd [%i1+8], %f4
+; V8-NEXT:    ldd [%i1], %f6
 ; V8-NEXT:    std %f0, [%fp+-8]
 ; V8-NEXT:    std %f2, [%fp+-16]
-; V8-NEXT:    std %f4, [%fp+-32]
-; V8-NEXT:    std %f6, [%fp+-24]
+; V8-NEXT:    std %f4, [%fp+-24]
+; V8-NEXT:    std %f6, [%fp+-32]
 ; V8-NEXT:    add %fp, -16, %o0
 ; V8-NEXT:    call _Q_cmpe
 ; V8-NEXT:    add %fp, -32, %o1
@@ -721,12 +721,12 @@ define void @fcmps_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V8PLUS-NEXT:    save %sp, -128, %sp
 ; V8PLUS-NEXT:    ldd [%i0+8], %f0
 ; V8PLUS-NEXT:    ldd [%i0], %f2
-; V8PLUS-NEXT:    ldd [%i1], %f4
-; V8PLUS-NEXT:    ldd [%i1+8], %f6
+; V8PLUS-NEXT:    ldd [%i1+8], %f4
+; V8PLUS-NEXT:    ldd [%i1], %f6
 ; V8PLUS-NEXT:    std %f0, [%fp+-8]
 ; V8PLUS-NEXT:    std %f2, [%fp+-16]
-; V8PLUS-NEXT:    std %f4, [%fp+-32]
-; V8PLUS-NEXT:    std %f6, [%fp+-24]
+; V8PLUS-NEXT:    std %f4, [%fp+-24]
+; V8PLUS-NEXT:    std %f6, [%fp+-32]
 ; V8PLUS-NEXT:    add %fp, -16, %o0
 ; V8PLUS-NEXT:    call _Q_cmpe
 ; V8PLUS-NEXT:    add %fp, -32, %o1
@@ -748,8 +748,8 @@ define void @fcmps_br_f128(fp128 %a, fp128 %b) nounwind strictfp {
 ; V9-NEXT:    save %sp, -208, %sp
 ; V9-NEXT:    std %f2, [%fp+2039]
 ; V9-NEXT:    std %f0, [%fp+2031]
-; V9-NEXT:    std %f4, [%fp+2015]
 ; V9-NEXT:    std %f6, [%fp+2023]
+; V9-NEXT:    std %f4, [%fp+2015]
 ; V9-NEXT:    add %fp, 2031, %o0
 ; V9-NEXT:    call _Qp_cmpe
 ; V9-NEXT:    add %fp, 2015, %o1

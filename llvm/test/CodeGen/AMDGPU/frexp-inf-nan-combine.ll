@@ -102,25 +102,37 @@ define i32 @frexp_inf_clamp_exp_f32(float %x) {
 ; GFX9-LABEL: frexp_inf_clamp_exp_f32:
 ; GFX9:       ; %bb.0:
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX9-NEXT:    s_movk_i32 s4, 0x204
+; GFX9-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX9-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
+; GFX9-NEXT:    v_cndmask_b32_e64 v0, v1, 0, s[4:5]
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX10-LABEL: frexp_inf_clamp_exp_f32:
 ; GFX10:       ; %bb.0:
 ; GFX10-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX10-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX10-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX10-NEXT:    v_cmp_class_f32_e64 s4, v0, 0x204
+; GFX10-NEXT:    v_cndmask_b32_e64 v0, v1, 0, s4
 ; GFX10-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: frexp_inf_clamp_exp_f32:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX11-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v1, 0, s0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX950-LABEL: frexp_inf_clamp_exp_f32:
 ; GFX950:       ; %bb.0:
 ; GFX950-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX950-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX950-NEXT:    s_movk_i32 s0, 0x204
+; GFX950-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX950-NEXT:    v_cmp_class_f32_e64 s[0:1], v0, s0
+; GFX950-NEXT:    s_nop 1
+; GFX950-NEXT:    v_cndmask_b32_e64 v0, v1, 0, s[0:1]
 ; GFX950-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX6-LABEL: frexp_inf_clamp_exp_f32:
@@ -129,7 +141,10 @@ define i32 @frexp_inf_clamp_exp_f32(float %x) {
 ; GFX6-NEXT:    s_mov_b32 s4, 0x7f800000
 ; GFX6-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
 ; GFX6-NEXT:    v_cmp_lt_f32_e64 vcc, |v0|, s4
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
+; GFX6-NEXT:    s_movk_i32 s4, 0x204
+; GFX6-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v1, 0, s[4:5]
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
   %frexp = call { float, i32 } @llvm.frexp.f32.i32(float %x)
   %exp = extractvalue { float, i32 } %frexp, 1
@@ -144,25 +159,37 @@ define i32 @frexp_not_inf_clamp_exp_f32(float %x) {
 ; GFX9-LABEL: frexp_not_inf_clamp_exp_f32:
 ; GFX9:       ; %bb.0:
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX9-NEXT:    s_movk_i32 s4, 0x1f8
+; GFX9-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX9-NEXT:    v_cmp_class_f32_e64 vcc, v0, s4
+; GFX9-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX10-LABEL: frexp_not_inf_clamp_exp_f32:
 ; GFX10:       ; %bb.0:
 ; GFX10-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX10-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX10-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX10-NEXT:    v_cmp_class_f32_e64 vcc_lo, v0, 0x1f8
+; GFX10-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc_lo
 ; GFX10-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: frexp_not_inf_clamp_exp_f32:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX11-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX11-NEXT:    v_cmp_class_f32_e64 vcc_lo, v0, 0x1f8
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc_lo
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX950-LABEL: frexp_not_inf_clamp_exp_f32:
 ; GFX950:       ; %bb.0:
 ; GFX950-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX950-NEXT:    v_frexp_exp_i32_f32_e32 v0, v0
+; GFX950-NEXT:    s_movk_i32 s0, 0x1f8
+; GFX950-NEXT:    v_frexp_exp_i32_f32_e32 v1, v0
+; GFX950-NEXT:    v_cmp_class_f32_e64 vcc, v0, s0
+; GFX950-NEXT:    s_nop 1
+; GFX950-NEXT:    v_cndmask_b32_e32 v0, 0, v1, vcc
 ; GFX950-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX6-LABEL: frexp_not_inf_clamp_exp_f32:

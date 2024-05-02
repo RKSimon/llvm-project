@@ -50,8 +50,10 @@ define <vscale x 1 x i32> @vmulhu_vi_nxv1i32_0(<vscale x 1 x i32> %va) {
 define <vscale x 1 x i32> @vmulhu_vi_nxv1i32_1(<vscale x 1 x i32> %va) {
 ; CHECK-LABEL: vmulhu_vi_nxv1i32_1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; CHECK-NEXT:    vsrl.vi v8, v8, 28
+; CHECK-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; CHECK-NEXT:    vzext.vf2 v9, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v9, 28
 ; CHECK-NEXT:    ret
   %vb = zext <vscale x 1 x i32> splat (i32 16) to <vscale x 1 x i64>
   %vc = zext <vscale x 1 x i32> %va to <vscale x 1 x i64>
@@ -109,8 +111,10 @@ define <vscale x 2 x i32> @vmulhu_vi_nxv2i32_0(<vscale x 2 x i32> %va) {
 define <vscale x 2 x i32> @vmulhu_vi_nxv2i32_1(<vscale x 2 x i32> %va) {
 ; CHECK-LABEL: vmulhu_vi_nxv2i32_1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; CHECK-NEXT:    vsrl.vi v8, v8, 28
+; CHECK-NEXT:    vsetvli a0, zero, e64, m2, ta, ma
+; CHECK-NEXT:    vzext.vf2 v10, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v10, 28
 ; CHECK-NEXT:    ret
   %vb = zext <vscale x 2 x i32> splat (i32 16) to <vscale x 2 x i64>
   %vc = zext <vscale x 2 x i32> %va to <vscale x 2 x i64>
@@ -168,8 +172,10 @@ define <vscale x 4 x i32> @vmulhu_vi_nxv4i32_0(<vscale x 4 x i32> %va) {
 define <vscale x 4 x i32> @vmulhu_vi_nxv4i32_1(<vscale x 4 x i32> %va) {
 ; CHECK-LABEL: vmulhu_vi_nxv4i32_1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; CHECK-NEXT:    vsrl.vi v8, v8, 28
+; CHECK-NEXT:    vsetvli a0, zero, e64, m4, ta, ma
+; CHECK-NEXT:    vzext.vf2 v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v12, 28
 ; CHECK-NEXT:    ret
   %vb = zext <vscale x 4 x i32> splat (i32 16) to <vscale x 4 x i64>
   %vc = zext <vscale x 4 x i32> %va to <vscale x 4 x i64>
@@ -227,8 +233,10 @@ define <vscale x 8 x i32> @vmulhu_vi_nxv8i32_0(<vscale x 8 x i32> %va) {
 define <vscale x 8 x i32> @vmulhu_vi_nxv8i32_1(<vscale x 8 x i32> %va) {
 ; CHECK-LABEL: vmulhu_vi_nxv8i32_1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
-; CHECK-NEXT:    vsrl.vi v8, v8, 28
+; CHECK-NEXT:    vsetvli a0, zero, e64, m8, ta, ma
+; CHECK-NEXT:    vzext.vf2 v16, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v16, 28
 ; CHECK-NEXT:    ret
   %vb = zext <vscale x 8 x i32> splat (i32 16) to <vscale x 8 x i64>
   %vc = zext <vscale x 8 x i32> %va to <vscale x 8 x i64>

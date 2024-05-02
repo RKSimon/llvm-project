@@ -143,9 +143,12 @@ define <vscale x 16 x i8> @uabd_b(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) 
 define <vscale x 16 x i8> @uabd_b_promoted_ops(<vscale x 16 x i1> %a, <vscale x 16 x i1> %b) #0 {
 ; CHECK-LABEL: uabd_b_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p2.b
-; CHECK-NEXT:    eor p0.b, p2/z, p0.b, p1.b
-; CHECK-NEXT:    mov z0.b, p0/z, #1 // =0x1
+; CHECK-NEXT:    mov z0.b, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z1.b, p0/z, #1 // =0x1
+; CHECK-NEXT:    ptrue p0.b
+; CHECK-NEXT:    add z1.b, p1/m, z1.b, z0.b
+; CHECK-NEXT:    movprfx z0, z1
+; CHECK-NEXT:    abs z0.b, p0/m, z1.b
 ; CHECK-NEXT:    ret
   %a.zext = zext <vscale x 16 x i1> %a to <vscale x 16 x i8>
   %b.zext = zext <vscale x 16 x i1> %b to <vscale x 16 x i8>
@@ -171,8 +174,8 @@ define <vscale x 8 x i16> @uabd_h(<vscale x 8 x i16> %a, <vscale x 8 x i16> %b) 
 define <vscale x 8 x i16> @uabd_h_promoted_ops(<vscale x 8 x i8> %a, <vscale x 8 x i8> %b) #0 {
 ; CHECK-LABEL: uabd_h_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z1.h, z1.h, #0xff
 ; CHECK-NEXT:    and z0.h, z0.h, #0xff
+; CHECK-NEXT:    and z1.h, z1.h, #0xff
 ; CHECK-NEXT:    ptrue p0.h
 ; CHECK-NEXT:    uabd z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    ret
@@ -200,8 +203,8 @@ define <vscale x 4 x i32> @uabd_s(<vscale x 4 x i32> %a, <vscale x 4 x i32> %b) 
 define <vscale x 4 x i32> @uabd_s_promoted_ops(<vscale x 4 x i16> %a, <vscale x 4 x i16> %b) #0 {
 ; CHECK-LABEL: uabd_s_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z1.s, z1.s, #0xffff
 ; CHECK-NEXT:    and z0.s, z0.s, #0xffff
+; CHECK-NEXT:    and z1.s, z1.s, #0xffff
 ; CHECK-NEXT:    ptrue p0.s
 ; CHECK-NEXT:    uabd z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    ret
@@ -229,8 +232,8 @@ define <vscale x 2 x i64> @uabd_d(<vscale x 2 x i64> %a, <vscale x 2 x i64> %b) 
 define <vscale x 2 x i64> @uabd_d_promoted_ops(<vscale x 2 x i32> %a, <vscale x 2 x i32> %b) #0 {
 ; CHECK-LABEL: uabd_d_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z1.d, z1.d, #0xffffffff
 ; CHECK-NEXT:    and z0.d, z0.d, #0xffffffff
+; CHECK-NEXT:    and z1.d, z1.d, #0xffffffff
 ; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    uabd z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    ret
@@ -263,8 +266,8 @@ define <vscale x 4 x i32> @uabd_non_matching_extension(<vscale x 4 x i32> %a, <v
 define <vscale x 4 x i32> @uabd_non_matching_promoted_ops(<vscale x 4 x i8> %a, <vscale x 4 x i16> %b) #0 {
 ; CHECK-LABEL: uabd_non_matching_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z1.s, z1.s, #0xffff
 ; CHECK-NEXT:    and z0.s, z0.s, #0xff
+; CHECK-NEXT:    and z1.s, z1.s, #0xffff
 ; CHECK-NEXT:    ptrue p0.s
 ; CHECK-NEXT:    uabd z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    ret

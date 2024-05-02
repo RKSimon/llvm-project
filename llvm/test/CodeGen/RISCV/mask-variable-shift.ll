@@ -63,12 +63,12 @@ define i128 @mask_pair_128(i128 %x, i128 %y) {
 ; RV32-NEXT:    lw a5, 4(a1)
 ; RV32-NEXT:    lw a6, 8(a1)
 ; RV32-NEXT:    lw a1, 12(a1)
-; RV32-NEXT:    srli a7, a3, 3
+; RV32-NEXT:    andi a7, a3, 96
 ; RV32-NEXT:    sw a4, 16(sp)
 ; RV32-NEXT:    sw a4, 20(sp)
 ; RV32-NEXT:    sw a4, 24(sp)
 ; RV32-NEXT:    sw a4, 28(sp)
-; RV32-NEXT:    andi a4, a7, 12
+; RV32-NEXT:    srli a4, a7, 3
 ; RV32-NEXT:    addi a7, sp, 16
 ; RV32-NEXT:    sw zero, 0(sp)
 ; RV32-NEXT:    sw zero, 4(sp)

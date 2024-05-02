@@ -1860,37 +1860,30 @@ define amdgpu_kernel void @byte8_extelt(ptr addrspace(1) %out, i32 %sel) {
 ; GCN-O0-NEXT:    s_load_dword s0, s[4:5], 0x2c
 ; GCN-O0-NEXT:    s_load_dwordx2 s[2:3], s[4:5], 0x24
 ; GCN-O0-NEXT:    s_load_dword s4, s[4:5], 0x2c
+; GCN-O0-NEXT:    s_mov_b32 s5, 0xffff
 ; GCN-O0-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-O0-NEXT:    s_mov_b32 s0, 0x200
-; GCN-O0-NEXT:    s_mov_b32 s1, 1
+; GCN-O0-NEXT:    s_mov_b32 s0, 0x201
+; GCN-O0-NEXT:    s_and_b32 s0, s5, s0
+; GCN-O0-NEXT:    s_mov_b32 s1, 0x403
+; GCN-O0-NEXT:    s_mov_b32 s7, 16
+; GCN-O0-NEXT:    s_lshl_b32 s1, s1, s7
 ; GCN-O0-NEXT:    s_or_b32 s0, s0, s1
-; GCN-O0-NEXT:    s_mov_b32 s6, 0xffff
-; GCN-O0-NEXT:    s_and_b32 s0, s6, s0
-; GCN-O0-NEXT:    s_mov_b32 s1, 0x400
-; GCN-O0-NEXT:    s_mov_b32 s5, 3
-; GCN-O0-NEXT:    s_or_b32 s1, s1, s5
-; GCN-O0-NEXT:    s_mov_b32 s8, 16
-; GCN-O0-NEXT:    s_lshl_b32 s1, s1, s8
-; GCN-O0-NEXT:    s_or_b32 s0, s0, s1
-; GCN-O0-NEXT:    s_mov_b32 s7, 0
+; GCN-O0-NEXT:    s_mov_b32 s6, 0
 ; GCN-O0-NEXT:    ; kill: def $sgpr0 killed $sgpr0 def $sgpr0_sgpr1
-; GCN-O0-NEXT:    s_mov_b32 s1, s7
-; GCN-O0-NEXT:    s_mov_b32 s7, 0x600
-; GCN-O0-NEXT:    s_mov_b32 s9, 5
-; GCN-O0-NEXT:    s_or_b32 s7, s7, s9
-; GCN-O0-NEXT:    s_and_b32 s6, s6, s7
-; GCN-O0-NEXT:    s_mov_b32 s7, 0x800
-; GCN-O0-NEXT:    s_mov_b32 s9, 7
-; GCN-O0-NEXT:    s_or_b32 s7, s7, s9
-; GCN-O0-NEXT:    s_lshl_b32 s7, s7, s8
-; GCN-O0-NEXT:    s_or_b32 s6, s6, s7
-; GCN-O0-NEXT:    ; implicit-def: $sgpr8
+; GCN-O0-NEXT:    s_mov_b32 s1, s6
+; GCN-O0-NEXT:    s_mov_b32 s6, 0x605
+; GCN-O0-NEXT:    s_and_b32 s5, s5, s6
+; GCN-O0-NEXT:    s_mov_b32 s6, 0x807
+; GCN-O0-NEXT:    s_lshl_b32 s6, s6, s7
+; GCN-O0-NEXT:    s_or_b32 s6, s5, s6
+; GCN-O0-NEXT:    ; implicit-def: $sgpr5
 ; GCN-O0-NEXT:    ; implicit-def: $sgpr7
 ; GCN-O0-NEXT:    ; kill: def $sgpr6 killed $sgpr6 def $sgpr6_sgpr7
-; GCN-O0-NEXT:    s_mov_b32 s7, s8
-; GCN-O0-NEXT:    s_mov_b32 s8, 32
-; GCN-O0-NEXT:    s_lshl_b64 s[6:7], s[6:7], s8
+; GCN-O0-NEXT:    s_mov_b32 s7, s5
+; GCN-O0-NEXT:    s_mov_b32 s5, 32
+; GCN-O0-NEXT:    s_lshl_b64 s[6:7], s[6:7], s5
 ; GCN-O0-NEXT:    s_or_b64 s[0:1], s[0:1], s[6:7]
+; GCN-O0-NEXT:    s_mov_b32 s5, 3
 ; GCN-O0-NEXT:    s_lshl_b32 s4, s4, s5
 ; GCN-O0-NEXT:    s_lshr_b64 s[0:1], s[0:1], s4
 ; GCN-O0-NEXT:    ; kill: def $sgpr0 killed $sgpr0 killed $sgpr0_sgpr1

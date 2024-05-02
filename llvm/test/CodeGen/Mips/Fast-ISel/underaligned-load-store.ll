@@ -58,10 +58,10 @@ define dso_local ccc i32 @__start() {
 ; MIPS-32-R6-STRICT-NEXT:    lbu $4, 3($1)
 ; MIPS-32-R6-STRICT-NEXT:    lbu $5, 2($1)
 ; MIPS-32-R6-STRICT-NEXT:    addiu $6, $zero, 42
-; MIPS-32-R6-STRICT-NEXT:    sb $zero, 2($1)
 ; MIPS-32-R6-STRICT-NEXT:    sb $6, 3($1)
-; MIPS-32-R6-STRICT-NEXT:    sb $zero, 0($1)
+; MIPS-32-R6-STRICT-NEXT:    sb $zero, 2($1)
 ; MIPS-32-R6-STRICT-NEXT:    sb $zero, 1($1)
+; MIPS-32-R6-STRICT-NEXT:    sb $zero, 0($1)
 ; MIPS-32-R6-STRICT-NEXT:    sll $1, $5, 8
 ; MIPS-32-R6-STRICT-NEXT:    or $1, $1, $4
 ; MIPS-32-R6-STRICT-NEXT:    sll $3, $3, 16
@@ -92,10 +92,10 @@ define dso_local ccc i32 @__start() {
 ; MIPS-64-R6-STRICT-NEXT:    lbu $4, 3($1)
 ; MIPS-64-R6-STRICT-NEXT:    lbu $5, 2($1)
 ; MIPS-64-R6-STRICT-NEXT:    addiu $6, $zero, 42
-; MIPS-64-R6-STRICT-NEXT:    sb $zero, 2($1)
 ; MIPS-64-R6-STRICT-NEXT:    sb $6, 3($1)
-; MIPS-64-R6-STRICT-NEXT:    sb $zero, 0($1)
+; MIPS-64-R6-STRICT-NEXT:    sb $zero, 2($1)
 ; MIPS-64-R6-STRICT-NEXT:    sb $zero, 1($1)
+; MIPS-64-R6-STRICT-NEXT:    sb $zero, 0($1)
 ; MIPS-64-R6-STRICT-NEXT:    sll $1, $5, 8
 ; MIPS-64-R6-STRICT-NEXT:    or $1, $1, $4
 ; MIPS-64-R6-STRICT-NEXT:    sll $3, $3, 16

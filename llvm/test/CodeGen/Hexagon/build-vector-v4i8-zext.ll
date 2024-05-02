@@ -8,15 +8,16 @@ define i32 @fred(i8 %a0, i8 %a1, i8 %a2, i8 %a3) #0 {
 ; CHECK-LABEL: fred:
 ; CHECK:       // %bb.0: // %b4
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r1 = and(r1,#255)
-; CHECK-NEXT:     r3 = and(r3,#255)
+; CHECK-NEXT:     r0 = vsplatb(r0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r0 = insert(r1,#24,#8)
-; CHECK-NEXT:     r2 = insert(r3,#24,#8)
+; CHECK-NEXT:     r0 = insert(r1,#8,#8)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r0 = combine(r2.l,r0.l)
+; CHECK-NEXT:     r0 = insert(r2,#8,#16)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r0 = insert(r3,#8,#24)
 ; CHECK-NEXT:     jumpr r31
 ; CHECK-NEXT:    }
 b4:

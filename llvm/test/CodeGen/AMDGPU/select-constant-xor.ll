@@ -20,6 +20,7 @@ define i64 @selecti64i64(i64 %a) {
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; CHECK-NEXT:    v_ashrrev_i32_e32 v1, 31, v1
 ; CHECK-NEXT:    v_xor_b32_e32 v0, 0x7fffffff, v1
+; CHECK-NEXT:    v_ashrrev_i32_e32 v1, 31, v1
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %c = icmp sgt i64 %a, -1
   %s = select i1 %c, i64 2147483647, i64 -2147483648

@@ -1721,7 +1721,9 @@ define i32 @sdiv_known_nonzero_vec(<4 x i32> %xx, <4 x i32> %y, ptr %p) nounwind
 ; X86-NEXT:    movd %xmm2, %ecx
 ; X86-NEXT:    unpcklpd {{.*#+}} xmm2 = xmm2[0],xmm0[0]
 ; X86-NEXT:    movapd %xmm2, (%eax)
-; X86-NEXT:    rep bsfl %ecx, %eax
+; X86-NEXT:    bsfl %ecx, %ecx
+; X86-NEXT:    movl $32, %eax
+; X86-NEXT:    cmovnel %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sdiv_known_nonzero_vec:
@@ -1732,8 +1734,9 @@ define i32 @sdiv_known_nonzero_vec(<4 x i32> %xx, <4 x i32> %y, ptr %p) nounwind
 ; X64-NEXT:    vdivpd %ymm1, %ymm0, %ymm0
 ; X64-NEXT:    vcvttpd2dq %ymm0, %xmm0
 ; X64-NEXT:    vmovapd %xmm0, (%rdi)
-; X64-NEXT:    vmovd %xmm0, %eax
-; X64-NEXT:    rep bsfl %eax, %eax
+; X64-NEXT:    vmovd %xmm0, %ecx
+; X64-NEXT:    movl $32, %eax
+; X64-NEXT:    rep bsfl %ecx, %eax
 ; X64-NEXT:    vzeroupper
 ; X64-NEXT:    retq
   %x = or <4 x i32> %xx, <i32 64, i32 -1, i32 0, i32 0>
@@ -2671,14 +2674,13 @@ define i32 @sext_known_nonzero_vec(<8 x i16> %xx, ptr %p) {
 ; X86-NEXT:    paddd {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0 # [1065353216,1065353216,1065353216,1065353216]
 ; X86-NEXT:    cvttps2dq %xmm0, %xmm0
 ; X86-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
-; X86-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
 ; X86-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,3,2,2,4,5,6,7]
-; X86-NEXT:    pshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,4,5,6,4]
 ; X86-NEXT:    psrad $16, %xmm0
+; X86-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[1,1,1,1]
+; X86-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
 ; X86-NEXT:    movdqa %xmm1, 16(%eax)
 ; X86-NEXT:    movdqa %xmm0, (%eax)
-; X86-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
-; X86-NEXT:    movd %xmm0, %eax
+; X86-NEXT:    movd %xmm2, %eax
 ; X86-NEXT:    rep bsfl %eax, %eax
 ; X86-NEXT:    retl
 ;

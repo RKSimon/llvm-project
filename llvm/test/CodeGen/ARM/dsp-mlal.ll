@@ -6,28 +6,36 @@
 define hidden i32 @SMMULR_SMMLAR(i32 %a, i32 %b0, i32 %b1, i32 %Xn, i32 %Xn1) local_unnamed_addr {
 ; DSP-LABEL: SMMULR_SMMLAR:
 ; DSP:       @ %bb.0: @ %entry
-; DSP-NEXT:    ldr r0, [sp]
-; DSP-NEXT:    smmulr r0, r0, r2
-; DSP-NEXT:    smmlar r0, r3, r1, r0
+; DSP-NEXT:    smull r0, r1, r3, r1
+; DSP-NEXT:    ldr r3, [sp]
+; DSP-NEXT:    smull r2, r3, r3, r2
+; DSP-NEXT:    adds.w r2, r2, #-2147483648
+; DSP-NEXT:    adcs r1, r3
+; DSP-NEXT:    adds.w r0, r0, #-2147483648
+; DSP-NEXT:    adc r0, r1, #0
 ; DSP-NEXT:    bx lr
 ;
 ; ARM7-LABEL: SMMULR_SMMLAR:
 ; ARM7:       @ %bb.0: @ %entry
 ; ARM7-NEXT:    ldr r0, [sp]
-; ARM7-NEXT:    smmulr r0, r0, r2
-; ARM7-NEXT:    smmlar r0, r3, r1, r0
+; ARM7-NEXT:    smull r1, r3, r3, r1
+; ARM7-NEXT:    smull r0, r2, r0, r2
+; ARM7-NEXT:    adds r0, r0, #-2147483648
+; ARM7-NEXT:    adc r0, r3, r2
+; ARM7-NEXT:    adds r1, r1, #-2147483648
+; ARM7-NEXT:    adc r0, r0, #0
 ; ARM7-NEXT:    bx lr
 ;
 ; NODSP-LABEL: SMMULR_SMMLAR:
 ; NODSP:       @ %bb.0: @ %entry
-; NODSP-NEXT:    push {r4, lr}
-; NODSP-NEXT:    ldr.w lr, [sp, #8]
-; NODSP-NEXT:    movs r0, #0
-; NODSP-NEXT:    mov.w r4, #-2147483648
-; NODSP-NEXT:    mov.w r12, #-2147483648
-; NODSP-NEXT:    smlal r4, r0, lr, r2
-; NODSP-NEXT:    smlal r12, r0, r3, r1
-; NODSP-NEXT:    pop {r4, pc}
+; NODSP-NEXT:    smull r0, r1, r3, r1
+; NODSP-NEXT:    ldr r3, [sp]
+; NODSP-NEXT:    smull r2, r3, r3, r2
+; NODSP-NEXT:    adds.w r2, r2, #-2147483648
+; NODSP-NEXT:    adcs r1, r3
+; NODSP-NEXT:    adds.w r0, r0, #-2147483648
+; NODSP-NEXT:    adc r0, r1, #0
+; NODSP-NEXT:    bx lr
 entry:
   %conv = sext i32 %b1 to i64
   %conv1 = sext i32 %Xn1 to i64

@@ -81,14 +81,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; SDAG-AGPR:       ; %bb.0:
 ; SDAG-AGPR-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; SDAG-AGPR-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[0:1], 48
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[2:3], 32
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[4:5], 16
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[0:1], 32
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[2:3], 16
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[4:5], 0
 ; SDAG-AGPR-NEXT:    s_waitcnt lgkmcnt(0)
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[8:9], s[24:25]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[10:11], s[26:27]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[12:13], s[28:29]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[14:15], s[30:31]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[6:7], s[24:25]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[8:9], s[26:27]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[10:11], s[28:29]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[12:13], s[30:31]
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a0, s8
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a1, s9
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a2, s10
@@ -105,40 +105,38 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a13, s21
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a14, s22
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a15, s23
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[6:7], 0
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v16, s16
-; SDAG-AGPR-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[8:11], v[12:15], a[0:15]
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v8, s20
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v9, s21
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v10, s22
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v11, s23
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v17, s17
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v18, s18
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s19
-; SDAG-AGPR-NEXT:    s_nop 4
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off sc0 sc1
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v18, s16
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s17
+; SDAG-AGPR-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[6:9], v[10:13], a[0:15]
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v20, s18
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v21, s19
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v6, s12
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v7, s13
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v8, s14
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v9, s15
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v14, s20
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v15, s21
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v16, s22
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v17, s23
+; SDAG-AGPR-NEXT:    s_nop 1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off offset:16 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], a[24:27], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[24:27], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], a[20:23], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], a[20:23], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[6:7], a[16:19], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], a[16:19], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], v[16:19], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[14:17], off offset:16 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[8:11], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[18:21], off sc0 sc1
+; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], v[6:9], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v0, s8
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v1, s9
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v2, s10
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v3, s11
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[6:7], v[0:3], off sc0 sc1
-; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    s_nop 0
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v0, s12
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v1, s13
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v2, s14
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v3, s15
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], v[0:3], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    s_endpgm
@@ -222,14 +220,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; SDAG-VGPR:       ; %bb.0:
 ; SDAG-VGPR-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; SDAG-VGPR-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[32:33], 48
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[34:35], 32
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[36:37], 16
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[32:33], 32
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[34:35], 16
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[36:37], 0
 ; SDAG-VGPR-NEXT:    s_waitcnt lgkmcnt(0)
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[42:43], s[26:27]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[40:41], s[24:25]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[46:47], s[30:31]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[44:45], s[28:29]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[40:41], s[26:27]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[38:39], s[24:25]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[44:45], s[30:31]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[42:43], s[28:29]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[0:1], s[8:9]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[2:3], s[10:11]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[4:5], s[12:13]
@@ -238,41 +236,39 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16(<8 x bfloat> %arg0, <8 x 
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[10:11], s[18:19]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[12:13], s[20:21]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[14:15], s[22:23]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[38:39], 0
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v48, s16
-; SDAG-VGPR-NEXT:    v_mfma_f32_32x32x16_bf16 v[16:31], v[40:43], v[44:47], v[0:15]
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v49, s17
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v50, s18
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v51, s19
-; SDAG-VGPR-NEXT:    s_nop 8
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[28:31], off sc0 sc1
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v50, s16
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v51, s17
+; SDAG-VGPR-NEXT:    v_mfma_f32_32x32x16_bf16 v[16:31], v[38:41], v[42:45], v[0:15]
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v52, s18
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v53, s19
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v46, s20
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v47, s21
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v48, s22
+; SDAG-VGPR-NEXT:    s_nop 1
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s12
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s13
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s14
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s15
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v49, s23
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[28:31], off offset:16 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[24:27], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[24:27], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[20:23], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[20:23], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[38:39], v[16:19], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[16:19], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[48:51], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[46:49], off offset:16 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s20
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s21
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s22
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s23
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[0:3], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[50:53], off sc0 sc1
+; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[0:3], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_nop 0
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s8
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s9
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s10
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s11
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[38:39], v[0:3], off sc0 sc1
-; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    s_nop 0
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s12
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s13
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s14
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s15
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[0:3], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_endpgm
@@ -404,14 +400,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; SDAG-AGPR:       ; %bb.0:
 ; SDAG-AGPR-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; SDAG-AGPR-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[0:1], 48
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[2:3], 32
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[4:5], 16
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[0:1], 32
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[2:3], 16
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[4:5], 0
 ; SDAG-AGPR-NEXT:    s_waitcnt lgkmcnt(0)
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[8:9], s[24:25]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[10:11], s[26:27]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[12:13], s[28:29]
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[14:15], s[30:31]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[6:7], s[24:25]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[8:9], s[26:27]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[10:11], s[28:29]
+; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[12:13], s[30:31]
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a0, s8
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a1, s9
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a2, s10
@@ -428,40 +424,38 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a13, s21
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a14, s22
 ; SDAG-AGPR-NEXT:    v_accvgpr_write_b32 a15, s23
-; SDAG-AGPR-NEXT:    v_mov_b64_e32 v[6:7], 0
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v16, s16
-; SDAG-AGPR-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[8:11], v[12:15], a[0:15] cbsz:2 abid:3 blgp:1
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v8, s20
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v9, s21
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v10, s22
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v11, s23
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v17, s17
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v18, s18
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s19
-; SDAG-AGPR-NEXT:    s_nop 4
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off sc0 sc1
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v18, s16
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s17
+; SDAG-AGPR-NEXT:    v_mfma_f32_32x32x16_bf16 a[16:31], v[6:9], v[10:13], a[0:15] cbsz:2 abid:3 blgp:1
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v20, s18
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v21, s19
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v6, s12
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v7, s13
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v8, s14
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v9, s15
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v14, s20
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v15, s21
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v16, s22
+; SDAG-AGPR-NEXT:    v_mov_b32_e32 v17, s23
+; SDAG-AGPR-NEXT:    s_nop 1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[28:31], off offset:16 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], a[24:27], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], a[24:27], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], a[20:23], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], a[20:23], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[6:7], a[16:19], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], a[16:19], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], v[16:19], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[14:17], off offset:16 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[8:11], off sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[0:1], v[18:21], off sc0 sc1
+; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v[2:3], v[6:9], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v0, s8
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v1, s9
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v2, s10
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v3, s11
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v[6:7], v[0:3], off sc0 sc1
-; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    s_nop 0
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v0, s12
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v1, s13
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v2, s14
-; SDAG-AGPR-NEXT:    v_mov_b32_e32 v3, s15
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v[4:5], v[0:3], off sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    s_endpgm
@@ -545,14 +539,14 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; SDAG-VGPR:       ; %bb.0:
 ; SDAG-VGPR-NEXT:    s_load_dwordx8 s[24:31], s[4:5], 0x24
 ; SDAG-VGPR-NEXT:    s_load_dwordx16 s[8:23], s[4:5], 0x64
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[32:33], 48
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[34:35], 32
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[36:37], 16
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[32:33], 32
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[34:35], 16
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[36:37], 0
 ; SDAG-VGPR-NEXT:    s_waitcnt lgkmcnt(0)
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[42:43], s[26:27]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[40:41], s[24:25]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[46:47], s[30:31]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[44:45], s[28:29]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[40:41], s[26:27]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[38:39], s[24:25]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[44:45], s[30:31]
+; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[42:43], s[28:29]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[0:1], s[8:9]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[2:3], s[10:11]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[4:5], s[12:13]
@@ -561,41 +555,39 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__flags(<8 x bfloat> %arg0
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[10:11], s[18:19]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[12:13], s[20:21]
 ; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[14:15], s[22:23]
-; SDAG-VGPR-NEXT:    v_mov_b64_e32 v[38:39], 0
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v48, s16
-; SDAG-VGPR-NEXT:    v_mfma_f32_32x32x16_bf16 v[16:31], v[40:43], v[44:47], v[0:15] cbsz:2 abid:3 blgp:1
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v49, s17
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v50, s18
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v51, s19
-; SDAG-VGPR-NEXT:    s_nop 8
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[28:31], off sc0 sc1
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v50, s16
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v51, s17
+; SDAG-VGPR-NEXT:    v_mfma_f32_32x32x16_bf16 v[16:31], v[38:41], v[42:45], v[0:15] cbsz:2 abid:3 blgp:1
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v52, s18
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v53, s19
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v46, s20
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v47, s21
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v48, s22
+; SDAG-VGPR-NEXT:    s_nop 1
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s12
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s13
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s14
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s15
+; SDAG-VGPR-NEXT:    v_mov_b32_e32 v49, s23
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[28:31], off offset:16 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[24:27], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[24:27], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[20:23], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[20:23], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[38:39], v[16:19], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[16:19], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[48:51], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[46:49], off offset:16 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s20
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s21
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s22
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s23
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[0:3], off sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[32:33], v[50:53], off sc0 sc1
+; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v[34:35], v[0:3], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_nop 0
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s8
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s9
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s10
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s11
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v[38:39], v[0:3], off sc0 sc1
-; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    s_nop 0
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v0, s12
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v1, s13
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v2, s14
-; SDAG-VGPR-NEXT:    v_mov_b32_e32 v3, s15
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v[36:37], v[0:3], off sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_endpgm
@@ -974,13 +966,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd(<8 x bfloat> %arg
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s11
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
-; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16 sc0 sc1
+; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    s_endpgm
 ;
@@ -1076,13 +1068,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd(<8 x bfloat> %arg
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v19, s11
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
-; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16 sc0 sc1
+; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;
@@ -1241,13 +1233,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd__flags(<8 x bfloa
 ; SDAG-AGPR-NEXT:    v_mov_b32_e32 v19, s11
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
-; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16 sc0 sc1
+; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-AGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
 ; SDAG-AGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-AGPR-NEXT:    s_endpgm
 ;
@@ -1343,13 +1335,13 @@ define amdgpu_kernel void @test_mfma_f32_32x32x16_bf16__vgprcd__flags(<8 x bfloa
 ; SDAG-VGPR-NEXT:    v_mov_b32_e32 v19, s11
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[16:19], s[0:1] sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
-; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[12:15], s[0:1] offset:48 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
-; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[8:11], s[0:1] offset:32 sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[4:7], s[0:1] offset:16 sc0 sc1
+; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
+; SDAG-VGPR-NEXT:    global_store_dwordx4 v32, v[0:3], s[0:1] sc0 sc1
 ; SDAG-VGPR-NEXT:    s_waitcnt vmcnt(0)
 ; SDAG-VGPR-NEXT:    s_endpgm
 ;

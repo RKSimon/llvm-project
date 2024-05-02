@@ -57,48 +57,41 @@ define i8 @clmul_i8(i8 %a, i8 %b) nounwind {
 define i16 @clmul_i16(i16 %a, i16 %b) nounwind {
 ; SCALAR-LABEL: clmul_i16:
 ; SCALAR:       # %bb.0:
-; SCALAR-NEXT:    pushq %rbp
-; SCALAR-NEXT:    pushq %rbx
-; SCALAR-NEXT:    movl %esi, %ecx
-; SCALAR-NEXT:    andl $4681, %ecx # imm = 0x1249
+; SCALAR-NEXT:    movl %esi, %eax
+; SCALAR-NEXT:    andl $37449, %eax # imm = 0x9249
 ; SCALAR-NEXT:    movl %edi, %r9d
 ; SCALAR-NEXT:    andl $9362, %r9d # imm = 0x2492
-; SCALAR-NEXT:    movl %esi, %edx
-; SCALAR-NEXT:    andl $9362, %edx # imm = 0x2492
-; SCALAR-NEXT:    movl %edi, %r11d
-; SCALAR-NEXT:    andl $4681, %r11d # imm = 0x1249
-; SCALAR-NEXT:    movl %esi, %r8d
-; SCALAR-NEXT:    andl $18724, %r8d # imm = 0x4924
-; SCALAR-NEXT:    movl %edi, %eax
-; SCALAR-NEXT:    andl $18724, %eax # imm = 0x4924
-; SCALAR-NEXT:    movl %eax, %r10d
-; SCALAR-NEXT:    imull %r8d, %r10d
-; SCALAR-NEXT:    movl %r9d, %ebx
-; SCALAR-NEXT:    imull %r8d, %ebx
-; SCALAR-NEXT:    imull %r11d, %r8d
-; SCALAR-NEXT:    imull %edx, %r11d
-; SCALAR-NEXT:    movl %eax, %ebp
-; SCALAR-NEXT:    imull %edx, %ebp
-; SCALAR-NEXT:    imull %r9d, %edx
-; SCALAR-NEXT:    imull %ecx, %r9d
-; SCALAR-NEXT:    xorl %r9d, %r11d
-; SCALAR-NEXT:    xorl %r11d, %r10d
-; SCALAR-NEXT:    andl $9362, %r10d # imm = 0x2492
-; SCALAR-NEXT:    andl $37449, %esi # imm = 0x9249
-; SCALAR-NEXT:    andl $37449, %edi # imm = 0x9249
+; SCALAR-NEXT:    movl %esi, %ecx
+; SCALAR-NEXT:    andl $9362, %ecx # imm = 0x2492
+; SCALAR-NEXT:    movl %edi, %edx
+; SCALAR-NEXT:    andl $37449, %edx # imm = 0x9249
+; SCALAR-NEXT:    movl %edx, %r8d
+; SCALAR-NEXT:    imull %ecx, %r8d
+; SCALAR-NEXT:    andl $18724, %edi # imm = 0x4924
+; SCALAR-NEXT:    movl %r9d, %r11d
+; SCALAR-NEXT:    movl %edi, %r10d
+; SCALAR-NEXT:    imull %ecx, %r10d
+; SCALAR-NEXT:    imull %r9d, %ecx
+; SCALAR-NEXT:    imull %eax, %r9d
+; SCALAR-NEXT:    xorl %r9d, %r8d
+; SCALAR-NEXT:    andl $18724, %esi # imm = 0x4924
+; SCALAR-NEXT:    movl %edx, %r9d
+; SCALAR-NEXT:    imull %eax, %r9d
+; SCALAR-NEXT:    imull %edi, %eax
 ; SCALAR-NEXT:    imull %esi, %edi
-; SCALAR-NEXT:    xorl %edi, %ebx
-; SCALAR-NEXT:    xorl %ebx, %ebp
-; SCALAR-NEXT:    andl $-28087, %ebp # imm = 0x9249
-; SCALAR-NEXT:    orl %r10d, %ebp
-; SCALAR-NEXT:    xorl %edx, %r8d
-; SCALAR-NEXT:    imull %ecx, %eax
-; SCALAR-NEXT:    xorl %r8d, %eax
+; SCALAR-NEXT:    xorl %r8d, %edi
+; SCALAR-NEXT:    andl $9362, %edi # imm = 0x2492
+; SCALAR-NEXT:    imull %esi, %r11d
+; SCALAR-NEXT:    xorl %r11d, %r9d
+; SCALAR-NEXT:    xorl %r9d, %r10d
+; SCALAR-NEXT:    andl $37449, %r10d # imm = 0x9249
+; SCALAR-NEXT:    orl %edi, %r10d
+; SCALAR-NEXT:    imull %esi, %edx
+; SCALAR-NEXT:    xorl %ecx, %edx
+; SCALAR-NEXT:    xorl %edx, %eax
 ; SCALAR-NEXT:    andl $18724, %eax # imm = 0x4924
-; SCALAR-NEXT:    orl %ebp, %eax
+; SCALAR-NEXT:    orl %r10d, %eax
 ; SCALAR-NEXT:    # kill: def $ax killed $ax killed $eax
-; SCALAR-NEXT:    popq %rbx
-; SCALAR-NEXT:    popq %rbp
 ; SCALAR-NEXT:    retq
 ;
 ; SSE-PCLMUL-LABEL: clmul_i16:
@@ -333,971 +326,957 @@ define i96 @clmul_i96(i96 %x, i96 %y) {
 ; SCALAR-NEXT:    .cfi_def_cfa_offset 48
 ; SCALAR-NEXT:    pushq %rbx
 ; SCALAR-NEXT:    .cfi_def_cfa_offset 56
-; SCALAR-NEXT:    subq $544, %rsp # imm = 0x220
-; SCALAR-NEXT:    .cfi_def_cfa_offset 600
+; SCALAR-NEXT:    subq $576, %rsp # imm = 0x240
+; SCALAR-NEXT:    .cfi_def_cfa_offset 632
 ; SCALAR-NEXT:    .cfi_offset %rbx, -56
 ; SCALAR-NEXT:    .cfi_offset %r12, -48
 ; SCALAR-NEXT:    .cfi_offset %r13, -40
 ; SCALAR-NEXT:    .cfi_offset %r14, -32
 ; SCALAR-NEXT:    .cfi_offset %r15, -24
 ; SCALAR-NEXT:    .cfi_offset %rbp, -16
-; SCALAR-NEXT:    movq %rcx, %r11
-; SCALAR-NEXT:    movq %rdx, %r10
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $31, %rax
+; SCALAR-NEXT:    movq %rcx, %rbx
+; SCALAR-NEXT:    movq %rdx, %rbp
+; SCALAR-NEXT:    movq %rsi, %r11
+; SCALAR-NEXT:    movq %rdi, %rdx
+; SCALAR-NEXT:    leaq (%rdi,%rdi), %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $62, %rax
+; SCALAR-NEXT:    sarq $63, %rax
 ; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    xorl %ecx, %ecx
-; SCALAR-NEXT:    testl %r11d, %r11d
-; SCALAR-NEXT:    cmovsq %rax, %rcx
-; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $1, %rdi, %rax
-; SCALAR-NEXT:    movq %rdx, %rcx
-; SCALAR-NEXT:    shlq $62, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
 ; SCALAR-NEXT:    andq %rcx, %rax
-; SCALAR-NEXT:    movl %r10d, %ecx
-; SCALAR-NEXT:    andl $1, %ecx
-; SCALAR-NEXT:    negq %rcx
+; SCALAR-NEXT:    movl %ebp, %r14d
+; SCALAR-NEXT:    andl $1, %r14d
+; SCALAR-NEXT:    negq %r14
+; SCALAR-NEXT:    movq %r14, %r9
+; SCALAR-NEXT:    andq %rdi, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    leaq (,%rdi,4), %rcx
 ; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rsi, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $2, %rdi, %r8
-; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    movq %rbp, %rax
 ; SCALAR-NEXT:    shlq $61, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
 ; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $3, %rdi, %rax
-; SCALAR-NEXT:    shlq $60, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $4, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $59, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $5, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $58, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $6, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $57, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $7, %rdi, %rax
-; SCALAR-NEXT:    movsbq %r10b, %rdx
-; SCALAR-NEXT:    sarq $7, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $8, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $55, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %r9
-; SCALAR-NEXT:    shldq $9, %rdi, %r9
-; SCALAR-NEXT:    movq %r10, %rax
-; SCALAR-NEXT:    shlq $54, %rax
-; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rax, %r9
-; SCALAR-NEXT:    xorq %r8, %r9
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $10, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $53, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r9, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $11, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $52, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $12, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $51, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $13, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $50, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $14, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $49, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $15, %rdi, %rcx
-; SCALAR-NEXT:    movswq %r10w, %rdx
-; SCALAR-NEXT:    sarq $15, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $16, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $47, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $17, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $46, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $18, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $45, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $19, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $44, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %r9
-; SCALAR-NEXT:    shldq $20, %rdi, %r9
-; SCALAR-NEXT:    movq %r10, %rax
-; SCALAR-NEXT:    shlq $43, %rax
-; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rax, %r9
-; SCALAR-NEXT:    xorq %r8, %r9
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $21, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $42, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r9, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $22, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $41, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $23, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $40, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $24, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $39, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $25, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $38, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $26, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $37, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $27, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $36, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $28, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $35, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $29, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $34, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $30, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $33, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $31, %rdi, %rax
-; SCALAR-NEXT:    movslq %r10d, %rdx
-; SCALAR-NEXT:    sarq $31, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $32, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $31, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $33, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $30, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $34, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $29, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %r9
-; SCALAR-NEXT:    shldq $35, %rdi, %r9
-; SCALAR-NEXT:    movq %r10, %rax
-; SCALAR-NEXT:    shlq $28, %rax
-; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rax, %r9
-; SCALAR-NEXT:    xorq %r8, %r9
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $36, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $27, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r9, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $37, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $26, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $38, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $25, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $39, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $24, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $40, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $23, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $41, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $22, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $42, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $21, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $43, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $20, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $44, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $19, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $45, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $18, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $46, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $17, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $47, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $16, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $48, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $15, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $49, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $14, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $50, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $13, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $51, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $12, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $52, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $11, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $53, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $10, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rsi, %r9
-; SCALAR-NEXT:    shldq $54, %rdi, %r9
-; SCALAR-NEXT:    movq %r10, %rax
-; SCALAR-NEXT:    shlq $9, %rax
-; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rax, %r9
-; SCALAR-NEXT:    xorq %r8, %r9
-; SCALAR-NEXT:    movq %rsi, %rax
-; SCALAR-NEXT:    shldq $55, %rdi, %rax
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $8, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r9, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $56, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $7, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $57, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $6, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $58, %rdi, %rcx
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $5, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $59, %rdi, %r8
-; SCALAR-NEXT:    movq %r10, %rdx
-; SCALAR-NEXT:    shlq $4, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $60, %rdi, %rcx
-; SCALAR-NEXT:    leaq (,%r10,8), %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    movq %rsi, %r8
-; SCALAR-NEXT:    shldq $61, %rdi, %r8
-; SCALAR-NEXT:    leaq (,%r10,4), %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %r8
-; SCALAR-NEXT:    xorq %rcx, %r8
-; SCALAR-NEXT:    movq %rsi, %rcx
-; SCALAR-NEXT:    shldq $62, %rdi, %rcx
-; SCALAR-NEXT:    leaq (%r10,%r10), %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    shldq $63, %rdi, %rsi
-; SCALAR-NEXT:    sarq $63, %r10
-; SCALAR-NEXT:    andq %r10, %rsi
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movl %r11d, %esi
-; SCALAR-NEXT:    andl $1, %esi
-; SCALAR-NEXT:    negq %rsi
-; SCALAR-NEXT:    andq %rdi, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %r11, %r8
-; SCALAR-NEXT:    shlq $62, %r8
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    leaq (,%rdi,8), %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $60, %r8
 ; SCALAR-NEXT:    sarq $63, %r8
-; SCALAR-NEXT:    leaq (%rdi,%rdi), %rcx
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
 ; SCALAR-NEXT:    andq %rcx, %r8
-; SCALAR-NEXT:    xorq %rsi, %r8
-; SCALAR-NEXT:    movq %r11, %rcx
-; SCALAR-NEXT:    shlq $61, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    leaq (,%rdi,4), %rdx
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %r11, %rax
-; SCALAR-NEXT:    shlq $60, %rax
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    xorq %r9, %r8
+; SCALAR-NEXT:    movq %rdi, %rcx
+; SCALAR-NEXT:    shlq $4, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $59, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    leaq (,%rdi,8), %rdx
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $4, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $59, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rdx, %rsi
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $5, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rax
-; SCALAR-NEXT:    shlq $58, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    movq %rdi, %rcx
+; SCALAR-NEXT:    shlq $5, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $58, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdi, %rcx
+; SCALAR-NEXT:    shlq $6, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $57, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $6, %rdx
-; SCALAR-NEXT:    movq %rdx, (%rsp) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $57, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rdx, %rsi
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $7, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movsbq %r11b, %rax
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $8, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $55, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rdx, %rsi
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $9, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rax
-; SCALAR-NEXT:    shlq $54, %rax
-; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $10, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $53, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rdx, %rsi
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $11, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rsi, %rcx
+; SCALAR-NEXT:    shldq $7, %rdi, %rcx
+; SCALAR-NEXT:    movq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $7, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    xorl %ecx, %ecx
+; SCALAR-NEXT:    testb %bpl, %bpl
+; SCALAR-NEXT:    cmovnsq %rcx, %r8
+; SCALAR-NEXT:    cmovnsq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $8, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $55, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $9, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r10
+; SCALAR-NEXT:    shlq $54, %r10
+; SCALAR-NEXT:    sarq $63, %r10
+; SCALAR-NEXT:    movq %r10, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %r10
+; SCALAR-NEXT:    xorq %r9, %r10
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $10, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $53, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %r8
+; SCALAR-NEXT:    xorq %r10, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $11, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
 ; SCALAR-NEXT:    shlq $52, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $12, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $51, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rdx, %rsi
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $13, %rax
 ; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %r8
-; SCALAR-NEXT:    shlq $50, %r8
-; SCALAR-NEXT:    sarq $63, %r8
-; SCALAR-NEXT:    andq %rax, %r8
-; SCALAR-NEXT:    xorq %rsi, %r8
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $14, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rax
-; SCALAR-NEXT:    shlq $49, %rax
+; SCALAR-NEXT:    andq %rdi, %rax
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $12, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $51, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $13, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $50, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    andq %rdx, %rax
-; SCALAR-NEXT:    xorq %r8, %rax
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rdi, %rdx
-; SCALAR-NEXT:    shlq $15, %rdx
-; SCALAR-NEXT:    movq %rdx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movswq %r11w, %rcx
-; SCALAR-NEXT:    andq %rdx, %rcx
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $16, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    movq %r11, %rdx
-; SCALAR-NEXT:    shlq $47, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %r8, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $17, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rcx
-; SCALAR-NEXT:    shlq $46, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    andq %r8, %rcx
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $18, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $45, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %r8, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $19, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rcx
-; SCALAR-NEXT:    shlq $44, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    andq %r8, %rcx
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $20, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $43, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %r8, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r15
-; SCALAR-NEXT:    shlq $21, %r15
-; SCALAR-NEXT:    movq %r11, %rcx
-; SCALAR-NEXT:    shlq $42, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    andq %r15, %rcx
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $22, %r8
-; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $41, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %r8, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r12
-; SCALAR-NEXT:    shlq $23, %r12
-; SCALAR-NEXT:    movq %r11, %rcx
-; SCALAR-NEXT:    shlq $40, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    andq %r12, %rcx
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %rbx
-; SCALAR-NEXT:    shlq $24, %rbx
-; SCALAR-NEXT:    movq %r11, %rsi
-; SCALAR-NEXT:    shlq $39, %rsi
-; SCALAR-NEXT:    sarq $63, %rsi
-; SCALAR-NEXT:    andq %rbx, %rsi
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r11
-; SCALAR-NEXT:    shlq $25, %r11
-; SCALAR-NEXT:    movq %rdx, %rcx
-; SCALAR-NEXT:    shlq $38, %rcx
-; SCALAR-NEXT:    sarq $63, %rcx
-; SCALAR-NEXT:    andq %r11, %rcx
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $26, %r8
-; SCALAR-NEXT:    movq %rdx, %r14
-; SCALAR-NEXT:    shlq $37, %r14
-; SCALAR-NEXT:    sarq $63, %r14
-; SCALAR-NEXT:    andq %r8, %r14
-; SCALAR-NEXT:    xorq %rcx, %r14
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $27, %rsi
-; SCALAR-NEXT:    movq %rdx, %rbp
-; SCALAR-NEXT:    shlq $36, %rbp
-; SCALAR-NEXT:    sarq $63, %rbp
-; SCALAR-NEXT:    andq %rsi, %rbp
-; SCALAR-NEXT:    xorq %r14, %rbp
-; SCALAR-NEXT:    xorq %rax, %rbp
-; SCALAR-NEXT:    movq %rdi, %r9
-; SCALAR-NEXT:    shlq $28, %r9
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $14, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $49, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rdi, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rsi, %rdi
+; SCALAR-NEXT:    shldq $15, %rdx, %rdi
 ; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    shlq $15, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    testw %bp, %bp
+; SCALAR-NEXT:    cmovnsq %rcx, %rax
+; SCALAR-NEXT:    cmovnsq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $16, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $47, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $17, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $46, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $18, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $45, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %r9, %r8
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $19, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $44, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $20, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r10
+; SCALAR-NEXT:    shlq $43, %r10
+; SCALAR-NEXT:    sarq $63, %r10
+; SCALAR-NEXT:    movq %r10, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r10
+; SCALAR-NEXT:    xorq %r9, %r10
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $21, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $42, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %r10, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $22, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $41, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $23, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $40, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $24, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $39, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $25, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $38, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $26, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $37, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $27, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $36, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $28, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %rax
 ; SCALAR-NEXT:    shlq $35, %rax
 ; SCALAR-NEXT:    sarq $63, %rax
-; SCALAR-NEXT:    andq %r9, %rax
-; SCALAR-NEXT:    movq %rdi, %rcx
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rdx, %rcx
 ; SCALAR-NEXT:    shlq $29, %rcx
 ; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
-; SCALAR-NEXT:    movq %rdx, %r14
-; SCALAR-NEXT:    shlq $34, %r14
-; SCALAR-NEXT:    sarq $63, %r14
-; SCALAR-NEXT:    andq %rcx, %r14
-; SCALAR-NEXT:    xorq %rax, %r14
-; SCALAR-NEXT:    movq %rdi, %rcx
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $34, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    movq %rdx, %rcx
 ; SCALAR-NEXT:    shlq $30, %rcx
-; SCALAR-NEXT:    shlq $33, %rdx
-; SCALAR-NEXT:    sarq $63, %rdx
-; SCALAR-NEXT:    andq %rcx, %rdx
-; SCALAR-NEXT:    xorq %rdx, %r14
-; SCALAR-NEXT:    xorq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rbp, %r14
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rbp # 8-byte Reload
-; SCALAR-NEXT:    leaq (%rdi,%rdi), %rax
-; SCALAR-NEXT:    andq %rax, %rbp
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq %rdi, %rdx
-; SCALAR-NEXT:    xorq %rbp, %rdx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    leaq (,%rdi,4), %rbp
-; SCALAR-NEXT:    andq %rbp, %rax
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rbp # 8-byte Reload
-; SCALAR-NEXT:    leaq (,%rdi,8), %r13
-; SCALAR-NEXT:    andq %r13, %rbp
-; SCALAR-NEXT:    xorq %rax, %rbp
-; SCALAR-NEXT:    xorq %rdx, %rbp
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Folded Reload
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rdx, %rax
-; SCALAR-NEXT:    movq %rax, %rdx
-; SCALAR-NEXT:    movq (%rsp), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rdx, %rax
-; SCALAR-NEXT:    xorq %rbp, %rax
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rdx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rdx, %r13
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rdx
-; SCALAR-NEXT:    xorq %rax, %rdx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rax
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %r13
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rax
-; SCALAR-NEXT:    movq %rax, %r13
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rax
-; SCALAR-NEXT:    xorq %rdx, %rax
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rdx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rdx, %r13
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %rdx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r13 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rdx, %r13
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r15 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r13, %r15
-; SCALAR-NEXT:    xorq %rax, %r15
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r12 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %r12
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rbx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r12, %rbx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r11 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rbx, %r11
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r8 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r11, %r8
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r8, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r9 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %r9
-; SCALAR-NEXT:    xorq %r15, %r9
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $32, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $33, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $34, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $35, %r8
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r8 # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $33, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rsi, %rdi
+; SCALAR-NEXT:    shldq $31, %rdx, %rdi
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $31, %r8
+; SCALAR-NEXT:    movq %r8, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    testl %ebp, %ebp
+; SCALAR-NEXT:    movl $0, %ecx
+; SCALAR-NEXT:    cmovnsq %rcx, %r8
+; SCALAR-NEXT:    cmovnsq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    xorq %r9, %r8
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $32, %r9
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $31, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $33, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $30, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %r9, %r8
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $34, %r9
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $29, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %r10
+; SCALAR-NEXT:    shlq $35, %r10
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $28, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r10
+; SCALAR-NEXT:    xorq %r9, %r10
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $36, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $27, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %r10, %r8
 ; SCALAR-NEXT:    xorq %rax, %r8
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $36, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r8, %rsi
-; SCALAR-NEXT:    xorq %r9, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
+; SCALAR-NEXT:    movq %rdx, %rax
 ; SCALAR-NEXT:    shlq $37, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $38, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $26, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $38, %r9
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $25, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rax
 ; SCALAR-NEXT:    shlq $39, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $40, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $24, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $40, %r9
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $23, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rax
 ; SCALAR-NEXT:    shlq $41, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $42, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $22, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, (%rsp) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $42, %r9
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $21, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r9
+; SCALAR-NEXT:    xorq %rax, %r9
+; SCALAR-NEXT:    movq %rdx, %rax
 ; SCALAR-NEXT:    shlq $43, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $44, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $45, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $46, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $47, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $48, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $49, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $50, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $51, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $52, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rcx
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $53, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rcx, %rsi
-; SCALAR-NEXT:    movq %rdi, %r8
-; SCALAR-NEXT:    shlq $54, %r8
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r8 # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %r8
-; SCALAR-NEXT:    movq %rdi, %rcx
-; SCALAR-NEXT:    shlq $55, %rcx
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %r8, %rcx
-; SCALAR-NEXT:    xorq %rax, %rcx
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $56, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $57, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $58, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $59, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $60, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    movq %rdi, %rsi
-; SCALAR-NEXT:    shlq $61, %rsi
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rsi # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rax, %rsi
-; SCALAR-NEXT:    movq %rdi, %rax
-; SCALAR-NEXT:    shlq $62, %rax
-; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
-; SCALAR-NEXT:    xorq %rsi, %rax
-; SCALAR-NEXT:    shlq $63, %rdi
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $20, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r9, %rax
+; SCALAR-NEXT:    movq %rdx, %r10
+; SCALAR-NEXT:    shlq $44, %r10
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $19, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r10
+; SCALAR-NEXT:    xorq %rax, %r10
+; SCALAR-NEXT:    movq %rdx, %r9
+; SCALAR-NEXT:    shlq $45, %r9
+; SCALAR-NEXT:    movq %rbp, %rax
+; SCALAR-NEXT:    shlq $18, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rax, %r9
+; SCALAR-NEXT:    xorq %r10, %r9
+; SCALAR-NEXT:    xorq %r8, %r9
+; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    shlq $46, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $17, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $47, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $16, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    shlq $48, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $15, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $49, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $14, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    shlq $50, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $13, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $51, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $12, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %rax
+; SCALAR-NEXT:    shlq $52, %rax
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $11, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %rax
+; SCALAR-NEXT:    xorq %r8, %rax
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $53, %r8
+; SCALAR-NEXT:    movq %rbp, %rcx
+; SCALAR-NEXT:    shlq $10, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    movq %rcx, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rcx, %r8
+; SCALAR-NEXT:    xorq %rax, %r8
+; SCALAR-NEXT:    movq %rdx, %r10
+; SCALAR-NEXT:    shlq $54, %r10
+; SCALAR-NEXT:    movq %rbp, %r13
+; SCALAR-NEXT:    shlq $9, %r13
+; SCALAR-NEXT:    sarq $63, %r13
+; SCALAR-NEXT:    andq %r13, %r10
+; SCALAR-NEXT:    xorq %r8, %r10
+; SCALAR-NEXT:    movq %rdx, %rsi
+; SCALAR-NEXT:    shlq $55, %rsi
+; SCALAR-NEXT:    movq %rbp, %r12
+; SCALAR-NEXT:    shlq $8, %r12
+; SCALAR-NEXT:    sarq $63, %r12
+; SCALAR-NEXT:    andq %r12, %rsi
+; SCALAR-NEXT:    xorq %r10, %rsi
+; SCALAR-NEXT:    xorq %r9, %rsi
+; SCALAR-NEXT:    movq %rdx, %r8
+; SCALAR-NEXT:    shlq $56, %r8
+; SCALAR-NEXT:    movq %rbp, %r15
+; SCALAR-NEXT:    shlq $7, %r15
+; SCALAR-NEXT:    sarq $63, %r15
+; SCALAR-NEXT:    andq %r15, %r8
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $57, %rdi
+; SCALAR-NEXT:    movq %rbp, %r10
+; SCALAR-NEXT:    shlq $6, %r10
+; SCALAR-NEXT:    sarq $63, %r10
 ; SCALAR-NEXT:    andq %r10, %rdi
-; SCALAR-NEXT:    xorq %rdi, %rax
+; SCALAR-NEXT:    xorq %r8, %rdi
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $58, %rcx
+; SCALAR-NEXT:    movq %rbp, %r9
+; SCALAR-NEXT:    shlq $5, %r9
+; SCALAR-NEXT:    sarq $63, %r9
+; SCALAR-NEXT:    andq %r9, %rcx
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $59, %rdi
+; SCALAR-NEXT:    movq %rbp, %r8
+; SCALAR-NEXT:    shlq $4, %r8
+; SCALAR-NEXT:    sarq $63, %r8
+; SCALAR-NEXT:    andq %r8, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $60, %rcx
+; SCALAR-NEXT:    leaq (,%rbp,8), %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rax, %rcx
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $61, %rdi
+; SCALAR-NEXT:    leaq (,%rbp,4), %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rax, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %rdx, %rcx
+; SCALAR-NEXT:    shlq $62, %rcx
+; SCALAR-NEXT:    leaq (%rbp,%rbp), %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    andq %rax, %rcx
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %rdx, %rdi
+; SCALAR-NEXT:    shlq $63, %rdi
+; SCALAR-NEXT:    sarq $63, %rbp
+; SCALAR-NEXT:    andq %rbp, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    xorq %rsi, %rdi
+; SCALAR-NEXT:    movq %rdi, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    testb %bl, %bl
+; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
+; SCALAR-NEXT:    movl $0, %ecx
+; SCALAR-NEXT:    cmovnsq %rcx, %rax
+; SCALAR-NEXT:    movq %rax, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $1, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    andq %r11, %r14
+; SCALAR-NEXT:    xorq %rax, %r14
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $2, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $3, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    xorq %r14, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $4, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $5, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rdi
+; SCALAR-NEXT:    movq %r11, %r14
+; SCALAR-NEXT:    shldq $6, %rdx, %r14
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %r14
+; SCALAR-NEXT:    xorq %rcx, %r14
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $8, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $9, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $10, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
 ; SCALAR-NEXT:    xorq %rcx, %rax
-; SCALAR-NEXT:    movq %r14, %rdx
-; SCALAR-NEXT:    addq $544, %rsp # imm = 0x220
+; SCALAR-NEXT:    xorq %r14, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $11, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $12, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $13, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %r14
+; SCALAR-NEXT:    shldq $14, %rdx, %r14
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %r14
+; SCALAR-NEXT:    xorq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %r14
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $16, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $17, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $18, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $19, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $20, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $21, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rax
+; SCALAR-NEXT:    xorq %r14, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $22, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $23, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $24, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $25, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $26, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $27, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %r14
+; SCALAR-NEXT:    shldq $28, %rdx, %r14
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %r14
+; SCALAR-NEXT:    xorq %rax, %r14
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $29, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $30, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    xorq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $32, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $33, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $34, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $35, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $36, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    xorq %r14, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $37, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $38, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $39, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $40, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $41, %rdx, %rcx
+; SCALAR-NEXT:    andq (%rsp), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $42, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $43, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $44, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %r14
+; SCALAR-NEXT:    shldq $45, %rdx, %r14
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %r14 # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %r14
+; SCALAR-NEXT:    xorq %rax, %r14
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $46, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $47, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $48, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $49, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $50, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $51, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $52, %rdx, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $53, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $54, %rdx, %rdi
+; SCALAR-NEXT:    andq %r13, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rax
+; SCALAR-NEXT:    shldq $55, %rdx, %rax
+; SCALAR-NEXT:    andq %r12, %rax
+; SCALAR-NEXT:    xorq %rdi, %rax
+; SCALAR-NEXT:    xorq %r14, %rax
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $56, %rdx, %rcx
+; SCALAR-NEXT:    andq %r15, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $57, %rdx, %rdi
+; SCALAR-NEXT:    andq %r10, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $58, %rdx, %rcx
+; SCALAR-NEXT:    andq %r9, %rcx
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $59, %rdx, %rdi
+; SCALAR-NEXT:    andq %r8, %rdi
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $60, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    movq %r11, %rdi
+; SCALAR-NEXT:    shldq $61, %rdx, %rdi
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rdi # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rdi
+; SCALAR-NEXT:    movq %r11, %rcx
+; SCALAR-NEXT:    shldq $62, %rdx, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rdi, %rcx
+; SCALAR-NEXT:    shldq $63, %rdx, %r11
+; SCALAR-NEXT:    andq %r11, %rbp
+; SCALAR-NEXT:    xorq %rcx, %rbp
+; SCALAR-NEXT:    movl %ebx, %ecx
+; SCALAR-NEXT:    andl $1, %ecx
+; SCALAR-NEXT:    negq %rcx
+; SCALAR-NEXT:    andq %rdx, %rcx
+; SCALAR-NEXT:    xorq %rcx, %rbp
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $62, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rbp
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $61, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rbp
+; SCALAR-NEXT:    xorq %rax, %rbp
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $60, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $59, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $58, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $57, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    xorq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $55, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $54, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $53, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $52, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $51, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $50, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $49, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    xorq %rax, %rbp
+; SCALAR-NEXT:    testw %bx, %bx
+; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Reload
+; SCALAR-NEXT:    movl $0, %esi
+; SCALAR-NEXT:    cmovnsq %rsi, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $47, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $46, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $45, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $44, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $43, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $42, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $41, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $40, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $39, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $38, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $37, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rcx, %rax
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $36, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    xorq %rcx, %rbp
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $35, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Folded Reload
+; SCALAR-NEXT:    movq %rbx, %rcx
+; SCALAR-NEXT:    shlq $34, %rcx
+; SCALAR-NEXT:    sarq $63, %rcx
+; SCALAR-NEXT:    andq {{[-0-9]+}}(%r{{[sb]}}p), %rcx # 8-byte Folded Reload
+; SCALAR-NEXT:    xorq %rax, %rcx
+; SCALAR-NEXT:    movq %rbx, %rax
+; SCALAR-NEXT:    shlq $33, %rax
+; SCALAR-NEXT:    sarq $63, %rax
+; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rdx # 8-byte Reload
+; SCALAR-NEXT:    andq %rax, %rdx
+; SCALAR-NEXT:    xorq %rcx, %rdx
+; SCALAR-NEXT:    testl %ebx, %ebx
+; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
+; SCALAR-NEXT:    cmovnsq %rsi, %rax
+; SCALAR-NEXT:    xorq %rdx, %rax
+; SCALAR-NEXT:    xorq %rax, %rbp
+; SCALAR-NEXT:    movq {{[-0-9]+}}(%r{{[sb]}}p), %rax # 8-byte Reload
+; SCALAR-NEXT:    movq %rbp, %rdx
+; SCALAR-NEXT:    addq $576, %rsp # imm = 0x240
 ; SCALAR-NEXT:    .cfi_def_cfa_offset 56
 ; SCALAR-NEXT:    popq %rbx
 ; SCALAR-NEXT:    .cfi_def_cfa_offset 48
@@ -2087,9 +2066,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulr_i8:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2099,9 +2078,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ;
 ; AVX-LABEL: clmulr_i8:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzbl %sil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movzbl %sil, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -2196,9 +2175,9 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulr_i16:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzwl %si, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzwl %di, %eax
+; SSE-PCLMUL-NEXT:    movzwl %si, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2208,9 +2187,9 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ;
 ; AVX-LABEL: clmulr_i16:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzwl %si, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzwl %di, %eax
+; AVX-NEXT:    movzwl %si, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -2550,9 +2529,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulh_i8:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2562,9 +2541,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ;
 ; AVX-LABEL: clmulh_i8:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzbl %sil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movzbl %sil, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -2659,9 +2638,9 @@ define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulh_i16:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzwl %si, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzwl %di, %eax
+; SSE-PCLMUL-NEXT:    movzwl %si, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2671,9 +2650,9 @@ define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ;
 ; AVX-LABEL: clmulh_i16:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzwl %si, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzwl %di, %eax
+; AVX-NEXT:    movzwl %si, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -3058,24 +3037,24 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-NEXT:    pushq %rbp
 ; SCALAR-NEXT:    pushq %r14
 ; SCALAR-NEXT:    pushq %rbx
-; SCALAR-NEXT:    movl %edi, %eax
+; SCALAR-NEXT:    movl %esi, %eax
 ; SCALAR-NEXT:    andl $73, %eax
-; SCALAR-NEXT:    movl %esi, %r9d
+; SCALAR-NEXT:    movl %edi, %r9d
 ; SCALAR-NEXT:    andl $146, %r9d
-; SCALAR-NEXT:    movl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %r8d
 ; SCALAR-NEXT:    andl $146, %r8d
-; SCALAR-NEXT:    movl %esi, %r11d
+; SCALAR-NEXT:    movl %edi, %r11d
 ; SCALAR-NEXT:    andl $73, %r11d
-; SCALAR-NEXT:    andl $36, %edi
 ; SCALAR-NEXT:    andl $36, %esi
-; SCALAR-NEXT:    movl %esi, %r10d
-; SCALAR-NEXT:    imull %edi, %r10d
+; SCALAR-NEXT:    andl $36, %edi
+; SCALAR-NEXT:    movl %edi, %r10d
+; SCALAR-NEXT:    imull %esi, %r10d
 ; SCALAR-NEXT:    movl %r9d, %ebx
-; SCALAR-NEXT:    imull %edi, %ebx
+; SCALAR-NEXT:    imull %esi, %ebx
 ; SCALAR-NEXT:    movl %r11d, %ebp
-; SCALAR-NEXT:    imull %r11d, %edi
+; SCALAR-NEXT:    imull %r11d, %esi
 ; SCALAR-NEXT:    imull %r8d, %r11d
-; SCALAR-NEXT:    movl %esi, %r14d
+; SCALAR-NEXT:    movl %edi, %r14d
 ; SCALAR-NEXT:    imull %r8d, %r14d
 ; SCALAR-NEXT:    imull %r9d, %r8d
 ; SCALAR-NEXT:    imull %eax, %r9d
@@ -3087,14 +3066,14 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-NEXT:    xorl %ebp, %r14d
 ; SCALAR-NEXT:    andl $4608, %r14d # imm = 0x1200
 ; SCALAR-NEXT:    orl %r10d, %r14d
-; SCALAR-NEXT:    xorl %r8d, %edi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %edi, %esi
-; SCALAR-NEXT:    andl $18688, %esi # imm = 0x4900
-; SCALAR-NEXT:    orl %r14d, %esi
-; SCALAR-NEXT:    shrl $8, %esi
-; SCALAR-NEXT:    movb %sil, (%rdx)
-; SCALAR-NEXT:    movb %sil, (%rcx)
+; SCALAR-NEXT:    xorl %r8d, %esi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    xorl %esi, %edi
+; SCALAR-NEXT:    andl $18688, %edi # imm = 0x4900
+; SCALAR-NEXT:    orl %r14d, %edi
+; SCALAR-NEXT:    shrl $8, %edi
+; SCALAR-NEXT:    movb %dil, (%rdx)
+; SCALAR-NEXT:    movb %dil, (%rcx)
 ; SCALAR-NEXT:    popq %rbx
 ; SCALAR-NEXT:    popq %r14
 ; SCALAR-NEXT:    popq %rbp
@@ -3103,8 +3082,8 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SSE-PCLMUL-LABEL: commutative_clmulh_i8:
 ; SSE-PCLMUL:       # %bb.0:
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %esi
+; SSE-PCLMUL-NEXT:    movd %esi, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -3116,8 +3095,8 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; AVX-LABEL: commutative_clmulh_i8:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    movzbl %dil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
-; AVX-NEXT:    movzbl %sil, %eax
+; AVX-NEXT:    movzbl %sil, %esi
+; AVX-NEXT:    vmovd %esi, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -3144,24 +3123,24 @@ define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-NEXT:    pushq %rbp
 ; SCALAR-NEXT:    pushq %r14
 ; SCALAR-NEXT:    pushq %rbx
-; SCALAR-NEXT:    movl %edi, %eax
+; SCALAR-NEXT:    movl %esi, %eax
 ; SCALAR-NEXT:    andl $73, %eax
-; SCALAR-NEXT:    movl %esi, %r9d
+; SCALAR-NEXT:    movl %edi, %r9d
 ; SCALAR-NEXT:    andl $146, %r9d
-; SCALAR-NEXT:    movl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %r8d
 ; SCALAR-NEXT:    andl $146, %r8d
-; SCALAR-NEXT:    movl %esi, %r11d
+; SCALAR-NEXT:    movl %edi, %r11d
 ; SCALAR-NEXT:    andl $73, %r11d
-; SCALAR-NEXT:    andl $36, %edi
 ; SCALAR-NEXT:    andl $36, %esi
-; SCALAR-NEXT:    movl %esi, %r10d
-; SCALAR-NEXT:    imull %edi, %r10d
+; SCALAR-NEXT:    andl $36, %edi
+; SCALAR-NEXT:    movl %edi, %r10d
+; SCALAR-NEXT:    imull %esi, %r10d
 ; SCALAR-NEXT:    movl %r9d, %ebx
-; SCALAR-NEXT:    imull %edi, %ebx
+; SCALAR-NEXT:    imull %esi, %ebx
 ; SCALAR-NEXT:    movl %r11d, %ebp
-; SCALAR-NEXT:    imull %r11d, %edi
+; SCALAR-NEXT:    imull %r11d, %esi
 ; SCALAR-NEXT:    imull %r8d, %r11d
-; SCALAR-NEXT:    movl %esi, %r14d
+; SCALAR-NEXT:    movl %edi, %r14d
 ; SCALAR-NEXT:    imull %r8d, %r14d
 ; SCALAR-NEXT:    imull %r9d, %r8d
 ; SCALAR-NEXT:    imull %eax, %r9d
@@ -3173,14 +3152,14 @@ define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-NEXT:    xorl %ebp, %r14d
 ; SCALAR-NEXT:    andl $4608, %r14d # imm = 0x1200
 ; SCALAR-NEXT:    orl %r10d, %r14d
-; SCALAR-NEXT:    xorl %r8d, %edi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %edi, %esi
-; SCALAR-NEXT:    andl $18688, %esi # imm = 0x4900
-; SCALAR-NEXT:    orl %r14d, %esi
-; SCALAR-NEXT:    shrl $7, %esi
-; SCALAR-NEXT:    movb %sil, (%rdx)
-; SCALAR-NEXT:    movb %sil, (%rcx)
+; SCALAR-NEXT:    xorl %r8d, %esi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    xorl %esi, %edi
+; SCALAR-NEXT:    andl $18688, %edi # imm = 0x4900
+; SCALAR-NEXT:    orl %r14d, %edi
+; SCALAR-NEXT:    shrl $7, %edi
+; SCALAR-NEXT:    movb %dil, (%rdx)
+; SCALAR-NEXT:    movb %dil, (%rcx)
 ; SCALAR-NEXT:    popq %rbx
 ; SCALAR-NEXT:    popq %r14
 ; SCALAR-NEXT:    popq %rbp
@@ -3189,8 +3168,8 @@ define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SSE-PCLMUL-LABEL: commutative_clmulr_i8:
 ; SSE-PCLMUL:       # %bb.0:
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %esi
+; SSE-PCLMUL-NEXT:    movd %esi, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -3202,8 +3181,8 @@ define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; AVX-LABEL: commutative_clmulr_i8:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    movzbl %dil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
-; AVX-NEXT:    movzbl %sil, %eax
+; AVX-NEXT:    movzbl %sil, %esi
+; AVX-NEXT:    vmovd %esi, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -3691,9 +3670,9 @@ define i8 @clmulr_i8_allones(i8 %x) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulr_i8_allones:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movl $65535, %eax # imm = 0xFFFF
-; SSE-PCLMUL-NEXT:    movq %rax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movl $65535, %ecx # imm = 0xFFFF
+; SSE-PCLMUL-NEXT:    movq %rcx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -3703,9 +3682,9 @@ define i8 @clmulr_i8_allones(i8 %x) nounwind {
 ;
 ; AVX-LABEL: clmulr_i8_allones:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movl $65535, %eax # imm = 0xFFFF
-; AVX-NEXT:    vmovq %rax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movl $65535, %ecx # imm = 0xFFFF
+; AVX-NEXT:    vmovq %rcx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -3962,9 +3941,9 @@ define i8 @clmulh_i8_allones(i8 %x) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulh_i8_allones:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movl $65535, %eax # imm = 0xFFFF
-; SSE-PCLMUL-NEXT:    movq %rax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movl $65535, %ecx # imm = 0xFFFF
+; SSE-PCLMUL-NEXT:    movq %rcx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -3974,9 +3953,9 @@ define i8 @clmulh_i8_allones(i8 %x) nounwind {
 ;
 ; AVX-LABEL: clmulh_i8_allones:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movl $65535, %eax # imm = 0xFFFF
-; AVX-NEXT:    vmovq %rax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movl $65535, %ecx # imm = 0xFFFF
+; AVX-NEXT:    vmovq %rcx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax

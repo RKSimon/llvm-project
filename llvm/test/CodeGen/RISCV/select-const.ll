@@ -85,21 +85,45 @@ define signext i32 @select_const_int_pow2_zero(i1 zeroext %a) nounwind {
 ;; this appears, it is too late for the generic DAG combine to turn the
 ;; select into a shift, so RISC-V specific lowering needs to do it.
 define i64 @select_shl_sra(i1 zeroext %c, i32 signext %x) nounwind {
-; RV32-LABEL: select_shl_sra:
-; RV32:       # %bb.0:
-; RV32-NEXT:    slli a0, a0, 1
-; RV32-NEXT:    sra a0, a1, a0
-; RV32-NEXT:    srai a1, a0, 31
-; RV32-NEXT:    ret
+; RV32I-LABEL: select_shl_sra:
+; RV32I:       # %bb.0:
+; RV32I-NEXT:    mv a2, a1
+; RV32I-NEXT:    srai a1, a1, 31
+; RV32I-NEXT:    beqz a0, .LBB3_2
+; RV32I-NEXT:  # %bb.1:
+; RV32I-NEXT:    srai a2, a2, 2
+; RV32I-NEXT:  .LBB3_2:
+; RV32I-NEXT:    mv a0, a2
+; RV32I-NEXT:    ret
+;
+; RV32IF-LABEL: select_shl_sra:
+; RV32IF:       # %bb.0:
+; RV32IF-NEXT:    mv a2, a1
+; RV32IF-NEXT:    srai a1, a1, 31
+; RV32IF-NEXT:    beqz a0, .LBB3_2
+; RV32IF-NEXT:  # %bb.1:
+; RV32IF-NEXT:    srai a2, a2, 2
+; RV32IF-NEXT:  .LBB3_2:
+; RV32IF-NEXT:    mv a0, a2
+; RV32IF-NEXT:    ret
+;
+; RV32ZICOND-LABEL: select_shl_sra:
+; RV32ZICOND:       # %bb.0:
+; RV32ZICOND-NEXT:    srai a2, a1, 2
+; RV32ZICOND-NEXT:    czero.nez a3, a1, a0
+; RV32ZICOND-NEXT:    czero.eqz a0, a2, a0
+; RV32ZICOND-NEXT:    srai a1, a1, 31
+; RV32ZICOND-NEXT:    or a0, a0, a3
+; RV32ZICOND-NEXT:    ret
 ;
 ; RV32IXQCI-LABEL: select_shl_sra:
 ; RV32IXQCI:       # %bb.0:
 ; RV32IXQCI-NEXT:    mv a2, a1
+; RV32IXQCI-NEXT:    srai a1, a1, 31
 ; RV32IXQCI-NEXT:    beqz a0, .LBB3_2
 ; RV32IXQCI-NEXT:  # %bb.1:
-; RV32IXQCI-NEXT:    srai a2, a1, 2
+; RV32IXQCI-NEXT:    srai a2, a2, 2
 ; RV32IXQCI-NEXT:  .LBB3_2:
-; RV32IXQCI-NEXT:    srai a1, a2, 31
 ; RV32IXQCI-NEXT:    mv a0, a2
 ; RV32IXQCI-NEXT:    ret
 ;

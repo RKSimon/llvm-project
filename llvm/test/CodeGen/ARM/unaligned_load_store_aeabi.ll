@@ -17,6 +17,16 @@ define void @loadstore4_align1_minsize(i32* %a, i32* %b) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: loadstore4_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r4, r1
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: loadstore4_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r4, lr}
@@ -27,11 +37,27 @@ define void @loadstore4_align1_minsize(i32* %a, i32* %b) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: loadstore4_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r4, r1
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: loadstore4_align1_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    str r0, [r1]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: loadstore4_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r0, [r1]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i32, i32* %a, align 1
   store i32 %tmp, i32* %b, align 1
@@ -39,19 +65,63 @@ entry:
 }
 
 define void @loadstore4_align1_optsize(i32* %a, i32* %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: loadstore4_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r4, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    strb r0, [r1, #3]
+; CHECK-V6M-MINSIZE-NEXT:    strb r4, [r1, #2]
+; CHECK-V6M-MINSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r1]
+; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V6M-OPTSIZE-LABEL: loadstore4_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE:        .save {r4, lr}
-; CHECK-V6M-OPTSIZE:        push {r4, lr}
-; CHECK-V6M-OPTSIZE-NOT:    bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE-NOT:    bl __aeabi_uwrite4
-; CHECK-V6M-OPTSIZE:        pop {r4, pc}
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r4, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r0, [r1, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r4, [r1, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r1]
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-V7M-MINSIZE-LABEL: loadstore4_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    strb r0, [r1, #3]
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r1, #2]
+; CHECK-V7M-MINSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V7M-MINSIZE-NEXT:    strb.w r12, [r1]
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: loadstore4_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r0, [r1, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r1, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    strb.w r12, [r1]
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: loadstore4_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r0, [r1]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: loadstore4_align1_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -72,6 +142,13 @@ define i32 @load4_align1_minsize(i32* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uread4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load4_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load4_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -79,25 +156,82 @@ define i32 @load4_align1_minsize(i32* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uread4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load4_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i32, i32* %a, align 1
   ret i32 %tmp
 }
 
 define i32 @load4_align1_optsize(i32* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load4_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load4_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load4_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r3, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r1, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load4_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r3, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r1, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -117,6 +251,14 @@ define i64 @load4_align1_zext_minsize(i32* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    movs r1, #0
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load4_align1_zext_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    movs r1, #0
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load4_align1_zext_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -125,11 +267,25 @@ define i64 @load4_align1_zext_minsize(i32* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    movs r1, #0
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load4_align1_zext_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    movs r1, #0
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_zext_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    movs r1, #0
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_zext_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    movs r1, #0
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i32, i32* %a, align 1
   %ext = zext i32 %tmp to i64
@@ -137,15 +293,65 @@ entry:
 }
 
 define i64 @load4_align1_zext_optsize(i32* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load4_align1_zext_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    movs r1, #0
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load4_align1_zext_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    movs r1, #0
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load4_align1_zext_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r3, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r1, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    movs r1, #0
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load4_align1_zext_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r3, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r1, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    movs r1, #0
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_zext_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    movs r1, #0
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_zext_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -167,6 +373,14 @@ define i64 @load4_align1_sext_minsize(i32* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    asrs r1, r0, #31
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load4_align1_sext_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    asrs r1, r0, #31
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load4_align1_sext_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -175,11 +389,25 @@ define i64 @load4_align1_sext_minsize(i32* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    asrs r1, r0, #31
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load4_align1_sext_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    asrs r1, r0, #31
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_sext_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    asrs r1, r0, #31
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_sext_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    asrs r1, r0, #31
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i32, i32* %a, align 1
   %ext = sext i32 %tmp to i64
@@ -187,15 +415,81 @@ entry:
 }
 
 define i64 @load4_align1_sext_optsize(i32* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load4_align1_sext_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    movs r1, #3
+; CHECK-V6M-MINSIZE-NEXT:    ldrsb r2, [r0, r1]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    asrs r3, r2, #31
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r4, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r4, r4, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r3, r4, r3
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r2, r0
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load4_align1_sext_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    movs r1, #3
+; CHECK-V6M-OPTSIZE-NEXT:    ldrsb r2, [r0, r1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    asrs r3, r2, #31
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r4, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r4, r4, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r3, r4, r3
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r2, r0
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-V7M-MINSIZE-LABEL: load4_align1_sext_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrsb.w r1, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r0, r1, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r2, r3, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    asrs r2, r1, #31
+; CHECK-V7M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsr #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load4_align1_sext_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrsb.w r1, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r0, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r2, r3, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    asrs r2, r1, #31
+; CHECK-V7M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsr #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load4_align1_sext_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    asrs r1, r0, #31
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align1_sext_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -219,6 +513,16 @@ define void @store4_align1_minsize(i32* %a, i32 %b) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: store4_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r2, r0
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: store4_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -229,25 +533,79 @@ define void @store4_align1_minsize(i32* %a, i32 %b) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: store4_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r2, r0
+; CHECK-V7M-OPTSIZE-NEXT:    mov r0, r1
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r2
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: store4_align1_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    str r1, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store4_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r1, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store i32 %b, i32* %a, align 1
   ret void
 }
 
 define void @store4_align1_optsize(i32* %a, i32 %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: store4_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r2, r1, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r2, r1, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: store4_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r2, r1, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r2, r1, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: store4_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r2, r1, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r2, r1, #16
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: store4_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r2, r1, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r2, r1, #16
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store4_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r1, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: store4_align1_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -266,6 +624,13 @@ define i32 @load4_align2_minsize(i32* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uread4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load4_align2_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load4_align2_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -273,25 +638,62 @@ define i32 @load4_align2_minsize(i32* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uread4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load4_align2_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load4_align2_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align2_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i32, i32* %a, align 2
   ret i32 %tmp
 }
 
 define i32 @load4_align2_optsize(i32* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load4_align2_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r0, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load4_align2_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r0, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load4_align2_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r1, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r0, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r0, r1, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load4_align2_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r1, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r0, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r0, r1, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load4_align2_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: load4_align2_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -315,6 +717,18 @@ define i64 @load6_align1_zext_minsize(i48* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    mov r1, r4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load6_align1_zext_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r4, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load6_align1_zext_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r4, lr}
@@ -326,12 +740,30 @@ define i64 @load6_align1_zext_minsize(i48* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load6_align1_zext_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r4, r0
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r4, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r4, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r1, r2, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load6_align1_zext_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldrh r1, [r0, #4]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load6_align1_zext_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldrh r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i48, i48* %a, align 1
   %ext = zext i48 %tmp to i64
@@ -339,15 +771,71 @@ entry:
 }
 
 define i64 @load6_align1_zext_optsize(i48* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load6_align1_zext_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load6_align1_zext_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load6_align1_zext_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r1, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load6_align1_zext_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load6_align1_zext_optsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
@@ -355,6 +843,13 @@ define i64 @load6_align1_zext_optsize(i48* %a) nounwind optsize {
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldrh r1, [r0, #4]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load6_align1_zext_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldrh r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i48, i48* %a, align 1
   %ext = zext i48 %tmp to i64
@@ -375,6 +870,19 @@ define i64 @load6_align1_sext_minsize(i48* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    mov r1, r4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load6_align1_sext_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    movs r1, #5
+; CHECK-V6M-OPTSIZE-NEXT:    ldrsb r1, [r0, r1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r1, r1, #8
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    adds r4, r1, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load6_align1_sext_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r4, lr}
@@ -386,12 +894,30 @@ define i64 @load6_align1_sext_minsize(i48* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    mov r1, r4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load6_align1_sext_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    ldrsb.w r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r4, r2, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread4
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: load6_align1_sext_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    ldrsh.w r1, [r0, #4]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load6_align1_sext_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldrsh.w r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i48, i48* %a, align 1
   %ext = sext i48 %tmp to i64
@@ -399,15 +925,80 @@ entry:
 }
 
 define i64 @load6_align1_sext_optsize(i48* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load6_align1_sext_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    movs r1, #5
+; CHECK-V6M-MINSIZE-NEXT:    ldrsb r1, [r0, r1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r1, r1, #8
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r1, r0
+; CHECK-V6M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load6_align1_sext_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    movs r1, #5
+; CHECK-V6M-OPTSIZE-NEXT:    ldrsb r1, [r0, r1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r1, r1, #8
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r1, r0
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load6_align1_sext_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrsb.w r1, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load6_align1_sext_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrsb.w r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load6_align1_sext_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldrsh.w r1, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: load6_align1_sext_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -434,6 +1025,18 @@ define void @store6_align1_minsize(i48* %a, i48 %b) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: store6_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r0
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r0, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r0, [r1, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: store6_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -446,26 +1049,96 @@ define void @store6_align1_minsize(i48* %a, i48 %b) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: store6_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r0
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r0, r3, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r0, [r1, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-ALIGNED-MINSIZE-LABEL: store6_align1_minsize:
 ; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-ALIGNED-MINSIZE-NEXT:    strh r3, [r0, #4]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
 ; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store6_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    strh r3, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store i48 %b, i48* %a, align 1
   ret void
 }
 
 define void @store6_align1_optsize(i48* %a, i48 %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: store6_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: store6_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: store6_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: store6_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store6_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    strh r3, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-ALIGNED-OPTSIZE-LABEL: store6_align1_optsize:
 ; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
@@ -488,6 +1161,16 @@ define void @loadstore8_align4_minsize(double* %a, double* %b) nounwind minsize 
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite8
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: loadstore8_align4_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r4, r1
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V6M-OPTSIZE-NEXT:    mov r2, r4
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: loadstore8_align4_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r4, lr}
@@ -498,6 +1181,31 @@ define void @loadstore8_align4_minsize(double* %a, double* %b) nounwind minsize 
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: loadstore8_align4_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r4, r1
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V7M-OPTSIZE-NEXT:    mov r2, r4
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: loadstore8_align4_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r0, [r1, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r1]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: loadstore8_align4_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r0, [r1, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r1]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load double, double* %a, align 1
   store double %tmp, double* %b, align 1
@@ -505,21 +1213,119 @@ entry:
 }
 
 define void @loadstore8_align4_optsize(double* %a, double* %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: loadstore8_align4_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    .save {r4, r5, r6, r7, lr}
+; CHECK-V6M-MINSIZE-NEXT:    push {r4, r5, r6, r7, lr}
+; CHECK-V6M-MINSIZE-NEXT:    .pad #4
+; CHECK-V6M-MINSIZE-NEXT:    sub sp, #4
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    str r2, [sp] @ 4-byte Spill
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r4, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r5, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r6, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r7, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-MINSIZE-NEXT:    strb r0, [r1, #7]
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r1, #6]
+; CHECK-V6M-MINSIZE-NEXT:    strb r7, [r1, #5]
+; CHECK-V6M-MINSIZE-NEXT:    strb r6, [r1, #4]
+; CHECK-V6M-MINSIZE-NEXT:    strb r5, [r1, #3]
+; CHECK-V6M-MINSIZE-NEXT:    strb r4, [r1, #2]
+; CHECK-V6M-MINSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V6M-MINSIZE-NEXT:    ldr r0, [sp] @ 4-byte Reload
+; CHECK-V6M-MINSIZE-NEXT:    strb r0, [r1]
+; CHECK-V6M-MINSIZE-NEXT:    add sp, #4
+; CHECK-V6M-MINSIZE-NEXT:    pop {r4, r5, r6, r7, pc}
+;
 ; CHECK-V6M-OPTSIZE-LABEL: loadstore8_align4_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
 ; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, r5, r6, r7, lr}
 ; CHECK-V6M-OPTSIZE-NEXT:    push {r4, r5, r6, r7, lr}
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V6M-OPTSIZE:         pop {r4, r5, r6, r7, pc}
+; CHECK-V6M-OPTSIZE-NEXT:    .pad #4
+; CHECK-V6M-OPTSIZE-NEXT:    sub sp, #4
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    str r2, [sp] @ 4-byte Spill
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r4, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r5, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r6, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r7, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r0, [r1, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r1, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r7, [r1, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r6, [r1, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r5, [r1, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r4, [r1, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r1, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    ldr r0, [sp] @ 4-byte Reload
+; CHECK-V6M-OPTSIZE-NEXT:    strb r0, [r1]
+; CHECK-V6M-OPTSIZE-NEXT:    add sp, #4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, r5, r6, r7, pc}
+;
+; CHECK-V7M-MINSIZE-LABEL: loadstore8_align4_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    .save {r4, r5, r6, lr}
+; CHECK-V7M-MINSIZE-NEXT:    push {r4, r5, r6, lr}
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w lr, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r4, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r5, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r6, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V7M-MINSIZE-NEXT:    strb r0, [r1, #7]
+; CHECK-V7M-MINSIZE-NEXT:    strb r6, [r1, #6]
+; CHECK-V7M-MINSIZE-NEXT:    strb r5, [r1, #5]
+; CHECK-V7M-MINSIZE-NEXT:    strb r4, [r1, #4]
+; CHECK-V7M-MINSIZE-NEXT:    strb r3, [r1, #3]
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r1, #2]
+; CHECK-V7M-MINSIZE-NEXT:    strb.w lr, [r1, #1]
+; CHECK-V7M-MINSIZE-NEXT:    strb.w r12, [r1]
+; CHECK-V7M-MINSIZE-NEXT:    pop {r4, r5, r6, pc}
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: loadstore8_align4_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, r5, r6, lr}
 ; CHECK-V7M-OPTSIZE-NEXT:    push {r4, r5, r6, lr}
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V7M-OPTSIZE:         pop {r4, r5, r6, pc}
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w lr, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r4, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r5, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r6, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r0, [r1, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r6, [r1, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r5, [r1, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r4, [r1, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r1, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r1, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    strb.w lr, [r1, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    strb.w r12, [r1]
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, r5, r6, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: loadstore8_align4_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r0, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r0, [r1, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r1]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: loadstore8_align4_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r0, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r0, [r1, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r1]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load double, double* %a, align 1
   store double %tmp, double* %b, align 1
@@ -534,6 +1340,13 @@ define double @load8_align1_minsize(double* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load8_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load8_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -541,22 +1354,125 @@ define double @load8_align1_minsize(double* %a) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V7M-OPTSIZE-LABEL: load8_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load8_align1_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    b OUTLINED_FUNCTION_0
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load8_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    b OUTLINED_FUNCTION_0
 entry:
   %tmp = load double, double* %a, align 1
   ret double %tmp
 }
 
 define double @load8_align1_optsize(double* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load8_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load8_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load8_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r1, [r0, #7]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r3, r2, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load8_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r0, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r3, r2, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
 ;
+; CHECK-ALIGNED-MINSIZE-LABEL: load8_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load8_align1_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load double, double* %a, align 1
   ret double %tmp
@@ -574,6 +1490,17 @@ define void @store8_align1_minsize(double* %a, double %b) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite8
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: store8_align1_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r3
+; CHECK-V6M-OPTSIZE-NEXT:    mov r3, r0
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    mov r2, r3
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: store8_align1_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
@@ -584,21 +1511,118 @@ define void @store8_align1_minsize(double* %a, double %b) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    mov r2, r3
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-V7M-OPTSIZE-LABEL: store8_align1_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r3
+; CHECK-V7M-OPTSIZE-NEXT:    mov r3, r0
+; CHECK-V7M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V7M-OPTSIZE-NEXT:    mov r2, r3
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store8_align1_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store8_align1_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store double %b, double* %a, align 1
   ret void
 }
 
 define void @store8_align1_optsize(double* %a, double %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: store8_align1_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: store8_align1_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: store8_align1_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: store8_align1_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store8_align1_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store8_align1_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store double %b, double* %a, align 1
   ret void
@@ -612,27 +1636,101 @@ define double @load8_align2_minsize(double* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load8_align2_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load8_align2_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
 ; CHECK-V7M-MINSIZE-NEXT:    push {r7, lr}
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-V7M-OPTSIZE-LABEL: load8_align2_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load8_align2_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    b OUTLINED_FUNCTION_0
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load8_align2_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    b OUTLINED_FUNCTION_0
 entry:
   %tmp = load double, double* %a, align 2
   ret double %tmp
 }
 
 define double @load8_align2_optsize(double* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load8_align2_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r1, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    ldrh r0, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load8_align2_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r1, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrh r0, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #16
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load8_align2_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r1, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r2, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r2, r1, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r1, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    ldrh r0, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r0, r1, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load8_align2_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r1, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r2, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r2, r1, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r1, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrh r0, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r0, r1, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load8_align2_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load8_align2_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load double, double* %a, align 2
   ret double %tmp
@@ -646,12 +1744,34 @@ define i64 @load12_align1_trunc_minsize(i96* %a) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r7, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: load12_align1_trunc_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r7, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: load12_align1_trunc_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r7, lr}
 ; CHECK-V7M-MINSIZE-NEXT:    push {r7, lr}
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uread8
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-V7M-OPTSIZE-LABEL: load12_align1_trunc_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r7, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uread8
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r7, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load12_align1_trunc_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    b OUTLINED_FUNCTION_0
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load12_align1_trunc_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    b OUTLINED_FUNCTION_0
 entry:
   %tmp = load i96, i96* %a, align 1
   %ext = trunc i96 %tmp to i64
@@ -659,15 +1779,105 @@ entry:
 }
 
 define i64 @load12_align1_trunc_optsize(i96* %a) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: load12_align1_trunc_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-MINSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #8
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r3, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-MINSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-MINSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-MINSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-MINSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-MINSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-MINSIZE-NEXT:    bx lr
+;
 ; CHECK-V6M-OPTSIZE-LABEL: load12_align1_trunc_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uread8
-; CHECK-V6M-OPTSIZE:         bx lr
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r2, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r3, r2
+; CHECK-V6M-OPTSIZE-NEXT:    adds r2, r2, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r1, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r3, r1
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r3, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r3, r3, #16
+; CHECK-V6M-OPTSIZE-NEXT:    ldrb r0, [r0, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    lsls r0, r0, #24
+; CHECK-V6M-OPTSIZE-NEXT:    adds r0, r0, r3
+; CHECK-V6M-OPTSIZE-NEXT:    adds r1, r0, r1
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-V7M-MINSIZE-LABEL: load12_align1_trunc_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r1, [r0, #7]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r3, r2, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r1, r2, r1, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-MINSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: load12_align1_trunc_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bx __aeabi_uread8
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r1, [r0, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb.w r12, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r3, r2, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r3, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r1, r2, r1, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r2, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    ldrb r0, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r2, r12, r3, lsl #8
+; CHECK-V7M-OPTSIZE-NEXT:    orr.w r0, r2, r0, lsl #16
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: load12_align1_trunc_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: load12_align1_trunc_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r1, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   %tmp = load i96, i96* %a, align 1
   %ext = trunc i96 %tmp to i64
@@ -690,6 +1900,21 @@ define void @store12_align4_trunc_minsize(i96* %a, i96 %b) nounwind minsize {
 ; CHECK-V6M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
 ;
+; CHECK-V6M-OPTSIZE-LABEL: store12_align4_trunc_minsize:
+; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r3
+; CHECK-V6M-OPTSIZE-NEXT:    mov r4, r0
+; CHECK-V6M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V6M-OPTSIZE-NEXT:    mov r2, r4
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V6M-OPTSIZE-NEXT:    adds r4, #8
+; CHECK-V6M-OPTSIZE-NEXT:    ldr r0, [sp, #8]
+; CHECK-V6M-OPTSIZE-NEXT:    mov r1, r4
+; CHECK-V6M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V7M-MINSIZE-LABEL: store12_align4_trunc_minsize:
 ; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
 ; CHECK-V7M-MINSIZE-NEXT:    .save {r4, lr}
@@ -703,25 +1928,165 @@ define void @store12_align4_trunc_minsize(i96* %a, i96 %b) nounwind minsize {
 ; CHECK-V7M-MINSIZE-NEXT:    add.w r1, r4, #8
 ; CHECK-V7M-MINSIZE-NEXT:    bl __aeabi_uwrite4
 ; CHECK-V7M-MINSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-V7M-OPTSIZE-LABEL: store12_align4_trunc_minsize:
+; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-OPTSIZE-NEXT:    .save {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    push {r4, lr}
+; CHECK-V7M-OPTSIZE-NEXT:    mov r4, r0
+; CHECK-V7M-OPTSIZE-NEXT:    mov r0, r2
+; CHECK-V7M-OPTSIZE-NEXT:    mov r1, r3
+; CHECK-V7M-OPTSIZE-NEXT:    mov r2, r4
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite8
+; CHECK-V7M-OPTSIZE-NEXT:    ldr r0, [sp, #8]
+; CHECK-V7M-OPTSIZE-NEXT:    add.w r1, r4, #8
+; CHECK-V7M-OPTSIZE-NEXT:    bl __aeabi_uwrite4
+; CHECK-V7M-OPTSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store12_align4_trunc_minsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r1, [sp]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r1, [r0, #8]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store12_align4_trunc_minsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r1, [sp]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r1, [r0, #8]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store i96 %b, i96* %a, align 1
   ret void
 }
 
 define void @store12_align4_trunc_optsize(i96* %a, i96 %b) nounwind optsize {
+; CHECK-V6M-MINSIZE-LABEL: store12_align4_trunc_optsize:
+; CHECK-V6M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V6M-MINSIZE-NEXT:    .save {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    push {r4, lr}
+; CHECK-V6M-MINSIZE-NEXT:    ldr r1, [sp, #8]
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #8]
+; CHECK-V6M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r4, r1, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r4, [r0, #11]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r4, r1, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r4, [r0, #10]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #9]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-MINSIZE-NEXT:    pop {r4, pc}
+;
 ; CHECK-V6M-OPTSIZE-LABEL: store12_align4_trunc_optsize:
 ; CHECK-V6M-OPTSIZE:       @ %bb.0: @ %entry
 ; CHECK-V6M-OPTSIZE-NEXT:    .save {r4, lr}
 ; CHECK-V6M-OPTSIZE-NEXT:    push {r4, lr}
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V6M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V6M-OPTSIZE:         pop {r4, pc}
+; CHECK-V6M-OPTSIZE-NEXT:    ldr r1, [sp, #8]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #8]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V6M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r4, r1, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r4, [r0, #11]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r4, r1, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r4, [r0, #10]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r1, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #9]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V6M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V6M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V6M-OPTSIZE-NEXT:    pop {r4, pc}
+;
+; CHECK-V7M-MINSIZE-LABEL: store12_align4_trunc_optsize:
+; CHECK-V7M-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-V7M-MINSIZE-NEXT:    ldr.w r12, [sp]
+; CHECK-V7M-MINSIZE-NEXT:    strb.w r12, [r0, #8]
+; CHECK-V7M-MINSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-MINSIZE-NEXT:    lsr.w r1, r12, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #11]
+; CHECK-V7M-MINSIZE-NEXT:    lsr.w r1, r12, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #10]
+; CHECK-V7M-MINSIZE-NEXT:    lsr.w r1, r12, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #9]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-MINSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-MINSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-MINSIZE-NEXT:    bx lr
 ;
 ; CHECK-V7M-OPTSIZE-LABEL: store12_align4_trunc_optsize:
 ; CHECK-V7M-OPTSIZE:       @ %bb.0: @ %entry
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite8
-; CHECK-V7M-OPTSIZE-NOT:     bl __aeabi_uwrite4
-; CHECK-V7M-OPTSIZE:         bx lr
+; CHECK-V7M-OPTSIZE-NEXT:    ldr.w r12, [sp]
+; CHECK-V7M-OPTSIZE-NEXT:    strb.w r12, [r0, #8]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r3, [r0, #4]
+; CHECK-V7M-OPTSIZE-NEXT:    lsr.w r1, r12, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r2, [r0]
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #11]
+; CHECK-V7M-OPTSIZE-NEXT:    lsr.w r1, r12, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #10]
+; CHECK-V7M-OPTSIZE-NEXT:    lsr.w r1, r12, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #9]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #7]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #6]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r3, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #5]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #24
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #3]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #16
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #2]
+; CHECK-V7M-OPTSIZE-NEXT:    lsrs r1, r2, #8
+; CHECK-V7M-OPTSIZE-NEXT:    strb r1, [r0, #1]
+; CHECK-V7M-OPTSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-MINSIZE-LABEL: store12_align4_trunc_optsize:
+; CHECK-ALIGNED-MINSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-MINSIZE-NEXT:    ldr r1, [sp]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-MINSIZE-NEXT:    str r1, [r0, #8]
+; CHECK-ALIGNED-MINSIZE-NEXT:    bx lr
+;
+; CHECK-ALIGNED-OPTSIZE-LABEL: store12_align4_trunc_optsize:
+; CHECK-ALIGNED-OPTSIZE:       @ %bb.0: @ %entry
+; CHECK-ALIGNED-OPTSIZE-NEXT:    ldr r1, [sp]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r3, [r0, #4]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r2, [r0]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    str r1, [r0, #8]
+; CHECK-ALIGNED-OPTSIZE-NEXT:    bx lr
 entry:
   store i96 %b, i96* %a, align 1
   ret void

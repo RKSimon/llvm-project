@@ -136,10 +136,10 @@ define fp128 @add(fp128 %x, fp128 %y) nounwind strictfp {
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; WIN-X86-NEXT:    movl %edi, 8(%esi)
-; WIN-X86-NEXT:    movl %edx, 12(%esi)
-; WIN-X86-NEXT:    movl %eax, (%esi)
+; WIN-X86-NEXT:    movl %edi, 12(%esi)
+; WIN-X86-NEXT:    movl %edx, 8(%esi)
 ; WIN-X86-NEXT:    movl %ecx, 4(%esi)
+; WIN-X86-NEXT:    movl %eax, (%esi)
 ; WIN-X86-NEXT:    movl %esi, %eax
 ; WIN-X86-NEXT:    leal -12(%ebp), %esp
 ; WIN-X86-NEXT:    popl %esi
@@ -265,10 +265,10 @@ define fp128 @sub(fp128 %x, fp128 %y) nounwind strictfp {
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; WIN-X86-NEXT:    movl %edi, 8(%esi)
-; WIN-X86-NEXT:    movl %edx, 12(%esi)
-; WIN-X86-NEXT:    movl %eax, (%esi)
+; WIN-X86-NEXT:    movl %edi, 12(%esi)
+; WIN-X86-NEXT:    movl %edx, 8(%esi)
 ; WIN-X86-NEXT:    movl %ecx, 4(%esi)
+; WIN-X86-NEXT:    movl %eax, (%esi)
 ; WIN-X86-NEXT:    movl %esi, %eax
 ; WIN-X86-NEXT:    leal -12(%ebp), %esp
 ; WIN-X86-NEXT:    popl %esi
@@ -394,10 +394,10 @@ define fp128 @mul(fp128 %x, fp128 %y) nounwind strictfp {
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; WIN-X86-NEXT:    movl %edi, 8(%esi)
-; WIN-X86-NEXT:    movl %edx, 12(%esi)
-; WIN-X86-NEXT:    movl %eax, (%esi)
+; WIN-X86-NEXT:    movl %edi, 12(%esi)
+; WIN-X86-NEXT:    movl %edx, 8(%esi)
 ; WIN-X86-NEXT:    movl %ecx, 4(%esi)
+; WIN-X86-NEXT:    movl %eax, (%esi)
 ; WIN-X86-NEXT:    movl %esi, %eax
 ; WIN-X86-NEXT:    leal -12(%ebp), %esp
 ; WIN-X86-NEXT:    popl %esi
@@ -523,10 +523,10 @@ define fp128 @div(fp128 %x, fp128 %y) nounwind strictfp {
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; WIN-X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; WIN-X86-NEXT:    movl %edi, 8(%esi)
-; WIN-X86-NEXT:    movl %edx, 12(%esi)
-; WIN-X86-NEXT:    movl %eax, (%esi)
+; WIN-X86-NEXT:    movl %edi, 12(%esi)
+; WIN-X86-NEXT:    movl %edx, 8(%esi)
 ; WIN-X86-NEXT:    movl %ecx, 4(%esi)
+; WIN-X86-NEXT:    movl %eax, (%esi)
 ; WIN-X86-NEXT:    movl %esi, %eax
 ; WIN-X86-NEXT:    leal -12(%ebp), %esp
 ; WIN-X86-NEXT:    popl %esi

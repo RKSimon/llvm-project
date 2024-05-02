@@ -117,9 +117,11 @@ define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 ; CHECK-SD-LABEL: abd_ext_i16_i32:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    sxth w8, w0
-; CHECK-SD-NEXT:    subs w8, w8, w1
-; CHECK-SD-NEXT:    cneg w0, w8, gt
+; CHECK-SD-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-SD-NEXT:    sxth x8, w0
+; CHECK-SD-NEXT:    subs x8, x8, w1, sxtw
+; CHECK-SD-NEXT:    cneg x8, x8, mi
+; CHECK-SD-NEXT:    neg w0, w8
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: abd_ext_i16_i32:
@@ -197,8 +199,11 @@ define i32 @abd_ext_i32(i32 %a, i32 %b) nounwind {
 define i32 @abd_ext_i32_i16(i32 %a, i16 %b) nounwind {
 ; CHECK-SD-LABEL: abd_ext_i32_i16:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    subs w8, w0, w1, sxth
-; CHECK-SD-NEXT:    cneg w0, w8, gt
+; CHECK-SD-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-SD-NEXT:    sxtw x8, w0
+; CHECK-SD-NEXT:    subs x8, x8, w1, sxth
+; CHECK-SD-NEXT:    cneg x8, x8, mi
+; CHECK-SD-NEXT:    neg w0, w8
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: abd_ext_i32_i16:

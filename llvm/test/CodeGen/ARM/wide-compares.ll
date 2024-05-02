@@ -18,24 +18,40 @@ define i32 @test_slt1(i64 %a, i64 %b) {
 ; CHECK-THUMB1-NOMOV:       @ %bb.0: @ %entry
 ; CHECK-THUMB1-NOMOV-NEXT:    subs r0, r0, r2
 ; CHECK-THUMB1-NOMOV-NEXT:    sbcs r1, r3
-; CHECK-THUMB1-NOMOV-NEXT:    bge .LBB0_2
-; CHECK-THUMB1-NOMOV-NEXT:  @ %bb.1: @ %bb1
-; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #1
-; CHECK-THUMB1-NOMOV-NEXT:    bx lr
+; CHECK-THUMB1-NOMOV-NEXT:    bge .LBB0_3
+; CHECK-THUMB1-NOMOV-NEXT:  @ %bb.1: @ %entry
+; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    beq .LBB0_4
 ; CHECK-THUMB1-NOMOV-NEXT:  .LBB0_2: @ %bb2
 ; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #2
+; CHECK-THUMB1-NOMOV-NEXT:    bx lr
+; CHECK-THUMB1-NOMOV-NEXT:  .LBB0_3:
+; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #1
+; CHECK-THUMB1-NOMOV-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    bne .LBB0_2
+; CHECK-THUMB1-NOMOV-NEXT:  .LBB0_4: @ %bb1
+; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #1
 ; CHECK-THUMB1-NOMOV-NEXT:    bx lr
 ;
 ; CHECK-THUMB1-LABEL: test_slt1:
 ; CHECK-THUMB1:       @ %bb.0: @ %entry
 ; CHECK-THUMB1-NEXT:    subs r0, r0, r2
 ; CHECK-THUMB1-NEXT:    sbcs r1, r3
-; CHECK-THUMB1-NEXT:    bge .LBB0_2
-; CHECK-THUMB1-NEXT:  @ %bb.1: @ %bb1
-; CHECK-THUMB1-NEXT:    movs r0, #1
-; CHECK-THUMB1-NEXT:    bx lr
+; CHECK-THUMB1-NEXT:    bge .LBB0_3
+; CHECK-THUMB1-NEXT:  @ %bb.1: @ %entry
+; CHECK-THUMB1-NEXT:    movs r0, #0
+; CHECK-THUMB1-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NEXT:    beq .LBB0_4
 ; CHECK-THUMB1-NEXT:  .LBB0_2: @ %bb2
 ; CHECK-THUMB1-NEXT:    movs r0, #2
+; CHECK-THUMB1-NEXT:    bx lr
+; CHECK-THUMB1-NEXT:  .LBB0_3:
+; CHECK-THUMB1-NEXT:    movs r0, #1
+; CHECK-THUMB1-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NEXT:    bne .LBB0_2
+; CHECK-THUMB1-NEXT:  .LBB0_4: @ %bb1
+; CHECK-THUMB1-NEXT:    movs r0, #1
 ; CHECK-THUMB1-NEXT:    bx lr
 ;
 ; CHECK-THUMB2-LABEL: test_slt1:
@@ -61,8 +77,11 @@ define void @test_slt2(i64 %a, i64 %b) {
 ; CHECK-ARM:       @ %bb.0: @ %entry
 ; CHECK-ARM-NEXT:    push {r11, lr}
 ; CHECK-ARM-NEXT:    subs r0, r0, r2
+; CHECK-ARM-NEXT:    mov r12, #0
 ; CHECK-ARM-NEXT:    sbcs r0, r1, r3
-; CHECK-ARM-NEXT:    bge .LBB1_2
+; CHECK-ARM-NEXT:    movwlt r12, #1
+; CHECK-ARM-NEXT:    cmp r12, #0
+; CHECK-ARM-NEXT:    beq .LBB1_2
 ; CHECK-ARM-NEXT:  @ %bb.1: @ %bb1
 ; CHECK-ARM-NEXT:    bl f
 ; CHECK-ARM-NEXT:    pop {r11, pc}
@@ -76,13 +95,21 @@ define void @test_slt2(i64 %a, i64 %b) {
 ; CHECK-THUMB1-NOMOV-NEXT:    push {r7, lr}
 ; CHECK-THUMB1-NOMOV-NEXT:    subs r0, r0, r2
 ; CHECK-THUMB1-NOMOV-NEXT:    sbcs r1, r3
-; CHECK-THUMB1-NOMOV-NEXT:    bge .LBB1_2
-; CHECK-THUMB1-NOMOV-NEXT:  @ %bb.1: @ %bb1
-; CHECK-THUMB1-NOMOV-NEXT:    bl f
-; CHECK-THUMB1-NOMOV-NEXT:    b .LBB1_3
+; CHECK-THUMB1-NOMOV-NEXT:    bge .LBB1_3
+; CHECK-THUMB1-NOMOV-NEXT:  @ %bb.1: @ %entry
+; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    beq .LBB1_4
 ; CHECK-THUMB1-NOMOV-NEXT:  .LBB1_2: @ %bb2
 ; CHECK-THUMB1-NOMOV-NEXT:    bl g
-; CHECK-THUMB1-NOMOV-NEXT:  .LBB1_3: @ %bb1
+; CHECK-THUMB1-NOMOV-NEXT:    b .LBB1_5
+; CHECK-THUMB1-NOMOV-NEXT:  .LBB1_3:
+; CHECK-THUMB1-NOMOV-NEXT:    movs r0, #1
+; CHECK-THUMB1-NOMOV-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NOMOV-NEXT:    bne .LBB1_2
+; CHECK-THUMB1-NOMOV-NEXT:  .LBB1_4: @ %bb1
+; CHECK-THUMB1-NOMOV-NEXT:    bl f
+; CHECK-THUMB1-NOMOV-NEXT:  .LBB1_5: @ %bb1
 ; CHECK-THUMB1-NOMOV-NEXT:    pop {r7}
 ; CHECK-THUMB1-NOMOV-NEXT:    pop {r0}
 ; CHECK-THUMB1-NOMOV-NEXT:    bx r0
@@ -92,20 +119,32 @@ define void @test_slt2(i64 %a, i64 %b) {
 ; CHECK-THUMB1-NEXT:    push {r7, lr}
 ; CHECK-THUMB1-NEXT:    subs r0, r0, r2
 ; CHECK-THUMB1-NEXT:    sbcs r1, r3
-; CHECK-THUMB1-NEXT:    bge .LBB1_2
-; CHECK-THUMB1-NEXT:  @ %bb.1: @ %bb1
-; CHECK-THUMB1-NEXT:    bl f
-; CHECK-THUMB1-NEXT:    pop {r7, pc}
+; CHECK-THUMB1-NEXT:    bge .LBB1_3
+; CHECK-THUMB1-NEXT:  @ %bb.1: @ %entry
+; CHECK-THUMB1-NEXT:    movs r0, #0
+; CHECK-THUMB1-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NEXT:    beq .LBB1_4
 ; CHECK-THUMB1-NEXT:  .LBB1_2: @ %bb2
 ; CHECK-THUMB1-NEXT:    bl g
+; CHECK-THUMB1-NEXT:    pop {r7, pc}
+; CHECK-THUMB1-NEXT:  .LBB1_3:
+; CHECK-THUMB1-NEXT:    movs r0, #1
+; CHECK-THUMB1-NEXT:    cmp r0, #0
+; CHECK-THUMB1-NEXT:    bne .LBB1_2
+; CHECK-THUMB1-NEXT:  .LBB1_4: @ %bb1
+; CHECK-THUMB1-NEXT:    bl f
 ; CHECK-THUMB1-NEXT:    pop {r7, pc}
 ;
 ; CHECK-THUMB2-LABEL: test_slt2:
 ; CHECK-THUMB2:       @ %bb.0: @ %entry
 ; CHECK-THUMB2-NEXT:    push {r7, lr}
 ; CHECK-THUMB2-NEXT:    subs r0, r0, r2
+; CHECK-THUMB2-NEXT:    mov.w r12, #0
 ; CHECK-THUMB2-NEXT:    sbcs.w r0, r1, r3
-; CHECK-THUMB2-NEXT:    bge .LBB1_2
+; CHECK-THUMB2-NEXT:    it lt
+; CHECK-THUMB2-NEXT:    movlt.w r12, #1
+; CHECK-THUMB2-NEXT:    cmp.w r12, #0
+; CHECK-THUMB2-NEXT:    beq .LBB1_2
 ; CHECK-THUMB2-NEXT:  @ %bb.1: @ %bb1
 ; CHECK-THUMB2-NEXT:    bl f
 ; CHECK-THUMB2-NEXT:    pop {r7, pc}
@@ -129,16 +168,14 @@ declare void @g()
 define i64 @test_slt_select(i64 %c, i64 %d, i64 %a, i64 %b) {
 ; CHECK-ARM-LABEL: test_slt_select:
 ; CHECK-ARM:       @ %bb.0: @ %entry
-; CHECK-ARM-NEXT:    push {r4, r5, r6, lr}
-; CHECK-ARM-NEXT:    ldr r12, [sp, #24]
-; CHECK-ARM-NEXT:    ldr lr, [sp, #16]
-; CHECK-ARM-NEXT:    ldr r6, [sp, #28]
-; CHECK-ARM-NEXT:    ldr r5, [sp, #20]
-; CHECK-ARM-NEXT:    subs r4, lr, r12
-; CHECK-ARM-NEXT:    sbcs r6, r5, r6
+; CHECK-ARM-NEXT:    push {r4, r5, r11, lr}
+; CHECK-ARM-NEXT:    add lr, sp, #16
+; CHECK-ARM-NEXT:    ldm lr, {r4, r5, r12, lr}
+; CHECK-ARM-NEXT:    subs r4, r4, r12
+; CHECK-ARM-NEXT:    sbcs r5, r5, lr
 ; CHECK-ARM-NEXT:    movhs r0, r2
 ; CHECK-ARM-NEXT:    movhs r1, r3
-; CHECK-ARM-NEXT:    pop {r4, r5, r6, pc}
+; CHECK-ARM-NEXT:    pop {r4, r5, r11, pc}
 ;
 ; CHECK-THUMB1-NOMOV-LABEL: test_slt_select:
 ; CHECK-THUMB1-NOMOV:       @ %bb.0: @ %entry
@@ -146,8 +183,10 @@ define i64 @test_slt_select(i64 %c, i64 %d, i64 %a, i64 %b) {
 ; CHECK-THUMB1-NOMOV-NEXT:    push {r4, r5, r6, r7, lr}
 ; CHECK-THUMB1-NOMOV-NEXT:    .pad #4
 ; CHECK-THUMB1-NOMOV-NEXT:    sub sp, #4
-; CHECK-THUMB1-NOMOV-NEXT:    ldr r4, [sp, #36]
-; CHECK-THUMB1-NOMOV-NEXT:    ldr r5, [sp, #28]
+; CHECK-THUMB1-NOMOV-NEXT:    add r4, sp, #32
+; CHECK-THUMB1-NOMOV-NEXT:    ldr r4, [r4, #4]
+; CHECK-THUMB1-NOMOV-NEXT:    add r5, sp, #24
+; CHECK-THUMB1-NOMOV-NEXT:    ldr r5, [r5, #4]
 ; CHECK-THUMB1-NOMOV-NEXT:    ldr r6, [sp, #32]
 ; CHECK-THUMB1-NOMOV-NEXT:    ldr r7, [sp, #24]
 ; CHECK-THUMB1-NOMOV-NEXT:    subs r6, r7, r6
@@ -170,8 +209,10 @@ define i64 @test_slt_select(i64 %c, i64 %d, i64 %a, i64 %b) {
 ; CHECK-THUMB1:       @ %bb.0: @ %entry
 ; CHECK-THUMB1-NEXT:    push {r4, r5, r6, r7, lr}
 ; CHECK-THUMB1-NEXT:    sub sp, #4
-; CHECK-THUMB1-NEXT:    ldr r4, [sp, #36]
-; CHECK-THUMB1-NEXT:    ldr r5, [sp, #28]
+; CHECK-THUMB1-NEXT:    add r4, sp, #32
+; CHECK-THUMB1-NEXT:    ldr r4, [r4, #4]
+; CHECK-THUMB1-NEXT:    add r5, sp, #24
+; CHECK-THUMB1-NEXT:    ldr r5, [r5, #4]
 ; CHECK-THUMB1-NEXT:    ldr r6, [sp, #32]
 ; CHECK-THUMB1-NEXT:    ldr r7, [sp, #24]
 ; CHECK-THUMB1-NEXT:    subs r6, r7, r6
@@ -192,15 +233,15 @@ define i64 @test_slt_select(i64 %c, i64 %d, i64 %a, i64 %b) {
 ;
 ; CHECK-THUMB2-LABEL: test_slt_select:
 ; CHECK-THUMB2:       @ %bb.0: @ %entry
-; CHECK-THUMB2-NEXT:    push {r4, r5, r6, lr}
-; CHECK-THUMB2-NEXT:    ldrd r12, r6, [sp, #24]
-; CHECK-THUMB2-NEXT:    ldrd lr, r5, [sp, #16]
-; CHECK-THUMB2-NEXT:    subs.w r4, lr, r12
-; CHECK-THUMB2-NEXT:    sbcs.w r6, r5, r6
+; CHECK-THUMB2-NEXT:    push {r4, r5, r7, lr}
+; CHECK-THUMB2-NEXT:    add.w lr, sp, #16
+; CHECK-THUMB2-NEXT:    ldm.w lr, {r4, r5, r12, lr}
+; CHECK-THUMB2-NEXT:    subs.w r4, r4, r12
+; CHECK-THUMB2-NEXT:    sbcs.w r5, r5, lr
 ; CHECK-THUMB2-NEXT:    itt hs
 ; CHECK-THUMB2-NEXT:    movhs r0, r2
 ; CHECK-THUMB2-NEXT:    movhs r1, r3
-; CHECK-THUMB2-NEXT:    pop {r4, r5, r6, pc}
+; CHECK-THUMB2-NEXT:    pop {r4, r5, r7, pc}
 entry:
     %cmp = icmp ult i64 %a, %b
     %r1 = select i1 %cmp, i64 %c, i64 %d
@@ -210,11 +251,10 @@ entry:
 define {i32, i32} @test_slt_not(i32 %c, i32 %d, i64 %a, i64 %b) {
 ; CHECK-ARM-LABEL: test_slt_not:
 ; CHECK-ARM:       @ %bb.0: @ %entry
-; CHECK-ARM-NEXT:    ldr r12, [sp]
+; CHECK-ARM-NEXT:    ldm sp, {r0, r12}
 ; CHECK-ARM-NEXT:    mov r1, #0
-; CHECK-ARM-NEXT:    ldr r0, [sp, #4]
-; CHECK-ARM-NEXT:    subs r2, r2, r12
-; CHECK-ARM-NEXT:    sbcs r0, r3, r0
+; CHECK-ARM-NEXT:    subs r0, r2, r0
+; CHECK-ARM-NEXT:    sbcs r0, r3, r12
 ; CHECK-ARM-NEXT:    mov r0, #0
 ; CHECK-ARM-NEXT:    movwge r1, #1
 ; CHECK-ARM-NEXT:    movwlt r0, #1
@@ -224,9 +264,10 @@ define {i32, i32} @test_slt_not(i32 %c, i32 %d, i64 %a, i64 %b) {
 ; CHECK-THUMB1-NOMOV:       @ %bb.0: @ %entry
 ; CHECK-THUMB1-NOMOV-NEXT:    .save {r4, r5, r7, lr}
 ; CHECK-THUMB1-NOMOV-NEXT:    push {r4, r5, r7, lr}
+; CHECK-THUMB1-NOMOV-NEXT:    add r0, sp, #16
+; CHECK-THUMB1-NOMOV-NEXT:    ldr r0, [r0, #4]
 ; CHECK-THUMB1-NOMOV-NEXT:    movs r1, #1
 ; CHECK-THUMB1-NOMOV-NEXT:    movs r4, #0
-; CHECK-THUMB1-NOMOV-NEXT:    ldr r0, [sp, #20]
 ; CHECK-THUMB1-NOMOV-NEXT:    ldr r5, [sp, #16]
 ; CHECK-THUMB1-NOMOV-NEXT:    subs r2, r2, r5
 ; CHECK-THUMB1-NOMOV-NEXT:    sbcs r3, r0
@@ -248,9 +289,10 @@ define {i32, i32} @test_slt_not(i32 %c, i32 %d, i64 %a, i64 %b) {
 ; CHECK-THUMB1-LABEL: test_slt_not:
 ; CHECK-THUMB1:       @ %bb.0: @ %entry
 ; CHECK-THUMB1-NEXT:    push {r4, r5, r7, lr}
+; CHECK-THUMB1-NEXT:    add r0, sp, #16
+; CHECK-THUMB1-NEXT:    ldr r0, [r0, #4]
 ; CHECK-THUMB1-NEXT:    movs r1, #1
 ; CHECK-THUMB1-NEXT:    movs r4, #0
-; CHECK-THUMB1-NEXT:    ldr r0, [sp, #20]
 ; CHECK-THUMB1-NEXT:    ldr r5, [sp, #16]
 ; CHECK-THUMB1-NEXT:    subs r2, r2, r5
 ; CHECK-THUMB1-NEXT:    sbcs r3, r0
@@ -269,11 +311,10 @@ define {i32, i32} @test_slt_not(i32 %c, i32 %d, i64 %a, i64 %b) {
 ;
 ; CHECK-THUMB2-LABEL: test_slt_not:
 ; CHECK-THUMB2:       @ %bb.0: @ %entry
-; CHECK-THUMB2-NEXT:    ldr.w r12, [sp]
+; CHECK-THUMB2-NEXT:    ldrd r0, r12, [sp]
 ; CHECK-THUMB2-NEXT:    movs r1, #0
-; CHECK-THUMB2-NEXT:    ldr r0, [sp, #4]
-; CHECK-THUMB2-NEXT:    subs.w r2, r2, r12
-; CHECK-THUMB2-NEXT:    sbcs.w r0, r3, r0
+; CHECK-THUMB2-NEXT:    subs r0, r2, r0
+; CHECK-THUMB2-NEXT:    sbcs.w r0, r3, r12
 ; CHECK-THUMB2-NEXT:    mov.w r0, #0
 ; CHECK-THUMB2-NEXT:    ite lt
 ; CHECK-THUMB2-NEXT:    movlt r0, #1

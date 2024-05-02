@@ -45,10 +45,10 @@ define float @test_extract_0(<2 x float> %a) #0 {
 ;
 ; CHECK-F32X2-LABEL: test_extract_0(
 ; CHECK-F32X2:       {
-; CHECK-F32X2-NEXT:    .reg .b32 %r<2>;
+; CHECK-F32X2-NEXT:    .reg .b32 %r<3>;
 ; CHECK-F32X2-EMPTY:
 ; CHECK-F32X2-NEXT:  // %bb.0:
-; CHECK-F32X2-NEXT:    ld.param::func.b32 %r1, [test_extract_0_param_0];
+; CHECK-F32X2-NEXT:    ld.param::func.v2.b32 {%r1, %r2}, [test_extract_0_param_0];
 ; CHECK-F32X2-NEXT:    st.param::func.b32 [func_retval0], %r1;
 ; CHECK-F32X2-NEXT:    ret;
   %e = extractelement <2 x float> %a, i32 0
@@ -67,11 +67,11 @@ define float @test_extract_1(<2 x float> %a) #0 {
 ;
 ; CHECK-F32X2-LABEL: test_extract_1(
 ; CHECK-F32X2:       {
-; CHECK-F32X2-NEXT:    .reg .b32 %r<2>;
+; CHECK-F32X2-NEXT:    .reg .b32 %r<3>;
 ; CHECK-F32X2-EMPTY:
 ; CHECK-F32X2-NEXT:  // %bb.0:
-; CHECK-F32X2-NEXT:    ld.param::func.b32 %r1, [test_extract_1_param_0+4];
-; CHECK-F32X2-NEXT:    st.param::func.b32 [func_retval0], %r1;
+; CHECK-F32X2-NEXT:    ld.param::func.v2.b32 {%r1, %r2}, [test_extract_1_param_0];
+; CHECK-F32X2-NEXT:    st.param::func.b32 [func_retval0], %r2;
 ; CHECK-F32X2-NEXT:    ret;
   %e = extractelement <2 x float> %a, i32 1
   ret float %e
@@ -2073,11 +2073,11 @@ define <2 x float> @test_bitcast_2xi32_to_2xfloat(<2 x i32> %a) #0 {
 define <2 x float> @test_bitcast_double_to_2xfloat(double %a) #0 {
 ; CHECK-NOF32X2-LABEL: test_bitcast_double_to_2xfloat(
 ; CHECK-NOF32X2:       {
-; CHECK-NOF32X2-NEXT:    .reg .b64 %rd<2>;
+; CHECK-NOF32X2-NEXT:    .reg .b32 %r<3>;
 ; CHECK-NOF32X2-EMPTY:
 ; CHECK-NOF32X2-NEXT:  // %bb.0:
-; CHECK-NOF32X2-NEXT:    ld.param.b64 %rd1, [test_bitcast_double_to_2xfloat_param_0];
-; CHECK-NOF32X2-NEXT:    st.param.b64 [func_retval0], %rd1;
+; CHECK-NOF32X2-NEXT:    ld.param.v2.b32 {%r1, %r2}, [test_bitcast_double_to_2xfloat_param_0];
+; CHECK-NOF32X2-NEXT:    st.param.v2.b32 [func_retval0], {%r1, %r2};
 ; CHECK-NOF32X2-NEXT:    ret;
 ;
 ; CHECK-F32X2-LABEL: test_bitcast_double_to_2xfloat(
@@ -2095,11 +2095,11 @@ define <2 x float> @test_bitcast_double_to_2xfloat(double %a) #0 {
 define double @test_bitcast_2xfloat_to_double(<2 x float> %a) #0 {
 ; CHECK-NOF32X2-LABEL: test_bitcast_2xfloat_to_double(
 ; CHECK-NOF32X2:       {
-; CHECK-NOF32X2-NEXT:    .reg .b32 %r<3>;
+; CHECK-NOF32X2-NEXT:    .reg .b64 %rd<2>;
 ; CHECK-NOF32X2-EMPTY:
 ; CHECK-NOF32X2-NEXT:  // %bb.0:
-; CHECK-NOF32X2-NEXT:    ld.param.v2.b32 {%r1, %r2}, [test_bitcast_2xfloat_to_double_param_0];
-; CHECK-NOF32X2-NEXT:    st.param.v2.b32 [func_retval0], {%r1, %r2};
+; CHECK-NOF32X2-NEXT:    ld.param.b64 %rd1, [test_bitcast_2xfloat_to_double_param_0];
+; CHECK-NOF32X2-NEXT:    st.param.b64 [func_retval0], %rd1;
 ; CHECK-NOF32X2-NEXT:    ret;
 ;
 ; CHECK-F32X2-LABEL: test_bitcast_2xfloat_to_double(
@@ -2754,12 +2754,12 @@ define <2 x float> @test_insertelement(<2 x float> %a, float %x) #0 {
 ;
 ; CHECK-F32X2-LABEL: test_insertelement(
 ; CHECK-F32X2:       {
-; CHECK-F32X2-NEXT:    .reg .b32 %r<3>;
+; CHECK-F32X2-NEXT:    .reg .b32 %r<4>;
 ; CHECK-F32X2-EMPTY:
 ; CHECK-F32X2-NEXT:  // %bb.0:
-; CHECK-F32X2-NEXT:    ld.param::func.b32 %r1, [test_insertelement_param_1];
-; CHECK-F32X2-NEXT:    ld.param::func.b32 %r2, [test_insertelement_param_0];
-; CHECK-F32X2-NEXT:    st.param::func.v2.b32 [func_retval0], {%r2, %r1};
+; CHECK-F32X2-NEXT:    ld.param::func.v2.b32 {%r1, %r2}, [test_insertelement_param_0];
+; CHECK-F32X2-NEXT:    ld.param::func.b32 %r3, [test_insertelement_param_1];
+; CHECK-F32X2-NEXT:    st.param::func.v2.b32 [func_retval0], {%r1, %r3};
 ; CHECK-F32X2-NEXT:    ret;
   %i = insertelement <2 x float> %a, float %x, i64 1
   ret <2 x float> %i

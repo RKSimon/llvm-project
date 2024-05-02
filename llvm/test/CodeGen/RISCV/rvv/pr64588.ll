@@ -4,8 +4,13 @@
 define void @bar(ptr %p) {
 ; CHECK-LABEL: bar:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    sd zero, 0(a0)
-; CHECK-NEXT:    sd zero, 8(a0)
+; CHECK-NEXT:    vsetivli zero, 1, e64, m1, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetivli zero, 8, e8, m1, ta, ma
+; CHECK-NEXT:    vmv.v.i v10, 0
+; CHECK-NEXT:    vsetivli zero, 16, e8, m2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v10, 8
+; CHECK-NEXT:    vse8.v v8, (a0)
 ; CHECK-NEXT:    ret
   %v = insertelement <64 x i64> zeroinitializer, i64 0, i32 0
   %trunc = trunc <64 x i64> %v to <64 x i1>

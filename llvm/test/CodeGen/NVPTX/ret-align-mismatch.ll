@@ -17,11 +17,11 @@ define internal alignstack(4) %struct.big @internal_ret_align4() {
 ; CHECK:       {
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], 5;
-; CHECK-NEXT:    st.param.b32 [func_retval0+12], 4;
-; CHECK-NEXT:    st.param.b32 [func_retval0+8], 3;
 ; CHECK-NEXT:    st.param.b32 [func_retval0+4], 2;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], 1;
+; CHECK-NEXT:    st.param.b32 [func_retval0+8], 3;
+; CHECK-NEXT:    st.param.b32 [func_retval0+12], 4;
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], 5;
 ; CHECK-NEXT:    ret;
   ret %struct.big { i32 1, i32 2, i32 3, i32 4, i32 5 }
 }
@@ -37,17 +37,17 @@ define %struct.big @caller_align4() {
 ; CHECK-NEXT:    { // callseq 0, 0
 ; CHECK-NEXT:    .param .align 4 .b8 retval0[20];
 ; CHECK-NEXT:    call.uni (retval0), internal_ret_align4, ();
-; CHECK-NEXT:    ld.param.b32 %r1, [retval0+16];
-; CHECK-NEXT:    ld.param.b32 %r2, [retval0+12];
+; CHECK-NEXT:    ld.param.b32 %r1, [retval0+4];
+; CHECK-NEXT:    ld.param.b32 %r2, [retval0];
 ; CHECK-NEXT:    ld.param.b32 %r3, [retval0+8];
-; CHECK-NEXT:    ld.param.b32 %r4, [retval0+4];
-; CHECK-NEXT:    ld.param.b32 %r5, [retval0];
+; CHECK-NEXT:    ld.param.b32 %r4, [retval0+12];
+; CHECK-NEXT:    ld.param.b32 %r5, [retval0+16];
 ; CHECK-NEXT:    } // callseq 0
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r1;
-; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r2;
+; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r1;
+; CHECK-NEXT:    st.param.b32 [func_retval0], %r2;
 ; CHECK-NEXT:    st.param.b32 [func_retval0+8], %r3;
-; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r4;
-; CHECK-NEXT:    st.param.b32 [func_retval0], %r5;
+; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r4;
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r5;
 ; CHECK-NEXT:    ret;
   %r = call %struct.big @internal_ret_align4()
   ret %struct.big %r
@@ -77,14 +77,14 @@ define %struct.big @caller_align16() {
 ; CHECK-NEXT:    { // callseq 1, 0
 ; CHECK-NEXT:    .param .align 16 .b8 retval0[20];
 ; CHECK-NEXT:    call.uni (retval0), internal_ret_align16, ();
-; CHECK-NEXT:    ld.param.b32 %r1, [retval0+16];
-; CHECK-NEXT:    ld.param.v4.b32 {%r2, %r3, %r4, %r5}, [retval0];
+; CHECK-NEXT:    ld.param.v4.b32 {%r1, %r2, %r3, %r4}, [retval0];
+; CHECK-NEXT:    ld.param.b32 %r5, [retval0+16];
 ; CHECK-NEXT:    } // callseq 1
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r1;
-; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r5;
-; CHECK-NEXT:    st.param.b32 [func_retval0+8], %r4;
-; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r3;
-; CHECK-NEXT:    st.param.b32 [func_retval0], %r2;
+; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r2;
+; CHECK-NEXT:    st.param.b32 [func_retval0], %r1;
+; CHECK-NEXT:    st.param.b32 [func_retval0+8], %r3;
+; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r4;
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r5;
 ; CHECK-NEXT:    ret;
   %r = call %struct.big @internal_ret_align16()
   ret %struct.big %r
@@ -114,14 +114,14 @@ define %struct.big @caller_default() {
 ; CHECK-NEXT:    { // callseq 2, 0
 ; CHECK-NEXT:    .param .align 16 .b8 retval0[20];
 ; CHECK-NEXT:    call.uni (retval0), internal_ret_default, ();
-; CHECK-NEXT:    ld.param.b32 %r1, [retval0+16];
-; CHECK-NEXT:    ld.param.v4.b32 {%r2, %r3, %r4, %r5}, [retval0];
+; CHECK-NEXT:    ld.param.v4.b32 {%r1, %r2, %r3, %r4}, [retval0];
+; CHECK-NEXT:    ld.param.b32 %r5, [retval0+16];
 ; CHECK-NEXT:    } // callseq 2
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r1;
-; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r5;
-; CHECK-NEXT:    st.param.b32 [func_retval0+8], %r4;
-; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r3;
-; CHECK-NEXT:    st.param.b32 [func_retval0], %r2;
+; CHECK-NEXT:    st.param.b32 [func_retval0+4], %r2;
+; CHECK-NEXT:    st.param.b32 [func_retval0], %r1;
+; CHECK-NEXT:    st.param.b32 [func_retval0+8], %r3;
+; CHECK-NEXT:    st.param.b32 [func_retval0+12], %r4;
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], %r5;
 ; CHECK-NEXT:    ret;
   %r = call %struct.big @internal_ret_default()
   ret %struct.big %r

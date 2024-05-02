@@ -194,9 +194,7 @@ define void @hang_when_merging_stores_after_legalisation_intrinsic(ptr %a, <2 x 
 ; CHECK-LABEL: hang_when_merging_stores_after_legalisation_intrinsic:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    mov z0.s, s0
-; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    mov z1.d, z0.d
-; CHECK-NEXT:    st2w { z0.s, z1.s }, p0, [x0]
+; CHECK-NEXT:    stp q0, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: hang_when_merging_stores_after_legalisation_intrinsic:

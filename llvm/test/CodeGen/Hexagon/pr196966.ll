@@ -35,7 +35,6 @@ define void @pr196966(ptr %base) {
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     r0 = p0
-; CHECK-NEXT:     r1 = add(r16,#6)
 ; CHECK-NEXT:     r5:4 = memd(r29+#8)
 ; CHECK-NEXT:     r3:2 = memd(r29+#24)
 ; CHECK-NEXT:    }
@@ -44,8 +43,11 @@ define void @pr196966(ptr %base) {
 ; CHECK-NEXT:     r5 = add(r16,#20)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p0 = bitsclr(r0,#4)
-; CHECK-NEXT:     if (p0.new) jump:t .LBB0_3
+; CHECK-NEXT:     r1 = extractu(r0,#6,#2)
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r1 = add(r16,#6)
+; CHECK-NEXT:     p0 = tstbit(r1,#0); if (!p0.new) jump:t .LBB0_3
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:  // %bb.2: // %cond.store3
 ; CHECK-NEXT:    {
@@ -59,21 +61,26 @@ define void @pr196966(ptr %base) {
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:  .LBB0_3: // %else4
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p0 = bitsclr(r0,#32)
-; CHECK-NEXT:     p1 = !tstbit(r0,#13)
+; CHECK-NEXT:     r6 = extractu(r0,#11,#5)
+; CHECK-NEXT:     r7 = extractu(r0,#3,#5)
 ; CHECK-NEXT:     r17:16 = memd(r30+#-8)
-; CHECK-NEXT:     if (!p0.new) memh(r5+#0) = r4.h
 ; CHECK-NEXT:    } // 8-byte Folded Reload
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     p2 = !tstbit(r0,#15)
-; CHECK-NEXT:     if (!p1) memh(r1+#0) = r2.h
+; CHECK-NEXT:     p0 = tstbit(r6,#0)
+; CHECK-NEXT:     p1 = tstbit(r7,#0)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r0 = extractu(r0,#1,#7)
+; CHECK-NEXT:     if (p0) memh(r5+#0) = r4.h
+; CHECK-NEXT:     if (p1) memh(r1+#0) = r2.h
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     p2 = tstbit(r0,#0)
 ; CHECK-NEXT:     r31:30 = deallocframe(r30):raw
-; CHECK-NEXT:     if (!p2) memh(r0+#0) = r3.h
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
 ; CHECK-NEXT:     jumpr r31
+; CHECK-NEXT:     if (p2) memh(r0+#0) = r3.h
 ; CHECK-NEXT:    }
 entry:
   %mb = icmp ne ptr %base, null

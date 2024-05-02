@@ -313,16 +313,16 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; RV32-NEXT:    vse32.v v9, (a1)
 ; RV32-NEXT:    addi a1, sp, 192
 ; RV32-NEXT:    vse32.v v8, (a1)
+; RV32-NEXT:    addi a2, a0, 96
+; RV32-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; RV32-NEXT:    vle32.v v8, (a2)
+; RV32-NEXT:    addi a2, sp, 416
+; RV32-NEXT:    vse32.v v8, (a2)
 ; RV32-NEXT:    addi a2, a0, 64
 ; RV32-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
 ; RV32-NEXT:    vle32.v v8, (a2)
 ; RV32-NEXT:    addi a2, sp, 384
 ; RV32-NEXT:    vse32.v v8, (a2)
-; RV32-NEXT:    addi a3, a0, 96
-; RV32-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; RV32-NEXT:    vle32.v v8, (a3)
-; RV32-NEXT:    addi a3, sp, 416
-; RV32-NEXT:    vse32.v v8, (a3)
 ; RV32-NEXT:    vsetivli zero, 16, e32, m4, ta, ma
 ; RV32-NEXT:    vle32.v v8, (a0)
 ; RV32-NEXT:    addi a3, sp, 64
@@ -332,12 +332,12 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; RV32-NEXT:    vle32.v v12, (a1)
 ; RV32-NEXT:    vsetivli zero, 8, e32, m4, ta, ma
 ; RV32-NEXT:    vslidedown.vi v16, v12, 8
-; RV32-NEXT:    mv a1, sp
+; RV32-NEXT:    addi a1, sp, 32
 ; RV32-NEXT:    vslidedown.vi v8, v8, 8
 ; RV32-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
+; RV32-NEXT:    vse32.v v16, (a1)
+; RV32-NEXT:    mv a1, sp
 ; RV32-NEXT:    vse32.v v12, (a1)
-; RV32-NEXT:    addi a3, sp, 32
-; RV32-NEXT:    vse32.v v16, (a3)
 ; RV32-NEXT:    addi a3, sp, 96
 ; RV32-NEXT:    vse32.v v8, (a3)
 ; RV32-NEXT:    lw a0, 112(a0)
@@ -410,19 +410,18 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; RV64-NEXT:    vse32.v v9, (a1)
 ; RV64-NEXT:    addi a1, sp, 192
 ; RV64-NEXT:    vse32.v v8, (a1)
+; RV64-NEXT:    addi a2, sp, 432
+; RV64-NEXT:    vse32.v v24, (a2)
+; RV64-NEXT:    addi a2, a0, 96
+; RV64-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; RV64-NEXT:    vle32.v v8, (a2)
+; RV64-NEXT:    addi a2, sp, 416
+; RV64-NEXT:    vse32.v v8, (a2)
 ; RV64-NEXT:    addi a2, a0, 64
 ; RV64-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
 ; RV64-NEXT:    vle32.v v8, (a2)
 ; RV64-NEXT:    addi a2, sp, 384
 ; RV64-NEXT:    vse32.v v8, (a2)
-; RV64-NEXT:    addi a3, a0, 96
-; RV64-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; RV64-NEXT:    vle32.v v8, (a3)
-; RV64-NEXT:    addi a3, sp, 416
-; RV64-NEXT:    vse32.v v8, (a3)
-; RV64-NEXT:    addi a3, sp, 432
-; RV64-NEXT:    vsetivli zero, 1, e32, mf2, ta, ma
-; RV64-NEXT:    vse32.v v24, (a3)
 ; RV64-NEXT:    vsetivli zero, 16, e32, m4, ta, ma
 ; RV64-NEXT:    vle32.v v8, (a0)
 ; RV64-NEXT:    addi a0, sp, 64
@@ -432,12 +431,12 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; RV64-NEXT:    vle32.v v12, (a1)
 ; RV64-NEXT:    vsetivli zero, 8, e32, m4, ta, ma
 ; RV64-NEXT:    vslidedown.vi v16, v12, 8
-; RV64-NEXT:    mv a0, sp
+; RV64-NEXT:    addi a0, sp, 32
 ; RV64-NEXT:    vslidedown.vi v8, v8, 8
 ; RV64-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
+; RV64-NEXT:    vse32.v v16, (a0)
+; RV64-NEXT:    mv a0, sp
 ; RV64-NEXT:    vse32.v v12, (a0)
-; RV64-NEXT:    addi a1, sp, 32
-; RV64-NEXT:    vse32.v v16, (a1)
 ; RV64-NEXT:    addi a1, sp, 96
 ; RV64-NEXT:    vse32.v v8, (a1)
 ; RV64-NEXT:    vsetivli zero, 16, e32, m4, ta, ma
@@ -508,19 +507,18 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; ZVZIP-NEXT:    vse32.v v9, (a1)
 ; ZVZIP-NEXT:    addi a1, sp, 192
 ; ZVZIP-NEXT:    vse32.v v8, (a1)
+; ZVZIP-NEXT:    addi a2, sp, 432
+; ZVZIP-NEXT:    vse32.v v24, (a2)
+; ZVZIP-NEXT:    addi a2, a0, 96
+; ZVZIP-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; ZVZIP-NEXT:    vle32.v v8, (a2)
+; ZVZIP-NEXT:    addi a2, sp, 416
+; ZVZIP-NEXT:    vse32.v v8, (a2)
 ; ZVZIP-NEXT:    addi a2, a0, 64
 ; ZVZIP-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
 ; ZVZIP-NEXT:    vle32.v v8, (a2)
 ; ZVZIP-NEXT:    addi a2, sp, 384
 ; ZVZIP-NEXT:    vse32.v v8, (a2)
-; ZVZIP-NEXT:    addi a3, a0, 96
-; ZVZIP-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; ZVZIP-NEXT:    vle32.v v8, (a3)
-; ZVZIP-NEXT:    addi a3, sp, 416
-; ZVZIP-NEXT:    vse32.v v8, (a3)
-; ZVZIP-NEXT:    addi a3, sp, 432
-; ZVZIP-NEXT:    vsetivli zero, 1, e32, mf2, ta, ma
-; ZVZIP-NEXT:    vse32.v v24, (a3)
 ; ZVZIP-NEXT:    vsetivli zero, 16, e32, m4, ta, ma
 ; ZVZIP-NEXT:    vle32.v v8, (a0)
 ; ZVZIP-NEXT:    addi a0, sp, 64
@@ -530,12 +528,12 @@ define {<15 x i32>, <15 x i32>, <15 x i32>} @vector_deinterleave3_v15i32_v45i32(
 ; ZVZIP-NEXT:    vle32.v v12, (a1)
 ; ZVZIP-NEXT:    vsetivli zero, 8, e32, m4, ta, ma
 ; ZVZIP-NEXT:    vslidedown.vi v16, v12, 8
-; ZVZIP-NEXT:    mv a0, sp
+; ZVZIP-NEXT:    addi a0, sp, 32
 ; ZVZIP-NEXT:    vslidedown.vi v8, v8, 8
 ; ZVZIP-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
+; ZVZIP-NEXT:    vse32.v v16, (a0)
+; ZVZIP-NEXT:    mv a0, sp
 ; ZVZIP-NEXT:    vse32.v v12, (a0)
-; ZVZIP-NEXT:    addi a1, sp, 32
-; ZVZIP-NEXT:    vse32.v v16, (a1)
 ; ZVZIP-NEXT:    addi a1, sp, 96
 ; ZVZIP-NEXT:    vse32.v v8, (a1)
 ; ZVZIP-NEXT:    vsetivli zero, 16, e32, m4, ta, ma

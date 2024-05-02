@@ -24,9 +24,13 @@ define i16 @srl_bitcast_buildvector_extract_last(<2 x i16> %v, ptr %p) {
 ; CHECK-RV64-NEXT:    divw a3, a2, a3
 ; CHECK-RV64-NEXT:    slli a0, a0, 32
 ; CHECK-RV64-NEXT:    srai a0, a0, 48
-; CHECK-RV64-NEXT:    divw a2, a2, a0
-; CHECK-RV64-NEXT:    sext.h a0, a2
-; CHECK-RV64-NEXT:    ppaire.h a2, a3, a2
+; CHECK-RV64-NEXT:    divw a0, a2, a0
+; CHECK-RV64-NEXT:    pmv.hs a2, a3
+; CHECK-RV64-NEXT:    slli a3, a0, 16
+; CHECK-RV64-NEXT:    lui a4, 65535
+; CHECK-RV64-NEXT:    slli a4, a4, 4
+; CHECK-RV64-NEXT:    sext.h a0, a0
+; CHECK-RV64-NEXT:    mvm a2, a3, a4
 ; CHECK-RV64-NEXT:    sw a2, 0(a1)
 ; CHECK-RV64-NEXT:    ret
   %div = sdiv <2 x i16> splat (i16 1), %v

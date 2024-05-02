@@ -39,12 +39,18 @@
 define <2 x float> @test_addsub_v2f32(<2 x float> %A, <2 x float> %B) {
 ; SSE-LABEL: test_addsub_v2f32:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    addsubps %xmm1, %xmm0
+; SSE-NEXT:    movaps %xmm0, %xmm2
+; SSE-NEXT:    addps %xmm1, %xmm2
+; SSE-NEXT:    subss %xmm1, %xmm0
+; SSE-NEXT:    movss {{.*#+}} xmm2 = xmm0[0],xmm2[1,2,3]
+; SSE-NEXT:    movaps %xmm2, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX-LABEL: test_addsub_v2f32:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vaddsubps %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vaddps %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vsubss %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vmovss {{.*#+}} xmm0 = xmm0[0],xmm2[1,2,3]
 ; AVX-NEXT:    retq
   %sub = fsub <2 x float> %A, %B
   %add = fadd <2 x float> %A, %B

@@ -4,15 +4,17 @@
 define void @test_compressstore_v2f64(ptr %p, <2 x double> %vec, <2 x i1> %mask) {
 ; CHECK-LABEL: test_compressstore_v2f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v1.2s, v1.2s, #31
+; CHECK-NEXT:    // kill: def $d1 killed $d1 def $q1
+; CHECK-NEXT:    shl v2.2s, v1.2s, #31
 ; CHECK-NEXT:    mov x8, #1 // =0x1
+; CHECK-NEXT:    fmov w9, s1
 ; CHECK-NEXT:    movk x8, #2, lsl #32
-; CHECK-NEXT:    fmov d2, x8
-; CHECK-NEXT:    cmlt v1.2s, v1.2s, #0
-; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
-; CHECK-NEXT:    addp v1.2s, v1.2s, v1.2s
-; CHECK-NEXT:    fmov w8, s1
-; CHECK-NEXT:    tbnz w8, #0, .LBB0_3
+; CHECK-NEXT:    fmov d3, x8
+; CHECK-NEXT:    cmlt v2.2s, v2.2s, #0
+; CHECK-NEXT:    and v2.8b, v2.8b, v3.8b
+; CHECK-NEXT:    addp v2.2s, v2.2s, v2.2s
+; CHECK-NEXT:    fmov w8, s2
+; CHECK-NEXT:    tbnz w9, #0, .LBB0_3
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB0_4
 ; CHECK-NEXT:  .LBB0_2: // %else2
@@ -30,14 +32,16 @@ define void @test_compressstore_v2f64(ptr %p, <2 x double> %vec, <2 x i1> %mask)
 define void @test_compressstore_v4i32(ptr %p, <4 x i32> %vec, <4 x i1> %mask) {
 ; CHECK-LABEL: test_compressstore_v4i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v1.4h, v1.4h, #15
+; CHECK-NEXT:    // kill: def $d1 killed $d1 def $q1
+; CHECK-NEXT:    shl v2.4h, v1.4h, #15
 ; CHECK-NEXT:    adrp x8, .LCPI1_0
-; CHECK-NEXT:    ldr d2, [x8, :lo12:.LCPI1_0]
-; CHECK-NEXT:    cmlt v1.4h, v1.4h, #0
-; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
-; CHECK-NEXT:    addv h1, v1.4h
+; CHECK-NEXT:    umov w9, v1.h[0]
+; CHECK-NEXT:    ldr d3, [x8, :lo12:.LCPI1_0]
+; CHECK-NEXT:    cmlt v2.4h, v2.4h, #0
+; CHECK-NEXT:    and v2.8b, v2.8b, v3.8b
+; CHECK-NEXT:    addv h1, v2.4h
 ; CHECK-NEXT:    fmov w8, s1
-; CHECK-NEXT:    tbnz w8, #0, .LBB1_5
+; CHECK-NEXT:    tbnz w9, #0, .LBB1_5
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB1_6
 ; CHECK-NEXT:  .LBB1_2: // %else2
@@ -65,15 +69,17 @@ define void @test_compressstore_v4i32(ptr %p, <4 x i32> %vec, <4 x i1> %mask) {
 define void @test_compressstore_v2i64(ptr %p, <2 x i64> %vec, <2 x i1> %mask) {
 ; CHECK-LABEL: test_compressstore_v2i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v1.2s, v1.2s, #31
+; CHECK-NEXT:    // kill: def $d1 killed $d1 def $q1
+; CHECK-NEXT:    shl v2.2s, v1.2s, #31
 ; CHECK-NEXT:    mov x8, #1 // =0x1
+; CHECK-NEXT:    fmov w9, s1
 ; CHECK-NEXT:    movk x8, #2, lsl #32
-; CHECK-NEXT:    fmov d2, x8
-; CHECK-NEXT:    cmlt v1.2s, v1.2s, #0
-; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
-; CHECK-NEXT:    addp v1.2s, v1.2s, v1.2s
-; CHECK-NEXT:    fmov w8, s1
-; CHECK-NEXT:    tbnz w8, #0, .LBB2_3
+; CHECK-NEXT:    fmov d3, x8
+; CHECK-NEXT:    cmlt v2.2s, v2.2s, #0
+; CHECK-NEXT:    and v2.8b, v2.8b, v3.8b
+; CHECK-NEXT:    addp v2.2s, v2.2s, v2.2s
+; CHECK-NEXT:    fmov w8, s2
+; CHECK-NEXT:    tbnz w9, #0, .LBB2_3
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB2_4
 ; CHECK-NEXT:  .LBB2_2: // %else2
@@ -91,14 +97,16 @@ define void @test_compressstore_v2i64(ptr %p, <2 x i64> %vec, <2 x i1> %mask) {
 define void @test_compressstore_v8i32(ptr %p, <8 x i32> %vec, <8 x i1> %mask) {
 ; CHECK-LABEL: test_compressstore_v8i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v2.8b, v2.8b, #7
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    shl v3.8b, v2.8b, #7
 ; CHECK-NEXT:    adrp x8, .LCPI3_0
-; CHECK-NEXT:    ldr d3, [x8, :lo12:.LCPI3_0]
-; CHECK-NEXT:    cmlt v2.8b, v2.8b, #0
-; CHECK-NEXT:    and v2.8b, v2.8b, v3.8b
-; CHECK-NEXT:    addv b2, v2.8b
+; CHECK-NEXT:    umov w9, v2.b[0]
+; CHECK-NEXT:    ldr d4, [x8, :lo12:.LCPI3_0]
+; CHECK-NEXT:    cmlt v3.8b, v3.8b, #0
+; CHECK-NEXT:    and v3.8b, v3.8b, v4.8b
+; CHECK-NEXT:    addv b2, v3.8b
 ; CHECK-NEXT:    fmov w8, s2
-; CHECK-NEXT:    tbnz w8, #0, .LBB3_9
+; CHECK-NEXT:    tbnz w9, #0, .LBB3_9
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB3_10
 ; CHECK-NEXT:  .LBB3_2: // %else2
@@ -146,14 +154,16 @@ define void @test_compressstore_v8i32(ptr %p, <8 x i32> %vec, <8 x i1> %mask) {
 define void @test_compressstore_v4i64(ptr %p, <4 x i64> %vec, <4 x i1> %mask) {
 ; CHECK-LABEL: test_compressstore_v4i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v2.4h, v2.4h, #15
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    shl v3.4h, v2.4h, #15
 ; CHECK-NEXT:    adrp x8, .LCPI4_0
-; CHECK-NEXT:    ldr d3, [x8, :lo12:.LCPI4_0]
-; CHECK-NEXT:    cmlt v2.4h, v2.4h, #0
-; CHECK-NEXT:    and v2.8b, v2.8b, v3.8b
-; CHECK-NEXT:    addv h2, v2.4h
+; CHECK-NEXT:    umov w9, v2.h[0]
+; CHECK-NEXT:    ldr d4, [x8, :lo12:.LCPI4_0]
+; CHECK-NEXT:    cmlt v3.4h, v3.4h, #0
+; CHECK-NEXT:    and v3.8b, v3.8b, v4.8b
+; CHECK-NEXT:    addv h2, v3.4h
 ; CHECK-NEXT:    fmov w8, s2
-; CHECK-NEXT:    tbnz w8, #0, .LBB4_5
+; CHECK-NEXT:    tbnz w9, #0, .LBB4_5
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB4_6
 ; CHECK-NEXT:  .LBB4_2: // %else2

@@ -45,7 +45,7 @@ entry:
 ; TONGA:    NumSgprs: 96
 ; TONGA-GCNTRACKERS:    NumSgprs: 96
 ; TONGA:    NumVgprs: 22
-; TONGA-GCNTRACKERS:    NumVgprs: 22
+; TONGA-GCNTRACKERS:    NumVgprs: 23
 ; TONGA:    Occupancy: 8
 ; TONGA-GCNTRACKERS:    Occupancy: 8
 
@@ -77,9 +77,9 @@ define amdgpu_kernel void @constant_zextload_v64i16_to_v64i32(ptr addrspace(1) %
 ; CHECK-LABEL: {{^}}excess_soft_clause_reg_pressure:
 ; GFX908:    NumSgprs: 64
 ; GFX908-GCNTRACKERS:    NumSgprs: 64
-; GFX908:    NumVgprs: 41
+; GFX908:    NumVgprs: 39
 ; GFX908-GCNTRACKERS:    NumVgprs: 39
-; GFX908:    Occupancy: 5
+; GFX908:    Occupancy: 6
 ; GFX908-GCNTRACKERS:    Occupancy: 6
 
 

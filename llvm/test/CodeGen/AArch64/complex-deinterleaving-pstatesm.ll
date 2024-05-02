@@ -19,9 +19,7 @@ define <4 x half> @complex_mul_streaming_mode(<4 x half> %a, <4 x half> %b) "aar
 ; CHECK-NEXT:    fmul z3.h, p0/m, z3.h, z0.h
 ; CHECK-NEXT:    fmad z0.h, p0/m, z1.h, z2.h
 ; CHECK-NEXT:    fnmsb z1.h, p0/m, z4.h, z3.h
-; CHECK-NEXT:    trn2 z2.h, z1.h, z0.h
 ; CHECK-NEXT:    zip1 z0.h, z1.h, z0.h
-; CHECK-NEXT:    zip1 z0.s, z0.s, z2.s
 ; CHECK-NEXT:    ret
 entry:
   %a.re = shufflevector <4 x half> %a, <4 x half> poison, <2 x i32> <i32 0, i32 2>

@@ -128,13 +128,14 @@ define zeroext i16 @my_setbit(i16 zeroext %crc) nounwind {
 ; CHECK-LABEL: my_setbit:
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r0 = setbit(r0,#15)
+; CHECK-NEXT:     r1 = or(r0,##-32768)
 ; CHECK-NEXT:     r29 = add(r29,#-8)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r29 = add(r29,#8)
+; CHECK-NEXT:     r0 = zxth(r1)
 ; CHECK-NEXT:     jumpr r31
-; CHECK-NEXT:     memh(r29+#6) = r0
+; CHECK-NEXT:     r29 = add(r29,#8)
+; CHECK-NEXT:     memh(r29+#6) = r1
 ; CHECK-NEXT:    }
 entry:
   %crc.addr = alloca i16, align 2
@@ -234,13 +235,17 @@ define zeroext i16 @my_togglebit(i16 zeroext %crc) nounwind {
 ; CHECK-LABEL: my_togglebit:
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    {
-; CHECK-NEXT:     r0 = togglebit(r0,#15)
+; CHECK-NEXT:     r1 = #-32768
 ; CHECK-NEXT:     r29 = add(r29,#-8)
 ; CHECK-NEXT:    }
 ; CHECK-NEXT:    {
+; CHECK-NEXT:     r1 = xor(r0,r1)
 ; CHECK-NEXT:     r29 = add(r29,#8)
+; CHECK-NEXT:     memh(r29+#6) = r1.new
+; CHECK-NEXT:    }
+; CHECK-NEXT:    {
+; CHECK-NEXT:     r0 = zxth(r1)
 ; CHECK-NEXT:     jumpr r31
-; CHECK-NEXT:     memh(r29+#6) = r0
 ; CHECK-NEXT:    }
 entry:
   %crc.addr = alloca i16, align 2

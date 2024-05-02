@@ -413,9 +413,9 @@ define void @caller_in_block() {
 ; CHECK-SD-NEXT:    bl return_in_block
 ; CHECK-SD-NEXT:    adrp x8, in_block_store
 ; CHECK-SD-NEXT:    add x8, x8, :lo12:in_block_store
-; CHECK-SD-NEXT:    stp d0, d1, [x8]
-; CHECK-SD-NEXT:    stp d2, d3, [x8, #16]
 ; CHECK-SD-NEXT:    stp d4, d5, [x8, #32]
+; CHECK-SD-NEXT:    stp d2, d3, [x8, #16]
+; CHECK-SD-NEXT:    stp d0, d1, [x8]
 ; CHECK-SD-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload
 ; CHECK-SD-NEXT:    ret
 ;
@@ -531,17 +531,21 @@ define void @caller_in_memory() {
 ; CHECK-SD-NEXT:    .cfi_offset w30, -16
 ; CHECK-SD-NEXT:    add x8, sp, #8
 ; CHECK-SD-NEXT:    bl return_in_memory
-; CHECK-SD-NEXT:    ldur q0, [sp, #24]
-; CHECK-SD-NEXT:    ldur q1, [sp, #8]
+; CHECK-SD-NEXT:    ldr d0, [sp, #24]
+; CHECK-SD-NEXT:    ldr d1, [sp, #48]
 ; CHECK-SD-NEXT:    adrp x8, in_memory_store
 ; CHECK-SD-NEXT:    add x8, x8, :lo12:in_memory_store
-; CHECK-SD-NEXT:    ldr d2, [sp, #72]
-; CHECK-SD-NEXT:    ldur q3, [sp, #56]
-; CHECK-SD-NEXT:    ldur q4, [sp, #40]
+; CHECK-SD-NEXT:    ldur q2, [sp, #56]
+; CHECK-SD-NEXT:    ldr d3, [sp, #72]
+; CHECK-SD-NEXT:    ldur q4, [sp, #8]
+; CHECK-SD-NEXT:    ldur q5, [sp, #32]
 ; CHECK-SD-NEXT:    ldr x30, [sp, #80] // 8-byte Reload
-; CHECK-SD-NEXT:    stp q1, q0, [x8]
-; CHECK-SD-NEXT:    str d2, [x8, #64]
-; CHECK-SD-NEXT:    stp q4, q3, [x8, #32]
+; CHECK-SD-NEXT:    str q2, [x8, #48]
+; CHECK-SD-NEXT:    stur q5, [x8, #24]
+; CHECK-SD-NEXT:    str q4, [x8]
+; CHECK-SD-NEXT:    str d3, [x8, #64]
+; CHECK-SD-NEXT:    str d1, [x8, #40]
+; CHECK-SD-NEXT:    str d0, [x8, #16]
 ; CHECK-SD-NEXT:    add sp, sp, #96
 ; CHECK-SD-NEXT:    ret
 ;
@@ -680,10 +684,10 @@ define void @caller_no_block() {
 ; CHECK-SD-NEXT:    bl return_no_block
 ; CHECK-SD-NEXT:    adrp x8, no_block_store
 ; CHECK-SD-NEXT:    add x8, x8, :lo12:no_block_store
-; CHECK-SD-NEXT:    str d0, [x8]
-; CHECK-SD-NEXT:    str w0, [x8, #8]
-; CHECK-SD-NEXT:    str d1, [x8, #16]
 ; CHECK-SD-NEXT:    str w1, [x8, #24]
+; CHECK-SD-NEXT:    str d1, [x8, #16]
+; CHECK-SD-NEXT:    str w0, [x8, #8]
+; CHECK-SD-NEXT:    str d0, [x8]
 ; CHECK-SD-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload
 ; CHECK-SD-NEXT:    ret
 ;

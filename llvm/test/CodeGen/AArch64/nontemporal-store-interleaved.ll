@@ -593,12 +593,12 @@ define void @test_stnp_interleaved_store3_v8i8(<8 x i8> %v0, <8 x i8> %v1, <8 x 
 ; CHECK-BE-IADISABLED-NEXT:    // kill: def $d2 killed $d2 def $q2
 ; CHECK-BE-IADISABLED-NEXT:    adrp x8, .LCPI14_0
 ; CHECK-BE-IADISABLED-NEXT:    add x8, x8, :lo12:.LCPI14_0
+; CHECK-BE-IADISABLED-NEXT:    rev64 v4.16b, v2.16b
 ; CHECK-BE-IADISABLED-NEXT:    ld1 { v0.16b }, [x8]
 ; CHECK-BE-IADISABLED-NEXT:    adrp x8, .LCPI14_1
 ; CHECK-BE-IADISABLED-NEXT:    add x8, x8, :lo12:.LCPI14_1
 ; CHECK-BE-IADISABLED-NEXT:    mov v3.d[1], v1.d[0]
 ; CHECK-BE-IADISABLED-NEXT:    ld1 { v1.16b }, [x8]
-; CHECK-BE-IADISABLED-NEXT:    rev64 v4.16b, v2.16b
 ; CHECK-BE-IADISABLED-NEXT:    tbl v0.16b, { v3.16b, v4.16b }, v0.16b
 ; CHECK-BE-IADISABLED-NEXT:    tbl v1.16b, { v3.16b, v4.16b }, v1.16b
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v0.16b, v0.16b
@@ -1312,10 +1312,10 @@ define void @test_stnp_interleaved_store4_v2i32(<2 x i32> %v0, <2 x i32> %v1, <2
 ; CHECK-BE-IADISABLED-LABEL: test_stnp_interleaved_store4_v2i32:
 ; CHECK-BE-IADISABLED:       // %bb.0: // %entry
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v2.2s, v2.2s
-; CHECK-BE-IADISABLED-NEXT:    rev64 v3.2s, v3.2s
-; CHECK-BE-IADISABLED-NEXT:    add x8, x0, #16
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v0.2s, v0.2s
+; CHECK-BE-IADISABLED-NEXT:    add x8, x0, #16
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v1.2s, v1.2s
+; CHECK-BE-IADISABLED-NEXT:    rev64 v3.2s, v3.2s
 ; CHECK-BE-IADISABLED-NEXT:    mov v2.d[1], v3.d[0]
 ; CHECK-BE-IADISABLED-NEXT:    mov v0.d[1], v1.d[0]
 ; CHECK-BE-IADISABLED-NEXT:    uzp2 v1.4s, v0.4s, v2.4s
@@ -1496,10 +1496,10 @@ define void @test_stnp_interleaved_store4_v2f32(<2 x float> %v0, <2 x float> %v1
 ; CHECK-BE-IADISABLED-LABEL: test_stnp_interleaved_store4_v2f32:
 ; CHECK-BE-IADISABLED:       // %bb.0: // %entry
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v2.2s, v2.2s
-; CHECK-BE-IADISABLED-NEXT:    rev64 v3.2s, v3.2s
-; CHECK-BE-IADISABLED-NEXT:    add x8, x0, #16
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v0.2s, v0.2s
+; CHECK-BE-IADISABLED-NEXT:    add x8, x0, #16
 ; CHECK-BE-IADISABLED-NEXT:    rev64 v1.2s, v1.2s
+; CHECK-BE-IADISABLED-NEXT:    rev64 v3.2s, v3.2s
 ; CHECK-BE-IADISABLED-NEXT:    mov v2.d[1], v3.d[0]
 ; CHECK-BE-IADISABLED-NEXT:    mov v0.d[1], v1.d[0]
 ; CHECK-BE-IADISABLED-NEXT:    uzp2 v1.4s, v0.4s, v2.4s
@@ -2323,50 +2323,54 @@ entry:
 define void @test_stnp_interleaved_store2_v2i24_non_pow2_elt_size(<2 x i24> %v0, <2 x i24> %v1, ptr %ptr) {
 ; CHECK-LE-LABEL: test_stnp_interleaved_store2_v2i24_non_pow2_elt_size:
 ; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    // kill: def $d1 killed $d1 def $q1
 ; CHECK-LE-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-LE-NEXT:    zip1 v2.2s, v0.2s, v1.2s
+; CHECK-LE-NEXT:    mov v2.16b, v0.16b
+; CHECK-LE-NEXT:    // kill: def $d1 killed $d1 def $q1
 ; CHECK-LE-NEXT:    fmov w9, s0
 ; CHECK-LE-NEXT:    str h0, [x0]
 ; CHECK-LE-NEXT:    mov w8, v1.s[1]
-; CHECK-LE-NEXT:    dup v1.2s, v0.s[1]
+; CHECK-LE-NEXT:    mov v2.d[1], v1.d[0]
 ; CHECK-LE-NEXT:    lsr w9, w9, #16
-; CHECK-LE-NEXT:    mov w10, v2.s[1]
 ; CHECK-LE-NEXT:    strb w9, [x0, #2]
-; CHECK-LE-NEXT:    fmov w9, s1
+; CHECK-LE-NEXT:    lsr w9, w8, #16
 ; CHECK-LE-NEXT:    sturh w8, [x0, #9]
-; CHECK-LE-NEXT:    lsr w8, w8, #16
-; CHECK-LE-NEXT:    str h1, [x0, #6]
-; CHECK-LE-NEXT:    strb w8, [x0, #11]
+; CHECK-LE-NEXT:    rev64 v3.4s, v2.4s
+; CHECK-LE-NEXT:    strb w9, [x0, #11]
+; CHECK-LE-NEXT:    uzp1 v2.4s, v2.4s, v3.4s
+; CHECK-LE-NEXT:    mov w10, v2.s[2]
+; CHECK-LE-NEXT:    mov w11, v2.s[1]
 ; CHECK-LE-NEXT:    lsr w8, w10, #16
-; CHECK-LE-NEXT:    lsr w9, w9, #16
-; CHECK-LE-NEXT:    sturh w10, [x0, #3]
-; CHECK-LE-NEXT:    strb w8, [x0, #5]
-; CHECK-LE-NEXT:    strb w9, [x0, #8]
+; CHECK-LE-NEXT:    lsr w9, w11, #16
+; CHECK-LE-NEXT:    strh w10, [x0, #6]
+; CHECK-LE-NEXT:    sturh w11, [x0, #3]
+; CHECK-LE-NEXT:    strb w8, [x0, #8]
+; CHECK-LE-NEXT:    strb w9, [x0, #5]
 ; CHECK-LE-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_stnp_interleaved_store2_v2i24_non_pow2_elt_size:
 ; CHECK-BE:       // %bb.0: // %entry
-; CHECK-BE-NEXT:    rev64 v1.2s, v1.2s
 ; CHECK-BE-NEXT:    rev64 v0.2s, v0.2s
-; CHECK-BE-NEXT:    zip1 v2.2s, v0.2s, v1.2s
+; CHECK-BE-NEXT:    rev64 v1.2s, v1.2s
+; CHECK-BE-NEXT:    mov v2.16b, v0.16b
 ; CHECK-BE-NEXT:    fmov w9, s0
 ; CHECK-BE-NEXT:    mov w8, v1.s[1]
-; CHECK-BE-NEXT:    dup v1.2s, v0.s[1]
 ; CHECK-BE-NEXT:    stur b0, [x0, #2]
+; CHECK-BE-NEXT:    mov v2.d[1], v1.d[0]
 ; CHECK-BE-NEXT:    lsr w9, w9, #8
-; CHECK-BE-NEXT:    mov w10, v2.s[1]
 ; CHECK-BE-NEXT:    strb w8, [x0, #11]
-; CHECK-BE-NEXT:    lsr w8, w8, #8
 ; CHECK-BE-NEXT:    strh w9, [x0]
-; CHECK-BE-NEXT:    fmov w9, s1
-; CHECK-BE-NEXT:    sturh w8, [x0, #9]
-; CHECK-BE-NEXT:    stur b1, [x0, #8]
+; CHECK-BE-NEXT:    lsr w9, w8, #8
+; CHECK-BE-NEXT:    rev64 v3.4s, v2.4s
+; CHECK-BE-NEXT:    sturh w9, [x0, #9]
+; CHECK-BE-NEXT:    uzp1 v2.4s, v2.4s, v3.4s
+; CHECK-BE-NEXT:    mov w10, v2.s[2]
+; CHECK-BE-NEXT:    mov w11, v2.s[1]
 ; CHECK-BE-NEXT:    lsr w8, w10, #8
-; CHECK-BE-NEXT:    lsr w9, w9, #8
-; CHECK-BE-NEXT:    strb w10, [x0, #5]
-; CHECK-BE-NEXT:    sturh w8, [x0, #3]
-; CHECK-BE-NEXT:    strh w9, [x0, #6]
+; CHECK-BE-NEXT:    lsr w9, w11, #8
+; CHECK-BE-NEXT:    strb w10, [x0, #8]
+; CHECK-BE-NEXT:    strb w11, [x0, #5]
+; CHECK-BE-NEXT:    strh w8, [x0, #6]
+; CHECK-BE-NEXT:    sturh w9, [x0, #3]
 ; CHECK-BE-NEXT:    ret
 entry:
   %shuffle = shufflevector <2 x i24> %v0, <2 x i24> %v1,
@@ -3251,14 +3255,11 @@ entry:
 define void @test_stnp_interleaved_store2_v3i32_non_pow2_elt_count_intrinsic(<3 x i32> %v0, <3 x i32> %v1, ptr %ptr) {
 ; CHECK-LE-LABEL: test_stnp_interleaved_store2_v3i32_non_pow2_elt_count_intrinsic:
 ; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    zip2 v2.4s, v0.4s, v1.4s
-; CHECK-LE-NEXT:    zip1 v0.4s, v0.4s, v1.4s
-; CHECK-LE-NEXT:    ext v1.16b, v0.16b, v2.16b, #12
-; CHECK-LE-NEXT:    mov v0.s[3], v1.s[0]
-; CHECK-LE-NEXT:    mov d2, v0.d[1]
-; CHECK-LE-NEXT:    ext v1.16b, v1.16b, v0.16b, #4
-; CHECK-LE-NEXT:    stnp d0, d2, [x0]
-; CHECK-LE-NEXT:    str d1, [x0, #16]
+; CHECK-LE-NEXT:    zip1 v2.4s, v0.4s, v1.4s
+; CHECK-LE-NEXT:    zip2 v0.4s, v0.4s, v1.4s
+; CHECK-LE-NEXT:    mov d3, v2.d[1]
+; CHECK-LE-NEXT:    str d0, [x0, #16]
+; CHECK-LE-NEXT:    stnp d2, d3, [x0]
 ; CHECK-LE-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: test_stnp_interleaved_store2_v3i32_non_pow2_elt_count_intrinsic:
@@ -3269,9 +3270,6 @@ define void @test_stnp_interleaved_store2_v3i32_non_pow2_elt_count_intrinsic(<3 
 ; CHECK-BE-NEXT:    ext v0.16b, v0.16b, v0.16b, #8
 ; CHECK-BE-NEXT:    zip2 v2.4s, v0.4s, v1.4s
 ; CHECK-BE-NEXT:    zip1 v0.4s, v0.4s, v1.4s
-; CHECK-BE-NEXT:    ext v1.16b, v0.16b, v2.16b, #12
-; CHECK-BE-NEXT:    ext v2.16b, v1.16b, v0.16b, #4
-; CHECK-BE-NEXT:    mov v0.s[3], v1.s[0]
 ; CHECK-BE-NEXT:    rev64 v1.4s, v2.4s
 ; CHECK-BE-NEXT:    st1 { v0.4s }, [x0]
 ; CHECK-BE-NEXT:    str d1, [x0, #16]

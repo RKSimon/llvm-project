@@ -7,34 +7,20 @@ define void @PR235665(ptr %p0) nounwind {
 ; LE-LABEL: PR235665:
 ; LE:       // %bb.0:
 ; LE-NEXT:    sub sp, sp, #64
-; LE-NEXT:    mov x8, #-7196 // =0xffffffffffffe3e4
-; LE-NEXT:    mov x9, #56 // =0x38
-; LE-NEXT:    mov x10, #-28784 // =0xffffffffffff8f90
-; LE-NEXT:    movk x8, #58339, lsl #16
-; LE-NEXT:    movk x9, #63744, lsl #32
-; LE-NEXT:    mov x11, #8 // =0x8
-; LE-NEXT:    movk x9, #63736, lsl #48
-; LE-NEXT:    movk x10, #36751, lsl #16
-; LE-NEXT:    movk x11, #63744, lsl #32
-; LE-NEXT:    and x8, x8, #0x1fffffffc
-; LE-NEXT:    movk x11, #63736, lsl #48
-; LE-NEXT:    and x10, x10, #0x1fffffff0
-; LE-NEXT:    orr x8, x9, x8, lsl #6
-; LE-NEXT:    mov x9, #4485090715960753726 // =0x3e3e3e3e3e3e3e3e
-; LE-NEXT:    orr x10, x11, x10, lsl #4
-; LE-NEXT:    orr x9, x9, #0xffffffc00000003f
-; LE-NEXT:    mov x11, #273778395316224 // =0xf90000000000
-; LE-NEXT:    movk x11, #63736, lsl #48
-; LE-NEXT:    and x9, x9, #0x1ffffffff
-; LE-NEXT:    stp x10, x8, [x0, #16]
-; LE-NEXT:    orr x9, x11, x9, lsl #2
-; LE-NEXT:    mov x11, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
-; LE-NEXT:    mov x10, #273752625512448 // =0xf8fa00000000
-; LE-NEXT:    orr x11, x11, #0xfffffffe00000001
-; LE-NEXT:    movk x10, #63736, lsl #48
-; LE-NEXT:    and x8, x11, #0x1ffffffff
-; LE-NEXT:    orr x8, x8, x10
-; LE-NEXT:    stp x8, x9, [x0]
+; LE-NEXT:    mov x8, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
+; LE-NEXT:    mov x9, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
+; LE-NEXT:    movk x8, #63800
+; LE-NEXT:    movk x9, #63752
+; LE-NEXT:    movk x8, #63864, lsl #32
+; LE-NEXT:    movk x9, #63768, lsl #32
+; LE-NEXT:    stp x9, x8, [x0, #16]
+; LE-NEXT:    mov x8, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
+; LE-NEXT:    mov x9, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
+; LE-NEXT:    movk x8, #63740
+; LE-NEXT:    movk x9, #63737
+; LE-NEXT:    movk x8, #63744, lsl #32
+; LE-NEXT:    movk x9, #63738, lsl #32
+; LE-NEXT:    stp x9, x8, [x0]
 ; LE-NEXT:    mov w8, #248 // =0xf8
 ; LE-NEXT:    strb w8, [x0, #32]
 ; LE-NEXT:    add sp, sp, #64
@@ -43,55 +29,25 @@ define void @PR235665(ptr %p0) nounwind {
 ; BE-LABEL: PR235665:
 ; BE:       // %bb.0:
 ; BE-NEXT:    sub sp, sp, #64
-; BE-NEXT:    mov x8, #506381209866536711 // =0x707070707070707
-; BE-NEXT:    mov x9, #-4485090715960753727 // =0xc1c1c1c1c1c1c1c1
-; BE-NEXT:    mov x10, #2025524839466146844 // =0x1c1c1c1c1c1c1c1c
-; BE-NEXT:    and x8, x8, #0x1ffffffff
-; BE-NEXT:    and x9, x9, #0x1ffffffff
-; BE-NEXT:    and x10, x10, #0x1fffffffc
-; BE-NEXT:    dup v0.2d, x8
-; BE-NEXT:    dup v1.2d, x9
-; BE-NEXT:    mov x8, #8102099357864587376 // =0x7070707070707070
-; BE-NEXT:    and x8, x8, #0x1fffffff0
-; BE-NEXT:    dup v2.2d, x10
-; BE-NEXT:    mov x12, #273752625512448 // =0xf8fa00000000
-; BE-NEXT:    dup v3.2d, x8
-; BE-NEXT:    movk x12, #63736, lsl #48
-; BE-NEXT:    mov x13, #273778395316224 // =0xf90000000000
-; BE-NEXT:    neg v1.2d, v1.2d
-; BE-NEXT:    neg v0.2d, v0.2d
-; BE-NEXT:    movk x13, #63736, lsl #48
-; BE-NEXT:    neg v2.2d, v2.2d
-; BE-NEXT:    neg v3.2d, v3.2d
-; BE-NEXT:    mov x8, v0.d[1]
-; BE-NEXT:    mov x9, v1.d[1]
-; BE-NEXT:    mov x10, v2.d[1]
-; BE-NEXT:    mov x11, v3.d[1]
-; BE-NEXT:    strb w8, [x0, #32]
-; BE-NEXT:    and x8, x8, #0x1ffffff00
-; BE-NEXT:    lsl x14, x9, #2
-; BE-NEXT:    lsr x9, x9, #6
-; BE-NEXT:    orr x8, x8, x12
-; BE-NEXT:    mov x12, #273778395316224 // =0xf90000000000
-; BE-NEXT:    movk x12, #63736, lsl #48
-; BE-NEXT:    extr x8, x14, x8, #8
-; BE-NEXT:    lsl x14, x11, #4
-; BE-NEXT:    lsr x11, x11, #4
-; BE-NEXT:    bfi x12, x9, #8, #27
-; BE-NEXT:    mov x9, #273778395316224 // =0xf90000000000
-; BE-NEXT:    lsr x15, x10, #2
+; BE-NEXT:    mov x9, #63736 // =0xf8f8
+; BE-NEXT:    mov x8, #-506381209866536712 // =0xf8f8f8f8f8f8f8f8
+; BE-NEXT:    movk x9, #248, lsl #16
+; BE-NEXT:    movk x8, #64248, lsl #16
+; BE-NEXT:    movk x9, #63737, lsl #32
+; BE-NEXT:    movk x8, #64760, lsl #48
+; BE-NEXT:    movk x9, #2296, lsl #48
+; BE-NEXT:    stp x9, x8, [x0, #16]
+; BE-NEXT:    mov x8, #63737 // =0xf8f9
+; BE-NEXT:    mov x9, #63737 // =0xf8f9
+; BE-NEXT:    movk x8, #6392, lsl #16
+; BE-NEXT:    movk x9, #30968, lsl #16
+; BE-NEXT:    movk x8, #63737, lsl #32
+; BE-NEXT:    movk x9, #63737, lsl #32
+; BE-NEXT:    movk x8, #14584, lsl #48
 ; BE-NEXT:    movk x9, #63736, lsl #48
-; BE-NEXT:    orr w14, w14, #0x8
-; BE-NEXT:    lsl x10, x10, #6
-; BE-NEXT:    bfi x9, x11, #8, #29
-; BE-NEXT:    extr x11, x14, x12, #8
-; BE-NEXT:    bfi x13, x15, #8, #31
-; BE-NEXT:    mov x12, #549755813880 // =0x7ffffffff8
-; BE-NEXT:    stp x11, x8, [x0, #16]
-; BE-NEXT:    orr w8, w10, #0x38
-; BE-NEXT:    extr x10, x12, x13, #8
-; BE-NEXT:    extr x8, x8, x9, #8
-; BE-NEXT:    stp x10, x8, [x0]
+; BE-NEXT:    stp x9, x8, [x0]
+; BE-NEXT:    mov w8, #249 // =0xf9
+; BE-NEXT:    strb w8, [x0, #32]
 ; BE-NEXT:    add sp, sp, #64
 ; BE-NEXT:    ret
   %t3 = bitcast <33 x i8> splat (i8 7) to <8 x i33>

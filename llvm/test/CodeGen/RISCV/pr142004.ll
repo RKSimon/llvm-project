@@ -11,13 +11,16 @@ define i32 @foo(i32 %x) {
 ; CHECK-NEXT:    lui a1, %hi(f)
 ; CHECK-NEXT:    lbu a1, %lo(f)(a1)
 ; CHECK-NEXT:    lui a2, %hi(d)
-; CHECK-NEXT:    lhu a2, %lo(d)(a2)
+; CHECK-NEXT:    ld a2, %lo(d)(a2)
 ; CHECK-NEXT:    xori a1, a1, 255
-; CHECK-NEXT:    slli a3, a0, 48
-; CHECK-NEXT:    or a0, a1, a2
-; CHECK-NEXT:    srli a3, a3, 48
-; CHECK-NEXT:    lui a1, %hi(e)
-; CHECK-NEXT:    sw a3, %lo(e)(a1)
+; CHECK-NEXT:    lui a3, 16
+; CHECK-NEXT:    or a1, a1, a2
+; CHECK-NEXT:    addi a3, a3, -1
+; CHECK-NEXT:    and a1, a1, a3
+; CHECK-NEXT:    and a3, a0, a3
+; CHECK-NEXT:    lui a2, %hi(e)
+; CHECK-NEXT:    mv a0, a1
+; CHECK-NEXT:    sw a3, %lo(e)(a2)
 ; CHECK-NEXT:    ret
 entry:
   %1 = load i64, ptr @f, align 8

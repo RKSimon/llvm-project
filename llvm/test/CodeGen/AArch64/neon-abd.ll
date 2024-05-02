@@ -215,9 +215,9 @@ define <4 x i16> @uabd_4h(<4 x i16> %a, <4 x i16> %b) #0 {
 define <4 x i16> @uabd_4h_promoted_ops(<4 x i8> %a, <4 x i8> %b) #0 {
 ; CHECK-LABEL: uabd_4h_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    bic v1.4h, #255, lsl #8
 ; CHECK-NEXT:    bic v0.4h, #255, lsl #8
-; CHECK-NEXT:    uabd v0.4h, v0.4h, v1.4h
+; CHECK-NEXT:    bic v1.4h, #255, lsl #8
+; CHECK-NEXT:    uabd v0.4h, v1.4h, v0.4h
 ; CHECK-NEXT:    ret
   %a.zext = zext <4 x i8> %a to <4 x i16>
   %b.zext = zext <4 x i8> %b to <4 x i16>
@@ -268,9 +268,9 @@ define <2 x i32> @uabd_2s_promoted_ops(<2 x i16> %a, <2 x i16> %b) #0 {
 ; CHECK-LABEL: uabd_2s_promoted_ops:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    movi d2, #0x00ffff0000ffff
-; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
 ; CHECK-NEXT:    and v0.8b, v0.8b, v2.8b
-; CHECK-NEXT:    uabd v0.2s, v0.2s, v1.2s
+; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
+; CHECK-NEXT:    uabd v0.2s, v1.2s, v0.2s
 ; CHECK-NEXT:    ret
   %a.zext = zext <2 x i16> %a to <2 x i32>
   %b.zext = zext <2 x i16> %b to <2 x i32>
@@ -641,16 +641,14 @@ define <8 x i32> @uabd_8h_bv_imm(<8 x i16> %a) {
 define <4 x i32> @sabd_4h_bv_non_imm(<4 x i16> %a, i16 %b) {
 ; CHECK-LABEL: sabd_4h_bv_non_imm:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sxth w9, w0
-; CHECK-NEXT:    mov w8, #-128 // =0xffffff80
-; CHECK-NEXT:    sshll v0.4s, v0.4h, #0
-; CHECK-NEXT:    fmov s1, w9
-; CHECK-NEXT:    mov v1.s[1], w8
+; CHECK-NEXT:    fmov s1, w0
+; CHECK-NEXT:    mov w8, #65408 // =0xff80
+; CHECK-NEXT:    mov v1.h[1], w8
 ; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    mov v1.s[2], w8
+; CHECK-NEXT:    mov v1.h[2], w8
 ; CHECK-NEXT:    mov w8, #69 // =0x45
-; CHECK-NEXT:    mov v1.s[3], w8
-; CHECK-NEXT:    sabd v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    mov v1.h[3], w8
+; CHECK-NEXT:    sabdl v0.4s, v0.4h, v1.4h
 ; CHECK-NEXT:    ret
   %conv = sext <4 x i16> %a to <4 x i32>
   %exted.b = sext i16 %b to i32
@@ -668,16 +666,14 @@ define <4 x i32> @sabd_4h_bv_non_imm(<4 x i16> %a, i16 %b) {
 define <4 x i32> @uabd_4h_bv_non_imm(<4 x i16> %a, i16 %b) {
 ; CHECK-LABEL: uabd_4h_bv_non_imm:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w9, w0, #0xffff
+; CHECK-NEXT:    fmov s1, w0
 ; CHECK-NEXT:    mov w8, #64000 // =0xfa00
-; CHECK-NEXT:    ushll v0.4s, v0.4h, #0
-; CHECK-NEXT:    fmov s1, w9
-; CHECK-NEXT:    mov v1.s[1], w8
+; CHECK-NEXT:    mov v1.h[1], w8
 ; CHECK-NEXT:    mov w8, #13 // =0xd
-; CHECK-NEXT:    mov v1.s[2], w8
+; CHECK-NEXT:    mov v1.h[2], w8
 ; CHECK-NEXT:    mov w8, #37 // =0x25
-; CHECK-NEXT:    mov v1.s[3], w8
-; CHECK-NEXT:    uabd v0.4s, v1.4s, v0.4s
+; CHECK-NEXT:    mov v1.h[3], w8
+; CHECK-NEXT:    uabdl v0.4s, v1.4h, v0.4h
 ; CHECK-NEXT:    ret
   %conv = zext <4 x i16> %a to <4 x i32>
   %exted.b = zext i16 %b to i32
@@ -700,8 +696,8 @@ define <8 x i32> @sabd_8s_splat_imm_no_shrink(<8 x i16> %a) {
 ; CHECK-NEXT:    sshll v0.4s, v0.4h, #0
 ; CHECK-NEXT:    sabd v0.4s, v0.4s, v1.4s
 ; CHECK-NEXT:    sabd v1.4s, v2.4s, v1.4s
-; CHECK-NEXT:    bic v1.4s, #3, lsl #16
-; CHECK-NEXT:    bic v0.4s, #3, lsl #16
+; CHECK-NEXT:    bic v1.4s, #1, lsl #16
+; CHECK-NEXT:    bic v0.4s, #1, lsl #16
 ; CHECK-NEXT:    ret
   %conv = sext <8 x i16> %a to <8 x i32>
   %sub = sub <8 x i32> %conv, splat(i32 64000)
@@ -718,13 +714,9 @@ define <8 x i32> @uabd_8s_splat_imm_no_shrink(<8 x i16> %a) {
 ; CHECK-LABEL: uabd_8s_splat_imm_no_shrink:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    movi v1.2d, #0xffffffffffffffff
-; CHECK-NEXT:    ushll2 v2.4s, v0.8h, #0
+; CHECK-NEXT:    sub v0.8h, v0.8h, v1.8h
+; CHECK-NEXT:    ushll2 v1.4s, v0.8h, #0
 ; CHECK-NEXT:    ushll v0.4s, v0.4h, #0
-; CHECK-NEXT:    movi v3.2d, #0x00ffff0000ffff
-; CHECK-NEXT:    sub v0.4s, v0.4s, v1.4s
-; CHECK-NEXT:    sub v1.4s, v2.4s, v1.4s
-; CHECK-NEXT:    and v1.16b, v1.16b, v3.16b
-; CHECK-NEXT:    and v0.16b, v0.16b, v3.16b
 ; CHECK-NEXT:    ret
   %conv = zext <8 x i16> %a to <8 x i32>
   %sub = sub <8 x i32> %conv, splat(i32 -1)

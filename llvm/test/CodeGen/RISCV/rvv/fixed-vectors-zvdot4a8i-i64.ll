@@ -121,17 +121,117 @@ define <2 x i64> @vdot4a_v2i64(<2 x i64> %acc, <16 x i8> %a, <16 x i8> %b) {
 ; NODOT64-NEXT:    .cfi_def_cfa_offset 0
 ; NODOT64-NEXT:    ret
 ;
-; DOT-LABEL: vdot4a_v2i64:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v11, 0
-; DOT-NEXT:    vdot4a.vv v11, v9, v10
-; DOT-NEXT:    vsetivli zero, 2, e32, m1, ta, ma
-; DOT-NEXT:    vslidedown.vi v9, v11, 2
-; DOT-NEXT:    vsetivli zero, 2, e32, mf2, ta, ma
-; DOT-NEXT:    vadd.vv v9, v11, v9
-; DOT-NEXT:    vwadd.wv v8, v8, v9
-; DOT-NEXT:    ret
+; DOT32-LABEL: vdot4a_v2i64:
+; DOT32:       # %bb.0: # %entry
+; DOT32-NEXT:    addi sp, sp, -16
+; DOT32-NEXT:    .cfi_def_cfa_offset 16
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a1, a0, 3
+; DOT32-NEXT:    add a0, a1, a0
+; DOT32-NEXT:    sub sp, sp, a0
+; DOT32-NEXT:    .cfi_escape 0x0f, 0x0d, 0x72, 0x00, 0x11, 0x10, 0x22, 0x11, 0x09, 0x92, 0xa2, 0x38, 0x00, 0x1e, 0x22 # sp + 16 + 9 * vlenb
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a0, a0, 3
+; DOT32-NEXT:    add a0, sp, a0
+; DOT32-NEXT:    addi a0, a0, 16
+; DOT32-NEXT:    vs1r.v v8, (a0) # vscale x 8-byte Folded Spill
+; DOT32-NEXT:    li a0, 1
+; DOT32-NEXT:    vsetivli zero, 16, e8, m1, ta, ma
+; DOT32-NEXT:    vwmul.vv v12, v9, v10
+; DOT32-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; DOT32-NEXT:    vsext.vf2 v8, v12
+; DOT32-NEXT:    vwmul.vx v16, v8, a0
+; DOT32-NEXT:    vsetivli zero, 2, e64, m8, ta, ma
+; DOT32-NEXT:    vslidedown.vi v8, v16, 14
+; DOT32-NEXT:    addi a0, sp, 16
+; DOT32-NEXT:    vs8r.v v8, (a0) # vscale x 64-byte Folded Spill
+; DOT32-NEXT:    vslidedown.vi v0, v16, 12
+; DOT32-NEXT:    vslidedown.vi v24, v16, 10
+; DOT32-NEXT:    vslidedown.vi v8, v16, 8
+; DOT32-NEXT:    vsetivli zero, 2, e64, m4, ta, ma
+; DOT32-NEXT:    vslidedown.vi v12, v16, 6
+; DOT32-NEXT:    vslidedown.vi v20, v16, 4
+; DOT32-NEXT:    vsetivli zero, 2, e64, m2, ta, ma
+; DOT32-NEXT:    vslidedown.vi v10, v16, 2
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a0, a0, 3
+; DOT32-NEXT:    add a0, sp, a0
+; DOT32-NEXT:    addi a0, a0, 16
+; DOT32-NEXT:    vl1r.v v9, (a0) # vscale x 8-byte Folded Reload
+; DOT32-NEXT:    vsetivli zero, 2, e64, m1, ta, ma
+; DOT32-NEXT:    vadd.vv v9, v9, v16
+; DOT32-NEXT:    vadd.vv v11, v24, v0
+; DOT32-NEXT:    addi a0, sp, 16
+; DOT32-NEXT:    vl8r.v v24, (a0) # vscale x 64-byte Folded Reload
+; DOT32-NEXT:    vadd.vv v9, v24, v9
+; DOT32-NEXT:    vadd.vv v8, v12, v8
+; DOT32-NEXT:    vadd.vv v10, v10, v20
+; DOT32-NEXT:    vadd.vv v9, v11, v9
+; DOT32-NEXT:    vadd.vv v8, v10, v8
+; DOT32-NEXT:    vadd.vv v8, v8, v9
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a1, a0, 3
+; DOT32-NEXT:    add a0, a1, a0
+; DOT32-NEXT:    add sp, sp, a0
+; DOT32-NEXT:    .cfi_def_cfa sp, 16
+; DOT32-NEXT:    addi sp, sp, 16
+; DOT32-NEXT:    .cfi_def_cfa_offset 0
+; DOT32-NEXT:    ret
+;
+; DOT64-LABEL: vdot4a_v2i64:
+; DOT64:       # %bb.0: # %entry
+; DOT64-NEXT:    addi sp, sp, -16
+; DOT64-NEXT:    .cfi_def_cfa_offset 16
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a1, a0, 3
+; DOT64-NEXT:    add a0, a1, a0
+; DOT64-NEXT:    sub sp, sp, a0
+; DOT64-NEXT:    .cfi_escape 0x0f, 0x0d, 0x72, 0x00, 0x11, 0x10, 0x22, 0x11, 0x09, 0x92, 0xa2, 0x38, 0x00, 0x1e, 0x22 # sp + 16 + 9 * vlenb
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a0, a0, 3
+; DOT64-NEXT:    add a0, sp, a0
+; DOT64-NEXT:    addi a0, a0, 16
+; DOT64-NEXT:    vs1r.v v8, (a0) # vscale x 8-byte Folded Spill
+; DOT64-NEXT:    vsetivli zero, 16, e8, m1, ta, ma
+; DOT64-NEXT:    vwmul.vv v12, v9, v10
+; DOT64-NEXT:    vsetvli zero, zero, e64, m8, ta, ma
+; DOT64-NEXT:    vsext.vf4 v16, v12
+; DOT64-NEXT:    vsetivli zero, 2, e64, m8, ta, ma
+; DOT64-NEXT:    vslidedown.vi v8, v16, 14
+; DOT64-NEXT:    addi a0, sp, 16
+; DOT64-NEXT:    vs8r.v v8, (a0) # vscale x 64-byte Folded Spill
+; DOT64-NEXT:    vslidedown.vi v0, v16, 12
+; DOT64-NEXT:    vslidedown.vi v24, v16, 10
+; DOT64-NEXT:    vslidedown.vi v8, v16, 8
+; DOT64-NEXT:    vsetivli zero, 2, e64, m4, ta, ma
+; DOT64-NEXT:    vslidedown.vi v12, v16, 6
+; DOT64-NEXT:    vslidedown.vi v20, v16, 4
+; DOT64-NEXT:    vsetivli zero, 2, e64, m2, ta, ma
+; DOT64-NEXT:    vslidedown.vi v10, v16, 2
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a0, a0, 3
+; DOT64-NEXT:    add a0, sp, a0
+; DOT64-NEXT:    addi a0, a0, 16
+; DOT64-NEXT:    vl1r.v v9, (a0) # vscale x 8-byte Folded Reload
+; DOT64-NEXT:    vsetivli zero, 2, e64, m1, ta, ma
+; DOT64-NEXT:    vadd.vv v9, v9, v16
+; DOT64-NEXT:    vadd.vv v11, v24, v0
+; DOT64-NEXT:    addi a0, sp, 16
+; DOT64-NEXT:    vl8r.v v24, (a0) # vscale x 64-byte Folded Reload
+; DOT64-NEXT:    vadd.vv v9, v24, v9
+; DOT64-NEXT:    vadd.vv v8, v12, v8
+; DOT64-NEXT:    vadd.vv v10, v10, v20
+; DOT64-NEXT:    vadd.vv v9, v11, v9
+; DOT64-NEXT:    vadd.vv v8, v10, v8
+; DOT64-NEXT:    vadd.vv v8, v8, v9
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a1, a0, 3
+; DOT64-NEXT:    add a0, a1, a0
+; DOT64-NEXT:    add sp, sp, a0
+; DOT64-NEXT:    .cfi_def_cfa sp, 16
+; DOT64-NEXT:    addi sp, sp, 16
+; DOT64-NEXT:    .cfi_def_cfa_offset 0
+; DOT64-NEXT:    ret
 entry:
   %a.sext = sext <16 x i8> %a to <16 x i64>
   %b.sext = sext <16 x i8> %b to <16 x i64>
@@ -425,17 +525,117 @@ define <2 x i64> @vdot4asu_v2i64(<2 x i64> %acc, <16 x i8> %a, <16 x i8> %b) {
 ; NODOT64-NEXT:    .cfi_def_cfa_offset 0
 ; NODOT64-NEXT:    ret
 ;
-; DOT-LABEL: vdot4asu_v2i64:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v11, 0
-; DOT-NEXT:    vdot4asu.vv v11, v9, v10
-; DOT-NEXT:    vsetivli zero, 2, e32, m1, ta, ma
-; DOT-NEXT:    vslidedown.vi v9, v11, 2
-; DOT-NEXT:    vsetivli zero, 2, e32, mf2, ta, ma
-; DOT-NEXT:    vadd.vv v9, v11, v9
-; DOT-NEXT:    vwadd.wv v8, v8, v9
-; DOT-NEXT:    ret
+; DOT32-LABEL: vdot4asu_v2i64:
+; DOT32:       # %bb.0: # %entry
+; DOT32-NEXT:    addi sp, sp, -16
+; DOT32-NEXT:    .cfi_def_cfa_offset 16
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a1, a0, 3
+; DOT32-NEXT:    add a0, a1, a0
+; DOT32-NEXT:    sub sp, sp, a0
+; DOT32-NEXT:    .cfi_escape 0x0f, 0x0d, 0x72, 0x00, 0x11, 0x10, 0x22, 0x11, 0x09, 0x92, 0xa2, 0x38, 0x00, 0x1e, 0x22 # sp + 16 + 9 * vlenb
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a0, a0, 3
+; DOT32-NEXT:    add a0, sp, a0
+; DOT32-NEXT:    addi a0, a0, 16
+; DOT32-NEXT:    vs1r.v v8, (a0) # vscale x 8-byte Folded Spill
+; DOT32-NEXT:    li a0, 1
+; DOT32-NEXT:    vsetivli zero, 16, e8, m1, ta, ma
+; DOT32-NEXT:    vwmulsu.vv v12, v9, v10
+; DOT32-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; DOT32-NEXT:    vsext.vf2 v8, v12
+; DOT32-NEXT:    vwmul.vx v16, v8, a0
+; DOT32-NEXT:    vsetivli zero, 2, e64, m8, ta, ma
+; DOT32-NEXT:    vslidedown.vi v8, v16, 14
+; DOT32-NEXT:    addi a0, sp, 16
+; DOT32-NEXT:    vs8r.v v8, (a0) # vscale x 64-byte Folded Spill
+; DOT32-NEXT:    vslidedown.vi v0, v16, 12
+; DOT32-NEXT:    vslidedown.vi v24, v16, 10
+; DOT32-NEXT:    vslidedown.vi v8, v16, 8
+; DOT32-NEXT:    vsetivli zero, 2, e64, m4, ta, ma
+; DOT32-NEXT:    vslidedown.vi v12, v16, 6
+; DOT32-NEXT:    vslidedown.vi v20, v16, 4
+; DOT32-NEXT:    vsetivli zero, 2, e64, m2, ta, ma
+; DOT32-NEXT:    vslidedown.vi v10, v16, 2
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a0, a0, 3
+; DOT32-NEXT:    add a0, sp, a0
+; DOT32-NEXT:    addi a0, a0, 16
+; DOT32-NEXT:    vl1r.v v9, (a0) # vscale x 8-byte Folded Reload
+; DOT32-NEXT:    vsetivli zero, 2, e64, m1, ta, ma
+; DOT32-NEXT:    vadd.vv v9, v9, v16
+; DOT32-NEXT:    vadd.vv v11, v24, v0
+; DOT32-NEXT:    addi a0, sp, 16
+; DOT32-NEXT:    vl8r.v v24, (a0) # vscale x 64-byte Folded Reload
+; DOT32-NEXT:    vadd.vv v9, v24, v9
+; DOT32-NEXT:    vadd.vv v8, v12, v8
+; DOT32-NEXT:    vadd.vv v10, v10, v20
+; DOT32-NEXT:    vadd.vv v9, v11, v9
+; DOT32-NEXT:    vadd.vv v8, v10, v8
+; DOT32-NEXT:    vadd.vv v8, v8, v9
+; DOT32-NEXT:    csrr a0, vlenb
+; DOT32-NEXT:    slli a1, a0, 3
+; DOT32-NEXT:    add a0, a1, a0
+; DOT32-NEXT:    add sp, sp, a0
+; DOT32-NEXT:    .cfi_def_cfa sp, 16
+; DOT32-NEXT:    addi sp, sp, 16
+; DOT32-NEXT:    .cfi_def_cfa_offset 0
+; DOT32-NEXT:    ret
+;
+; DOT64-LABEL: vdot4asu_v2i64:
+; DOT64:       # %bb.0: # %entry
+; DOT64-NEXT:    addi sp, sp, -16
+; DOT64-NEXT:    .cfi_def_cfa_offset 16
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a1, a0, 3
+; DOT64-NEXT:    add a0, a1, a0
+; DOT64-NEXT:    sub sp, sp, a0
+; DOT64-NEXT:    .cfi_escape 0x0f, 0x0d, 0x72, 0x00, 0x11, 0x10, 0x22, 0x11, 0x09, 0x92, 0xa2, 0x38, 0x00, 0x1e, 0x22 # sp + 16 + 9 * vlenb
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a0, a0, 3
+; DOT64-NEXT:    add a0, sp, a0
+; DOT64-NEXT:    addi a0, a0, 16
+; DOT64-NEXT:    vs1r.v v8, (a0) # vscale x 8-byte Folded Spill
+; DOT64-NEXT:    vsetivli zero, 16, e8, m1, ta, ma
+; DOT64-NEXT:    vwmulsu.vv v12, v9, v10
+; DOT64-NEXT:    vsetvli zero, zero, e64, m8, ta, ma
+; DOT64-NEXT:    vsext.vf4 v16, v12
+; DOT64-NEXT:    vsetivli zero, 2, e64, m8, ta, ma
+; DOT64-NEXT:    vslidedown.vi v8, v16, 14
+; DOT64-NEXT:    addi a0, sp, 16
+; DOT64-NEXT:    vs8r.v v8, (a0) # vscale x 64-byte Folded Spill
+; DOT64-NEXT:    vslidedown.vi v0, v16, 12
+; DOT64-NEXT:    vslidedown.vi v24, v16, 10
+; DOT64-NEXT:    vslidedown.vi v8, v16, 8
+; DOT64-NEXT:    vsetivli zero, 2, e64, m4, ta, ma
+; DOT64-NEXT:    vslidedown.vi v12, v16, 6
+; DOT64-NEXT:    vslidedown.vi v20, v16, 4
+; DOT64-NEXT:    vsetivli zero, 2, e64, m2, ta, ma
+; DOT64-NEXT:    vslidedown.vi v10, v16, 2
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a0, a0, 3
+; DOT64-NEXT:    add a0, sp, a0
+; DOT64-NEXT:    addi a0, a0, 16
+; DOT64-NEXT:    vl1r.v v9, (a0) # vscale x 8-byte Folded Reload
+; DOT64-NEXT:    vsetivli zero, 2, e64, m1, ta, ma
+; DOT64-NEXT:    vadd.vv v9, v9, v16
+; DOT64-NEXT:    vadd.vv v11, v24, v0
+; DOT64-NEXT:    addi a0, sp, 16
+; DOT64-NEXT:    vl8r.v v24, (a0) # vscale x 64-byte Folded Reload
+; DOT64-NEXT:    vadd.vv v9, v24, v9
+; DOT64-NEXT:    vadd.vv v8, v12, v8
+; DOT64-NEXT:    vadd.vv v10, v10, v20
+; DOT64-NEXT:    vadd.vv v9, v11, v9
+; DOT64-NEXT:    vadd.vv v8, v10, v8
+; DOT64-NEXT:    vadd.vv v8, v8, v9
+; DOT64-NEXT:    csrr a0, vlenb
+; DOT64-NEXT:    slli a1, a0, 3
+; DOT64-NEXT:    add a0, a1, a0
+; DOT64-NEXT:    add sp, sp, a0
+; DOT64-NEXT:    .cfi_def_cfa sp, 16
+; DOT64-NEXT:    addi sp, sp, 16
+; DOT64-NEXT:    .cfi_def_cfa_offset 0
+; DOT64-NEXT:    ret
 entry:
   %a.sext = sext <16 x i8> %a to <16 x i64>
   %b.zext = zext <16 x i8> %b to <16 x i64>
@@ -445,6 +645,4 @@ entry:
 }
 ;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
 ; CHECK: {{.*}}
-; DOT32: {{.*}}
-; DOT64: {{.*}}
 ; NODOT: {{.*}}

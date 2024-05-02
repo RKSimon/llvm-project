@@ -26,16 +26,15 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    .cfi_offset b14, -72
 ; CHECK-NEXT:    .cfi_offset b15, -80
 ; CHECK-NEXT:    movi v1.2d, #0000000000000000
-; CHECK-NEXT:    adrp x14, B+48
-; CHECK-NEXT:    add x14, x14, :lo12:B+48
 ; CHECK-NEXT:    mov x8, xzr
-; CHECK-NEXT:    mov w9, #8 // =0x8
-; CHECK-NEXT:    adrp x10, A
-; CHECK-NEXT:    add x10, x10, :lo12:A
-; CHECK-NEXT:    mov x11, xzr
-; CHECK-NEXT:    // implicit-def: $q7
+; CHECK-NEXT:    adrp x9, B+48
+; CHECK-NEXT:    add x9, x9, :lo12:B+48
+; CHECK-NEXT:    adrp x10, A+128
+; CHECK-NEXT:    add x10, x10, :lo12:A+128
+; CHECK-NEXT:    mov w11, #8 // =0x8
 ; CHECK-NEXT:    mov x12, xzr
-; CHECK-NEXT:    mov x13, x14
+; CHECK-NEXT:    // implicit-def: $q7
+; CHECK-NEXT:    mov x13, xzr
 ; CHECK-NEXT:    // implicit-def: $q18
 ; CHECK-NEXT:    // implicit-def: $q2
 ; CHECK-NEXT:    // implicit-def: $q3
@@ -70,14 +69,14 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    ldr x18, [x8]
 ; CHECK-NEXT:    ldr x15, [x8]
-; CHECK-NEXT:    add x5, x10, x11
-; CHECK-NEXT:    ldr x16, [x9]
-; CHECK-NEXT:    ldr x14, [x14, #8]
 ; CHECK-NEXT:    mov v7.16b, v1.16b
-; CHECK-NEXT:    mul x1, x18, x15
-; CHECK-NEXT:    ldr x2, [x13], #64
-; CHECK-NEXT:    ldr x5, [x5, #128]
+; CHECK-NEXT:    ldr q14, [x9], #64
+; CHECK-NEXT:    ldr x14, [x11]
+; CHECK-NEXT:    mul x1, x15, x18
+; CHECK-NEXT:    ldr x5, [x10, x12]
 ; CHECK-NEXT:    stp q29, q23, [sp] // 32-byte Folded Spill
+; CHECK-NEXT:    mov x16, v14.d[1]
+; CHECK-NEXT:    fmov x3, d14
 ; CHECK-NEXT:    mov v29.16b, v15.16b
 ; CHECK-NEXT:    mul x0, x18, x18
 ; CHECK-NEXT:    str q11, [sp, #64] // 16-byte Spill
@@ -85,20 +84,20 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    mov v9.16b, v30.16b
 ; CHECK-NEXT:    mov v30.16b, v25.16b
 ; CHECK-NEXT:    mov v25.16b, v20.16b
-; CHECK-NEXT:    mul x17, x16, x18
+; CHECK-NEXT:    mul x17, x14, x18
 ; CHECK-NEXT:    mov v20.16b, v6.16b
 ; CHECK-NEXT:    mov v6.16b, v13.16b
 ; CHECK-NEXT:    fmov d14, x1
 ; CHECK-NEXT:    ldr q13, [sp, #80] // 16-byte Reload
 ; CHECK-NEXT:    mov v23.16b, v31.16b
-; CHECK-NEXT:    mul x3, x14, x18
+; CHECK-NEXT:    mul x2, x16, x18
 ; CHECK-NEXT:    mov v31.16b, v26.16b
 ; CHECK-NEXT:    mov v26.16b, v21.16b
 ; CHECK-NEXT:    fmov d15, x0
 ; CHECK-NEXT:    mov v21.16b, v16.16b
 ; CHECK-NEXT:    mov v16.16b, v2.16b
 ; CHECK-NEXT:    mov v0.16b, v14.16b
-; CHECK-NEXT:    mul x4, x2, x18
+; CHECK-NEXT:    mul x4, x3, x18
 ; CHECK-NEXT:    stp q4, q10, [sp, #32] // 32-byte Folded Spill
 ; CHECK-NEXT:    mov v10.16b, v17.16b
 ; CHECK-NEXT:    mov v17.16b, v3.16b
@@ -107,42 +106,42 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    mov v15.d[1], x17
 ; CHECK-NEXT:    mov v19.16b, v5.16b
 ; CHECK-NEXT:    mov v0.d[1], x1
-; CHECK-NEXT:    add x11, x11, #8
-; CHECK-NEXT:    add x12, x12, #1
+; CHECK-NEXT:    add x12, x12, #8
+; CHECK-NEXT:    add x13, x13, #1
 ; CHECK-NEXT:    mul x6, x15, x15
-; CHECK-NEXT:    cmp x11, #64
+; CHECK-NEXT:    cmp x12, #64
 ; CHECK-NEXT:    fmov d1, x4
 ; CHECK-NEXT:    mul x7, x15, x5
 ; CHECK-NEXT:    fmov d2, x18
 ; CHECK-NEXT:    add v13.2d, v13.2d, v0.2d
 ; CHECK-NEXT:    ldr q0, [sp, #96] // 16-byte Reload
-; CHECK-NEXT:    mul x19, x16, x5
-; CHECK-NEXT:    mov v1.d[1], x3
+; CHECK-NEXT:    mul x19, x14, x5
+; CHECK-NEXT:    mov v1.d[1], x2
 ; CHECK-NEXT:    fmov d4, x6
 ; CHECK-NEXT:    add v0.2d, v0.2d, v15.2d
-; CHECK-NEXT:    mul x20, x2, x5
+; CHECK-NEXT:    mul x20, x3, x5
 ; CHECK-NEXT:    str q13, [sp, #80] // 16-byte Spill
 ; CHECK-NEXT:    add v13.2d, v6.2d, v15.2d
 ; CHECK-NEXT:    fmov d3, x7
 ; CHECK-NEXT:    mov v6.16b, v20.16b
 ; CHECK-NEXT:    mov v20.16b, v25.16b
-; CHECK-NEXT:    mul x0, x14, x5
+; CHECK-NEXT:    mul x0, x16, x5
 ; CHECK-NEXT:    mov v4.d[1], x6
 ; CHECK-NEXT:    str q0, [sp, #96] // 16-byte Spill
 ; CHECK-NEXT:    mov v2.d[1], x19
 ; CHECK-NEXT:    mov v25.16b, v30.16b
 ; CHECK-NEXT:    mov v30.16b, v9.16b
-; CHECK-NEXT:    mul x17, x2, x15
+; CHECK-NEXT:    mul x17, x3, x15
 ; CHECK-NEXT:    mov v3.d[1], x7
 ; CHECK-NEXT:    add v15.2d, v29.2d, v1.2d
 ; CHECK-NEXT:    fmov d5, x20
-; CHECK-NEXT:    mul x16, x16, x15
+; CHECK-NEXT:    mul x14, x14, x15
 ; CHECK-NEXT:    add v12.2d, v12.2d, v4.2d
 ; CHECK-NEXT:    add v6.2d, v6.2d, v4.2d
 ; CHECK-NEXT:    add v8.2d, v8.2d, v2.2d
 ; CHECK-NEXT:    mov v2.16b, v16.16b
 ; CHECK-NEXT:    mov v16.16b, v21.16b
-; CHECK-NEXT:    mul x14, x14, x15
+; CHECK-NEXT:    mul x15, x16, x15
 ; CHECK-NEXT:    mov v5.d[1], x0
 ; CHECK-NEXT:    mov v21.16b, v26.16b
 ; CHECK-NEXT:    fmov d0, x17
@@ -151,15 +150,14 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    mov v3.16b, v17.16b
 ; CHECK-NEXT:    mov v17.16b, v10.16b
 ; CHECK-NEXT:    add v31.2d, v23.2d, v4.2d
-; CHECK-NEXT:    mov v14.d[1], x16
+; CHECK-NEXT:    mov v14.d[1], x14
 ; CHECK-NEXT:    add v1.2d, v7.2d, v4.2d
 ; CHECK-NEXT:    ldr q11, [sp, #64] // 16-byte Reload
 ; CHECK-NEXT:    add v30.2d, v30.2d, v5.2d
 ; CHECK-NEXT:    mov v5.16b, v19.16b
 ; CHECK-NEXT:    add v26.2d, v26.2d, v4.2d
-; CHECK-NEXT:    mov v0.d[1], x14
+; CHECK-NEXT:    mov v0.d[1], x15
 ; CHECK-NEXT:    add v19.2d, v24.2d, v4.2d
-; CHECK-NEXT:    mov x14, x13
 ; CHECK-NEXT:    ldp q4, q10, [sp, #32] // 32-byte Folded Reload
 ; CHECK-NEXT:    ldp q29, q23, [sp] // 32-byte Folded Reload
 ; CHECK-NEXT:    add v27.2d, v27.2d, v14.2d

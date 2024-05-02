@@ -421,18 +421,18 @@ define void @v1i64_add(ptr %a, ptr %b, ptr %out) nounwind {
 define void @v4i64_add(ptr %a, ptr %b, ptr %out) nounwind {
 ; CHECK-LABEL: v4i64_add:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lg %r0, 0(%r2)
-; CHECK-NEXT:    lg %r1, 8(%r2)
-; CHECK-NEXT:    lg %r5, 16(%r2)
-; CHECK-NEXT:    lg %r2, 24(%r2)
-; CHECK-NEXT:    ag %r2, 24(%r3)
-; CHECK-NEXT:    ag %r5, 16(%r3)
-; CHECK-NEXT:    ag %r1, 8(%r3)
-; CHECK-NEXT:    ag %r0, 0(%r3)
-; CHECK-NEXT:    stg %r0, 0(%r4)
-; CHECK-NEXT:    stg %r1, 8(%r4)
-; CHECK-NEXT:    stg %r5, 16(%r4)
-; CHECK-NEXT:    stg %r2, 24(%r4)
+; CHECK-NEXT:    lg %r0, 24(%r2)
+; CHECK-NEXT:    lg %r1, 16(%r2)
+; CHECK-NEXT:    lg %r5, 8(%r2)
+; CHECK-NEXT:    lg %r2, 0(%r2)
+; CHECK-NEXT:    ag %r2, 0(%r3)
+; CHECK-NEXT:    ag %r5, 8(%r3)
+; CHECK-NEXT:    ag %r1, 16(%r3)
+; CHECK-NEXT:    ag %r0, 24(%r3)
+; CHECK-NEXT:    stg %r0, 24(%r4)
+; CHECK-NEXT:    stg %r1, 16(%r4)
+; CHECK-NEXT:    stg %r5, 8(%r4)
+; CHECK-NEXT:    stg %r2, 0(%r4)
 ; CHECK-NEXT:    br %r14
   %va = load <4 x i64>, ptr %a
   %vb = load <4 x i64>, ptr %b

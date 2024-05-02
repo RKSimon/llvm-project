@@ -120,21 +120,21 @@ define <4 x i64> @smulh_v4i64(<4 x i64> %a0, <4 x i64> %a1) nounwind {
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512-NEXT:    vpblendd {{.*#+}} ymm3 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
-; AVX512-NEXT:    vpsraq $32, %ymm0, %ymm4
-; AVX512-NEXT:    vpmullq %ymm3, %ymm4, %ymm3
-; AVX512-NEXT:    vpmuludq %ymm1, %ymm0, %ymm5
+; AVX512-NEXT:    vpblendd {{.*#+}} ymm4 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; AVX512-NEXT:    vpmuludq %ymm3, %ymm4, %ymm5
 ; AVX512-NEXT:    vpsrlq $32, %ymm5, %ymm5
+; AVX512-NEXT:    vpsraq $32, %ymm0, %ymm0
+; AVX512-NEXT:    vpmullq %ymm3, %ymm0, %ymm3
 ; AVX512-NEXT:    vpaddq %ymm5, %ymm3, %ymm3
 ; AVX512-NEXT:    vpsraq $32, %ymm3, %ymm5
-; AVX512-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
 ; AVX512-NEXT:    vpsraq $32, %ymm1, %ymm1
-; AVX512-NEXT:    vpmullq %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpmullq %ymm1, %ymm4, %ymm4
 ; AVX512-NEXT:    vpblendd {{.*#+}} ymm2 = ymm3[0],ymm2[1],ymm3[2],ymm2[3],ymm3[4],ymm2[5],ymm3[6],ymm2[7]
+; AVX512-NEXT:    vpaddq %ymm2, %ymm4, %ymm2
+; AVX512-NEXT:    vpsraq $32, %ymm2, %ymm2
+; AVX512-NEXT:    vpmuldq %ymm1, %ymm0, %ymm0
+; AVX512-NEXT:    vpaddq %ymm5, %ymm0, %ymm0
 ; AVX512-NEXT:    vpaddq %ymm2, %ymm0, %ymm0
-; AVX512-NEXT:    vpsraq $32, %ymm0, %ymm0
-; AVX512-NEXT:    vpmuldq %ymm1, %ymm4, %ymm1
-; AVX512-NEXT:    vpaddq %ymm5, %ymm1, %ymm1
-; AVX512-NEXT:    vpaddq %ymm0, %ymm1, %ymm0
 ; AVX512-NEXT:    retq
   %res = call <4 x i64> @llvm.smulh.v4i64(<4 x i64> %a0, <4 x i64> %a1)
   ret <4 x i64> %res

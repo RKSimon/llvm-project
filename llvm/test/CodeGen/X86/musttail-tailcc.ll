@@ -98,18 +98,18 @@ declare tailcc void @f1_64(i64, i64, i64, i64, i64, i64, i64)
 define tailcc void @stack_arg_const_64(i64, i64, i64, i64, i64, i64, i64) {
 ; X86-LABEL: stack_arg_const_64:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl $4, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $8, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $15, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $42, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $15, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $8, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $4, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $1, %ecx
 ; X86-NEXT:    xorl %edx, %edx
 ; X86-NEXT:    jmp f1_64@PLT # TAILCALL
@@ -122,11 +122,11 @@ declare tailcc void @f1_32(i32, i32, i32, i32, i32, i32, i32)
 define tailcc void @stack_arg_const_32(i32, i32, i32, i32, i32, i32, i32) {
 ; X86-LABEL: stack_arg_const_32:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl $8, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $15, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
-; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $42, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $23, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $16, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $15, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $8, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $1, %ecx
 ; X86-NEXT:    movl $4, %edx
 ; X86-NEXT:    jmp f1_32@PLT # TAILCALL

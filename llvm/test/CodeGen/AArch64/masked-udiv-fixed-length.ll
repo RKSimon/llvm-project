@@ -339,23 +339,20 @@ define <3 x i10> @udiv_v3i10(<3 x i10> %x, <3 x i10> %y, <3 x i1> %m) {
 ; NEON-NEXT:    bic v1.4h, #252, lsl #8
 ; NEON-NEXT:    mov v0.h[2], w8
 ; NEON-NEXT:    bic v2.4h, #252, lsl #8
-; NEON-NEXT:    umov w9, v2.h[0]
+; NEON-NEXT:    umov w8, v2.h[0]
 ; NEON-NEXT:    shl v0.4h, v0.4h, #15
 ; NEON-NEXT:    cmlt v0.4h, v0.4h, #0
 ; NEON-NEXT:    and v1.8b, v1.8b, v0.8b
 ; NEON-NEXT:    mvn v0.8b, v0.8b
 ; NEON-NEXT:    sub v0.4h, v1.4h, v0.4h
-; NEON-NEXT:    umov w8, v0.h[0]
-; NEON-NEXT:    and w8, w8, #0x3ff
-; NEON-NEXT:    udiv w0, w9, w8
-; NEON-NEXT:    umov w8, v0.h[1]
-; NEON-NEXT:    umov w9, v2.h[1]
-; NEON-NEXT:    and w8, w8, #0x3ff
-; NEON-NEXT:    udiv w1, w9, w8
-; NEON-NEXT:    umov w8, v0.h[2]
-; NEON-NEXT:    umov w9, v2.h[2]
-; NEON-NEXT:    and w8, w8, #0x3ff
-; NEON-NEXT:    udiv w2, w9, w8
+; NEON-NEXT:    umov w9, v0.h[0]
+; NEON-NEXT:    udiv w0, w8, w9
+; NEON-NEXT:    umov w8, v2.h[1]
+; NEON-NEXT:    umov w9, v0.h[1]
+; NEON-NEXT:    udiv w1, w8, w9
+; NEON-NEXT:    umov w8, v2.h[2]
+; NEON-NEXT:    umov w9, v0.h[2]
+; NEON-NEXT:    udiv w2, w8, w9
 ; NEON-NEXT:    ret
 ;
 ; SVE-LABEL: udiv_v3i10:

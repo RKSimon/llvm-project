@@ -155,21 +155,20 @@ define double @test_v2f64_seq(<2 x double> %a) nounwind {
 define fp128 @test_v2f128_reassoc(<2 x fp128> %a) nounwind {
 ; CHECK-LABEL: test_v2f128_reassoc:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    .save {r11, lr}
-; CHECK-NEXT:    push {r11, lr}
+; CHECK-NEXT:    .save {r4, r5, r11, lr}
+; CHECK-NEXT:    push {r4, r5, r11, lr}
 ; CHECK-NEXT:    .pad #16
 ; CHECK-NEXT:    sub sp, sp, #16
-; CHECK-NEXT:    ldr r12, [sp, #36]
-; CHECK-NEXT:    str r12, [sp, #12]
 ; CHECK-NEXT:    ldr r12, [sp, #32]
-; CHECK-NEXT:    str r12, [sp, #8]
-; CHECK-NEXT:    ldr r12, [sp, #28]
-; CHECK-NEXT:    str r12, [sp, #4]
-; CHECK-NEXT:    ldr r12, [sp, #24]
-; CHECK-NEXT:    str r12, [sp]
+; CHECK-NEXT:    ldr r4, [sp, #40]
+; CHECK-NEXT:    ldr r5, [sp, #44]
+; CHECK-NEXT:    ldr lr, [sp, #36]
+; CHECK-NEXT:    stm sp, {r12, lr}
+; CHECK-NEXT:    str r4, [sp, #8]
+; CHECK-NEXT:    str r5, [sp, #12]
 ; CHECK-NEXT:    bl __addtf3
 ; CHECK-NEXT:    add sp, sp, #16
-; CHECK-NEXT:    pop {r11, lr}
+; CHECK-NEXT:    pop {r4, r5, r11, lr}
 ; CHECK-NEXT:    mov pc, lr
   %b = call reassoc fp128 @llvm.vector.reduce.fadd.f128.v2f128(fp128 0xL00000000000000008000000000000000, <2 x fp128> %a)
   ret fp128 %b
@@ -178,21 +177,20 @@ define fp128 @test_v2f128_reassoc(<2 x fp128> %a) nounwind {
 define fp128 @test_v2f128_seq(<2 x fp128> %a) nounwind {
 ; CHECK-LABEL: test_v2f128_seq:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    .save {r11, lr}
-; CHECK-NEXT:    push {r11, lr}
+; CHECK-NEXT:    .save {r4, r5, r11, lr}
+; CHECK-NEXT:    push {r4, r5, r11, lr}
 ; CHECK-NEXT:    .pad #16
 ; CHECK-NEXT:    sub sp, sp, #16
-; CHECK-NEXT:    ldr r12, [sp, #36]
-; CHECK-NEXT:    str r12, [sp, #12]
 ; CHECK-NEXT:    ldr r12, [sp, #32]
-; CHECK-NEXT:    str r12, [sp, #8]
-; CHECK-NEXT:    ldr r12, [sp, #28]
-; CHECK-NEXT:    str r12, [sp, #4]
-; CHECK-NEXT:    ldr r12, [sp, #24]
-; CHECK-NEXT:    str r12, [sp]
+; CHECK-NEXT:    ldr r4, [sp, #40]
+; CHECK-NEXT:    ldr r5, [sp, #44]
+; CHECK-NEXT:    ldr lr, [sp, #36]
+; CHECK-NEXT:    stm sp, {r12, lr}
+; CHECK-NEXT:    str r4, [sp, #8]
+; CHECK-NEXT:    str r5, [sp, #12]
 ; CHECK-NEXT:    bl __addtf3
 ; CHECK-NEXT:    add sp, sp, #16
-; CHECK-NEXT:    pop {r11, lr}
+; CHECK-NEXT:    pop {r4, r5, r11, lr}
 ; CHECK-NEXT:    mov pc, lr
   %b = call fp128 @llvm.vector.reduce.fadd.f128.v2f128(fp128 0xL00000000000000008000000000000000, <2 x fp128> %a)
   ret fp128 %b

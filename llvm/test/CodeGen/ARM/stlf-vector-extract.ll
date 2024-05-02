@@ -6,10 +6,12 @@ define <2 x i32> @test_offset_load(ptr %p, <4 x i32> %v) {
 ; BE-LABEL: test_offset_load:
 ; BE:       @ %bb.0:
 ; BE-NEXT:    vldr d17, [sp]
-; BE-NEXT:    vmov r1, r12, d17
+; BE-NEXT:    mov r1, #8
 ; BE-NEXT:    vmov d16, r3, r2
-; BE-NEXT:    vst1.64 {d16, d17}, [r0:128]
-; BE-NEXT:    mov r0, r12
+; BE-NEXT:    vrev64.32 q8, q8
+; BE-NEXT:    vst1.32 {d16, d17}, [r0:128], r1
+; BE-NEXT:    vldr d16, [r0]
+; BE-NEXT:    vmov r1, r0, d16
 ; BE-NEXT:    bx lr
 ;
 ; LE-LABEL: test_offset_load:

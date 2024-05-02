@@ -793,7 +793,8 @@ entry:
 define i1 @issubnormal_or_zero_f(float %x) {
 ; X86-LABEL: issubnormal_or_zero_f:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    sete %al
 ; X86-NEXT:    retl
 ;
@@ -811,7 +812,8 @@ entry:
 define i1 @issubnormal_or_zero_f_daz(float %x) #0 {
 ; X86-LABEL: issubnormal_or_zero_f_daz:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    sete %al
 ; X86-NEXT:    retl
 ;
@@ -829,7 +831,8 @@ entry:
 define i1 @issubnormal_or_zero_f_maybe_daz(float %x) #1 {
 ; X86-LABEL: issubnormal_or_zero_f_maybe_daz:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    sete %al
 ; X86-NEXT:    retl
 ;
@@ -847,7 +850,8 @@ entry:
 define i1 @not_issubnormal_or_zero_f(float %x) {
 ; X86-LABEL: not_issubnormal_or_zero_f:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    setne %al
 ; X86-NEXT:    retl
 ;
@@ -865,7 +869,8 @@ entry:
 define i1 @not_issubnormal_or_zero_f_daz(float %x) #0 {
 ; X86-LABEL: not_issubnormal_or_zero_f_daz:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    setne %al
 ; X86-NEXT:    retl
 ;
@@ -883,7 +888,8 @@ entry:
 define i1 @not_issubnormal_or_zero_f_maybe_daz(float %x) #1 {
 ; X86-LABEL: not_issubnormal_or_zero_f_maybe_daz:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    testl $2139095040, {{[0-9]+}}(%esp) # imm = 0x7F800000
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    testl $32640, %eax # imm = 0x7F80
 ; X86-NEXT:    setne %al
 ; X86-NEXT:    retl
 ;

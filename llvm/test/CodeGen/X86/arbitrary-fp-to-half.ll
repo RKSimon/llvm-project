@@ -117,27 +117,26 @@ define i16 @e5m2_scalar(i8 %src) {
 define i16 @e5m3fnu_scalar(i8 %src) {
 ; CHECK-LABEL: e5m3fnu_scalar:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movl %edi, %eax
-; CHECK-NEXT:    andl $7, %eax
-; CHECK-NEXT:    movl %eax, %ecx
+; CHECK-NEXT:    movzbl %dil, %eax
+; CHECK-NEXT:    andl $7, %edi
+; CHECK-NEXT:    movl %edi, %ecx
 ; CHECK-NEXT:    shll $7, %ecx
-; CHECK-NEXT:    shrl $3, %edi
-; CHECK-NEXT:    andl $31, %edi
-; CHECK-NEXT:    movl %edi, %edx
+; CHECK-NEXT:    shrl $3, %eax
+; CHECK-NEXT:    movl %eax, %edx
 ; CHECK-NEXT:    shll $10, %edx
 ; CHECK-NEXT:    orl %ecx, %edx
-; CHECK-NEXT:    cmpw $31, %di
+; CHECK-NEXT:    cmpw $31, %ax
 ; CHECK-NEXT:    movl $31744, %ecx # imm = 0x7C00
 ; CHECK-NEXT:    cmovbl %edx, %ecx
 ; CHECK-NEXT:    sete %dl
-; CHECK-NEXT:    testl %eax, %eax
-; CHECK-NEXT:    sete %sil
 ; CHECK-NEXT:    testl %edi, %edi
-; CHECK-NEXT:    sete %dil
+; CHECK-NEXT:    sete %sil
+; CHECK-NEXT:    testl %eax, %eax
+; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    xorl %r8d, %r8d
-; CHECK-NEXT:    testb %sil, %dil
+; CHECK-NEXT:    testb %sil, %al
 ; CHECK-NEXT:    cmovel %ecx, %r8d
-; CHECK-NEXT:    cmpw $7, %ax
+; CHECK-NEXT:    cmpw $7, %di
 ; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    testb %al, %dl
 ; CHECK-NEXT:    movl $32256, %eax # imm = 0x7E00

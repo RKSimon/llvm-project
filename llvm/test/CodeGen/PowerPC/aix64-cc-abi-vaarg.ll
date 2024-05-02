@@ -14,11 +14,11 @@ define i32 @int_va_arg(i32 %a, ...) local_unnamed_addr  {
 ; CHECK-NEXT:    ld 4, -16(1)
 ; CHECK-NEXT:    std 6, 72(1)
 ; CHECK-NEXT:    addi 6, 4, 4
-; CHECK-NEXT:    std 5, 64(1)
-; CHECK-NEXT:    std 7, 80(1)
-; CHECK-NEXT:    std 8, 88(1)
-; CHECK-NEXT:    std 9, 96(1)
 ; CHECK-NEXT:    std 10, 104(1)
+; CHECK-NEXT:    std 9, 96(1)
+; CHECK-NEXT:    std 8, 88(1)
+; CHECK-NEXT:    std 7, 80(1)
+; CHECK-NEXT:    std 5, 64(1)
 ; CHECK-NEXT:    std 6, -16(1)
 ; CHECK-NEXT:    lwz 5, 56(1)
 ; CHECK-NEXT:    lwz 4, 0(4)
@@ -104,13 +104,13 @@ define double @double_va_arg(double %a, ...) local_unnamed_addr  {
 ; CHECK-NEXT:    ld 3, -16(1)
 ; CHECK-NEXT:    lfd 0, 56(1)
 ; CHECK-NEXT:    addi 4, 3, 8
-; CHECK-NEXT:    std 5, 64(1)
-; CHECK-NEXT:    fadd 0, 0, 1
-; CHECK-NEXT:    std 6, 72(1)
-; CHECK-NEXT:    std 7, 80(1)
-; CHECK-NEXT:    std 8, 88(1)
-; CHECK-NEXT:    std 9, 96(1)
 ; CHECK-NEXT:    std 10, 104(1)
+; CHECK-NEXT:    fadd 0, 0, 1
+; CHECK-NEXT:    std 9, 96(1)
+; CHECK-NEXT:    std 8, 88(1)
+; CHECK-NEXT:    std 7, 80(1)
+; CHECK-NEXT:    std 6, 72(1)
+; CHECK-NEXT:    std 5, 64(1)
 ; CHECK-NEXT:    std 4, -16(1)
 ; CHECK-NEXT:    lfd 1, 0(3)
 ; CHECK-NEXT:    fadd 1, 1, 1

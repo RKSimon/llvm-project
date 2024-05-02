@@ -6,12 +6,14 @@ define i1 @andn_icmp_eq_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_eq_i8:
 ; LA32:       # %bb.0:
 ; LA32-NEXT:    andn $a0, $a1, $a0
+; LA32-NEXT:    andi $a0, $a0, 255
 ; LA32-NEXT:    sltui $a0, $a0, 1
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_eq_i8:
 ; LA64:       # %bb.0:
 ; LA64-NEXT:    andn $a0, $a1, $a0
+; LA64-NEXT:    andi $a0, $a0, 255
 ; LA64-NEXT:    sltui $a0, $a0, 1
 ; LA64-NEXT:    ret
   %and = and i8 %a, %b
@@ -23,12 +25,16 @@ define i1 @andn_icmp_eq_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_eq_i16:
 ; LA32:       # %bb.0:
 ; LA32-NEXT:    andn $a0, $a1, $a0
+; LA32-NEXT:    lu12i.w $a1, 15
+; LA32-NEXT:    ori $a1, $a1, 4095
+; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltui $a0, $a0, 1
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_eq_i16:
 ; LA64:       # %bb.0:
 ; LA64-NEXT:    andn $a0, $a1, $a0
+; LA64-NEXT:    bstrpick.d $a0, $a0, 15, 0
 ; LA64-NEXT:    sltui $a0, $a0, 1
 ; LA64-NEXT:    ret
   %and = and i16 %a, %b
@@ -76,12 +82,14 @@ define i1 @andn_icmp_ne_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ne_i8:
 ; LA32:       # %bb.0:
 ; LA32-NEXT:    andn $a0, $a1, $a0
+; LA32-NEXT:    andi $a0, $a0, 255
 ; LA32-NEXT:    sltu $a0, $zero, $a0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ne_i8:
 ; LA64:       # %bb.0:
 ; LA64-NEXT:    andn $a0, $a1, $a0
+; LA64-NEXT:    andi $a0, $a0, 255
 ; LA64-NEXT:    sltu $a0, $zero, $a0
 ; LA64-NEXT:    ret
   %and = and i8 %a, %b
@@ -93,12 +101,16 @@ define i1 @andn_icmp_ne_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ne_i16:
 ; LA32:       # %bb.0:
 ; LA32-NEXT:    andn $a0, $a1, $a0
+; LA32-NEXT:    lu12i.w $a1, 15
+; LA32-NEXT:    ori $a1, $a1, 4095
+; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $zero, $a0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ne_i16:
 ; LA64:       # %bb.0:
 ; LA64-NEXT:    andn $a0, $a1, $a0
+; LA64-NEXT:    bstrpick.d $a0, $a0, 15, 0
 ; LA64-NEXT:    sltu $a0, $zero, $a0
 ; LA64-NEXT:    ret
   %and = and i16 %a, %b
@@ -145,12 +157,14 @@ define i1 @andn_icmp_ne_i64(i64 %a, i64 %b) nounwind {
 define i1 @andn_icmp_ult_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ult_i8:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    andi $a1, $a1, 255
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a0, $a1
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ult_i8:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    andi $a1, $a1, 255
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a0, $a1
 ; LA64-NEXT:    ret
@@ -162,12 +176,16 @@ define i1 @andn_icmp_ult_i8(i8 signext %a, i8 signext %b) nounwind {
 define i1 @andn_icmp_ult_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ult_i16:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    lu12i.w $a2, 15
+; LA32-NEXT:    ori $a2, $a2, 4095
+; LA32-NEXT:    and $a1, $a1, $a2
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a0, $a1
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ult_i16:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    bstrpick.d $a1, $a1, 15, 0
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a0, $a1
 ; LA64-NEXT:    ret
@@ -179,6 +197,7 @@ define i1 @andn_icmp_ult_i16(i16 signext %a, i16 signext %b) nounwind {
 define i1 @andn_icmp_uge_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_uge_i8:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    andi $a1, $a1, 255
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a0, $a1
 ; LA32-NEXT:    xori $a0, $a0, 1
@@ -186,6 +205,7 @@ define i1 @andn_icmp_uge_i8(i8 signext %a, i8 signext %b) nounwind {
 ;
 ; LA64-LABEL: andn_icmp_uge_i8:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    andi $a1, $a1, 255
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a0, $a1
 ; LA64-NEXT:    xori $a0, $a0, 1
@@ -198,6 +218,9 @@ define i1 @andn_icmp_uge_i8(i8 signext %a, i8 signext %b) nounwind {
 define i1 @andn_icmp_uge_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_uge_i16:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    lu12i.w $a2, 15
+; LA32-NEXT:    ori $a2, $a2, 4095
+; LA32-NEXT:    and $a1, $a1, $a2
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a0, $a1
 ; LA32-NEXT:    xori $a0, $a0, 1
@@ -205,6 +228,7 @@ define i1 @andn_icmp_uge_i16(i16 signext %a, i16 signext %b) nounwind {
 ;
 ; LA64-LABEL: andn_icmp_uge_i16:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    bstrpick.d $a1, $a1, 15, 0
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a0, $a1
 ; LA64-NEXT:    xori $a0, $a0, 1
@@ -217,12 +241,14 @@ define i1 @andn_icmp_uge_i16(i16 signext %a, i16 signext %b) nounwind {
 define i1 @andn_icmp_ugt_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ugt_i8:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    andi $a1, $a1, 255
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a1, $a0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ugt_i8:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    andi $a1, $a1, 255
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a1, $a0
 ; LA64-NEXT:    ret
@@ -234,12 +260,16 @@ define i1 @andn_icmp_ugt_i8(i8 signext %a, i8 signext %b) nounwind {
 define i1 @andn_icmp_ugt_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ugt_i16:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    lu12i.w $a2, 15
+; LA32-NEXT:    ori $a2, $a2, 4095
+; LA32-NEXT:    and $a1, $a1, $a2
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a1, $a0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: andn_icmp_ugt_i16:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    bstrpick.d $a1, $a1, 15, 0
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a1, $a0
 ; LA64-NEXT:    ret
@@ -251,6 +281,7 @@ define i1 @andn_icmp_ugt_i16(i16 signext %a, i16 signext %b) nounwind {
 define i1 @andn_icmp_ule_i8(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ule_i8:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    andi $a1, $a1, 255
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a1, $a0
 ; LA32-NEXT:    xori $a0, $a0, 1
@@ -258,6 +289,7 @@ define i1 @andn_icmp_ule_i8(i8 signext %a, i8 signext %b) nounwind {
 ;
 ; LA64-LABEL: andn_icmp_ule_i8:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    andi $a1, $a1, 255
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a1, $a0
 ; LA64-NEXT:    xori $a0, $a0, 1
@@ -270,6 +302,9 @@ define i1 @andn_icmp_ule_i8(i8 signext %a, i8 signext %b) nounwind {
 define i1 @andn_icmp_ule_i16(i16 signext %a, i16 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_ule_i16:
 ; LA32:       # %bb.0:
+; LA32-NEXT:    lu12i.w $a2, 15
+; LA32-NEXT:    ori $a2, $a2, 4095
+; LA32-NEXT:    and $a1, $a1, $a2
 ; LA32-NEXT:    and $a0, $a0, $a1
 ; LA32-NEXT:    sltu $a0, $a1, $a0
 ; LA32-NEXT:    xori $a0, $a0, 1
@@ -277,6 +312,7 @@ define i1 @andn_icmp_ule_i16(i16 signext %a, i16 signext %b) nounwind {
 ;
 ; LA64-LABEL: andn_icmp_ule_i16:
 ; LA64:       # %bb.0:
+; LA64-NEXT:    bstrpick.d $a1, $a1, 15, 0
 ; LA64-NEXT:    and $a0, $a0, $a1
 ; LA64-NEXT:    sltu $a0, $a1, $a0
 ; LA64-NEXT:    xori $a0, $a0, 1
@@ -582,6 +618,7 @@ define i1 @andn_icmp_eq_i8_i32(i8 signext %a, i8 signext %b) nounwind {
 ; LA32-LABEL: andn_icmp_eq_i8_i32:
 ; LA32:       # %bb.0:
 ; LA32-NEXT:    andn $a0, $a1, $a0
+; LA32-NEXT:    andi $a0, $a0, 255
 ; LA32-NEXT:    sltui $a0, $a0, 1
 ; LA32-NEXT:    ret
 ;

@@ -12,15 +12,15 @@ define void @fun0(i64 %g0, double %d0, i64 %n, ...) #0 {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    stmg %r4, %r15, 32(%r15)
 ; CHECK-NEXT:    aghi %r15, -192
-; CHECK-NEXT:    std %f2, 328(%r15)
-; CHECK-NEXT:    std %f4, 336(%r15)
 ; CHECK-NEXT:    std %f6, 344(%r15)
-; CHECK-NEXT:    la %r0, 352(%r15)
-; CHECK-NEXT:    stg %r0, 176(%r15)
+; CHECK-NEXT:    std %f4, 336(%r15)
+; CHECK-NEXT:    std %f2, 328(%r15)
 ; CHECK-NEXT:    la %r0, 192(%r15)
 ; CHECK-NEXT:    stg %r0, 184(%r15)
-; CHECK-NEXT:    mvghi 160(%r15), 2
+; CHECK-NEXT:    la %r0, 352(%r15)
+; CHECK-NEXT:    stg %r0, 176(%r15)
 ; CHECK-NEXT:    mvghi 168(%r15), 1
+; CHECK-NEXT:    mvghi 160(%r15), 2
 ; CHECK-NEXT:    lmg %r6, %r15, 240(%r15)
 ; CHECK-NEXT:    br %r14
 entry:

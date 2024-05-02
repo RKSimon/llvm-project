@@ -425,8 +425,8 @@ define void @call_copy_notcxx14aggregate() {
 ; CHECK-SD-NEXT:    mov x0, sp
 ; CHECK-SD-NEXT:    mov x1, x19
 ; CHECK-SD-NEXT:    bl copy_notcxx14aggregate
-; CHECK-SD-NEXT:    ldp d0, d1, [sp]
-; CHECK-SD-NEXT:    stp d0, d1, [x19]
+; CHECK-SD-NEXT:    ldp d1, d0, [sp]
+; CHECK-SD-NEXT:    stp d1, d0, [x19]
 ; CHECK-SD-NEXT:    .seh_startepilogue
 ; CHECK-SD-NEXT:    ldp x19, x30, [sp, #16] // 16-byte Folded Reload
 ; CHECK-SD-NEXT:    .seh_save_lrpair x19, 16
@@ -454,8 +454,8 @@ define void @call_copy_notcxx14aggregate() {
 ; CHECK-EC-SD-NEXT:    .weak_anti_dep "#copy_notcxx14aggregate"
 ; CHECK-EC-SD-NEXT:  "#copy_notcxx14aggregate" = copy_notcxx14aggregate
 ; CHECK-EC-SD-NEXT:    bl "#copy_notcxx14aggregate"
-; CHECK-EC-SD-NEXT:    ldp d0, d1, [sp]
-; CHECK-EC-SD-NEXT:    stp d0, d1, [x19]
+; CHECK-EC-SD-NEXT:    ldp d1, d0, [sp]
+; CHECK-EC-SD-NEXT:    stp d1, d0, [x19]
 ; CHECK-EC-SD-NEXT:    .seh_startepilogue
 ; CHECK-EC-SD-NEXT:    ldp x19, x30, [sp, #16] // 16-byte Folded Reload
 ; CHECK-EC-SD-NEXT:    .seh_save_lrpair x19, 16
@@ -510,8 +510,8 @@ define void @call_copy_notcxx14aggregate() {
 ; CHECK-FAST-NEXT:    mov x0, sp
 ; CHECK-FAST-NEXT:    mov x1, x19
 ; CHECK-FAST-NEXT:    bl copy_notcxx14aggregate
-; CHECK-FAST-NEXT:    ldp d0, d1, [sp]
-; CHECK-FAST-NEXT:    stp d0, d1, [x19]
+; CHECK-FAST-NEXT:    ldp d1, d0, [sp]
+; CHECK-FAST-NEXT:    stp d1, d0, [x19]
 ; CHECK-FAST-NEXT:    .seh_startepilogue
 ; CHECK-FAST-NEXT:    ldp x19, x30, [sp, #16] // 16-byte Folded Reload
 ; CHECK-FAST-NEXT:    .seh_save_lrpair x19, 16
@@ -539,8 +539,8 @@ define void @call_copy_notcxx14aggregate() {
 ; CHECK-EC-GI-NEXT:    .weak_anti_dep "#copy_notcxx14aggregate"
 ; CHECK-EC-GI-NEXT:  "#copy_notcxx14aggregate" = copy_notcxx14aggregate
 ; CHECK-EC-GI-NEXT:    bl "#copy_notcxx14aggregate"
-; CHECK-EC-GI-NEXT:    ldp d0, d1, [sp]
-; CHECK-EC-GI-NEXT:    stp d0, d1, [x19]
+; CHECK-EC-GI-NEXT:    ldp d1, d0, [sp]
+; CHECK-EC-GI-NEXT:    stp d1, d0, [x19]
 ; CHECK-EC-GI-NEXT:    .seh_startepilogue
 ; CHECK-EC-GI-NEXT:    ldp x19, x30, [sp, #16] // 16-byte Folded Reload
 ; CHECK-EC-GI-NEXT:    .seh_save_lrpair x19, 16

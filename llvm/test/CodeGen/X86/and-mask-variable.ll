@@ -110,8 +110,8 @@ define i128 @mask_pair_128(i128 %x, i128 %y) nounwind {
 ; X86-NOBMI-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NOBMI-NEXT:    movl $0, (%esp)
 ; X86-NOBMI-NEXT:    movl %ecx, %edx
+; X86-NOBMI-NEXT:    andb $96, %dl
 ; X86-NOBMI-NEXT:    shrb $3, %dl
-; X86-NOBMI-NEXT:    andb $12, %dl
 ; X86-NOBMI-NEXT:    negb %dl
 ; X86-NOBMI-NEXT:    movsbl %dl, %ebx
 ; X86-NOBMI-NEXT:    movl 24(%esp,%ebx), %edx
@@ -153,8 +153,8 @@ define i128 @mask_pair_128(i128 %x, i128 %y) nounwind {
 ; X86-BMI2-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-BMI2-NEXT:    movl $0, (%esp)
 ; X86-BMI2-NEXT:    movl %ecx, %edx
+; X86-BMI2-NEXT:    andb $96, %dl
 ; X86-BMI2-NEXT:    shrb $3, %dl
-; X86-BMI2-NEXT:    andb $12, %dl
 ; X86-BMI2-NEXT:    negb %dl
 ; X86-BMI2-NEXT:    movsbl %dl, %edi
 ; X86-BMI2-NEXT:    movl 24(%esp,%edi), %edx

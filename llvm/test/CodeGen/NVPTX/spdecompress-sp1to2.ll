@@ -84,10 +84,10 @@ define <64 x i8> @test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_32(<2 x i32> %m
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r3, %r4, %r5, %r6}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_32_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r7, %r8, %r9, %r10}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_32_param_1];
 ; CHECK-NEXT:    spdecompress.b8.b2.sp::1:2.x32 {%r11, %r12, %r13, %r14, %r15, %r16, %r17, %r18, %r19, %r20, %r21, %r22, %r23, %r24, %r25, %r26}, {%r1, %r2}, {%r7, %r8, %r9, %r10, %r3, %r4, %r5, %r6};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r23, %r24, %r25, %r26};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r19, %r20, %r21, %r22};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r15, %r16, %r17, %r18};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r11, %r12, %r13, %r14};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r19, %r20, %r21, %r22};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r23, %r24, %r25, %r26};
 ; CHECK-NEXT:    ret;
   %res = call <64 x i8> @llvm.nvvm.spdecompress.v64i8.v2i32.v32i8(<2 x i32> %metadata, <32 x i8> %compdata, i32 2, i32 2)
   ret <64 x i8> %res
@@ -107,14 +107,14 @@ define <128 x i8> @test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_64(<4 x i32> %
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r13, %r14, %r15, %r16}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_64_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r17, %r18, %r19, %r20}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b2_rpf_64_param_1];
 ; CHECK-NEXT:    spdecompress.b8.b2.sp::1:2.x64 {%r21, %r22, %r23, %r24, %r25, %r26, %r27, %r28, %r29, %r30, %r31, %r32, %r33, %r34, %r35, %r36, %r37, %r38, %r39, %r40, %r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50, %r51, %r52}, {%r1, %r2, %r3, %r4}, {%r17, %r18, %r19, %r20, %r13, %r14, %r15, %r16, %r9, %r10, %r11, %r12, %r5, %r6, %r7, %r8};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r49, %r50, %r51, %r52};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r45, %r46, %r47, %r48};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r41, %r42, %r43, %r44};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r37, %r38, %r39, %r40};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r33, %r34, %r35, %r36};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r29, %r30, %r31, %r32};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r25, %r26, %r27, %r28};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r21, %r22, %r23, %r24};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r29, %r30, %r31, %r32};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r33, %r34, %r35, %r36};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r37, %r38, %r39, %r40};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r41, %r42, %r43, %r44};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r45, %r46, %r47, %r48};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r49, %r50, %r51, %r52};
 ; CHECK-NEXT:    ret;
   %res = call <128 x i8> @llvm.nvvm.spdecompress.v128i8.v4i32.v64i8(<4 x i32> %metadata, <64 x i8> %compdata, i32 2, i32 2)
   ret <128 x i8> %res
@@ -201,10 +201,10 @@ define <64 x i8> @test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_32(<4 x i32> %m
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r5, %r6, %r7, %r8}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_32_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r9, %r10, %r11, %r12}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_32_param_1];
 ; CHECK-NEXT:    spdecompress.b8.b4.sp::1:2.x32 {%r13, %r14, %r15, %r16, %r17, %r18, %r19, %r20, %r21, %r22, %r23, %r24, %r25, %r26, %r27, %r28}, {%r1, %r2, %r3, %r4}, {%r9, %r10, %r11, %r12, %r5, %r6, %r7, %r8};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r25, %r26, %r27, %r28};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r21, %r22, %r23, %r24};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r17, %r18, %r19, %r20};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r13, %r14, %r15, %r16};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r21, %r22, %r23, %r24};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r25, %r26, %r27, %r28};
 ; CHECK-NEXT:    ret;
   %res = call <64 x i8> @llvm.nvvm.spdecompress.v64i8.v4i32.v32i8(<4 x i32> %metadata, <32 x i8> %compdata, i32 4, i32 2)
   ret <64 x i8> %res
@@ -225,14 +225,14 @@ define <128 x i8> @test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_64(<8 x i32> %
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r17, %r18, %r19, %r20}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_64_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r21, %r22, %r23, %r24}, [test_spdecompress_sp1to2_elmsz_b8_idxsz_b4_rpf_64_param_1];
 ; CHECK-NEXT:    spdecompress.b8.b4.sp::1:2.x64 {%r25, %r26, %r27, %r28, %r29, %r30, %r31, %r32, %r33, %r34, %r35, %r36, %r37, %r38, %r39, %r40, %r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50, %r51, %r52, %r53, %r54, %r55, %r56}, {%r5, %r6, %r7, %r8, %r1, %r2, %r3, %r4}, {%r21, %r22, %r23, %r24, %r17, %r18, %r19, %r20, %r13, %r14, %r15, %r16, %r9, %r10, %r11, %r12};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r53, %r54, %r55, %r56};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r49, %r50, %r51, %r52};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r45, %r46, %r47, %r48};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r41, %r42, %r43, %r44};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r37, %r38, %r39, %r40};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r33, %r34, %r35, %r36};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r29, %r30, %r31, %r32};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r25, %r26, %r27, %r28};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r33, %r34, %r35, %r36};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r37, %r38, %r39, %r40};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r41, %r42, %r43, %r44};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r45, %r46, %r47, %r48};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r49, %r50, %r51, %r52};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r53, %r54, %r55, %r56};
 ; CHECK-NEXT:    ret;
   %res = call <128 x i8> @llvm.nvvm.spdecompress.v128i8.v8i32.v64i8(<8 x i32> %metadata, <64 x i8> %compdata, i32 4, i32 2)
   ret <128 x i8> %res
@@ -319,10 +319,10 @@ define <32 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_16(i32 %metad
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r2, %r3, %r4, %r5}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_16_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r6, %r7, %r8, %r9}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_16_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b2.sp::1:2.x16 {%r10, %r11, %r12, %r13, %r14, %r15, %r16, %r17, %r18, %r19, %r20, %r21, %r22, %r23, %r24, %r25}, {%r1}, {%r6, %r7, %r8, %r9, %r2, %r3, %r4, %r5};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r22, %r23, %r24, %r25};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r18, %r19, %r20, %r21};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r14, %r15, %r16, %r17};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r10, %r11, %r12, %r13};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r18, %r19, %r20, %r21};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r22, %r23, %r24, %r25};
 ; CHECK-NEXT:    ret;
   %res = call <32 x i16> @llvm.nvvm.spdecompress.v32i16.i32.v16i16(i32 %metadata, <16 x i16> %compdata, i32 2, i32 2)
   ret <32 x i16> %res
@@ -342,14 +342,14 @@ define <64 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_32(<2 x i32> 
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r11, %r12, %r13, %r14}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_32_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r15, %r16, %r17, %r18}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_32_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b2.sp::1:2.x32 {%r19, %r20, %r21, %r22, %r23, %r24, %r25, %r26, %r27, %r28, %r29, %r30, %r31, %r32, %r33, %r34, %r35, %r36, %r37, %r38, %r39, %r40, %r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50}, {%r1, %r2}, {%r15, %r16, %r17, %r18, %r11, %r12, %r13, %r14, %r7, %r8, %r9, %r10, %r3, %r4, %r5, %r6};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r47, %r48, %r49, %r50};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r43, %r44, %r45, %r46};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r39, %r40, %r41, %r42};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r35, %r36, %r37, %r38};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r31, %r32, %r33, %r34};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r27, %r28, %r29, %r30};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r23, %r24, %r25, %r26};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r19, %r20, %r21, %r22};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r27, %r28, %r29, %r30};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r31, %r32, %r33, %r34};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r35, %r36, %r37, %r38};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r39, %r40, %r41, %r42};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r43, %r44, %r45, %r46};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r47, %r48, %r49, %r50};
 ; CHECK-NEXT:    ret;
   %res = call <64 x i16> @llvm.nvvm.spdecompress.v64i16.v2i32.v32i16(<2 x i32> %metadata, <32 x i16> %compdata, i32 2, i32 2)
   ret <64 x i16> %res
@@ -373,22 +373,22 @@ define <128 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_64(<4 x i32>
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r29, %r30, %r31, %r32}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_64_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r33, %r34, %r35, %r36}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b2_rpf_64_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b2.sp::1:2.x64 {%r37, %r38, %r39, %r40, %r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50, %r51, %r52, %r53, %r54, %r55, %r56, %r57, %r58, %r59, %r60, %r61, %r62, %r63, %r64, %r65, %r66, %r67, %r68, %r69, %r70, %r71, %r72, %r73, %r74, %r75, %r76, %r77, %r78, %r79, %r80, %r81, %r82, %r83, %r84, %r85, %r86, %r87, %r88, %r89, %r90, %r91, %r92, %r93, %r94, %r95, %r96, %r97, %r98, %r99, %r100}, {%r1, %r2, %r3, %r4}, {%r33, %r34, %r35, %r36, %r29, %r30, %r31, %r32, %r25, %r26, %r27, %r28, %r21, %r22, %r23, %r24, %r17, %r18, %r19, %r20, %r13, %r14, %r15, %r16, %r9, %r10, %r11, %r12, %r5, %r6, %r7, %r8};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+240], {%r97, %r98, %r99, %r100};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+224], {%r93, %r94, %r95, %r96};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+208], {%r89, %r90, %r91, %r92};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+192], {%r85, %r86, %r87, %r88};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+176], {%r81, %r82, %r83, %r84};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+160], {%r77, %r78, %r79, %r80};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+144], {%r73, %r74, %r75, %r76};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+128], {%r69, %r70, %r71, %r72};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r65, %r66, %r67, %r68};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r61, %r62, %r63, %r64};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r57, %r58, %r59, %r60};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r53, %r54, %r55, %r56};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r49, %r50, %r51, %r52};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r45, %r46, %r47, %r48};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r41, %r42, %r43, %r44};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r37, %r38, %r39, %r40};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r45, %r46, %r47, %r48};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r49, %r50, %r51, %r52};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r53, %r54, %r55, %r56};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r57, %r58, %r59, %r60};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r61, %r62, %r63, %r64};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r65, %r66, %r67, %r68};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+128], {%r69, %r70, %r71, %r72};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+144], {%r73, %r74, %r75, %r76};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+160], {%r77, %r78, %r79, %r80};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+176], {%r81, %r82, %r83, %r84};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+192], {%r85, %r86, %r87, %r88};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+208], {%r89, %r90, %r91, %r92};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+224], {%r93, %r94, %r95, %r96};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+240], {%r97, %r98, %r99, %r100};
 ; CHECK-NEXT:    ret;
   %res = call <128 x i16> @llvm.nvvm.spdecompress.v128i16.v4i32.v64i16(<4 x i32> %metadata, <64 x i16> %compdata, i32 2, i32 2)
   ret <128 x i16> %res
@@ -475,10 +475,10 @@ define <32 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_16(<2 x i32> 
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r3, %r4, %r5, %r6}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_16_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r7, %r8, %r9, %r10}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_16_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b4.sp::1:2.x16 {%r11, %r12, %r13, %r14, %r15, %r16, %r17, %r18, %r19, %r20, %r21, %r22, %r23, %r24, %r25, %r26}, {%r1, %r2}, {%r7, %r8, %r9, %r10, %r3, %r4, %r5, %r6};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r23, %r24, %r25, %r26};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r19, %r20, %r21, %r22};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r15, %r16, %r17, %r18};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r11, %r12, %r13, %r14};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r19, %r20, %r21, %r22};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r23, %r24, %r25, %r26};
 ; CHECK-NEXT:    ret;
   %res = call <32 x i16> @llvm.nvvm.spdecompress.v32i16.v2i32.v16i16(<2 x i32> %metadata, <16 x i16> %compdata, i32 4, i32 2)
   ret <32 x i16> %res
@@ -498,14 +498,14 @@ define <64 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_32(<4 x i32> 
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r13, %r14, %r15, %r16}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_32_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r17, %r18, %r19, %r20}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_32_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b4.sp::1:2.x32 {%r21, %r22, %r23, %r24, %r25, %r26, %r27, %r28, %r29, %r30, %r31, %r32, %r33, %r34, %r35, %r36, %r37, %r38, %r39, %r40, %r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50, %r51, %r52}, {%r1, %r2, %r3, %r4}, {%r17, %r18, %r19, %r20, %r13, %r14, %r15, %r16, %r9, %r10, %r11, %r12, %r5, %r6, %r7, %r8};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r49, %r50, %r51, %r52};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r45, %r46, %r47, %r48};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r41, %r42, %r43, %r44};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r37, %r38, %r39, %r40};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r33, %r34, %r35, %r36};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r29, %r30, %r31, %r32};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r25, %r26, %r27, %r28};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r21, %r22, %r23, %r24};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r29, %r30, %r31, %r32};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r33, %r34, %r35, %r36};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r37, %r38, %r39, %r40};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r41, %r42, %r43, %r44};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r45, %r46, %r47, %r48};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r49, %r50, %r51, %r52};
 ; CHECK-NEXT:    ret;
   %res = call <64 x i16> @llvm.nvvm.spdecompress.v64i16.v4i32.v32i16(<4 x i32> %metadata, <32 x i16> %compdata, i32 4, i32 2)
   ret <64 x i16> %res
@@ -530,22 +530,22 @@ define <128 x i16> @test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_64(<8 x i32>
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r33, %r34, %r35, %r36}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_64_param_1+16];
 ; CHECK-NEXT:    ld.param::func.v4.b32 {%r37, %r38, %r39, %r40}, [test_spdecompress_sp1to2_elmsz_b16_idxsz_b4_rpf_64_param_1];
 ; CHECK-NEXT:    spdecompress.b16.b4.sp::1:2.x64 {%r41, %r42, %r43, %r44, %r45, %r46, %r47, %r48, %r49, %r50, %r51, %r52, %r53, %r54, %r55, %r56, %r57, %r58, %r59, %r60, %r61, %r62, %r63, %r64, %r65, %r66, %r67, %r68, %r69, %r70, %r71, %r72, %r73, %r74, %r75, %r76, %r77, %r78, %r79, %r80, %r81, %r82, %r83, %r84, %r85, %r86, %r87, %r88, %r89, %r90, %r91, %r92, %r93, %r94, %r95, %r96, %r97, %r98, %r99, %r100, %r101, %r102, %r103, %r104}, {%r5, %r6, %r7, %r8, %r1, %r2, %r3, %r4}, {%r37, %r38, %r39, %r40, %r33, %r34, %r35, %r36, %r29, %r30, %r31, %r32, %r25, %r26, %r27, %r28, %r21, %r22, %r23, %r24, %r17, %r18, %r19, %r20, %r13, %r14, %r15, %r16, %r9, %r10, %r11, %r12};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+240], {%r101, %r102, %r103, %r104};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+224], {%r97, %r98, %r99, %r100};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+208], {%r93, %r94, %r95, %r96};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+192], {%r89, %r90, %r91, %r92};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+176], {%r85, %r86, %r87, %r88};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+160], {%r81, %r82, %r83, %r84};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+144], {%r77, %r78, %r79, %r80};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+128], {%r73, %r74, %r75, %r76};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r69, %r70, %r71, %r72};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r65, %r66, %r67, %r68};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r61, %r62, %r63, %r64};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r57, %r58, %r59, %r60};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r53, %r54, %r55, %r56};
-; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r49, %r50, %r51, %r52};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+16], {%r45, %r46, %r47, %r48};
 ; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0], {%r41, %r42, %r43, %r44};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+32], {%r49, %r50, %r51, %r52};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+48], {%r53, %r54, %r55, %r56};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+64], {%r57, %r58, %r59, %r60};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+80], {%r61, %r62, %r63, %r64};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+96], {%r65, %r66, %r67, %r68};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+112], {%r69, %r70, %r71, %r72};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+128], {%r73, %r74, %r75, %r76};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+144], {%r77, %r78, %r79, %r80};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+160], {%r81, %r82, %r83, %r84};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+176], {%r85, %r86, %r87, %r88};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+192], {%r89, %r90, %r91, %r92};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+208], {%r93, %r94, %r95, %r96};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+224], {%r97, %r98, %r99, %r100};
+; CHECK-NEXT:    st.param::func.v4.b32 [func_retval0+240], {%r101, %r102, %r103, %r104};
 ; CHECK-NEXT:    ret;
   %res = call <128 x i16> @llvm.nvvm.spdecompress.v128i16.v8i32.v64i16(<8 x i32> %metadata, <64 x i16> %compdata, i32 4, i32 2)
   ret <128 x i16> %res

@@ -75,6 +75,7 @@ define amdgpu_ps i32 @s_cvt_pkrtz_samereg_v2f16_f32(float inreg %x) #0 {
 define amdgpu_ps i32 @s_cvt_pkrtz_undef_undef() #0 {
 ; SI-SDAG-LABEL: s_cvt_pkrtz_undef_undef:
 ; SI-SDAG:       ; %bb.0:
+; SI-SDAG-NEXT:    s_mov_b32 s0, 0
 ; SI-SDAG-NEXT:    ; return to shader part epilog
 ;
 ; SI-GISEL-LABEL: s_cvt_pkrtz_undef_undef:

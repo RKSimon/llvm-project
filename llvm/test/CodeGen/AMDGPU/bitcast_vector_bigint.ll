@@ -687,9 +687,9 @@ define <128 x i4> @shuffle_v4i4_to_v128i4(<4 x i4> %arg) {
 ; GFX9:       ; %bb.0:
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-NEXT:    v_mov_b32_e32 v2, 15
-; GFX9-NEXT:    v_and_b32_e32 v1, 15, v1
 ; GFX9-NEXT:    v_and_b32_sdwa v4, v4, v2 dst_sel:BYTE_3 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
 ; GFX9-NEXT:    v_and_b32_sdwa v2, v3, v2 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
+; GFX9-NEXT:    v_and_b32_e32 v1, 15, v1
 ; GFX9-NEXT:    v_or3_b32 v1, v1, v2, v4
 ; GFX9-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX9-NEXT:    buffer_store_dword v2, v0, s[0:3], 0 offen offset:60
@@ -718,8 +718,8 @@ define <128 x i4> @shuffle_v4i4_to_v128i4(<4 x i4> %arg) {
 ; GFX12-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-TRUE16-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-TRUE16-NEXT:    v_and_b16 v4.l, v4.l, 15
-; GFX12-TRUE16-NEXT:    v_and_b16 v2.l, v1.l, 15
 ; GFX12-TRUE16-NEXT:    v_and_b16 v3.l, v3.l, 15
+; GFX12-TRUE16-NEXT:    v_and_b16 v2.l, v1.l, 15
 ; GFX12-TRUE16-NEXT:    s_mov_b32 s0, 0
 ; GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX12-TRUE16-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v8, 24, v4

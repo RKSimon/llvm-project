@@ -58,18 +58,16 @@ define <8 x i8> @vaaddu_vx_v8i8_floor(<8 x i8> %x, i8 %y) {
 define <8 x i8> @vaaddu_vv_v8i8_floor_zexti32(<8 x i8> %x, <8 x i8> %y) {
 ; CHECK-LABEL: vaaddu_vv_v8i8_floor_zexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 2
 ; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vaaddu.vv v8, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    vnsrl.wi v8, v10, 1
 ; CHECK-NEXT:    ret
 ;
 ; NOVXRM-LABEL: vaaddu_vv_v8i8_floor_zexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vand.vv v8, v8, v9
-; NOVXRM-NEXT:    vsrl.vi v9, v10, 1
-; NOVXRM-NEXT:    vadd.vv v8, v8, v9
+; NOVXRM-NEXT:    vwaddu.vv v10, v8, v9
+; NOVXRM-NEXT:    vnsrl.wi v8, v10, 1
 ; NOVXRM-NEXT:    ret
   %xzv = zext <8 x i8> %x to <8 x i32>
   %yzv = zext <8 x i8> %y to <8 x i32>
@@ -433,18 +431,25 @@ define <8 x i8> @vaaddu_vx_v8i8_ceil(<8 x i8> %x, i8 %y) {
 define <8 x i8> @vaaddu_vv_v8i8_ceil_zexti32(<8 x i8> %x, <8 x i8> %y) {
 ; CHECK-LABEL: vaaddu_vv_v8i8_ceil_zexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 0
 ; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vaaddu.vv v8, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    li a0, 1
+; CHECK-NEXT:    csrwi vxrm, 2
+; CHECK-NEXT:    vsetvli zero, zero, e16, m1, ta, ma
+; CHECK-NEXT:    vaaddu.vx v8, v10, a0
+; CHECK-NEXT:    vsetvli zero, zero, e8, mf2, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v8, 0
 ; CHECK-NEXT:    ret
 ;
 ; NOVXRM-LABEL: vaaddu_vv_v8i8_ceil_zexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vor.vv v8, v8, v9
-; NOVXRM-NEXT:    vsrl.vi v9, v10, 1
-; NOVXRM-NEXT:    vsub.vv v8, v8, v9
+; NOVXRM-NEXT:    vwaddu.vv v10, v8, v9
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, m1, ta, ma
+; NOVXRM-NEXT:    vsrl.vi v8, v10, 1
+; NOVXRM-NEXT:    vsub.vv v8, v10, v8
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf2, ta, ma
+; NOVXRM-NEXT:    vnsrl.wi v8, v8, 0
 ; NOVXRM-NEXT:    ret
   %xzv = zext <8 x i8> %x to <8 x i32>
   %yzv = zext <8 x i8> %y to <8 x i32>

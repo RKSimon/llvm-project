@@ -21,8 +21,8 @@ define void @test_load_store_f80(ptr %p, ptr %q) #0 {
 ; X86-NEXT:    movl 8(%ecx), %edx
 ; X86-NEXT:    movl (%ecx), %esi
 ; X86-NEXT:    movl 4(%ecx), %ecx
-; X86-NEXT:    movl %esi, (%eax)
 ; X86-NEXT:    movl %ecx, 4(%eax)
+; X86-NEXT:    movl %esi, (%eax)
 ; X86-NEXT:    movw %dx, 8(%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    retl

@@ -167,11 +167,11 @@ define i64 @test_rotl_udiv_special_case(i64 %i) {
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_rotl_udiv_special_case_param_0];
 ; CHECK-NEXT:    mul.hi.u64 %rd2, %rd1, -6148914691236517205;
-; CHECK-NEXT:    shr.u64 %rd3, %rd2, 1;
-; CHECK-NEXT:    mov.b64 {%r1, %r2}, %rd3;
-; CHECK-NEXT:    shf.l.wrap.b32 %r3, %r2, %r1, 28;
-; CHECK-NEXT:    shf.l.wrap.b32 %r4, %r1, %r2, 28;
-; CHECK-NEXT:    mov.b64 %rd4, {%r4, %r3};
+; CHECK-NEXT:    mov.b64 {%r1, %r2}, %rd2;
+; CHECK-NEXT:    shf.l.wrap.b32 %r3, %r2, %r1, 27;
+; CHECK-NEXT:    shf.l.wrap.b32 %r4, %r1, %r2, 27;
+; CHECK-NEXT:    mov.b64 %rd3, {%r4, %r3};
+; CHECK-NEXT:    and.b64 %rd4, %rd3, -576460752303423489;
 ; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
 ; CHECK-NEXT:    ret;
   %lhs_div = udiv i64 %i, 3
@@ -231,8 +231,8 @@ define i32 @test_fshl_with_mask_special_case(i32 %x) {
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b32 %r1, [test_fshl_with_mask_special_case_param_0];
-; CHECK-NEXT:    or.b32 %r2, %r1, 1;
-; CHECK-NEXT:    shf.l.wrap.b32 %r3, %r1, %r2, 5;
+; CHECK-NEXT:    shf.l.wrap.b32 %r2, %r1, %r1, 5;
+; CHECK-NEXT:    or.b32 %r3, %r2, 32;
 ; CHECK-NEXT:    and.b32 %r4, %r3, -31;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r4;
 ; CHECK-NEXT:    ret;

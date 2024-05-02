@@ -182,15 +182,15 @@ define ptx_kernel void @zextend_to_v2i32(<2 x i8> %0) {
 ; CHECK-SM100-NEXT:    cvt.u32.u16 %r2, %rs1;
 ; CHECK-SM100-NEXT:    mov.b64 %rd1, {%r2, %r1};
 ; CHECK-SM100-NEXT:    mov.b64 %rd2, {0, 0};
-; CHECK-SM100-NEXT:    mov.b64 %rd3, 4;
+; CHECK-SM100-NEXT:    mov.b64 %rd3, 0;
 ; CHECK-SM100-NEXT:    st.b32 [%rd3], %rd2;
-; CHECK-SM100-NEXT:    mov.b64 %rd4, 0;
-; CHECK-SM100-NEXT:    st.b32 [%rd4], %rd2;
-; CHECK-SM100-NEXT:    cvt.u64.u16 %rd5, %rs2;
-; CHECK-SM100-NEXT:    mov.b64 %rd6, 12;
-; CHECK-SM100-NEXT:    st.b32 [%rd6], %rd5;
-; CHECK-SM100-NEXT:    mov.b64 %rd7, 8;
-; CHECK-SM100-NEXT:    st.b32 [%rd7], %rd1;
+; CHECK-SM100-NEXT:    cvt.u64.u16 %rd4, %rs2;
+; CHECK-SM100-NEXT:    mov.b64 %rd5, 12;
+; CHECK-SM100-NEXT:    st.b32 [%rd5], %rd4;
+; CHECK-SM100-NEXT:    mov.b64 %rd6, 8;
+; CHECK-SM100-NEXT:    st.b32 [%rd6], %rd1;
+; CHECK-SM100-NEXT:    mov.b64 %rd7, 4;
+; CHECK-SM100-NEXT:    st.b32 [%rd7], 0;
 ; CHECK-SM100-NEXT:    ret;
   %2 = zext <2 x i8> %0 to <2 x i32>
   %3 = shufflevector <2 x i32> zeroinitializer, <2 x i32> %2, <4 x i32> <i32 0, i32 1, i32 2, i32 3>
@@ -235,14 +235,14 @@ define ptx_kernel void @sextend_to_v2i32(<2 x i8> %0) {
 ; CHECK-SM100-NEXT:    cvt.s32.s8 %r4, %r3;
 ; CHECK-SM100-NEXT:    mov.b64 %rd1, {%r4, %r2};
 ; CHECK-SM100-NEXT:    mov.b64 %rd2, {0, 0};
-; CHECK-SM100-NEXT:    mov.b64 %rd3, 4;
+; CHECK-SM100-NEXT:    mov.b64 %rd3, 0;
 ; CHECK-SM100-NEXT:    st.b32 [%rd3], %rd2;
-; CHECK-SM100-NEXT:    mov.b64 %rd4, 0;
-; CHECK-SM100-NEXT:    st.b32 [%rd4], %rd2;
-; CHECK-SM100-NEXT:    mov.b64 %rd5, 12;
-; CHECK-SM100-NEXT:    st.b32 [%rd5], %r2;
-; CHECK-SM100-NEXT:    mov.b64 %rd6, 8;
-; CHECK-SM100-NEXT:    st.b32 [%rd6], %rd1;
+; CHECK-SM100-NEXT:    mov.b64 %rd4, 12;
+; CHECK-SM100-NEXT:    st.b32 [%rd4], %r2;
+; CHECK-SM100-NEXT:    mov.b64 %rd5, 8;
+; CHECK-SM100-NEXT:    st.b32 [%rd5], %rd1;
+; CHECK-SM100-NEXT:    mov.b64 %rd6, 4;
+; CHECK-SM100-NEXT:    st.b32 [%rd6], 0;
 ; CHECK-SM100-NEXT:    ret;
   %2 = sext <2 x i8> %0 to <2 x i32>
   %3 = shufflevector <2 x i32> zeroinitializer, <2 x i32> %2, <4 x i32> <i32 0, i32 1, i32 2, i32 3>

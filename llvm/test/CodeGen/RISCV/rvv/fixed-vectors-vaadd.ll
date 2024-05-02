@@ -58,18 +58,16 @@ define <8 x i8> @vaadd_vx_v8i8_floor(<8 x i8> %x, i8 %y) {
 define <8 x i8> @vaadd_vv_v8i8_floor_sexti32(<8 x i8> %x, <8 x i8> %y) {
 ; CHECK-LABEL: vaadd_vv_v8i8_floor_sexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 2
 ; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; CHECK-NEXT:    vaadd.vv v8, v8, v9
+; CHECK-NEXT:    vwadd.vv v10, v8, v9
+; CHECK-NEXT:    vnsrl.wi v8, v10, 1
 ; CHECK-NEXT:    ret
 ;
 ; NOVXRM-LABEL: vaadd_vv_v8i8_floor_sexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vand.vv v8, v8, v9
-; NOVXRM-NEXT:    vsra.vi v9, v10, 1
-; NOVXRM-NEXT:    vadd.vv v8, v8, v9
+; NOVXRM-NEXT:    vwadd.vv v10, v8, v9
+; NOVXRM-NEXT:    vnsrl.wi v8, v10, 1
 ; NOVXRM-NEXT:    ret
   %xzv = sext <8 x i8> %x to <8 x i32>
   %yzv = sext <8 x i8> %y to <8 x i32>
@@ -441,10 +439,14 @@ define <8 x i8> @vaadd_vv_v8i8_ceil_sexti32(<8 x i8> %x, <8 x i8> %y) {
 ; NOVXRM-LABEL: vaadd_vv_v8i8_ceil_sexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vor.vv v8, v8, v9
-; NOVXRM-NEXT:    vsra.vi v9, v10, 1
-; NOVXRM-NEXT:    vsub.vv v8, v8, v9
+; NOVXRM-NEXT:    vwadd.vv v10, v8, v9
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, m1, ta, ma
+; NOVXRM-NEXT:    vxor.vi v8, v10, 1
+; NOVXRM-NEXT:    vand.vi v9, v10, 1
+; NOVXRM-NEXT:    vsra.vi v8, v8, 1
+; NOVXRM-NEXT:    vadd.vv v8, v9, v8
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf2, ta, ma
+; NOVXRM-NEXT:    vnsrl.wi v8, v8, 0
 ; NOVXRM-NEXT:    ret
   %xzv = sext <8 x i8> %x to <8 x i32>
   %yzv = sext <8 x i8> %y to <8 x i32>
@@ -762,6 +764,31 @@ define <4 x i8> @vaadd_reassociate(<4 x i8> %x, <4 x i8> %y, <4 x i8> %z, <4 x i
 ; CHECK-NEXT:    vnsrl.wi v9, v10, 0
 ; CHECK-NEXT:    vmul.vv v8, v8, v9
 ; CHECK-NEXT:    ret
+;
+; NOVXRM-LABEL: vaadd_reassociate:
+; NOVXRM:       # %bb.0:
+; NOVXRM-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
+; NOVXRM-NEXT:    vsext.vf2 v12, v11
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
+; NOVXRM-NEXT:    vwsub.vv v11, v8, v10
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
+; NOVXRM-NEXT:    vadd.vi v10, v11, 1
+; NOVXRM-NEXT:    vxor.vv v11, v10, v12
+; NOVXRM-NEXT:    vand.vv v10, v10, v12
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
+; NOVXRM-NEXT:    vxor.vv v12, v8, v9
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
+; NOVXRM-NEXT:    vsra.vi v11, v11, 1
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
+; NOVXRM-NEXT:    vor.vv v8, v8, v9
+; NOVXRM-NEXT:    vsra.vi v9, v12, 1
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
+; NOVXRM-NEXT:    vadd.vv v10, v10, v11
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
+; NOVXRM-NEXT:    vsub.vv v8, v8, v9
+; NOVXRM-NEXT:    vnsrl.wi v9, v10, 0
+; NOVXRM-NEXT:    vmul.vv v8, v8, v9
+; NOVXRM-NEXT:    ret
   %a = sext <4 x i8> %x to <4 x i16>
   %b = sext <4 x i8> %y to <4 x i16>
   %c = sext <4 x i8> %z to <4 x i16>

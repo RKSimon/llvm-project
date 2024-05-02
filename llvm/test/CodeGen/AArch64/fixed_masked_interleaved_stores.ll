@@ -6,26 +6,27 @@ define void @foo_st2_v16i8(<16 x i1> %mask, <16 x i8> %val1, <16 x i8> %val2, pt
 ; NEON-LABEL: foo_st2_v16i8:
 ; NEON:       // %bb.0:
 ; NEON-NEXT:    zip2 v3.16b, v0.16b, v0.16b
-; NEON-NEXT:    zip1 v0.16b, v0.16b, v0.16b
+; NEON-NEXT:    zip1 v4.16b, v0.16b, v0.16b
 ; NEON-NEXT:    adrp x8, .LCPI0_0
-; NEON-NEXT:    ldr q4, [x8, :lo12:.LCPI0_0]
-; NEON-NEXT:    shl v3.16b, v3.16b, #7
-; NEON-NEXT:    shl v0.16b, v0.16b, #7
-; NEON-NEXT:    cmlt v3.16b, v3.16b, #0
-; NEON-NEXT:    cmlt v0.16b, v0.16b, #0
-; NEON-NEXT:    and v3.16b, v3.16b, v4.16b
-; NEON-NEXT:    and v0.16b, v0.16b, v4.16b
-; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    umov w9, v3.h[0]
-; NEON-NEXT:    umov w8, v0.h[0]
+; NEON-NEXT:    ldr q5, [x8, :lo12:.LCPI0_0]
+; NEON-NEXT:    umov w10, v0.b[0]
 ; NEON-NEXT:    zip1 v0.16b, v1.16b, v2.16b
+; NEON-NEXT:    shl v3.16b, v3.16b, #7
+; NEON-NEXT:    shl v4.16b, v4.16b, #7
+; NEON-NEXT:    cmlt v3.16b, v3.16b, #0
+; NEON-NEXT:    cmlt v4.16b, v4.16b, #0
+; NEON-NEXT:    and v3.16b, v3.16b, v5.16b
+; NEON-NEXT:    and v4.16b, v4.16b, v5.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    addp v4.16b, v4.16b, v4.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    addp v4.16b, v4.16b, v4.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    addp v4.16b, v4.16b, v4.16b
+; NEON-NEXT:    umov w9, v3.h[0]
+; NEON-NEXT:    umov w8, v4.h[0]
 ; NEON-NEXT:    bfi w8, w9, #16, #16
-; NEON-NEXT:    tbnz w8, #0, .LBB0_33
+; NEON-NEXT:    tbnz w10, #0, .LBB0_33
 ; NEON-NEXT:  // %bb.1: // %else
 ; NEON-NEXT:    tbnz w8, #1, .LBB0_34
 ; NEON-NEXT:  .LBB0_2: // %else2
@@ -238,18 +239,19 @@ define void @foo_st2_v8i16(<8 x i1> %mask, <8 x i16> %val1, <8 x i16> %val2, ptr
 ; NEON-LABEL: foo_st2_v8i16:
 ; NEON:       // %bb.0:
 ; NEON-NEXT:    // kill: def $d0 killed $d0 def $q0
+; NEON-NEXT:    zip1 v3.16b, v0.16b, v0.16b
 ; NEON-NEXT:    adrp x8, .LCPI1_0
-; NEON-NEXT:    zip1 v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    ldr q3, [x8, :lo12:.LCPI1_0]
-; NEON-NEXT:    shl v0.16b, v0.16b, #7
-; NEON-NEXT:    cmlt v0.16b, v0.16b, #0
-; NEON-NEXT:    and v0.16b, v0.16b, v3.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    addp v0.16b, v0.16b, v0.16b
-; NEON-NEXT:    umov w8, v0.h[0]
+; NEON-NEXT:    umov w9, v0.b[0]
+; NEON-NEXT:    ldr q4, [x8, :lo12:.LCPI1_0]
 ; NEON-NEXT:    zip1 v0.8h, v1.8h, v2.8h
-; NEON-NEXT:    tbnz w8, #0, .LBB1_17
+; NEON-NEXT:    shl v3.16b, v3.16b, #7
+; NEON-NEXT:    cmlt v3.16b, v3.16b, #0
+; NEON-NEXT:    and v3.16b, v3.16b, v4.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    addp v3.16b, v3.16b, v3.16b
+; NEON-NEXT:    umov w8, v3.h[0]
+; NEON-NEXT:    tbnz w9, #0, .LBB1_17
 ; NEON-NEXT:  // %bb.1: // %else
 ; NEON-NEXT:    tbnz w8, #1, .LBB1_18
 ; NEON-NEXT:  .LBB1_2: // %else2
@@ -366,18 +368,22 @@ define void @foo_st2_v8i16(<8 x i1> %mask, <8 x i16> %val1, <8 x i16> %val2, ptr
 define void @foo_st2_v4i32(<4 x i1> %mask, <4 x i32> %val1, <4 x i32> %val2, ptr %p) {
 ; NEON-LABEL: foo_st2_v4i32:
 ; NEON:       // %bb.0:
-; NEON-NEXT:    // kill: def $d0 killed $d0 def $q0
+; NEON-NEXT:    fmov d3, d0
 ; NEON-NEXT:    adrp x8, .LCPI2_0
-; NEON-NEXT:    zip1 v0.8h, v0.8h, v0.8h
-; NEON-NEXT:    ldr d3, [x8, :lo12:.LCPI2_0]
-; NEON-NEXT:    xtn v0.8b, v0.8h
+; NEON-NEXT:    ldr d0, [x8, :lo12:.LCPI2_0]
+; NEON-NEXT:    adrp x8, .LCPI2_1
+; NEON-NEXT:    ldr d6, [x8, :lo12:.LCPI2_1]
+; NEON-NEXT:    zip2 v5.4h, v3.4h, v3.4h
+; NEON-NEXT:    zip1 v4.4h, v3.4h, v3.4h
+; NEON-NEXT:    umov w9, v3.h[0]
+; NEON-NEXT:    tbl v0.8b, { v3.16b, v4.16b, v5.16b }, v0.8b
 ; NEON-NEXT:    shl v0.8b, v0.8b, #7
 ; NEON-NEXT:    cmlt v0.8b, v0.8b, #0
-; NEON-NEXT:    and v0.8b, v0.8b, v3.8b
+; NEON-NEXT:    and v0.8b, v0.8b, v6.8b
 ; NEON-NEXT:    addv b3, v0.8b
 ; NEON-NEXT:    zip1 v0.4s, v1.4s, v2.4s
 ; NEON-NEXT:    fmov w8, s3
-; NEON-NEXT:    tbnz w8, #0, .LBB2_9
+; NEON-NEXT:    tbnz w9, #0, .LBB2_9
 ; NEON-NEXT:  // %bb.1: // %else
 ; NEON-NEXT:    tbnz w8, #1, .LBB2_10
 ; NEON-NEXT:  .LBB2_2: // %else2
@@ -447,18 +453,24 @@ define void @foo_st2_v2i64(<2 x i1> %mask, <2 x i64> %val1, <2 x i64> %val2, ptr
 ; NEON-LABEL: foo_st2_v2i64:
 ; NEON:       // %bb.0:
 ; NEON-NEXT:    // kill: def $d0 killed $d0 def $q0
-; NEON-NEXT:    dup v3.2s, v0.s[1]
+; NEON-NEXT:    dup v3.2s, v0.s[0]
+; NEON-NEXT:    dup v4.2s, v0.s[1]
 ; NEON-NEXT:    adrp x8, .LCPI3_0
-; NEON-NEXT:    dup v0.2s, v0.s[0]
-; NEON-NEXT:    uzp1 v0.4h, v0.4h, v3.4h
-; NEON-NEXT:    ldr d3, [x8, :lo12:.LCPI3_0]
-; NEON-NEXT:    shl v0.4h, v0.4h, #15
-; NEON-NEXT:    cmlt v0.4h, v0.4h, #0
-; NEON-NEXT:    and v0.8b, v0.8b, v3.8b
-; NEON-NEXT:    addv h3, v0.4h
-; NEON-NEXT:    zip1 v0.2d, v1.2d, v2.2d
-; NEON-NEXT:    fmov w8, s3
-; NEON-NEXT:    tbnz w8, #0, .LBB3_5
+; NEON-NEXT:    ldr d5, [x8, :lo12:.LCPI3_0]
+; NEON-NEXT:    mov w9, v3.s[1]
+; NEON-NEXT:    mov v3.16b, v0.16b
+; NEON-NEXT:    mov v3.h[1], w9
+; NEON-NEXT:    mov w9, v4.s[1]
+; NEON-NEXT:    mov v3.h[2], v4.h[0]
+; NEON-NEXT:    mov v3.h[3], w9
+; NEON-NEXT:    fmov w9, s0
+; NEON-NEXT:    shl v3.4h, v3.4h, #15
+; NEON-NEXT:    cmlt v3.4h, v3.4h, #0
+; NEON-NEXT:    and v3.8b, v3.8b, v5.8b
+; NEON-NEXT:    addv h5, v3.4h
+; NEON-NEXT:    zip1 v3.2d, v1.2d, v2.2d
+; NEON-NEXT:    fmov w8, s5
+; NEON-NEXT:    tbnz w9, #0, .LBB3_5
 ; NEON-NEXT:  // %bb.1: // %else
 ; NEON-NEXT:    tbnz w8, #1, .LBB3_6
 ; NEON-NEXT:  .LBB3_2: // %else2
@@ -469,10 +481,10 @@ define void @foo_st2_v2i64(<2 x i1> %mask, <2 x i64> %val1, <2 x i64> %val2, ptr
 ; NEON-NEXT:  .LBB3_4: // %else6
 ; NEON-NEXT:    ret
 ; NEON-NEXT:  .LBB3_5: // %cond.store
-; NEON-NEXT:    str d0, [x0]
+; NEON-NEXT:    str d3, [x0]
 ; NEON-NEXT:    tbz w8, #1, .LBB3_2
 ; NEON-NEXT:  .LBB3_6: // %cond.store1
-; NEON-NEXT:    mov d0, v0.d[1]
+; NEON-NEXT:    mov d0, v3.d[1]
 ; NEON-NEXT:    str d0, [x0, #8]
 ; NEON-NEXT:    zip2 v0.2d, v1.2d, v2.2d
 ; NEON-NEXT:    tbz w8, #2, .LBB3_3

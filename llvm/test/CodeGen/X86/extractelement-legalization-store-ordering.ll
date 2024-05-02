@@ -10,26 +10,29 @@ target datalayout = "e-m:o-p:32:32-f64:32:64-f80:128-n8:16:32-S128"
 define void @test_extractelement_legalization_storereuse(<4 x i32> %a, ptr nocapture %x, ptr nocapture readonly %y, i32 %i) #0 {
 ; CHECK-LABEL: test_extractelement_legalization_storereuse:
 ; CHECK:       ## %bb.0: ## %entry
+; CHECK-NEXT:    pushl %ebp
 ; CHECK-NEXT:    pushl %ebx
 ; CHECK-NEXT:    pushl %edi
 ; CHECK-NEXT:    pushl %esi
 ; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; CHECK-NEXT:    paddd (%ecx), %xmm0
 ; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; CHECK-NEXT:    paddd (%edx), %xmm0
-; CHECK-NEXT:    movdqa %xmm0, (%edx)
-; CHECK-NEXT:    movl (%edx), %esi
-; CHECK-NEXT:    movl 4(%edx), %edi
+; CHECK-NEXT:    movdqa %xmm0, (%ecx)
+; CHECK-NEXT:    leal (,%eax,4), %esi
+; CHECK-NEXT:    movl (%ecx), %edi
+; CHECK-NEXT:    movl 4(%ecx), %ebx
+; CHECK-NEXT:    movl 8(%ecx), %ebp
+; CHECK-NEXT:    movl 12(%ecx), %ecx
+; CHECK-NEXT:    movl %edi, 12(%edx,%esi,4)
 ; CHECK-NEXT:    shll $4, %eax
-; CHECK-NEXT:    movl 8(%edx), %ebx
-; CHECK-NEXT:    movl 12(%edx), %edx
-; CHECK-NEXT:    movl %esi, 12(%ecx,%eax)
-; CHECK-NEXT:    movl %edi, (%ecx,%eax)
-; CHECK-NEXT:    movl %ebx, 8(%ecx,%eax)
-; CHECK-NEXT:    movl %edx, 4(%ecx,%eax)
+; CHECK-NEXT:    movl %ebx, (%edx,%eax)
+; CHECK-NEXT:    movl %ebp, 8(%edx,%esi,4)
+; CHECK-NEXT:    movl %ecx, 4(%edx,%esi,4)
 ; CHECK-NEXT:    popl %esi
 ; CHECK-NEXT:    popl %edi
 ; CHECK-NEXT:    popl %ebx
+; CHECK-NEXT:    popl %ebp
 ; CHECK-NEXT:    retl
 entry:
   %0 = load <4 x i32>, ptr %y, align 16

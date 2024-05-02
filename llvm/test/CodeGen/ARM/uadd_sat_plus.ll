@@ -46,8 +46,9 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ; CHECK-T1:       @ %bb.0:
 ; CHECK-T1-NEXT:    .save {r4, lr}
 ; CHECK-T1-NEXT:    push {r4, lr}
+; CHECK-T1-NEXT:    add r2, sp, #8
+; CHECK-T1-NEXT:    ldr r2, [r2, #4]
 ; CHECK-T1-NEXT:    movs r4, #0
-; CHECK-T1-NEXT:    ldr r2, [sp, #12]
 ; CHECK-T1-NEXT:    ldr r3, [sp, #8]
 ; CHECK-T1-NEXT:    adds r3, r0, r3
 ; CHECK-T1-NEXT:    adcs r2, r1
@@ -70,10 +71,10 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ;
 ; CHECK-T2-LABEL: func64:
 ; CHECK-T2:       @ %bb.0:
-; CHECK-T2-NEXT:    ldrd r2, r3, [sp]
+; CHECK-T2-NEXT:    ldrd r3, r2, [sp]
 ; CHECK-T2-NEXT:    mov.w r12, #0
-; CHECK-T2-NEXT:    adds r0, r0, r2
-; CHECK-T2-NEXT:    adcs r1, r3
+; CHECK-T2-NEXT:    adds r0, r0, r3
+; CHECK-T2-NEXT:    adcs r1, r2
 ; CHECK-T2-NEXT:    adcs r2, r12, #0
 ; CHECK-T2-NEXT:    itt ne
 ; CHECK-T2-NEXT:    movne.w r0, #-1
@@ -82,9 +83,8 @@ define i64 @func64(i64 %x, i64 %y, i64 %z) nounwind {
 ;
 ; CHECK-ARM-LABEL: func64:
 ; CHECK-ARM:       @ %bb.0:
-; CHECK-ARM-NEXT:    ldr r2, [sp]
+; CHECK-ARM-NEXT:    ldm sp, {r2, r3}
 ; CHECK-ARM-NEXT:    mov r12, #0
-; CHECK-ARM-NEXT:    ldr r3, [sp, #4]
 ; CHECK-ARM-NEXT:    adds r0, r0, r2
 ; CHECK-ARM-NEXT:    adcs r1, r1, r3
 ; CHECK-ARM-NEXT:    adcs r2, r12, #0
