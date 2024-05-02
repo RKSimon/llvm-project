@@ -125,19 +125,39 @@ define void @factor3_v4i32(ptr %src) {
 define void @factor3_v8i32(ptr %src) {
 ; CHECK-LABEL: factor3_v8i32:
 ; CHECK:       @ %bb.0:
+; CHECK-NEXT:    .save {r4, lr}
+; CHECK-NEXT:    push {r4, lr}
+; CHECK-NEXT:    add r1, r0, #64
+; CHECK-NEXT:    vld1.32 {d24, d25}, [r1]!
+; CHECK-NEXT:    vmov r2, r3, d25
 ; CHECK-NEXT:    vld3.32 {d16, d18, d20}, [r0]!
 ; CHECK-NEXT:    vld3.32 {d17, d19, d21}, [r0]!
 ; CHECK-NEXT:    @ fake_use: $q8
 ; CHECK-NEXT:    @ fake_use: $q9
 ; CHECK-NEXT:    @ fake_use: $q10 $q8_q9_q10_q11
-; CHECK-NEXT:    vld3.32 {d24, d26, d28}, [r0]!
-; CHECK-NEXT:    vld3.32 {d25, d27, d29}, [r0]
-; CHECK-NEXT:    @ fake_use: $q12
-; CHECK-NEXT:    vorr q12, q13, q13
-; CHECK-NEXT:    @ fake_use: $q12
-; CHECK-NEXT:    vorr q0, q14, q14
+; CHECK-NEXT:    vld1.32 {d26, d27}, [r1]
+; CHECK-NEXT:    vld1.32 {d28, d29}, [r0]
+; CHECK-NEXT:    vmov r1, r12, d26
+; CHECK-NEXT:    vmov r0, lr, d29
+; CHECK-NEXT:    vmov.32 d31[0], r3
+; CHECK-NEXT:    vmov.32 d1[0], r2
+; CHECK-NEXT:    vmov r2, r3, d28
+; CHECK-NEXT:    vmov.32 d29[0], r1
+; CHECK-NEXT:    vmov.32 d28[0], r0
+; CHECK-NEXT:    vmov r0, r1, d27
+; CHECK-NEXT:    vmov.32 d0[0], r2
+; CHECK-NEXT:    vmov r2, r4, d24
+; CHECK-NEXT:    vmov.32 d30[0], r3
+; CHECK-NEXT:    vmov.32 d1[1], r12
+; CHECK-NEXT:    vmov.32 d0[1], lr
 ; CHECK-NEXT:    @ fake_use: $q0
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    vmov.32 d31[1], r0
+; CHECK-NEXT:    vmov.32 d29[1], r1
+; CHECK-NEXT:    vmov.32 d28[1], r4
+; CHECK-NEXT:    @ fake_use: $q14
+; CHECK-NEXT:    vmov.32 d30[1], r2
+; CHECK-NEXT:    @ fake_use: $q15
+; CHECK-NEXT:    pop {r4, pc}
   %load = load <24 x i32>, ptr %src, align 4
   %deinterleave = call { <8 x i32>, <8 x i32>, <8 x i32> } @llvm.vector.deinterleave3.v24i32(<24 x i32> %load)
   %v0 = extractvalue { <8 x i32>, <8 x i32>, <8 x i32> } %deinterleave, 0
@@ -197,22 +217,25 @@ define void @factor4_v4i32(ptr %src) {
 define void @factor4_v8i32(ptr %src) {
 ; CHECK-LABEL: factor4_v8i32:
 ; CHECK:       @ %bb.0:
+; CHECK-NEXT:    add r1, r0, #80
 ; CHECK-NEXT:    vld4.32 {d16, d18, d20, d22}, [r0:256]!
+; CHECK-NEXT:    vld1.32 {d24, d25}, [r1:128]!
 ; CHECK-NEXT:    vld4.32 {d17, d19, d21, d23}, [r0:256]!
 ; CHECK-NEXT:    @ fake_use: $q8
 ; CHECK-NEXT:    @ fake_use: $q9
 ; CHECK-NEXT:    @ fake_use: $q10
 ; CHECK-NEXT:    @ fake_use: $q11 $q8_q9_q10_q11
-; CHECK-NEXT:    vld4.32 {d24, d26, d28, d30}, [r0:256]!
-; CHECK-NEXT:    vld4.32 {d25, d27, d29, d31}, [r0:256]
-; CHECK-NEXT:    vorr q0, q12, q12
-; CHECK-NEXT:    @ fake_use: $q0
-; CHECK-NEXT:    vorr q0, q15, q15
-; CHECK-NEXT:    @ fake_use: $q0
-; CHECK-NEXT:    vorr q1, q14, q14
-; CHECK-NEXT:    @ fake_use: $q1
-; CHECK-NEXT:    vorr q12, q13, q13
+; CHECK-NEXT:    vld1.32 {d26, d27}, [r1:128]!
+; CHECK-NEXT:    vld1.64 {d28, d29}, [r1:128]
+; CHECK-NEXT:    vld1.64 {d30, d31}, [r0:128]
+; CHECK-NEXT:    vuzp.32 q13, q14
+; CHECK-NEXT:    vuzp.32 q15, q12
+; CHECK-NEXT:    vuzp.32 q15, q13
+; CHECK-NEXT:    @ fake_use: $q15
+; CHECK-NEXT:    @ fake_use: $q13
+; CHECK-NEXT:    vuzp.32 q12, q14
 ; CHECK-NEXT:    @ fake_use: $q12
+; CHECK-NEXT:    @ fake_use: $q14
 ; CHECK-NEXT:    bx lr
   %load = load <32 x i32>, ptr %src
   %deinterleave = call { <8 x i32>, <8 x i32>, <8 x i32>, <8 x i32> } @llvm.vector.deinterleave4.v32i32(<32 x i32> %load)

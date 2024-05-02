@@ -180,8 +180,12 @@ define <8 x i32> @and_mask_constant(<8 x i32> %v0, <8 x i32> %v1) {
 ; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X86-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
 ; X86-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm0
+; X86-NEXT:    vpackssdw %xmm1, %xmm0, %xmm0
+; X86-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],xmm2[1,2],xmm0[3],xmm2[4],xmm0[5,6],xmm2[7]
+; X86-NEXT:    vpsrlw $15, %xmm0, %xmm0
+; X86-NEXT:    vpunpckhwd {{.*#+}} xmm1 = xmm0[4],xmm2[4],xmm0[5],xmm2[5],xmm0[6],xmm2[6],xmm0[7],xmm2[7]
+; X86-NEXT:    vpmovzxwd {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero
 ; X86-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
-; X86-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: and_mask_constant:
@@ -190,22 +194,34 @@ define <8 x i32> @and_mask_constant(<8 x i32> %v0, <8 x i32> %v1) {
 ; X64-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X64-NEXT:    vpcmpeqd %xmm2, %xmm1, %xmm1
 ; X64-NEXT:    vpcmpeqd %xmm2, %xmm0, %xmm0
+; X64-NEXT:    vpackssdw %xmm1, %xmm0, %xmm0
+; X64-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],xmm2[1,2],xmm0[3],xmm2[4],xmm0[5,6],xmm2[7]
+; X64-NEXT:    vpsrlw $15, %xmm0, %xmm0
+; X64-NEXT:    vpunpckhwd {{.*#+}} xmm1 = xmm0[4],xmm2[4],xmm0[5],xmm2[5],xmm0[6],xmm2[6],xmm0[7],xmm2[7]
+; X64-NEXT:    vpmovzxwd {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero
 ; X64-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
-; X64-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; X64-NEXT:    retq
 ;
 ; X86-AVX2-LABEL: and_mask_constant:
 ; X86-AVX2:       ## %bb.0:
 ; X86-AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X86-AVX2-NEXT:    vpcmpeqd %ymm1, %ymm0, %ymm0
-; X86-AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}, %ymm0, %ymm0
+; X86-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; X86-AVX2-NEXT:    vpackssdw %xmm2, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],xmm1[1,2],xmm0[3],xmm1[4],xmm0[5,6],xmm1[7]
+; X86-AVX2-NEXT:    vpsrlw $15, %xmm0, %xmm0
+; X86-AVX2-NEXT:    vpmovzxwd {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
 ; X86-AVX2-NEXT:    retl
 ;
 ; X64-AVX2-LABEL: and_mask_constant:
 ; X64-AVX2:       ## %bb.0:
 ; X64-AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X64-AVX2-NEXT:    vpcmpeqd %ymm1, %ymm0, %ymm0
-; X64-AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; X64-AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; X64-AVX2-NEXT:    vpackssdw %xmm2, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0],xmm1[1,2],xmm0[3],xmm1[4],xmm0[5,6],xmm1[7]
+; X64-AVX2-NEXT:    vpsrlw $15, %xmm0, %xmm0
+; X64-AVX2-NEXT:    vpmovzxwd {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
 ; X64-AVX2-NEXT:    retq
 ;
 ; X86-AVX512-LABEL: and_mask_constant:

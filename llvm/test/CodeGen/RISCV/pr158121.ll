@@ -4,8 +4,9 @@
 define i64 @f(ptr %p) {
 ; CHECK-LABEL: f:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lb a0, 0(a0)
-; CHECK-NEXT:    srai a0, a0, 63
+; CHECK-NEXT:    lbu a0, 0(a0)
+; CHECK-NEXT:    sltiu a0, a0, 128
+; CHECK-NEXT:    addi a0, a0, -1
 ; CHECK-NEXT:    ret
   %load = load i8, ptr %p, align 1
   %conv1 = zext i8 %load to i32

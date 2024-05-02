@@ -58,29 +58,29 @@ define void @interleave3_v3f32(ptr %dst,  <vscale x 3 x float> %a,  <vscale x 3 
 ; CHECK-NEXT:    // kill: def $z0 killed $z0 killed $z0_z1_z2 def $z0_z1_z2
 ; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [sp]
 ; CHECK-NEXT:    mul x9, x8, x9
-; CHECK-NEXT:    ldr z0, [sp, #2, mul vl]
-; CHECK-NEXT:    ldr z1, [sp, #1, mul vl]
-; CHECK-NEXT:    ldr z2, [sp]
+; CHECK-NEXT:    ldr z0, [sp, #1, mul vl]
+; CHECK-NEXT:    ldr z1, [sp]
+; CHECK-NEXT:    ldr z2, [sp, #2, mul vl]
 ; CHECK-NEXT:    mul x8, x8, x11
 ; CHECK-NEXT:    whilelo p0.s, xzr, x9
 ; CHECK-NEXT:    cntw x9, all, mul #3
 ; CHECK-NEXT:    add x10, x10, x9
 ; CHECK-NEXT:    whilelo p1.s, xzr, x8
-; CHECK-NEXT:    str z0, [sp, #9, mul vl]
-; CHECK-NEXT:    str z1, [sp, #8, mul vl]
-; CHECK-NEXT:    str z2, [sp, #7, mul vl]
-; CHECK-NEXT:    str z2, [sp, #11, mul vl]
+; CHECK-NEXT:    str z0, [sp, #8, mul vl]
+; CHECK-NEXT:    str z1, [sp, #7, mul vl]
+; CHECK-NEXT:    str z2, [sp, #9, mul vl]
+; CHECK-NEXT:    str z1, [sp, #11, mul vl]
 ; CHECK-NEXT:    ld1w { z3.s }, p0/z, [x10]
 ; CHECK-NEXT:    addvl x10, sp, #11
 ; CHECK-NEXT:    add x9, x10, x9
 ; CHECK-NEXT:    addvl x10, sp, #3
 ; CHECK-NEXT:    st1w { z3.s }, p0, [x9]
 ; CHECK-NEXT:    cnth x9, all, mul #3
-; CHECK-NEXT:    str z0, [sp, #5, mul vl]
+; CHECK-NEXT:    str z0, [sp, #4, mul vl]
 ; CHECK-NEXT:    ldr z0, [sp, #12, mul vl]
 ; CHECK-NEXT:    add x10, x10, x9
-; CHECK-NEXT:    str z1, [sp, #4, mul vl]
-; CHECK-NEXT:    str z2, [sp, #3, mul vl]
+; CHECK-NEXT:    str z1, [sp, #3, mul vl]
+; CHECK-NEXT:    str z2, [sp, #5, mul vl]
 ; CHECK-NEXT:    str z0, [sp, #14, mul vl]
 ; CHECK-NEXT:    ldr z0, [sp, #11, mul vl]
 ; CHECK-NEXT:    str z0, [sp, #13, mul vl]

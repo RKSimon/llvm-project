@@ -51,7 +51,11 @@ declare i16 @llvm.bswap.i16(i16) nounwind readnone
 define i32 @test4(i16 zeroext %a) nounwind {
 ; CHECK-LABEL: test4:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    revsh r0, r0
+; CHECK-NEXT:    lsls r1, r0, #24
+; CHECK-NEXT:    lsrs r0, r0, #8
+; CHECK-NEXT:    lsls r0, r0, #16
+; CHECK-NEXT:    adds r0, r1, r0
+; CHECK-NEXT:    asrs r0, r0, #16
 ; CHECK-NEXT:    bx lr
 entry:
   %conv = zext i16 %a to i32

@@ -93,9 +93,9 @@ define i8 @v16i8_extract_index_3() {
 ; GFX9:       ; %bb.0:
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-NEXT:    v_mov_b32_e32 v0, 0
-; GFX9-NEXT:    ds_read_b32 v0, v0
+; GFX9-NEXT:    ds_read_b128 v[0:3], v0
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX9-NEXT:    v_lshrrev_b32_e32 v0, 24, v0
+; GFX9-NEXT:    v_lshrrev_b64 v[0:1], 24, v[0:1]
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: v16i8_extract_index_3:
@@ -103,9 +103,9 @@ define i8 @v16i8_extract_index_3() {
 ; GFX12-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_mov_b32_e32 v0, 0
-; GFX12-NEXT:    ds_load_b32 v0, v0
+; GFX12-NEXT:    ds_load_b128 v[0:3], v0
 ; GFX12-NEXT:    s_wait_dscnt 0x0
-; GFX12-NEXT:    v_lshrrev_b32_e32 v0, 24, v0
+; GFX12-NEXT:    v_lshrrev_b64 v[0:1], 24, v[0:1]
 ; GFX12-NEXT:    s_set_pc_i64 s[30:31]
   %ptr = getelementptr inbounds i8, ptr addrspace(3) @lds, i32 0
   %val = load <16 x i8>, ptr addrspace(3) %ptr, align 16
@@ -247,7 +247,7 @@ define i8 @v8i8_extract_index_0() {
 ; GFX9:       ; %bb.0:
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-NEXT:    v_mov_b32_e32 v0, 0
-; GFX9-NEXT:    ds_read_b32 v0, v0
+; GFX9-NEXT:    ds_read_b64 v[0:1], v0
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -256,7 +256,7 @@ define i8 @v8i8_extract_index_0() {
 ; GFX12-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_mov_b32_e32 v0, 0
-; GFX12-NEXT:    ds_load_b32 v0, v0
+; GFX12-NEXT:    ds_load_b64 v[0:1], v0
 ; GFX12-NEXT:    s_wait_dscnt 0x0
 ; GFX12-NEXT:    s_set_pc_i64 s[30:31]
   %ptr = getelementptr inbounds i8, ptr addrspace(3) @lds, i32 0

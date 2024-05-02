@@ -116,18 +116,13 @@ define i32 @test_bitextract_b231(b231 %src, i32 %off) {
 ; CHECK-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %r8d, %eax
-; CHECK-NEXT:    shrb $6, %al
-; CHECK-NEXT:    movzbl %al, %eax
-; CHECK-NEXT:    movq -72(%rsp,%rax,8), %rdx
+; CHECK-NEXT:    andb $-64, %al
+; CHECK-NEXT:    shrb $3, %al
+; CHECK-NEXT:    movzbl %al, %ecx
+; CHECK-NEXT:    movq -72(%rsp,%rcx), %rax
+; CHECK-NEXT:    movq -64(%rsp,%rcx), %rdx
 ; CHECK-NEXT:    movl %r8d, %ecx
-; CHECK-NEXT:    shrq %cl, %rdx
-; CHECK-NEXT:    movl -64(%rsp,%rax,8), %eax
-; CHECK-NEXT:    addl %eax, %eax
-; CHECK-NEXT:    andb $63, %r8b
-; CHECK-NEXT:    notb %r8b
-; CHECK-NEXT:    movl %r8d, %ecx
-; CHECK-NEXT:    shlq %cl, %rax
-; CHECK-NEXT:    orl %edx, %eax
+; CHECK-NEXT:    shrdq %cl, %rdx, %rax
 ; CHECK-NEXT:    # kill: def $eax killed $eax killed $rax
 ; CHECK-NEXT:    retq
   %result = bitextract i32, b231 %src, i32 %off
@@ -262,15 +257,15 @@ define b231 @test_bitinsert_b231_var(b231 %base, i32 %val, i32 %off) {
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %r9d, %edi
 ; CHECK-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl $4294967295, %edi # imm = 0xFFFFFFFF
 ; CHECK-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %ecx, %edi
+; CHECK-NEXT:    andb $-64, %dil
 ; CHECK-NEXT:    shrb $3, %dil
-; CHECK-NEXT:    andb $24, %dil
 ; CHECK-NEXT:    negb %dil
 ; CHECK-NEXT:    movsbq %dil, %r11
 ; CHECK-NEXT:    movq -16(%rsp,%r11), %r14
@@ -654,22 +649,22 @@ define b231 @test_bitinsert_val_b123_into_b231_var(b231 %base, b123 %val, i32 %o
 ; CHECK-NEXT:    movq %rcx, %r10
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    movzbl {{[0-9]+}}(%rsp), %ecx
+; CHECK-NEXT:    movq %r9, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    xorps %xmm0, %xmm0
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movq %r9, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movabsq $576460752303423487, %rdi # imm = 0x7FFFFFFFFFFFFFF
 ; CHECK-NEXT:    movq {{[0-9]+}}(%rsp), %r9
 ; CHECK-NEXT:    andq %rdi, %r9
 ; CHECK-NEXT:    movq %r9, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rdi, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movl %ecx, %edi
+; CHECK-NEXT:    andb $-64, %dil
 ; CHECK-NEXT:    shrb $3, %dil
-; CHECK-NEXT:    andb $24, %dil
 ; CHECK-NEXT:    negb %dil
 ; CHECK-NEXT:    movsbq %dil, %r11
 ; CHECK-NEXT:    movq -16(%rsp,%r11), %r14

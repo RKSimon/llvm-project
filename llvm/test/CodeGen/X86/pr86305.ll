@@ -4,17 +4,18 @@
 define void @add(ptr %pa, ptr %pb, ptr %pc) nounwind {
 ; CHECK-LABEL: add:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movzwl (%rsi), %eax
-; CHECK-NEXT:    shll $16, %eax
-; CHECK-NEXT:    vmovd %eax, %xmm0
 ; CHECK-NEXT:    movzwl (%rdi), %eax
+; CHECK-NEXT:    movzwl (%rsi), %ecx
+; CHECK-NEXT:    shll $16, %ecx
+; CHECK-NEXT:    vmovd %ecx, %xmm0
 ; CHECK-NEXT:    shll $16, %eax
 ; CHECK-NEXT:    vmovd %eax, %xmm1
 ; CHECK-NEXT:    vaddss %xmm0, %xmm1, %xmm0
 ; CHECK-NEXT:    vmovd %xmm0, %eax
+; CHECK-NEXT:    xorl %ecx, %ecx
 ; CHECK-NEXT:    btl $16, %eax
-; CHECK-NEXT:    movl %eax, %ecx
 ; CHECK-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; CHECK-NEXT:    addl %eax, %ecx
 ; CHECK-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; CHECK-NEXT:    vucomiss %xmm0, %xmm0
 ; CHECK-NEXT:    cmovnpl %ecx, %eax

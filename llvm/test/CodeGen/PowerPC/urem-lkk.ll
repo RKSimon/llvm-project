@@ -101,7 +101,7 @@ define i64 @dont_fold_urem_i64(i64 %x) {
 ; CHECK-NEXT:    mulli 5, 5, 49
 ; CHECK-NEXT:    sub 3, 3, 5
 ; CHECK-NEXT:    rlwimi 4, 3, 1, 0, 30
-; CHECK-NEXT:    li 3, 0
+; CHECK-NEXT:    srwi 3, 3, 31
 ; CHECK-NEXT:    blr
   %1 = urem i64 %x, 98
   ret i64 %1

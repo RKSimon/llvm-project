@@ -90,7 +90,7 @@ define <8 x i32> @stack_fold_inserti128(<4 x i32> %a0, <4 x i32> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vinserti128 $1, {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 16-byte Folded Reload
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i32> %a0, <4 x i32> %a1, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>
@@ -361,7 +361,7 @@ define <32 x i8> @stack_fold_pand(<32 x i8> %a0, <32 x i8> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpand {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
-; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = and <32 x i8> %a0, %a1
@@ -378,7 +378,7 @@ define <32 x i8> @stack_fold_pandn(<32 x i8> %a0, <32 x i8> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpandn {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
-; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = xor <32 x i8> %a0, <i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1, i8 -1>
@@ -391,11 +391,24 @@ define <32 x i8> @stack_fold_pandn(<32 x i8> %a0, <32 x i8> %a1) {
 define <32 x i8> @stack_fold_pavgb(<32 x i8> %a0, <32 x i8> %a1) {
 ; CHECK-LABEL: stack_fold_pavgb:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; CHECK-NEXT:    vpmovzxbw {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero,xmm2[8],zero,xmm2[9],zero,xmm2[10],zero,xmm2[11],zero,xmm2[12],zero,xmm2[13],zero,xmm2[14],zero,xmm2[15],zero
+; CHECK-NEXT:    vpmovzxbw {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero,xmm0[8],zero,xmm0[9],zero,xmm0[10],zero,xmm0[11],zero,xmm0[12],zero,xmm0[13],zero,xmm0[14],zero,xmm0[15],zero
+; CHECK-NEXT:    vextracti128 $1, %ymm1, %xmm3
+; CHECK-NEXT:    vpmovzxbw {{.*#+}} ymm3 = xmm3[0],zero,xmm3[1],zero,xmm3[2],zero,xmm3[3],zero,xmm3[4],zero,xmm3[5],zero,xmm3[6],zero,xmm3[7],zero,xmm3[8],zero,xmm3[9],zero,xmm3[10],zero,xmm3[11],zero,xmm3[12],zero,xmm3[13],zero,xmm3[14],zero,xmm3[15],zero
+; CHECK-NEXT:    vpmovzxbw {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero,xmm1[8],zero,xmm1[9],zero,xmm1[10],zero,xmm1[11],zero,xmm1[12],zero,xmm1[13],zero,xmm1[14],zero,xmm1[15],zero
+; CHECK-NEXT:    vpcmpeqd %ymm4, %ymm4, %ymm4
+; CHECK-NEXT:    vpxor %ymm4, %ymm1, %ymm1
+; CHECK-NEXT:    vpsubw %ymm1, %ymm0, %ymm0
+; CHECK-NEXT:    vpxor %ymm4, %ymm3, %ymm1
+; CHECK-NEXT:    vpsubw %ymm1, %ymm2, %ymm1
+; CHECK-NEXT:    vpsrlw $1, %ymm1, %ymm1
+; CHECK-NEXT:    vpsrlw $1, %ymm0, %ymm0
+; CHECK-NEXT:    vpackuswb %ymm1, %ymm0, %ymm0
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
-; CHECK-NEXT:    vpavgb {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
+; CHECK-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,2,1,3]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = zext <32 x i8> %a0 to <32 x i16>
@@ -410,11 +423,24 @@ define <32 x i8> @stack_fold_pavgb(<32 x i8> %a0, <32 x i8> %a1) {
 define <16 x i16> @stack_fold_pavgw(<16 x i16> %a0, <16 x i16> %a1) {
 ; CHECK-LABEL: stack_fold_pavgw:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; CHECK-NEXT:    vpmovzxwd {{.*#+}} ymm2 = xmm2[0],zero,xmm2[1],zero,xmm2[2],zero,xmm2[3],zero,xmm2[4],zero,xmm2[5],zero,xmm2[6],zero,xmm2[7],zero
+; CHECK-NEXT:    vpmovzxwd {{.*#+}} ymm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
+; CHECK-NEXT:    vextracti128 $1, %ymm1, %xmm3
+; CHECK-NEXT:    vpmovzxwd {{.*#+}} ymm3 = xmm3[0],zero,xmm3[1],zero,xmm3[2],zero,xmm3[3],zero,xmm3[4],zero,xmm3[5],zero,xmm3[6],zero,xmm3[7],zero
+; CHECK-NEXT:    vpmovzxwd {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero,xmm1[4],zero,xmm1[5],zero,xmm1[6],zero,xmm1[7],zero
+; CHECK-NEXT:    vpcmpeqd %ymm4, %ymm4, %ymm4
+; CHECK-NEXT:    vpxor %ymm4, %ymm1, %ymm1
+; CHECK-NEXT:    vpsubd %ymm1, %ymm0, %ymm0
+; CHECK-NEXT:    vpxor %ymm4, %ymm3, %ymm1
+; CHECK-NEXT:    vpsubd %ymm1, %ymm2, %ymm1
+; CHECK-NEXT:    vpsrld $1, %ymm1, %ymm1
+; CHECK-NEXT:    vpsrld $1, %ymm0, %ymm0
+; CHECK-NEXT:    vpackusdw %ymm1, %ymm0, %ymm0
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
-; CHECK-NEXT:    vpavgw {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
+; CHECK-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,2,1,3]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = zext <16 x i16> %a0 to <16 x i32>
@@ -454,7 +480,7 @@ define <8 x i32> @stack_fold_pblendd_ymm(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpblendd $7, {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = mem[0,1,2],ymm0[3,4,5,6,7]
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <8 x i32> %a0, <8 x i32> %a1, <8 x i32> <i32 8, i32 9, i32 10, i32 3, i32 4, i32 5, i32 6, i32 7>
@@ -529,7 +555,7 @@ define <4 x i32> @stack_fold_pbroadcastd(<4 x i32> %a0) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpbroadcastd {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [2,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i32> %a0, <4 x i32> undef, <4 x i32> zeroinitializer
@@ -546,7 +572,7 @@ define <8 x i32> @stack_fold_pbroadcastd_ymm(<4 x i32> %a0) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpbroadcastd {{[-0-9]+}}(%r{{[sb]}}p), %ymm0 # 16-byte Folded Reload
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i32> %a0, <4 x i32> undef, <8 x i32> zeroinitializer
@@ -563,7 +589,7 @@ define <2 x i64> @stack_fold_pbroadcastq(<2 x i64> %a0) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpbroadcastq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
-; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [2,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <2 x i64> %a0, <2 x i64> undef, <2 x i32> zeroinitializer
@@ -580,7 +606,7 @@ define <4 x i64> @stack_fold_pbroadcastq_ymm(<2 x i64> %a0) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpbroadcastq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0 # 16-byte Folded Reload
-; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <2 x i64> %a0, <2 x i64> undef, <4 x i32> zeroinitializer
@@ -746,7 +772,7 @@ define <8 x i32> @stack_fold_perm2i128(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vperm2i128 $33, {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = ymm0[2,3],mem[0,1]
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <8 x i32> %a0, <8 x i32> %a1, <8 x i32> <i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11>
@@ -763,7 +789,7 @@ define <8 x i32> @stack_fold_permd(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpermd {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = call <8 x i32> @llvm.x86.avx2.permd(<8 x i32> %a1, <8 x i32> %a0)
@@ -816,7 +842,7 @@ define <4 x i64> @stack_fold_permq(<4 x i64> %a0) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpermq $235, {{[-0-9]+}}(%r{{[sb]}}p), %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = mem[3,2,2,3]
-; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i64> %a0, <4 x i64> undef, <4 x i32> <i32 3, i32 2, i32 2, i32 3>
@@ -1401,11 +1427,13 @@ define <16 x i16> @stack_fold_pmullw(<16 x i16> %a0, <16 x i16> %a1) {
 define <4 x i64> @stack_fold_pmuludq(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-LABEL: stack_fold_pmuludq:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
+; CHECK-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
-; CHECK-NEXT:    vpmuludq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = bitcast <8 x i32> %a0 to <4 x i64>
@@ -1424,7 +1452,7 @@ define <32 x i8> @stack_fold_por(<32 x i8> %a0, <32 x i8> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpor {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
-; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = or <32 x i8> %a0, %a1
@@ -1472,7 +1500,7 @@ define <8 x i32> @stack_fold_pshufd(<8 x i32> %a0) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpshufd $27, {{[-0-9]+}}(%r{{[sb]}}p), %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = mem[3,2,1,0,7,6,5,4]
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm1},~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <8 x i32> %a0, <8 x i32> undef, <8 x i32> <i32 3, i32 2, i32 1, i32 0, i32 7, i32 6, i32 5, i32 4>
@@ -1966,7 +1994,7 @@ define <8 x i32> @stack_fold_punpckhdq(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpunpckhdq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = ymm0[2],mem[2],ymm0[3],mem[3],ymm0[6],mem[6],ymm0[7],mem[7]
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <8 x i32> %a0, <8 x i32> %a1, <8 x i32> <i32 2, i32 10, i32 3, i32 11, i32 6, i32 14, i32 7, i32 15>
@@ -1984,7 +2012,7 @@ define <4 x i64> @stack_fold_punpckhqdq(<4 x i64> %a0, <4 x i64> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpunpckhqdq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = ymm0[1],mem[1],ymm0[3],mem[3]
-; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i64> %a0, <4 x i64> %a1, <4 x i32> <i32 1, i32 5, i32 3, i32 7>
@@ -2032,7 +2060,7 @@ define <8 x i32> @stack_fold_punpckldq(<8 x i32> %a0, <8 x i32> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpunpckldq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = ymm0[0],mem[0],ymm0[1],mem[1],ymm0[4],mem[4],ymm0[5],mem[5]
-; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <8 x i32> %a0, <8 x i32> %a1, <8 x i32> <i32 0, i32 8, i32 1, i32 9, i32 4, i32 12, i32 5, i32 13>
@@ -2050,7 +2078,7 @@ define <4 x i64> @stack_fold_punpcklqdq(<4 x i64> %a0, <4 x i64> %a1) {
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpunpcklqdq {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
 ; CHECK-NEXT:    # ymm0 = ymm0[0],mem[0],ymm0[2],mem[2]
-; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = shufflevector <4 x i64> %a0, <4 x i64> %a1, <4 x i32> <i32 0, i32 4, i32 2, i32 6>
@@ -2082,7 +2110,7 @@ define <32 x i8> @stack_fold_pxor(<32 x i8> %a0, <32 x i8> %a1) {
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:    #NO_APP
 ; CHECK-NEXT:    vpxor {{[-0-9]+}}(%r{{[sb]}}p), %ymm0, %ymm0 # 32-byte Folded Reload
-; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; CHECK-NEXT:    vpaddb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0 # [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ; CHECK-NEXT:    retq
   %1 = tail call <2 x i64> asm sideeffect "nop", "=x,~{xmm2},~{xmm3},~{xmm4},~{xmm5},~{xmm6},~{xmm7},~{xmm8},~{xmm9},~{xmm10},~{xmm11},~{xmm12},~{xmm13},~{xmm14},~{xmm15},~{flags}"()
   %2 = xor <32 x i8> %a0, %a1

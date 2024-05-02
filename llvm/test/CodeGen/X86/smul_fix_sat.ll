@@ -481,10 +481,9 @@ define <4 x i32> @vec2(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; X64-NEXT:    movdqa %xmm3, %xmm0
 ; X64-NEXT:    psrad $31, %xmm0
 ; X64-NEXT:    pcmpeqd %xmm5, %xmm0
-; X64-NEXT:    movdqa %xmm0, %xmm1
-; X64-NEXT:    pandn %xmm2, %xmm1
-; X64-NEXT:    pand %xmm3, %xmm0
-; X64-NEXT:    por %xmm1, %xmm0
+; X64-NEXT:    pand %xmm0, %xmm3
+; X64-NEXT:    pandn %xmm2, %xmm0
+; X64-NEXT:    por %xmm3, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: vec2:

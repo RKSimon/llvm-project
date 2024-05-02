@@ -5,27 +5,17 @@
 ; RUN: llc -mtriple=riscv64 -mattr=+v,+experimental-zvdot4a8i -verify-machineinstrs < %s | FileCheck %s --check-prefixes=CHECK,DOT,DOT64
 
 define i32 @vdot4a_vv(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: vdot4a_vv:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsum.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4a_vv:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4a.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4a_vv:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsum.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -73,27 +63,17 @@ entry:
 }
 
 define i32 @vdot4au_vv(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: vdot4au_vv:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsumu.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4au_vv:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4au.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4au_vv:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsumu.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -122,27 +102,17 @@ entry:
 }
 
 define i32 @vdot4asu_vv(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: vdot4asu_vv:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsum.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4asu_vv:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4asu.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4asu_vv:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsum.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -152,27 +122,17 @@ entry:
 }
 
 define i32 @vdot4asu_vv_swapped(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: vdot4asu_vv_swapped:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsum.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4asu_vv_swapped:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4asu.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4asu_vv_swapped:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsum.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -275,27 +235,17 @@ entry:
 }
 
 define i32 @vdot4a_vv_accum(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 16 x i32> %x) {
-; NODOT-LABEL: vdot4a_vv_accum:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwadd.wv v16, v16, v12
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vredsum.vs v8, v16, v8
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4a_vv_accum:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4a.vv v16, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vsetvli a0, zero, e32, m8, ta, ma
-; DOT-NEXT:    vredsum.vs v8, v16, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4a_vv_accum:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwadd.wv v16, v16, v12
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vredsum.vs v8, v16, v8
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -306,27 +256,17 @@ entry:
 }
 
 define i32 @vdot4au_vv_accum(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 16 x i32> %x) {
-; NODOT-LABEL: vdot4au_vv_accum:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwaddu.wv v16, v16, v12
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vredsum.vs v8, v16, v8
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4au_vv_accum:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4au.vv v16, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vsetvli a0, zero, e32, m8, ta, ma
-; DOT-NEXT:    vredsum.vs v8, v16, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4au_vv_accum:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwaddu.wv v16, v16, v12
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vredsum.vs v8, v16, v8
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -337,27 +277,17 @@ entry:
 }
 
 define i32 @vdot4asu_vv_accum(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 16 x i32> %x) {
-; NODOT-LABEL: vdot4asu_vv_accum:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwadd.wv v16, v16, v12
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vredsum.vs v8, v16, v8
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4asu_vv_accum:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4asu.vv v16, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vsetvli a0, zero, e32, m8, ta, ma
-; DOT-NEXT:    vredsum.vs v8, v16, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4asu_vv_accum:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwadd.wv v16, v16, v12
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vredsum.vs v8, v16, v8
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -368,27 +298,17 @@ entry:
 }
 
 define i32 @vdot4a_vv_scalar_add(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: vdot4a_vv_scalar_add:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, a0
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsum.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4a_vv_scalar_add:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4a.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, a0
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4a_vv_scalar_add:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, a0
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsum.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -399,27 +319,17 @@ entry:
 }
 
 define i32 @vdot4au_vv_scalar_add(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: vdot4au_vv_scalar_add:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, a0
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsumu.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4au_vv_scalar_add:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4au.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, a0
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4au_vv_scalar_add:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, a0
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsumu.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -430,27 +340,17 @@ entry:
 }
 
 define i32 @vdot4asu_vv_scalar_add(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: vdot4asu_vv_scalar_add:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, a0
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsum.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4asu_vv_scalar_add:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4asu.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, a0
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4asu_vv_scalar_add:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, a0
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsum.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -461,29 +361,18 @@ entry:
 }
 
 define i32 @vdot4a_vv_split(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 16 x i8> %c, <vscale x 16 x i8> %d) {
-; NODOT-LABEL: vdot4a_vv_split:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v16, v12, v14
-; NODOT-NEXT:    vwmul.vv v20, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwadd.vv v8, v20, v16
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v16, zero
-; NODOT-NEXT:    vredsum.vs v8, v8, v16
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4a_vv_split:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v16, 0
-; DOT-NEXT:    vdot4a.vv v16, v8, v10
-; DOT-NEXT:    vdot4a.vv v16, v12, v14
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v16, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4a_vv_split:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v16, v12, v14
+; CHECK-NEXT:    vwmul.vv v20, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwadd.vv v8, v20, v16
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v16, zero
+; CHECK-NEXT:    vredsum.vs v8, v8, v16
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -498,30 +387,22 @@ entry:
 
 
 define <vscale x 1 x i32> @partial_reduce_nf2(<vscale x 4 x i8> %a, <vscale x 4 x i8> %b) {
-; NODOT-LABEL: partial_reduce_nf2:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    csrr a0, vlenb
-; NODOT-NEXT:    srli a0, a0, 3
-; NODOT-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
-; NODOT-NEXT:    vwmul.vv v10, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vsext.vf2 v8, v10
-; NODOT-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vslidedown.vx v10, v9, a0
-; NODOT-NEXT:    vslidedown.vx v11, v8, a0
-; NODOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    vadd.vv v9, v11, v9
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_nf2:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vdot4a.vv v10, v8, v9
-; DOT-NEXT:    vmv1r.v v8, v10
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_nf2:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    csrr a0, vlenb
+; CHECK-NEXT:    srli a0, a0, 3
+; CHECK-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
+; CHECK-NEXT:    vwmul.vv v10, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsext.vf2 v8, v10
+; CHECK-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vslidedown.vx v10, v9, a0
+; CHECK-NEXT:    vslidedown.vx v11, v8, a0
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    vadd.vv v9, v11, v9
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 4 x i8> %a to <vscale x 4 x i32>
   %b.sext = sext <vscale x 4 x i8> %b to <vscale x 4 x i32>
@@ -531,25 +412,17 @@ entry:
 }
 
 define <vscale x 2 x i32> @partial_reduce_m1(<vscale x 8 x i8> %a, <vscale x 8 x i8> %b) {
-; NODOT-LABEL: partial_reduce_m1:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
-; NODOT-NEXT:    vsext.vf2 v8, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v11, v8
-; NODOT-NEXT:    vadd.vv v9, v9, v10
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_m1:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vdot4a.vv v10, v8, v9
-; DOT-NEXT:    vmv.v.v v8, v10
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_m1:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vsext.vf2 v8, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v11, v8
+; CHECK-NEXT:    vadd.vv v9, v9, v10
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 8 x i8> %a to <vscale x 8 x i32>
   %b.sext = sext <vscale x 8 x i8> %b to <vscale x 8 x i32>
@@ -559,25 +432,17 @@ entry:
 }
 
 define <vscale x 4 x i32> @partial_reduce_m2(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: partial_reduce_m2:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v16, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v8, v16
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v14, v8
-; NODOT-NEXT:    vadd.vv v10, v10, v12
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_m2:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4a.vv v12, v8, v10
-; DOT-NEXT:    vmv.v.v v8, v12
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_m2:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v16, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v8, v16
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v14, v8
+; CHECK-NEXT:    vadd.vv v10, v10, v12
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -825,25 +690,18 @@ entry:
 }
 
 define <vscale x 4 x i32> @partial_reduce_accum(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 4 x i32> %accum) {
-; NODOT-LABEL: partial_reduce_accum:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v24, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v16, v24
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v18, v20
-; NODOT-NEXT:    vadd.vv v10, v12, v16
-; NODOT-NEXT:    vadd.vv v10, v22, v10
-; NODOT-NEXT:    vadd.vv v8, v8, v10
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_accum:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4a.vv v12, v8, v10
-; DOT-NEXT:    vmv.v.v v8, v12
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_accum:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v24, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v16, v24
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v18, v20
+; CHECK-NEXT:    vadd.vv v10, v12, v16
+; CHECK-NEXT:    vadd.vv v10, v22, v10
+; CHECK-NEXT:    vadd.vv v8, v8, v10
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.sext = sext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -869,30 +727,22 @@ entry:
 }
 
 define <vscale x 1 x i32> @partial_reduce_vdot4au(<vscale x 4 x i8> %a, <vscale x 4 x i8> %b) {
-; NODOT-LABEL: partial_reduce_vdot4au:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    csrr a0, vlenb
-; NODOT-NEXT:    srli a0, a0, 3
-; NODOT-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v10, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vzext.vf2 v8, v10
-; NODOT-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vslidedown.vx v10, v9, a0
-; NODOT-NEXT:    vslidedown.vx v11, v8, a0
-; NODOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    vadd.vv v9, v11, v9
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4au:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vdot4au.vv v10, v8, v9
-; DOT-NEXT:    vmv1r.v v8, v10
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4au:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    csrr a0, vlenb
+; CHECK-NEXT:    srli a0, a0, 3
+; CHECK-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v10, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vzext.vf2 v8, v10
+; CHECK-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vslidedown.vx v10, v9, a0
+; CHECK-NEXT:    vslidedown.vx v11, v8, a0
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    vadd.vv v9, v11, v9
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = zext <vscale x 4 x i8> %a to <vscale x 4 x i32>
   %b.sext = zext <vscale x 4 x i8> %b to <vscale x 4 x i32>
@@ -902,30 +752,22 @@ entry:
 }
 
 define <vscale x 1 x i32> @partial_reduce_vdot4asu(<vscale x 4 x i8> %a, <vscale x 4 x i8> %b) {
-; NODOT-LABEL: partial_reduce_vdot4asu:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    csrr a0, vlenb
-; NODOT-NEXT:    srli a0, a0, 3
-; NODOT-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v10, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vsext.vf2 v8, v10
-; NODOT-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vslidedown.vx v10, v9, a0
-; NODOT-NEXT:    vslidedown.vx v11, v8, a0
-; NODOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    vadd.vv v9, v11, v9
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4asu:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vdot4asu.vv v10, v8, v9
-; DOT-NEXT:    vmv1r.v v8, v10
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4asu:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    csrr a0, vlenb
+; CHECK-NEXT:    srli a0, a0, 3
+; CHECK-NEXT:    vsetvli a1, zero, e8, mf2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v10, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vsext.vf2 v8, v10
+; CHECK-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vslidedown.vx v10, v9, a0
+; CHECK-NEXT:    vslidedown.vx v11, v8, a0
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    vadd.vv v9, v11, v9
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 4 x i8> %a to <vscale x 4 x i32>
   %b.sext = zext <vscale x 4 x i8> %b to <vscale x 4 x i32>
@@ -937,26 +779,20 @@ entry:
 ; vdot4a is commutative, so a scalar splat in either operand should select
 ; vdot4a.vx.
 define <vscale x 4 x i32> @partial_reduce_vdot4a_vx_operand1(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %a, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4a_vx_operand1:
-; NODOT:       # %bb.0:
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v10, v16
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4a_vx_operand1:
-; DOT:       # %bb.0:
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4a.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4a_vx_operand1:
+; CHECK:       # %bb.0:
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v10, v16
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
   %b = bitcast <vscale x 4 x i32> %s to <vscale x 16 x i8>
@@ -968,26 +804,20 @@ define <vscale x 4 x i32> @partial_reduce_vdot4a_vx_operand1(<vscale x 4 x i32> 
 }
 
 define <vscale x 4 x i32> @partial_reduce_vdot4a_vx_operand0(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4a_vx_operand0:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmul.vv v12, v16, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4a_vx_operand0:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4a.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4a_vx_operand0:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmul.vv v12, v16, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
@@ -1002,26 +832,20 @@ entry:
 ; vdot4au is commutative, so a scalar splat in either operand should select
 ; vdot4au.vx.
 define <vscale x 4 x i32> @partial_reduce_vdot4au_vx_operand1(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %a, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4au_vx_operand1:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v10, v16
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vzext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4au_vx_operand1:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4au.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4au_vx_operand1:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v10, v16
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vzext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
@@ -1034,26 +858,20 @@ entry:
 }
 
 define <vscale x 4 x i32> @partial_reduce_vdot4au_vx_operand0(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4au_vx_operand0:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v16, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vzext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4au_vx_operand0:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4au.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4au_vx_operand0:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v16, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vzext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
@@ -1068,26 +886,20 @@ entry:
 ; The unsigned operand of vdot4asu is a scalar splat, so this should select
 ; vdot4asu.vx directly.
 define <vscale x 4 x i32> @partial_reduce_vdot4asu_vx(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %a, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4asu_vx:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v10, v16
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4asu_vx:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4asu.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4asu_vx:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v10, v16
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
@@ -1103,26 +915,20 @@ entry:
 ; vdot4aus.vx (the operand-swapped counterpart) directly instead of
 ; materializing a vmv.v.x splat and using vdot4asu.vv.
 define <vscale x 4 x i32> @partial_reduce_vdot4aus_vx(<vscale x 4 x i32> %acc, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: partial_reduce_vdot4aus_vx:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vmv.v.x v16, a0
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulsu.vv v12, v16, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vsext.vf2 v16, v12
-; NODOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vadd.vv v10, v18, v20
-; NODOT-NEXT:    vadd.vv v8, v8, v16
-; NODOT-NEXT:    vadd.vv v8, v22, v8
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vdot4aus_vx:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vdot4aus.vx v8, v10, a0
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vdot4aus_vx:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vmv.v.x v16, a0
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulsu.vv v12, v16, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vsext.vf2 v16, v12
+; CHECK-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vadd.vv v10, v18, v20
+; CHECK-NEXT:    vadd.vv v8, v8, v16
+; CHECK-NEXT:    vadd.vv v8, v22, v8
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    ret
 entry:
   %h = insertelement <vscale x 4 x i32> poison, i32 %x, i32 0
   %s = shufflevector <vscale x 4 x i32> %h, <vscale x 4 x i32> poison, <vscale x 4 x i32> zeroinitializer
@@ -1187,30 +993,19 @@ entry:
 }
 
 define <vscale x 2 x i32> @partial_reduce_select(<vscale x 8 x i8> %a, <vscale x 8 x i8> %b, <vscale x 8 x i1> %m) {
-; NODOT-LABEL: partial_reduce_select:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
-; NODOT-NEXT:    vmv.v.i v12, 0
-; NODOT-NEXT:    vsetvli zero, zero, e8, m1, ta, ma
-; NODOT-NEXT:    vwmul.vv v10, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m4, ta, mu
-; NODOT-NEXT:    vsext.vf2 v12, v10, v0.t
-; NODOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v15, v12
-; NODOT-NEXT:    vadd.vv v9, v13, v14
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_select:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vmerge.vvm v10, v10, v9, v0
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v9, 0
-; DOT-NEXT:    vdot4a.vv v9, v8, v10
-; DOT-NEXT:    vmv.v.v v8, v9
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_select:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vmv.v.i v12, 0
+; CHECK-NEXT:    vsetvli zero, zero, e8, m1, ta, ma
+; CHECK-NEXT:    vwmul.vv v10, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m4, ta, mu
+; CHECK-NEXT:    vsext.vf2 v12, v10, v0.t
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v15, v12
+; CHECK-NEXT:    vadd.vv v9, v13, v14
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 8 x i8> %a to <vscale x 8 x i32>
   %b.sext = sext <vscale x 8 x i8> %b to <vscale x 8 x i32>
@@ -1221,31 +1016,19 @@ entry:
 }
 
 define <vscale x 2 x i32> @partial_reduce_vpmerge(<vscale x 8 x i8> %a, <vscale x 8 x i8> %b, <vscale x 8 x i1> %m, i32 zeroext %evl) {
-; NODOT-LABEL: partial_reduce_vpmerge:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e32, m4, ta, ma
-; NODOT-NEXT:    vmv.v.i v12, 0
-; NODOT-NEXT:    vsetvli zero, a0, e8, m1, ta, ma
-; NODOT-NEXT:    vwmul.vv v10, v8, v9
-; NODOT-NEXT:    vsetvli zero, zero, e32, m4, tu, mu
-; NODOT-NEXT:    vsext.vf2 v12, v10, v0.t
-; NODOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v15, v12
-; NODOT-NEXT:    vadd.vv v9, v13, v14
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vpmerge:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e8, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vsetvli zero, a0, e8, m1, tu, ma
-; DOT-NEXT:    vmerge.vvm v10, v10, v9, v0
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v9, 0
-; DOT-NEXT:    vdot4a.vv v9, v8, v10
-; DOT-NEXT:    vmv.v.v v8, v9
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vpmerge:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e32, m4, ta, ma
+; CHECK-NEXT:    vmv.v.i v12, 0
+; CHECK-NEXT:    vsetvli zero, a0, e8, m1, ta, ma
+; CHECK-NEXT:    vwmul.vv v10, v8, v9
+; CHECK-NEXT:    vsetvli zero, zero, e32, m4, tu, mu
+; CHECK-NEXT:    vsext.vf2 v12, v10, v0.t
+; CHECK-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v15, v12
+; CHECK-NEXT:    vadd.vv v9, v13, v14
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 8 x i8> %a to <vscale x 8 x i32>
   %b.sext = sext <vscale x 8 x i8> %b to <vscale x 8 x i32>
@@ -1259,29 +1042,18 @@ entry:
 ; so the dot products accumulate into one vector register and only a single
 ; reduction remains.
 define i32 @vdot4au_vv_scalar_add_chain2(<vscale x 16 x i8> %a0, <vscale x 16 x i8> %b0, <vscale x 16 x i8> %a1, <vscale x 16 x i8> %b1, i32 %acc) {
-; NODOT-LABEL: vdot4au_vv_scalar_add_chain2:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v16, v12, v14
-; NODOT-NEXT:    vwmulu.vv v20, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwaddu.vv v8, v16, v20
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v16, a0
-; NODOT-NEXT:    vredsum.vs v8, v8, v16
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4au_vv_scalar_add_chain2:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v16, 0
-; DOT-NEXT:    vdot4au.vv v16, v12, v14
-; DOT-NEXT:    vdot4au.vv v16, v8, v10
-; DOT-NEXT:    vmv.s.x v8, a0
-; DOT-NEXT:    vredsum.vs v8, v16, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4au_vv_scalar_add_chain2:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v16, v12, v14
+; CHECK-NEXT:    vwmulu.vv v20, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwaddu.vv v8, v16, v20
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v16, a0
+; CHECK-NEXT:    vredsum.vs v8, v8, v16
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a0.zext = zext <vscale x 16 x i8> %a0 to <vscale x 16 x i32>
   %b0.zext = zext <vscale x 16 x i8> %b0 to <vscale x 16 x i32>
@@ -1298,37 +1070,24 @@ entry:
 
 ; Four-term chain without an external accumulator (x264 SAD shape).
 define i32 @vdot4au_vv_chain4(<vscale x 16 x i8> %a0, <vscale x 16 x i8> %b0, <vscale x 16 x i8> %a1, <vscale x 16 x i8> %b1, <vscale x 16 x i8> %a2, <vscale x 16 x i8> %b2, <vscale x 16 x i8> %a3, <vscale x 16 x i8> %b3) {
-; NODOT-LABEL: vdot4au_vv_chain4:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v24, v20, v22
-; NODOT-NEXT:    vwmulu.vv v20, v8, v10
-; NODOT-NEXT:    vwmulu.vv v28, v12, v14
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwaddu.vv v8, v28, v20
-; NODOT-NEXT:    vsetvli zero, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v28, v16, v18
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwaddu.vv v16, v24, v28
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v16, v8
-; NODOT-NEXT:    vmv.s.x v16, zero
-; NODOT-NEXT:    vredsum.vs v8, v8, v16
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vdot4au_vv_chain4:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v24, 0
-; DOT-NEXT:    vdot4au.vv v24, v12, v14
-; DOT-NEXT:    vdot4au.vv v24, v8, v10
-; DOT-NEXT:    vdot4au.vv v24, v20, v22
-; DOT-NEXT:    vdot4au.vv v24, v16, v18
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v24, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vdot4au_vv_chain4:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v24, v20, v22
+; CHECK-NEXT:    vwmulu.vv v20, v8, v10
+; CHECK-NEXT:    vwmulu.vv v28, v12, v14
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwaddu.vv v8, v28, v20
+; CHECK-NEXT:    vsetvli zero, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v28, v16, v18
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwaddu.vv v16, v28, v24
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v16, v8
+; CHECK-NEXT:    vmv.s.x v16, zero
+; CHECK-NEXT:    vredsum.vs v8, v8, v16
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a0.zext = zext <vscale x 16 x i8> %a0 to <vscale x 16 x i32>
   %b0.zext = zext <vscale x 16 x i8> %b0 to <vscale x 16 x i32>

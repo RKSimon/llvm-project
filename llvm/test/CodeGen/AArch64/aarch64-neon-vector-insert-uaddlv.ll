@@ -282,7 +282,7 @@ define void @insert_vec_v16i8_uaddlv_from_v8i8(ptr %0) {
 ; CHECK-NEXT:    uaddlv.8b h1, v0
 ; CHECK-NEXT:    stp q0, q0, [x0, #32]
 ; CHECK-NEXT:    mov.h v2[0], v1[0]
-; CHECK-NEXT:    bic.4h v2, #255, lsl #8
+; CHECK-NEXT:    bic.4h v2, #7, lsl #8
 ; CHECK-NEXT:    ushll.4s v2, v2, #0
 ; CHECK-NEXT:    ucvtf.4s v2, v2
 ; CHECK-NEXT:    stp q2, q0, [x0]
@@ -323,8 +323,8 @@ define void @insert_vec_v12i16_uaddlv_from_v4i16(ptr %0) {
 ; CHECK-LABEL: insert_vec_v12i16_uaddlv_from_v4i16:
 ; CHECK:       ; %bb.0: ; %entry
 ; CHECK-NEXT:    movi.2d v0, #0000000000000000
-; CHECK-NEXT:    stp xzr, xzr, [x0, #16]
 ; CHECK-NEXT:    stp xzr, xzr, [x0, #32]
+; CHECK-NEXT:    stp xzr, xzr, [x0, #16]
 ; CHECK-NEXT:    uaddlv.4h s1, v0
 ; CHECK-NEXT:    mov.h v0[0], v1[0]
 ; CHECK-NEXT:    ushll.4s v0, v0, #0

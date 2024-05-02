@@ -11,7 +11,8 @@ define i32 @v4i1(<4 x i1> %x) {
 ; CHECK-NEXT:    vsraw 2, 2, 4
 ; CHECK-NEXT:    lxvd2x 0, 0, 3
 ; CHECK-NEXT:    xxswapd 35, 0
-; CHECK-NEXT:    xxland 34, 34, 35
+; CHECK-NEXT:    xxlxor 0, 0, 0
+; CHECK-NEXT:    xxsel 34, 0, 35, 34
 ; CHECK-NEXT:    xxmrghw 0, 34, 34
 ; CHECK-NEXT:    xxmrghw 35, 0, 34
 ; CHECK-NEXT:    vmaxuw 2, 2, 3
@@ -62,7 +63,8 @@ define i32 @v4i1_zero_is_poison(<4 x i1> %x) {
 ; CHECK-NEXT:    vsraw 2, 2, 4
 ; CHECK-NEXT:    lxvd2x 0, 0, 3
 ; CHECK-NEXT:    xxswapd 35, 0
-; CHECK-NEXT:    xxland 34, 34, 35
+; CHECK-NEXT:    xxlxor 0, 0, 0
+; CHECK-NEXT:    xxsel 34, 0, 35, 34
 ; CHECK-NEXT:    xxmrghw 0, 34, 34
 ; CHECK-NEXT:    xxmrghw 35, 0, 34
 ; CHECK-NEXT:    vmaxuw 2, 2, 3

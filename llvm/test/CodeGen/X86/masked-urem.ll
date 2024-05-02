@@ -10,10 +10,9 @@ define <4 x i32> @urem_v4i32(<4 x i32> %x, <4 x i32> %y, <4 x i1> %m) {
 ; SSE2:       # %bb.0:
 ; SSE2-NEXT:    pslld $31, %xmm2
 ; SSE2-NEXT:    psrad $31, %xmm2
-; SSE2-NEXT:    pcmpeqd %xmm3, %xmm3
-; SSE2-NEXT:    pxor %xmm2, %xmm3
-; SSE2-NEXT:    pand %xmm1, %xmm2
-; SSE2-NEXT:    psubd %xmm3, %xmm2
+; SSE2-NEXT:    pand %xmm2, %xmm1
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; SSE2-NEXT:    por %xmm1, %xmm2
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm2[3,3,3,3]
 ; SSE2-NEXT:    movd %xmm1, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
@@ -353,10 +352,9 @@ define <2 x i32> @urem_v2i32(<2 x i32> %x, <2 x i32> %y, <2 x i1> %m) {
 ; SSE2-NEXT:    shufps {{.*#+}} xmm2 = xmm2[0,2],xmm3[2,3]
 ; SSE2-NEXT:    pslld $31, %xmm2
 ; SSE2-NEXT:    psrad $31, %xmm2
-; SSE2-NEXT:    pcmpeqd %xmm3, %xmm3
-; SSE2-NEXT:    pxor %xmm2, %xmm3
-; SSE2-NEXT:    pand %xmm1, %xmm2
-; SSE2-NEXT:    psubd %xmm3, %xmm2
+; SSE2-NEXT:    pand %xmm2, %xmm1
+; SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; SSE2-NEXT:    por %xmm1, %xmm2
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm2[3,3,3,3]
 ; SSE2-NEXT:    movd %xmm1, %ecx
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
@@ -1011,9 +1009,8 @@ define <8 x i64> @urem_v8i64(<8 x i64> %x, <8 x i64> %y, <8 x i1> %m) {
 ;
 ; AVX2-LABEL: urem_v8i64:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpmovzxwd {{.*#+}} xmm5 = xmm4[0],zero,xmm4[1],zero,xmm4[2],zero,xmm4[3],zero
-; AVX2-NEXT:    vpslld $31, %xmm5, %xmm5
-; AVX2-NEXT:    vpmovsxdq %xmm5, %ymm6
+; AVX2-NEXT:    vpmovzxwq {{.*#+}} ymm5 = xmm4[0],zero,zero,zero,xmm4[1],zero,zero,zero,xmm4[2],zero,zero,zero,xmm4[3],zero,zero,zero
+; AVX2-NEXT:    vpsllq $63, %ymm5, %ymm6
 ; AVX2-NEXT:    vbroadcastsd {{.*#+}} ymm5 = [1,1,1,1]
 ; AVX2-NEXT:    vblendvpd %ymm6, %ymm2, %ymm5, %ymm2
 ; AVX2-NEXT:    vextractf128 $1, %ymm2, %xmm6

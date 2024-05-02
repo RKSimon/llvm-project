@@ -20,8 +20,8 @@ define void @vhaddw_h_b_illegal(ptr %a, ptr %b, ptr %r) nounwind {
 ; LA32-NEXT:    vslti.b $vr2, $vr1, 0
 ; LA32-NEXT:    vilvl.b $vr1, $vr2, $vr1
 ; LA32-NEXT:    vadd.h $vr0, $vr0, $vr1
-; LA32-NEXT:    vstelm.w $vr0, $a2, 0, 0
 ; LA32-NEXT:    vstelm.w $vr0, $a2, 4, 1
+; LA32-NEXT:    vstelm.w $vr0, $a2, 0, 0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: vhaddw_h_b_illegal:

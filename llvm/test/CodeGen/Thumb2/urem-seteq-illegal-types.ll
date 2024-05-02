@@ -42,13 +42,15 @@ define i1 @test_urem_even(i27 %X) nounwind {
 define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_setne:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    movs r1, #13
-; CHECK-NEXT:    muls r0, r1, r0
 ; CHECK-NEXT:    and r1, r0, #15
-; CHECK-NEXT:    movs r0, #0
-; CHECK-NEXT:    cmp r1, #3
-; CHECK-NEXT:    it hi
-; CHECK-NEXT:    movhi r0, #1
+; CHECK-NEXT:    movs r2, #13
+; CHECK-NEXT:    muls r1, r2, r1
+; CHECK-NEXT:    lsrs r1, r1, #6
+; CHECK-NEXT:    orr.w r1, r1, r1, lsl #2
+; CHECK-NEXT:    subs r0, r0, r1
+; CHECK-NEXT:    ands r0, r0, #15
+; CHECK-NEXT:    it ne
+; CHECK-NEXT:    movne r0, #1
 ; CHECK-NEXT:    bx lr
   %urem = urem i4 %X, 5
   %cmp = icmp ne i4 %urem, 0

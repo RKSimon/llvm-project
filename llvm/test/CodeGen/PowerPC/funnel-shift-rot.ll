@@ -105,16 +105,17 @@ define i32 @rotl_i32(i32 %x, i32 %z) {
 define i64 @rotl_i64(i64 %x, i64 %z) {
 ; CHECK32-LABEL: rotl_i64:
 ; CHECK32:       # %bb.0:
-; CHECK32-NEXT:    andi. 5, 6, 32
+; CHECK32-NEXT:    srwi 5, 6, 5
+; CHECK32-NEXT:    andi. 5, 5, 1
 ; CHECK32-NEXT:    mr 5, 3
-; CHECK32-NEXT:    bne 0, .LBB4_2
+; CHECK32-NEXT:    bc 12, 1, .LBB4_2
 ; CHECK32-NEXT:  # %bb.1:
 ; CHECK32-NEXT:    mr 5, 4
 ; CHECK32-NEXT:  .LBB4_2:
 ; CHECK32-NEXT:    clrlwi 6, 6, 27
 ; CHECK32-NEXT:    subfic 8, 6, 32
 ; CHECK32-NEXT:    srw 7, 5, 8
-; CHECK32-NEXT:    bne 0, .LBB4_4
+; CHECK32-NEXT:    bc 12, 1, .LBB4_4
 ; CHECK32-NEXT:  # %bb.3:
 ; CHECK32-NEXT:    mr 4, 3
 ; CHECK32-NEXT:  .LBB4_4:

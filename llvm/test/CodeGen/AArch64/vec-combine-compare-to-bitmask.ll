@@ -1594,26 +1594,15 @@ define void @example.safeAdd(ptr %0, ptr %1, ptr %2) {
 ; CHECK-LABEL: example.safeAdd:
 ; CHECK:       // %bb.0: // %Entry
 ; CHECK-NEXT:    ldp q2, q3, [x1]
-; CHECK-NEXT:    adrp x8, .LCPI22_0
 ; CHECK-NEXT:    ldp q1, q0, [x2]
-; CHECK-NEXT:    ldr q4, [x8, :lo12:.LCPI22_0]
 ; CHECK-NEXT:    add v0.16b, v3.16b, v0.16b
 ; CHECK-NEXT:    add v1.16b, v2.16b, v1.16b
 ; CHECK-NEXT:    cmhi v3.16b, v3.16b, v0.16b
 ; CHECK-NEXT:    cmhi v2.16b, v2.16b, v1.16b
-; CHECK-NEXT:    and v3.16b, v3.16b, v4.16b
-; CHECK-NEXT:    and v2.16b, v2.16b, v4.16b
-; CHECK-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-NEXT:    umov w8, v3.h[0]
-; CHECK-NEXT:    umov w9, v2.h[0]
-; CHECK-NEXT:    orr w8, w9, w8
-; CHECK-NEXT:    tst w8, #0xffff
-; CHECK-NEXT:    b.ne .LBB22_2
+; CHECK-NEXT:    orr v2.16b, v2.16b, v3.16b
+; CHECK-NEXT:    umaxv b2, v2.16b
+; CHECK-NEXT:    fmov w8, s2
+; CHECK-NEXT:    tbnz w8, #0, .LBB22_2
 ; CHECK-NEXT:  // %bb.1: // %Else
 ; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
@@ -1631,28 +1620,14 @@ define void @example.safeAdd(ptr %0, ptr %1, ptr %2) {
 ; CHECK-BE-NEXT:    ld1 { v2.16b }, [x8]
 ; CHECK-BE-NEXT:    add x8, x2, #16
 ; CHECK-BE-NEXT:    ld1 { v1.16b }, [x8]
-; CHECK-BE-NEXT:    adrp x8, .LCPI22_0
-; CHECK-BE-NEXT:    add x8, x8, :lo12:.LCPI22_0
 ; CHECK-BE-NEXT:    add v0.16b, v3.16b, v0.16b
-; CHECK-BE-NEXT:    ld1 { v4.16b }, [x8]
 ; CHECK-BE-NEXT:    add v1.16b, v2.16b, v1.16b
 ; CHECK-BE-NEXT:    cmhi v3.16b, v3.16b, v0.16b
 ; CHECK-BE-NEXT:    cmhi v2.16b, v2.16b, v1.16b
-; CHECK-BE-NEXT:    and v3.16b, v3.16b, v4.16b
-; CHECK-BE-NEXT:    and v2.16b, v2.16b, v4.16b
-; CHECK-BE-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-BE-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-BE-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-BE-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-BE-NEXT:    addp v3.16b, v3.16b, v3.16b
-; CHECK-BE-NEXT:    addp v2.16b, v2.16b, v2.16b
-; CHECK-BE-NEXT:    rev16 v3.16b, v3.16b
-; CHECK-BE-NEXT:    rev16 v2.16b, v2.16b
-; CHECK-BE-NEXT:    umov w8, v3.h[0]
-; CHECK-BE-NEXT:    umov w9, v2.h[0]
-; CHECK-BE-NEXT:    orr w8, w9, w8
-; CHECK-BE-NEXT:    tst w8, #0xffff
-; CHECK-BE-NEXT:    b.ne .LBB22_2
+; CHECK-BE-NEXT:    orr v2.16b, v3.16b, v2.16b
+; CHECK-BE-NEXT:    umaxv b2, v2.16b
+; CHECK-BE-NEXT:    fmov w8, s2
+; CHECK-BE-NEXT:    tbnz w8, #0, .LBB22_2
 ; CHECK-BE-NEXT:  // %bb.1: // %Else
 ; CHECK-BE-NEXT:    add x8, x0, #16
 ; CHECK-BE-NEXT:    st1 { v0.16b }, [x0]
@@ -2030,10 +2005,9 @@ define i16 @bitmask_v16i64(<16 x i64> %v) {
 ; CHECK-SD-NEXT:    uzp1 v0.4s, v0.4s, v1.4s
 ; CHECK-SD-NEXT:    uzp1 v1.8h, v4.8h, v6.8h
 ; CHECK-SD-NEXT:    uzp1 v0.8h, v0.8h, v2.8h
-; CHECK-SD-NEXT:    mvn v1.16b, v1.16b
-; CHECK-SD-NEXT:    mvn v0.16b, v0.16b
 ; CHECK-SD-NEXT:    uzp1 v0.16b, v0.16b, v1.16b
 ; CHECK-SD-NEXT:    ldr q1, [x8, :lo12:.LCPI27_0]
+; CHECK-SD-NEXT:    mvn v0.16b, v0.16b
 ; CHECK-SD-NEXT:    shl v0.16b, v0.16b, #7
 ; CHECK-SD-NEXT:    cmlt v0.16b, v0.16b, #0
 ; CHECK-SD-NEXT:    and v0.16b, v0.16b, v1.16b
@@ -2069,10 +2043,9 @@ define i16 @bitmask_v16i64(<16 x i64> %v) {
 ; CHECK-BE-NEXT:    uzp1 v2.4s, v2.4s, v3.4s
 ; CHECK-BE-NEXT:    uzp1 v1.8h, v4.8h, v6.8h
 ; CHECK-BE-NEXT:    uzp1 v0.8h, v0.8h, v2.8h
-; CHECK-BE-NEXT:    mvn v1.16b, v1.16b
-; CHECK-BE-NEXT:    mvn v0.16b, v0.16b
 ; CHECK-BE-NEXT:    uzp1 v0.16b, v0.16b, v1.16b
 ; CHECK-BE-NEXT:    ld1 { v1.16b }, [x8]
+; CHECK-BE-NEXT:    mvn v0.16b, v0.16b
 ; CHECK-BE-NEXT:    shl v0.16b, v0.16b, #7
 ; CHECK-BE-NEXT:    cmlt v0.16b, v0.16b, #0
 ; CHECK-BE-NEXT:    and v0.16b, v0.16b, v1.16b

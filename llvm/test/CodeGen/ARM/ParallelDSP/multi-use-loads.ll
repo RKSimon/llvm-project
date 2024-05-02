@@ -352,13 +352,14 @@ define i32 @and_user(i32 %arg, ptr nocapture readnone %arg1, ptr nocapture reado
 ; CHECK-BE-NEXT:    mov.w lr, #0
 ; CHECK-BE-NEXT:  .LBB3_2: @ %for.body
 ; CHECK-BE-NEXT:    @ =>This Inner Loop Header: Depth=1
-; CHECK-BE-NEXT:    ldrh r1, [r3, #2]!
-; CHECK-BE-NEXT:    subs r0, #1
 ; CHECK-BE-NEXT:    ldrsh r4, [r2, #2]!
+; CHECK-BE-NEXT:    subs r0, #1
+; CHECK-BE-NEXT:    ldrsh r1, [r3, #2]!
 ; CHECK-BE-NEXT:    ldrsh.w r5, [r2, #2]
-; CHECK-BE-NEXT:    mul lr, r1, lr
 ; CHECK-BE-NEXT:    smlabb r12, r4, r1, r12
 ; CHECK-BE-NEXT:    ldrsh.w r4, [r3, #2]
+; CHECK-BE-NEXT:    uxth r1, r1
+; CHECK-BE-NEXT:    mul lr, r1, lr
 ; CHECK-BE-NEXT:    smlabb r12, r5, r4, r12
 ; CHECK-BE-NEXT:    bne .LBB3_2
 ; CHECK-BE-NEXT:  @ %bb.3: @ %for.cond.cleanup

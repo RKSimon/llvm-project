@@ -33,12 +33,12 @@ define void @interleave3_consecutive_splats_nonzero(<8 x i16> %src, ptr %dst0, p
 ; CHECK-NEXT:    dup v2.8h, v0.h[3]
 ; CHECK-NEXT:    dup v3.8h, v0.h[4]
 ; CHECK-NEXT:    st3 { v1.8h, v2.8h, v3.8h }, [x8]
-; CHECK-NEXT:    ldp q0, q1, [sp]
-; CHECK-NEXT:    ldr q2, [sp, #32]
-; CHECK-NEXT:    stp q0, q1, [x0]
-; CHECK-NEXT:    str q2, [x0, #32]
-; CHECK-NEXT:    stp q0, q1, [x1]
-; CHECK-NEXT:    str q2, [x1, #32]
+; CHECK-NEXT:    ldp q1, q0, [sp, #16]
+; CHECK-NEXT:    ldr q2, [sp]
+; CHECK-NEXT:    stp q1, q0, [x0, #16]
+; CHECK-NEXT:    str q2, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1, #16]
+; CHECK-NEXT:    str q2, [x1]
 ; CHECK-NEXT:    add sp, sp, #48
 ; CHECK-NEXT:    ret
   %splat2 = shufflevector <8 x i16> %src, <8 x i16> poison, <8 x i32> splat (i32 2)
@@ -80,14 +80,14 @@ define void @interleave4_nonshuffle_operand(<8 x i16> %src, ptr %dst0, ptr %dst1
 ; CHECK-NEXT:    zip1 v2.8h, v2.8h, v3.8h
 ; CHECK-NEXT:    zip2 v5.8h, v0.8h, v4.8h
 ; CHECK-NEXT:    zip1 v0.8h, v0.8h, v4.8h
-; CHECK-NEXT:    zip1 v3.8h, v1.8h, v5.8h
-; CHECK-NEXT:    zip2 v1.8h, v1.8h, v5.8h
-; CHECK-NEXT:    zip1 v4.8h, v2.8h, v0.8h
-; CHECK-NEXT:    zip2 v0.8h, v2.8h, v0.8h
-; CHECK-NEXT:    stp q3, q1, [x0, #32]
-; CHECK-NEXT:    stp q4, q0, [x0]
-; CHECK-NEXT:    stp q4, q0, [x1]
-; CHECK-NEXT:    stp q3, q1, [x1, #32]
+; CHECK-NEXT:    zip2 v3.8h, v1.8h, v5.8h
+; CHECK-NEXT:    zip1 v1.8h, v1.8h, v5.8h
+; CHECK-NEXT:    zip2 v4.8h, v2.8h, v0.8h
+; CHECK-NEXT:    zip1 v0.8h, v2.8h, v0.8h
+; CHECK-NEXT:    stp q1, q3, [x0, #32]
+; CHECK-NEXT:    stp q0, q4, [x0]
+; CHECK-NEXT:    stp q0, q4, [x1]
+; CHECK-NEXT:    stp q1, q3, [x1, #32]
 ; CHECK-NEXT:    ret
   %splat0 = shufflevector <8 x i16> %src, <8 x i16> poison, <8 x i32> zeroinitializer
   %added = add <8 x i16> %src, splat (i16 1)

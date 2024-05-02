@@ -483,7 +483,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    mulhw r5, r3, r4
 ; P9LE-NEXT:    add r3, r5, r3
 ; P9LE-NEXT:    srwi r5, r3, 31
-; P9LE-NEXT:    srwi r3, r3, 6
+; P9LE-NEXT:    srawi r3, r3, 6
 ; P9LE-NEXT:    add r3, r3, r5
 ; P9LE-NEXT:    mtvsrd v0, r3
 ; P9LE-NEXT:    li r3, 4
@@ -493,7 +493,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    mulhw r5, r3, r4
 ; P9LE-NEXT:    add r3, r5, r3
 ; P9LE-NEXT:    srwi r5, r3, 31
-; P9LE-NEXT:    srwi r3, r3, 6
+; P9LE-NEXT:    srawi r3, r3, 6
 ; P9LE-NEXT:    add r3, r3, r5
 ; P9LE-NEXT:    mtvsrd v0, r3
 ; P9LE-NEXT:    li r3, 6
@@ -502,7 +502,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9LE-NEXT:    mulhw r4, r3, r4
 ; P9LE-NEXT:    add r3, r4, r3
 ; P9LE-NEXT:    srwi r4, r3, 31
-; P9LE-NEXT:    srwi r3, r3, 6
+; P9LE-NEXT:    srawi r3, r3, 6
 ; P9LE-NEXT:    add r3, r3, r4
 ; P9LE-NEXT:    mtvsrd v1, r3
 ; P9LE-NEXT:    vmrghh v0, v1, v0
@@ -525,7 +525,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-NEXT:    mulhw r5, r3, r4
 ; P9BE-NEXT:    add r3, r5, r3
 ; P9BE-NEXT:    srwi r5, r3, 31
-; P9BE-NEXT:    srwi r3, r3, 6
+; P9BE-NEXT:    srawi r3, r3, 6
 ; P9BE-NEXT:    add r3, r3, r5
 ; P9BE-NEXT:    mtfprwz f0, r3
 ; P9BE-NEXT:    li r3, 4
@@ -534,7 +534,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-NEXT:    mulhw r5, r3, r4
 ; P9BE-NEXT:    add r3, r5, r3
 ; P9BE-NEXT:    srwi r5, r3, 31
-; P9BE-NEXT:    srwi r3, r3, 6
+; P9BE-NEXT:    srawi r3, r3, 6
 ; P9BE-NEXT:    add r3, r3, r5
 ; P9BE-NEXT:    mtfprwz f1, r3
 ; P9BE-NEXT:    addis r3, r2, .LCPI2_0@toc@ha
@@ -547,7 +547,7 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P9BE-NEXT:    mulhw r5, r3, r4
 ; P9BE-NEXT:    add r3, r5, r3
 ; P9BE-NEXT:    srwi r5, r3, 31
-; P9BE-NEXT:    srwi r3, r3, 6
+; P9BE-NEXT:    srawi r3, r3, 6
 ; P9BE-NEXT:    add r3, r3, r5
 ; P9BE-NEXT:    mtfprwz f1, r3
 ; P9BE-NEXT:    li r3, 0
@@ -592,13 +592,13 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P8LE-NEXT:    add r7, r8, r7
 ; P8LE-NEXT:    add r4, r5, r4
 ; P8LE-NEXT:    srwi r5, r6, 31
-; P8LE-NEXT:    srwi r6, r6, 6
+; P8LE-NEXT:    srawi r6, r6, 6
 ; P8LE-NEXT:    add r5, r6, r5
 ; P8LE-NEXT:    mtvsrd v3, r4
 ; P8LE-NEXT:    srwi r4, r3, 31
-; P8LE-NEXT:    srwi r3, r3, 6
+; P8LE-NEXT:    srawi r3, r3, 6
 ; P8LE-NEXT:    srwi r6, r7, 31
-; P8LE-NEXT:    srwi r7, r7, 6
+; P8LE-NEXT:    srawi r7, r7, 6
 ; P8LE-NEXT:    mtvsrd v4, r5
 ; P8LE-NEXT:    add r3, r3, r4
 ; P8LE-NEXT:    add r6, r7, r6
@@ -642,14 +642,14 @@ define <4 x i16> @combine_srem_sdiv(<4 x i16> %x) {
 ; P8BE-NEXT:    addi r4, r4, .LCPI2_1@toc@l
 ; P8BE-NEXT:    lxvw4x v3, 0, r4
 ; P8BE-NEXT:    srwi r4, r5, 31
-; P8BE-NEXT:    srwi r5, r5, 6
+; P8BE-NEXT:    srawi r5, r5, 6
 ; P8BE-NEXT:    add r4, r5, r4
 ; P8BE-NEXT:    srwi r5, r6, 31
-; P8BE-NEXT:    srwi r6, r6, 6
+; P8BE-NEXT:    srawi r6, r6, 6
 ; P8BE-NEXT:    add r5, r6, r5
 ; P8BE-NEXT:    mtvsrwz v4, r4
 ; P8BE-NEXT:    srwi r6, r7, 31
-; P8BE-NEXT:    srwi r7, r7, 6
+; P8BE-NEXT:    srawi r7, r7, 6
 ; P8BE-NEXT:    srwi r4, r3, 31
 ; P8BE-NEXT:    srawi r3, r3, 6
 ; P8BE-NEXT:    mtvsrwz v5, r5

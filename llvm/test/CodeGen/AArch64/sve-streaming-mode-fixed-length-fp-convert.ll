@@ -10,38 +10,38 @@ define void @fp_convert_combine_crash(ptr %a, ptr %b) {
 ; CHECK-LABEL: fp_convert_combine_crash:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fmov z0.s, #8.00000000
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    ptrue p0.s, vl4
 ; CHECK-NEXT:    fmul z1.s, p0/m, z1.s, z0.s
 ; CHECK-NEXT:    fmul z0.s, p0/m, z0.s, z2.s
 ; CHECK-NEXT:    fcvtzs z1.s, p0/m, z1.s
 ; CHECK-NEXT:    fcvtzs z0.s, p0/m, z0.s
-; CHECK-NEXT:    stp q1, q0, [x1]
+; CHECK-NEXT:    stp q0, q1, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fp_convert_combine_crash:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [sp, #-64]!
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-64]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 64
-; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp, #24]
+; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp, #8]
 ; NONEON-NOSVE-NEXT:    fcvtzs w8, s0, #3
-; NONEON-NOSVE-NEXT:    ldp s2, s0, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldp s2, s0, [sp]
 ; NONEON-NOSVE-NEXT:    fcvtzs w9, s1, #3
 ; NONEON-NOSVE-NEXT:    fcvtzs w10, s0, #3
 ; NONEON-NOSVE-NEXT:    fcvtzs w11, s2, #3
-; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp, #8]
-; NONEON-NOSVE-NEXT:    ldp s2, s3, [sp]
-; NONEON-NOSVE-NEXT:    stp w9, w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp, #24]
+; NONEON-NOSVE-NEXT:    ldp s2, s3, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp w9, w8, [sp, #40]
 ; NONEON-NOSVE-NEXT:    fcvtzs w12, s0, #3
 ; NONEON-NOSVE-NEXT:    fcvtzs w8, s1, #3
-; NONEON-NOSVE-NEXT:    stp w11, w10, [sp, #48]
+; NONEON-NOSVE-NEXT:    stp w11, w10, [sp, #32]
 ; NONEON-NOSVE-NEXT:    fcvtzs w9, s3, #3
 ; NONEON-NOSVE-NEXT:    fcvtzs w10, s2, #3
-; NONEON-NOSVE-NEXT:    stp w8, w12, [sp, #40]
-; NONEON-NOSVE-NEXT:    stp w10, w9, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #32]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    stp w8, w12, [sp, #56]
+; NONEON-NOSVE-NEXT:    stp w10, w9, [sp, #48]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #64
 ; NONEON-NOSVE-NEXT:    ret
   %f = load <8 x float>, ptr %a

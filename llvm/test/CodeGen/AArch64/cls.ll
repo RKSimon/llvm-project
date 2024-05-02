@@ -76,7 +76,10 @@ define i64 @cls_i64_not_32(i64 %x) {
 ; CHECK-SD-LABEL: cls_i64_not_32:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    asr x8, x0, #16
-; CHECK-SD-NEXT:    cls x8, x8
+; CHECK-SD-NEXT:    mov w9, #1 // =0x1
+; CHECK-SD-NEXT:    eor x8, x8, x0, asr #63
+; CHECK-SD-NEXT:    orr x8, x9, x8, lsl #1
+; CHECK-SD-NEXT:    clz x8, x8
 ; CHECK-SD-NEXT:    orr x0, x8, #0x10
 ; CHECK-SD-NEXT:    ret
 ;
@@ -139,7 +142,9 @@ define i32 @cls_i32_knownbits_no_overestimate(i32 signext %x) {
 ; CHECK-SD-LABEL: cls_i32_knownbits_no_overestimate:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    asr w8, w0, #15
-; CHECK-SD-NEXT:    cls w8, w8
+; CHECK-SD-NEXT:    eor w8, w8, w0, asr #31
+; CHECK-SD-NEXT:    clz w8, w8
+; CHECK-SD-NEXT:    sub w8, w8, #1
 ; CHECK-SD-NEXT:    orr w0, w8, #0x10
 ; CHECK-SD-NEXT:    ret
 ;
@@ -177,12 +182,20 @@ declare <4 x i32> @llvm.aarch64.neon.cls.v4i32(<4 x i32>) nounwind readnone
 ; Test ensures that the compiler generates no extra instructions
 ; for __builtin_clzg output type conversion
 define i32 @foo8(i8 %0) {
-; CHECK-LABEL: foo8:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    clz w8, w8
-; CHECK-NEXT:    sub w0, w8, #24
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: foo8:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    and w8, w0, #0xff
+; CHECK-SD-NEXT:    clz w8, w8
+; CHECK-SD-NEXT:    sub w8, w8, #24
+; CHECK-SD-NEXT:    and w0, w8, #0xff
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: foo8:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    and w8, w0, #0xff
+; CHECK-GI-NEXT:    clz w8, w8
+; CHECK-GI-NEXT:    sub w0, w8, #24
+; CHECK-GI-NEXT:    ret
   %2 = tail call i8 @llvm.ctlz.i8(i8 %0, i1 false)
   %3 = zext nneg i8 %2 to i32
   ret i32 %3
@@ -191,12 +204,20 @@ define i32 @foo8(i8 %0) {
 ; Test ensures that the compiler generates no extra instructions
 ; for __builtin_clzg output type conversion
 define i32 @foo16(i16 %0) {
-; CHECK-LABEL: foo16:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xffff
-; CHECK-NEXT:    clz w8, w8
-; CHECK-NEXT:    sub w0, w8, #16
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: foo16:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    and w8, w0, #0xffff
+; CHECK-SD-NEXT:    clz w8, w8
+; CHECK-SD-NEXT:    sub w8, w8, #16
+; CHECK-SD-NEXT:    and w0, w8, #0xffff
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: foo16:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    and w8, w0, #0xffff
+; CHECK-GI-NEXT:    clz w8, w8
+; CHECK-GI-NEXT:    sub w0, w8, #16
+; CHECK-GI-NEXT:    ret
   %2 = tail call i16 @llvm.ctlz.i16(i16 %0, i1 false)
   %3 = zext nneg i16 %2 to i32
   ret i32 %3

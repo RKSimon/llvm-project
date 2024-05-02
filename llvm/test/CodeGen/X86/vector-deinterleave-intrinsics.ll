@@ -36,14 +36,16 @@ define void @deinterleave3(ptr %src, ptr %dst0, ptr %dst1, ptr %dst2) {
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm1[1,1,1,1]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm5 = xmm0[2,3,2,3]
 ; CHECK-NEXT:    punpckldq {{.*#+}} xmm5 = xmm5[0],xmm4[0],xmm5[1],xmm4[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm5 = xmm5[0,1],xmm2[0,3]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm2[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm5 = xmm5[0],xmm4[0]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[1,1,1,1]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
 ; CHECK-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm2[0],xmm1[1],xmm2[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,3],xmm1[0,1]
-; CHECK-NEXT:    movaps %xmm0, (%rsi)
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm1[0]
+; CHECK-NEXT:    movdqa %xmm0, (%rsi)
 ; CHECK-NEXT:    movdqa %xmm3, (%rdx)
-; CHECK-NEXT:    movaps %xmm5, (%rcx)
+; CHECK-NEXT:    movdqa %xmm5, (%rcx)
 ; CHECK-NEXT:    retq
   %wide = load <12 x i32>, ptr %src
   %result = call { <4 x i32>, <4 x i32>, <4 x i32> } @llvm.vector.deinterleave3.v12i32(<12 x i32> %wide)
@@ -156,54 +158,58 @@ define void @deinterleave6(ptr %src, ptr %dst0, ptr %dst1, ptr %dst2, ptr %dst3,
 ; CHECK-LABEL: deinterleave6:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq {{[0-9]+}}(%rsp), %rax
-; CHECK-NEXT:    movdqa 80(%rdi), %xmm2
-; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; CHECK-NEXT:    movdqa 80(%rdi), %xmm3
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm3[2,3,2,3]
 ; CHECK-NEXT:    movdqa 64(%rdi), %xmm5
-; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm5[3,3,3,3]
-; CHECK-NEXT:    punpckldq {{.*#+}} xmm4 = xmm4[0],xmm0[0],xmm4[1],xmm0[1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm5[3,3,3,3]
+; CHECK-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1]
 ; CHECK-NEXT:    movdqa (%rdi), %xmm0
-; CHECK-NEXT:    movdqa 16(%rdi), %xmm3
+; CHECK-NEXT:    movdqa 16(%rdi), %xmm2
 ; CHECK-NEXT:    movdqa 32(%rdi), %xmm6
-; CHECK-NEXT:    movdqa 48(%rdi), %xmm1
-; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm1[1,1,1,1]
+; CHECK-NEXT:    movdqa 48(%rdi), %xmm7
+; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm7[1,1,1,1]
 ; CHECK-NEXT:    punpckldq {{.*#+}} xmm8 = xmm8[0],xmm5[0],xmm8[1],xmm5[1]
-; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm8 = xmm8[0],xmm4[0]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm6[2,3,2,3]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm7 = xmm3[3,3,3,3]
-; CHECK-NEXT:    punpckldq {{.*#+}} xmm7 = xmm7[0],xmm4[0],xmm7[1],xmm4[1]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm0[1,1,1,1]
-; CHECK-NEXT:    punpckldq {{.*#+}} xmm4 = xmm4[0],xmm3[0],xmm4[1],xmm3[1]
-; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm4 = xmm4[0],xmm7[0]
-; CHECK-NEXT:    movdqa %xmm4, %xmm7
-; CHECK-NEXT:    shufps {{.*#+}} xmm7 = xmm7[1,3],xmm8[1,3]
-; CHECK-NEXT:    shufps {{.*#+}} xmm4 = xmm4[0,2],xmm8[0,2]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm8 = xmm8[0],xmm1[0]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm6[2,3,2,3]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm4 = xmm2[3,3,3,3]
+; CHECK-NEXT:    punpckldq {{.*#+}} xmm4 = xmm4[0],xmm1[0],xmm4[1],xmm1[1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; CHECK-NEXT:    punpckldq {{.*#+}} xmm1 = xmm1[0],xmm2[0],xmm1[1],xmm2[1]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm4[0]
+; CHECK-NEXT:    movdqa %xmm1, %xmm4
+; CHECK-NEXT:    shufps {{.*#+}} xmm4 = xmm4[1,3],xmm8[1,3]
+; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[0,2],xmm8[0,2]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm5[1,1,1,1]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm9 = xmm1[2,3,2,3]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm9 = xmm7[2,3,2,3]
 ; CHECK-NEXT:    punpckldq {{.*#+}} xmm9 = xmm9[0],xmm8[0],xmm9[1],xmm8[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm9 = xmm9[0,1],xmm2[0,3]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm3[1,1,1,1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm3[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm9 = xmm9[0],xmm8[0]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm2[1,1,1,1]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm10 = xmm0[2,3,2,3]
 ; CHECK-NEXT:    punpckldq {{.*#+}} xmm10 = xmm10[0],xmm8[0],xmm10[1],xmm8[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm10 = xmm10[0,1],xmm6[0,3]
-; CHECK-NEXT:    movaps %xmm10, %xmm8
+; CHECK-NEXT:    pshufd {{.*#+}} xmm8 = xmm6[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm10 = xmm10[0],xmm8[0]
+; CHECK-NEXT:    movdqa %xmm10, %xmm8
 ; CHECK-NEXT:    shufps {{.*#+}} xmm8 = xmm8[1,3],xmm9[1,3]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[1,1,1,1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm3 = xmm3[1,1,1,1]
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm5 = xmm5[2,3,2,3]
-; CHECK-NEXT:    punpckldq {{.*#+}} xmm5 = xmm5[0],xmm2[0],xmm5[1],xmm2[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[0,3],xmm5[0,1]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm2 = xmm6[1,1,1,1]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm3 = xmm3[2,3,2,3]
-; CHECK-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1]
-; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,3],xmm3[0,1]
-; CHECK-NEXT:    movaps %xmm0, %xmm2
-; CHECK-NEXT:    shufps {{.*#+}} xmm2 = xmm2[1,3],xmm1[1,3]
+; CHECK-NEXT:    punpckldq {{.*#+}} xmm5 = xmm5[0],xmm3[0],xmm5[1],xmm3[1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm3 = xmm7[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm3 = xmm3[0],xmm5[0]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm5 = xmm6[1,1,1,1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[2,3,2,3]
+; CHECK-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm5[0],xmm2[1],xmm5[1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,3,1,3]
+; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm2[0]
+; CHECK-NEXT:    movdqa %xmm0, %xmm2
+; CHECK-NEXT:    shufps {{.*#+}} xmm2 = xmm2[1,3],xmm3[1,3]
 ; CHECK-NEXT:    shufps {{.*#+}} xmm10 = xmm10[0,2],xmm9[0,2]
-; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
+; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,2],xmm3[0,2]
 ; CHECK-NEXT:    movaps %xmm0, (%rsi)
-; CHECK-NEXT:    movaps %xmm4, (%rdx)
+; CHECK-NEXT:    movaps %xmm1, (%rdx)
 ; CHECK-NEXT:    movaps %xmm10, (%rcx)
 ; CHECK-NEXT:    movaps %xmm2, (%r8)
-; CHECK-NEXT:    movaps %xmm7, (%r9)
+; CHECK-NEXT:    movaps %xmm4, (%r9)
 ; CHECK-NEXT:    movaps %xmm8, (%rax)
 ; CHECK-NEXT:    retq
   %wide = load <24 x i32>, ptr %src

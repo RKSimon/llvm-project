@@ -16,32 +16,34 @@ define i128 @opt_setcc_lt_power_of_2(i128 %a) nounwind {
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $16, %esp
-; X86-NEXT:    movl 36(%ebp), %ecx
+; X86-NEXT:    movl 36(%ebp), %edi
 ; X86-NEXT:    movl 32(%ebp), %edx
-; X86-NEXT:    movl 28(%ebp), %edi
-; X86-NEXT:    movl 24(%ebp), %esi
+; X86-NEXT:    movl 28(%ebp), %esi
+; X86-NEXT:    movl 24(%ebp), %ecx
 ; X86-NEXT:    .p2align 4
 ; X86-NEXT:  .LBB0_1: # %loop
 ; X86-NEXT:    # =>This Inner Loop Header: Depth=1
-; X86-NEXT:    addl $1, %esi
-; X86-NEXT:    adcl $0, %edi
+; X86-NEXT:    addl $1, %ecx
+; X86-NEXT:    adcl $0, %esi
 ; X86-NEXT:    adcl $0, %edx
-; X86-NEXT:    adcl $0, %ecx
+; X86-NEXT:    adcl $0, %edi
 ; X86-NEXT:    movl %edx, %ebx
-; X86-NEXT:    orl %ecx, %ebx
-; X86-NEXT:    movl %esi, %eax
-; X86-NEXT:    movl %edi, %esi
-; X86-NEXT:    orl %edx, %esi
-; X86-NEXT:    orl %ecx, %esi
-; X86-NEXT:    shrdl $28, %ebx, %esi
-; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    shldl $4, %esi, %ebx
+; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    movl %edi, %ecx
+; X86-NEXT:    shrl $28, %ecx
+; X86-NEXT:    orl %ebx, %ecx
+; X86-NEXT:    movl %edi, %ebx
+; X86-NEXT:    shldl $4, %edx, %ebx
+; X86-NEXT:    orl %ebx, %ecx
+; X86-NEXT:    movl %eax, %ecx
 ; X86-NEXT:    jne .LBB0_1
 ; X86-NEXT:  # %bb.2: # %exit
 ; X86-NEXT:    movl 8(%ebp), %eax
-; X86-NEXT:    movl %esi, (%eax)
-; X86-NEXT:    movl %edi, 4(%eax)
+; X86-NEXT:    movl %ecx, (%eax)
+; X86-NEXT:    movl %esi, 4(%eax)
 ; X86-NEXT:    movl %edx, 8(%eax)
-; X86-NEXT:    movl %ecx, 12(%eax)
+; X86-NEXT:    movl %edi, 12(%eax)
 ; X86-NEXT:    leal -12(%ebp), %esp
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
@@ -81,16 +83,23 @@ define i1 @opt_setcc_srl_eq_zero(i128 %a) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    movl %esp, %ebp
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $16, %esp
-; X86-NEXT:    movl 8(%ebp), %eax
-; X86-NEXT:    movl 12(%ebp), %ecx
-; X86-NEXT:    shrl $17, %eax
-; X86-NEXT:    orl 20(%ebp), %ecx
-; X86-NEXT:    orl 16(%ebp), %ecx
-; X86-NEXT:    orl %eax, %ecx
+; X86-NEXT:    movl 12(%ebp), %edx
+; X86-NEXT:    movl 16(%ebp), %eax
+; X86-NEXT:    movl 20(%ebp), %ecx
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    shldl $15, %edx, %esi
+; X86-NEXT:    orl %ecx, %edx
+; X86-NEXT:    shrl $17, %ecx
+; X86-NEXT:    orl %esi, %ecx
+; X86-NEXT:    orl 8(%ebp), %eax
+; X86-NEXT:    shrdl $17, %edx, %eax
+; X86-NEXT:    orl %ecx, %eax
 ; X86-NEXT:    sete %al
-; X86-NEXT:    movl %ebp, %esp
+; X86-NEXT:    leal -4(%ebp), %esp
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
 ;
@@ -110,16 +119,23 @@ define i1 @opt_setcc_srl_ne_zero(i128 %a) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    movl %esp, %ebp
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $16, %esp
-; X86-NEXT:    movl 8(%ebp), %eax
-; X86-NEXT:    movl 12(%ebp), %ecx
-; X86-NEXT:    shrl $17, %eax
-; X86-NEXT:    orl 20(%ebp), %ecx
-; X86-NEXT:    orl 16(%ebp), %ecx
-; X86-NEXT:    orl %eax, %ecx
+; X86-NEXT:    movl 12(%ebp), %edx
+; X86-NEXT:    movl 16(%ebp), %eax
+; X86-NEXT:    movl 20(%ebp), %ecx
+; X86-NEXT:    movl %eax, %esi
+; X86-NEXT:    shldl $15, %edx, %esi
+; X86-NEXT:    orl %ecx, %edx
+; X86-NEXT:    shrl $17, %ecx
+; X86-NEXT:    orl %esi, %ecx
+; X86-NEXT:    orl 8(%ebp), %eax
+; X86-NEXT:    shrdl $17, %edx, %eax
+; X86-NEXT:    orl %ecx, %eax
 ; X86-NEXT:    setne %al
-; X86-NEXT:    movl %ebp, %esp
+; X86-NEXT:    leal -4(%ebp), %esp
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
 ;
@@ -139,16 +155,23 @@ define i1 @opt_setcc_shl_eq_zero(i128 %a) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    movl %esp, %ebp
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $16, %esp
-; X86-NEXT:    movl 8(%ebp), %eax
-; X86-NEXT:    movl 20(%ebp), %ecx
-; X86-NEXT:    shll $17, %ecx
-; X86-NEXT:    orl 16(%ebp), %eax
-; X86-NEXT:    orl 12(%ebp), %eax
-; X86-NEXT:    orl %ecx, %eax
+; X86-NEXT:    movl 8(%ebp), %ecx
+; X86-NEXT:    movl 12(%ebp), %eax
+; X86-NEXT:    movl 16(%ebp), %esi
+; X86-NEXT:    movl %ecx, %edx
+; X86-NEXT:    orl %esi, %ecx
+; X86-NEXT:    shldl $17, %eax, %esi
+; X86-NEXT:    shll $17, %edx
+; X86-NEXT:    orl %esi, %edx
+; X86-NEXT:    orl 20(%ebp), %eax
+; X86-NEXT:    shldl $17, %ecx, %eax
+; X86-NEXT:    orl %edx, %eax
 ; X86-NEXT:    sete %al
-; X86-NEXT:    movl %ebp, %esp
+; X86-NEXT:    leal -4(%ebp), %esp
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
 ;
@@ -168,16 +191,23 @@ define i1 @opt_setcc_shl_ne_zero(i128 %a) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    movl %esp, %ebp
+; X86-NEXT:    pushl %esi
 ; X86-NEXT:    andl $-16, %esp
 ; X86-NEXT:    subl $16, %esp
-; X86-NEXT:    movl 8(%ebp), %eax
-; X86-NEXT:    movl 20(%ebp), %ecx
-; X86-NEXT:    shll $17, %ecx
-; X86-NEXT:    orl 16(%ebp), %eax
-; X86-NEXT:    orl 12(%ebp), %eax
-; X86-NEXT:    orl %ecx, %eax
+; X86-NEXT:    movl 8(%ebp), %ecx
+; X86-NEXT:    movl 12(%ebp), %eax
+; X86-NEXT:    movl 16(%ebp), %esi
+; X86-NEXT:    movl %ecx, %edx
+; X86-NEXT:    orl %esi, %ecx
+; X86-NEXT:    shldl $17, %eax, %esi
+; X86-NEXT:    shll $17, %edx
+; X86-NEXT:    orl %esi, %edx
+; X86-NEXT:    orl 20(%ebp), %eax
+; X86-NEXT:    shldl $17, %ecx, %eax
+; X86-NEXT:    orl %edx, %eax
 ; X86-NEXT:    setne %al
-; X86-NEXT:    movl %ebp, %esp
+; X86-NEXT:    leal -4(%ebp), %esp
+; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
 ;

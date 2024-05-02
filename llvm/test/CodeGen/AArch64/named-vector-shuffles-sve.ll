@@ -493,9 +493,9 @@ define <vscale x 16 x float> @splice_nxv16f32_16(<vscale x 16 x float> %a, <vsca
 ; CHECK-NEXT:    str z1, [sp, #1, mul vl]
 ; CHECK-NEXT:    str z0, [sp]
 ; CHECK-NEXT:    str z7, [sp, #7, mul vl]
-; CHECK-NEXT:    str z4, [sp, #4, mul vl]
-; CHECK-NEXT:    str z5, [sp, #5, mul vl]
 ; CHECK-NEXT:    str z6, [sp, #6, mul vl]
+; CHECK-NEXT:    str z5, [sp, #5, mul vl]
+; CHECK-NEXT:    str z4, [sp, #4, mul vl]
 ; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x9, x8, lsl #2]
 ; CHECK-NEXT:    add x8, x9, #64
 ; CHECK-NEXT:    ldr z1, [x8, #1, mul vl]
@@ -1093,9 +1093,9 @@ define <vscale x 16 x float> @splice_nxv16f32_neg17(<vscale x 16 x float> %a, <v
 ; CHECK-NEXT:    str z1, [sp, #1, mul vl]
 ; CHECK-NEXT:    str z0, [sp]
 ; CHECK-NEXT:    str z7, [sp, #7, mul vl]
-; CHECK-NEXT:    str z4, [sp, #4, mul vl]
-; CHECK-NEXT:    str z5, [sp, #5, mul vl]
 ; CHECK-NEXT:    str z6, [sp, #6, mul vl]
+; CHECK-NEXT:    str z5, [sp, #5, mul vl]
+; CHECK-NEXT:    str z4, [sp, #4, mul vl]
 ; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x8, x9, lsl #2]
 ; CHECK-NEXT:    sub x8, x8, #68
 ; CHECK-NEXT:    ldr z1, [x8, #1, mul vl]

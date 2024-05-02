@@ -604,9 +604,8 @@ define bfloat @test_copysign(bfloat %a, bfloat %b) #0 {
 ; CHECK-BF16-NEXT:    ldrb r1, [sp, #5]
 ; CHECK-BF16-NEXT:    strh r0, [sp]
 ; CHECK-BF16-NEXT:    ldrb r0, [sp, #1]
-; CHECK-BF16-NEXT:    and r1, r1, #128
-; CHECK-BF16-NEXT:    and r0, r0, #127
-; CHECK-BF16-NEXT:    orr r0, r0, r1
+; CHECK-BF16-NEXT:    lsr r1, r1, #7
+; CHECK-BF16-NEXT:    bfi r0, r1, #7, #1
 ; CHECK-BF16-NEXT:    strb r0, [sp, #1]
 ; CHECK-BF16-NEXT:    ldrh r0, [sp]
 ; CHECK-BF16-NEXT:    vmov s0, r0
@@ -672,9 +671,8 @@ define bfloat @test_copysign_f64(bfloat %a, double %b) #0 {
 ; CHECK-BF16-NEXT:    ldrb r1, [sp, #15]
 ; CHECK-BF16-NEXT:    strh r0, [sp, #4]
 ; CHECK-BF16-NEXT:    ldrb r0, [sp, #5]
-; CHECK-BF16-NEXT:    and r1, r1, #128
-; CHECK-BF16-NEXT:    and r0, r0, #127
-; CHECK-BF16-NEXT:    orr r0, r0, r1
+; CHECK-BF16-NEXT:    lsr r1, r1, #7
+; CHECK-BF16-NEXT:    bfi r0, r1, #7, #1
 ; CHECK-BF16-NEXT:    strb r0, [sp, #5]
 ; CHECK-BF16-NEXT:    ldrh r0, [sp, #4]
 ; CHECK-BF16-NEXT:    vmov s0, r0

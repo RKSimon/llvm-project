@@ -53,29 +53,29 @@ define i96 @smulh_i96(i96 %x, i96 %y) nounwind {
 ; CHECK-SD-LABEL: smulh_i96:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    extr x9, x1, x0, #32
+; CHECK-SD-NEXT:    sxtw x8, w3
 ; CHECK-SD-NEXT:    lsl x10, x0, #32
-; CHECK-SD-NEXT:    sxtw x13, w3
-; CHECK-SD-NEXT:    sbfx x8, x1, #31, #1
-; CHECK-SD-NEXT:    umulh x12, x10, x2
-; CHECK-SD-NEXT:    asr x16, x13, #63
+; CHECK-SD-NEXT:    asr x12, x9, #63
+; CHECK-SD-NEXT:    umulh x13, x10, x2
+; CHECK-SD-NEXT:    asr x16, x8, #63
 ; CHECK-SD-NEXT:    mul x14, x9, x2
-; CHECK-SD-NEXT:    mul x8, x8, x2
 ; CHECK-SD-NEXT:    umulh x11, x9, x2
-; CHECK-SD-NEXT:    adds x12, x14, x12
-; CHECK-SD-NEXT:    mul x17, x10, x13
-; CHECK-SD-NEXT:    umulh x15, x10, x13
-; CHECK-SD-NEXT:    adc x8, x11, x8
+; CHECK-SD-NEXT:    mul x12, x12, x2
+; CHECK-SD-NEXT:    adds x13, x14, x13
+; CHECK-SD-NEXT:    mul x17, x10, x8
+; CHECK-SD-NEXT:    umulh x15, x10, x8
+; CHECK-SD-NEXT:    adc x11, x11, x12
 ; CHECK-SD-NEXT:    mul x10, x10, x16
-; CHECK-SD-NEXT:    asr x11, x8, #63
-; CHECK-SD-NEXT:    cmn x17, x12
-; CHECK-SD-NEXT:    mul x16, x9, x13
-; CHECK-SD-NEXT:    smulh x9, x9, x13
-; CHECK-SD-NEXT:    adc x10, x15, x10
-; CHECK-SD-NEXT:    asr x12, x10, #63
-; CHECK-SD-NEXT:    adds x8, x8, x10
-; CHECK-SD-NEXT:    adc x10, x11, x12
-; CHECK-SD-NEXT:    adds x0, x16, x8
-; CHECK-SD-NEXT:    adc x1, x9, x10
+; CHECK-SD-NEXT:    cmn x17, x13
+; CHECK-SD-NEXT:    mul x16, x9, x8
+; CHECK-SD-NEXT:    smulh x8, x9, x8
+; CHECK-SD-NEXT:    adc x9, x15, x10
+; CHECK-SD-NEXT:    asr x10, x11, #63
+; CHECK-SD-NEXT:    asr x12, x9, #63
+; CHECK-SD-NEXT:    adds x9, x11, x9
+; CHECK-SD-NEXT:    adc x10, x10, x12
+; CHECK-SD-NEXT:    adds x0, x16, x9
+; CHECK-SD-NEXT:    adc x1, x8, x10
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: smulh_i96:

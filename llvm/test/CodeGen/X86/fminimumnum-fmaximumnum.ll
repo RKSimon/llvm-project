@@ -2669,9 +2669,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; SSE2-NEXT:    andps %xmm0, %xmm1
 ; SSE2-NEXT:    orps %xmm3, %xmm1
 ; SSE2-NEXT:    movd %xmm1, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm1, %xmm1
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -2691,9 +2692,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX1-NEXT:    vcmpunordss %xmm1, %xmm1, %xmm1
 ; AVX1-NEXT:    vblendvps %xmm1, %xmm0, %xmm2, %xmm0
 ; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    xorl %ecx, %ecx
 ; AVX1-NEXT:    btl $16, %eax
-; AVX1-NEXT:    movl %eax, %ecx
 ; AVX1-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX1-NEXT:    addl %eax, %ecx
 ; AVX1-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX1-NEXT:    vucomiss %xmm0, %xmm0
 ; AVX1-NEXT:    cmovnpl %ecx, %eax
@@ -2714,9 +2716,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX512F-NEXT:    vcmpunordss %xmm1, %xmm1, %k1
 ; AVX512F-NEXT:    vmovss %xmm0, %xmm2, %xmm2 {%k1}
 ; AVX512F-NEXT:    vmovd %xmm2, %eax
+; AVX512F-NEXT:    xorl %ecx, %ecx
 ; AVX512F-NEXT:    btl $16, %eax
-; AVX512F-NEXT:    movl %eax, %ecx
 ; AVX512F-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX512F-NEXT:    addl %eax, %ecx
 ; AVX512F-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX512F-NEXT:    vucomiss %xmm2, %xmm2
 ; AVX512F-NEXT:    cmovnpl %ecx, %eax
@@ -2737,9 +2740,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX512DQ-NEXT:    vcmpunordss %xmm1, %xmm1, %k1
 ; AVX512DQ-NEXT:    vmovss %xmm0, %xmm2, %xmm2 {%k1}
 ; AVX512DQ-NEXT:    vmovd %xmm2, %eax
+; AVX512DQ-NEXT:    xorl %ecx, %ecx
 ; AVX512DQ-NEXT:    btl $16, %eax
-; AVX512DQ-NEXT:    movl %eax, %ecx
 ; AVX512DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX512DQ-NEXT:    addl %eax, %ecx
 ; AVX512DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX512DQ-NEXT:    vucomiss %xmm2, %xmm2
 ; AVX512DQ-NEXT:    cmovnpl %ecx, %eax
@@ -2770,10 +2774,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ;
 ; X86-LABEL: test_fmaximumnum_bf16:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    shll $16, %eax
-; X86-NEXT:    vmovd %eax, %xmm0
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    shll $16, %ecx
+; X86-NEXT:    vmovd %ecx, %xmm0
 ; X86-NEXT:    shll $16, %eax
 ; X86-NEXT:    vmovd %eax, %xmm1
 ; X86-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
@@ -2784,9 +2788,10 @@ define bfloat @test_fmaximumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; X86-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovd %xmm0, %eax
+; X86-NEXT:    xorl %ecx, %ecx
 ; X86-NEXT:    btl $16, %eax
-; X86-NEXT:    movl %eax, %ecx
 ; X86-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X86-NEXT:    addl %eax, %ecx
 ; X86-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X86-NEXT:    vucomiss %xmm0, %xmm0
 ; X86-NEXT:    cmovnpl %ecx, %eax
@@ -2831,12 +2836,14 @@ define <4 x bfloat> @test_fmaximumnum_v4bf16(<4 x bfloat> %x, <4 x bfloat> %y) n
 ; SSE2-NEXT:    andnps %xmm9, %xmm11
 ; SSE2-NEXT:    orps %xmm11, %xmm7
 ; SSE2-NEXT:    movd %xmm7, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
-; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    movl $0, %edx
+; SSE2-NEXT:    adcl $32767, %edx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %edx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm7, %xmm7
-; SSE2-NEXT:    cmovnpl %ecx, %eax
+; SSE2-NEXT:    cmovnpl %edx, %eax
 ; SSE2-NEXT:    shrl $16, %eax
 ; SSE2-NEXT:    pslld $16, %xmm0
 ; SSE2-NEXT:    pslld $16, %xmm1
@@ -2855,14 +2862,15 @@ define <4 x bfloat> @test_fmaximumnum_v4bf16(<4 x bfloat> %x, <4 x bfloat> %y) n
 ; SSE2-NEXT:    orps %xmm9, %xmm8
 ; SSE2-NEXT:    andnps %xmm8, %xmm10
 ; SSE2-NEXT:    orps %xmm10, %xmm1
-; SSE2-NEXT:    movd %xmm1, %ecx
-; SSE2-NEXT:    btl $16, %ecx
-; SSE2-NEXT:    movl %ecx, %edx
-; SSE2-NEXT:    adcl $32767, %edx # imm = 0x7FFF
-; SSE2-NEXT:    orl $4194304, %ecx # imm = 0x400000
+; SSE2-NEXT:    movd %xmm1, %edx
+; SSE2-NEXT:    btl $16, %edx
+; SSE2-NEXT:    movl $0, %esi
+; SSE2-NEXT:    adcl $32767, %esi # imm = 0x7FFF
+; SSE2-NEXT:    addl %edx, %esi
+; SSE2-NEXT:    orl $4194304, %edx # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm1, %xmm1
-; SSE2-NEXT:    cmovnpl %edx, %ecx
-; SSE2-NEXT:    shrl $16, %ecx
+; SSE2-NEXT:    cmovnpl %esi, %edx
+; SSE2-NEXT:    shrl $16, %edx
 ; SSE2-NEXT:    pslld $16, %xmm6
 ; SSE2-NEXT:    pslld $16, %xmm5
 ; SSE2-NEXT:    movdqa %xmm6, %xmm0
@@ -2880,14 +2888,15 @@ define <4 x bfloat> @test_fmaximumnum_v4bf16(<4 x bfloat> %x, <4 x bfloat> %y) n
 ; SSE2-NEXT:    orps %xmm7, %xmm1
 ; SSE2-NEXT:    andnps %xmm1, %xmm8
 ; SSE2-NEXT:    orps %xmm8, %xmm5
-; SSE2-NEXT:    movd %xmm5, %edx
-; SSE2-NEXT:    btl $16, %edx
-; SSE2-NEXT:    movl %edx, %esi
-; SSE2-NEXT:    adcl $32767, %esi # imm = 0x7FFF
-; SSE2-NEXT:    orl $4194304, %edx # imm = 0x400000
+; SSE2-NEXT:    movd %xmm5, %esi
+; SSE2-NEXT:    btl $16, %esi
+; SSE2-NEXT:    movl $0, %edi
+; SSE2-NEXT:    adcl $32767, %edi # imm = 0x7FFF
+; SSE2-NEXT:    addl %esi, %edi
+; SSE2-NEXT:    orl $4194304, %esi # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm5, %xmm5
-; SSE2-NEXT:    cmovnpl %esi, %edx
-; SSE2-NEXT:    shrl $16, %edx
+; SSE2-NEXT:    cmovnpl %edi, %esi
+; SSE2-NEXT:    shrl $16, %esi
 ; SSE2-NEXT:    pslld $16, %xmm3
 ; SSE2-NEXT:    orps %xmm3, %xmm4
 ; SSE2-NEXT:    pslld $16, %xmm2
@@ -2905,18 +2914,18 @@ define <4 x bfloat> @test_fmaximumnum_v4bf16(<4 x bfloat> %x, <4 x bfloat> %y) n
 ; SSE2-NEXT:    andnps %xmm1, %xmm0
 ; SSE2-NEXT:    andps %xmm3, %xmm2
 ; SSE2-NEXT:    orps %xmm0, %xmm2
-; SSE2-NEXT:    movd %xmm2, %esi
-; SSE2-NEXT:    btl $16, %esi
-; SSE2-NEXT:    movl %esi, %edi
-; SSE2-NEXT:    adcl $32767, %edi # imm = 0x7FFF
-; SSE2-NEXT:    orl $4194304, %esi # imm = 0x400000
+; SSE2-NEXT:    movd %xmm2, %edi
+; SSE2-NEXT:    btl $16, %edi
+; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %edi, %ecx
+; SSE2-NEXT:    orl $4194304, %edi # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm2, %xmm2
-; SSE2-NEXT:    cmovnpl %edi, %esi
-; SSE2-NEXT:    shrl $16, %esi
-; SSE2-NEXT:    pinsrw $0, %esi, %xmm0
-; SSE2-NEXT:    pinsrw $0, %edx, %xmm1
+; SSE2-NEXT:    cmovnpl %ecx, %edi
+; SSE2-NEXT:    shrl $16, %edi
+; SSE2-NEXT:    pinsrw $0, %edi, %xmm0
+; SSE2-NEXT:    pinsrw $0, %esi, %xmm1
 ; SSE2-NEXT:    punpcklwd {{.*#+}} xmm1 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
-; SSE2-NEXT:    pinsrw $0, %ecx, %xmm0
+; SSE2-NEXT:    pinsrw $0, %edx, %xmm0
 ; SSE2-NEXT:    pinsrw $0, %eax, %xmm2
 ; SSE2-NEXT:    punpcklwd {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[1],xmm2[1],xmm0[2],xmm2[2],xmm0[3],xmm2[3]
 ; SSE2-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
@@ -3883,9 +3892,11 @@ define <4 x bfloat> @test_fmaximumnum_v4bf16(<4 x bfloat> %x, <4 x bfloat> %y) n
 ; X86-NEXT:    vpinsrw $7, %ebx, %xmm5, %xmm3
 ; X86-NEXT:    vpblendvb %xmm2, %xmm0, %xmm3, %xmm0
 ; X86-NEXT:    vpblendvb %xmm1, %xmm0, %xmm3, %xmm0
-; X86-NEXT:    vpextrw $1, %xmm0, %eax
+; X86-NEXT:    vmovd %xmm0, %eax
+; X86-NEXT:    shrl $16, %eax
 ; X86-NEXT:    vpinsrw $0, %eax, %xmm0, %xmm1
-; X86-NEXT:    vpextrw $3, %xmm0, %eax
+; X86-NEXT:    vpextrd $1, %xmm0, %eax
+; X86-NEXT:    shrl $16, %eax
 ; X86-NEXT:    vpinsrw $0, %eax, %xmm0, %xmm2
 ; X86-NEXT:    vmovq {{.*#+}} xmm0 = xmm0[0],zero
 ; X86-NEXT:    vpslld $16, %xmm1, %xmm1
@@ -3925,9 +3936,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; SSE2-NEXT:    andps %xmm0, %xmm1
 ; SSE2-NEXT:    orps %xmm3, %xmm1
 ; SSE2-NEXT:    movd %xmm1, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm1, %xmm1
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -3947,9 +3959,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX1-NEXT:    vcmpunordss %xmm1, %xmm1, %xmm1
 ; AVX1-NEXT:    vblendvps %xmm1, %xmm0, %xmm2, %xmm0
 ; AVX1-NEXT:    vmovd %xmm0, %eax
+; AVX1-NEXT:    xorl %ecx, %ecx
 ; AVX1-NEXT:    btl $16, %eax
-; AVX1-NEXT:    movl %eax, %ecx
 ; AVX1-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX1-NEXT:    addl %eax, %ecx
 ; AVX1-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX1-NEXT:    vucomiss %xmm0, %xmm0
 ; AVX1-NEXT:    cmovnpl %ecx, %eax
@@ -3970,9 +3983,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX512F-NEXT:    vcmpunordss %xmm1, %xmm1, %k1
 ; AVX512F-NEXT:    vmovss %xmm0, %xmm2, %xmm2 {%k1}
 ; AVX512F-NEXT:    vmovd %xmm2, %eax
+; AVX512F-NEXT:    xorl %ecx, %ecx
 ; AVX512F-NEXT:    btl $16, %eax
-; AVX512F-NEXT:    movl %eax, %ecx
 ; AVX512F-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX512F-NEXT:    addl %eax, %ecx
 ; AVX512F-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX512F-NEXT:    vucomiss %xmm2, %xmm2
 ; AVX512F-NEXT:    cmovnpl %ecx, %eax
@@ -3993,9 +4007,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; AVX512DQ-NEXT:    vcmpunordss %xmm1, %xmm1, %k1
 ; AVX512DQ-NEXT:    vmovss %xmm0, %xmm2, %xmm2 {%k1}
 ; AVX512DQ-NEXT:    vmovd %xmm2, %eax
+; AVX512DQ-NEXT:    xorl %ecx, %ecx
 ; AVX512DQ-NEXT:    btl $16, %eax
-; AVX512DQ-NEXT:    movl %eax, %ecx
 ; AVX512DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; AVX512DQ-NEXT:    addl %eax, %ecx
 ; AVX512DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; AVX512DQ-NEXT:    vucomiss %xmm2, %xmm2
 ; AVX512DQ-NEXT:    cmovnpl %ecx, %eax
@@ -4026,10 +4041,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ;
 ; X86-LABEL: test_fminimumnum_bf16:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    shll $16, %eax
-; X86-NEXT:    vmovd %eax, %xmm0
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    shll $16, %ecx
+; X86-NEXT:    vmovd %ecx, %xmm0
 ; X86-NEXT:    shll $16, %eax
 ; X86-NEXT:    vmovd %eax, %xmm1
 ; X86-NEXT:    vminss %xmm0, %xmm1, %xmm2
@@ -4040,9 +4055,10 @@ define bfloat @test_fminimumnum_bf16(bfloat %x, bfloat %y) nounwind {
 ; X86-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
 ; X86-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
 ; X86-NEXT:    vmovd %xmm0, %eax
+; X86-NEXT:    xorl %ecx, %ecx
 ; X86-NEXT:    btl $16, %eax
-; X86-NEXT:    movl %eax, %ecx
 ; X86-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X86-NEXT:    addl %eax, %ecx
 ; X86-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X86-NEXT:    vucomiss %xmm0, %xmm0
 ; X86-NEXT:    cmovnpl %ecx, %eax

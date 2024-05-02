@@ -8,11 +8,15 @@ define i32 @main() {
 ; CHECK-LABEL: main:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq ak@GOTPCREL(%rip), %rax
-; CHECK-NEXT:    movq s@GOTPCREL(%rip), %rcx
-; CHECK-NEXT:    movzwl (%rcx), %ecx
-; CHECK-NEXT:    movzwl (%rax), %eax
-; CHECK-NEXT:    movswl %ax, %ecx
-; CHECK-NEXT:    orl $65534, %eax # imm = 0xFFFE
+; CHECK-NEXT:    movswl (%rax), %ecx
+; CHECK-NEXT:    movq s@GOTPCREL(%rip), %rdx
+; CHECK-NEXT:    movzwl (%rdx), %edx
+; CHECK-NEXT:    movzwl (%rax), %edx
+; CHECK-NEXT:    movl %edx, %esi
+; CHECK-NEXT:    xorl $65534, %esi # imm = 0xFFFE
+; CHECK-NEXT:    movzwl %cx, %eax
+; CHECK-NEXT:    orl %esi, %eax
+; CHECK-NEXT:    orl %edx, %eax
 ; CHECK-NEXT:    xorl %ecx, %eax
 ; CHECK-NEXT:    retq
   %i = load i16, ptr @ak, align 2

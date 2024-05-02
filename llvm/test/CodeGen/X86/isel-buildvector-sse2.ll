@@ -11,8 +11,8 @@ define <7 x i8> @test_vector_v7i8() {
 ; SSE2-X64-LABEL: test_vector_v7i8:
 ; SSE2-X64:       # %bb.0:
 ; SSE2-X64-NEXT:    movq %rdi, %rax
-; SSE2-X64-NEXT:    movl {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ecx
-; SSE2-X64-NEXT:    movl %ecx, (%rdi)
+; SSE2-X64-NEXT:    movsd {{.*#+}} xmm0 = [4,8,15,16,23,42,63,0,0,0,0,0,0,0,0,0]
+; SSE2-X64-NEXT:    movss %xmm0, (%rdi)
 ; SSE2-X64-NEXT:    movb $63, 6(%rdi)
 ; SSE2-X64-NEXT:    movw $10775, 4(%rdi) # imm = 0x2A17
 ; SSE2-X64-NEXT:    retq

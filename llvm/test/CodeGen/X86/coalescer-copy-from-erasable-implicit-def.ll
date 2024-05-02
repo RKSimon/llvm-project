@@ -38,12 +38,13 @@ define <16 x i32> @f1() {
 ; CHECK-NEXT:  .LBB0_1:
 ; CHECK-NEXT:    xorps %xmm0, %xmm0
 ; CHECK-NEXT:  .LBB0_5:
+; CHECK-NEXT:    # implicit-def: $xmm2
 ; CHECK-NEXT:    movaps {{.*#+}} xmm1 = [1,1,1,1]
-; CHECK-NEXT:    movaps %xmm0, %xmm2
-; CHECK-NEXT:    shufps {{.*#+}} xmm2 = xmm2[2,0],xmm1[3,0]
-; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,1],xmm2[0,2]
-; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[0,0,1,0]
-; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[0,2,2,3]
+; CHECK-NEXT:    movaps %xmm1, %xmm3
+; CHECK-NEXT:    shufps {{.*#+}} xmm3 = xmm3[3,0],xmm0[2,0]
+; CHECK-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,1],xmm3[2,0]
+; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[1,0],xmm2[0,0]
+; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[2,0],xmm2[2,3]
 ; CHECK-NEXT:    # implicit-def: $xmm2
 ; CHECK-NEXT:    # implicit-def: $xmm3
 ; CHECK-NEXT:    retq

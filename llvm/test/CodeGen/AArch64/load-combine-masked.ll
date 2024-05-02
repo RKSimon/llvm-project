@@ -126,9 +126,12 @@ define i32 @load_4_bytes_last_masked(ptr %p) {
 ;
 ; BE-LABEL: load_4_bytes_last_masked:
 ; BE:       // %bb.0:
-; BE-NEXT:    ldr w8, [x0]
+; BE-NEXT:    ldrh w8, [x0]
+; BE-NEXT:    ldrb w9, [x0, #2]
+; BE-NEXT:    ldrb w10, [x0, #3]
 ; BE-NEXT:    rev w8, w8
-; BE-NEXT:    and w0, w8, #0x3fffffff
+; BE-NEXT:    extr w0, w9, w8, #16
+; BE-NEXT:    bfi w0, w10, #24, #6
 ; BE-NEXT:    ret
   %p1 = getelementptr i8, ptr %p, i64 1
   %p2 = getelementptr i8, ptr %p, i64 2

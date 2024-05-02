@@ -87,9 +87,6 @@ define i8 @trunc_i8_bitcast_v2i8(<2 x i8> %in) {
 ; SI-LABEL: trunc_i8_bitcast_v2i8:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_lshlrev_b32_e32 v1, 8, v1
-; SI-NEXT:    v_and_b32_e32 v0, 0xff, v0
-; SI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: trunc_i8_bitcast_v2i8:
@@ -121,8 +118,6 @@ define i8 @trunc_i32_bitcast_v4i8(<4 x i8> %in) {
 ; VI-LABEL: trunc_i32_bitcast_v4i8:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0xc0c0004
-; VI-NEXT:    v_perm_b32 v0, v0, v1, s4
 ; VI-NEXT:    s_setpc_b64 s[30:31]
   %bc = bitcast <4 x i8> %in to i32
   %trunc = trunc i32 %bc to i8
@@ -133,20 +128,11 @@ define i8 @trunc_i24_bitcast_v3i8(<3 x i8> %in) {
 ; SI-LABEL: trunc_i24_bitcast_v3i8:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_lshlrev_b32_e32 v1, 8, v1
-; SI-NEXT:    v_and_b32_e32 v0, 0xff, v0
-; SI-NEXT:    v_or_b32_e32 v0, v0, v1
-; SI-NEXT:    v_and_b32_e32 v1, 0xff, v2
-; SI-NEXT:    v_and_b32_e32 v0, 0xffff, v0
-; SI-NEXT:    v_lshlrev_b32_e32 v1, 16, v1
-; SI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: trunc_i24_bitcast_v3i8:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0xc0c0004
-; VI-NEXT:    v_perm_b32 v0, v0, v1, s4
 ; VI-NEXT:    s_setpc_b64 s[30:31]
   %bc = bitcast <3 x i8> %in to i24
   %trunc = trunc i24 %bc to i8

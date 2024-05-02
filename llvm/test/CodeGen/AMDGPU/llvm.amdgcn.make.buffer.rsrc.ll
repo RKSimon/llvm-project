@@ -407,7 +407,7 @@ define amdgpu_ps ptr addrspace(8) @variable_top_half(ptr inreg %p, i64 inreg %nu
   ; CHECK45-NEXT:   [[REG_SEQUENCE2:%[0-9]+]]:sreg_64 = REG_SEQUENCE [[S_MOV_B32_1]], %subreg.sub0, [[S_LSHL_B32_]], %subreg.sub1
   ; CHECK45-NEXT:   [[S_MOV_B32_2:%[0-9]+]]:sreg_32 = S_MOV_B32 7
   ; CHECK45-NEXT:   [[S_LSHR_B64_:%[0-9]+]]:sreg_64 = S_LSHR_B64 [[REG_SEQUENCE1]], [[S_MOV_B32_2]], implicit-def dead $scc
-  ; CHECK45-NEXT:   [[S_MOV_B:%[0-9]+]]:sreg_64 = S_MOV_B64_IMM_PSEUDO 274877906943
+  ; CHECK45-NEXT:   [[S_MOV_B:%[0-9]+]]:sreg_64 = S_MOV_B64_IMM_PSEUDO 270582939648
   ; CHECK45-NEXT:   [[S_AND_B64_:%[0-9]+]]:sreg_64 = S_AND_B64 [[S_LSHR_B64_]], [[S_MOV_B]], implicit-def dead $scc
   ; CHECK45-NEXT:   [[S_OR_B64_:%[0-9]+]]:sreg_64 = S_OR_B64 [[S_AND_B64_]], [[REG_SEQUENCE2]], implicit-def dead $scc
   ; CHECK45-NEXT:   [[S_MOV_B1:%[0-9]+]]:sreg_64 = S_MOV_B64_IMM_PSEUDO 70368744177664
@@ -490,7 +490,7 @@ define amdgpu_ps ptr addrspace(8) @general_case(ptr inreg %p, i16 inreg %stride,
   ; CHECK45-NEXT:   [[REG_SEQUENCE2:%[0-9]+]]:sreg_64 = REG_SEQUENCE [[S_MOV_B32_1]], %subreg.sub0, [[S_LSHL_B32_]], %subreg.sub1
   ; CHECK45-NEXT:   [[S_MOV_B32_2:%[0-9]+]]:sreg_32 = S_MOV_B32 7
   ; CHECK45-NEXT:   [[S_LSHR_B64_:%[0-9]+]]:sreg_64 = S_LSHR_B64 [[REG_SEQUENCE1]], [[S_MOV_B32_2]], implicit-def dead $scc
-  ; CHECK45-NEXT:   [[S_MOV_B:%[0-9]+]]:sreg_64 = S_MOV_B64_IMM_PSEUDO 274877906943
+  ; CHECK45-NEXT:   [[S_MOV_B:%[0-9]+]]:sreg_64 = S_MOV_B64_IMM_PSEUDO 270582939648
   ; CHECK45-NEXT:   [[S_AND_B64_:%[0-9]+]]:sreg_64 = S_AND_B64 [[S_LSHR_B64_]], [[S_MOV_B]], implicit-def dead $scc
   ; CHECK45-NEXT:   [[S_OR_B64_:%[0-9]+]]:sreg_64 = S_OR_B64 [[S_AND_B64_]], [[REG_SEQUENCE2]], implicit-def dead $scc
   ; CHECK45-NEXT:   [[S_MOV_B32_3:%[0-9]+]]:sreg_32 = S_MOV_B32 28

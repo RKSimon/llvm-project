@@ -122,8 +122,8 @@ entry:
 define i64 @testu_f64_multiuse(double %x) {
 ; CHECK-LABEL: testu_f64_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz d1, d0
 ; CHECK-NEXT:    fcvtzu x8, d0
-; CHECK-NEXT:    ucvtf d1, x8
 ; CHECK-NEXT:    fcmp d0, d1
 ; CHECK-NEXT:    csel x0, x8, xzr, eq
 ; CHECK-NEXT:    ret
@@ -138,8 +138,8 @@ entry:
 define i32 @testu_f32_multiuse(float %x) {
 ; CHECK-LABEL: testu_f32_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz s1, s0
 ; CHECK-NEXT:    fcvtzu w8, s0
-; CHECK-NEXT:    ucvtf s1, w8
 ; CHECK-NEXT:    fcmp s0, s1
 ; CHECK-NEXT:    csel w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
@@ -154,8 +154,8 @@ entry:
 define i32 @testu_f16_multiuse(half %x) {
 ; CHECK-LABEL: testu_f16_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz h1, h0
 ; CHECK-NEXT:    fcvtzu w8, h0
-; CHECK-NEXT:    ucvtf h1, w8
 ; CHECK-NEXT:    fcmp h0, h1
 ; CHECK-NEXT:    csel w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
@@ -170,8 +170,8 @@ entry:
 define i64 @tests_f64_multiuse(double %x) {
 ; CHECK-LABEL: tests_f64_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz d1, d0
 ; CHECK-NEXT:    fcvtzs x8, d0
-; CHECK-NEXT:    scvtf d1, x8
 ; CHECK-NEXT:    fcmp d0, d1
 ; CHECK-NEXT:    csel x0, x8, xzr, eq
 ; CHECK-NEXT:    ret
@@ -186,8 +186,8 @@ entry:
 define i32 @tests_f32_multiuse(float %x) {
 ; CHECK-LABEL: tests_f32_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz s1, s0
 ; CHECK-NEXT:    fcvtzs w8, s0
-; CHECK-NEXT:    scvtf s1, w8
 ; CHECK-NEXT:    fcmp s0, s1
 ; CHECK-NEXT:    csel w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
@@ -202,8 +202,8 @@ entry:
 define i32 @tests_f16_multiuse(half %x) {
 ; CHECK-LABEL: tests_f16_multiuse:
 ; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    frintz h1, h0
 ; CHECK-NEXT:    fcvtzs w8, h0
-; CHECK-NEXT:    scvtf h1, w8
 ; CHECK-NEXT:    fcmp h0, h1
 ; CHECK-NEXT:    csel w0, w8, wzr, eq
 ; CHECK-NEXT:    ret

@@ -450,24 +450,12 @@ define void @bitcast_64i8_store(ptr %p, <64 x i8> %a0) {
 ;
 ; AVX512F-LABEL: bitcast_64i8_store:
 ; AVX512F:       # %bb.0:
-; AVX512F-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512F-NEXT:    vpcmpgtb %ymm0, %ymm1, %ymm2
-; AVX512F-NEXT:    vpmovsxbd %xmm2, %zmm3
-; AVX512F-NEXT:    vptestmd %zmm3, %zmm3, %k0
-; AVX512F-NEXT:    vextracti128 $1, %ymm2, %xmm2
-; AVX512F-NEXT:    vpmovsxbd %xmm2, %zmm2
-; AVX512F-NEXT:    vptestmd %zmm2, %zmm2, %k1
-; AVX512F-NEXT:    vextracti64x4 $1, %zmm0, %ymm0
-; AVX512F-NEXT:    vpcmpgtb %ymm0, %ymm1, %ymm0
-; AVX512F-NEXT:    vpmovsxbd %xmm0, %zmm1
-; AVX512F-NEXT:    vptestmd %zmm1, %zmm1, %k2
-; AVX512F-NEXT:    vextracti128 $1, %ymm0, %xmm0
-; AVX512F-NEXT:    vpmovsxbd %xmm0, %zmm0
-; AVX512F-NEXT:    vptestmd %zmm0, %zmm0, %k3
-; AVX512F-NEXT:    kmovw %k3, 6(%rdi)
-; AVX512F-NEXT:    kmovw %k2, 4(%rdi)
-; AVX512F-NEXT:    kmovw %k1, 2(%rdi)
-; AVX512F-NEXT:    kmovw %k0, (%rdi)
+; AVX512F-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512F-NEXT:    vpmovmskb %ymm1, %eax
+; AVX512F-NEXT:    shlq $32, %rax
+; AVX512F-NEXT:    vpmovmskb %ymm0, %ecx
+; AVX512F-NEXT:    orq %rax, %rcx
+; AVX512F-NEXT:    movq %rcx, (%rdi)
 ; AVX512F-NEXT:    vzeroupper
 ; AVX512F-NEXT:    retq
 ;

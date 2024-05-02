@@ -289,8 +289,8 @@ define <4 x half> @fmul_v4f16_imm_a(<4 x half> %b) {
 ; SI-NEXT:    v_add_f32_e32 v3, v3, v3
 ; SI-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NEXT:    v_mul_f32_e32 v1, 0x40400000, v1
-; SI-NEXT:    v_cvt_f16_f32_e32 v3, v3
 ; SI-NEXT:    v_mul_f32_e32 v0, 0x41000000, v0
+; SI-NEXT:    v_cvt_f16_f32_e32 v3, v3
 ; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
 ; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
 ; SI-NEXT:    v_lshlrev_b32_e32 v2, 16, v2

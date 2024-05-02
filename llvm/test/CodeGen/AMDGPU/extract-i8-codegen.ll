@@ -15,10 +15,11 @@ define void @extract_multiple_v16i8(ptr addrspace(1) %out) {
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX9-NEXT:    ds_read_b128 v[2:5], v2
-; GFX9-NEXT:    s_mov_b32 s0, 0xc0c0004
+; GFX9-NEXT:    s_mov_b32 s0, 0xc0c0400
+; GFX9-NEXT:    s_mov_b32 s1, 0x6050400
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX9-NEXT:    v_perm_b32 v2, v2, v3, s0
-; GFX9-NEXT:    v_perm_b32 v3, v4, v5, s0
+; GFX9-NEXT:    v_perm_b32 v2, v3, v2, s0
+; GFX9-NEXT:    v_perm_b32 v3, v5, v4, s1
 ; GFX9-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
 ; GFX9-NEXT:    v_or_b32_e32 v2, v2, v3
 ; GFX9-NEXT:    global_store_dword v[0:1], v2, off
@@ -32,8 +33,8 @@ define void @extract_multiple_v16i8(ptr addrspace(1) %out) {
 ; GFX12-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX12-NEXT:    ds_load_b128 v[2:5], v2
 ; GFX12-NEXT:    s_wait_dscnt 0x0
-; GFX12-NEXT:    v_perm_b32 v4, v4, v5, 0xc0c0004
-; GFX12-NEXT:    v_perm_b32 v2, v2, v3, 0xc0c0004
+; GFX12-NEXT:    v_perm_b32 v4, v5, v4, 0x6050400
+; GFX12-NEXT:    v_perm_b32 v2, v3, v2, 0xc0c0400
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_lshlrev_b32_e32 v3, 16, v4
 ; GFX12-NEXT:    v_or_b32_e32 v2, v2, v3

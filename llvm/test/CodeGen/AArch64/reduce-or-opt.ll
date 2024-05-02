@@ -108,7 +108,7 @@ define i64 @select_or_reduce_nxv2i1(ptr nocapture noundef readonly %src) {
 ; CHECK-NEXT:    tbnz w11, #0, .LBB2_1
 ; CHECK-NEXT:  // %bb.2: // %middle.split
 ; CHECK-NEXT:    ptest p0, p1.b
-; CHECK-NEXT:    cset w0, ne
+; CHECK-NEXT:    cset x0, ne
 ; CHECK-NEXT:    ret
 entry:
   %vscale = tail call i64 @llvm.vscale.i64()

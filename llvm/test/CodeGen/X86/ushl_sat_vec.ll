@@ -24,6 +24,7 @@ define <2 x i64> @vec_v2i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ; X64-NEXT:    pcmpeqd %xmm5, %xmm0
 ; X64-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,0,3,2]
 ; X64-NEXT:    pand %xmm1, %xmm0
+; X64-NEXT:    andpd %xmm0, %xmm4
 ; X64-NEXT:    pcmpeqd %xmm1, %xmm1
 ; X64-NEXT:    pxor %xmm1, %xmm0
 ; X64-NEXT:    por %xmm4, %xmm0
@@ -125,7 +126,7 @@ define <4 x i32> @vec_v4i32(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; X64-NEXT:    pshuflw {{.*#+}} xmm3 = xmm1[2,3,3,3,4,5,6,7]
 ; X64-NEXT:    pshuflw {{.*#+}} xmm4 = xmm1[0,1,1,1,4,5,6,7]
 ; X64-NEXT:    pslld $23, %xmm1
-; X64-NEXT:    paddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; X64-NEXT:    paddd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [1065353216,1065353216,1065353216,1065353216]
 ; X64-NEXT:    cvttps2dq %xmm1, %xmm1
 ; X64-NEXT:    movdqa %xmm0, %xmm5
 ; X64-NEXT:    pmuludq %xmm1, %xmm5

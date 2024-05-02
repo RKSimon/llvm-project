@@ -29,13 +29,13 @@ define i4 @concat_fcmp_v4f64_v2f64(<2 x double> %a0, <2 x double> %a1) {
 ;
 ; AVX512-LABEL: concat_fcmp_v4f64_v2f64:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vxorpd %xmm2, %xmm2, %xmm2
-; AVX512-NEXT:    vcmpltpd %xmm0, %xmm2, %k0
-; AVX512-NEXT:    vcmpltpd %xmm1, %xmm2, %k1
-; AVX512-NEXT:    kshiftlb $2, %k1, %k1
-; AVX512-NEXT:    korw %k1, %k0, %k0
+; AVX512-NEXT:    # kill: def $xmm0 killed $xmm0 def $ymm0
+; AVX512-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
+; AVX512-NEXT:    vxorpd %xmm1, %xmm1, %xmm1
+; AVX512-NEXT:    vcmpltpd %ymm0, %ymm1, %k0
 ; AVX512-NEXT:    kmovd %k0, %eax
 ; AVX512-NEXT:    # kill: def $al killed $al killed $eax
+; AVX512-NEXT:    vzeroupper
 ; AVX512-NEXT:    retq
   %v0 = fcmp ogt <2 x double> %a0, zeroinitializer
   %v1 = fcmp ogt <2 x double> %a1, zeroinitializer
@@ -207,13 +207,11 @@ define i8 @concat_fcmp_v8f64_v4f64(<4 x double> %a0, <4 x double> %a1) {
 ; SSE-NEXT:    cmpneqpd %xmm4, %xmm5
 ; SSE-NEXT:    cmpordpd %xmm4, %xmm1
 ; SSE-NEXT:    andpd %xmm5, %xmm1
-; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,2,2,3]
 ; SSE-NEXT:    movapd %xmm0, %xmm5
 ; SSE-NEXT:    cmpneqpd %xmm4, %xmm5
 ; SSE-NEXT:    cmpordpd %xmm4, %xmm0
 ; SSE-NEXT:    andpd %xmm5, %xmm0
-; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,2,3]
-; SSE-NEXT:    punpcklwd {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1],xmm0[2],xmm1[2],xmm0[3],xmm1[3]
+; SSE-NEXT:    packssdw %xmm1, %xmm0
 ; SSE-NEXT:    movapd %xmm3, %xmm1
 ; SSE-NEXT:    cmpneqpd %xmm4, %xmm1
 ; SSE-NEXT:    cmpordpd %xmm4, %xmm3
@@ -223,11 +221,10 @@ define i8 @concat_fcmp_v8f64_v4f64(<4 x double> %a0, <4 x double> %a1) {
 ; SSE-NEXT:    cmpordpd %xmm4, %xmm2
 ; SSE-NEXT:    andpd %xmm1, %xmm2
 ; SSE-NEXT:    packssdw %xmm3, %xmm2
+; SSE-NEXT:    packssdw %xmm0, %xmm0
 ; SSE-NEXT:    packssdw %xmm2, %xmm2
-; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,2,3]
-; SSE-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,2,1,3,4,5,6,7]
-; SSE-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm2[0]
-; SSE-NEXT:    packsswb %xmm0, %xmm0
+; SSE-NEXT:    packsswb %xmm2, %xmm0
+; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,3,2,3]
 ; SSE-NEXT:    pmovmskb %xmm0, %eax
 ; SSE-NEXT:    # kill: def $al killed $al killed $eax
 ; SSE-NEXT:    retq
@@ -283,20 +280,6 @@ define i8 @concat_fcmp_v8f64_v4f64(<4 x double> %a0, <4 x double> %a1) {
 }
 
 define i16 @concat_fcmp_v16f32_v8f32(<8 x float> %a0, <8 x float> %a1) {
-; SSE-LABEL: concat_fcmp_v16f32_v8f32:
-; SSE:       # %bb.0:
-; SSE-NEXT:    xorps %xmm4, %xmm4
-; SSE-NEXT:    cmpleps %xmm4, %xmm1
-; SSE-NEXT:    cmpleps %xmm4, %xmm0
-; SSE-NEXT:    packssdw %xmm1, %xmm0
-; SSE-NEXT:    cmpleps %xmm4, %xmm3
-; SSE-NEXT:    cmpleps %xmm4, %xmm2
-; SSE-NEXT:    packssdw %xmm3, %xmm2
-; SSE-NEXT:    packsswb %xmm2, %xmm0
-; SSE-NEXT:    pmovmskb %xmm0, %eax
-; SSE-NEXT:    # kill: def $ax killed $ax killed $eax
-; SSE-NEXT:    retq
-;
 ; AVX1OR2-LABEL: concat_fcmp_v16f32_v8f32:
 ; AVX1OR2:       # %bb.0:
 ; AVX1OR2-NEXT:    vxorps %xmm2, %xmm2, %xmm2

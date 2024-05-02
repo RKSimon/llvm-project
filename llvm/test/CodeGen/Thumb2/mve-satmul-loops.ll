@@ -227,28 +227,27 @@ define arm_aapcs_vfpcc void @ssatmul_4_q31(ptr nocapture readonly %pSrcA, ptr no
 ; CHECK-NEXT:    vldrw.u32 q3, [r5], #16
 ; CHECK-NEXT:    vldrw.u32 q2, [r0], #16
 ; CHECK-NEXT:    str r2, [sp, #12] @ 4-byte Spill
-; CHECK-NEXT:    mov.w r2, #-1
+; CHECK-NEXT:    mov.w r8, #0
 ; CHECK-NEXT:    vmov.f32 s16, s10
 ; CHECK-NEXT:    str r5, [sp, #8] @ 4-byte Spill
-; CHECK-NEXT:    vmov.f32 s20, s14
-; CHECK-NEXT:    mov.w r8, #0
 ; CHECK-NEXT:    vmov.f32 s18, s11
+; CHECK-NEXT:    mov r2, r0
+; CHECK-NEXT:    vmov.f32 s20, s14
+; CHECK-NEXT:    mov.w r0, #-1
 ; CHECK-NEXT:    vmov.f32 s22, s15
 ; CHECK-NEXT:    vmullb.s32 q6, q5, q4
-; CHECK-NEXT:    vmov.f32 s14, s13
+; CHECK-NEXT:    vmov r6, s13
 ; CHECK-NEXT:    vmov r4, r7, d12
 ; CHECK-NEXT:    asrl r4, r7, #31
-; CHECK-NEXT:    vmov.f32 s10, s9
 ; CHECK-NEXT:    rsbs.w r5, r4, #-2147483648
-; CHECK-NEXT:    sbcs.w r5, r2, r7
+; CHECK-NEXT:    sbcs.w r5, r0, r7
 ; CHECK-NEXT:    csetm r5, lt
 ; CHECK-NEXT:    bfi r8, r5, #0, #8
 ; CHECK-NEXT:    vmov r10, r5, d13
 ; CHECK-NEXT:    asrl r10, r5, #31
-; CHECK-NEXT:    vmov r6, s14
 ; CHECK-NEXT:    rsbs.w r3, r10, #-2147483648
 ; CHECK-NEXT:    vmov q4[2], q4[0], r4, r10
-; CHECK-NEXT:    sbcs.w r3, r2, r5
+; CHECK-NEXT:    sbcs.w r3, r0, r5
 ; CHECK-NEXT:    vmov q4[3], q4[1], r7, r5
 ; CHECK-NEXT:    csetm r3, lt
 ; CHECK-NEXT:    bfi r8, r3, #8, #8
@@ -274,17 +273,18 @@ define arm_aapcs_vfpcc void @ssatmul_4_q31(ptr nocapture readonly %pSrcA, ptr no
 ; CHECK-NEXT:    smull r4, r7, r4, r3
 ; CHECK-NEXT:    asrl r4, r7, #31
 ; CHECK-NEXT:    rsbs.w r3, r4, #-2147483648
-; CHECK-NEXT:    sbcs.w r3, r2, r7
+; CHECK-NEXT:    sbcs.w r3, r0, r7
 ; CHECK-NEXT:    csetm r3, lt
 ; CHECK-NEXT:    bfi r5, r3, #0, #8
-; CHECK-NEXT:    vmov r3, s10
+; CHECK-NEXT:    vmov r3, s9
 ; CHECK-NEXT:    smull r6, r3, r6, r3
 ; CHECK-NEXT:    asrl r6, r3, #31
 ; CHECK-NEXT:    rsbs.w r1, r6, #-2147483648
 ; CHECK-NEXT:    vmov q2[2], q2[0], r4, r6
-; CHECK-NEXT:    sbcs.w r1, r2, r3
+; CHECK-NEXT:    sbcs.w r1, r0, r3
 ; CHECK-NEXT:    vmov q2[3], q2[1], r7, r3
 ; CHECK-NEXT:    csetm r1, lt
+; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    bfi r5, r1, #8, #8
 ; CHECK-NEXT:    vmsr p0, r5
 ; CHECK-NEXT:    ldrd r5, r2, [sp, #8] @ 8-byte Folded Reload
@@ -2521,8 +2521,8 @@ define arm_aapcs_vfpcc void @ssatmul_16t_q7(ptr nocapture readonly %pSrcA, ptr n
 ; CHECK-NEXT:    vldrw.u32 q5, [r6]
 ; CHECK-NEXT:    adr r6, .LCPI18_3
 ; CHECK-NEXT:    vldrw.u32 q6, [r6]
-; CHECK-NEXT:    add r5, sp, #32
-; CHECK-NEXT:    add r6, sp, #64
+; CHECK-NEXT:    add r5, sp, #64
+; CHECK-NEXT:    add r6, sp, #32
 ; CHECK-NEXT:    movs r3, #0
 ; CHECK-NEXT:    vstrw.32 q0, [sp] @ 16-byte Spill
 ; CHECK-NEXT:  .LBB18_2: @ %vector.body
@@ -2664,8 +2664,8 @@ define arm_aapcs_vfpcc void @ssatmul_16ti_q7(ptr nocapture readonly %pSrcA, ptr 
 ; CHECK-NEXT:    vldrw.u32 q5, [r6]
 ; CHECK-NEXT:    adr r6, .LCPI19_3
 ; CHECK-NEXT:    vldrw.u32 q6, [r6]
-; CHECK-NEXT:    add r5, sp, #32
-; CHECK-NEXT:    add r6, sp, #64
+; CHECK-NEXT:    add r5, sp, #64
+; CHECK-NEXT:    add r6, sp, #32
 ; CHECK-NEXT:    movs r3, #0
 ; CHECK-NEXT:    vstrw.32 q0, [sp] @ 16-byte Spill
 ; CHECK-NEXT:  .LBB19_2: @ %vector.body

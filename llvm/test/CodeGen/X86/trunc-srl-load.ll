@@ -13,7 +13,7 @@ define i16 @extractSub64_16(ptr %word, i32 %idx) nounwind {
 ; X86-LABEL: extractSub64_16:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    andl $48, %ecx
 ; X86-NEXT:    shrl $3, %ecx
 ; X86-NEXT:    movzwl (%eax,%ecx), %eax
@@ -39,7 +39,7 @@ define i16 @extractSub128_16(ptr %word, i32 %idx) nounwind {
 ; X86-LABEL: extractSub128_16:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    andl $112, %ecx
 ; X86-NEXT:    shrl $3, %ecx
 ; X86-NEXT:    movzwl (%eax,%ecx), %eax
@@ -65,7 +65,7 @@ define i32 @extractSub128_32(ptr %word, i32 %idx) nounwind {
 ; X86-LABEL: extractSub128_32:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    andl $96, %ecx
 ; X86-NEXT:    shrl $3, %ecx
 ; X86-NEXT:    movl (%eax,%ecx), %eax
@@ -91,7 +91,7 @@ define i64 @extractSub128_64(ptr %word, i32 %idx) nounwind {
 ; X86-LABEL: extractSub128_64:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    andl $64, %edx
 ; X86-NEXT:    shrl $3, %edx
 ; X86-NEXT:    movl (%ecx,%edx), %eax

@@ -20,7 +20,7 @@ define i1 @fuse_and_mask_on_modify(ptr %word, i32 %position) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl (%ecx), %edx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    btcl %eax, %edx
 ; X86-NEXT:    setb %al
 ; X86-NEXT:    movl %edx, (%ecx)
@@ -49,8 +49,8 @@ define i1 @fuse_and_mask_on_bt(ptr %word, i64 %position) nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $1, %esi
 ; X86-NEXT:    xorl %edi, %edi
 ; X86-NEXT:    shldl %cl, %esi, %edi
@@ -67,8 +67,8 @@ define i1 @fuse_and_mask_on_bt(ptr %word, i64 %position) nounwind {
 ; X86-NEXT:    movl (%edx,%eax), %eax
 ; X86-NEXT:    btl %ecx, %eax
 ; X86-NEXT:    setb %al
-; X86-NEXT:    orl %esi, (%edx)
 ; X86-NEXT:    orl %edi, 4(%edx)
+; X86-NEXT:    orl %esi, (%edx)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    retl
@@ -100,7 +100,7 @@ define i1 @fuse_zext_pos(ptr %word, i32 %position) nounwind {
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl $1, %eax
 ; X86-NEXT:    xorl %esi, %esi
@@ -114,19 +114,19 @@ define i1 @fuse_zext_pos(ptr %word, i32 %position) nounwind {
 ; X86-NEXT:  .LBB2_2:
 ; X86-NEXT:    notl %esi
 ; X86-NEXT:    notl %eax
-; X86-NEXT:    movl (%edx), %ebx
-; X86-NEXT:    movl 4(%edx), %edi
-; X86-NEXT:    movl %edi, %ebp
+; X86-NEXT:    movl (%edx), %edi
+; X86-NEXT:    movl 4(%edx), %ebx
+; X86-NEXT:    movl %ebx, %ebp
 ; X86-NEXT:    jne .LBB2_4
 ; X86-NEXT:  # %bb.3:
-; X86-NEXT:    movl %ebx, %ebp
+; X86-NEXT:    movl %edi, %ebp
 ; X86-NEXT:  .LBB2_4:
-; X86-NEXT:    andl %esi, %edi
-; X86-NEXT:    andl %eax, %ebx
+; X86-NEXT:    andl %esi, %ebx
+; X86-NEXT:    andl %eax, %edi
 ; X86-NEXT:    btl %ecx, %ebp
 ; X86-NEXT:    setae %al
-; X86-NEXT:    movl %ebx, (%edx)
-; X86-NEXT:    movl %edi, 4(%edx)
+; X86-NEXT:    movl %ebx, 4(%edx)
+; X86-NEXT:    movl %edi, (%edx)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
@@ -196,7 +196,7 @@ define i1 @no_fuse_diff_pos_or(ptr %word, i64 %a, i64 %b) nounwind {
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $1, %esi
@@ -220,8 +220,8 @@ define i1 @no_fuse_diff_pos_or(ptr %word, i64 %a, i64 %b) nounwind {
 ; X86-NEXT:  .LBB4_4:
 ; X86-NEXT:    btl %eax, %ecx
 ; X86-NEXT:    setb %al
-; X86-NEXT:    movl %esi, (%edx)
 ; X86-NEXT:    movl %edi, 4(%edx)
+; X86-NEXT:    movl %esi, (%edx)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
@@ -297,7 +297,7 @@ define i1 @no_fuse_diff_pos_and(ptr %word, i64 %a, i64 %b) nounwind {
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $1, %esi
@@ -323,8 +323,8 @@ define i1 @no_fuse_diff_pos_and(ptr %word, i64 %a, i64 %b) nounwind {
 ; X86-NEXT:  .LBB6_4:
 ; X86-NEXT:    btl %eax, %ecx
 ; X86-NEXT:    setae %al
-; X86-NEXT:    movl %esi, (%edx)
 ; X86-NEXT:    movl %edi, 4(%edx)
+; X86-NEXT:    movl %esi, (%edx)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx

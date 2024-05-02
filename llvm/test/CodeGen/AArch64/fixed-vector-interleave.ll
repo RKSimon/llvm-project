@@ -191,14 +191,23 @@ define <4 x i16> @interleave2_same_nonconst_splat_v4i16(i16 %a) {
 }
 
 define <4 x i16> @interleave2_diff_nonconst_splat_v4i16(i16 %a, i16 %b) {
-; CHECK-LABEL: interleave2_diff_nonconst_splat_v4i16:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    fmov s0, w0
-; CHECK-NEXT:    mov v0.h[1], w1
-; CHECK-NEXT:    mov v0.h[2], w0
-; CHECK-NEXT:    mov v0.h[3], w1
-; CHECK-NEXT:    // kill: def $d0 killed $d0 killed $q0
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: interleave2_diff_nonconst_splat_v4i16:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    fmov s0, w0
+; CHECK-SD-NEXT:    mov v0.s[1], w1
+; CHECK-SD-NEXT:    mov v0.s[2], w0
+; CHECK-SD-NEXT:    mov v0.s[3], w1
+; CHECK-SD-NEXT:    xtn v0.4h, v0.4s
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: interleave2_diff_nonconst_splat_v4i16:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    fmov s0, w0
+; CHECK-GI-NEXT:    mov v0.h[1], w1
+; CHECK-GI-NEXT:    mov v0.h[2], w0
+; CHECK-GI-NEXT:    mov v0.h[3], w1
+; CHECK-GI-NEXT:    // kill: def $d0 killed $d0 killed $q0
+; CHECK-GI-NEXT:    ret
   %ins1 = insertelement <2 x i16> poison, i16 %a, i32 0
   %splat1 = shufflevector <2 x i16> %ins1, <2 x i16> poison, <2 x i32> <i32 0, i32 0>
   %ins2 = insertelement <2 x i16> poison, i16 %b, i32 0
@@ -560,23 +569,14 @@ define <24 x i8> @interleave3_v24i8(<8 x i8> %vec0, <8 x i8> %vec1, <8 x i8> %ve
 define <12 x double> @interleave6_v12f64(<2 x double> %vec0, <2 x double> %vec1, <2 x double> %vec2, <2 x double> %vec3, <2 x double> %vec4, <2 x double> %vec5) {
 ; CHECK-LABEL: interleave6_v12f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sub sp, sp, #48
-; CHECK-NEXT:    .cfi_def_cfa_offset 48
-; CHECK-NEXT:    zip2 v18.2d, v2.2d, v5.2d
-; CHECK-NEXT:    zip1 v7.2d, v2.2d, v5.2d
-; CHECK-NEXT:    mov x9, sp
-; CHECK-NEXT:    zip2 v17.2d, v1.2d, v4.2d
-; CHECK-NEXT:    zip1 v6.2d, v1.2d, v4.2d
-; CHECK-NEXT:    zip2 v16.2d, v0.2d, v3.2d
-; CHECK-NEXT:    zip1 v5.2d, v0.2d, v3.2d
-; CHECK-NEXT:    st3 { v16.2d, v17.2d, v18.2d }, [x9]
-; CHECK-NEXT:    mov x9, x8
-; CHECK-NEXT:    st3 { v5.2d, v6.2d, v7.2d }, [x9], #48
-; CHECK-NEXT:    ldp q1, q0, [sp, #16]
-; CHECK-NEXT:    ldr q2, [sp]
-; CHECK-NEXT:    stp q1, q0, [x8, #64]
-; CHECK-NEXT:    str q2, [x9]
-; CHECK-NEXT:    add sp, sp, #48
+; CHECK-NEXT:    zip1 v18.2d, v2.2d, v5.2d
+; CHECK-NEXT:    zip2 v7.2d, v2.2d, v5.2d
+; CHECK-NEXT:    zip1 v17.2d, v1.2d, v4.2d
+; CHECK-NEXT:    zip2 v6.2d, v1.2d, v4.2d
+; CHECK-NEXT:    zip1 v16.2d, v0.2d, v3.2d
+; CHECK-NEXT:    zip2 v5.2d, v0.2d, v3.2d
+; CHECK-NEXT:    st3 { v16.2d, v17.2d, v18.2d }, [x8], #48
+; CHECK-NEXT:    st3 { v5.2d, v6.2d, v7.2d }, [x8]
 ; CHECK-NEXT:    ret
   %retval = call <12 x double> @llvm.vector.interleave6.v12f64(<2 x double> %vec0, <2 x double> %vec1, <2 x double> %vec2, <2 x double> %vec3, <2 x double> %vec4, <2 x double> %vec5)
   ret <12 x double> %retval

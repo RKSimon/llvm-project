@@ -590,17 +590,17 @@ define <vscale x 16 x i64> @mul_bigimm_stepvector_nxv16i64() {
 ; RV32-NEXT:    addi a4, a4, -683
 ; RV32-NEXT:    srli a5, a0, 2
 ; RV32-NEXT:    slli a0, a0, 3
-; RV32-NEXT:    sw a4, 8(sp)
-; RV32-NEXT:    sw a3, 12(sp)
+; RV32-NEXT:    sw a4, 0(sp)
+; RV32-NEXT:    sw a3, 4(sp)
 ; RV32-NEXT:    sub a0, a0, a5
 ; RV32-NEXT:    add a0, a2, a0
-; RV32-NEXT:    sw a1, 0(sp)
-; RV32-NEXT:    sw a0, 4(sp)
-; RV32-NEXT:    addi a0, sp, 8
+; RV32-NEXT:    sw a1, 8(sp)
+; RV32-NEXT:    sw a0, 12(sp)
+; RV32-NEXT:    mv a0, sp
 ; RV32-NEXT:    vsetvli a1, zero, e64, m8, ta, ma
 ; RV32-NEXT:    vlse64.v v8, (a0), zero
 ; RV32-NEXT:    vid.v v16
-; RV32-NEXT:    mv a0, sp
+; RV32-NEXT:    addi a0, sp, 8
 ; RV32-NEXT:    vmul.vv v8, v16, v8
 ; RV32-NEXT:    vlse64.v v16, (a0), zero
 ; RV32-NEXT:    vadd.vv v16, v8, v16

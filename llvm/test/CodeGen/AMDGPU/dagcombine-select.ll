@@ -107,8 +107,9 @@ define amdgpu_kernel void @select_or1(ptr addrspace(1) %p, i32 %x, i32 %y) {
 ; GCN-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x24
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_cmp_lt_i32 s2, 11
-; GCN-NEXT:    s_cselect_b32 s2, s3, -1
+; GCN-NEXT:    s_cmp_gt_i32 s2, 10
+; GCN-NEXT:    s_cselect_b32 s2, -1, 0
+; GCN-NEXT:    s_or_b32 s2, s3, s2
 ; GCN-NEXT:    v_mov_b32_e32 v1, s2
 ; GCN-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GCN-NEXT:    s_endpgm
@@ -125,8 +126,9 @@ define amdgpu_kernel void @select_or2(ptr addrspace(1) %p, i32 %x, i32 %y) {
 ; GCN-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x24
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_cmp_lt_i32 s2, 11
-; GCN-NEXT:    s_cselect_b32 s2, s3, -1
+; GCN-NEXT:    s_cmp_gt_i32 s2, 10
+; GCN-NEXT:    s_cselect_b32 s2, -1, 0
+; GCN-NEXT:    s_or_b32 s2, s2, s3
 ; GCN-NEXT:    v_mov_b32_e32 v1, s2
 ; GCN-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GCN-NEXT:    s_endpgm
@@ -143,8 +145,9 @@ define amdgpu_kernel void @select_or3(ptr addrspace(1) %p, i32 %x, i32 %y) {
 ; GCN-NEXT:    s_load_dwordx4 s[0:3], s[4:5], 0x24
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_cmp_gt_i32 s2, 10
-; GCN-NEXT:    s_cselect_b32 s2, s3, -1
+; GCN-NEXT:    s_cmp_lt_i32 s2, 11
+; GCN-NEXT:    s_cselect_b32 s2, -1, 0
+; GCN-NEXT:    s_or_b32 s2, s3, s2
 ; GCN-NEXT:    v_mov_b32_e32 v1, s2
 ; GCN-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GCN-NEXT:    s_endpgm

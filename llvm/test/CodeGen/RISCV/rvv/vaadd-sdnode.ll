@@ -57,18 +57,16 @@ define <vscale x 8 x i8> @vaadd_vx_nxv8i8_floor(<vscale x 8 x i8> %x, i8 %y) {
 define <vscale x 8 x i8> @vaadd_vv_nxv8i8_floor_sexti32(<vscale x 8 x i8> %x, <vscale x 8 x i8> %y) {
 ; CHECK-LABEL: vaadd_vv_nxv8i8_floor_sexti32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 2
 ; CHECK-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; CHECK-NEXT:    vaadd.vv v8, v8, v9
+; CHECK-NEXT:    vwadd.vv v10, v8, v9
+; CHECK-NEXT:    vnsrl.wi v8, v10, 1
 ; CHECK-NEXT:    ret
 ;
 ; NOVXRM-LABEL: vaadd_vv_nxv8i8_floor_sexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vand.vv v8, v8, v9
-; NOVXRM-NEXT:    vsra.vi v9, v10, 1
-; NOVXRM-NEXT:    vadd.vv v8, v8, v9
+; NOVXRM-NEXT:    vwadd.vv v10, v8, v9
+; NOVXRM-NEXT:    vnsrl.wi v8, v10, 1
 ; NOVXRM-NEXT:    ret
   %xzv = sext <vscale x 8 x i8> %x to <vscale x 8 x i32>
   %yzv = sext <vscale x 8 x i8> %y to <vscale x 8 x i32>
@@ -345,10 +343,13 @@ define <vscale x 8 x i8> @vaadd_vv_nxv8i8_ceil_sexti32(<vscale x 8 x i8> %x, <vs
 ; NOVXRM-LABEL: vaadd_vv_nxv8i8_ceil_sexti32:
 ; NOVXRM:       # %bb.0:
 ; NOVXRM-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
-; NOVXRM-NEXT:    vxor.vv v10, v8, v9
-; NOVXRM-NEXT:    vor.vv v8, v8, v9
-; NOVXRM-NEXT:    vsra.vi v9, v10, 1
-; NOVXRM-NEXT:    vsub.vv v8, v8, v9
+; NOVXRM-NEXT:    vwadd.vv v10, v8, v9
+; NOVXRM-NEXT:    vsetvli zero, zero, e16, m2, ta, ma
+; NOVXRM-NEXT:    vsra.vi v8, v10, 1
+; NOVXRM-NEXT:    vand.vi v10, v10, 1
+; NOVXRM-NEXT:    vadd.vv v10, v10, v8
+; NOVXRM-NEXT:    vsetvli zero, zero, e8, m1, ta, ma
+; NOVXRM-NEXT:    vnsrl.wi v8, v10, 0
 ; NOVXRM-NEXT:    ret
   %xzv = sext <vscale x 8 x i8> %x to <vscale x 8 x i32>
   %yzv = sext <vscale x 8 x i8> %y to <vscale x 8 x i32>

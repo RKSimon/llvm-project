@@ -934,8 +934,9 @@ define <4 x i32> @test_shuf_zero_ext_start_lhs_splat(<4 x i32> %a, i32 %b) {
 define <8 x i8 > @Shuff(<8 x i8> %in, ptr %out) nounwind ssp {
 ; CHECK-SD-LABEL: Shuff:
 ; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    movi v1.2d, #0000000000000000
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    mov v0.s[0], wzr
+; CHECK-SD-NEXT:    mov v0.s[0], v1.s[0]
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
 ; CHECK-SD-NEXT:    ret
 ;
@@ -952,8 +953,10 @@ define <8 x i8 > @Shuff(<8 x i8> %in, ptr %out) nounwind ssp {
 ;
 ; CHECKBE-LABEL: Shuff:
 ; CHECKBE:       // %bb.0:
+; CHECKBE-NEXT:    movi v1.2d, #0000000000000000
 ; CHECKBE-NEXT:    rev64 v0.2s, v0.2s
-; CHECKBE-NEXT:    mov v0.s[0], wzr
+; CHECKBE-NEXT:    rev32 v1.16b, v1.16b
+; CHECKBE-NEXT:    mov v0.s[0], v1.s[0]
 ; CHECKBE-NEXT:    rev64 v0.2s, v0.2s
 ; CHECKBE-NEXT:    ret
   %value = shufflevector <8 x i8> %in, <8 x i8> zeroinitializer, <8 x i32> <i32 8, i32 9, i32 10, i32 11, i32 4, i32 5, i32 6, i32 7>

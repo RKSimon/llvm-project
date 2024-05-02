@@ -54,11 +54,11 @@ define void @array_1D_insert(ptr %addr, %my_subtype %elt) #0 {
 ; CHECK-NEXT:    addvl sp, sp, #-3
 ; CHECK-NEXT:    .cfi_escape 0x0f, 0x08, 0x8f, 0x10, 0x92, 0x2e, 0x00, 0x48, 0x1e, 0x22 // sp + 16 + 24 * VG
 ; CHECK-NEXT:    .cfi_offset w29, -16
-; CHECK-NEXT:    ldr z1, [x0, #2, mul vl]
-; CHECK-NEXT:    ldr z2, [x0]
+; CHECK-NEXT:    ldr z1, [x0]
+; CHECK-NEXT:    ldr z2, [x0, #2, mul vl]
 ; CHECK-NEXT:    str z0, [sp, #1, mul vl]
-; CHECK-NEXT:    str z1, [sp, #2, mul vl]
-; CHECK-NEXT:    str z2, [sp]
+; CHECK-NEXT:    str z1, [sp]
+; CHECK-NEXT:    str z2, [sp, #2, mul vl]
 ; CHECK-NEXT:    addvl sp, sp, #3
 ; CHECK-NEXT:    ldr x29, [sp], #16 // 8-byte Folded Reload
 ; CHECK-NEXT:    ret

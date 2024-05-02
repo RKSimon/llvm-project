@@ -121,14 +121,14 @@ define amdgpu_kernel void @not_enough_agprs(ptr addrspace(1) %arg) #2 {
 ; HEURRC-NEXT:    v_mfma_f32_32x32x1_2b_f32 v[0:31], v33, v34, v[0:31] cbsz:1 abid:2 blgp:3
 ; HEURRC-NEXT:    s_nop 15
 ; HEURRC-NEXT:    s_nop 1
-; HEURRC-NEXT:    global_store_dwordx4 v32, v[24:27], s[34:35] offset:96
 ; HEURRC-NEXT:    global_store_dwordx4 v32, v[28:31], s[34:35] offset:112
-; HEURRC-NEXT:    global_store_dwordx4 v32, v[16:19], s[34:35] offset:64
+; HEURRC-NEXT:    global_store_dwordx4 v32, v[24:27], s[34:35] offset:96
 ; HEURRC-NEXT:    global_store_dwordx4 v32, v[20:23], s[34:35] offset:80
-; HEURRC-NEXT:    global_store_dwordx4 v32, v[8:11], s[34:35] offset:32
+; HEURRC-NEXT:    global_store_dwordx4 v32, v[16:19], s[34:35] offset:64
 ; HEURRC-NEXT:    global_store_dwordx4 v32, v[12:15], s[34:35] offset:48
-; HEURRC-NEXT:    global_store_dwordx4 v32, v[0:3], s[34:35]
+; HEURRC-NEXT:    global_store_dwordx4 v32, v[8:11], s[34:35] offset:32
 ; HEURRC-NEXT:    global_store_dwordx4 v32, v[4:7], s[34:35] offset:16
+; HEURRC-NEXT:    global_store_dwordx4 v32, v[0:3], s[34:35]
 ; HEURRC-NEXT:    s_endpgm
 ;
 ; VGPRRC-LABEL: not_enough_agprs:
@@ -177,14 +177,14 @@ define amdgpu_kernel void @not_enough_agprs(ptr addrspace(1) %arg) #2 {
 ; VGPRRC-NEXT:    v_mfma_f32_32x32x1_2b_f32 v[0:31], v33, v34, v[0:31] cbsz:1 abid:2 blgp:3
 ; VGPRRC-NEXT:    s_nop 15
 ; VGPRRC-NEXT:    s_nop 1
-; VGPRRC-NEXT:    global_store_dwordx4 v32, v[24:27], s[34:35] offset:96
 ; VGPRRC-NEXT:    global_store_dwordx4 v32, v[28:31], s[34:35] offset:112
-; VGPRRC-NEXT:    global_store_dwordx4 v32, v[16:19], s[34:35] offset:64
+; VGPRRC-NEXT:    global_store_dwordx4 v32, v[24:27], s[34:35] offset:96
 ; VGPRRC-NEXT:    global_store_dwordx4 v32, v[20:23], s[34:35] offset:80
-; VGPRRC-NEXT:    global_store_dwordx4 v32, v[8:11], s[34:35] offset:32
+; VGPRRC-NEXT:    global_store_dwordx4 v32, v[16:19], s[34:35] offset:64
 ; VGPRRC-NEXT:    global_store_dwordx4 v32, v[12:15], s[34:35] offset:48
-; VGPRRC-NEXT:    global_store_dwordx4 v32, v[0:3], s[34:35]
+; VGPRRC-NEXT:    global_store_dwordx4 v32, v[8:11], s[34:35] offset:32
 ; VGPRRC-NEXT:    global_store_dwordx4 v32, v[4:7], s[34:35] offset:16
+; VGPRRC-NEXT:    global_store_dwordx4 v32, v[0:3], s[34:35]
 ; VGPRRC-NEXT:    s_endpgm
 bb:
   %in.1 = load <32 x float>, ptr addrspace(1) %arg, align 128

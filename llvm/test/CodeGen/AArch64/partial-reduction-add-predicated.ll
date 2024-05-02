@@ -6,10 +6,16 @@ target triple = "aarch64"
 define <4 x i32> @predicate_dot_fixed_length(<4 x i32> %acc, <16 x i1> %p, <16 x i8> %a, <16 x i8> %b) #0 {
 ; CHECK-LABEL: predicate_dot_fixed_length:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v1.16b, v1.16b, #7
-; CHECK-NEXT:    cmlt v1.16b, v1.16b, #0
-; CHECK-NEXT:    and v1.16b, v1.16b, v3.16b
-; CHECK-NEXT:    sdot v0.4s, v2.16b, v1.16b
+; CHECK-NEXT:    ushll v4.8h, v1.8b, #0
+; CHECK-NEXT:    smull v5.8h, v2.8b, v3.8b
+; CHECK-NEXT:    ushll2 v1.8h, v1.16b, #0
+; CHECK-NEXT:    smull2 v2.8h, v2.16b, v3.16b
+; CHECK-NEXT:    and z4.h, z4.h, #0x1
+; CHECK-NEXT:    and z1.h, z1.h, #0x1
+; CHECK-NEXT:    smlal v0.4s, v5.4h, v4.4h
+; CHECK-NEXT:    smlal2 v0.4s, v5.8h, v4.8h
+; CHECK-NEXT:    smlal v0.4s, v2.4h, v1.4h
+; CHECK-NEXT:    smlal2 v0.4s, v2.8h, v1.8h
 ; CHECK-NEXT:    ret
  %ext.1 = sext <16 x i8> %a to <16 x i32>
  %ext.2 = sext <16 x i8> %b to <16 x i32>

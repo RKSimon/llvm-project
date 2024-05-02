@@ -82,9 +82,9 @@ define i32 @byte_sum_v16_i32() nounwind {
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -109,9 +109,9 @@ define i32 @byte_sum_v16_i32() nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm1, %ymm0
 ; AVX512BW-NEXT:    vpaddd %zmm0, %zmm1, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -225,9 +225,9 @@ define i32 @byte_sum_v32_i32() nounwind {
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm0, %ymm0
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -253,9 +253,9 @@ define i32 @byte_sum_v32_i32() nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -405,9 +405,9 @@ define i32 @byte_sum_v64_i32() nounwind {
 ; AVX2-NEXT:    vpaddd %ymm3, %ymm2, %ymm1
 ; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -435,9 +435,9 @@ define i32 @byte_sum_v64_i32() nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -539,7 +539,7 @@ define i64 @byte_sum_v16_i64() nounwind {
 ; AVX2-NEXT:    vpaddq %ymm0, %ymm0, %ymm0
 ; AVX2-NEXT:    vpaddq %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovq %xmm0, %rax
@@ -565,7 +565,7 @@ define i64 @byte_sum_v16_i64() nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX512BW-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovq %xmm0, %rax
@@ -686,9 +686,9 @@ define i32 @byte_sum_v16_i32_sext() nounwind {
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -712,9 +712,9 @@ define i32 @byte_sum_v16_i32_sext() nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -830,9 +830,9 @@ define i32 @word_sum_v16_i32(ptr nocapture readonly %src) nounwind {
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -855,9 +855,9 @@ define i32 @word_sum_v16_i32(ptr nocapture readonly %src) nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -962,11 +962,11 @@ define i16 @byte_sum_v16_i16() nounwind {
 ; AVX2-NEXT:    jne .LBB6_1
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVX2-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpsrld $16, %xmm0, %xmm1
 ; AVX2-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -989,11 +989,11 @@ define i16 @byte_sum_v16_i16() nounwind {
 ; AVX512BW-NEXT:    jne .LBB6_1
 ; AVX512BW-NEXT:  # %bb.2: # %middle.block
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVX512BW-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddw %ymm1, %ymm0, %ymm0
 ; AVX512BW-NEXT:    vpsrld $16, %xmm0, %xmm1
 ; AVX512BW-NEXT:    vpaddw %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -1103,9 +1103,9 @@ define i32 @dword_sum_v16_i32(ptr nocapture readonly %src) nounwind {
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -1127,9 +1127,9 @@ define i32 @dword_sum_v16_i32(ptr nocapture readonly %src) nounwind {
 ; AVX512BW-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
 ; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax
@@ -1226,9 +1226,9 @@ define i32 @byte_sum_v8_i32() nounwind {
 ; AVX2-NEXT:    jne .LBB8_1
 ; AVX2-NEXT:  # %bb.2: # %middle.block
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX2-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %eax
@@ -1250,9 +1250,9 @@ define i32 @byte_sum_v8_i32() nounwind {
 ; AVX512BW-NEXT:    jne .LBB8_1
 ; AVX512BW-NEXT:  # %bb.2: # %middle.block
 ; AVX512BW-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512BW-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX512BW-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512BW-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512BW-NEXT:    vmovd %xmm0, %eax

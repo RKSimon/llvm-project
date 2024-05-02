@@ -34,9 +34,10 @@ define bfloat @sitofp_i64_to_bf16(i64 %a) nounwind {
 ; SSE2-NEXT:    fstps {{[0-9]+}}(%esp)
 ; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm0, %xmm0
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -50,9 +51,10 @@ define bfloat @sitofp_i64_to_bf16(i64 %a) nounwind {
 ; DQ-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; DQ-NEXT:    vcvtqq2ps %ymm0, %xmm0
 ; DQ-NEXT:    vmovd %xmm0, %eax
+; DQ-NEXT:    xorl %ecx, %ecx
 ; DQ-NEXT:    btl $16, %eax
-; DQ-NEXT:    movl %eax, %ecx
 ; DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; DQ-NEXT:    addl %eax, %ecx
 ; DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; DQ-NEXT:    vucomiss %xmm0, %xmm0
 ; DQ-NEXT:    cmovnpl %ecx, %eax
@@ -65,9 +67,10 @@ define bfloat @sitofp_i64_to_bf16(i64 %a) nounwind {
 ; X64:       # %bb.0:
 ; X64-NEXT:    cvtsi2ss %rdi, %xmm0
 ; X64-NEXT:    movd %xmm0, %eax
+; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    btl $16, %eax
-; X64-NEXT:    movl %eax, %ecx
 ; X64-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X64-NEXT:    addl %eax, %ecx
 ; X64-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X64-NEXT:    ucomiss %xmm0, %xmm0
 ; X64-NEXT:    cmovnpl %ecx, %eax
@@ -107,9 +110,10 @@ define bfloat @sitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; SSE2-NEXT:    fstps {{[0-9]+}}(%esp)
 ; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm0, %xmm0
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -124,9 +128,10 @@ define bfloat @sitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; DQ-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; DQ-NEXT:    vcvtqq2ps %ymm0, %xmm0
 ; DQ-NEXT:    vmovd %xmm0, %eax
+; DQ-NEXT:    xorl %ecx, %ecx
 ; DQ-NEXT:    btl $16, %eax
-; DQ-NEXT:    movl %eax, %ecx
 ; DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; DQ-NEXT:    addl %eax, %ecx
 ; DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; DQ-NEXT:    vucomiss %xmm0, %xmm0
 ; DQ-NEXT:    cmovnpl %ecx, %eax
@@ -139,9 +144,10 @@ define bfloat @sitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; X64:       # %bb.0:
 ; X64-NEXT:    cvtsi2ssq (%rdi), %xmm0
 ; X64-NEXT:    movd %xmm0, %eax
+; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    btl $16, %eax
-; X64-NEXT:    movl %eax, %ecx
 ; X64-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X64-NEXT:    addl %eax, %ecx
 ; X64-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X64-NEXT:    ucomiss %xmm0, %xmm0
 ; X64-NEXT:    cmovnpl %ecx, %eax
@@ -185,9 +191,10 @@ define bfloat @uitofp_i64_to_bf16(i64 %a) nounwind {
 ; SSE2-NEXT:    fstps {{[0-9]+}}(%esp)
 ; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm0, %xmm0
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -201,9 +208,10 @@ define bfloat @uitofp_i64_to_bf16(i64 %a) nounwind {
 ; DQ-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; DQ-NEXT:    vcvtuqq2ps %ymm0, %xmm0
 ; DQ-NEXT:    vmovd %xmm0, %eax
+; DQ-NEXT:    xorl %ecx, %ecx
 ; DQ-NEXT:    btl $16, %eax
-; DQ-NEXT:    movl %eax, %ecx
 ; DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; DQ-NEXT:    addl %eax, %ecx
 ; DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; DQ-NEXT:    vucomiss %xmm0, %xmm0
 ; DQ-NEXT:    cmovnpl %ecx, %eax
@@ -228,9 +236,10 @@ define bfloat @uitofp_i64_to_bf16(i64 %a) nounwind {
 ; X64-NEXT:    addss %xmm0, %xmm0
 ; X64-NEXT:  .LBB2_3:
 ; X64-NEXT:    movd %xmm0, %eax
+; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    btl $16, %eax
-; X64-NEXT:    movl %eax, %ecx
 ; X64-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X64-NEXT:    addl %eax, %ecx
 ; X64-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X64-NEXT:    ucomiss %xmm0, %xmm0
 ; X64-NEXT:    cmovnpl %ecx, %eax
@@ -275,9 +284,10 @@ define bfloat @uitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; SSE2-NEXT:    fstps {{[0-9]+}}(%esp)
 ; SSE2-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, %eax
+; SSE2-NEXT:    xorl %ecx, %ecx
 ; SSE2-NEXT:    btl $16, %eax
-; SSE2-NEXT:    movl %eax, %ecx
 ; SSE2-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; SSE2-NEXT:    addl %eax, %ecx
 ; SSE2-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; SSE2-NEXT:    ucomiss %xmm0, %xmm0
 ; SSE2-NEXT:    cmovnpl %ecx, %eax
@@ -292,9 +302,10 @@ define bfloat @uitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; DQ-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; DQ-NEXT:    vcvtuqq2ps %ymm0, %xmm0
 ; DQ-NEXT:    vmovd %xmm0, %eax
+; DQ-NEXT:    xorl %ecx, %ecx
 ; DQ-NEXT:    btl $16, %eax
-; DQ-NEXT:    movl %eax, %ecx
 ; DQ-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; DQ-NEXT:    addl %eax, %ecx
 ; DQ-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; DQ-NEXT:    vucomiss %xmm0, %xmm0
 ; DQ-NEXT:    cmovnpl %ecx, %eax
@@ -320,9 +331,10 @@ define bfloat @uitofp_load_i64_to_bf16(ptr %p) nounwind {
 ; X64-NEXT:    addss %xmm0, %xmm0
 ; X64-NEXT:  .LBB3_3:
 ; X64-NEXT:    movd %xmm0, %eax
+; X64-NEXT:    xorl %ecx, %ecx
 ; X64-NEXT:    btl $16, %eax
-; X64-NEXT:    movl %eax, %ecx
 ; X64-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; X64-NEXT:    addl %eax, %ecx
 ; X64-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; X64-NEXT:    ucomiss %xmm0, %xmm0
 ; X64-NEXT:    cmovnpl %ecx, %eax

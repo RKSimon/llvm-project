@@ -1708,8 +1708,8 @@ define i1 @signtest_v4i64(<4 x i64> %a0) {
 ; X86-SSE2-LABEL: signtest_v4i64:
 ; X86-SSE2:       # %bb.0:
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[3,3,3,3]
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
 ; X86-SSE2-NEXT:    movd %xmm0, %eax
 ; X86-SSE2-NEXT:    testl %eax, %eax
@@ -2093,12 +2093,12 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X86-SSE2-NEXT:    movdqa %xmm1, (%esp)
 ; X86-SSE2-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-SSE2-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-SSE2-NEXT:    andb $1, %cl
 ; X86-SSE2-NEXT:    shlb $2, %cl
 ; X86-SSE2-NEXT:    andb $1, %al
 ; X86-SSE2-NEXT:    addb %al, %al
 ; X86-SSE2-NEXT:    subb (%esp), %al
 ; X86-SSE2-NEXT:    orb %cl, %al
+; X86-SSE2-NEXT:    testb $7, %al
 ; X86-SSE2-NEXT:    je .LBB30_3
 ; X86-SSE2-NEXT:  # %bb.1: # %bb3
 ; X86-SSE2-NEXT:    xorl %eax, %eax
@@ -2118,12 +2118,12 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X64-SSE2-NEXT:    movdqa %xmm1, -{{[0-9]+}}(%rsp)
 ; X64-SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %eax
 ; X64-SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %ecx
-; X64-SSE2-NEXT:    andb $1, %cl
 ; X64-SSE2-NEXT:    shlb $2, %cl
 ; X64-SSE2-NEXT:    andb $1, %al
 ; X64-SSE2-NEXT:    addb %al, %al
 ; X64-SSE2-NEXT:    subb -{{[0-9]+}}(%rsp), %al
 ; X64-SSE2-NEXT:    orb %cl, %al
+; X64-SSE2-NEXT:    testb $7, %al
 ; X64-SSE2-NEXT:    je .LBB30_2
 ; X64-SSE2-NEXT:  # %bb.1: # %bb3
 ; X64-SSE2-NEXT:    xorl %eax, %eax
@@ -2144,9 +2144,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X86-SSE4-NEXT:    addb %al, %al
 ; X86-SSE4-NEXT:    subb %cl, %al
 ; X86-SSE4-NEXT:    pextrb $8, %xmm1, %ecx
-; X86-SSE4-NEXT:    andb $1, %cl
 ; X86-SSE4-NEXT:    shlb $2, %cl
 ; X86-SSE4-NEXT:    orb %al, %cl
+; X86-SSE4-NEXT:    testb $7, %cl
 ; X86-SSE4-NEXT:    je .LBB30_2
 ; X86-SSE4-NEXT:  # %bb.1: # %bb3
 ; X86-SSE4-NEXT:    xorl %eax, %eax
@@ -2168,9 +2168,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X64-SSE4-NEXT:    addb %cl, %cl
 ; X64-SSE4-NEXT:    subb %al, %cl
 ; X64-SSE4-NEXT:    pextrb $8, %xmm1, %eax
-; X64-SSE4-NEXT:    andb $1, %al
 ; X64-SSE4-NEXT:    shlb $2, %al
 ; X64-SSE4-NEXT:    orb %cl, %al
+; X64-SSE4-NEXT:    testb $7, %al
 ; X64-SSE4-NEXT:    je .LBB30_2
 ; X64-SSE4-NEXT:  # %bb.1: # %bb3
 ; X64-SSE4-NEXT:    xorl %eax, %eax
@@ -2191,9 +2191,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X86-AVX1-NEXT:    addb %al, %al
 ; X86-AVX1-NEXT:    subb %cl, %al
 ; X86-AVX1-NEXT:    vpextrb $8, %xmm0, %ecx
-; X86-AVX1-NEXT:    andb $1, %cl
 ; X86-AVX1-NEXT:    shlb $2, %cl
 ; X86-AVX1-NEXT:    orb %al, %cl
+; X86-AVX1-NEXT:    testb $7, %cl
 ; X86-AVX1-NEXT:    je .LBB30_2
 ; X86-AVX1-NEXT:  # %bb.1: # %bb3
 ; X86-AVX1-NEXT:    xorl %eax, %eax
@@ -2215,9 +2215,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X64-AVX1-NEXT:    addb %cl, %cl
 ; X64-AVX1-NEXT:    subb %al, %cl
 ; X64-AVX1-NEXT:    vpextrb $8, %xmm0, %eax
-; X64-AVX1-NEXT:    andb $1, %al
 ; X64-AVX1-NEXT:    shlb $2, %al
 ; X64-AVX1-NEXT:    orb %cl, %al
+; X64-AVX1-NEXT:    testb $7, %al
 ; X64-AVX1-NEXT:    je .LBB30_2
 ; X64-AVX1-NEXT:  # %bb.1: # %bb3
 ; X64-AVX1-NEXT:    xorl %eax, %eax
@@ -2238,9 +2238,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X86-AVX2-NEXT:    addb %al, %al
 ; X86-AVX2-NEXT:    subb %cl, %al
 ; X86-AVX2-NEXT:    vpextrb $8, %xmm0, %ecx
-; X86-AVX2-NEXT:    andb $1, %cl
 ; X86-AVX2-NEXT:    shlb $2, %cl
 ; X86-AVX2-NEXT:    orb %al, %cl
+; X86-AVX2-NEXT:    testb $7, %cl
 ; X86-AVX2-NEXT:    je .LBB30_2
 ; X86-AVX2-NEXT:  # %bb.1: # %bb3
 ; X86-AVX2-NEXT:    xorl %eax, %eax
@@ -2262,9 +2262,9 @@ define i32 @mask_v3i1(<3 x i32> %a, <3 x i32> %b) nounwind {
 ; X64-AVX2-NEXT:    addb %cl, %cl
 ; X64-AVX2-NEXT:    subb %al, %cl
 ; X64-AVX2-NEXT:    vpextrb $8, %xmm0, %eax
-; X64-AVX2-NEXT:    andb $1, %al
 ; X64-AVX2-NEXT:    shlb $2, %al
 ; X64-AVX2-NEXT:    orb %cl, %al
+; X64-AVX2-NEXT:    testb $7, %al
 ; X64-AVX2-NEXT:    je .LBB30_2
 ; X64-AVX2-NEXT:  # %bb.1: # %bb3
 ; X64-AVX2-NEXT:    xorl %eax, %eax

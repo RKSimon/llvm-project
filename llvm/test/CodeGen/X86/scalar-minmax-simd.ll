@@ -1164,28 +1164,28 @@ define void @sort2_i64(ptr %a) nounwind {
 ; X86-SSE41-NEXT:    pushl %ebx
 ; X86-SSE41-NEXT:    pushl %edi
 ; X86-SSE41-NEXT:    pushl %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl (%ecx), %edx
-; X86-SSE41-NEXT:    movl 4(%ecx), %edi
-; X86-SSE41-NEXT:    movl 12(%ecx), %eax
-; X86-SSE41-NEXT:    movl 8(%ecx), %esi
-; X86-SSE41-NEXT:    cmpl %esi, %edx
-; X86-SSE41-NEXT:    movl %edi, %ebx
-; X86-SSE41-NEXT:    sbbl %eax, %ebx
-; X86-SSE41-NEXT:    movl %eax, %ebx
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE41-NEXT:    movl (%eax), %edi
+; X86-SSE41-NEXT:    movl 4(%eax), %esi
+; X86-SSE41-NEXT:    movl 12(%eax), %ebp
+; X86-SSE41-NEXT:    movl 8(%eax), %ecx
+; X86-SSE41-NEXT:    cmpl %ecx, %edi
+; X86-SSE41-NEXT:    movl %esi, %ebx
+; X86-SSE41-NEXT:    sbbl %ebp, %ebx
+; X86-SSE41-NEXT:    movl %ecx, %ebx
 ; X86-SSE41-NEXT:    cmovll %edi, %ebx
-; X86-SSE41-NEXT:    movl %esi, %ebp
-; X86-SSE41-NEXT:    cmovll %edx, %ebp
-; X86-SSE41-NEXT:    cmpl %edx, %esi
-; X86-SSE41-NEXT:    movl %eax, %ecx
-; X86-SSE41-NEXT:    sbbl %edi, %ecx
-; X86-SSE41-NEXT:    cmovll %edi, %eax
-; X86-SSE41-NEXT:    cmovll %edx, %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl %ebp, (%ecx)
-; X86-SSE41-NEXT:    movl %ebx, 4(%ecx)
-; X86-SSE41-NEXT:    movl %esi, 8(%ecx)
-; X86-SSE41-NEXT:    movl %eax, 12(%ecx)
+; X86-SSE41-NEXT:    movl %ebp, %eax
+; X86-SSE41-NEXT:    cmovll %esi, %eax
+; X86-SSE41-NEXT:    cmpl %edi, %ecx
+; X86-SSE41-NEXT:    movl %ebp, %edx
+; X86-SSE41-NEXT:    sbbl %esi, %edx
+; X86-SSE41-NEXT:    cmovll %edi, %ecx
+; X86-SSE41-NEXT:    cmovll %esi, %ebp
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE41-NEXT:    movl %eax, 4(%edx)
+; X86-SSE41-NEXT:    movl %ebx, (%edx)
+; X86-SSE41-NEXT:    movl %ebp, 12(%edx)
+; X86-SSE41-NEXT:    movl %ecx, 8(%edx)
 ; X86-SSE41-NEXT:    popl %esi
 ; X86-SSE41-NEXT:    popl %edi
 ; X86-SSE41-NEXT:    popl %ebx
@@ -1490,28 +1490,28 @@ define void @sort2_i64_optsize(ptr %a) nounwind optsize {
 ; X86-SSE41-NEXT:    pushl %ebx
 ; X86-SSE41-NEXT:    pushl %edi
 ; X86-SSE41-NEXT:    pushl %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl (%ecx), %edx
-; X86-SSE41-NEXT:    movl 4(%ecx), %edi
-; X86-SSE41-NEXT:    movl 12(%ecx), %eax
-; X86-SSE41-NEXT:    movl 8(%ecx), %esi
-; X86-SSE41-NEXT:    cmpl %esi, %edx
-; X86-SSE41-NEXT:    movl %edi, %ebx
-; X86-SSE41-NEXT:    sbbl %eax, %ebx
-; X86-SSE41-NEXT:    movl %eax, %ebx
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE41-NEXT:    movl (%eax), %edi
+; X86-SSE41-NEXT:    movl 4(%eax), %esi
+; X86-SSE41-NEXT:    movl 12(%eax), %ebp
+; X86-SSE41-NEXT:    movl 8(%eax), %ecx
+; X86-SSE41-NEXT:    cmpl %ecx, %edi
+; X86-SSE41-NEXT:    movl %esi, %ebx
+; X86-SSE41-NEXT:    sbbl %ebp, %ebx
+; X86-SSE41-NEXT:    movl %ecx, %ebx
 ; X86-SSE41-NEXT:    cmovll %edi, %ebx
-; X86-SSE41-NEXT:    movl %esi, %ebp
-; X86-SSE41-NEXT:    cmovll %edx, %ebp
-; X86-SSE41-NEXT:    cmpl %edx, %esi
-; X86-SSE41-NEXT:    movl %eax, %ecx
-; X86-SSE41-NEXT:    sbbl %edi, %ecx
-; X86-SSE41-NEXT:    cmovll %edi, %eax
-; X86-SSE41-NEXT:    cmovll %edx, %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl %ebp, (%ecx)
-; X86-SSE41-NEXT:    movl %ebx, 4(%ecx)
-; X86-SSE41-NEXT:    movl %esi, 8(%ecx)
-; X86-SSE41-NEXT:    movl %eax, 12(%ecx)
+; X86-SSE41-NEXT:    movl %ebp, %eax
+; X86-SSE41-NEXT:    cmovll %esi, %eax
+; X86-SSE41-NEXT:    cmpl %edi, %ecx
+; X86-SSE41-NEXT:    movl %ebp, %edx
+; X86-SSE41-NEXT:    sbbl %esi, %edx
+; X86-SSE41-NEXT:    cmovll %edi, %ecx
+; X86-SSE41-NEXT:    cmovll %esi, %ebp
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE41-NEXT:    movl %eax, 4(%edx)
+; X86-SSE41-NEXT:    movl %ebx, (%edx)
+; X86-SSE41-NEXT:    movl %ebp, 12(%edx)
+; X86-SSE41-NEXT:    movl %ecx, 8(%edx)
 ; X86-SSE41-NEXT:    popl %esi
 ; X86-SSE41-NEXT:    popl %edi
 ; X86-SSE41-NEXT:    popl %ebx
@@ -1607,28 +1607,28 @@ define void @sort2_i64_noimplicitfloat(ptr %a) nounwind noimplicitfloat {
 ; X86-SSE41-NEXT:    pushl %ebx
 ; X86-SSE41-NEXT:    pushl %edi
 ; X86-SSE41-NEXT:    pushl %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl (%ecx), %edx
-; X86-SSE41-NEXT:    movl 4(%ecx), %edi
-; X86-SSE41-NEXT:    movl 12(%ecx), %eax
-; X86-SSE41-NEXT:    movl 8(%ecx), %esi
-; X86-SSE41-NEXT:    cmpl %esi, %edx
-; X86-SSE41-NEXT:    movl %edi, %ebx
-; X86-SSE41-NEXT:    sbbl %eax, %ebx
-; X86-SSE41-NEXT:    movl %eax, %ebx
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE41-NEXT:    movl (%eax), %edi
+; X86-SSE41-NEXT:    movl 4(%eax), %esi
+; X86-SSE41-NEXT:    movl 12(%eax), %ebp
+; X86-SSE41-NEXT:    movl 8(%eax), %ecx
+; X86-SSE41-NEXT:    cmpl %ecx, %edi
+; X86-SSE41-NEXT:    movl %esi, %ebx
+; X86-SSE41-NEXT:    sbbl %ebp, %ebx
+; X86-SSE41-NEXT:    movl %ecx, %ebx
 ; X86-SSE41-NEXT:    cmovll %edi, %ebx
-; X86-SSE41-NEXT:    movl %esi, %ebp
-; X86-SSE41-NEXT:    cmovll %edx, %ebp
-; X86-SSE41-NEXT:    cmpl %edx, %esi
-; X86-SSE41-NEXT:    movl %eax, %ecx
-; X86-SSE41-NEXT:    sbbl %edi, %ecx
-; X86-SSE41-NEXT:    cmovll %edi, %eax
-; X86-SSE41-NEXT:    cmovll %edx, %esi
-; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE41-NEXT:    movl %ebp, (%ecx)
-; X86-SSE41-NEXT:    movl %ebx, 4(%ecx)
-; X86-SSE41-NEXT:    movl %esi, 8(%ecx)
-; X86-SSE41-NEXT:    movl %eax, 12(%ecx)
+; X86-SSE41-NEXT:    movl %ebp, %eax
+; X86-SSE41-NEXT:    cmovll %esi, %eax
+; X86-SSE41-NEXT:    cmpl %edi, %ecx
+; X86-SSE41-NEXT:    movl %ebp, %edx
+; X86-SSE41-NEXT:    sbbl %esi, %edx
+; X86-SSE41-NEXT:    cmovll %edi, %ecx
+; X86-SSE41-NEXT:    cmovll %esi, %ebp
+; X86-SSE41-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE41-NEXT:    movl %eax, 4(%edx)
+; X86-SSE41-NEXT:    movl %ebx, (%edx)
+; X86-SSE41-NEXT:    movl %ebp, 12(%edx)
+; X86-SSE41-NEXT:    movl %ecx, 8(%edx)
 ; X86-SSE41-NEXT:    popl %esi
 ; X86-SSE41-NEXT:    popl %edi
 ; X86-SSE41-NEXT:    popl %ebx

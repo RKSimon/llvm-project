@@ -704,13 +704,12 @@ entry:
 define void @and_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-LABEL: and_v3i16:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr x8, [x0]
-; CHECK-SD-NEXT:    ldr x9, [x1]
-; CHECK-SD-NEXT:    and x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
-; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    ldr d0, [x0]
+; CHECK-SD-NEXT:    ldr d1, [x1]
+; CHECK-SD-NEXT:    and v0.8b, v0.8b, v1.8b
+; CHECK-SD-NEXT:    mov h1, v0.h[2]
+; CHECK-SD-NEXT:    str s0, [x0]
+; CHECK-SD-NEXT:    str h1, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: and_v3i16:
@@ -735,13 +734,12 @@ entry:
 define void @or_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-LABEL: or_v3i16:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr x8, [x0]
-; CHECK-SD-NEXT:    ldr x9, [x1]
-; CHECK-SD-NEXT:    orr x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
-; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    ldr d0, [x0]
+; CHECK-SD-NEXT:    ldr d1, [x1]
+; CHECK-SD-NEXT:    orr v0.8b, v0.8b, v1.8b
+; CHECK-SD-NEXT:    mov h1, v0.h[2]
+; CHECK-SD-NEXT:    str s0, [x0]
+; CHECK-SD-NEXT:    str h1, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: or_v3i16:
@@ -766,13 +764,12 @@ entry:
 define void @xor_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-LABEL: xor_v3i16:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr x8, [x0]
-; CHECK-SD-NEXT:    ldr x9, [x1]
-; CHECK-SD-NEXT:    eor x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
-; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    ldr d0, [x0]
+; CHECK-SD-NEXT:    ldr d1, [x1]
+; CHECK-SD-NEXT:    eor v0.8b, v0.8b, v1.8b
+; CHECK-SD-NEXT:    mov h1, v0.h[2]
+; CHECK-SD-NEXT:    str s0, [x0]
+; CHECK-SD-NEXT:    str h1, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: xor_v3i16:

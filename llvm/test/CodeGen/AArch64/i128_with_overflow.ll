@@ -279,10 +279,10 @@ cleanup:
 define i128 @test_smul_i128(i128 noundef %x, i128 noundef %y) {
 ; CHECK-LABEL: test_smul_i128:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    eor x8, x3, x2, asr #63
-; CHECK-NEXT:    eor x9, x1, x0, asr #63
-; CHECK-NEXT:    orr x8, x9, x8
-; CHECK-NEXT:    cbz x8, .LBB5_4
+; CHECK-NEXT:    asr x8, x0, #63
+; CHECK-NEXT:    cmp x3, x2, asr #63
+; CHECK-NEXT:    ccmp x1, x8, #0, eq
+; CHECK-NEXT:    b.eq .LBB5_4
 ; CHECK-NEXT:  // %bb.1: // %overflow
 ; CHECK-NEXT:    asr x9, x1, #63
 ; CHECK-NEXT:    umulh x10, x0, x2
@@ -325,6 +325,7 @@ define i128 @test_smul_i128(i128 noundef %x, i128 noundef %y) {
 ; CHECK-NEXT:    ret
 ; CHECK-NEXT:  .LBB5_4: // %overflow.no
 ; CHECK-NEXT:    smulh x1, x0, x2
+; CHECK-NEXT:    mov w8, wzr
 ; CHECK-NEXT:    mul x0, x0, x2
 ; CHECK-NEXT:    cbnz w8, .LBB5_2
 ; CHECK-NEXT:    b .LBB5_3

@@ -549,10 +549,11 @@ define <8 x i16> @abds_const_lhs(<8 x i16> %src1) {
 define <8 x i16> @abds_const_zero(<8 x i16> %src1) {
 ; CHECK-SD-LABEL: abds_const_zero:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    mov d1, v0.d[1]
-; CHECK-SD-NEXT:    abs v0.4h, v0.4h
-; CHECK-SD-NEXT:    abs v1.4h, v1.4h
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    sshll v1.4s, v0.4h, #0
+; CHECK-SD-NEXT:    sshll2 v0.4s, v0.8h, #0
+; CHECK-SD-NEXT:    abs v0.4s, v0.4s
+; CHECK-SD-NEXT:    abs v1.4s, v1.4s
+; CHECK-SD-NEXT:    uzp1 v0.8h, v1.8h, v0.8h
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: abds_const_zero:
@@ -797,7 +798,8 @@ define <1 x i64> @recursive() {
 ; CHECK-SD-LABEL: recursive:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    movi v0.4h, #254
-; CHECK-SD-NEXT:    movi v1.8b, #254
+; CHECK-SD-NEXT:    mov x8, #-72340172838076674 // =0xfefefefefefefefe
+; CHECK-SD-NEXT:    fmov d1, x8
 ; CHECK-SD-NEXT:    saddlp v0.1d, v0.2s
 ; CHECK-SD-NEXT:    orr v0.8b, v0.8b, v1.8b
 ; CHECK-SD-NEXT:    ret
@@ -833,9 +835,8 @@ define <1 x i64> @recursive() {
 define <4 x i32> @abdu_const_poison(<4 x i8> %x) {
 ; CHECK-SD-LABEL: abdu_const_poison:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    mov w8, #8388736 // =0x800080
+; CHECK-SD-NEXT:    movi v1.4h, #128
 ; CHECK-SD-NEXT:    bic v0.4h, #255, lsl #8
-; CHECK-SD-NEXT:    fmov d1, x8
 ; CHECK-SD-NEXT:    uabdl v0.4s, v0.4h, v1.4h
 ; CHECK-SD-NEXT:    ret
 ;

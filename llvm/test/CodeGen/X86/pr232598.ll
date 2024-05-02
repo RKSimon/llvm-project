@@ -12,7 +12,7 @@ define <4 x i32> @PR232598(<4 x i32> %v) {
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,2,3]
 ; SSE2-NEXT:    pmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [2,2,5,5]
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,2,2]
-; SSE2-NEXT:    pmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [2155905153,u,4096,u]
+; SSE2-NEXT:    pmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [2155905153,2155905153,4096,4096]
 ; SSE2-NEXT:    movdqa %xmm1, %xmm2
 ; SSE2-NEXT:    psrld $7, %xmm2
 ; SSE2-NEXT:    shufps {{.*#+}} xmm2 = xmm2[0,1],xmm1[2,3]
@@ -24,7 +24,7 @@ define <4 x i32> @PR232598(<4 x i32> %v) {
 ; SSE42:       # %bb.0:
 ; SSE42-NEXT:    pmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0 # [0,2,15,5]
 ; SSE42-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,3,3]
-; SSE42-NEXT:    pmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [2155905153,u,4096,u]
+; SSE42-NEXT:    pmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1 # [2155905153,2155905153,4096,4096]
 ; SSE42-NEXT:    movdqa %xmm1, %xmm2
 ; SSE42-NEXT:    psrld $7, %xmm2
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm2 = xmm2[0,1,2,3],xmm1[4,5,6,7]

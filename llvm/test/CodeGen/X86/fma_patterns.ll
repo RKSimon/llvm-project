@@ -1395,20 +1395,20 @@ define float @test_f32_interp(float %x, float %y, float %t) {
 define float @test_f32_interp_ninf(float %x, float %y, float %t) {
 ; FMA-LABEL: test_f32_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213ss {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA-NEXT:    vfmsub213ss {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; FMA-NEXT:    vfnmadd213ss {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA-NEXT:    vfmadd213ss {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_f32_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubss {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA4-NEXT:    vfmsubss {{.*#+}} xmm0 = (xmm0 * xmm2) - xmm1
+; FMA4-NEXT:    vfnmaddss {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA4-NEXT:    vfmaddss {{.*#+}} xmm0 = (xmm0 * xmm2) + xmm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_f32_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213ss {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; AVX512-NEXT:    vfmsub213ss {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; AVX512-NEXT:    vfnmadd213ss {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; AVX512-NEXT:    vfmadd213ss {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz float 1.0, %t
   %tx = fmul contract ninf nsz float %x, %t
@@ -1451,20 +1451,20 @@ define <4 x float> @test_v4f32_interp(<4 x float> %x, <4 x float> %y, <4 x float
 define <4 x float> @test_v4f32_interp_ninf(<4 x float> %x, <4 x float> %y, <4 x float> %t) {
 ; FMA-LABEL: test_v4f32_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213ps {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA-NEXT:    vfmsub213ps {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; FMA-NEXT:    vfnmadd213ps {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA-NEXT:    vfmadd213ps {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v4f32_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubps {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA4-NEXT:    vfmsubps {{.*#+}} xmm0 = (xmm0 * xmm2) - xmm1
+; FMA4-NEXT:    vfnmaddps {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA4-NEXT:    vfmaddps {{.*#+}} xmm0 = (xmm0 * xmm2) + xmm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v4f32_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213ps {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; AVX512-NEXT:    vfmsub213ps {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; AVX512-NEXT:    vfnmadd213ps {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; AVX512-NEXT:    vfmadd213ps {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz <4 x float> <float 1.0, float 1.0, float 1.0, float 1.0>, %t
   %tx = fmul contract ninf nsz <4 x float> %x, %t
@@ -1507,20 +1507,20 @@ define <8 x float> @test_v8f32_interp(<8 x float> %x, <8 x float> %y, <8 x float
 define <8 x float> @test_v8f32_interp_ninf(<8 x float> %x, <8 x float> %y, <8 x float> %t) {
 ; FMA-LABEL: test_v8f32_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213ps {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; FMA-NEXT:    vfmsub213ps {{.*#+}} ymm0 = (ymm2 * ymm0) - ymm1
+; FMA-NEXT:    vfnmadd213ps {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; FMA-NEXT:    vfmadd213ps {{.*#+}} ymm0 = (ymm2 * ymm0) + ymm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v8f32_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubps {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; FMA4-NEXT:    vfmsubps {{.*#+}} ymm0 = (ymm0 * ymm2) - ymm1
+; FMA4-NEXT:    vfnmaddps {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; FMA4-NEXT:    vfmaddps {{.*#+}} ymm0 = (ymm0 * ymm2) + ymm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v8f32_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213ps {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; AVX512-NEXT:    vfmsub213ps {{.*#+}} ymm0 = (ymm2 * ymm0) - ymm1
+; AVX512-NEXT:    vfnmadd213ps {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; AVX512-NEXT:    vfmadd213ps {{.*#+}} ymm0 = (ymm2 * ymm0) + ymm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz <8 x float> <float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0>, %t
   %tx = fmul contract ninf nsz <8 x float> %x, %t
@@ -1563,20 +1563,20 @@ define double @test_f64_interp(double %x, double %y, double %t) {
 define double @test_f64_interp_ninf(double %x, double %y, double %t) {
 ; FMA-LABEL: test_f64_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213sd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA-NEXT:    vfmsub213sd {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; FMA-NEXT:    vfnmadd213sd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA-NEXT:    vfmadd213sd {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_f64_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubsd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA4-NEXT:    vfmsubsd {{.*#+}} xmm0 = (xmm0 * xmm2) - xmm1
+; FMA4-NEXT:    vfnmaddsd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA4-NEXT:    vfmaddsd {{.*#+}} xmm0 = (xmm0 * xmm2) + xmm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_f64_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213sd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; AVX512-NEXT:    vfmsub213sd {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; AVX512-NEXT:    vfnmadd213sd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; AVX512-NEXT:    vfmadd213sd {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz double 1.0, %t
   %tx = fmul contract ninf nsz double %x, %t
@@ -1622,20 +1622,20 @@ define <2 x double> @test_v2f64_interp(<2 x double> %x, <2 x double> %y, <2 x do
 define <2 x double> @test_v2f64_interp_ninf(<2 x double> %x, <2 x double> %y, <2 x double> %t) {
 ; FMA-LABEL: test_v2f64_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213pd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA-NEXT:    vfmsub213pd {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; FMA-NEXT:    vfnmadd213pd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA-NEXT:    vfmadd213pd {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v2f64_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubpd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; FMA4-NEXT:    vfmsubpd {{.*#+}} xmm0 = (xmm0 * xmm2) - xmm1
+; FMA4-NEXT:    vfnmaddpd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm0 = (xmm0 * xmm2) + xmm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v2f64_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213pd {{.*#+}} xmm1 = (xmm2 * xmm1) - xmm1
-; AVX512-NEXT:    vfmsub213pd {{.*#+}} xmm0 = (xmm2 * xmm0) - xmm1
+; AVX512-NEXT:    vfnmadd213pd {{.*#+}} xmm1 = -(xmm2 * xmm1) + xmm1
+; AVX512-NEXT:    vfmadd213pd {{.*#+}} xmm0 = (xmm2 * xmm0) + xmm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz <2 x double> <double 1.0, double 1.0>, %t
   %tx = fmul contract ninf nsz <2 x double> %x, %t
@@ -1678,20 +1678,20 @@ define <4 x double> @test_v4f64_interp(<4 x double> %x, <4 x double> %y, <4 x do
 define <4 x double> @test_v4f64_interp_ninf(<4 x double> %x, <4 x double> %y, <4 x double> %t) {
 ; FMA-LABEL: test_v4f64_interp_ninf:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213pd {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; FMA-NEXT:    vfmsub213pd {{.*#+}} ymm0 = (ymm2 * ymm0) - ymm1
+; FMA-NEXT:    vfnmadd213pd {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; FMA-NEXT:    vfmadd213pd {{.*#+}} ymm0 = (ymm2 * ymm0) + ymm1
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v4f64_interp_ninf:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubpd {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; FMA4-NEXT:    vfmsubpd {{.*#+}} ymm0 = (ymm0 * ymm2) - ymm1
+; FMA4-NEXT:    vfnmaddpd {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; FMA4-NEXT:    vfmaddpd {{.*#+}} ymm0 = (ymm0 * ymm2) + ymm1
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v4f64_interp_ninf:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213pd {{.*#+}} ymm1 = (ymm2 * ymm1) - ymm1
-; AVX512-NEXT:    vfmsub213pd {{.*#+}} ymm0 = (ymm2 * ymm0) - ymm1
+; AVX512-NEXT:    vfnmadd213pd {{.*#+}} ymm1 = -(ymm2 * ymm1) + ymm1
+; AVX512-NEXT:    vfmadd213pd {{.*#+}} ymm0 = (ymm2 * ymm0) + ymm1
 ; AVX512-NEXT:    retq
   %t1 = fsub contract ninf nsz <4 x double> <double 1.0, double 1.0, double 1.0, double 1.0>, %t
   %tx = fmul contract ninf nsz <4 x double> %x, %t
@@ -1749,17 +1749,26 @@ define <4 x double> @test_v4f64_fneg_fmsub(<4 x double> %a0, <4 x double> %a1, <
 define <4 x float> @test_v4f32_fneg_fnmadd(<4 x float> %a0, <4 x float> %a1, <4 x float> %a2) {
 ; FMA-LABEL: test_v4f32_fneg_fnmadd:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmsub213ps {{.*#+}} xmm0 = (xmm1 * xmm0) - xmm2
+; FMA-NEXT:    vxorps %xmm3, %xmm3, %xmm3
+; FMA-NEXT:    vfnmsub231ps {{.*#+}} xmm3 = -(xmm1 * xmm0) - xmm3
+; FMA-NEXT:    vaddps %xmm2, %xmm3, %xmm0
+; FMA-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v4f32_fneg_fnmadd:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmsubps {{.*#+}} xmm0 = (xmm0 * xmm1) - xmm2
+; FMA4-NEXT:    vxorps %xmm3, %xmm3, %xmm3
+; FMA4-NEXT:    vfnmsubps {{.*#+}} xmm0 = -(xmm0 * xmm1) - xmm3
+; FMA4-NEXT:    vaddps %xmm2, %xmm0, %xmm0
+; FMA4-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v4f32_fneg_fnmadd:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmsub213ps {{.*#+}} xmm0 = (xmm1 * xmm0) - xmm2
+; AVX512-NEXT:    vxorps %xmm3, %xmm3, %xmm3
+; AVX512-NEXT:    vfnmsub231ps {{.*#+}} xmm3 = -(xmm1 * xmm0) - xmm3
+; AVX512-NEXT:    vaddps %xmm2, %xmm3, %xmm0
+; AVX512-NEXT:    vxorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm0, %xmm0
 ; AVX512-NEXT:    retq
   %mul = fmul contract nsz <4 x float> %a0, %a1
   %neg0 = fsub contract nsz <4 x float> <float -0.0, float -0.0, float -0.0, float -0.0>, %mul
@@ -1771,17 +1780,23 @@ define <4 x float> @test_v4f32_fneg_fnmadd(<4 x float> %a0, <4 x float> %a1, <4 
 define <4 x double> @test_v4f64_fneg_fnmsub(<4 x double> %a0, <4 x double> %a1, <4 x double> %a2) {
 ; FMA-LABEL: test_v4f64_fneg_fnmsub:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vfmadd213pd {{.*#+}} ymm0 = (ymm1 * ymm0) + ymm2
+; FMA-NEXT:    vxorpd %xmm3, %xmm3, %xmm3
+; FMA-NEXT:    vfnmsub231pd {{.*#+}} ymm3 = -(ymm1 * ymm0) - ymm3
+; FMA-NEXT:    vsubpd %ymm3, %ymm2, %ymm0
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: test_v4f64_fneg_fnmsub:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vfmaddpd {{.*#+}} ymm0 = (ymm0 * ymm1) + ymm2
+; FMA4-NEXT:    vxorpd %xmm3, %xmm3, %xmm3
+; FMA4-NEXT:    vfnmsubpd {{.*#+}} ymm0 = -(ymm0 * ymm1) - ymm3
+; FMA4-NEXT:    vsubpd %ymm0, %ymm2, %ymm0
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: test_v4f64_fneg_fnmsub:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vfmadd213pd {{.*#+}} ymm0 = (ymm1 * ymm0) + ymm2
+; AVX512-NEXT:    vxorpd %xmm3, %xmm3, %xmm3
+; AVX512-NEXT:    vfnmsub231pd {{.*#+}} ymm3 = -(ymm1 * ymm0) - ymm3
+; AVX512-NEXT:    vsubpd %ymm3, %ymm2, %ymm0
 ; AVX512-NEXT:    retq
   %mul = fmul contract nsz  <4 x double> %a0, %a1
   %neg0 = fsub contract nsz <4 x double> <double -0.0, double -0.0, double -0.0, double -0.0>, %mul
@@ -2025,28 +2040,26 @@ define float @fadd_fma_fmul_2(float %a, float %b, float %c, float %d, float %n0)
 define <2 x double> @fadd_fma_fmul_3(<2 x double> %x1, <2 x double> %x2, <2 x double> %x3, <2 x double> %x4, <2 x double> %x5, <2 x double> %x6, <2 x double> %x7, <2 x double> %x8) nounwind {
 ; FMA-LABEL: fadd_fma_fmul_3:
 ; FMA:       # %bb.0:
-; FMA-NEXT:    vmulpd %xmm3, %xmm2, %xmm2
-; FMA-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm1 * xmm0) + xmm2
-; FMA-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm7 * xmm6) + xmm2
-; FMA-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm5 * xmm4) + xmm2
-; FMA-NEXT:    vmovapd %xmm2, %xmm0
+; FMA-NEXT:    vmulpd %xmm7, %xmm6, %xmm6
+; FMA-NEXT:    vfmadd231pd {{.*#+}} xmm6 = (xmm5 * xmm4) + xmm6
+; FMA-NEXT:    vfmadd231pd {{.*#+}} xmm6 = (xmm3 * xmm2) + xmm6
+; FMA-NEXT:    vfmadd213pd {{.*#+}} xmm0 = (xmm1 * xmm0) + xmm6
 ; FMA-NEXT:    retq
 ;
 ; FMA4-LABEL: fadd_fma_fmul_3:
 ; FMA4:       # %bb.0:
-; FMA4-NEXT:    vmulpd %xmm3, %xmm2, %xmm2
+; FMA4-NEXT:    vmulpd %xmm7, %xmm6, %xmm6
+; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm4 = (xmm4 * xmm5) + xmm6
+; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm2 = (xmm2 * xmm3) + xmm4
 ; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm0 = (xmm0 * xmm1) + xmm2
-; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm0 = (xmm6 * xmm7) + xmm0
-; FMA4-NEXT:    vfmaddpd {{.*#+}} xmm0 = (xmm4 * xmm5) + xmm0
 ; FMA4-NEXT:    retq
 ;
 ; AVX512-LABEL: fadd_fma_fmul_3:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vmulpd %xmm3, %xmm2, %xmm2
-; AVX512-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm1 * xmm0) + xmm2
-; AVX512-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm7 * xmm6) + xmm2
-; AVX512-NEXT:    vfmadd231pd {{.*#+}} xmm2 = (xmm5 * xmm4) + xmm2
-; AVX512-NEXT:    vmovapd %xmm2, %xmm0
+; AVX512-NEXT:    vmulpd %xmm7, %xmm6, %xmm6
+; AVX512-NEXT:    vfmadd231pd {{.*#+}} xmm6 = (xmm5 * xmm4) + xmm6
+; AVX512-NEXT:    vfmadd231pd {{.*#+}} xmm6 = (xmm3 * xmm2) + xmm6
+; AVX512-NEXT:    vfmadd213pd {{.*#+}} xmm0 = (xmm1 * xmm0) + xmm6
 ; AVX512-NEXT:    retq
   %m1 = fmul contract fast <2 x double> %x1, %x2
   %m2 = fmul contract fast <2 x double> %x3, %x4

@@ -67,21 +67,23 @@ define <8 x i32> @umulh_v8i32(<8 x i32> %a0, <8 x i32> %a1) nounwind {
 define <4 x i64> @umulh_v4i64(<4 x i64> %a0, <4 x i64> %a1) nounwind {
 ; AVX-LABEL: umulh_v4i64:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vpsrlq $32, %ymm0, %ymm2
-; AVX-NEXT:    vpmuludq %ymm1, %ymm2, %ymm3
-; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm4
-; AVX-NEXT:    vpsrlq $32, %ymm4, %ymm4
-; AVX-NEXT:    vpaddq %ymm4, %ymm3, %ymm3
-; AVX-NEXT:    vpsrlq $32, %ymm3, %ymm4
-; AVX-NEXT:    vpxor %xmm5, %xmm5, %xmm5
-; AVX-NEXT:    vpblendd {{.*#+}} ymm3 = ymm3[0],ymm5[1],ymm3[2],ymm5[3],ymm3[4],ymm5[5],ymm3[6],ymm5[7]
-; AVX-NEXT:    vpsrlq $32, %ymm1, %ymm1
-; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
-; AVX-NEXT:    vpaddq %ymm3, %ymm0, %ymm0
+; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX-NEXT:    vpblendd {{.*#+}} ymm3 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
+; AVX-NEXT:    vpblendd {{.*#+}} ymm4 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; AVX-NEXT:    vpmuludq %ymm3, %ymm4, %ymm5
+; AVX-NEXT:    vpsrlq $32, %ymm5, %ymm5
 ; AVX-NEXT:    vpsrlq $32, %ymm0, %ymm0
-; AVX-NEXT:    vpmuludq %ymm1, %ymm2, %ymm1
-; AVX-NEXT:    vpaddq %ymm4, %ymm1, %ymm1
-; AVX-NEXT:    vpaddq %ymm0, %ymm1, %ymm0
+; AVX-NEXT:    vpmuludq %ymm3, %ymm0, %ymm3
+; AVX-NEXT:    vpaddq %ymm5, %ymm3, %ymm3
+; AVX-NEXT:    vpsrlq $32, %ymm3, %ymm5
+; AVX-NEXT:    vpblendd {{.*#+}} ymm2 = ymm3[0],ymm2[1],ymm3[2],ymm2[3],ymm3[4],ymm2[5],ymm3[6],ymm2[7]
+; AVX-NEXT:    vpsrlq $32, %ymm1, %ymm1
+; AVX-NEXT:    vpmuludq %ymm1, %ymm4, %ymm3
+; AVX-NEXT:    vpaddq %ymm2, %ymm3, %ymm2
+; AVX-NEXT:    vpsrlq $32, %ymm2, %ymm2
+; AVX-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
+; AVX-NEXT:    vpaddq %ymm5, %ymm0, %ymm0
+; AVX-NEXT:    vpaddq %ymm2, %ymm0, %ymm0
 ; AVX-NEXT:    retq
   %res = call <4 x i64> @llvm.umulh.v4i64(<4 x i64> %a0, <4 x i64> %a1)
   ret <4 x i64> %res

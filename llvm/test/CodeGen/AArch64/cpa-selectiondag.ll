@@ -159,15 +159,15 @@ define void @msubpt1(i32 %index, i32 %elem) {
 ; CHECK-NOCPA-O0-NEXT:    mov w9, #48 // =0x30
 ; CHECK-NOCPA-O0-NEXT:    // kill: def $x9 killed $w9
 ; CHECK-NOCPA-O0-NEXT:    mneg x8, x8, x9
-; CHECK-NOCPA-O0-NEXT:    adrp x9, array2
-; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array2
+; CHECK-NOCPA-O0-NEXT:    adrp x9, array2+96
+; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array2+96
 ; CHECK-NOCPA-O0-NEXT:    add x8, x9, x8
-; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9, #96]
-; CHECK-NOCPA-O0-NEXT:    ldr q1, [x9, #112]
-; CHECK-NOCPA-O0-NEXT:    ldr q2, [x9, #128]
-; CHECK-NOCPA-O0-NEXT:    str q2, [x8, #320]
-; CHECK-NOCPA-O0-NEXT:    str q1, [x8, #304]
-; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #288]
+; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9]
+; CHECK-NOCPA-O0-NEXT:    ldr q1, [x9, #16]
+; CHECK-NOCPA-O0-NEXT:    ldr q2, [x9, #32]
+; CHECK-NOCPA-O0-NEXT:    str q2, [x8, #224]
+; CHECK-NOCPA-O0-NEXT:    str q1, [x8, #208]
+; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #192]
 ; CHECK-NOCPA-O0-NEXT:    ret
 ;
 ; CHECK-NOCPA-O3-LABEL: msubpt1:
@@ -176,13 +176,13 @@ define void @msubpt1(i32 %index, i32 %elem) {
 ; CHECK-NOCPA-O3-NEXT:    sxtw x8, w0
 ; CHECK-NOCPA-O3-NEXT:    mov w9, #48 // =0x30
 ; CHECK-NOCPA-O3-NEXT:    mneg x8, x8, x9
-; CHECK-NOCPA-O3-NEXT:    adrp x9, array2
-; CHECK-NOCPA-O3-NEXT:    add x9, x9, :lo12:array2
-; CHECK-NOCPA-O3-NEXT:    ldp q1, q0, [x9, #112]
-; CHECK-NOCPA-O3-NEXT:    ldr q2, [x9, #96]
+; CHECK-NOCPA-O3-NEXT:    adrp x9, array2+96
+; CHECK-NOCPA-O3-NEXT:    add x9, x9, :lo12:array2+96
+; CHECK-NOCPA-O3-NEXT:    ldp q1, q0, [x9, #16]
+; CHECK-NOCPA-O3-NEXT:    ldr q2, [x9]
 ; CHECK-NOCPA-O3-NEXT:    add x8, x9, x8
-; CHECK-NOCPA-O3-NEXT:    stp q1, q0, [x8, #304]
-; CHECK-NOCPA-O3-NEXT:    str q2, [x8, #288]
+; CHECK-NOCPA-O3-NEXT:    stp q1, q0, [x8, #208]
+; CHECK-NOCPA-O3-NEXT:    str q2, [x8, #192]
 ; CHECK-NOCPA-O3-NEXT:    ret
 entry:
   %idx.ext = sext i32 %index to i64
@@ -226,22 +226,22 @@ define void @subpt1(i32 %index, i32 %elem) {
 ; CHECK-NOCPA-O0-NEXT:    // implicit-def: $x8
 ; CHECK-NOCPA-O0-NEXT:    mov w8, w0
 ; CHECK-NOCPA-O0-NEXT:    sxtw x8, w8
-; CHECK-NOCPA-O0-NEXT:    adrp x9, array
-; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array
+; CHECK-NOCPA-O0-NEXT:    adrp x9, array+32
+; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array+32
 ; CHECK-NOCPA-O0-NEXT:    subs x8, x9, x8, lsl #8
-; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9, #32]
-; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #96]
+; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9]
+; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #64]
 ; CHECK-NOCPA-O0-NEXT:    ret
 ;
 ; CHECK-NOCPA-O3-LABEL: subpt1:
 ; CHECK-NOCPA-O3:       // %bb.0: // %entry
 ; CHECK-NOCPA-O3-NEXT:    // kill: def $w0 killed $w0 def $x0
 ; CHECK-NOCPA-O3-NEXT:    sxtw x9, w0
-; CHECK-NOCPA-O3-NEXT:    adrp x8, array
-; CHECK-NOCPA-O3-NEXT:    add x8, x8, :lo12:array
-; CHECK-NOCPA-O3-NEXT:    ldr q0, [x8, #32]
+; CHECK-NOCPA-O3-NEXT:    adrp x8, array+32
+; CHECK-NOCPA-O3-NEXT:    add x8, x8, :lo12:array+32
+; CHECK-NOCPA-O3-NEXT:    ldr q0, [x8]
 ; CHECK-NOCPA-O3-NEXT:    sub x9, x8, x9, lsl #8
-; CHECK-NOCPA-O3-NEXT:    str q0, [x9, #96]
+; CHECK-NOCPA-O3-NEXT:    str q0, [x9, #64]
 ; CHECK-NOCPA-O3-NEXT:    ret
 entry:
   %conv = sext i32 %index to i64
@@ -277,20 +277,20 @@ define void @subpt2(i32 %index, i32 %elem) {
 ;
 ; CHECK-NOCPA-O0-LABEL: subpt2:
 ; CHECK-NOCPA-O0:       // %bb.0: // %entry
-; CHECK-NOCPA-O0-NEXT:    adrp x9, array
-; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array
+; CHECK-NOCPA-O0-NEXT:    adrp x9, array+32
+; CHECK-NOCPA-O0-NEXT:    add x9, x9, :lo12:array+32
 ; CHECK-NOCPA-O0-NEXT:    subs x8, x9, w0, sxtw #4
-; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9, #32]
-; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #96]
+; CHECK-NOCPA-O0-NEXT:    ldr q0, [x9]
+; CHECK-NOCPA-O0-NEXT:    str q0, [x8, #64]
 ; CHECK-NOCPA-O0-NEXT:    ret
 ;
 ; CHECK-NOCPA-O3-LABEL: subpt2:
 ; CHECK-NOCPA-O3:       // %bb.0: // %entry
-; CHECK-NOCPA-O3-NEXT:    adrp x8, array
-; CHECK-NOCPA-O3-NEXT:    add x8, x8, :lo12:array
+; CHECK-NOCPA-O3-NEXT:    adrp x8, array+32
+; CHECK-NOCPA-O3-NEXT:    add x8, x8, :lo12:array+32
 ; CHECK-NOCPA-O3-NEXT:    sub x9, x8, w0, sxtw #4
-; CHECK-NOCPA-O3-NEXT:    ldr q0, [x8, #32]
-; CHECK-NOCPA-O3-NEXT:    str q0, [x9, #96]
+; CHECK-NOCPA-O3-NEXT:    ldr q0, [x8]
+; CHECK-NOCPA-O3-NEXT:    str q0, [x9, #64]
 ; CHECK-NOCPA-O3-NEXT:    ret
 entry:
   %idx.ext = sext i32 %index to i64
@@ -710,14 +710,11 @@ define hidden void @multidim() {
 ; CHECK-NOCPA-O0-NEXT:    .cfi_offset w30, -16
 ; CHECK-NOCPA-O0-NEXT:    adrp x8, b
 ; CHECK-NOCPA-O0-NEXT:    ldrh w9, [x8, :lo12:b]
-; CHECK-NOCPA-O0-NEXT:    adrp x8, a
-; CHECK-NOCPA-O0-NEXT:    add x8, x8, :lo12:a
+; CHECK-NOCPA-O0-NEXT:    adrp x8, a+2
+; CHECK-NOCPA-O0-NEXT:    add x8, x8, :lo12:a+2
 ; CHECK-NOCPA-O0-NEXT:    add x8, x8, w9, uxtw #1
 ; CHECK-NOCPA-O0-NEXT:    add w9, w9, #1
-; CHECK-NOCPA-O0-NEXT:    mov w9, w9
-; CHECK-NOCPA-O0-NEXT:    // kill: def $x9 killed $w9
-; CHECK-NOCPA-O0-NEXT:    add x8, x8, x9
-; CHECK-NOCPA-O0-NEXT:    ldrb w8, [x8, #2]
+; CHECK-NOCPA-O0-NEXT:    ldrb w8, [x8, w9, uxtw]
 ; CHECK-NOCPA-O0-NEXT:    cbz w8, .LBB14_2
 ; CHECK-NOCPA-O0-NEXT:    b .LBB14_1
 ; CHECK-NOCPA-O0-NEXT:  .LBB14_1:
@@ -732,12 +729,12 @@ define hidden void @multidim() {
 ; CHECK-NOCPA-O3-LABEL: multidim:
 ; CHECK-NOCPA-O3:       // %bb.0: // %entry
 ; CHECK-NOCPA-O3-NEXT:    adrp x8, b
-; CHECK-NOCPA-O3-NEXT:    adrp x9, a
-; CHECK-NOCPA-O3-NEXT:    add x9, x9, :lo12:a
+; CHECK-NOCPA-O3-NEXT:    adrp x9, a+2
+; CHECK-NOCPA-O3-NEXT:    add x9, x9, :lo12:a+2
 ; CHECK-NOCPA-O3-NEXT:    ldrh w8, [x8, :lo12:b]
 ; CHECK-NOCPA-O3-NEXT:    add x9, x9, x8, lsl #1
-; CHECK-NOCPA-O3-NEXT:    add x8, x9, x8
-; CHECK-NOCPA-O3-NEXT:    ldrb w8, [x8, #3]
+; CHECK-NOCPA-O3-NEXT:    add x8, x8, x9
+; CHECK-NOCPA-O3-NEXT:    ldrb w8, [x8, #1]
 ; CHECK-NOCPA-O3-NEXT:    cbz w8, .LBB14_2
 ; CHECK-NOCPA-O3-NEXT:  // %bb.1:
 ; CHECK-NOCPA-O3-NEXT:    str x30, [sp, #-16]! // 8-byte Folded Spill

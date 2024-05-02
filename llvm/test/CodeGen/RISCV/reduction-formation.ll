@@ -51,10 +51,10 @@ define i32 @reduce_xor_4xi32(<4 x i32> %v) {
 ;
 ; RV64-LABEL: reduce_xor_4xi32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    ld a1, 0(a0)
-; RV64-NEXT:    ld a2, 8(a0)
-; RV64-NEXT:    ld a3, 16(a0)
-; RV64-NEXT:    ld a0, 24(a0)
+; RV64-NEXT:    lw a1, 0(a0)
+; RV64-NEXT:    lw a2, 8(a0)
+; RV64-NEXT:    lw a3, 16(a0)
+; RV64-NEXT:    lw a0, 24(a0)
 ; RV64-NEXT:    xor a1, a1, a2
 ; RV64-NEXT:    xor a0, a3, a0
 ; RV64-NEXT:    xor a0, a1, a0
@@ -83,10 +83,10 @@ define i32 @reduce_or_4xi32(<4 x i32> %v) {
 ;
 ; RV64-LABEL: reduce_or_4xi32:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    ld a1, 0(a0)
-; RV64-NEXT:    ld a2, 8(a0)
-; RV64-NEXT:    ld a3, 16(a0)
-; RV64-NEXT:    ld a0, 24(a0)
+; RV64-NEXT:    lw a1, 0(a0)
+; RV64-NEXT:    lw a2, 8(a0)
+; RV64-NEXT:    lw a3, 16(a0)
+; RV64-NEXT:    lw a0, 24(a0)
 ; RV64-NEXT:    or a1, a1, a2
 ; RV64-NEXT:    or a0, a3, a0
 ; RV64-NEXT:    or a0, a1, a0

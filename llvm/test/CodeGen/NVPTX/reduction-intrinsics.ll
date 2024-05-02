@@ -2000,7 +2000,7 @@ define i16 @reduce_mul_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM80-NEXT:    mul.lo.s16 %rs9, %rs4, %rs1;
 ; CHECK-SM80-NEXT:    mul.lo.s16 %rs10, %rs9, %rs8;
 ; CHECK-SM80-NEXT:    mul.lo.s16 %rs11, %rs5, %rs2;
-; CHECK-SM80-NEXT:    mul.lo.s16 %rs12, %rs7, %rs11;
+; CHECK-SM80-NEXT:    mul.lo.s16 %rs12, %rs11, %rs7;
 ; CHECK-SM80-NEXT:    mul.lo.s16 %rs13, %rs10, %rs12;
 ; CHECK-SM80-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r1;
@@ -2019,7 +2019,7 @@ define i16 @reduce_mul_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM100-NEXT:    mul.lo.s16 %rs9, %rs4, %rs1;
 ; CHECK-SM100-NEXT:    mul.lo.s16 %rs10, %rs9, %rs8;
 ; CHECK-SM100-NEXT:    mul.lo.s16 %rs11, %rs5, %rs2;
-; CHECK-SM100-NEXT:    mul.lo.s16 %rs12, %rs7, %rs11;
+; CHECK-SM100-NEXT:    mul.lo.s16 %rs12, %rs11, %rs7;
 ; CHECK-SM100-NEXT:    mul.lo.s16 %rs13, %rs10, %rs12;
 ; CHECK-SM100-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r1;
@@ -2079,7 +2079,7 @@ define i32 @reduce_mul_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM80-NEXT:    mul.lo.s32 %r9, %r4, %r1;
 ; CHECK-SM80-NEXT:    mul.lo.s32 %r10, %r9, %r8;
 ; CHECK-SM80-NEXT:    mul.lo.s32 %r11, %r5, %r2;
-; CHECK-SM80-NEXT:    mul.lo.s32 %r12, %r7, %r11;
+; CHECK-SM80-NEXT:    mul.lo.s32 %r12, %r11, %r7;
 ; CHECK-SM80-NEXT:    mul.lo.s32 %r13, %r10, %r12;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r13;
 ; CHECK-SM80-NEXT:    ret;
@@ -2096,7 +2096,7 @@ define i32 @reduce_mul_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM100-NEXT:    mul.lo.s32 %r9, %r4, %r1;
 ; CHECK-SM100-NEXT:    mul.lo.s32 %r10, %r9, %r8;
 ; CHECK-SM100-NEXT:    mul.lo.s32 %r11, %r5, %r2;
-; CHECK-SM100-NEXT:    mul.lo.s32 %r12, %r7, %r11;
+; CHECK-SM100-NEXT:    mul.lo.s32 %r12, %r11, %r7;
 ; CHECK-SM100-NEXT:    mul.lo.s32 %r13, %r10, %r12;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r13;
 ; CHECK-SM100-NEXT:    ret;
@@ -2160,7 +2160,7 @@ define i16 @reduce_umax_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM80-NEXT:    max.u16 %rs9, %rs4, %rs1;
 ; CHECK-SM80-NEXT:    max.u16 %rs10, %rs9, %rs8;
 ; CHECK-SM80-NEXT:    max.u16 %rs11, %rs5, %rs2;
-; CHECK-SM80-NEXT:    max.u16 %rs12, %rs7, %rs11;
+; CHECK-SM80-NEXT:    max.u16 %rs12, %rs11, %rs7;
 ; CHECK-SM80-NEXT:    max.u16 %rs13, %rs10, %rs12;
 ; CHECK-SM80-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r1;
@@ -2239,7 +2239,7 @@ define i32 @reduce_umax_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM80-NEXT:    max.u32 %r9, %r4, %r1;
 ; CHECK-SM80-NEXT:    max.u32 %r10, %r9, %r8;
 ; CHECK-SM80-NEXT:    max.u32 %r11, %r5, %r2;
-; CHECK-SM80-NEXT:    max.u32 %r12, %r7, %r11;
+; CHECK-SM80-NEXT:    max.u32 %r12, %r11, %r7;
 ; CHECK-SM80-NEXT:    max.u32 %r13, %r10, %r12;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r13;
 ; CHECK-SM80-NEXT:    ret;
@@ -2256,7 +2256,7 @@ define i32 @reduce_umax_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM100-NEXT:    max.u32 %r9, %r4, %r1;
 ; CHECK-SM100-NEXT:    max.u32 %r10, %r9, %r8;
 ; CHECK-SM100-NEXT:    max.u32 %r11, %r5, %r2;
-; CHECK-SM100-NEXT:    max.u32 %r12, %r7, %r11;
+; CHECK-SM100-NEXT:    max.u32 %r12, %r11, %r7;
 ; CHECK-SM100-NEXT:    max.u32 %r13, %r10, %r12;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r13;
 ; CHECK-SM100-NEXT:    ret;
@@ -2320,7 +2320,7 @@ define i16 @reduce_umin_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM80-NEXT:    min.u16 %rs9, %rs4, %rs1;
 ; CHECK-SM80-NEXT:    min.u16 %rs10, %rs9, %rs8;
 ; CHECK-SM80-NEXT:    min.u16 %rs11, %rs5, %rs2;
-; CHECK-SM80-NEXT:    min.u16 %rs12, %rs7, %rs11;
+; CHECK-SM80-NEXT:    min.u16 %rs12, %rs11, %rs7;
 ; CHECK-SM80-NEXT:    min.u16 %rs13, %rs10, %rs12;
 ; CHECK-SM80-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r1;
@@ -2399,7 +2399,7 @@ define i32 @reduce_umin_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM80-NEXT:    min.u32 %r9, %r4, %r1;
 ; CHECK-SM80-NEXT:    min.u32 %r10, %r9, %r8;
 ; CHECK-SM80-NEXT:    min.u32 %r11, %r5, %r2;
-; CHECK-SM80-NEXT:    min.u32 %r12, %r7, %r11;
+; CHECK-SM80-NEXT:    min.u32 %r12, %r11, %r7;
 ; CHECK-SM80-NEXT:    min.u32 %r13, %r10, %r12;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r13;
 ; CHECK-SM80-NEXT:    ret;
@@ -2416,7 +2416,7 @@ define i32 @reduce_umin_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM100-NEXT:    min.u32 %r9, %r4, %r1;
 ; CHECK-SM100-NEXT:    min.u32 %r10, %r9, %r8;
 ; CHECK-SM100-NEXT:    min.u32 %r11, %r5, %r2;
-; CHECK-SM100-NEXT:    min.u32 %r12, %r7, %r11;
+; CHECK-SM100-NEXT:    min.u32 %r12, %r11, %r7;
 ; CHECK-SM100-NEXT:    min.u32 %r13, %r10, %r12;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r13;
 ; CHECK-SM100-NEXT:    ret;
@@ -2480,7 +2480,7 @@ define i16 @reduce_smax_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM80-NEXT:    max.s16 %rs9, %rs4, %rs1;
 ; CHECK-SM80-NEXT:    max.s16 %rs10, %rs9, %rs8;
 ; CHECK-SM80-NEXT:    max.s16 %rs11, %rs5, %rs2;
-; CHECK-SM80-NEXT:    max.s16 %rs12, %rs7, %rs11;
+; CHECK-SM80-NEXT:    max.s16 %rs12, %rs11, %rs7;
 ; CHECK-SM80-NEXT:    max.s16 %rs13, %rs10, %rs12;
 ; CHECK-SM80-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r1;
@@ -2559,7 +2559,7 @@ define i32 @reduce_smax_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM80-NEXT:    max.s32 %r9, %r4, %r1;
 ; CHECK-SM80-NEXT:    max.s32 %r10, %r9, %r8;
 ; CHECK-SM80-NEXT:    max.s32 %r11, %r5, %r2;
-; CHECK-SM80-NEXT:    max.s32 %r12, %r7, %r11;
+; CHECK-SM80-NEXT:    max.s32 %r12, %r11, %r7;
 ; CHECK-SM80-NEXT:    max.s32 %r13, %r10, %r12;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r13;
 ; CHECK-SM80-NEXT:    ret;
@@ -2576,7 +2576,7 @@ define i32 @reduce_smax_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM100-NEXT:    max.s32 %r9, %r4, %r1;
 ; CHECK-SM100-NEXT:    max.s32 %r10, %r9, %r8;
 ; CHECK-SM100-NEXT:    max.s32 %r11, %r5, %r2;
-; CHECK-SM100-NEXT:    max.s32 %r12, %r7, %r11;
+; CHECK-SM100-NEXT:    max.s32 %r12, %r11, %r7;
 ; CHECK-SM100-NEXT:    max.s32 %r13, %r10, %r12;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r13;
 ; CHECK-SM100-NEXT:    ret;
@@ -2640,7 +2640,7 @@ define i16 @reduce_smin_i16_nonpow2(<7 x i16> %in) {
 ; CHECK-SM80-NEXT:    min.s16 %rs9, %rs4, %rs1;
 ; CHECK-SM80-NEXT:    min.s16 %rs10, %rs9, %rs8;
 ; CHECK-SM80-NEXT:    min.s16 %rs11, %rs5, %rs2;
-; CHECK-SM80-NEXT:    min.s16 %rs12, %rs7, %rs11;
+; CHECK-SM80-NEXT:    min.s16 %rs12, %rs11, %rs7;
 ; CHECK-SM80-NEXT:    min.s16 %rs13, %rs10, %rs12;
 ; CHECK-SM80-NEXT:    cvt.u32.u16 %r1, %rs13;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r1;
@@ -2719,7 +2719,7 @@ define i32 @reduce_smin_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM80-NEXT:    min.s32 %r9, %r4, %r1;
 ; CHECK-SM80-NEXT:    min.s32 %r10, %r9, %r8;
 ; CHECK-SM80-NEXT:    min.s32 %r11, %r5, %r2;
-; CHECK-SM80-NEXT:    min.s32 %r12, %r7, %r11;
+; CHECK-SM80-NEXT:    min.s32 %r12, %r11, %r7;
 ; CHECK-SM80-NEXT:    min.s32 %r13, %r10, %r12;
 ; CHECK-SM80-NEXT:    st.param.b32 [func_retval0], %r13;
 ; CHECK-SM80-NEXT:    ret;
@@ -2736,7 +2736,7 @@ define i32 @reduce_smin_i32_nonpow2(<7 x i32> %in) {
 ; CHECK-SM100-NEXT:    min.s32 %r9, %r4, %r1;
 ; CHECK-SM100-NEXT:    min.s32 %r10, %r9, %r8;
 ; CHECK-SM100-NEXT:    min.s32 %r11, %r5, %r2;
-; CHECK-SM100-NEXT:    min.s32 %r12, %r7, %r11;
+; CHECK-SM100-NEXT:    min.s32 %r12, %r11, %r7;
 ; CHECK-SM100-NEXT:    min.s32 %r13, %r10, %r12;
 ; CHECK-SM100-NEXT:    st.param::func.b32 [func_retval0], %r13;
 ; CHECK-SM100-NEXT:    ret;

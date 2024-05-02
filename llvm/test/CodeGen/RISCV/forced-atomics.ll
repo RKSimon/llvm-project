@@ -3717,9 +3717,10 @@ define i64 @rmw64_umin_seq_cst(ptr %p) nounwind {
 ; RV32-NEXT:    bnez a0, .LBB52_4
 ; RV32-NEXT:  .LBB52_2: # %atomicrmw.start
 ; RV32-NEXT:    # =>This Inner Loop Header: Depth=1
-; RV32-NEXT:    sltiu a0, a4, 2
-; RV32-NEXT:    seqz a2, a1
-; RV32-NEXT:    and a0, a2, a0
+; RV32-NEXT:    snez a0, a1
+; RV32-NEXT:    sltiu a2, a4, 2
+; RV32-NEXT:    addi a0, a0, -1
+; RV32-NEXT:    and a0, a0, a2
 ; RV32-NEXT:    mv a2, a4
 ; RV32-NEXT:    bnez a0, .LBB52_1
 ; RV32-NEXT:  # %bb.3: # %atomicrmw.start

@@ -75,8 +75,9 @@ define i1 @bitcast_from_v32i8(ptr %a0) {
 define i1 @bitcast_from_v16i16(ptr %a0) {
 ; CHECK-LABEL: bitcast_from_v16i16:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
-; CHECK-NEXT:    vle16.v v8, (a0)
+; CHECK-NEXT:    li a1, 32
+; CHECK-NEXT:    vsetvli zero, a1, e8, m2, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
 ; CHECK-NEXT:    vmsne.vi v10, v8, 0
 ; CHECK-NEXT:    vcpop.m a0, v10
 ; CHECK-NEXT:    seqz a0, a0
@@ -90,8 +91,9 @@ define i1 @bitcast_from_v16i16(ptr %a0) {
 define i1 @bitcast_from_v8i32(ptr %a0) {
 ; CHECK-LABEL: bitcast_from_v8i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
-; CHECK-NEXT:    vle32.v v8, (a0)
+; CHECK-NEXT:    li a1, 32
+; CHECK-NEXT:    vsetvli zero, a1, e8, m2, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
 ; CHECK-NEXT:    vmsne.vi v10, v8, 0
 ; CHECK-NEXT:    vcpop.m a0, v10
 ; CHECK-NEXT:    seqz a0, a0
@@ -106,9 +108,10 @@ define i1 @bitcast_from_v8i32(ptr %a0) {
 define i1 @cmp_plain_to_v16i16(ptr %a0, ptr %a1) {
 ; CHECK-LABEL: cmp_plain_to_v16i16:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
-; CHECK-NEXT:    vle16.v v8, (a0)
-; CHECK-NEXT:    vle16.v v10, (a1)
+; CHECK-NEXT:    li a2, 32
+; CHECK-NEXT:    vsetvli zero, a2, e8, m2, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
+; CHECK-NEXT:    vle8.v v10, (a1)
 ; CHECK-NEXT:    vmsne.vv v12, v8, v10
 ; CHECK-NEXT:    vcpop.m a0, v12
 ; CHECK-NEXT:    seqz a0, a0
@@ -124,9 +127,10 @@ define i1 @cmp_plain_to_v16i16(ptr %a0, ptr %a1) {
 define i1 @cmp_v16i16_to_plain(ptr %a0, ptr %a1) {
 ; CHECK-LABEL: cmp_v16i16_to_plain:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
-; CHECK-NEXT:    vle16.v v8, (a0)
-; CHECK-NEXT:    vle16.v v10, (a1)
+; CHECK-NEXT:    li a2, 32
+; CHECK-NEXT:    vsetvli zero, a2, e8, m2, ta, ma
+; CHECK-NEXT:    vle8.v v8, (a0)
+; CHECK-NEXT:    vle8.v v10, (a1)
 ; CHECK-NEXT:    vmsne.vv v12, v8, v10
 ; CHECK-NEXT:    vcpop.m a0, v12
 ; CHECK-NEXT:    seqz a0, a0

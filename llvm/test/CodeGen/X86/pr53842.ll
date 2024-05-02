@@ -5,28 +5,17 @@
 ; RUN: llc < %s -mtriple=x86_64-unknown-unknown -mattr=+avx512f,+avx512dq | FileCheck %s --check-prefixes=AVX512DQ
 
 define void @PR53842_eq() {
-; AVX512F-LABEL: PR53842_eq:
-; AVX512F:       # %bb.0: # %entry
-; AVX512F-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512F-NEXT:    vpmovzxbq {{.*#+}} zmm1 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero,mem[2],zero,zero,zero,zero,zero,zero,zero,mem[3],zero,zero,zero,zero,zero,zero,zero,mem[4],zero,zero,zero,zero,zero,zero,zero,mem[5],zero,zero,zero,zero,zero,zero,zero,mem[6],zero,zero,zero,zero,zero,zero,zero,mem[7],zero,zero,zero,zero,zero,zero,zero
-; AVX512F-NEXT:    vptestnmq %zmm1, %zmm1, %k1
-; AVX512F-NEXT:    vpternlogd {{.*#+}} zmm1 = -1
-; AVX512F-NEXT:    .p2align 4
-; AVX512F-NEXT:  .LBB0_1: # %vector.body
-; AVX512F-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512F-NEXT:    vpsubq %zmm1, %zmm0, %zmm0 {%k1}
-; AVX512F-NEXT:    jmp .LBB0_1
-;
 ; AVX512DQ-LABEL: PR53842_eq:
 ; AVX512DQ:       # %bb.0: # %entry
 ; AVX512DQ-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512DQ-NEXT:    vpmovzxbq {{.*#+}} zmm1 = mem[0],zero,zero,zero,zero,zero,zero,zero,mem[1],zero,zero,zero,zero,zero,zero,zero,mem[2],zero,zero,zero,zero,zero,zero,zero,mem[3],zero,zero,zero,zero,zero,zero,zero,mem[4],zero,zero,zero,zero,zero,zero,zero,mem[5],zero,zero,zero,zero,zero,zero,zero,mem[6],zero,zero,zero,zero,zero,zero,zero,mem[7],zero,zero,zero,zero,zero,zero,zero
-; AVX512DQ-NEXT:    vptestnmq %zmm1, %zmm1, %k0
-; AVX512DQ-NEXT:    vpmovm2q %k0, %zmm1
+; AVX512DQ-NEXT:    vmovq {{.*#+}} xmm1 = mem[0],zero
+; AVX512DQ-NEXT:    vpcmpeqb %xmm0, %xmm1, %xmm1
+; AVX512DQ-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; AVX512DQ-NEXT:    vpmovzxbq {{.*#+}} zmm1 = xmm1[0],zero,zero,zero,zero,zero,zero,zero,xmm1[1],zero,zero,zero,zero,zero,zero,zero,xmm1[2],zero,zero,zero,zero,zero,zero,zero,xmm1[3],zero,zero,zero,zero,zero,zero,zero,xmm1[4],zero,zero,zero,zero,zero,zero,zero,xmm1[5],zero,zero,zero,zero,zero,zero,zero,xmm1[6],zero,zero,zero,zero,zero,zero,zero,xmm1[7],zero,zero,zero,zero,zero,zero,zero
 ; AVX512DQ-NEXT:    .p2align 4
 ; AVX512DQ-NEXT:  .LBB0_1: # %vector.body
 ; AVX512DQ-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512DQ-NEXT:    vpsubq %zmm1, %zmm0, %zmm0
+; AVX512DQ-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    jmp .LBB0_1
 entry:
   br label %vector.body
@@ -46,29 +35,17 @@ middle.block:
 }
 
 define void @PR53842_sgt() {
-; AVX512F-LABEL: PR53842_sgt:
-; AVX512F:       # %bb.0: # %entry
-; AVX512F-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512F-NEXT:    vpmovsxbq (%rax), %zmm1
-; AVX512F-NEXT:    vpternlogd {{.*#+}} zmm2 = -1
-; AVX512F-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX512F-NEXT:    .p2align 4
-; AVX512F-NEXT:  .LBB1_1: # %vector.body
-; AVX512F-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512F-NEXT:    vpcmpgtq %zmm1, %zmm0, %k1
-; AVX512F-NEXT:    vpsubq %zmm2, %zmm3, %zmm3 {%k1}
-; AVX512F-NEXT:    jmp .LBB1_1
-;
 ; AVX512DQ-LABEL: PR53842_sgt:
 ; AVX512DQ:       # %bb.0: # %entry
 ; AVX512DQ-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512DQ-NEXT:    vpmovsxbq (%rax), %zmm1
-; AVX512DQ-NEXT:    vpmovq2m %zmm1, %k0
-; AVX512DQ-NEXT:    vpmovm2q %k0, %zmm1
+; AVX512DQ-NEXT:    vmovq {{.*#+}} xmm1 = mem[0],zero
+; AVX512DQ-NEXT:    vpcmpgtb %xmm1, %xmm0, %xmm1
+; AVX512DQ-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; AVX512DQ-NEXT:    vpmovzxbq {{.*#+}} zmm1 = xmm1[0],zero,zero,zero,zero,zero,zero,zero,xmm1[1],zero,zero,zero,zero,zero,zero,zero,xmm1[2],zero,zero,zero,zero,zero,zero,zero,xmm1[3],zero,zero,zero,zero,zero,zero,zero,xmm1[4],zero,zero,zero,zero,zero,zero,zero,xmm1[5],zero,zero,zero,zero,zero,zero,zero,xmm1[6],zero,zero,zero,zero,zero,zero,zero,xmm1[7],zero,zero,zero,zero,zero,zero,zero
 ; AVX512DQ-NEXT:    .p2align 4
 ; AVX512DQ-NEXT:  .LBB1_1: # %vector.body
 ; AVX512DQ-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512DQ-NEXT:    vpsubq %zmm1, %zmm0, %zmm0
+; AVX512DQ-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    jmp .LBB1_1
 entry:
   br label %vector.body
@@ -88,30 +65,17 @@ middle.block:
 }
 
 define void @PR53842_slt() {
-; AVX512F-LABEL: PR53842_slt:
-; AVX512F:       # %bb.0: # %entry
-; AVX512F-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512F-NEXT:    vpmovsxbq (%rax), %zmm1
-; AVX512F-NEXT:    vpternlogd {{.*#+}} zmm2 = -1
-; AVX512F-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVX512F-NEXT:    .p2align 4
-; AVX512F-NEXT:  .LBB2_1: # %vector.body
-; AVX512F-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512F-NEXT:    vpcmpgtq %zmm0, %zmm1, %k1
-; AVX512F-NEXT:    vpsubq %zmm2, %zmm3, %zmm3 {%k1}
-; AVX512F-NEXT:    jmp .LBB2_1
-;
 ; AVX512DQ-LABEL: PR53842_slt:
 ; AVX512DQ:       # %bb.0: # %entry
 ; AVX512DQ-NEXT:    vpxor %xmm0, %xmm0, %xmm0
-; AVX512DQ-NEXT:    vpmovsxbq (%rax), %zmm1
-; AVX512DQ-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX512DQ-NEXT:    vmovq {{.*#+}} xmm1 = mem[0],zero
+; AVX512DQ-NEXT:    vpcmpgtb %xmm0, %xmm1, %xmm1
+; AVX512DQ-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
+; AVX512DQ-NEXT:    vpmovzxbq {{.*#+}} zmm1 = xmm1[0],zero,zero,zero,zero,zero,zero,zero,xmm1[1],zero,zero,zero,zero,zero,zero,zero,xmm1[2],zero,zero,zero,zero,zero,zero,zero,xmm1[3],zero,zero,zero,zero,zero,zero,zero,xmm1[4],zero,zero,zero,zero,zero,zero,zero,xmm1[5],zero,zero,zero,zero,zero,zero,zero,xmm1[6],zero,zero,zero,zero,zero,zero,zero,xmm1[7],zero,zero,zero,zero,zero,zero,zero
 ; AVX512DQ-NEXT:    .p2align 4
 ; AVX512DQ-NEXT:  .LBB2_1: # %vector.body
 ; AVX512DQ-NEXT:    # =>This Inner Loop Header: Depth=1
-; AVX512DQ-NEXT:    vpcmpgtq %zmm0, %zmm1, %k0
-; AVX512DQ-NEXT:    vpmovm2q %k0, %zmm3
-; AVX512DQ-NEXT:    vpsubq %zmm3, %zmm2, %zmm2
+; AVX512DQ-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    jmp .LBB2_1
 entry:
   br label %vector.body
@@ -129,3 +93,5 @@ middle.block:
   %bin.rdx = add <8 x i64> undef, %i2
   unreachable
 }
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; AVX512F: {{.*}}

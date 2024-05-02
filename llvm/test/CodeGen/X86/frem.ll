@@ -101,8 +101,8 @@ define void @frem_v16f32(<16 x float> %a0, <16 x float> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    vmovups %ymm2, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
 ; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
 ; CHECK-NEXT:    vmovups %ymm0, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
-; CHECK-NEXT:    vmovaps %xmm1, %xmm0
-; CHECK-NEXT:    vmovaps %xmm3, %xmm1
+; CHECK-NEXT:    # kill: def $xmm0 killed $xmm0 killed $ymm0
+; CHECK-NEXT:    vmovaps %xmm2, %xmm1
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    callq fmodf@PLT
 ; CHECK-NEXT:    vmovaps %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -228,13 +228,13 @@ define void @frem_v16f32(<16 x float> %a0, <16 x float> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    callq fmodf@PLT
 ; CHECK-NEXT:    vmovaps (%rsp), %xmm1 # 16-byte Reload
 ; CHECK-NEXT:    vinsertps {{.*#+}} xmm0 = xmm1[0,1,2],xmm0[0]
-; CHECK-NEXT:    vmovaps %xmm0, 16(%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
-; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
 ; CHECK-NEXT:    vmovaps %xmm0, 48(%rbx)
 ; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
 ; CHECK-NEXT:    vmovaps %xmm0, 32(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, 16(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
 ; CHECK-NEXT:    addq $160, %rsp
 ; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    retq
@@ -374,10 +374,10 @@ define void @frem_v8f64(<8 x double> %a0, <8 x double> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    movq %rdi, %rbx
 ; CHECK-NEXT:    vmovups %ymm3, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
 ; CHECK-NEXT:    vmovups %ymm2, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
-; CHECK-NEXT:    vmovups %ymm1, (%rsp) # 32-byte Spill
-; CHECK-NEXT:    vmovups %ymm0, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
-; CHECK-NEXT:    vmovaps %xmm1, %xmm0
-; CHECK-NEXT:    vmovaps %xmm3, %xmm1
+; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vmovups %ymm0, (%rsp) # 32-byte Spill
+; CHECK-NEXT:    # kill: def $xmm0 killed $xmm0 killed $ymm0
+; CHECK-NEXT:    vmovaps %xmm2, %xmm1
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    callq fmod@PLT
 ; CHECK-NEXT:    vmovaps %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -439,13 +439,13 @@ define void @frem_v8f64(<8 x double> %a0, <8 x double> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    callq fmod@PLT
 ; CHECK-NEXT:    vmovapd {{[-0-9]+}}(%r{{[sb]}}p), %xmm1 # 16-byte Reload
 ; CHECK-NEXT:    vunpcklpd {{.*#+}} xmm0 = xmm1[0],xmm0[0]
-; CHECK-NEXT:    vmovapd %xmm0, 16(%rbx)
+; CHECK-NEXT:    vmovapd %xmm0, 48(%rbx)
 ; CHECK-NEXT:    vmovaps (%rsp), %xmm0 # 16-byte Reload
-; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
-; CHECK-NEXT:    vmovaps %xmm0, 48(%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
 ; CHECK-NEXT:    vmovaps %xmm0, 32(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, 16(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
 ; CHECK-NEXT:    addq $160, %rsp
 ; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    retq
@@ -535,11 +535,11 @@ define void @frem_v32f16(<32 x half> %a0, <32 x half> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    pushq %rbx
 ; CHECK-NEXT:    subq $192, %rsp
 ; CHECK-NEXT:    movq %rdi, %rbx
-; CHECK-NEXT:    vmovdqu %ymm3, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
-; CHECK-NEXT:    vmovups %ymm2, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vmovups %ymm3, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
+; CHECK-NEXT:    vmovdqu %ymm2, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
 ; CHECK-NEXT:    vmovups %ymm1, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
 ; CHECK-NEXT:    vmovups %ymm0, {{[-0-9]+}}(%r{{[sb]}}p) # 32-byte Spill
-; CHECK-NEXT:    vpsrldq {{.*#+}} xmm0 = xmm3[14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
+; CHECK-NEXT:    vpsrldq {{.*#+}} xmm0 = xmm2[14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    callq __extendhfsf2@PLT
 ; CHECK-NEXT:    vmovd %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 4-byte Folded Spill
@@ -1005,13 +1005,13 @@ define void @frem_v32f16(<32 x half> %a0, <32 x half> %a1, ptr%p3) nounwind {
 ; CHECK-NEXT:    # xmm0 = xmm0[0],mem[0],xmm0[1],mem[1]
 ; CHECK-NEXT:    vpunpcklqdq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0, %xmm0 # 16-byte Folded Reload
 ; CHECK-NEXT:    # xmm0 = xmm0[0],mem[0]
-; CHECK-NEXT:    vmovdqa %xmm0, 16(%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
-; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
-; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
-; CHECK-NEXT:    vmovaps %xmm0, 48(%rbx)
+; CHECK-NEXT:    vmovdqa %xmm0, 48(%rbx)
 ; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
 ; CHECK-NEXT:    vmovaps %xmm0, 32(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, 16(%rbx)
+; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
+; CHECK-NEXT:    vmovaps %xmm0, (%rbx)
 ; CHECK-NEXT:    addq $192, %rsp
 ; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    retq

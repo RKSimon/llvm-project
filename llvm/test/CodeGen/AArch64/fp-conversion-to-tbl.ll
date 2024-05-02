@@ -400,8 +400,8 @@ define void @fptoui_2x_v8f32_to_v8i16_in_loop(ptr %A, ptr %B, ptr %dst) {
 ; CHECK-NEXT:    lsl x9, x8, #5
 ; CHECK-NEXT:    add x8, x8, #1
 ; CHECK-NEXT:    cmp x8, #1000
-; CHECK-NEXT:    add x10, x0, x9
-; CHECK-NEXT:    add x11, x1, x9
+; CHECK-NEXT:    add x10, x1, x9
+; CHECK-NEXT:    add x11, x0, x9
 ; CHECK-NEXT:    add x9, x2, x9
 ; CHECK-NEXT:    ldp q0, q1, [x10]
 ; CHECK-NEXT:    ldp q2, q3, [x11]
@@ -411,7 +411,7 @@ define void @fptoui_2x_v8f32_to_v8i16_in_loop(ptr %A, ptr %B, ptr %dst) {
 ; CHECK-NEXT:    fcvtzu.4s v2, v2
 ; CHECK-NEXT:    uzp1.8h v0, v0, v1
 ; CHECK-NEXT:    uzp1.8h v1, v2, v3
-; CHECK-NEXT:    stp q0, q1, [x9]
+; CHECK-NEXT:    stp q1, q0, [x9]
 ; CHECK-NEXT:    b.ne LBB7_1
 ; CHECK-NEXT:  ; %bb.2: ; %exit
 ; CHECK-NEXT:    ret
@@ -731,8 +731,8 @@ define void @uitofp_ld4_v32i16_to_v8f64(ptr nocapture noundef readonly %x, ptr n
 ; CHECK-NEXT:  LBB11_1: ; %vector.body
 ; CHECK-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    add x9, x0, x8
-; CHECK-NEXT:    ldp q3, q4, [x9, #32]
-; CHECK-NEXT:    ldp q5, q6, [x9]
+; CHECK-NEXT:    ldp q4, q3, [x9, #32]
+; CHECK-NEXT:    ldp q6, q5, [x9]
 ; CHECK-NEXT:    add x9, x1, x8
 ; CHECK-NEXT:    add x8, x8, #64
 ; CHECK-NEXT:    tbl.16b v7, { v4 }, v0
@@ -780,8 +780,8 @@ define void @uitofp_ld4_v32i16_to_v8f64(ptr nocapture noundef readonly %x, ptr n
 ; CHECK-NEXT:    fadd.2d v4, v7, v4
 ; CHECK-NEXT:    fadd.2d v5, v18, v5
 ; CHECK-NEXT:    fadd.2d v6, v17, v6
-; CHECK-NEXT:    stp q3, q4, [x9, #32]
-; CHECK-NEXT:    stp q5, q6, [x9]
+; CHECK-NEXT:    stp q4, q3, [x9, #32]
+; CHECK-NEXT:    stp q6, q5, [x9]
 ; CHECK-NEXT:    b.ne LBB11_1
 ; CHECK-NEXT:  ; %bb.2: ; %for.cond.cleanup
 ; CHECK-NEXT:    ret

@@ -64,65 +64,66 @@ define void @if_then_else16(ptr %out, i16 %mask, ptr %if_true, ptr %if_false) {
 ; CHECK-LE-NEXT:    adrp x8, .LCPI1_0
 ; CHECK-LE-NEXT:    cmtst v1.4s, v0.4s, v1.4s
 ; CHECK-LE-NEXT:    ldr q4, [x8, :lo12:.LCPI1_0]
-; CHECK-LE-NEXT:    ldp q5, q16, [x3, #32]
-; CHECK-LE-NEXT:    ldp q6, q7, [x2, #32]
+; CHECK-LE-NEXT:    ldp q16, q5, [x3, #32]
+; CHECK-LE-NEXT:    ldp q7, q6, [x2, #32]
 ; CHECK-LE-NEXT:    cmtst v2.4s, v0.4s, v2.4s
 ; CHECK-LE-NEXT:    cmtst v3.4s, v0.4s, v3.4s
 ; CHECK-LE-NEXT:    cmtst v0.4s, v0.4s, v4.4s
-; CHECK-LE-NEXT:    ldp q4, q17, [x3]
+; CHECK-LE-NEXT:    ldp q17, q4, [x3]
 ; CHECK-LE-NEXT:    bsl v1.16b, v6.16b, v5.16b
-; CHECK-LE-NEXT:    ldp q5, q6, [x2]
+; CHECK-LE-NEXT:    ldp q6, q5, [x2]
 ; CHECK-LE-NEXT:    bsl v2.16b, v7.16b, v16.16b
 ; CHECK-LE-NEXT:    bsl v3.16b, v5.16b, v4.16b
 ; CHECK-LE-NEXT:    bsl v0.16b, v6.16b, v17.16b
-; CHECK-LE-NEXT:    stp q1, q2, [x0, #32]
-; CHECK-LE-NEXT:    stp q3, q0, [x0]
+; CHECK-LE-NEXT:    stp q2, q1, [x0, #32]
+; CHECK-LE-NEXT:    stp q0, q3, [x0]
 ; CHECK-LE-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: if_then_else16:
 ; CHECK-BE:       // %bb.0: // %start
-; CHECK-BE-NEXT:    add x9, x2, #48
-; CHECK-BE-NEXT:    dup v3.4s, w1
-; CHECK-BE-NEXT:    add x8, x2, #32
-; CHECK-BE-NEXT:    ld1 { v2.4s }, [x9]
+; CHECK-BE-NEXT:    add x9, x2, #32
+; CHECK-BE-NEXT:    dup v2.4s, w1
+; CHECK-BE-NEXT:    add x8, x2, #48
+; CHECK-BE-NEXT:    ld1 { v1.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x9, .LCPI1_3
 ; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI1_3
-; CHECK-BE-NEXT:    ld1 { v4.4s }, [x9]
+; CHECK-BE-NEXT:    ld1 { v3.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x9, .LCPI1_2
 ; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI1_2
-; CHECK-BE-NEXT:    ld1 { v0.4s }, [x8]
-; CHECK-BE-NEXT:    adrp x8, .LCPI1_0
-; CHECK-BE-NEXT:    add x8, x8, :lo12:.LCPI1_0
-; CHECK-BE-NEXT:    ld1 { v5.4s }, [x9]
+; CHECK-BE-NEXT:    ld1 { v4.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x9, .LCPI1_1
 ; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI1_1
+; CHECK-BE-NEXT:    ld1 { v5.4s }, [x9]
+; CHECK-BE-NEXT:    adrp x9, .LCPI1_0
+; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI1_0
 ; CHECK-BE-NEXT:    ld1 { v6.4s }, [x9]
+; CHECK-BE-NEXT:    add x9, x3, #48
+; CHECK-BE-NEXT:    cmtst v3.4s, v2.4s, v3.4s
+; CHECK-BE-NEXT:    ld1 { v7.4s }, [x9]
 ; CHECK-BE-NEXT:    add x9, x3, #32
-; CHECK-BE-NEXT:    ld1 { v7.4s }, [x8]
-; CHECK-BE-NEXT:    cmtst v4.4s, v3.4s, v4.4s
+; CHECK-BE-NEXT:    cmtst v4.4s, v2.4s, v4.4s
+; CHECK-BE-NEXT:    cmtst v5.4s, v2.4s, v5.4s
+; CHECK-BE-NEXT:    ld1 { v0.4s }, [x8]
 ; CHECK-BE-NEXT:    ld1 { v16.4s }, [x9]
-; CHECK-BE-NEXT:    add x8, x3, #48
-; CHECK-BE-NEXT:    cmtst v5.4s, v3.4s, v5.4s
-; CHECK-BE-NEXT:    add x9, x2, #16
+; CHECK-BE-NEXT:    add x8, x2, #16
+; CHECK-BE-NEXT:    add x9, x3, #16
+; CHECK-BE-NEXT:    cmtst v2.4s, v2.4s, v6.4s
 ; CHECK-BE-NEXT:    ld1 { v17.4s }, [x8]
-; CHECK-BE-NEXT:    cmtst v6.4s, v3.4s, v6.4s
-; CHECK-BE-NEXT:    cmtst v3.4s, v3.4s, v7.4s
-; CHECK-BE-NEXT:    add x8, x3, #16
-; CHECK-BE-NEXT:    ld1 { v1.4s }, [x2]
-; CHECK-BE-NEXT:    ld1 { v7.4s }, [x3]
-; CHECK-BE-NEXT:    bif v0.16b, v16.16b, v4.16b
-; CHECK-BE-NEXT:    ld1 { v4.4s }, [x9]
-; CHECK-BE-NEXT:    ld1 { v16.4s }, [x8]
-; CHECK-BE-NEXT:    bif v2.16b, v17.16b, v5.16b
-; CHECK-BE-NEXT:    add x8, x0, #32
-; CHECK-BE-NEXT:    bif v1.16b, v7.16b, v6.16b
-; CHECK-BE-NEXT:    bsl v3.16b, v4.16b, v16.16b
-; CHECK-BE-NEXT:    st1 { v0.4s }, [x8]
+; CHECK-BE-NEXT:    ld1 { v6.4s }, [x9]
 ; CHECK-BE-NEXT:    add x8, x0, #48
-; CHECK-BE-NEXT:    st1 { v2.4s }, [x8]
+; CHECK-BE-NEXT:    bif v0.16b, v7.16b, v3.16b
+; CHECK-BE-NEXT:    ld1 { v3.4s }, [x2]
+; CHECK-BE-NEXT:    ld1 { v7.4s }, [x3]
+; CHECK-BE-NEXT:    bif v1.16b, v16.16b, v4.16b
+; CHECK-BE-NEXT:    mov v4.16b, v5.16b
+; CHECK-BE-NEXT:    bsl v2.16b, v3.16b, v7.16b
+; CHECK-BE-NEXT:    bsl v4.16b, v17.16b, v6.16b
+; CHECK-BE-NEXT:    st1 { v0.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x0, #32
+; CHECK-BE-NEXT:    st1 { v1.4s }, [x8]
 ; CHECK-BE-NEXT:    add x8, x0, #16
-; CHECK-BE-NEXT:    st1 { v1.4s }, [x0]
-; CHECK-BE-NEXT:    st1 { v3.4s }, [x8]
+; CHECK-BE-NEXT:    st1 { v2.4s }, [x0]
+; CHECK-BE-NEXT:    st1 { v4.4s }, [x8]
 ; CHECK-BE-NEXT:    ret
 start:
   %t = load <16 x i32>, ptr %if_true, align 4
@@ -143,15 +144,15 @@ define void @if_then_else32(ptr %out, i32 %mask, ptr %if_true, ptr %if_false) {
 ; CHECK-LE-NEXT:    adrp x8, .LCPI2_7
 ; CHECK-LE-NEXT:    ldr q23, [x9, :lo12:.LCPI2_6]
 ; CHECK-LE-NEXT:    ldr q20, [x8, :lo12:.LCPI2_7]
-; CHECK-LE-NEXT:    ldp q5, q2, [x2, #64]
+; CHECK-LE-NEXT:    ldp q2, q5, [x2, #64]
 ; CHECK-LE-NEXT:    cmtst v17.4s, v6.4s, v17.4s
-; CHECK-LE-NEXT:    ldp q21, q22, [x3, #64]
+; CHECK-LE-NEXT:    ldp q22, q21, [x3, #64]
 ; CHECK-LE-NEXT:    adrp x9, .LCPI2_4
 ; CHECK-LE-NEXT:    cmtst v20.4s, v6.4s, v20.4s
 ; CHECK-LE-NEXT:    cmtst v23.4s, v6.4s, v23.4s
-; CHECK-LE-NEXT:    ldp q4, q3, [x2, #96]
+; CHECK-LE-NEXT:    ldp q3, q4, [x2, #96]
 ; CHECK-LE-NEXT:    ldr q24, [x9, :lo12:.LCPI2_4]
-; CHECK-LE-NEXT:    ldp q18, q19, [x3, #96]
+; CHECK-LE-NEXT:    ldp q19, q18, [x3, #96]
 ; CHECK-LE-NEXT:    adrp x9, .LCPI2_3
 ; CHECK-LE-NEXT:    ldr q25, [x9, :lo12:.LCPI2_3]
 ; CHECK-LE-NEXT:    adrp x9, .LCPI2_2
@@ -168,54 +169,54 @@ define void @if_then_else32(ptr %out, i32 %mask, ptr %if_true, ptr %if_false) {
 ; CHECK-LE-NEXT:    bif v3.16b, v19.16b, v23.16b
 ; CHECK-LE-NEXT:    cmtst v23.4s, v6.4s, v24.4s
 ; CHECK-LE-NEXT:    cmtst v6.4s, v6.4s, v18.4s
-; CHECK-LE-NEXT:    ldp q1, q0, [x2, #32]
-; CHECK-LE-NEXT:    ldp q7, q16, [x2]
+; CHECK-LE-NEXT:    ldp q0, q1, [x2, #32]
+; CHECK-LE-NEXT:    ldp q16, q7, [x2]
 ; CHECK-LE-NEXT:    bif v2.16b, v22.16b, v21.16b
-; CHECK-LE-NEXT:    ldp q19, q20, [x3, #32]
-; CHECK-LE-NEXT:    ldp q18, q21, [x3]
-; CHECK-LE-NEXT:    stp q4, q3, [x0, #96]
+; CHECK-LE-NEXT:    ldp q20, q19, [x3, #32]
+; CHECK-LE-NEXT:    ldp q21, q18, [x3]
+; CHECK-LE-NEXT:    stp q3, q4, [x0, #96]
 ; CHECK-LE-NEXT:    mov v3.16b, v23.16b
 ; CHECK-LE-NEXT:    mov v4.16b, v6.16b
 ; CHECK-LE-NEXT:    bif v1.16b, v19.16b, v25.16b
 ; CHECK-LE-NEXT:    bif v0.16b, v20.16b, v17.16b
-; CHECK-LE-NEXT:    stp q5, q2, [x0, #64]
+; CHECK-LE-NEXT:    stp q2, q5, [x0, #64]
 ; CHECK-LE-NEXT:    bsl v3.16b, v7.16b, v18.16b
 ; CHECK-LE-NEXT:    bsl v4.16b, v16.16b, v21.16b
-; CHECK-LE-NEXT:    stp q1, q0, [x0, #32]
-; CHECK-LE-NEXT:    stp q3, q4, [x0]
+; CHECK-LE-NEXT:    stp q0, q1, [x0, #32]
+; CHECK-LE-NEXT:    stp q4, q3, [x0]
 ; CHECK-LE-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: if_then_else32:
 ; CHECK-BE:       // %bb.0: // %start
-; CHECK-BE-NEXT:    add x9, x2, #112
-; CHECK-BE-NEXT:    add x8, x2, #96
-; CHECK-BE-NEXT:    dup v19.4s, w1
+; CHECK-BE-NEXT:    add x9, x2, #96
+; CHECK-BE-NEXT:    add x8, x2, #112
+; CHECK-BE-NEXT:    add x10, x2, #80
 ; CHECK-BE-NEXT:    ld1 { v6.4s }, [x9]
 ; CHECK-BE-NEXT:    add x9, x2, #32
 ; CHECK-BE-NEXT:    ld1 { v4.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x2, #64
 ; CHECK-BE-NEXT:    ld1 { v3.4s }, [x9]
-; CHECK-BE-NEXT:    add x9, x3, #112
-; CHECK-BE-NEXT:    ld1 { v7.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x2, #80
+; CHECK-BE-NEXT:    add x9, x3, #96
+; CHECK-BE-NEXT:    add x8, x2, #64
 ; CHECK-BE-NEXT:    ld1 { v17.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x9, .LCPI2_5
 ; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI2_5
-; CHECK-BE-NEXT:    ld1 { v5.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x2, #48
+; CHECK-BE-NEXT:    ld1 { v7.4s }, [x10]
+; CHECK-BE-NEXT:    add x10, x2, #16
+; CHECK-BE-NEXT:    dup v19.4s, w1
 ; CHECK-BE-NEXT:    ld1 { v20.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x9, .LCPI2_6
 ; CHECK-BE-NEXT:    add x9, x9, :lo12:.LCPI2_6
-; CHECK-BE-NEXT:    ld1 { v2.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x2, #16
+; CHECK-BE-NEXT:    ld1 { v1.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x2, #48
+; CHECK-BE-NEXT:    ld1 { v2.4s }, [x10]
 ; CHECK-BE-NEXT:    ld1 { v22.4s }, [x9]
 ; CHECK-BE-NEXT:    adrp x10, .LCPI2_7
 ; CHECK-BE-NEXT:    add x10, x10, :lo12:.LCPI2_7
-; CHECK-BE-NEXT:    ld1 { v0.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x3, #96
+; CHECK-BE-NEXT:    ld1 { v5.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x3, #112
 ; CHECK-BE-NEXT:    ld1 { v23.4s }, [x10]
 ; CHECK-BE-NEXT:    ld1 { v16.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x3, #64
+; CHECK-BE-NEXT:    add x8, x3, #80
 ; CHECK-BE-NEXT:    cmtst v20.4s, v19.4s, v20.4s
 ; CHECK-BE-NEXT:    adrp x10, .LCPI2_3
 ; CHECK-BE-NEXT:    add x10, x10, :lo12:.LCPI2_3
@@ -225,7 +226,7 @@ define void @if_then_else32(ptr %out, i32 %mask, ptr %if_true, ptr %if_false) {
 ; CHECK-BE-NEXT:    adrp x10, .LCPI2_4
 ; CHECK-BE-NEXT:    add x10, x10, :lo12:.LCPI2_4
 ; CHECK-BE-NEXT:    cmtst v23.4s, v19.4s, v23.4s
-; CHECK-BE-NEXT:    add x8, x3, #80
+; CHECK-BE-NEXT:    add x8, x3, #64
 ; CHECK-BE-NEXT:    ld1 { v25.4s }, [x10]
 ; CHECK-BE-NEXT:    adrp x10, .LCPI2_2
 ; CHECK-BE-NEXT:    add x10, x10, :lo12:.LCPI2_2
@@ -240,39 +241,39 @@ define void @if_then_else32(ptr %out, i32 %mask, ptr %if_true, ptr %if_false) {
 ; CHECK-BE-NEXT:    ld1 { v17.4s }, [x8]
 ; CHECK-BE-NEXT:    ld1 { v22.4s }, [x9]
 ; CHECK-BE-NEXT:    cmtst v25.4s, v19.4s, v25.4s
-; CHECK-BE-NEXT:    add x11, x3, #32
+; CHECK-BE-NEXT:    add x11, x3, #48
 ; CHECK-BE-NEXT:    cmtst v24.4s, v19.4s, v24.4s
 ; CHECK-BE-NEXT:    bif v4.16b, v16.16b, v23.16b
 ; CHECK-BE-NEXT:    ld1 { v18.4s }, [x11]
-; CHECK-BE-NEXT:    add x8, x3, #48
+; CHECK-BE-NEXT:    add x8, x3, #32
 ; CHECK-BE-NEXT:    cmtst v20.4s, v19.4s, v20.4s
 ; CHECK-BE-NEXT:    cmtst v17.4s, v19.4s, v17.4s
 ; CHECK-BE-NEXT:    ld1 { v16.4s }, [x8]
 ; CHECK-BE-NEXT:    add x8, x3, #16
 ; CHECK-BE-NEXT:    cmtst v19.4s, v19.4s, v22.4s
-; CHECK-BE-NEXT:    ld1 { v1.4s }, [x2]
-; CHECK-BE-NEXT:    ld1 { v23.4s }, [x3]
-; CHECK-BE-NEXT:    ld1 { v22.4s }, [x8]
-; CHECK-BE-NEXT:    bif v5.16b, v21.16b, v25.16b
-; CHECK-BE-NEXT:    add x8, x0, #96
-; CHECK-BE-NEXT:    bif v3.16b, v18.16b, v24.16b
-; CHECK-BE-NEXT:    st1 { v4.4s }, [x8]
+; CHECK-BE-NEXT:    ld1 { v0.4s }, [x2]
+; CHECK-BE-NEXT:    ld1 { v23.4s }, [x8]
+; CHECK-BE-NEXT:    ld1 { v22.4s }, [x3]
+; CHECK-BE-NEXT:    bif v1.16b, v21.16b, v25.16b
 ; CHECK-BE-NEXT:    add x8, x0, #112
-; CHECK-BE-NEXT:    bif v2.16b, v16.16b, v20.16b
+; CHECK-BE-NEXT:    bif v5.16b, v18.16b, v24.16b
+; CHECK-BE-NEXT:    st1 { v4.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x0, #96
+; CHECK-BE-NEXT:    bif v3.16b, v16.16b, v20.16b
 ; CHECK-BE-NEXT:    st1 { v6.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x0, #64
-; CHECK-BE-NEXT:    bif v1.16b, v23.16b, v19.16b
-; CHECK-BE-NEXT:    st1 { v7.4s }, [x8]
 ; CHECK-BE-NEXT:    add x8, x0, #80
+; CHECK-BE-NEXT:    bif v2.16b, v23.16b, v19.16b
+; CHECK-BE-NEXT:    st1 { v7.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x0, #64
 ; CHECK-BE-NEXT:    bif v0.16b, v22.16b, v17.16b
+; CHECK-BE-NEXT:    st1 { v1.4s }, [x8]
+; CHECK-BE-NEXT:    add x8, x0, #48
 ; CHECK-BE-NEXT:    st1 { v5.4s }, [x8]
 ; CHECK-BE-NEXT:    add x8, x0, #32
 ; CHECK-BE-NEXT:    st1 { v3.4s }, [x8]
-; CHECK-BE-NEXT:    add x8, x0, #48
-; CHECK-BE-NEXT:    st1 { v2.4s }, [x8]
 ; CHECK-BE-NEXT:    add x8, x0, #16
-; CHECK-BE-NEXT:    st1 { v1.4s }, [x0]
-; CHECK-BE-NEXT:    st1 { v0.4s }, [x8]
+; CHECK-BE-NEXT:    st1 { v2.4s }, [x8]
+; CHECK-BE-NEXT:    st1 { v0.4s }, [x0]
 ; CHECK-BE-NEXT:    ret
 start:
   %t = load <32 x i32>, ptr %if_true, align 4

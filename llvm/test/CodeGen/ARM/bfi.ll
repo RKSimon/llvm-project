@@ -221,13 +221,10 @@ define i32 @f13(i32 %x, i32 %y) {
 define i32 @bfi1(i32 %a, i32 %b) {
 ; CHECK-LABEL: bfi1:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    and r2, r0, #1
-; CHECK-NEXT:    bic r1, r1, #19
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #16
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r0, r0, #2
-; CHECK-NEXT:    orr r0, r1, r0
+; CHECK-NEXT:    bfi r1, r0, #0, #2
+; CHECK-NEXT:    lsr r0, r0, #4
+; CHECK-NEXT:    bfi r1, r0, #4, #1
+; CHECK-NEXT:    mov r0, r1
 ; CHECK-NEXT:    bx lr
   %x1 = and i32 %a, 1
   %y1 = and i32 %b, 4294967294
@@ -273,17 +270,10 @@ define void @bfi1_use(i32 %a, i32 %b) {
 define i32 @bfi2(i32 %a, i32 %b) {
 ; CHECK-LABEL: bfi2:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    movw r2, #65148
-; CHECK-NEXT:    movt r2, #65535
-; CHECK-NEXT:    and r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #1
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #2
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #128
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r0, r0, #256
-; CHECK-NEXT:    orr r0, r1, r0
+; CHECK-NEXT:    bfi r1, r0, #0, #2
+; CHECK-NEXT:    lsr r0, r0, #7
+; CHECK-NEXT:    bfi r1, r0, #7, #2
+; CHECK-NEXT:    mov r0, r1
 ; CHECK-NEXT:    bx lr
   %x1 = and i32 %a, 1
   %y1 = and i32 %b, 4294967294
@@ -334,17 +324,10 @@ define void @bfi2_uses(i32 %a, i32 %b) {
 define i32 @bfi3(i32 %a, i32 %b) {
 ; CHECK-LABEL: bfi3:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    movw r2, #65148
-; CHECK-NEXT:    movt r2, #65535
-; CHECK-NEXT:    and r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #1
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #128
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r2, r0, #2
-; CHECK-NEXT:    orr r1, r1, r2
-; CHECK-NEXT:    and r0, r0, #256
-; CHECK-NEXT:    orr r0, r1, r0
+; CHECK-NEXT:    bfi r1, r0, #0, #2
+; CHECK-NEXT:    lsr r0, r0, #7
+; CHECK-NEXT:    bfi r1, r0, #7, #2
+; CHECK-NEXT:    mov r0, r1
 ; CHECK-NEXT:    bx lr
   %x1 = and i32 %a, 1
   %y1 = and i32 %b, 4294967294

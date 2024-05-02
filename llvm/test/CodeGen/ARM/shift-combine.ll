@@ -763,21 +763,40 @@ entry:
 }
 
 define arm_aapcscc void @test_sext_shift8_mask8(ptr %p, ptr %q) {
-; CHECK-COMMON-LABEL: test_sext_shift8_mask8:
-; CHECK-COMMON:       @ %bb.0: @ %entry
-; CHECK-COMMON-NEXT:    ldrb r0, [r0, #1]
-; CHECK-COMMON-NEXT:    str r0, [r1]
-; CHECK-COMMON-NEXT:    bx lr
+; CHECK-ARM-LABEL: test_sext_shift8_mask8:
+; CHECK-ARM:       @ %bb.0: @ %entry
+; CHECK-ARM-NEXT:    ldrsh r0, [r0]
+; CHECK-ARM-NEXT:    ubfx r0, r0, #8, #8
+; CHECK-ARM-NEXT:    str r0, [r1]
+; CHECK-ARM-NEXT:    bx lr
 ;
 ; CHECK-BE-LABEL: test_sext_shift8_mask8:
 ; CHECK-BE:       @ %bb.0: @ %entry
-; CHECK-BE-NEXT:    ldrb r0, [r0]
+; CHECK-BE-NEXT:    ldrsh r0, [r0]
+; CHECK-BE-NEXT:    ubfx r0, r0, #8, #8
 ; CHECK-BE-NEXT:    str r0, [r1]
 ; CHECK-BE-NEXT:    bx lr
 ;
+; CHECK-THUMB-LABEL: test_sext_shift8_mask8:
+; CHECK-THUMB:       @ %bb.0: @ %entry
+; CHECK-THUMB-NEXT:    ldrsh.w r0, [r0]
+; CHECK-THUMB-NEXT:    ubfx r0, r0, #8, #8
+; CHECK-THUMB-NEXT:    str r0, [r1]
+; CHECK-THUMB-NEXT:    bx lr
+;
+; CHECK-ALIGN-LABEL: test_sext_shift8_mask8:
+; CHECK-ALIGN:       @ %bb.0: @ %entry
+; CHECK-ALIGN-NEXT:    ldrsh.w r0, [r0]
+; CHECK-ALIGN-NEXT:    ubfx r0, r0, #8, #8
+; CHECK-ALIGN-NEXT:    str r0, [r1]
+; CHECK-ALIGN-NEXT:    bx lr
+;
 ; CHECK-V6M-LABEL: test_sext_shift8_mask8:
 ; CHECK-V6M:       @ %bb.0: @ %entry
-; CHECK-V6M-NEXT:    ldrb r0, [r0, #1]
+; CHECK-V6M-NEXT:    movs r2, #0
+; CHECK-V6M-NEXT:    ldrsh r0, [r0, r2]
+; CHECK-V6M-NEXT:    lsrs r0, r0, #8
+; CHECK-V6M-NEXT:    uxtb r0, r0
 ; CHECK-V6M-NEXT:    str r0, [r1]
 ; CHECK-V6M-NEXT:    bx lr
 entry:
@@ -1222,22 +1241,24 @@ define i32 @logic_tree_with_mismatching_shifts2_i32(i32 %a, i32 %b, i32 %c, i32 
 define <4 x i32> @or_tree_with_shifts_vec_i32(<4 x i32> %a, <4 x i32> %b, <4 x i32> %c, <4 x i32> %d) {
 ; CHECK-ARM-LABEL: or_tree_with_shifts_vec_i32:
 ; CHECK-ARM:       @ %bb.0:
-; CHECK-ARM-NEXT:    vorr q8, q0, q2
-; CHECK-ARM-NEXT:    vshl.i32 q8, q8, #16
-; CHECK-ARM-NEXT:    vorr q8, q8, q1
-; CHECK-ARM-NEXT:    vorr q0, q8, q3
+; CHECK-ARM-NEXT:    vshl.i32 q8, q2, #16
+; CHECK-ARM-NEXT:    vshl.i32 q9, q0, #16
+; CHECK-ARM-NEXT:    vorr q8, q8, q3
+; CHECK-ARM-NEXT:    vorr q9, q9, q1
+; CHECK-ARM-NEXT:    vorr q0, q9, q8
 ; CHECK-ARM-NEXT:    bx lr
 ;
 ; CHECK-BE-LABEL: or_tree_with_shifts_vec_i32:
 ; CHECK-BE:       @ %bb.0:
 ; CHECK-BE-NEXT:    vrev64.32 q8, q2
 ; CHECK-BE-NEXT:    vrev64.32 q9, q0
-; CHECK-BE-NEXT:    vorr q8, q9, q8
-; CHECK-BE-NEXT:    vrev64.32 q9, q1
-; CHECK-BE-NEXT:    vrev64.32 q10, q3
 ; CHECK-BE-NEXT:    vshl.i32 q8, q8, #16
-; CHECK-BE-NEXT:    vorr q8, q8, q9
+; CHECK-BE-NEXT:    vrev64.32 q10, q3
+; CHECK-BE-NEXT:    vshl.i32 q9, q9, #16
+; CHECK-BE-NEXT:    vrev64.32 q11, q1
 ; CHECK-BE-NEXT:    vorr q8, q8, q10
+; CHECK-BE-NEXT:    vorr q9, q9, q11
+; CHECK-BE-NEXT:    vorr q8, q9, q8
 ; CHECK-BE-NEXT:    vrev64.32 q0, q8
 ; CHECK-BE-NEXT:    bx lr
 ;
@@ -2066,15 +2087,13 @@ define <2 x i64> @lshr_into_vsri_i64(<2 x i64> %a, <2 x i64> %b) {
 ;
 ; CHECK-ALIGN-LABEL: lshr_into_vsri_i64:
 ; CHECK-ALIGN:       @ %bb.0: @ %bb1
-; CHECK-ALIGN-NEXT:    ldr r0, [sp]
+; CHECK-ALIGN-NEXT:    ldrd r0, r2, [sp]
 ; CHECK-ALIGN-NEXT:    and r1, r1, #-536870912
-; CHECK-ALIGN-NEXT:    ldr r2, [sp, #4]
+; CHECK-ALIGN-NEXT:    orr.w r1, r1, r2, lsr #3
 ; CHECK-ALIGN-NEXT:    and r3, r3, #-536870912
-; CHECK-ALIGN-NEXT:    ldr.w r12, [sp, #12]
 ; CHECK-ALIGN-NEXT:    lsrs r0, r0, #3
 ; CHECK-ALIGN-NEXT:    orr.w r0, r0, r2, lsl #29
-; CHECK-ALIGN-NEXT:    orr.w r1, r1, r2, lsr #3
-; CHECK-ALIGN-NEXT:    ldr r2, [sp, #8]
+; CHECK-ALIGN-NEXT:    ldrd r2, r12, [sp, #8]
 ; CHECK-ALIGN-NEXT:    orr.w r3, r3, r12, lsr #3
 ; CHECK-ALIGN-NEXT:    lsrs r2, r2, #3
 ; CHECK-ALIGN-NEXT:    orr.w r2, r2, r12, lsl #29
@@ -2083,22 +2102,24 @@ define <2 x i64> @lshr_into_vsri_i64(<2 x i64> %a, <2 x i64> %b) {
 ; CHECK-V6M-LABEL: lshr_into_vsri_i64:
 ; CHECK-V6M:       @ %bb.0: @ %bb1
 ; CHECK-V6M-NEXT:    push {r4, r5, r6, lr}
-; CHECK-V6M-NEXT:    ldr r4, [sp, #20]
-; CHECK-V6M-NEXT:    lsls r0, r4, #29
-; CHECK-V6M-NEXT:    ldr r2, [sp, #16]
+; CHECK-V6M-NEXT:    ldr r0, [sp, #16]
+; CHECK-V6M-NEXT:    lsrs r0, r0, #3
+; CHECK-V6M-NEXT:    add r2, sp, #16
+; CHECK-V6M-NEXT:    ldr r2, [r2, #4]
+; CHECK-V6M-NEXT:    lsls r4, r2, #29
+; CHECK-V6M-NEXT:    adds r0, r0, r4
+; CHECK-V6M-NEXT:    movs r4, #7
+; CHECK-V6M-NEXT:    lsls r4, r4, #29
+; CHECK-V6M-NEXT:    ands r1, r4
 ; CHECK-V6M-NEXT:    lsrs r2, r2, #3
-; CHECK-V6M-NEXT:    adds r0, r2, r0
-; CHECK-V6M-NEXT:    ldr r5, [sp, #28]
-; CHECK-V6M-NEXT:    lsls r2, r5, #29
-; CHECK-V6M-NEXT:    ldr r6, [sp, #24]
-; CHECK-V6M-NEXT:    lsrs r6, r6, #3
-; CHECK-V6M-NEXT:    adds r2, r6, r2
-; CHECK-V6M-NEXT:    movs r6, #7
-; CHECK-V6M-NEXT:    lsls r6, r6, #29
-; CHECK-V6M-NEXT:    ands r1, r6
-; CHECK-V6M-NEXT:    lsrs r4, r4, #3
-; CHECK-V6M-NEXT:    adds r1, r4, r1
-; CHECK-V6M-NEXT:    ands r3, r6
+; CHECK-V6M-NEXT:    adds r1, r2, r1
+; CHECK-V6M-NEXT:    ldr r2, [sp, #24]
+; CHECK-V6M-NEXT:    lsrs r2, r2, #3
+; CHECK-V6M-NEXT:    add r5, sp, #24
+; CHECK-V6M-NEXT:    ldr r5, [r5, #4]
+; CHECK-V6M-NEXT:    lsls r6, r5, #29
+; CHECK-V6M-NEXT:    adds r2, r2, r6
+; CHECK-V6M-NEXT:    ands r3, r4
 ; CHECK-V6M-NEXT:    lsrs r4, r5, #3
 ; CHECK-V6M-NEXT:    adds r3, r4, r3
 ; CHECK-V6M-NEXT:    pop {r4, r5, r6, pc}
@@ -2122,38 +2143,39 @@ define <2 x i64> @shl_into_vsli_i64(<2 x i64> %a, <2 x i64> %b) {
 ;
 ; CHECK-ALIGN-LABEL: shl_into_vsli_i64:
 ; CHECK-ALIGN:       @ %bb.0: @ %bb1
-; CHECK-ALIGN-NEXT:    ldr r3, [sp, #4]
+; CHECK-ALIGN-NEXT:    push {r7, lr}
+; CHECK-ALIGN-NEXT:    ldrd r1, r3, [sp, #8]
 ; CHECK-ALIGN-NEXT:    and r0, r0, #7
-; CHECK-ALIGN-NEXT:    ldr r1, [sp]
-; CHECK-ALIGN-NEXT:    and r2, r2, #7
-; CHECK-ALIGN-NEXT:    ldr.w r12, [sp, #8]
+; CHECK-ALIGN-NEXT:    ldrd lr, r12, [sp, #16]
 ; CHECK-ALIGN-NEXT:    lsls r3, r3, #3
+; CHECK-ALIGN-NEXT:    and r2, r2, #7
 ; CHECK-ALIGN-NEXT:    orr.w r0, r0, r1, lsl #3
 ; CHECK-ALIGN-NEXT:    orr.w r1, r3, r1, lsr #29
-; CHECK-ALIGN-NEXT:    ldr r3, [sp, #12]
-; CHECK-ALIGN-NEXT:    orr.w r2, r2, r12, lsl #3
-; CHECK-ALIGN-NEXT:    lsls r3, r3, #3
-; CHECK-ALIGN-NEXT:    orr.w r3, r3, r12, lsr #29
-; CHECK-ALIGN-NEXT:    bx lr
+; CHECK-ALIGN-NEXT:    lsl.w r3, r12, #3
+; CHECK-ALIGN-NEXT:    orr.w r2, r2, lr, lsl #3
+; CHECK-ALIGN-NEXT:    orr.w r3, r3, lr, lsr #29
+; CHECK-ALIGN-NEXT:    pop {r7, pc}
 ;
 ; CHECK-V6M-LABEL: shl_into_vsli_i64:
 ; CHECK-V6M:       @ %bb.0: @ %bb1
 ; CHECK-V6M-NEXT:    push {r4, lr}
-; CHECK-V6M-NEXT:    movs r3, #7
-; CHECK-V6M-NEXT:    ands r0, r3
-; CHECK-V6M-NEXT:    ldr r1, [sp, #8]
-; CHECK-V6M-NEXT:    lsls r4, r1, #3
-; CHECK-V6M-NEXT:    adds r0, r4, r0
-; CHECK-V6M-NEXT:    lsrs r1, r1, #29
-; CHECK-V6M-NEXT:    ldr r4, [sp, #12]
-; CHECK-V6M-NEXT:    lsls r4, r4, #3
-; CHECK-V6M-NEXT:    adds r1, r4, r1
-; CHECK-V6M-NEXT:    ands r2, r3
-; CHECK-V6M-NEXT:    ldr r3, [sp, #16]
+; CHECK-V6M-NEXT:    movs r1, #7
+; CHECK-V6M-NEXT:    ands r0, r1
+; CHECK-V6M-NEXT:    ldr r3, [sp, #8]
 ; CHECK-V6M-NEXT:    lsls r4, r3, #3
-; CHECK-V6M-NEXT:    adds r2, r4, r2
-; CHECK-V6M-NEXT:    lsrs r3, r3, #29
-; CHECK-V6M-NEXT:    ldr r4, [sp, #20]
+; CHECK-V6M-NEXT:    adds r0, r4, r0
+; CHECK-V6M-NEXT:    ands r2, r1
+; CHECK-V6M-NEXT:    ldr r4, [sp, #16]
+; CHECK-V6M-NEXT:    lsls r1, r4, #3
+; CHECK-V6M-NEXT:    adds r2, r1, r2
+; CHECK-V6M-NEXT:    lsrs r1, r3, #29
+; CHECK-V6M-NEXT:    add r3, sp, #8
+; CHECK-V6M-NEXT:    ldr r3, [r3, #4]
+; CHECK-V6M-NEXT:    lsls r3, r3, #3
+; CHECK-V6M-NEXT:    adds r1, r3, r1
+; CHECK-V6M-NEXT:    lsrs r3, r4, #29
+; CHECK-V6M-NEXT:    add r4, sp, #16
+; CHECK-V6M-NEXT:    ldr r4, [r4, #4]
 ; CHECK-V6M-NEXT:    lsls r4, r4, #3
 ; CHECK-V6M-NEXT:    adds r3, r4, r3
 ; CHECK-V6M-NEXT:    pop {r4, pc}
@@ -2199,22 +2221,20 @@ define <2 x i64> @lshr_into_vsri_shift1_i64(<2 x i64> %a, <2 x i64> %b) {
 ;
 ; CHECK-ALIGN-LABEL: lshr_into_vsri_shift1_i64:
 ; CHECK-ALIGN:       @ %bb.0: @ %bb1
-; CHECK-ALIGN-NEXT:    push {r7, lr}
-; CHECK-ALIGN-NEXT:    ldr.w r12, [sp, #12]
+; CHECK-ALIGN-NEXT:    push {r4, lr}
+; CHECK-ALIGN-NEXT:    ldrd r12, lr, [sp, #8]
 ; CHECK-ALIGN-NEXT:    and r0, r0, #-2147483648
-; CHECK-ALIGN-NEXT:    ldr.w lr, [sp, #20]
-; CHECK-ALIGN-NEXT:    and r2, r2, #-2147483648
-; CHECK-ALIGN-NEXT:    lsrs.w r12, r12, #1
-; CHECK-ALIGN-NEXT:    orr.w r1, r1, r12
-; CHECK-ALIGN-NEXT:    ldr.w r12, [sp, #8]
-; CHECK-ALIGN-NEXT:    rrx r12, r12
-; CHECK-ALIGN-NEXT:    orr.w r0, r0, r12
-; CHECK-ALIGN-NEXT:    ldr.w r12, [sp, #16]
 ; CHECK-ALIGN-NEXT:    lsrs.w lr, lr, #1
-; CHECK-ALIGN-NEXT:    orr.w r3, r3, lr
+; CHECK-ALIGN-NEXT:    orr.w r1, r1, lr
+; CHECK-ALIGN-NEXT:    ldrd lr, r4, [sp, #16]
+; CHECK-ALIGN-NEXT:    and r2, r2, #-2147483648
 ; CHECK-ALIGN-NEXT:    rrx r12, r12
-; CHECK-ALIGN-NEXT:    orr.w r2, r2, r12
-; CHECK-ALIGN-NEXT:    pop {r7, pc}
+; CHECK-ALIGN-NEXT:    lsrs.w r4, r4, #1
+; CHECK-ALIGN-NEXT:    orr.w r3, r3, r4
+; CHECK-ALIGN-NEXT:    orr.w r0, r0, r12
+; CHECK-ALIGN-NEXT:    rrx r4, lr
+; CHECK-ALIGN-NEXT:    orrs r2, r4
+; CHECK-ALIGN-NEXT:    pop {r4, pc}
 ;
 ; CHECK-V6M-LABEL: lshr_into_vsri_shift1_i64:
 ; CHECK-V6M:       @ %bb.0: @ %bb1
@@ -2223,22 +2243,24 @@ define <2 x i64> @lshr_into_vsri_shift1_i64(<2 x i64> %a, <2 x i64> %b) {
 ; CHECK-V6M-NEXT:    movs r4, #1
 ; CHECK-V6M-NEXT:    lsls r4, r4, #31
 ; CHECK-V6M-NEXT:    ands r0, r4
-; CHECK-V6M-NEXT:    ldr r5, [sp, #28]
-; CHECK-V6M-NEXT:    lsls r6, r5, #31
-; CHECK-V6M-NEXT:    ldr r7, [sp, #24]
-; CHECK-V6M-NEXT:    lsrs r7, r7, #1
-; CHECK-V6M-NEXT:    adds r6, r7, r6
-; CHECK-V6M-NEXT:    orrs r0, r6
-; CHECK-V6M-NEXT:    ands r2, r4
-; CHECK-V6M-NEXT:    ldr r4, [sp, #36]
-; CHECK-V6M-NEXT:    lsls r6, r4, #31
-; CHECK-V6M-NEXT:    ldr r7, [sp, #32]
-; CHECK-V6M-NEXT:    lsrs r7, r7, #1
-; CHECK-V6M-NEXT:    adds r6, r7, r6
-; CHECK-V6M-NEXT:    orrs r2, r6
+; CHECK-V6M-NEXT:    ldr r5, [sp, #24]
 ; CHECK-V6M-NEXT:    lsrs r5, r5, #1
-; CHECK-V6M-NEXT:    orrs r1, r5
+; CHECK-V6M-NEXT:    add r6, sp, #24
+; CHECK-V6M-NEXT:    ldr r6, [r6, #4]
+; CHECK-V6M-NEXT:    lsls r7, r6, #31
+; CHECK-V6M-NEXT:    adds r5, r5, r7
+; CHECK-V6M-NEXT:    orrs r0, r5
+; CHECK-V6M-NEXT:    ands r2, r4
+; CHECK-V6M-NEXT:    ldr r4, [sp, #32]
 ; CHECK-V6M-NEXT:    lsrs r4, r4, #1
+; CHECK-V6M-NEXT:    add r5, sp, #32
+; CHECK-V6M-NEXT:    ldr r5, [r5, #4]
+; CHECK-V6M-NEXT:    lsls r7, r5, #31
+; CHECK-V6M-NEXT:    adds r4, r4, r7
+; CHECK-V6M-NEXT:    orrs r2, r4
+; CHECK-V6M-NEXT:    lsrs r4, r6, #1
+; CHECK-V6M-NEXT:    orrs r1, r4
+; CHECK-V6M-NEXT:    lsrs r4, r5, #1
 ; CHECK-V6M-NEXT:    orrs r3, r4
 ; CHECK-V6M-NEXT:    add sp, #4
 ; CHECK-V6M-NEXT:    pop {r4, r5, r6, r7, pc}

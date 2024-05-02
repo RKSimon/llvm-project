@@ -10,7 +10,9 @@
 define i32 @nan_guard_fptosi_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fcvtzs w0, s0
+; CHECK-NEXT:    fcvtzs w8, s0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -21,7 +23,9 @@ define i32 @nan_guard_fptosi_f32(float %x) {
 define i32 @nan_guard_fptosi_ord_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_ord_f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fcvtzs w0, s0
+; CHECK-NEXT:    fcvtzs w8, s0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    csel w0, w8, wzr, vc
 ; CHECK-NEXT:    ret
   %cmp = fcmp ord float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -32,7 +36,9 @@ define i32 @nan_guard_fptosi_ord_f32(float %x) {
 define i32 @nan_guard_fptoui_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptoui_f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fcvtzu w0, s0
+; CHECK-NEXT:    fcvtzu w8, s0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptoui float %x to i32
@@ -43,7 +49,9 @@ define i32 @nan_guard_fptoui_f32(float %x) {
 define i32 @nan_guard_fptoui_ord_f32(float %x) {
 ; CHECK-LABEL: nan_guard_fptoui_ord_f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fcvtzu w0, s0
+; CHECK-NEXT:    fcvtzu w8, s0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    csel w0, w8, wzr, vc
 ; CHECK-NEXT:    ret
   %cmp = fcmp ord float %x, 0.000000e+00
   %conv = fptoui float %x to i32
@@ -55,7 +63,9 @@ define i32 @nan_guard_fptosi_and_mask(float %x) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fcvtzs w8, s0
-; CHECK-NEXT:    and w0, w8, #0x3
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    and w8, w8, #0x3
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -69,7 +79,9 @@ define i32 @nan_guard_fptosi_and_mask_var(float %x, i32 %m) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask_var:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fcvtzs w8, s0
-; CHECK-NEXT:    and w0, w8, w0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    and w8, w8, w0
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -83,7 +95,9 @@ define i32 @nan_guard_fptosi_and_mask_commuted(float %x, i32 %m) {
 ; CHECK-LABEL: nan_guard_fptosi_and_mask_commuted:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fcvtzs w8, s0
-; CHECK-NEXT:    and w0, w8, w0
+; CHECK-NEXT:    fcmp s0, s0
+; CHECK-NEXT:    and w8, w0, w8
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno float %x, 0.000000e+00
   %conv = fptosi float %x to i32
@@ -95,7 +109,9 @@ define i32 @nan_guard_fptosi_and_mask_commuted(float %x, i32 %m) {
 define i32 @nan_guard_fptosi_f64(double %x) {
 ; CHECK-LABEL: nan_guard_fptosi_f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fcvtzs w0, d0
+; CHECK-NEXT:    fcvtzs w8, d0
+; CHECK-NEXT:    fcmp d0, d0
+; CHECK-NEXT:    csel w0, wzr, w8, vs
 ; CHECK-NEXT:    ret
   %cmp = fcmp uno double %x, 0.000000e+00
   %conv = fptosi double %x to i32

@@ -9,16 +9,17 @@ define <4 x i16> @scalar_to_vector_v2i32(i32 %in) nounwind {
 ; SI-LABEL: scalar_to_vector_v2i32:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
-; SI-NEXT:    v_alignbit_b32 v0, v1, v0, 16
+; SI-NEXT:    v_and_b32_e32 v1, 0xffff0000, v0
+; SI-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; SI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SI-NEXT:    v_mov_b32_e32 v1, v0
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: scalar_to_vector_v2i32:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0x7060706
-; VI-NEXT:    v_perm_b32 v0, v0, v0, s4
+; VI-NEXT:    v_and_b32_e32 v1, 0xffff0000, v0
+; VI-NEXT:    v_or_b32_sdwa v0, v0, v1 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    v_mov_b32_e32 v1, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -46,16 +47,17 @@ define <4 x i16> @scalar_to_vector_v2f32(float %in) nounwind {
 ; SI-LABEL: scalar_to_vector_v2f32:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
-; SI-NEXT:    v_alignbit_b32 v0, v1, v0, 16
+; SI-NEXT:    v_and_b32_e32 v1, 0xffff0000, v0
+; SI-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; SI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SI-NEXT:    v_mov_b32_e32 v1, v0
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: scalar_to_vector_v2f32:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
-; VI-NEXT:    v_alignbit_b32 v0, v1, v0, 16
+; VI-NEXT:    v_and_b32_e32 v1, 0xffff0000, v0
+; VI-NEXT:    v_or_b32_sdwa v0, v0, v1 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    v_mov_b32_e32 v1, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -96,55 +98,27 @@ define amdgpu_kernel void @scalar_to_vector_v4i16() {
 ; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
 ; SI-NEXT:    s_endpgm
 ;
-; VI-LABEL: scalar_to_vector_v4i16:
-; VI:       ; %bb.0: ; %bb
-; VI-NEXT:    s_mov_b32 s3, 0xf000
-; VI-NEXT:    s_mov_b32 s2, -1
-; VI-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
-; VI-NEXT:    s_waitcnt vmcnt(0)
-; VI-NEXT:    v_readfirstlane_b32 s0, v0
-; VI-NEXT:    s_lshl_b32 s1, s0, 8
-; VI-NEXT:    s_or_b32 s0, s0, s1
-; VI-NEXT:    s_lshl_b32 s1, s0, 16
-; VI-NEXT:    s_and_b32 s0, s0, 0xffff
-; VI-NEXT:    s_or_b32 s0, s0, s1
-; VI-NEXT:    v_mov_b32_e32 v0, s0
-; VI-NEXT:    v_mov_b32_e32 v1, s0
-; VI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
-; VI-NEXT:    s_endpgm
-;
-; GFX9-LABEL: scalar_to_vector_v4i16:
-; GFX9:       ; %bb.0: ; %bb
-; GFX9-NEXT:    s_mov_b32 s3, 0xf000
-; GFX9-NEXT:    s_mov_b32 s2, -1
-; GFX9-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
-; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_readfirstlane_b32 s0, v0
-; GFX9-NEXT:    s_lshl_b32 s1, s0, 8
-; GFX9-NEXT:    s_or_b32 s0, s0, s1
-; GFX9-NEXT:    s_and_b32 s1, s0, 0xffff
-; GFX9-NEXT:    s_lshl_b32 s0, s0, 16
-; GFX9-NEXT:    s_or_b32 s0, s1, s0
-; GFX9-NEXT:    v_mov_b32_e32 v0, s0
-; GFX9-NEXT:    v_mov_b32_e32 v1, s0
-; GFX9-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
-; GFX9-NEXT:    s_endpgm
+; GFX89-LABEL: scalar_to_vector_v4i16:
+; GFX89:       ; %bb.0: ; %bb
+; GFX89-NEXT:    s_mov_b32 s3, 0xf000
+; GFX89-NEXT:    s_mov_b32 s2, -1
+; GFX89-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
+; GFX89-NEXT:    s_mov_b32 s0, 0x4040404
+; GFX89-NEXT:    s_waitcnt vmcnt(0)
+; GFX89-NEXT:    v_perm_b32 v0, v0, v0, s0
+; GFX89-NEXT:    v_mov_b32_e32 v1, v0
+; GFX89-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
+; GFX89-NEXT:    s_endpgm
 ;
 ; GFX11-LABEL: scalar_to_vector_v4i16:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_mov_b32 s3, 0x31016000
 ; GFX11-NEXT:    s_mov_b32 s2, -1
-; GFX11-NEXT:    buffer_load_d16_u8 v0, off, s[0:3], 0
+; GFX11-NEXT:    buffer_load_u8 v0, off, s[0:3], 0
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
-; GFX11-NEXT:    v_readfirstlane_b32 s0, v0
-; GFX11-NEXT:    s_lshl_b32 s1, s0, 8
-; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
-; GFX11-NEXT:    s_or_b32 s0, s0, s1
-; GFX11-NEXT:    s_and_b32 s1, s0, 0xffff
-; GFX11-NEXT:    s_lshl_b32 s0, s0, 16
-; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
-; GFX11-NEXT:    s_or_b32 s0, s1, s0
-; GFX11-NEXT:    v_dual_mov_b32 v0, s0 :: v_dual_mov_b32 v1, s0
+; GFX11-NEXT:    v_perm_b32 v0, v0, v0, 0x4040404
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_mov_b32_e32 v1, v0
 ; GFX11-NEXT:    buffer_store_b64 v[0:1], off, s[0:3], 0
 ; GFX11-NEXT:    s_endpgm
 bb:
@@ -172,70 +146,27 @@ define amdgpu_kernel void @scalar_to_vector_v4f16() {
 ; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
 ; SI-NEXT:    s_endpgm
 ;
-; VI-LABEL: scalar_to_vector_v4f16:
-; VI:       ; %bb.0: ; %bb
-; VI-NEXT:    s_mov_b32 s3, 0xf000
-; VI-NEXT:    s_mov_b32 s2, -1
-; VI-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
-; VI-NEXT:    s_waitcnt vmcnt(0)
-; VI-NEXT:    v_readfirstlane_b32 s0, v0
-; VI-NEXT:    s_lshl_b32 s1, s0, 8
-; VI-NEXT:    s_or_b32 s0, s1, s0
-; VI-NEXT:    s_and_b32 s1, s0, 0xff00
-; VI-NEXT:    s_bfe_u32 s4, s0, 0x80008
-; VI-NEXT:    s_or_b32 s1, s4, s1
-; VI-NEXT:    s_and_b32 s0, s0, 0xffff
-; VI-NEXT:    s_lshl_b32 s4, s1, 16
-; VI-NEXT:    s_and_b32 s1, s1, 0xffff
-; VI-NEXT:    s_or_b32 s1, s1, s4
-; VI-NEXT:    s_or_b32 s0, s0, s4
-; VI-NEXT:    v_mov_b32_e32 v0, s0
-; VI-NEXT:    v_mov_b32_e32 v1, s1
-; VI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
-; VI-NEXT:    s_endpgm
-;
-; GFX9-LABEL: scalar_to_vector_v4f16:
-; GFX9:       ; %bb.0: ; %bb
-; GFX9-NEXT:    s_mov_b32 s3, 0xf000
-; GFX9-NEXT:    s_mov_b32 s2, -1
-; GFX9-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
-; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_readfirstlane_b32 s0, v0
-; GFX9-NEXT:    s_lshl_b32 s1, s0, 8
-; GFX9-NEXT:    s_or_b32 s0, s1, s0
-; GFX9-NEXT:    s_and_b32 s1, s0, 0xff00
-; GFX9-NEXT:    s_bfe_u32 s4, s0, 0x80008
-; GFX9-NEXT:    s_or_b32 s1, s4, s1
-; GFX9-NEXT:    s_and_b32 s0, s0, 0xffff
-; GFX9-NEXT:    s_and_b32 s4, s1, 0xffff
-; GFX9-NEXT:    s_lshl_b32 s1, s1, 16
-; GFX9-NEXT:    s_or_b32 s4, s4, s1
-; GFX9-NEXT:    s_or_b32 s0, s0, s1
-; GFX9-NEXT:    v_mov_b32_e32 v0, s0
-; GFX9-NEXT:    v_mov_b32_e32 v1, s4
-; GFX9-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
-; GFX9-NEXT:    s_endpgm
+; GFX89-LABEL: scalar_to_vector_v4f16:
+; GFX89:       ; %bb.0: ; %bb
+; GFX89-NEXT:    s_mov_b32 s3, 0xf000
+; GFX89-NEXT:    s_mov_b32 s2, -1
+; GFX89-NEXT:    buffer_load_ubyte v0, off, s[0:3], 0
+; GFX89-NEXT:    s_mov_b32 s0, 0x4040404
+; GFX89-NEXT:    s_waitcnt vmcnt(0)
+; GFX89-NEXT:    v_perm_b32 v0, v0, v0, s0
+; GFX89-NEXT:    v_mov_b32_e32 v1, v0
+; GFX89-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
+; GFX89-NEXT:    s_endpgm
 ;
 ; GFX11-LABEL: scalar_to_vector_v4f16:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_mov_b32 s3, 0x31016000
 ; GFX11-NEXT:    s_mov_b32 s2, -1
-; GFX11-NEXT:    buffer_load_d16_u8 v0, off, s[0:3], 0
+; GFX11-NEXT:    buffer_load_u8 v0, off, s[0:3], 0
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
-; GFX11-NEXT:    v_lshlrev_b32_e32 v1, 8, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_or_b32_e32 v0, v1, v0
-; GFX11-NEXT:    v_readfirstlane_b32 s0, v0
-; GFX11-NEXT:    s_and_b32 s1, s0, 0xff00
-; GFX11-NEXT:    s_bfe_u32 s4, s0, 0x80008
-; GFX11-NEXT:    s_and_b32 s0, s0, 0xffff
-; GFX11-NEXT:    s_or_b32 s1, s4, s1
-; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(SKIP_3) | instid1(SALU_CYCLE_1)
-; GFX11-NEXT:    s_lshl_b32 s4, s1, 16
-; GFX11-NEXT:    s_and_b32 s1, s1, 0xffff
-; GFX11-NEXT:    s_or_b32 s0, s0, s4
-; GFX11-NEXT:    s_or_b32 s1, s1, s4
-; GFX11-NEXT:    v_dual_mov_b32 v0, s0 :: v_dual_mov_b32 v1, s1
+; GFX11-NEXT:    v_perm_b32 v0, v0, v0, 0x4040404
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_mov_b32_e32 v1, v0
 ; GFX11-NEXT:    buffer_store_b64 v[0:1], off, s[0:3], 0
 ; GFX11-NEXT:    s_endpgm
 bb:

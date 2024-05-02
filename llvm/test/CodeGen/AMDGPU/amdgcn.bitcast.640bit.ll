@@ -29670,17 +29670,17 @@ define inreg <40 x half> @bitcast_v40i16_to_v40f16_scalar(<40 x i16> inreg %a, i
 ; VI-NEXT:  .LBB57_2: ; %end
 ; VI-NEXT:    s_and_b32 s26, 0xffff, s26
 ; VI-NEXT:    s_lshl_b32 s13, s13, 16
-; VI-NEXT:    s_or_b32 s13, s26, s13
-; VI-NEXT:    s_and_b32 s26, 0xffff, s27
+; VI-NEXT:    s_or_b32 s26, s26, s13
+; VI-NEXT:    s_and_b32 s13, 0xffff, s27
 ; VI-NEXT:    s_lshl_b32 s12, s12, 16
-; VI-NEXT:    s_or_b32 s12, s26, s12
-; VI-NEXT:    s_and_b32 s26, 0xffff, s28
+; VI-NEXT:    s_or_b32 s13, s13, s12
+; VI-NEXT:    s_and_b32 s12, 0xffff, s28
 ; VI-NEXT:    s_lshl_b32 s9, s9, 16
-; VI-NEXT:    s_or_b32 s9, s26, s9
-; VI-NEXT:    s_and_b32 s26, 0xffff, s29
+; VI-NEXT:    s_or_b32 s12, s12, s9
+; VI-NEXT:    s_and_b32 s9, 0xffff, s29
 ; VI-NEXT:    s_lshl_b32 s6, s6, 16
-; VI-NEXT:    s_or_b32 s6, s26, s6
-; VI-NEXT:    s_and_b32 s26, 0xffff, s44
+; VI-NEXT:    s_or_b32 s9, s9, s6
+; VI-NEXT:    s_and_b32 s6, 0xffff, s44
 ; VI-NEXT:    s_lshl_b32 s27, s45, 16
 ; VI-NEXT:    s_and_b32 s16, 0xffff, s16
 ; VI-NEXT:    s_lshl_b32 s61, s61, 16
@@ -29702,7 +29702,7 @@ define inreg <40 x half> @bitcast_v40i16_to_v40f16_scalar(<40 x i16> inreg %a, i
 ; VI-NEXT:    s_lshl_b32 s43, s43, 16
 ; VI-NEXT:    s_and_b32 s25, 0xffff, s25
 ; VI-NEXT:    s_lshl_b32 s40, s40, 16
-; VI-NEXT:    s_or_b32 s26, s26, s27
+; VI-NEXT:    s_or_b32 s6, s6, s27
 ; VI-NEXT:    s_and_b32 s27, 0xffff, s41
 ; VI-NEXT:    s_lshl_b32 s28, s42, 16
 ; VI-NEXT:    s_and_b32 s14, 0xffff, s14
@@ -29738,11 +29738,11 @@ define inreg <40 x half> @bitcast_v40i16_to_v40f16_scalar(<40 x i16> inreg %a, i
 ; VI-NEXT:    v_mov_b32_e32 v7, s23
 ; VI-NEXT:    v_mov_b32_e32 v8, s24
 ; VI-NEXT:    v_mov_b32_e32 v9, s25
-; VI-NEXT:    v_mov_b32_e32 v10, s13
-; VI-NEXT:    v_mov_b32_e32 v11, s12
-; VI-NEXT:    v_mov_b32_e32 v12, s9
-; VI-NEXT:    v_mov_b32_e32 v13, s6
-; VI-NEXT:    v_mov_b32_e32 v14, s26
+; VI-NEXT:    v_mov_b32_e32 v10, s26
+; VI-NEXT:    v_mov_b32_e32 v11, s13
+; VI-NEXT:    v_mov_b32_e32 v12, s12
+; VI-NEXT:    v_mov_b32_e32 v13, s9
+; VI-NEXT:    v_mov_b32_e32 v14, s6
 ; VI-NEXT:    v_mov_b32_e32 v15, s27
 ; VI-NEXT:    v_mov_b32_e32 v16, s14
 ; VI-NEXT:    v_mov_b32_e32 v17, s10

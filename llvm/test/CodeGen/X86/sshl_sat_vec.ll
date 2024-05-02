@@ -11,37 +11,37 @@ declare <16 x i8> @llvm.sshl.sat.v16i8(<16 x i8>, <16 x i8>)
 define <2 x i64> @vec_v2i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ; X64-LABEL: vec_v2i64:
 ; X64:       # %bb.0:
-; X64-NEXT:    movdqa {{.*#+}} xmm3 = [9223372036854775808,9223372036854775808]
-; X64-NEXT:    movdqa %xmm3, %xmm2
-; X64-NEXT:    pshufd {{.*#+}} xmm4 = xmm0[1,1,3,3]
-; X64-NEXT:    pxor %xmm5, %xmm5
-; X64-NEXT:    pcmpgtd %xmm4, %xmm5
-; X64-NEXT:    pand %xmm3, %xmm4
-; X64-NEXT:    por %xmm3, %xmm5
+; X64-NEXT:    movdqa {{.*#+}} xmm2 = [9223372036854775808,9223372036854775808]
+; X64-NEXT:    movdqa %xmm2, %xmm3
 ; X64-NEXT:    psrlq %xmm1, %xmm3
-; X64-NEXT:    pshufd {{.*#+}} xmm6 = xmm1[2,3,2,3]
-; X64-NEXT:    psrlq %xmm6, %xmm2
-; X64-NEXT:    movsd {{.*#+}} xmm2 = xmm3[0],xmm2[1]
+; X64-NEXT:    pshufd {{.*#+}} xmm4 = xmm1[2,3,2,3]
+; X64-NEXT:    movdqa %xmm2, %xmm5
+; X64-NEXT:    psrlq %xmm4, %xmm5
+; X64-NEXT:    movsd {{.*#+}} xmm5 = xmm3[0],xmm5[1]
+; X64-NEXT:    movdqa %xmm0, %xmm6
+; X64-NEXT:    psllq %xmm1, %xmm6
 ; X64-NEXT:    movdqa %xmm0, %xmm3
-; X64-NEXT:    psllq %xmm1, %xmm3
-; X64-NEXT:    movdqa %xmm0, %xmm7
-; X64-NEXT:    psllq %xmm6, %xmm7
-; X64-NEXT:    movdqa %xmm7, %xmm8
-; X64-NEXT:    movsd {{.*#+}} xmm7 = xmm3[0],xmm7[1]
-; X64-NEXT:    psrlq %xmm1, %xmm3
-; X64-NEXT:    psrlq %xmm6, %xmm8
-; X64-NEXT:    movsd {{.*#+}} xmm8 = xmm3[0],xmm8[1]
-; X64-NEXT:    xorpd %xmm2, %xmm8
-; X64-NEXT:    psubq %xmm2, %xmm8
-; X64-NEXT:    pcmpeqd %xmm0, %xmm8
-; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm8[1,0,3,2]
-; X64-NEXT:    pand %xmm8, %xmm0
-; X64-NEXT:    andpd %xmm0, %xmm7
-; X64-NEXT:    pcmpeqd %xmm1, %xmm1
-; X64-NEXT:    pxor %xmm5, %xmm1
-; X64-NEXT:    por %xmm4, %xmm1
-; X64-NEXT:    pandn %xmm1, %xmm0
-; X64-NEXT:    por %xmm7, %xmm0
+; X64-NEXT:    psllq %xmm4, %xmm3
+; X64-NEXT:    movdqa %xmm3, %xmm7
+; X64-NEXT:    movsd {{.*#+}} xmm3 = xmm6[0],xmm3[1]
+; X64-NEXT:    psrlq %xmm1, %xmm6
+; X64-NEXT:    psrlq %xmm4, %xmm7
+; X64-NEXT:    movsd {{.*#+}} xmm7 = xmm6[0],xmm7[1]
+; X64-NEXT:    xorpd %xmm5, %xmm7
+; X64-NEXT:    psubq %xmm5, %xmm7
+; X64-NEXT:    pcmpeqd %xmm0, %xmm7
+; X64-NEXT:    pshufd {{.*#+}} xmm1 = xmm7[1,0,3,2]
+; X64-NEXT:    pand %xmm7, %xmm1
+; X64-NEXT:    andpd %xmm1, %xmm3
+; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,3,3]
+; X64-NEXT:    pand %xmm0, %xmm2
+; X64-NEXT:    pxor %xmm4, %xmm4
+; X64-NEXT:    pcmpgtd %xmm0, %xmm4
+; X64-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
+; X64-NEXT:    por %xmm2, %xmm4
+; X64-NEXT:    pandn %xmm4, %xmm1
+; X64-NEXT:    por %xmm3, %xmm1
+; X64-NEXT:    movdqa %xmm1, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X64-AVX2-LABEL: vec_v2i64:

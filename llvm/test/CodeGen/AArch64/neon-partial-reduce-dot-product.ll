@@ -102,23 +102,13 @@ end:
 }
 
 define <2 x i32> @udot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) {
-; CHECK-NODOT-LABEL: udot_narrow:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    umull v1.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    uadalp v0.2s, v1.4h
-; CHECK-NODOT-NEXT:    mov d1, v1.d[1]
-; CHECK-NODOT-NEXT:    uadalp v0.2s, v1.4h
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: udot_narrow:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    udot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: udot_narrow:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    udot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: udot_narrow:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    umull v1.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    uadalp v0.2s, v1.4h
+; CHECK-COMMON-NEXT:    mov d1, v1.d[1]
+; CHECK-COMMON-NEXT:    uadalp v0.2s, v1.4h
+; CHECK-COMMON-NEXT:    ret
   %u.wide = zext <8 x i8> %u to <8 x i32>
   %s.wide = zext <8 x i8> %s to <8 x i32>
   %mult = mul nuw nsw <8 x i32> %s.wide, %u.wide
@@ -152,23 +142,13 @@ define <4 x i32> @sdot(<4 x i32> %acc, <16 x i8> %u, <16 x i8> %s) {
 }
 
 define <2 x i32> @sdot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) {
-; CHECK-NODOT-LABEL: sdot_narrow:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    smull v1.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    sadalp v0.2s, v1.4h
-; CHECK-NODOT-NEXT:    mov d1, v1.d[1]
-; CHECK-NODOT-NEXT:    sadalp v0.2s, v1.4h
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: sdot_narrow:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    sdot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: sdot_narrow:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    sdot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: sdot_narrow:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    smull v1.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    sadalp v0.2s, v1.4h
+; CHECK-COMMON-NEXT:    mov d1, v1.d[1]
+; CHECK-COMMON-NEXT:    sadalp v0.2s, v1.4h
+; CHECK-COMMON-NEXT:    ret
   %u.wide = sext <8 x i8> %u to <8 x i32>
   %s.wide = sext <8 x i8> %s to <8 x i32>
   %mult = mul nuw nsw <8 x i32> %s.wide, %u.wide
@@ -1897,9 +1877,13 @@ define <1 x i64> @partial_reduce_umull_v8i8_v1i64(<1 x i64> %acc, <8 x i8> %a, <
 ; CHECK-COMMON-LABEL: partial_reduce_umull_v8i8_v1i64:
 ; CHECK-COMMON:       // %bb.0:
 ; CHECK-COMMON-NEXT:    umull v1.8h, v1.8b, v2.8b
-; CHECK-COMMON-NEXT:    mov d2, v1.d[1]
-; CHECK-COMMON-NEXT:    uaddlp v1.2s, v1.4h
-; CHECK-COMMON-NEXT:    uadalp v1.2s, v2.4h
+; CHECK-COMMON-NEXT:    ushll v2.4s, v1.4h, #0
+; CHECK-COMMON-NEXT:    ushll2 v1.4s, v1.8h, #0
+; CHECK-COMMON-NEXT:    uadalp v0.1d, v2.2s
+; CHECK-COMMON-NEXT:    mov d2, v2.d[1]
+; CHECK-COMMON-NEXT:    uadalp v0.1d, v2.2s
+; CHECK-COMMON-NEXT:    uadalp v0.1d, v1.2s
+; CHECK-COMMON-NEXT:    mov d1, v1.d[1]
 ; CHECK-COMMON-NEXT:    uadalp v0.1d, v1.2s
 ; CHECK-COMMON-NEXT:    ret
   %ea = zext <8 x i8> %a to <8 x i64>
@@ -1913,9 +1897,13 @@ define <1 x i64> @partial_reduce_smull_v8i8_v1i64(<1 x i64> %acc, <8 x i8> %a, <
 ; CHECK-COMMON-LABEL: partial_reduce_smull_v8i8_v1i64:
 ; CHECK-COMMON:       // %bb.0:
 ; CHECK-COMMON-NEXT:    smull v1.8h, v1.8b, v2.8b
-; CHECK-COMMON-NEXT:    mov d2, v1.d[1]
-; CHECK-COMMON-NEXT:    saddlp v1.2s, v1.4h
-; CHECK-COMMON-NEXT:    sadalp v1.2s, v2.4h
+; CHECK-COMMON-NEXT:    sshll v2.4s, v1.4h, #0
+; CHECK-COMMON-NEXT:    sshll2 v1.4s, v1.8h, #0
+; CHECK-COMMON-NEXT:    sadalp v0.1d, v2.2s
+; CHECK-COMMON-NEXT:    mov d2, v2.d[1]
+; CHECK-COMMON-NEXT:    sadalp v0.1d, v2.2s
+; CHECK-COMMON-NEXT:    sadalp v0.1d, v1.2s
+; CHECK-COMMON-NEXT:    mov d1, v1.d[1]
 ; CHECK-COMMON-NEXT:    sadalp v0.1d, v1.2s
 ; CHECK-COMMON-NEXT:    ret
   %ea = sext <8 x i8> %a to <8 x i64>

@@ -12,8 +12,8 @@ define dso_local void @lots_args(i32 signext %x0, i32 signext %x1, <vscale x 16 
 ; CHECK-NEXT:    csrr t0, vlenb
 ; CHECK-NEXT:    slli t0, t0, 3
 ; CHECK-NEXT:    sub sp, sp, t0
-; CHECK-NEXT:    ld t0, 8(s0)
-; CHECK-NEXT:    ld t1, 0(s0)
+; CHECK-NEXT:    lw t0, 8(s0)
+; CHECK-NEXT:    lw t1, 0(s0)
 ; CHECK-NEXT:    sw a0, -28(s0)
 ; CHECK-NEXT:    sw a1, -32(s0)
 ; CHECK-NEXT:    csrr a0, vlenb

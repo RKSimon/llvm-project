@@ -8,10 +8,9 @@
 define i3 @sign_i3(i3 %a) {
 ; CHECK-LABEL: sign_i3:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    andb $4, %dil
-; CHECK-NEXT:    xorl %eax, %eax
-; CHECK-NEXT:    negb %dil
-; CHECK-NEXT:    sbbl %eax, %eax
+; CHECK-NEXT:    movl %edi, %eax
+; CHECK-NEXT:    shlb $5, %al
+; CHECK-NEXT:    sarb $7, %al
 ; CHECK-NEXT:    orb $1, %al
 ; CHECK-NEXT:    # kill: def $al killed $al killed $eax
 ; CHECK-NEXT:    retq
@@ -23,10 +22,9 @@ define i3 @sign_i3(i3 %a) {
 define i4 @sign_i4(i4 %a) {
 ; CHECK-LABEL: sign_i4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    andb $8, %dil
-; CHECK-NEXT:    xorl %eax, %eax
-; CHECK-NEXT:    negb %dil
-; CHECK-NEXT:    sbbl %eax, %eax
+; CHECK-NEXT:    movl %edi, %eax
+; CHECK-NEXT:    shlb $4, %al
+; CHECK-NEXT:    sarb $7, %al
 ; CHECK-NEXT:    orb $1, %al
 ; CHECK-NEXT:    # kill: def $al killed $al killed $eax
 ; CHECK-NEXT:    retq
@@ -52,7 +50,7 @@ define i16 @sign_i16(i16 %a) {
 ; CHECK-LABEL: sign_i16:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movswl %di, %eax
-; CHECK-NEXT:    sarl $15, %eax
+; CHECK-NEXT:    shrl $15, %eax
 ; CHECK-NEXT:    orl $1, %eax
 ; CHECK-NEXT:    # kill: def $ax killed $ax killed $eax
 ; CHECK-NEXT:    retq
@@ -537,8 +535,8 @@ define <4 x i32> @not_sign_4xi32_select_false_breaks_pattern(<4 x i32> %a) {
 ; CHECK-NOBMI-NEXT:    pcmpgtd %xmm1, %xmm0
 ; CHECK-NOBMI-NEXT:    movdqa %xmm0, %xmm1
 ; CHECK-NOBMI-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
-; CHECK-NOBMI-NEXT:    psubd %xmm0, %xmm1
-; CHECK-NOBMI-NEXT:    movdqa %xmm1, %xmm0
+; CHECK-NOBMI-NEXT:    psrld $31, %xmm0
+; CHECK-NOBMI-NEXT:    por %xmm1, %xmm0
 ; CHECK-NOBMI-NEXT:    retq
 ;
 ; CHECK-BMI2-SSE2-LABEL: not_sign_4xi32_select_false_breaks_pattern:
@@ -547,8 +545,8 @@ define <4 x i32> @not_sign_4xi32_select_false_breaks_pattern(<4 x i32> %a) {
 ; CHECK-BMI2-SSE2-NEXT:    pcmpgtd %xmm1, %xmm0
 ; CHECK-BMI2-SSE2-NEXT:    movdqa %xmm0, %xmm1
 ; CHECK-BMI2-SSE2-NEXT:    pandn {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
-; CHECK-BMI2-SSE2-NEXT:    psubd %xmm0, %xmm1
-; CHECK-BMI2-SSE2-NEXT:    movdqa %xmm1, %xmm0
+; CHECK-BMI2-SSE2-NEXT:    psrld $31, %xmm0
+; CHECK-BMI2-SSE2-NEXT:    por %xmm1, %xmm0
 ; CHECK-BMI2-SSE2-NEXT:    retq
 ;
 ; CHECK-AVX12-LABEL: not_sign_4xi32_select_false_breaks_pattern:
@@ -574,89 +572,71 @@ define <4 x i65> @sign_4xi65(<4 x i65> %a) {
 ; CHECK-NOBMI-LABEL: sign_4xi65:
 ; CHECK-NOBMI:       # %bb.0:
 ; CHECK-NOBMI-NEXT:    movq %rdi, %rax
-; CHECK-NOBMI-NEXT:    movq {{[0-9]+}}(%rsp), %rcx
-; CHECK-NOBMI-NEXT:    andl $1, %ecx
-; CHECK-NOBMI-NEXT:    movq %rcx, %rsi
-; CHECK-NOBMI-NEXT:    negq %rsi
-; CHECK-NOBMI-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
-; CHECK-NOBMI-NEXT:    andl $1, %edi
-; CHECK-NOBMI-NEXT:    movq %rdi, %r10
-; CHECK-NOBMI-NEXT:    negq %r10
 ; CHECK-NOBMI-NEXT:    andl $1, %edx
-; CHECK-NOBMI-NEXT:    negq %rdx
 ; CHECK-NOBMI-NEXT:    andl $1, %r8d
 ; CHECK-NOBMI-NEXT:    negq %r8
-; CHECK-NOBMI-NEXT:    leaq (%r8,%r8), %r9
-; CHECK-NOBMI-NEXT:    movq %rdx, %xmm0
+; CHECK-NOBMI-NEXT:    movl %r8d, %ecx
+; CHECK-NOBMI-NEXT:    andl $1, %ecx
+; CHECK-NOBMI-NEXT:    shldq $1, %r8, %rcx
+; CHECK-NOBMI-NEXT:    orq $1, %r8
+; CHECK-NOBMI-NEXT:    leaq (%rdx,%r8,2), %rsi
+; CHECK-NOBMI-NEXT:    negq %rdx
+; CHECK-NOBMI-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
+; CHECK-NOBMI-NEXT:    andl $1, %edi
+; CHECK-NOBMI-NEXT:    negq %rdi
+; CHECK-NOBMI-NEXT:    movq {{[0-9]+}}(%rsp), %r8
+; CHECK-NOBMI-NEXT:    andl $1, %r8d
+; CHECK-NOBMI-NEXT:    negq %r8
+; CHECK-NOBMI-NEXT:    movl %r8d, %r9d
+; CHECK-NOBMI-NEXT:    andl $1, %r9d
+; CHECK-NOBMI-NEXT:    shldq $2, %r8, %r9
+; CHECK-NOBMI-NEXT:    orq $1, %r8
+; CHECK-NOBMI-NEXT:    movq %rdi, %r10
+; CHECK-NOBMI-NEXT:    orq $1, %r10
 ; CHECK-NOBMI-NEXT:    orq $1, %rdx
 ; CHECK-NOBMI-NEXT:    movq %rdx, (%rax)
-; CHECK-NOBMI-NEXT:    andl $15, %r10d
-; CHECK-NOBMI-NEXT:    movb %r10b, 32(%rax)
-; CHECK-NOBMI-NEXT:    movl %esi, %r10d
-; CHECK-NOBMI-NEXT:    andl $1, %r10d
-; CHECK-NOBMI-NEXT:    shldq $2, %rsi, %r10
-; CHECK-NOBMI-NEXT:    shll $3, %edi
-; CHECK-NOBMI-NEXT:    subq %rdi, %r10
-; CHECK-NOBMI-NEXT:    orq $8, %r10
-; CHECK-NOBMI-NEXT:    movq %r10, 24(%rax)
-; CHECK-NOBMI-NEXT:    movl %r8d, %esi
-; CHECK-NOBMI-NEXT:    andl $1, %esi
-; CHECK-NOBMI-NEXT:    shldq $1, %r8, %rsi
-; CHECK-NOBMI-NEXT:    shll $2, %ecx
-; CHECK-NOBMI-NEXT:    subq %rcx, %rsi
-; CHECK-NOBMI-NEXT:    orq $4, %rsi
-; CHECK-NOBMI-NEXT:    movq %rsi, 16(%rax)
-; CHECK-NOBMI-NEXT:    movq %rdx, %xmm1
-; CHECK-NOBMI-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm0[0]
-; CHECK-NOBMI-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; CHECK-NOBMI-NEXT:    movq %xmm0, %rcx
-; CHECK-NOBMI-NEXT:    orq $2, %r9
-; CHECK-NOBMI-NEXT:    subq %rcx, %r9
-; CHECK-NOBMI-NEXT:    movq %r9, 8(%rax)
+; CHECK-NOBMI-NEXT:    movq %rsi, 8(%rax)
+; CHECK-NOBMI-NEXT:    andl $15, %edi
+; CHECK-NOBMI-NEXT:    movb %dil, 32(%rax)
+; CHECK-NOBMI-NEXT:    leaq (%r9,%r10,8), %rdx
+; CHECK-NOBMI-NEXT:    movq %rdx, 24(%rax)
+; CHECK-NOBMI-NEXT:    leaq (%rcx,%r8,4), %rcx
+; CHECK-NOBMI-NEXT:    movq %rcx, 16(%rax)
 ; CHECK-NOBMI-NEXT:    retq
 ;
 ; CHECK-BMI2-SSE2-LABEL: sign_4xi65:
 ; CHECK-BMI2-SSE2:       # %bb.0:
 ; CHECK-BMI2-SSE2-NEXT:    movq %rdi, %rax
-; CHECK-BMI2-SSE2-NEXT:    movq {{[0-9]+}}(%rsp), %rcx
-; CHECK-BMI2-SSE2-NEXT:    andl $1, %ecx
-; CHECK-BMI2-SSE2-NEXT:    movq %rcx, %rsi
-; CHECK-BMI2-SSE2-NEXT:    negq %rsi
-; CHECK-BMI2-SSE2-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
-; CHECK-BMI2-SSE2-NEXT:    andl $1, %edi
-; CHECK-BMI2-SSE2-NEXT:    movq %rdi, %r10
-; CHECK-BMI2-SSE2-NEXT:    negq %r10
 ; CHECK-BMI2-SSE2-NEXT:    andl $1, %edx
-; CHECK-BMI2-SSE2-NEXT:    negq %rdx
 ; CHECK-BMI2-SSE2-NEXT:    andl $1, %r8d
 ; CHECK-BMI2-SSE2-NEXT:    negq %r8
-; CHECK-BMI2-SSE2-NEXT:    leaq (%r8,%r8), %r9
-; CHECK-BMI2-SSE2-NEXT:    movq %rdx, %xmm0
+; CHECK-BMI2-SSE2-NEXT:    movl %r8d, %ecx
+; CHECK-BMI2-SSE2-NEXT:    andl $1, %ecx
+; CHECK-BMI2-SSE2-NEXT:    shldq $1, %r8, %rcx
+; CHECK-BMI2-SSE2-NEXT:    orq $1, %r8
+; CHECK-BMI2-SSE2-NEXT:    leaq (%rdx,%r8,2), %rsi
+; CHECK-BMI2-SSE2-NEXT:    negq %rdx
+; CHECK-BMI2-SSE2-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
+; CHECK-BMI2-SSE2-NEXT:    andl $1, %edi
+; CHECK-BMI2-SSE2-NEXT:    negq %rdi
+; CHECK-BMI2-SSE2-NEXT:    movq {{[0-9]+}}(%rsp), %r8
+; CHECK-BMI2-SSE2-NEXT:    andl $1, %r8d
+; CHECK-BMI2-SSE2-NEXT:    negq %r8
+; CHECK-BMI2-SSE2-NEXT:    movl %r8d, %r9d
+; CHECK-BMI2-SSE2-NEXT:    andl $1, %r9d
+; CHECK-BMI2-SSE2-NEXT:    shldq $2, %r8, %r9
+; CHECK-BMI2-SSE2-NEXT:    orq $1, %r8
+; CHECK-BMI2-SSE2-NEXT:    movq %rdi, %r10
+; CHECK-BMI2-SSE2-NEXT:    orq $1, %r10
 ; CHECK-BMI2-SSE2-NEXT:    orq $1, %rdx
 ; CHECK-BMI2-SSE2-NEXT:    movq %rdx, (%rax)
-; CHECK-BMI2-SSE2-NEXT:    andl $15, %r10d
-; CHECK-BMI2-SSE2-NEXT:    movb %r10b, 32(%rax)
-; CHECK-BMI2-SSE2-NEXT:    movl %esi, %r10d
-; CHECK-BMI2-SSE2-NEXT:    andl $1, %r10d
-; CHECK-BMI2-SSE2-NEXT:    shldq $2, %rsi, %r10
-; CHECK-BMI2-SSE2-NEXT:    shll $3, %edi
-; CHECK-BMI2-SSE2-NEXT:    subq %rdi, %r10
-; CHECK-BMI2-SSE2-NEXT:    orq $8, %r10
-; CHECK-BMI2-SSE2-NEXT:    movq %r10, 24(%rax)
-; CHECK-BMI2-SSE2-NEXT:    movl %r8d, %esi
-; CHECK-BMI2-SSE2-NEXT:    andl $1, %esi
-; CHECK-BMI2-SSE2-NEXT:    shldq $1, %r8, %rsi
-; CHECK-BMI2-SSE2-NEXT:    shll $2, %ecx
-; CHECK-BMI2-SSE2-NEXT:    subq %rcx, %rsi
-; CHECK-BMI2-SSE2-NEXT:    orq $4, %rsi
-; CHECK-BMI2-SSE2-NEXT:    movq %rsi, 16(%rax)
-; CHECK-BMI2-SSE2-NEXT:    movq %rdx, %xmm1
-; CHECK-BMI2-SSE2-NEXT:    punpcklqdq {{.*#+}} xmm1 = xmm1[0],xmm0[0]
-; CHECK-BMI2-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; CHECK-BMI2-SSE2-NEXT:    movq %xmm0, %rcx
-; CHECK-BMI2-SSE2-NEXT:    orq $2, %r9
-; CHECK-BMI2-SSE2-NEXT:    subq %rcx, %r9
-; CHECK-BMI2-SSE2-NEXT:    movq %r9, 8(%rax)
+; CHECK-BMI2-SSE2-NEXT:    movq %rsi, 8(%rax)
+; CHECK-BMI2-SSE2-NEXT:    andl $15, %edi
+; CHECK-BMI2-SSE2-NEXT:    movb %dil, 32(%rax)
+; CHECK-BMI2-SSE2-NEXT:    leaq (%r9,%r10,8), %rdx
+; CHECK-BMI2-SSE2-NEXT:    movq %rdx, 24(%rax)
+; CHECK-BMI2-SSE2-NEXT:    leaq (%rcx,%r8,4), %rcx
+; CHECK-BMI2-SSE2-NEXT:    movq %rcx, 16(%rax)
 ; CHECK-BMI2-SSE2-NEXT:    retq
 ;
 ; CHECK-AVX12-LABEL: sign_4xi65:
@@ -665,39 +645,37 @@ define <4 x i65> @sign_4xi65(<4 x i65> %a) {
 ; CHECK-AVX12-NEXT:    andl $1, %r8d
 ; CHECK-AVX12-NEXT:    movq %r8, %rsi
 ; CHECK-AVX12-NEXT:    negq %rsi
-; CHECK-AVX12-NEXT:    movq {{[0-9]+}}(%rsp), %rcx
+; CHECK-AVX12-NEXT:    movl {{[0-9]+}}(%rsp), %ecx
 ; CHECK-AVX12-NEXT:    andl $1, %ecx
-; CHECK-AVX12-NEXT:    movq %rcx, %r9
-; CHECK-AVX12-NEXT:    negq %r9
-; CHECK-AVX12-NEXT:    movq {{[0-9]+}}(%rsp), %rdi
-; CHECK-AVX12-NEXT:    andl $1, %edi
-; CHECK-AVX12-NEXT:    movq %rdi, %r10
-; CHECK-AVX12-NEXT:    negq %r10
+; CHECK-AVX12-NEXT:    movl %ecx, %edi
+; CHECK-AVX12-NEXT:    negl %edi
 ; CHECK-AVX12-NEXT:    andl $1, %edx
-; CHECK-AVX12-NEXT:    movq %rdx, %r11
-; CHECK-AVX12-NEXT:    negq %r11
-; CHECK-AVX12-NEXT:    orq $1, %r11
-; CHECK-AVX12-NEXT:    movq %r11, (%rax)
-; CHECK-AVX12-NEXT:    andl $15, %r10d
-; CHECK-AVX12-NEXT:    movb %r10b, 32(%rax)
+; CHECK-AVX12-NEXT:    movq %rdx, %r9
+; CHECK-AVX12-NEXT:    negq %r9
+; CHECK-AVX12-NEXT:    movq {{[0-9]+}}(%rsp), %r10
+; CHECK-AVX12-NEXT:    andl $1, %r10d
+; CHECK-AVX12-NEXT:    negq %r10
+; CHECK-AVX12-NEXT:    movl %r10d, %r11d
+; CHECK-AVX12-NEXT:    andl $1, %r11d
+; CHECK-AVX12-NEXT:    shldq $2, %r10, %r11
+; CHECK-AVX12-NEXT:    orq $1, %r10
+; CHECK-AVX12-NEXT:    orq $1, %r9
+; CHECK-AVX12-NEXT:    andl $15, %edi
+; CHECK-AVX12-NEXT:    movb %dil, 32(%rax)
+; CHECK-AVX12-NEXT:    movq %r9, (%rax)
 ; CHECK-AVX12-NEXT:    addl %r8d, %r8d
 ; CHECK-AVX12-NEXT:    subq %r8, %rdx
 ; CHECK-AVX12-NEXT:    orq $2, %rdx
 ; CHECK-AVX12-NEXT:    movq %rdx, 8(%rax)
-; CHECK-AVX12-NEXT:    movl %r9d, %edx
-; CHECK-AVX12-NEXT:    andl $1, %edx
-; CHECK-AVX12-NEXT:    shldq $2, %r9, %rdx
-; CHECK-AVX12-NEXT:    shll $3, %edi
-; CHECK-AVX12-NEXT:    subq %rdi, %rdx
-; CHECK-AVX12-NEXT:    orq $8, %rdx
-; CHECK-AVX12-NEXT:    movq %rdx, 24(%rax)
 ; CHECK-AVX12-NEXT:    movl %esi, %edx
 ; CHECK-AVX12-NEXT:    andl $1, %edx
 ; CHECK-AVX12-NEXT:    shldq $1, %rsi, %rdx
-; CHECK-AVX12-NEXT:    shll $2, %ecx
-; CHECK-AVX12-NEXT:    subq %rcx, %rdx
-; CHECK-AVX12-NEXT:    orq $4, %rdx
+; CHECK-AVX12-NEXT:    leaq (%rdx,%r10,4), %rdx
 ; CHECK-AVX12-NEXT:    movq %rdx, 16(%rax)
+; CHECK-AVX12-NEXT:    shll $3, %ecx
+; CHECK-AVX12-NEXT:    subq %rcx, %r11
+; CHECK-AVX12-NEXT:    orq $8, %r11
+; CHECK-AVX12-NEXT:    movq %r11, 24(%rax)
 ; CHECK-AVX12-NEXT:    retq
 ;
 ; CHECK-AVX512-LABEL: sign_4xi65:
@@ -750,14 +728,13 @@ define <4 x i65> @sign_4xi65(<4 x i65> %a) {
 ; CHECK-AVX512-NEXT:    vmovq %xmm0, %rdi
 ; CHECK-AVX512-NEXT:    leaq (%rdx,%rdi,2), %rdx
 ; CHECK-AVX512-NEXT:    movq %rdx, 8(%rax)
+; CHECK-AVX512-NEXT:    vpextrq $1, %xmm1, %rdx
+; CHECK-AVX512-NEXT:    shldq $3, %rsi, %rdx
+; CHECK-AVX512-NEXT:    movb %dl, 32(%rax)
 ; CHECK-AVX512-NEXT:    vpextrq $1, %xmm0, %rdx
 ; CHECK-AVX512-NEXT:    shldq $1, %rdi, %rdx
 ; CHECK-AVX512-NEXT:    leaq (%rdx,%rcx,4), %rcx
 ; CHECK-AVX512-NEXT:    movq %rcx, 16(%rax)
-; CHECK-AVX512-NEXT:    vpextrq $1, %xmm1, %rcx
-; CHECK-AVX512-NEXT:    shldq $3, %rsi, %rcx
-; CHECK-AVX512-NEXT:    andl $15, %ecx
-; CHECK-AVX512-NEXT:    movb %cl, 32(%rax)
 ; CHECK-AVX512-NEXT:    vzeroupper
 ; CHECK-AVX512-NEXT:    retq
   %c = icmp sgt <4 x i65> %a, <i65 -1, i65 -1, i65 -1, i65 -1>

@@ -150,8 +150,8 @@ define i128 @test2(i128 %x) nounwind {
 ; X86-NEXT:    movl %eax, %edi
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 120(%esp,%eax), %edx
@@ -187,8 +187,8 @@ define i128 @test2(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %ecx # 4-byte Reload
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %esi
 ; X86-NEXT:    movl 76(%esp,%esi), %eax
 ; X86-NEXT:    movl 72(%esp,%esi), %ebx
@@ -465,8 +465,8 @@ define i128 @test3(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %edx
+; X86-NEXT:    andb $96, %dl
 ; X86-NEXT:    shrb $3, %dl
-; X86-NEXT:    andb $12, %dl
 ; X86-NEXT:    negb %dl
 ; X86-NEXT:    movsbl %dl, %edx
 ; X86-NEXT:    movl 136(%esp,%edx), %esi
@@ -500,8 +500,8 @@ define i128 @test3(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ebx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edx
 ; X86-NEXT:    movl 92(%esp,%edx), %edi
 ; X86-NEXT:    movl 88(%esp,%edx), %esi
@@ -797,8 +797,8 @@ define i128 @div_by_7(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %edx
@@ -834,8 +834,8 @@ define i128 @div_by_7(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edi
 ; X86-NEXT:    movl 92(%esp,%edi), %esi
 ; X86-NEXT:    movl 88(%esp,%edi), %ebx
@@ -1122,8 +1122,8 @@ define i128 @div_by_11(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %edx
@@ -1159,8 +1159,8 @@ define i128 @div_by_11(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edi
 ; X86-NEXT:    movl 92(%esp,%edi), %esi
 ; X86-NEXT:    movl 88(%esp,%edi), %ebx
@@ -1445,8 +1445,8 @@ define i128 @div_by_22(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %edx
@@ -1482,8 +1482,8 @@ define i128 @div_by_22(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edi
 ; X86-NEXT:    movl 92(%esp,%edi), %esi
 ; X86-NEXT:    movl 88(%esp,%edi), %ebx
@@ -1770,8 +1770,8 @@ define i128 @div_by_56(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %edx
@@ -1807,8 +1807,8 @@ define i128 @div_by_56(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edi
 ; X86-NEXT:    movl 92(%esp,%edi), %esi
 ; X86-NEXT:    movl 88(%esp,%edi), %ebx
@@ -2098,8 +2098,8 @@ define i128 @rem_by_7(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %esi
@@ -2136,8 +2136,8 @@ define i128 @rem_by_7(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %ecx # 4-byte Reload
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %eax
 ; X86-NEXT:    movl 92(%esp,%eax), %edi
 ; X86-NEXT:    movl 88(%esp,%eax), %edx
@@ -2433,8 +2433,8 @@ define i128 @rem_by_14(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %esi
@@ -2471,8 +2471,8 @@ define i128 @rem_by_14(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %ecx # 4-byte Reload
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %eax
 ; X86-NEXT:    movl 92(%esp,%eax), %edi
 ; X86-NEXT:    movl 88(%esp,%eax), %edx
@@ -2631,24 +2631,24 @@ define i128 @rem_by_14(i128 %x) nounwind {
 ; X64:       # %bb.0:
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    shrdq $61, %rsi, %rax
-; X64-NEXT:    movabsq $1152921504606846975, %rcx # imm = 0xFFFFFFFFFFFFFFF
-; X64-NEXT:    andq %rcx, %rax
-; X64-NEXT:    movq %rdi, %rdx
-; X64-NEXT:    shrq %rdx
-; X64-NEXT:    andq %rcx, %rdx
-; X64-NEXT:    addq %rax, %rdx
+; X64-NEXT:    movabsq $1152921504606846975, %rdx # imm = 0xFFFFFFFFFFFFFFF
+; X64-NEXT:    andq %rdx, %rax
+; X64-NEXT:    movq %rdi, %rcx
+; X64-NEXT:    shrq %rcx
+; X64-NEXT:    andq %rdx, %rcx
+; X64-NEXT:    addq %rax, %rcx
 ; X64-NEXT:    shrq $57, %rsi
-; X64-NEXT:    addq %rdx, %rsi
-; X64-NEXT:    movabsq $5270498306774157605, %rcx # imm = 0x4924924924924925
-; X64-NEXT:    movq %rsi, %rax
-; X64-NEXT:    mulq %rcx
+; X64-NEXT:    addq %rsi, %rcx
+; X64-NEXT:    movabsq $5270498306774157605, %rdx # imm = 0x4924924924924925
+; X64-NEXT:    movq %rcx, %rax
+; X64-NEXT:    mulq %rdx
 ; X64-NEXT:    shrq %rdx
-; X64-NEXT:    leal (,%rdx,8), %eax
-; X64-NEXT:    subl %eax, %edx
-; X64-NEXT:    addl %edx, %esi
+; X64-NEXT:    leaq (,%rdx,8), %rax
+; X64-NEXT:    subq %rax, %rdx
+; X64-NEXT:    addq %rcx, %rdx
 ; X64-NEXT:    andl $1, %edi
-; X64-NEXT:    leaq (%rdi,%rsi,2), %rax
-; X64-NEXT:    xorl %edx, %edx
+; X64-NEXT:    leaq (%rdi,%rdx,2), %rax
+; X64-NEXT:    shrq $63, %rdx
 ; X64-NEXT:    retq
   %rem = urem i128 %x, 14
   ret i128 %rem
@@ -2768,8 +2768,8 @@ define i128 @div_by_67(i128 %x) nounwind {
 ; X86-NEXT:    movl %ebx, %ecx
 ; X86-NEXT:    xorb $127, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %eax
 ; X86-NEXT:    movl 136(%esp,%eax), %edx
@@ -2805,8 +2805,8 @@ define i128 @div_by_67(i128 %x) nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %edi
 ; X86-NEXT:    movl 92(%esp,%edi), %esi
 ; X86-NEXT:    movl 88(%esp,%edi), %ebx

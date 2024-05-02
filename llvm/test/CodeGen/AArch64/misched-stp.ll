@@ -10,9 +10,11 @@
 ; equivalent pair of stp calls as a baseline.
 
 ; CHECK-LABEL: test_splat
-; CHECK:     ldr [[REG:w[0-9]+]], [x2]
-; CHECK-DAG: stp w0, [[REG]], [x2, #12]
-; CHECK-DAG: stp [[REG]], w1, [x2, #4]
+; CHECK:      mov x8, x2
+; CHECK-NEXT: ld1r { v0.2s }, [x8], #4
+; CHECK-NEXT: stur d0, [x2, #12]
+; CHECK-NEXT: str d0, [x8]
+; CHECK-NEXT: stp w1, w0, [x2, #8]
 define void @test_splat(i32 %x, i32 %y, ptr %p) {
 entry:
   %val = load i32, ptr %p, align 4

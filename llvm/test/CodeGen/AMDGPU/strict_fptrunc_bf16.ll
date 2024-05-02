@@ -102,7 +102,7 @@ define amdgpu_ps void @strict_fptrunc_v2f64_to_v2bf16(<2 x double> %a, ptr %out)
 ; GFX950-NEXT:    v_cvt_f32_f64_e32 v9, v[0:1]
 ; GFX950-NEXT:    v_cndmask_b32_e64 v2, -1, 1, s[2:3]
 ; GFX950-NEXT:    v_add_u32_e32 v2, v8, v2
-; GFX950-NEXT:    s_or_b64 vcc, vcc, s[0:1]
+; GFX950-NEXT:    s_or_b64 vcc, s[0:1], vcc
 ; GFX950-NEXT:    v_cndmask_b32_e32 v6, v2, v8, vcc
 ; GFX950-NEXT:    v_cvt_f64_f32_e32 v[2:3], v9
 ; GFX950-NEXT:    v_and_b32_e32 v10, 1, v9
@@ -111,7 +111,7 @@ define amdgpu_ps void @strict_fptrunc_v2f64_to_v2bf16(<2 x double> %a, ptr %out)
 ; GFX950-NEXT:    v_cmp_nlg_f64_e64 s[0:1], v[0:1], v[2:3]
 ; GFX950-NEXT:    v_cndmask_b32_e64 v0, -1, 1, s[2:3]
 ; GFX950-NEXT:    v_add_u32_e32 v0, v9, v0
-; GFX950-NEXT:    s_or_b64 vcc, vcc, s[0:1]
+; GFX950-NEXT:    s_or_b64 vcc, s[0:1], vcc
 ; GFX950-NEXT:    v_cndmask_b32_e32 v0, v0, v9, vcc
 ; GFX950-NEXT:    v_cvt_pk_bf16_f32 v0, v0, v6
 ; GFX950-NEXT:    flat_store_dword v[4:5], v0
@@ -142,9 +142,9 @@ define amdgpu_ps void @strict_fptrunc_v2f64_to_v2bf16(<2 x double> %a, ptr %out)
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX1250-NEXT:    v_dual_add_nc_u32 v0, v11, v0 :: v_dual_bitop2_b32 v12, 1, v10 bitop3:0x40
 ; GFX1250-NEXT:    v_cmp_ne_u32_e64 s1, 0, v12
-; GFX1250-NEXT:    s_or_b32 vcc_lo, s1, vcc_lo
+; GFX1250-NEXT:    s_or_b32 vcc_lo, vcc_lo, s1
 ; GFX1250-NEXT:    v_cndmask_b32_e32 v1, v1, v10, vcc_lo
-; GFX1250-NEXT:    s_or_b32 vcc_lo, s2, s0
+; GFX1250-NEXT:    s_or_b32 vcc_lo, s0, s2
 ; GFX1250-NEXT:    v_cndmask_b32_e32 v0, v0, v11, vcc_lo
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX1250-NEXT:    v_cvt_pk_bf16_f32 v0, v0, v1

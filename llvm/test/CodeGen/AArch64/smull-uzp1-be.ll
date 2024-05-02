@@ -42,18 +42,14 @@ define <2 x i64> @smull_trunc_i64_extract_high_v4i32(<2 x i64> %a, <4 x i32> %b)
 define <2 x i64> @umull_trunc_i64_extract_high_v4i32(<2 x i64> %a, <4 x i32> %b) {
 ; LE-LABEL: umull_trunc_i64_extract_high_v4i32:
 ; LE:       // %bb.0:
-; LE-NEXT:    movi v2.2d, #0x000000ffffffff
-; LE-NEXT:    and v0.16b, v0.16b, v2.16b
 ; LE-NEXT:    uzp1 v0.4s, v0.4s, v0.4s
 ; LE-NEXT:    umull2 v0.2d, v0.4s, v1.4s
 ; LE-NEXT:    ret
 ;
 ; BE-LABEL: umull_trunc_i64_extract_high_v4i32:
 ; BE:       // %bb.0:
-; BE-NEXT:    movi v2.2d, #0x000000ffffffff
-; BE-NEXT:    ext v0.16b, v0.16b, v0.16b, #8
 ; BE-NEXT:    rev64 v1.4s, v1.4s
-; BE-NEXT:    and v0.16b, v0.16b, v2.16b
+; BE-NEXT:    ext v0.16b, v0.16b, v0.16b, #8
 ; BE-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
 ; BE-NEXT:    uzp1 v0.4s, v0.4s, v0.4s
 ; BE-NEXT:    umull2 v0.2d, v0.4s, v1.4s

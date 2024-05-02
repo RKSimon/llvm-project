@@ -326,13 +326,13 @@ define <2 x float> @add_f32x2_f16x2_ftz(<2 x half> %a, <2 x float> %b) {
 define <2 x float> @add_f32x2_f16x2_partial(<2 x half> %a, float %c, <2 x float> %b) {
 ; CHECK-NOFTZ-LABEL: add_f32x2_f16x2_partial(
 ; CHECK-NOFTZ:       {
-; CHECK-NOFTZ-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NOFTZ-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-NOFTZ-NEXT:    .reg .b32 %r<3>;
 ; CHECK-NOFTZ-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-NOFTZ-EMPTY:
 ; CHECK-NOFTZ-NEXT:  // %bb.0:
+; CHECK-NOFTZ-NEXT:    ld.param::func.v2.b16 {%rs1, %rs2}, [add_f32x2_f16x2_partial_param_0];
 ; CHECK-NOFTZ-NEXT:    ld.param::func.b32 %r1, [add_f32x2_f16x2_partial_param_1];
-; CHECK-NOFTZ-NEXT:    ld.param::func.b16 %rs1, [add_f32x2_f16x2_partial_param_0];
 ; CHECK-NOFTZ-NEXT:    cvt.f32.f16 %r2, %rs1;
 ; CHECK-NOFTZ-NEXT:    ld.param::func.b64 %rd1, [add_f32x2_f16x2_partial_param_2];
 ; CHECK-NOFTZ-NEXT:    mov.b64 %rd2, {%r2, %r1};
@@ -342,13 +342,13 @@ define <2 x float> @add_f32x2_f16x2_partial(<2 x half> %a, float %c, <2 x float>
 ;
 ; CHECK-FTZ-LABEL: add_f32x2_f16x2_partial(
 ; CHECK-FTZ:       {
-; CHECK-FTZ-NEXT:    .reg .b16 %rs<2>;
+; CHECK-FTZ-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-FTZ-NEXT:    .reg .b32 %r<3>;
 ; CHECK-FTZ-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-FTZ-EMPTY:
 ; CHECK-FTZ-NEXT:  // %bb.0:
+; CHECK-FTZ-NEXT:    ld.param::func.v2.b16 {%rs1, %rs2}, [add_f32x2_f16x2_partial_param_0];
 ; CHECK-FTZ-NEXT:    ld.param::func.b32 %r1, [add_f32x2_f16x2_partial_param_1];
-; CHECK-FTZ-NEXT:    ld.param::func.b16 %rs1, [add_f32x2_f16x2_partial_param_0];
 ; CHECK-FTZ-NEXT:    cvt.ftz.f32.f16 %r2, %rs1;
 ; CHECK-FTZ-NEXT:    ld.param::func.b64 %rd1, [add_f32x2_f16x2_partial_param_2];
 ; CHECK-FTZ-NEXT:    mov.b64 %rd2, {%r2, %r1};
@@ -681,13 +681,13 @@ define <2 x float> @add_f32x2_bf16x2_ftz(<2 x bfloat> %a, <2 x float> %b) {
 define <2 x float> @add_f32x2_bf16x2_partial(<2 x bfloat> %a, float %c, <2 x float> %b) {
 ; CHECK-NOFTZ-LABEL: add_f32x2_bf16x2_partial(
 ; CHECK-NOFTZ:       {
-; CHECK-NOFTZ-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NOFTZ-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-NOFTZ-NEXT:    .reg .b32 %r<3>;
 ; CHECK-NOFTZ-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-NOFTZ-EMPTY:
 ; CHECK-NOFTZ-NEXT:  // %bb.0:
+; CHECK-NOFTZ-NEXT:    ld.param::func.v2.b16 {%rs1, %rs2}, [add_f32x2_bf16x2_partial_param_0];
 ; CHECK-NOFTZ-NEXT:    ld.param::func.b32 %r1, [add_f32x2_bf16x2_partial_param_1];
-; CHECK-NOFTZ-NEXT:    ld.param::func.b16 %rs1, [add_f32x2_bf16x2_partial_param_0];
 ; CHECK-NOFTZ-NEXT:    cvt.f32.bf16 %r2, %rs1;
 ; CHECK-NOFTZ-NEXT:    ld.param::func.b64 %rd1, [add_f32x2_bf16x2_partial_param_2];
 ; CHECK-NOFTZ-NEXT:    mov.b64 %rd2, {%r2, %r1};
@@ -697,13 +697,13 @@ define <2 x float> @add_f32x2_bf16x2_partial(<2 x bfloat> %a, float %c, <2 x flo
 ;
 ; CHECK-FTZ-LABEL: add_f32x2_bf16x2_partial(
 ; CHECK-FTZ:       {
-; CHECK-FTZ-NEXT:    .reg .b16 %rs<2>;
+; CHECK-FTZ-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-FTZ-NEXT:    .reg .b32 %r<3>;
 ; CHECK-FTZ-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-FTZ-EMPTY:
 ; CHECK-FTZ-NEXT:  // %bb.0:
+; CHECK-FTZ-NEXT:    ld.param::func.v2.b16 {%rs1, %rs2}, [add_f32x2_bf16x2_partial_param_0];
 ; CHECK-FTZ-NEXT:    ld.param::func.b32 %r1, [add_f32x2_bf16x2_partial_param_1];
-; CHECK-FTZ-NEXT:    ld.param::func.b16 %rs1, [add_f32x2_bf16x2_partial_param_0];
 ; CHECK-FTZ-NEXT:    cvt.ftz.f32.bf16 %r2, %rs1;
 ; CHECK-FTZ-NEXT:    ld.param::func.b64 %rd1, [add_f32x2_bf16x2_partial_param_2];
 ; CHECK-FTZ-NEXT:    mov.b64 %rd2, {%r2, %r1};

@@ -871,7 +871,7 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; SDAG-NEXT:    ds_read_b128 a[4:7], v3 offset:16
 ; SDAG-NEXT:    ds_read_b128 a[8:11], v3 offset:32
 ; SDAG-NEXT:    ds_read_b128 a[12:15], v3 offset:48
-; SDAG-NEXT:    v_add_u32_e32 v4, 0x6000, v3
+; SDAG-NEXT:    v_add_u32_e32 v4, 0xc000, v3
 ; SDAG-NEXT:    ds_read_b128 a[60:63], v3 offset:8304
 ; SDAG-NEXT:    ds_read_b128 a[56:59], v3 offset:8288
 ; SDAG-NEXT:    ds_read_b128 a[52:55], v3 offset:8272
@@ -896,14 +896,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; SDAG-NEXT:    ds_read_b128 a[104:107], v3 offset:49184
 ; SDAG-NEXT:    ds_read_b128 a[100:103], v3 offset:49168
 ; SDAG-NEXT:    ds_read_b128 a[96:99], v3 offset:49152
-; SDAG-NEXT:    ds_read_b128 a[156:159], v4 offset:57456
-; SDAG-NEXT:    ds_read_b128 a[152:155], v4 offset:57440
-; SDAG-NEXT:    ds_read_b128 a[148:151], v4 offset:57424
-; SDAG-NEXT:    ds_read_b128 a[144:147], v4 offset:57408
-; SDAG-NEXT:    ds_read_b128 a[128:131], v4 offset:57344
-; SDAG-NEXT:    ds_read_b128 a[132:135], v4 offset:57360
-; SDAG-NEXT:    ds_read_b128 a[136:139], v4 offset:57376
-; SDAG-NEXT:    ds_read_b128 a[140:143], v4 offset:57392
+; SDAG-NEXT:    ds_read_b128 a[156:159], v4 offset:32880
+; SDAG-NEXT:    ds_read_b128 a[152:155], v4 offset:32864
+; SDAG-NEXT:    ds_read_b128 a[148:151], v4 offset:32848
+; SDAG-NEXT:    ds_read_b128 a[144:147], v4 offset:32832
+; SDAG-NEXT:    ds_read_b128 a[128:131], v4 offset:32768
+; SDAG-NEXT:    ds_read_b128 a[132:135], v4 offset:32784
+; SDAG-NEXT:    ds_read_b128 a[136:139], v4 offset:32800
+; SDAG-NEXT:    ds_read_b128 a[140:143], v4 offset:32816
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(14)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v1, a[0:31]
 ; SDAG-NEXT:    v_add_u32_e32 v0, s1, v0
@@ -924,38 +924,38 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:16
 ; SDAG-NEXT:    ds_write_b128 v0, a[0:3]
 ; SDAG-NEXT:    v_mov_b32_e32 v0, s1
-; SDAG-NEXT:    ds_write_b128 v0, a[56:59] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[60:63] offset:8304
-; SDAG-NEXT:    ds_write_b128 v0, a[48:51] offset:8256
+; SDAG-NEXT:    ds_write_b128 v0, a[56:59] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[52:55] offset:8272
-; SDAG-NEXT:    ds_write_b128 v0, a[40:43] offset:8224
+; SDAG-NEXT:    ds_write_b128 v0, a[48:51] offset:8256
 ; SDAG-NEXT:    ds_write_b128 v0, a[44:47] offset:8240
-; SDAG-NEXT:    ds_write_b128 v0, a[32:35] offset:8192
+; SDAG-NEXT:    ds_write_b128 v0, a[40:43] offset:8224
 ; SDAG-NEXT:    ds_write_b128 v0, a[36:39] offset:8208
-; SDAG-NEXT:    ds_write_b128 v0, a[88:91] offset:16480
+; SDAG-NEXT:    ds_write_b128 v0, a[32:35] offset:8192
 ; SDAG-NEXT:    ds_write_b128 v0, a[92:95] offset:16496
-; SDAG-NEXT:    ds_write_b128 v0, a[80:83] offset:16448
+; SDAG-NEXT:    ds_write_b128 v0, a[88:91] offset:16480
 ; SDAG-NEXT:    ds_write_b128 v0, a[84:87] offset:16464
-; SDAG-NEXT:    ds_write_b128 v0, a[72:75] offset:16416
+; SDAG-NEXT:    ds_write_b128 v0, a[80:83] offset:16448
 ; SDAG-NEXT:    ds_write_b128 v0, a[76:79] offset:16432
-; SDAG-NEXT:    ds_write_b128 v0, a[64:67] offset:16384
+; SDAG-NEXT:    ds_write_b128 v0, a[72:75] offset:16416
 ; SDAG-NEXT:    ds_write_b128 v0, a[68:71] offset:16400
-; SDAG-NEXT:    ds_write_b128 v0, a[120:123] offset:24672
+; SDAG-NEXT:    ds_write_b128 v0, a[64:67] offset:16384
 ; SDAG-NEXT:    ds_write_b128 v0, a[124:127] offset:24688
-; SDAG-NEXT:    ds_write_b128 v0, a[112:115] offset:24640
+; SDAG-NEXT:    ds_write_b128 v0, a[120:123] offset:24672
 ; SDAG-NEXT:    ds_write_b128 v0, a[116:119] offset:24656
-; SDAG-NEXT:    ds_write_b128 v0, a[104:107] offset:24608
+; SDAG-NEXT:    ds_write_b128 v0, a[112:115] offset:24640
 ; SDAG-NEXT:    ds_write_b128 v0, a[108:111] offset:24624
-; SDAG-NEXT:    ds_write_b128 v0, a[96:99] offset:24576
+; SDAG-NEXT:    ds_write_b128 v0, a[104:107] offset:24608
 ; SDAG-NEXT:    ds_write_b128 v0, a[100:103] offset:24592
-; SDAG-NEXT:    ds_write_b128 v0, a[152:155] offset:32864
+; SDAG-NEXT:    ds_write_b128 v0, a[96:99] offset:24576
 ; SDAG-NEXT:    ds_write_b128 v0, a[156:159] offset:32880
-; SDAG-NEXT:    ds_write_b128 v0, a[144:147] offset:32832
+; SDAG-NEXT:    ds_write_b128 v0, a[152:155] offset:32864
 ; SDAG-NEXT:    ds_write_b128 v0, a[148:151] offset:32848
-; SDAG-NEXT:    ds_write_b128 v0, a[136:139] offset:32800
+; SDAG-NEXT:    ds_write_b128 v0, a[144:147] offset:32832
 ; SDAG-NEXT:    ds_write_b128 v0, a[140:143] offset:32816
-; SDAG-NEXT:    ds_write_b128 v0, a[128:131] offset:32768
+; SDAG-NEXT:    ds_write_b128 v0, a[136:139] offset:32800
 ; SDAG-NEXT:    ds_write_b128 v0, a[132:135] offset:32784
+; SDAG-NEXT:    ds_write_b128 v0, a[128:131] offset:32768
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(5) SyncID(0)
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000200) size(40) SyncID(0)
 ; SDAG-NEXT:    s_endpgm
@@ -1244,7 +1244,7 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v3 offset:16
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v3 offset:32
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[12:15], v3 offset:48
-; EXACTCUTOFF-NEXT:    v_add_u32_e32 v4, 0x6000, v3
+; EXACTCUTOFF-NEXT:    v_add_u32_e32 v4, 0xc000, v3
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[60:63], v3 offset:8304
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[56:59], v3 offset:8288
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[52:55], v3 offset:8272
@@ -1269,14 +1269,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[104:107], v3 offset:49184
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[100:103], v3 offset:49168
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[96:99], v3 offset:49152
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[156:159], v4 offset:57456
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[152:155], v4 offset:57440
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[148:151], v4 offset:57424
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[144:147], v4 offset:57408
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[128:131], v4 offset:57344
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[132:135], v4 offset:57360
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[136:139], v4 offset:57376
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[140:143], v4 offset:57392
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[156:159], v4 offset:32880
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[152:155], v4 offset:32864
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[148:151], v4 offset:32848
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[144:147], v4 offset:32832
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[128:131], v4 offset:32768
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[132:135], v4 offset:32784
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[136:139], v4 offset:32800
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[140:143], v4 offset:32816
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(14)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v1, a[0:31]
 ; EXACTCUTOFF-NEXT:    v_add_u32_e32 v0, s1, v0
@@ -1297,38 +1297,38 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_cluster(ptr ad
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:16
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3]
 ; EXACTCUTOFF-NEXT:    v_mov_b32_e32 v0, s1
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[56:59] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[60:63] offset:8304
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[48:51] offset:8256
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[56:59] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[52:55] offset:8272
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[40:43] offset:8224
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[48:51] offset:8256
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[44:47] offset:8240
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[32:35] offset:8192
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[40:43] offset:8224
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[36:39] offset:8208
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[88:91] offset:16480
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[32:35] offset:8192
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[92:95] offset:16496
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[80:83] offset:16448
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[88:91] offset:16480
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[84:87] offset:16464
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[72:75] offset:16416
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[80:83] offset:16448
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[76:79] offset:16432
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[64:67] offset:16384
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[72:75] offset:16416
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[68:71] offset:16400
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[120:123] offset:24672
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[64:67] offset:16384
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[124:127] offset:24688
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[112:115] offset:24640
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[120:123] offset:24672
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[116:119] offset:24656
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[104:107] offset:24608
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[112:115] offset:24640
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[108:111] offset:24624
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[96:99] offset:24576
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[104:107] offset:24608
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[100:103] offset:24592
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[152:155] offset:32864
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[96:99] offset:24576
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[156:159] offset:32880
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[144:147] offset:32832
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[152:155] offset:32864
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[148:151] offset:32848
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[136:139] offset:32800
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[144:147] offset:32832
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[140:143] offset:32816
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[128:131] offset:32768
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[136:139] offset:32800
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[132:135] offset:32784
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[128:131] offset:32768
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(5) SyncID(0)
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000200) size(40) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_endpgm
@@ -1417,14 +1417,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 15
 ; SDAG-NEXT:    s_nop 1
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:8304
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:8272
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:8240
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:8208
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
 ; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:24688
 ; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:24672
 ; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:24656
@@ -1440,14 +1440,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 15
 ; SDAG-NEXT:    s_nop 2
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:16496
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:16464
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:16432
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:16400
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
 ; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:49264
 ; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:49248
 ; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:49232
@@ -1458,28 +1458,28 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; SDAG-NEXT:    ds_read_b128 a[0:3], v1 offset:49152
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(0)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v3, a[0:31]
-; SDAG-NEXT:    v_add_u32_e32 v1, 0x6000, v1
+; SDAG-NEXT:    v_add_u32_e32 v1, 0xc000, v1
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000100) size(8) SyncID(0)
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 15
 ; SDAG-NEXT:    s_nop 1
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:24688
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:24656
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:24624
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:24592
-; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:57456
-; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:57440
-; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:57424
-; SDAG-NEXT:    ds_read_b128 a[16:19], v1 offset:57408
-; SDAG-NEXT:    ds_read_b128 a[0:3], v1 offset:57344
-; SDAG-NEXT:    ds_read_b128 a[4:7], v1 offset:57360
-; SDAG-NEXT:    ds_read_b128 a[8:11], v1 offset:57376
-; SDAG-NEXT:    ds_read_b128 a[12:15], v1 offset:57392
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:32880
+; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:32864
+; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:32848
+; SDAG-NEXT:    ds_read_b128 a[16:19], v1 offset:32832
+; SDAG-NEXT:    ds_read_b128 a[0:3], v1 offset:32768
+; SDAG-NEXT:    ds_read_b128 a[4:7], v1 offset:32784
+; SDAG-NEXT:    ds_read_b128 a[8:11], v1 offset:32800
+; SDAG-NEXT:    ds_read_b128 a[12:15], v1 offset:32816
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(0)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v3, a[0:31]
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
@@ -1487,14 +1487,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 15
 ; SDAG-NEXT:    s_nop 2
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:32880
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:32848
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:32816
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:32784
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
 ; SDAG-NEXT:    s_endpgm
 ;
@@ -1835,14 +1835,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 15
 ; EXACTCUTOFF-NEXT:    s_nop 1
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:8304
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:8272
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:8240
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:8208
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:24688
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:24672
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:24656
@@ -1858,14 +1858,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 15
 ; EXACTCUTOFF-NEXT:    s_nop 2
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:16496
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:16464
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:16432
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:16400
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:49264
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:49248
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:49232
@@ -1876,28 +1876,28 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v1 offset:49152
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(0)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v3, a[0:31]
-; EXACTCUTOFF-NEXT:    v_add_u32_e32 v1, 0x6000, v1
+; EXACTCUTOFF-NEXT:    v_add_u32_e32 v1, 0xc000, v1
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000100) size(8) SyncID(0)
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 15
 ; EXACTCUTOFF-NEXT:    s_nop 1
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:24688
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:24656
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:24624
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:24592
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:57456
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:57440
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:57424
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[16:19], v1 offset:57408
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v1 offset:57344
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v1 offset:57360
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v1 offset:57376
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[12:15], v1 offset:57392
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:32880
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:32864
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:32848
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[16:19], v1 offset:32832
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v1 offset:32768
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v1 offset:32784
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v1 offset:32800
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[12:15], v1 offset:32816
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(0)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v2, v3, a[0:31]
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
@@ -1905,14 +1905,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_MFMA_interleave(ptr
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 15
 ; EXACTCUTOFF-NEXT:    s_nop 2
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:32880
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:32848
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:32816
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:32784
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000200) size(8) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_endpgm
 entry:
@@ -2050,19 +2050,19 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    v_cmp_ngt_f32_e32 vcc, s1, v7
 ; SDAG-NEXT:    v_cndmask_b32_e32 v0, v8, v0, vcc
 ; SDAG-NEXT:    v_mul_f32_e32 v3, s2, v2
-; SDAG-NEXT:    v_rndne_f32_e32 v10, v3
+; SDAG-NEXT:    v_rndne_f32_e32 v9, v3
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(0)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v0, a[0:31]
-; SDAG-NEXT:    v_sub_f32_e32 v11, v3, v10
+; SDAG-NEXT:    v_sub_f32_e32 v10, v3, v9
 ; SDAG-NEXT:    v_fma_f32 v3, s2, v2, -v3
 ; SDAG-NEXT:    v_fmac_f32_e32 v3, s2, v6
-; SDAG-NEXT:    v_add_f32_e32 v3, v11, v3
+; SDAG-NEXT:    v_add_f32_e32 v3, v10, v3
 ; SDAG-NEXT:    v_exp_f32_e32 v3, v3
-; SDAG-NEXT:    v_cvt_i32_f32_e32 v10, v10
+; SDAG-NEXT:    v_cvt_i32_f32_e32 v9, v9
 ; SDAG-NEXT:    v_mov_b32_e32 v0, s7
 ; SDAG-NEXT:    v_cmp_nlt_f32_e32 vcc, s2, v4
-; SDAG-NEXT:    v_add_u32_e32 v9, 0x6000, v1
-; SDAG-NEXT:    v_ldexp_f32 v3, v3, v10
+; SDAG-NEXT:    v_add_u32_e32 v10, 0xc000, v1
+; SDAG-NEXT:    v_ldexp_f32 v3, v3, v9
 ; SDAG-NEXT:    v_cndmask_b32_e32 v3, 0, v3, vcc
 ; SDAG-NEXT:    v_cmp_ngt_f32_e32 vcc, s2, v7
 ; SDAG-NEXT:    v_cndmask_b32_e32 v3, v8, v3, vcc
@@ -2071,14 +2071,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000400) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 4
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:8304
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:8272
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:8240
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:8208
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
 ; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:24688
 ; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:24672
 ; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:24656
@@ -2090,24 +2090,24 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(0)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v3, a[0:31]
 ; SDAG-NEXT:    v_mul_f32_e32 v3, s3, v2
-; SDAG-NEXT:    v_rndne_f32_e32 v10, v3
-; SDAG-NEXT:    v_sub_f32_e32 v11, v3, v10
+; SDAG-NEXT:    v_rndne_f32_e32 v9, v3
+; SDAG-NEXT:    v_sub_f32_e32 v11, v3, v9
 ; SDAG-NEXT:    v_fma_f32 v3, s3, v2, -v3
 ; SDAG-NEXT:    v_fmac_f32_e32 v3, s3, v6
 ; SDAG-NEXT:    v_add_f32_e32 v3, v11, v3
 ; SDAG-NEXT:    v_exp_f32_e32 v3, v3
-; SDAG-NEXT:    v_cvt_i32_f32_e32 v10, v10
+; SDAG-NEXT:    v_cvt_i32_f32_e32 v9, v9
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000400) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 10
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:16496
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:16464
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:16432
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:16400
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
 ; SDAG-NEXT:    ds_read_b128 a[28:31], v1 offset:49264
 ; SDAG-NEXT:    ds_read_b128 a[24:27], v1 offset:49248
 ; SDAG-NEXT:    ds_read_b128 a[20:23], v1 offset:49232
@@ -2116,7 +2116,7 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    ds_read_b128 a[8:11], v1 offset:49184
 ; SDAG-NEXT:    ds_read_b128 a[4:7], v1 offset:49168
 ; SDAG-NEXT:    ds_read_b128 a[0:3], v1 offset:49152
-; SDAG-NEXT:    v_ldexp_f32 v1, v3, v10
+; SDAG-NEXT:    v_ldexp_f32 v1, v3, v9
 ; SDAG-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
 ; SDAG-NEXT:    v_cmp_ngt_f32_e32 vcc, s3, v7
 ; SDAG-NEXT:    v_cndmask_b32_e32 v1, v8, v1, vcc
@@ -2125,10 +2125,10 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v1, a[0:31]
 ; SDAG-NEXT:    v_mul_f32_e32 v1, s8, v2
 ; SDAG-NEXT:    v_rndne_f32_e32 v3, v1
-; SDAG-NEXT:    v_sub_f32_e32 v10, v1, v3
+; SDAG-NEXT:    v_sub_f32_e32 v9, v1, v3
 ; SDAG-NEXT:    v_fma_f32 v1, s8, v2, -v1
 ; SDAG-NEXT:    v_fmac_f32_e32 v1, s8, v6
-; SDAG-NEXT:    v_add_f32_e32 v1, v10, v1
+; SDAG-NEXT:    v_add_f32_e32 v1, v9, v1
 ; SDAG-NEXT:    v_exp_f32_e32 v1, v1
 ; SDAG-NEXT:    v_cvt_i32_f32_e32 v2, v3
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
@@ -2138,35 +2138,35 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; SDAG-NEXT:    v_cmp_ngt_f32_e32 vcc, s8, v7
 ; SDAG-NEXT:    v_cndmask_b32_e32 v1, v8, v1, vcc
 ; SDAG-NEXT:    s_nop 6
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:24688
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:24656
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:24624
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:24592
-; SDAG-NEXT:    ds_read_b128 a[28:31], v9 offset:57456
-; SDAG-NEXT:    ds_read_b128 a[24:27], v9 offset:57440
-; SDAG-NEXT:    ds_read_b128 a[20:23], v9 offset:57424
-; SDAG-NEXT:    ds_read_b128 a[16:19], v9 offset:57408
-; SDAG-NEXT:    ds_read_b128 a[0:3], v9 offset:57344
-; SDAG-NEXT:    ds_read_b128 a[4:7], v9 offset:57360
-; SDAG-NEXT:    ds_read_b128 a[8:11], v9 offset:57376
-; SDAG-NEXT:    ds_read_b128 a[12:15], v9 offset:57392
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; SDAG-NEXT:    ds_read_b128 a[28:31], v10 offset:32880
+; SDAG-NEXT:    ds_read_b128 a[24:27], v10 offset:32864
+; SDAG-NEXT:    ds_read_b128 a[20:23], v10 offset:32848
+; SDAG-NEXT:    ds_read_b128 a[16:19], v10 offset:32832
+; SDAG-NEXT:    ds_read_b128 a[0:3], v10 offset:32768
+; SDAG-NEXT:    ds_read_b128 a[4:7], v10 offset:32784
+; SDAG-NEXT:    ds_read_b128 a[8:11], v10 offset:32800
+; SDAG-NEXT:    ds_read_b128 a[12:15], v10 offset:32816
 ; SDAG-NEXT:    s_waitcnt lgkmcnt(0)
 ; SDAG-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v1, a[0:31]
 ; SDAG-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; SDAG-NEXT:    s_nop 15
 ; SDAG-NEXT:    s_nop 2
-; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; SDAG-NEXT:    ds_write_b128 v0, a[28:31] offset:32880
-; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
+; SDAG-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; SDAG-NEXT:    ds_write_b128 v0, a[20:23] offset:32848
-; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
+; SDAG-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
 ; SDAG-NEXT:    ds_write_b128 v0, a[12:15] offset:32816
-; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
+; SDAG-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
 ; SDAG-NEXT:    ds_write_b128 v0, a[4:7] offset:32784
+; SDAG-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
 ; SDAG-NEXT:    s_endpgm
 ;
 ; GISEL-LABEL: test_sched_group_barrier_pipeline_interleave_EXP_MFMA:
@@ -2612,19 +2612,19 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    v_cmp_ngt_f32_e32 vcc, s1, v7
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v0, v8, v0, vcc
 ; EXACTCUTOFF-NEXT:    v_mul_f32_e32 v3, s2, v2
-; EXACTCUTOFF-NEXT:    v_rndne_f32_e32 v10, v3
+; EXACTCUTOFF-NEXT:    v_rndne_f32_e32 v9, v3
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(0)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v0, a[0:31]
-; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v11, v3, v10
+; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v10, v3, v9
 ; EXACTCUTOFF-NEXT:    v_fma_f32 v3, s2, v2, -v3
 ; EXACTCUTOFF-NEXT:    v_fmac_f32_e32 v3, s2, v6
-; EXACTCUTOFF-NEXT:    v_add_f32_e32 v3, v11, v3
+; EXACTCUTOFF-NEXT:    v_add_f32_e32 v3, v10, v3
 ; EXACTCUTOFF-NEXT:    v_exp_f32_e32 v3, v3
-; EXACTCUTOFF-NEXT:    v_cvt_i32_f32_e32 v10, v10
+; EXACTCUTOFF-NEXT:    v_cvt_i32_f32_e32 v9, v9
 ; EXACTCUTOFF-NEXT:    v_mov_b32_e32 v0, s7
 ; EXACTCUTOFF-NEXT:    v_cmp_nlt_f32_e32 vcc, s2, v4
-; EXACTCUTOFF-NEXT:    v_add_u32_e32 v9, 0x6000, v1
-; EXACTCUTOFF-NEXT:    v_ldexp_f32 v3, v3, v10
+; EXACTCUTOFF-NEXT:    v_add_u32_e32 v10, 0xc000, v1
+; EXACTCUTOFF-NEXT:    v_ldexp_f32 v3, v3, v9
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v3, 0, v3, vcc
 ; EXACTCUTOFF-NEXT:    v_cmp_ngt_f32_e32 vcc, s2, v7
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v3, v8, v3, vcc
@@ -2633,14 +2633,14 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000400) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 4
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:8304
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:8288
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:8272
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:8256
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:8240
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:8224
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:8208
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:8192
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:24688
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:24672
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:24656
@@ -2652,24 +2652,24 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(0)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v3, a[0:31]
 ; EXACTCUTOFF-NEXT:    v_mul_f32_e32 v3, s3, v2
-; EXACTCUTOFF-NEXT:    v_rndne_f32_e32 v10, v3
-; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v11, v3, v10
+; EXACTCUTOFF-NEXT:    v_rndne_f32_e32 v9, v3
+; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v11, v3, v9
 ; EXACTCUTOFF-NEXT:    v_fma_f32 v3, s3, v2, -v3
 ; EXACTCUTOFF-NEXT:    v_fmac_f32_e32 v3, s3, v6
 ; EXACTCUTOFF-NEXT:    v_add_f32_e32 v3, v11, v3
 ; EXACTCUTOFF-NEXT:    v_exp_f32_e32 v3, v3
-; EXACTCUTOFF-NEXT:    v_cvt_i32_f32_e32 v10, v10
+; EXACTCUTOFF-NEXT:    v_cvt_i32_f32_e32 v9, v9
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000400) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 10
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:16496
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:16480
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:16464
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:16448
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:16432
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:16416
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:16400
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:16384
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v1 offset:49264
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v1 offset:49248
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v1 offset:49232
@@ -2678,7 +2678,7 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v1 offset:49184
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v1 offset:49168
 ; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v1 offset:49152
-; EXACTCUTOFF-NEXT:    v_ldexp_f32 v1, v3, v10
+; EXACTCUTOFF-NEXT:    v_ldexp_f32 v1, v3, v9
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
 ; EXACTCUTOFF-NEXT:    v_cmp_ngt_f32_e32 vcc, s3, v7
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v1, v8, v1, vcc
@@ -2687,10 +2687,10 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v1, a[0:31]
 ; EXACTCUTOFF-NEXT:    v_mul_f32_e32 v1, s8, v2
 ; EXACTCUTOFF-NEXT:    v_rndne_f32_e32 v3, v1
-; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v10, v1, v3
+; EXACTCUTOFF-NEXT:    v_sub_f32_e32 v9, v1, v3
 ; EXACTCUTOFF-NEXT:    v_fma_f32 v1, s8, v2, -v1
 ; EXACTCUTOFF-NEXT:    v_fmac_f32_e32 v1, s8, v6
-; EXACTCUTOFF-NEXT:    v_add_f32_e32 v1, v10, v1
+; EXACTCUTOFF-NEXT:    v_add_f32_e32 v1, v9, v1
 ; EXACTCUTOFF-NEXT:    v_exp_f32_e32 v1, v1
 ; EXACTCUTOFF-NEXT:    v_cvt_i32_f32_e32 v2, v3
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
@@ -2700,35 +2700,35 @@ define amdgpu_kernel void @test_sched_group_barrier_pipeline_interleave_EXP_MFMA
 ; EXACTCUTOFF-NEXT:    v_cmp_ngt_f32_e32 vcc, s8, v7
 ; EXACTCUTOFF-NEXT:    v_cndmask_b32_e32 v1, v8, v1, vcc
 ; EXACTCUTOFF-NEXT:    s_nop 6
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:24688
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:24672
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:24656
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:24640
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:24624
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:24608
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:24592
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v9 offset:57456
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v9 offset:57440
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v9 offset:57424
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[16:19], v9 offset:57408
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v9 offset:57344
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v9 offset:57360
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v9 offset:57376
-; EXACTCUTOFF-NEXT:    ds_read_b128 a[12:15], v9 offset:57392
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:24576
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[28:31], v10 offset:32880
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[24:27], v10 offset:32864
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[20:23], v10 offset:32848
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[16:19], v10 offset:32832
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[0:3], v10 offset:32768
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[4:7], v10 offset:32784
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[8:11], v10 offset:32800
+; EXACTCUTOFF-NEXT:    ds_read_b128 a[12:15], v10 offset:32816
 ; EXACTCUTOFF-NEXT:    s_waitcnt lgkmcnt(0)
 ; EXACTCUTOFF-NEXT:    v_mfma_f32_32x32x1f32 a[0:31], v5, v1, a[0:31]
 ; EXACTCUTOFF-NEXT:    ; sched_group_barrier mask(0x00000008) size(1) SyncID(0)
 ; EXACTCUTOFF-NEXT:    s_nop 15
 ; EXACTCUTOFF-NEXT:    s_nop 2
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[28:31] offset:32880
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[24:27] offset:32864
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[20:23] offset:32848
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[16:19] offset:32832
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[12:15] offset:32816
-; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[8:11] offset:32800
 ; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[4:7] offset:32784
+; EXACTCUTOFF-NEXT:    ds_write_b128 v0, a[0:3] offset:32768
 ; EXACTCUTOFF-NEXT:    s_endpgm
 entry:
   %idx = call i32 @llvm.amdgcn.workitem.id.x()

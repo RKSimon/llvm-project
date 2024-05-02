@@ -106,7 +106,7 @@ define void @test_dagcombine_store_concat_trunc_v8i32(ptr addrspace(1) %p, <4 x 
 
 define i1 @test_dagcombine_reduce_load_width(ptr addrspace(1) %p) {
 ; CHECK-LABEL: test_dagcombine_reduce_load_width(
-; CHECK:    ld.global.L1::evict_first.b8 %rs1, [%rd1];
+; CHECK:    ld.global.L1::evict_first.b8 %rd2, [%rd1];
   %v = load i64, ptr addrspace(1) %p, align 8, !mem.cache_hint !2
   %masked = and i64 %v, 255
   %cmp = icmp eq i64 %masked, 0
@@ -120,10 +120,10 @@ define i1 @test_dagcombine_reduce_load_width(ptr addrspace(1) %p) {
 define <16 x i32> @test_legalize_split_load_v16i32(ptr addrspace(1) %p) {
 ; O2-LABEL: test_legalize_split_load_v16i32(
 ; O2:    mov.b64 %rd2, 12345;
-; O2:    ld.global.L2::cache_hint.v4.b32 {%r1, %r2, %r3, %r4}, [%rd1], %rd2;
-; O2:    ld.global.L2::cache_hint.v4.b32 {%r5, %r6, %r7, %r8}, [%rd1+16], %rd2;
-; O2:    ld.global.L2::cache_hint.v4.b32 {%r9, %r10, %r11, %r12}, [%rd1+32], %rd2;
-; O2:    ld.global.L2::cache_hint.v4.b32 {%r13, %r14, %r15, %r16}, [%rd1+48], %rd2;
+; O2:    ld.global.L2::cache_hint.v4.b32 {%r1, %r2, %r3, %r4}, [%rd1+48], %rd2;
+; O2:    ld.global.L2::cache_hint.v4.b32 {%r5, %r6, %r7, %r8}, [%rd1+32], %rd2;
+; O2:    ld.global.L2::cache_hint.v4.b32 {%r9, %r10, %r11, %r12}, [%rd1], %rd2;
+; O2:    ld.global.L2::cache_hint.v4.b32 {%r13, %r14, %r15, %r16}, [%rd1+16], %rd2;
 ;
 ; O0-LABEL: test_legalize_split_load_v16i32(
 ; O0:    mov.b64 %rd2, 12345;

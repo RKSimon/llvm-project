@@ -13,9 +13,8 @@ define i64 @pr222714(i64 %x, ptr %p) {
 ; CHECK-NEXT:    addq %rcx, %rax
 ; CHECK-NEXT:    testq %rdi, %rdi
 ; CHECK-NEXT:    cmovneq %rcx, %rax
-; CHECK-NEXT:    movzwl %ax, %ecx
 ; CHECK-NEXT:    movl %eax, %eax
-; CHECK-NEXT:    addq (%rsi,%rcx,8), %rax
+; CHECK-NEXT:    addq (%rsi,%rax,8), %rax
 ; CHECK-NEXT:    retq
   %m = and i64 %x, 17179869183
   %c = icmp eq i64 %m, 0

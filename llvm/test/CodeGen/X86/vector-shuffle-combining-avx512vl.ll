@@ -57,25 +57,27 @@ define void @PR142995(ptr %p0, ptr %p1, ptr %p2) nounwind #0 {
 ; X86-NEXT:    kmovw %ebx, %k1
 ; X86-NEXT:    vmovdqu32 (%edx), %ymm0 {%k1} {z}
 ; X86-NEXT:    vmovq {{.*#+}} xmm1 = mem[0],zero
-; X86-NEXT:    movw $6144, %dx # imm = 0x1800
-; X86-NEXT:    kmovw %edx, %k1
-; X86-NEXT:    vmovdqu32 128(%ecx), %zmm2 {%k1} {z}
 ; X86-NEXT:    movw $1031, %dx # imm = 0x407
 ; X86-NEXT:    kmovw %edx, %k1
-; X86-NEXT:    vmovdqu32 (%ecx), %zmm3 {%k1} {z}
-; X86-NEXT:    vpbroadcastd 252(%ecx), %zmm4
-; X86-NEXT:    vpbroadcastd %xmm1, %xmm5
-; X86-NEXT:    vpsrldq {{.*#+}} xmm5 = xmm5[4,5,6,7,8,9,10,11,12,13,14,15],zero,zero,zero,zero
-; X86-NEXT:    vpunpckldq {{.*#+}} xmm1 = xmm3[0],xmm1[0],xmm3[1],xmm1[1]
-; X86-NEXT:    vpunpckldq {{.*#+}} zmm2 = zmm4[0],zmm2[0],zmm4[1],zmm2[1],zmm4[4],zmm2[4],zmm4[5],zmm2[5],zmm4[8],zmm2[8],zmm4[9],zmm2[9],zmm4[12],zmm2[12],zmm4[13],zmm2[13]
-; X86-NEXT:    vextracti32x4 $3, %zmm2, %xmm2
-; X86-NEXT:    vpblendd {{.*#+}} xmm1 = xmm2[0,1],xmm1[2,3]
-; X86-NEXT:    vpaddd %xmm1, %xmm5, %xmm1
+; X86-NEXT:    vmovdqu32 (%ecx), %zmm2 {%k1} {z}
+; X86-NEXT:    movw $6144, %dx # imm = 0x1800
+; X86-NEXT:    kmovw %edx, %k1
+; X86-NEXT:    vmovdqu32 128(%ecx), %zmm3 {%k1} {z}
+; X86-NEXT:    vpbroadcastd %xmm1, %xmm4
+; X86-NEXT:    vpsrldq {{.*#+}} xmm4 = xmm4[4,5,6,7,8,9,10,11,12,13,14,15],zero,zero,zero,zero
+; X86-NEXT:    vextracti32x4 $3, %zmm3, %xmm3
+; X86-NEXT:    vmovd %xmm3, %edx
+; X86-NEXT:    vpbroadcastd 252(%ecx), %xmm3
+; X86-NEXT:    vpinsrd $1, %edx, %xmm3, %xmm5
+; X86-NEXT:    vpextrd $1, %xmm2, %ecx
+; X86-NEXT:    vpinsrd $2, %ecx, %xmm5, %xmm2
+; X86-NEXT:    vinsertps {{.*#+}} xmm1 = xmm2[0,1,2],xmm1[1]
+; X86-NEXT:    vpaddd %xmm1, %xmm4, %xmm1
 ; X86-NEXT:    vmovdqu %xmm1, (%eax)
 ; X86-NEXT:    vpmovsxbd {{.*#+}} ymm1 = [4,0,10,0,4,4,14,0]
 ; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X86-NEXT:    vpermi2d %ymm2, %ymm0, %ymm1
-; X86-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0],ymm4[1],ymm1[2,3,4,5,6,7]
+; X86-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0],ymm3[1],ymm1[2,3,4,5,6,7]
 ; X86-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1,2],ymm2[3],ymm0[4,5,6,7]
 ; X86-NEXT:    vmovdqu %ymm0, (%eax)
 ; X86-NEXT:    popl %ebx
@@ -87,26 +89,30 @@ define void @PR142995(ptr %p0, ptr %p1, ptr %p2) nounwind #0 {
 ; X64-NEXT:    movb $17, %al
 ; X64-NEXT:    kmovw %eax, %k1
 ; X64-NEXT:    vmovdqu32 (%rdi), %ymm0 {%k1} {z}
-; X64-NEXT:    vmovq {{.*#+}} xmm1 = mem[0],zero
-; X64-NEXT:    movw $6144, %ax # imm = 0x1800
-; X64-NEXT:    kmovw %eax, %k1
-; X64-NEXT:    vmovdqu32 128(%rsi), %zmm2 {%k1} {z}
-; X64-NEXT:    movw $1031, %ax # imm = 0x407
-; X64-NEXT:    kmovw %eax, %k1
-; X64-NEXT:    vmovdqu32 (%rsi), %zmm3 {%k1} {z}
-; X64-NEXT:    vpbroadcastd 252(%rsi), %zmm4
-; X64-NEXT:    vpbroadcastd %xmm1, %xmm5
-; X64-NEXT:    vpsrldq {{.*#+}} xmm5 = xmm5[4,5,6,7,8,9,10,11,12,13,14,15],zero,zero,zero,zero
-; X64-NEXT:    vpunpckldq {{.*#+}} xmm1 = xmm3[0],xmm1[0],xmm3[1],xmm1[1]
-; X64-NEXT:    vpunpckldq {{.*#+}} zmm2 = zmm4[0],zmm2[0],zmm4[1],zmm2[1],zmm4[4],zmm2[4],zmm4[5],zmm2[5],zmm4[8],zmm2[8],zmm4[9],zmm2[9],zmm4[12],zmm2[12],zmm4[13],zmm2[13]
-; X64-NEXT:    vextracti32x4 $3, %zmm2, %xmm2
-; X64-NEXT:    vpblendd {{.*#+}} xmm1 = xmm2[0,1],xmm1[2,3]
-; X64-NEXT:    vpaddd %xmm1, %xmm5, %xmm1
+; X64-NEXT:    movq (%rax), %rax
+; X64-NEXT:    vmovq %rax, %xmm1
+; X64-NEXT:    movw $1031, %cx # imm = 0x407
+; X64-NEXT:    kmovw %ecx, %k1
+; X64-NEXT:    vmovdqu32 (%rsi), %zmm2 {%k1} {z}
+; X64-NEXT:    movw $6144, %cx # imm = 0x1800
+; X64-NEXT:    kmovw %ecx, %k1
+; X64-NEXT:    vmovdqu32 128(%rsi), %zmm3 {%k1} {z}
+; X64-NEXT:    vpbroadcastd %xmm1, %xmm1
+; X64-NEXT:    vpsrldq {{.*#+}} xmm1 = xmm1[4,5,6,7,8,9,10,11,12,13,14,15],zero,zero,zero,zero
+; X64-NEXT:    vextracti32x4 $3, %zmm3, %xmm3
+; X64-NEXT:    vmovd %xmm3, %ecx
+; X64-NEXT:    vpbroadcastd 252(%rsi), %xmm3
+; X64-NEXT:    vpinsrd $1, %ecx, %xmm3, %xmm4
+; X64-NEXT:    vpextrd $1, %xmm2, %ecx
+; X64-NEXT:    vpinsrd $2, %ecx, %xmm4, %xmm2
+; X64-NEXT:    shrq $32, %rax
+; X64-NEXT:    vpinsrd $3, %eax, %xmm2, %xmm2
+; X64-NEXT:    vpaddd %xmm2, %xmm1, %xmm1
 ; X64-NEXT:    vmovdqu %xmm1, (%rax)
 ; X64-NEXT:    vpmovsxbd {{.*#+}} ymm1 = [4,0,10,0,4,4,14,0]
 ; X64-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; X64-NEXT:    vpermi2d %ymm2, %ymm0, %ymm1
-; X64-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0],ymm4[1],ymm1[2,3,4,5,6,7]
+; X64-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0],ymm3[1],ymm1[2,3,4,5,6,7]
 ; X64-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1,2],ymm2[3],ymm0[4,5,6,7]
 ; X64-NEXT:    vmovdqu %ymm0, (%rdx)
 ; X64-NEXT:    vzeroupper

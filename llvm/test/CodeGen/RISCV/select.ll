@@ -1082,29 +1082,29 @@ define i32 @select_sub_3(i1 zeroext %cond, i32 %a) {
 ; RV32IM-LABEL: select_sub_3:
 ; RV32IM:       # %bb.0: # %entry
 ; RV32IM-NEXT:    addi a0, a0, -1
-; RV32IM-NEXT:    andi a0, a0, 42
-; RV32IM-NEXT:    sub a0, a1, a0
+; RV32IM-NEXT:    andi a0, a0, -42
+; RV32IM-NEXT:    add a0, a1, a0
 ; RV32IM-NEXT:    ret
 ;
 ; RV64IM-LABEL: select_sub_3:
 ; RV64IM:       # %bb.0: # %entry
 ; RV64IM-NEXT:    addi a0, a0, -1
-; RV64IM-NEXT:    andi a0, a0, 42
-; RV64IM-NEXT:    subw a0, a1, a0
+; RV64IM-NEXT:    andi a0, a0, -42
+; RV64IM-NEXT:    addw a0, a1, a0
 ; RV64IM-NEXT:    ret
 ;
 ; RV32IMZICOND-LABEL: select_sub_3:
 ; RV32IMZICOND:       # %bb.0: # %entry
 ; RV32IMZICOND-NEXT:    addi a0, a0, -1
-; RV32IMZICOND-NEXT:    andi a0, a0, 42
-; RV32IMZICOND-NEXT:    sub a0, a1, a0
+; RV32IMZICOND-NEXT:    andi a0, a0, -42
+; RV32IMZICOND-NEXT:    add a0, a1, a0
 ; RV32IMZICOND-NEXT:    ret
 ;
 ; RV64IMZICOND-LABEL: select_sub_3:
 ; RV64IMZICOND:       # %bb.0: # %entry
 ; RV64IMZICOND-NEXT:    addi a0, a0, -1
-; RV64IMZICOND-NEXT:    andi a0, a0, 42
-; RV64IMZICOND-NEXT:    subw a0, a1, a0
+; RV64IMZICOND-NEXT:    andi a0, a0, -42
+; RV64IMZICOND-NEXT:    addw a0, a1, a0
 ; RV64IMZICOND-NEXT:    ret
 ;
 ; RV32IXQCI-LABEL: select_sub_3:
@@ -1844,11 +1844,10 @@ define i32 @select_cst_not4(i32 signext %a, i32 signext %b) {
 ;
 ; RV64IM-LABEL: select_cst_not4:
 ; RV64IM:       # %bb.0:
+; RV64IM-NEXT:    lui a2, 524288
 ; RV64IM-NEXT:    slt a0, a0, a1
-; RV64IM-NEXT:    lui a1, 524288
-; RV64IM-NEXT:    neg a0, a0
-; RV64IM-NEXT:    addiw a1, a1, -1
-; RV64IM-NEXT:    xor a0, a0, a1
+; RV64IM-NEXT:    addi a2, a2, -1
+; RV64IM-NEXT:    addw a0, a0, a2
 ; RV64IM-NEXT:    ret
 ;
 ; RV32IMZICOND-LABEL: select_cst_not4:
@@ -1861,11 +1860,10 @@ define i32 @select_cst_not4(i32 signext %a, i32 signext %b) {
 ;
 ; RV64IMZICOND-LABEL: select_cst_not4:
 ; RV64IMZICOND:       # %bb.0:
+; RV64IMZICOND-NEXT:    lui a2, 524288
 ; RV64IMZICOND-NEXT:    slt a0, a0, a1
-; RV64IMZICOND-NEXT:    lui a1, 524288
-; RV64IMZICOND-NEXT:    neg a0, a0
-; RV64IMZICOND-NEXT:    addiw a1, a1, -1
-; RV64IMZICOND-NEXT:    xor a0, a0, a1
+; RV64IMZICOND-NEXT:    addi a2, a2, -1
+; RV64IMZICOND-NEXT:    addw a0, a0, a2
 ; RV64IMZICOND-NEXT:    ret
 ;
 ; RV32IXQCI-LABEL: select_cst_not4:

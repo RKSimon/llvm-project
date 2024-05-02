@@ -13,9 +13,10 @@ define bfloat @test_prdx_fmla(<1 x bfloat> %acc, <1 x bfloat> %in) {
 ; CHECK-NEXT:    pslld $16, %xmm0
 ; CHECK-NEXT:    addss %xmm1, %xmm0
 ; CHECK-NEXT:    movd %xmm0, %eax
+; CHECK-NEXT:    xorl %ecx, %ecx
 ; CHECK-NEXT:    btl $16, %eax
-; CHECK-NEXT:    movl %eax, %ecx
 ; CHECK-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; CHECK-NEXT:    addl %eax, %ecx
 ; CHECK-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm0, %xmm0
 ; CHECK-NEXT:    cmovnpl %ecx, %eax
@@ -46,19 +47,35 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    pextrw $7, %xmm1, %eax
 ; CHECK-NEXT:    pextrw $6, %xmm1, %ecx
 ; CHECK-NEXT:    pextrw $5, %xmm1, %edx
-; CHECK-NEXT:    pextrw $3, %xmm1, %esi
-; CHECK-NEXT:    pextrw $2, %xmm1, %edi
-; CHECK-NEXT:    pextrw $1, %xmm1, %r8d
+; CHECK-NEXT:    pextrw $3, %xmm1, %edi
+; CHECK-NEXT:    pextrw $2, %xmm1, %r8d
+; CHECK-NEXT:    pextrw $1, %xmm1, %esi
 ; CHECK-NEXT:    pxor %xmm2, %xmm2
 ; CHECK-NEXT:    punpckhwd {{.*#+}} xmm2 = xmm2[4],xmm1[4],xmm2[5],xmm1[5],xmm2[6],xmm1[6],xmm2[7],xmm1[7]
+; CHECK-NEXT:    pslld $16, %xmm1
+; CHECK-NEXT:    movd %esi, %xmm3
+; CHECK-NEXT:    pslld $16, %xmm3
+; CHECK-NEXT:    addss %xmm1, %xmm3
+; CHECK-NEXT:    movd %xmm3, %r9d
+; CHECK-NEXT:    xorl %esi, %esi
+; CHECK-NEXT:    btl $16, %r9d
+; CHECK-NEXT:    movl $0, %r10d
+; CHECK-NEXT:    adcl $32767, %r10d # imm = 0x7FFF
+; CHECK-NEXT:    addl %r9d, %r10d
+; CHECK-NEXT:    orl $4194304, %r9d # imm = 0x400000
+; CHECK-NEXT:    ucomiss %xmm3, %xmm3
+; CHECK-NEXT:    cmovnpl %r10d, %r9d
+; CHECK-NEXT:    movd %r9d, %xmm1
+; CHECK-NEXT:    psrld $16, %xmm1
 ; CHECK-NEXT:    pslld $16, %xmm1
 ; CHECK-NEXT:    movd %r8d, %xmm3
 ; CHECK-NEXT:    pslld $16, %xmm3
 ; CHECK-NEXT:    addss %xmm1, %xmm3
 ; CHECK-NEXT:    movd %xmm3, %r8d
 ; CHECK-NEXT:    btl $16, %r8d
-; CHECK-NEXT:    movl %r8d, %r9d
+; CHECK-NEXT:    movl $0, %r9d
 ; CHECK-NEXT:    adcl $32767, %r9d # imm = 0x7FFF
+; CHECK-NEXT:    addl %r8d, %r9d
 ; CHECK-NEXT:    orl $4194304, %r8d # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm3, %xmm3
 ; CHECK-NEXT:    cmovnpl %r9d, %r8d
@@ -70,36 +87,25 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    addss %xmm1, %xmm3
 ; CHECK-NEXT:    movd %xmm3, %edi
 ; CHECK-NEXT:    btl $16, %edi
-; CHECK-NEXT:    movl %edi, %r8d
+; CHECK-NEXT:    movl $0, %r8d
 ; CHECK-NEXT:    adcl $32767, %r8d # imm = 0x7FFF
+; CHECK-NEXT:    addl %edi, %r8d
 ; CHECK-NEXT:    orl $4194304, %edi # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm3, %xmm3
 ; CHECK-NEXT:    cmovnpl %r8d, %edi
 ; CHECK-NEXT:    movd %edi, %xmm1
 ; CHECK-NEXT:    psrld $16, %xmm1
 ; CHECK-NEXT:    pslld $16, %xmm1
-; CHECK-NEXT:    movd %esi, %xmm3
-; CHECK-NEXT:    pslld $16, %xmm3
-; CHECK-NEXT:    addss %xmm1, %xmm3
-; CHECK-NEXT:    movd %xmm3, %esi
-; CHECK-NEXT:    btl $16, %esi
-; CHECK-NEXT:    movl %esi, %edi
-; CHECK-NEXT:    adcl $32767, %edi # imm = 0x7FFF
-; CHECK-NEXT:    orl $4194304, %esi # imm = 0x400000
-; CHECK-NEXT:    ucomiss %xmm3, %xmm3
-; CHECK-NEXT:    cmovnpl %edi, %esi
-; CHECK-NEXT:    movd %esi, %xmm1
-; CHECK-NEXT:    psrld $16, %xmm1
-; CHECK-NEXT:    pslld $16, %xmm1
 ; CHECK-NEXT:    addss %xmm1, %xmm2
-; CHECK-NEXT:    movd %xmm2, %esi
-; CHECK-NEXT:    btl $16, %esi
-; CHECK-NEXT:    movl %esi, %edi
-; CHECK-NEXT:    adcl $32767, %edi # imm = 0x7FFF
-; CHECK-NEXT:    orl $4194304, %esi # imm = 0x400000
+; CHECK-NEXT:    movd %xmm2, %edi
+; CHECK-NEXT:    btl $16, %edi
+; CHECK-NEXT:    movl $0, %r8d
+; CHECK-NEXT:    adcl $32767, %r8d # imm = 0x7FFF
+; CHECK-NEXT:    addl %edi, %r8d
+; CHECK-NEXT:    orl $4194304, %edi # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm2, %xmm2
-; CHECK-NEXT:    cmovnpl %edi, %esi
-; CHECK-NEXT:    movd %esi, %xmm1
+; CHECK-NEXT:    cmovnpl %r8d, %edi
+; CHECK-NEXT:    movd %edi, %xmm1
 ; CHECK-NEXT:    psrld $16, %xmm1
 ; CHECK-NEXT:    pslld $16, %xmm1
 ; CHECK-NEXT:    movd %edx, %xmm2
@@ -107,11 +113,12 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    addss %xmm1, %xmm2
 ; CHECK-NEXT:    movd %xmm2, %edx
 ; CHECK-NEXT:    btl $16, %edx
-; CHECK-NEXT:    movl %edx, %esi
-; CHECK-NEXT:    adcl $32767, %esi # imm = 0x7FFF
+; CHECK-NEXT:    movl $0, %edi
+; CHECK-NEXT:    adcl $32767, %edi # imm = 0x7FFF
+; CHECK-NEXT:    addl %edx, %edi
 ; CHECK-NEXT:    orl $4194304, %edx # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm2, %xmm2
-; CHECK-NEXT:    cmovnpl %esi, %edx
+; CHECK-NEXT:    cmovnpl %edi, %edx
 ; CHECK-NEXT:    movd %edx, %xmm1
 ; CHECK-NEXT:    psrld $16, %xmm1
 ; CHECK-NEXT:    pslld $16, %xmm1
@@ -120,8 +127,9 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    addss %xmm1, %xmm2
 ; CHECK-NEXT:    movd %xmm2, %ecx
 ; CHECK-NEXT:    btl $16, %ecx
-; CHECK-NEXT:    movl %ecx, %edx
+; CHECK-NEXT:    movl $0, %edx
 ; CHECK-NEXT:    adcl $32767, %edx # imm = 0x7FFF
+; CHECK-NEXT:    addl %ecx, %edx
 ; CHECK-NEXT:    orl $4194304, %ecx # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm2, %xmm2
 ; CHECK-NEXT:    cmovnpl %edx, %ecx
@@ -133,8 +141,9 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    addss %xmm1, %xmm2
 ; CHECK-NEXT:    movd %xmm2, %eax
 ; CHECK-NEXT:    btl $16, %eax
-; CHECK-NEXT:    movl %eax, %ecx
+; CHECK-NEXT:    movl $0, %ecx
 ; CHECK-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; CHECK-NEXT:    addl %eax, %ecx
 ; CHECK-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm2, %xmm2
 ; CHECK-NEXT:    cmovnpl %ecx, %eax
@@ -145,11 +154,11 @@ define bfloat @test_prdx_fmla_wide_input(<1 x bfloat> %acc, <8 x bfloat> %in) {
 ; CHECK-NEXT:    addss %xmm1, %xmm0
 ; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    btl $16, %eax
-; CHECK-NEXT:    movl %eax, %ecx
-; CHECK-NEXT:    adcl $32767, %ecx # imm = 0x7FFF
+; CHECK-NEXT:    adcl $32767, %esi # imm = 0x7FFF
+; CHECK-NEXT:    addl %eax, %esi
 ; CHECK-NEXT:    orl $4194304, %eax # imm = 0x400000
 ; CHECK-NEXT:    ucomiss %xmm0, %xmm0
-; CHECK-NEXT:    cmovnpl %ecx, %eax
+; CHECK-NEXT:    cmovnpl %esi, %eax
 ; CHECK-NEXT:    shrl $16, %eax
 ; CHECK-NEXT:    pinsrw $0, %eax, %xmm0
 ; CHECK-NEXT:    retq

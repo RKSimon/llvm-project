@@ -7,10 +7,11 @@ define void @f(i64 %a, i64 %b) nounwind {
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    shll $16, %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-NEXT:    movl $-65536, %edi # imm = 0xFFFF0000
-; X86-NEXT:    cmpl $65527, %eax # imm = 0xFFF7
+; X86-NEXT:    cmpl $-589824, %eax # imm = 0xFFF70000
 ; X86-NEXT:    jne .LBB0_2
 ; X86-NEXT:  # %bb.1: # %if.then
 ; X86-NEXT:    calll ext1@PLT

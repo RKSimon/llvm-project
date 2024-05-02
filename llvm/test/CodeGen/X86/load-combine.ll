@@ -886,9 +886,9 @@ define i32 @load_i32_by_sext_i16(ptr %arg) nounwind {
 define i32 @load_i32_by_i8_base_offset_index(ptr %arg, i32 %i) nounwind {
 ; X86-LABEL: load_i32_by_i8_base_offset_index:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    movl 8(%esp), %ecx
-; X86-NEXT:    movl 12(%eax,%ecx), %eax
+; X86-NEXT:    movl 8(%esp), %eax
+; X86-NEXT:    movl 4(%esp), %ecx
+; X86-NEXT:    movl 12(%ecx,%eax), %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: load_i32_by_i8_base_offset_index:
@@ -931,15 +931,15 @@ define i32 @load_i32_by_i8_base_offset_index(ptr %arg, i32 %i) nounwind {
 define i32 @load_i32_by_i8_base_offset_index_2(ptr %arg, i32 %i) nounwind {
 ; X86-LABEL: load_i32_by_i8_base_offset_index_2:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    movl 8(%esp), %ecx
-; X86-NEXT:    movl 13(%eax,%ecx), %eax
+; X86-NEXT:    movl 8(%esp), %eax
+; X86-NEXT:    movl 4(%esp), %ecx
+; X86-NEXT:    movl 13(%ecx,%eax), %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: load_i32_by_i8_base_offset_index_2:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movl %esi, %eax
-; X64-NEXT:    movl 13(%rax,%rdi), %eax
+; X64-NEXT:    movl 13(%rdi,%rax), %eax
 ; X64-NEXT:    retq
   %tmp = add nuw nsw i32 %i, 4
   %tmp2 = add nuw nsw i32 %i, 3
@@ -987,9 +987,9 @@ define i32 @load_i32_by_i8_base_offset_index_2(ptr %arg, i32 %i) nounwind {
 define i32 @load_i32_by_i8_zaext_loads(ptr %arg, i32 %arg1) nounwind {
 ; X86-LABEL: load_i32_by_i8_zaext_loads:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    movl 8(%esp), %ecx
-; X86-NEXT:    movl 12(%eax,%ecx), %eax
+; X86-NEXT:    movl 8(%esp), %eax
+; X86-NEXT:    movl 4(%esp), %ecx
+; X86-NEXT:    movl 12(%ecx,%eax), %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: load_i32_by_i8_zaext_loads:
@@ -1043,9 +1043,9 @@ define i32 @load_i32_by_i8_zaext_loads(ptr %arg, i32 %arg1) nounwind {
 define i32 @load_i32_by_i8_zsext_loads(ptr %arg, i32 %arg1) nounwind {
 ; X86-LABEL: load_i32_by_i8_zsext_loads:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl 4(%esp), %eax
-; X86-NEXT:    movl 8(%esp), %ecx
-; X86-NEXT:    movl 12(%eax,%ecx), %eax
+; X86-NEXT:    movl 8(%esp), %eax
+; X86-NEXT:    movl 4(%esp), %ecx
+; X86-NEXT:    movl 12(%ecx,%eax), %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: load_i32_by_i8_zsext_loads:

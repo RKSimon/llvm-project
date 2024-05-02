@@ -9,12 +9,13 @@ define float @select_select_fold_select_and(float %w, float %x, float %y, float 
 ; CHECK-SD-LABEL: select_select_fold_select_and:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    fcmp s1, s2
-; CHECK-SD-NEXT:    fmov s4, #0.50000000
+; CHECK-SD-NEXT:    fmaxnm s4, s0, s3
 ; CHECK-SD-NEXT:    fcsel s1, s1, s2, lt
-; CHECK-SD-NEXT:    fmaxnm s2, s0, s3
-; CHECK-SD-NEXT:    fccmp s1, s0, #4, lt
-; CHECK-SD-NEXT:    fadd s1, s0, s4
-; CHECK-SD-NEXT:    fcsel s2, s2, s0, gt
+; CHECK-SD-NEXT:    fmov s2, #0.50000000
+; CHECK-SD-NEXT:    fcsel s4, s4, s0, lt
+; CHECK-SD-NEXT:    fcmp s1, s0
+; CHECK-SD-NEXT:    fadd s1, s0, s2
+; CHECK-SD-NEXT:    fcsel s2, s4, s0, gt
 ; CHECK-SD-NEXT:    fadd s4, s1, s2
 ; CHECK-SD-NEXT:    fcmp s4, s1
 ; CHECK-SD-NEXT:    b.le .LBB0_2
@@ -99,12 +100,13 @@ define float @select_select_fold_select_or(float %w, float %x, float %y, float %
 ; CHECK-SD-LABEL: select_select_fold_select_or:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    fcmp s1, s2
+; CHECK-SD-NEXT:    fmaxnm s4, s0, s3
 ; CHECK-SD-NEXT:    fcsel s1, s1, s2, lt
-; CHECK-SD-NEXT:    fccmp s0, s3, #0, ge
 ; CHECK-SD-NEXT:    fmov s2, #0.50000000
-; CHECK-SD-NEXT:    fccmp s1, s0, #0, le
+; CHECK-SD-NEXT:    fcsel s4, s0, s4, lt
+; CHECK-SD-NEXT:    fcmp s1, s0
 ; CHECK-SD-NEXT:    fadd s1, s0, s2
-; CHECK-SD-NEXT:    fcsel s2, s0, s3, gt
+; CHECK-SD-NEXT:    fcsel s2, s0, s4, gt
 ; CHECK-SD-NEXT:    fadd s4, s1, s2
 ; CHECK-SD-NEXT:    fcmp s4, s1
 ; CHECK-SD-NEXT:    b.le .LBB1_2

@@ -126,7 +126,7 @@ define <16 x i32> @add_v16i32_01uuuuuuuuuuuuuu(<16 x i32> %a, <16 x i32> %b) {
 ;
 ; AVX512-LABEL: add_v16i32_01uuuuuuuuuuuuuu:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,2,2,3]
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,2,1,1]
 ; AVX512-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,3,2,3]
 ; AVX512-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
 ; AVX512-NEXT:    retq
@@ -218,10 +218,10 @@ define <16 x i32> @add_v16i32_0145uuuuuuuuuuuu(<16 x i32> %a, <16 x i32> %b) {
 ;
 ; AVX512-LABEL: add_v16i32_0145uuuuuuuuuuuu:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpmovqd %ymm0, %xmm1
-; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm2
-; AVX512-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[1,3],xmm2[1,3]
-; AVX512-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX512-NEXT:    vpmovsxbd {{.*#+}} xmm1 = [1,3,5,7]
+; AVX512-NEXT:    vpermd %ymm0, %ymm1, %ymm1
+; AVX512-NEXT:    vpmovqd %ymm0, %xmm0
+; AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512-NEXT:    retq
   %x = shufflevector <16 x i32> %a, <16 x i32> %b, <4 x i32> <i32 0, i32 2, i32 4, i32 6>
   %y = shufflevector <16 x i32> %a, <16 x i32> %b, <4 x i32> <i32 1, i32 3, i32 5, i32 7>

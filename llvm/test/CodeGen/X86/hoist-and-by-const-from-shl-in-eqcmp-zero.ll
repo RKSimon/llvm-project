@@ -343,7 +343,7 @@ define i1 @scalar_i64_signbit_eq(i64 %x, i64 %y) nounwind {
 define i1 @scalar_i64_lowestbit_eq(i64 %x, i64 %y) nounwind {
 ; X86-LABEL: scalar_i64_lowestbit_eq:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    testb $32, %al
 ; X86-NEXT:    je .LBB10_1
 ; X86-NEXT:  # %bb.2:
@@ -434,14 +434,14 @@ define i1 @scalar_i128_lowestbit_eq(i128 %x, i128 %y) nounwind {
 ; X86-SSE2-LABEL: scalar_i128_lowestbit_eq:
 ; X86-SSE2:       # %bb.0:
 ; X86-SSE2-NEXT:    subl $44, %esp
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE2-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-SSE2-NEXT:    movaps {{[0-9]+}}(%esp), %xmm0
 ; X86-SSE2-NEXT:    xorps %xmm1, %xmm1
 ; X86-SSE2-NEXT:    movaps %xmm1, {{[0-9]+}}(%esp)
 ; X86-SSE2-NEXT:    movaps %xmm0, (%esp)
 ; X86-SSE2-NEXT:    movl %eax, %ecx
+; X86-SSE2-NEXT:    andb $96, %cl
 ; X86-SSE2-NEXT:    shrb $3, %cl
-; X86-SSE2-NEXT:    andb $12, %cl
 ; X86-SSE2-NEXT:    movzbl %cl, %ecx
 ; X86-SSE2-NEXT:    movl (%esp,%ecx), %ecx
 ; X86-SSE2-NEXT:    btl %eax, %ecx
@@ -452,14 +452,14 @@ define i1 @scalar_i128_lowestbit_eq(i128 %x, i128 %y) nounwind {
 ; X86-BMI2-AVX2-LABEL: scalar_i128_lowestbit_eq:
 ; X86-BMI2-AVX2:       # %bb.0:
 ; X86-BMI2-AVX2-NEXT:    subl $44, %esp
-; X86-BMI2-AVX2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-BMI2-AVX2-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-BMI2-AVX2-NEXT:    vmovaps {{[0-9]+}}(%esp), %xmm0
 ; X86-BMI2-AVX2-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; X86-BMI2-AVX2-NEXT:    vmovaps %xmm1, {{[0-9]+}}(%esp)
 ; X86-BMI2-AVX2-NEXT:    vmovaps %xmm0, (%esp)
 ; X86-BMI2-AVX2-NEXT:    movl %eax, %ecx
+; X86-BMI2-AVX2-NEXT:    andb $96, %cl
 ; X86-BMI2-AVX2-NEXT:    shrb $3, %cl
-; X86-BMI2-AVX2-NEXT:    andb $12, %cl
 ; X86-BMI2-AVX2-NEXT:    movzbl %cl, %ecx
 ; X86-BMI2-AVX2-NEXT:    movl (%esp,%ecx), %ecx
 ; X86-BMI2-AVX2-NEXT:    btl %eax, %ecx
@@ -514,10 +514,10 @@ define <4 x i1> @vec_4xi32_splat_eq(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; AVX2-LABEL: vec_4xi32_splat_eq:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1,1,1,1]
-; AVX2-NEXT:    vpxor %xmm3, %xmm3, %xmm3
 ; AVX2-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm0, %xmm0
+; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; X64-SSE2-LABEL: vec_4xi32_splat_eq:
@@ -600,10 +600,10 @@ define <4 x i1> @vec_4xi32_nonsplat_undef0_eq(<4 x i32> %x, <4 x i32> %y) nounwi
 ; AVX2-LABEL: vec_4xi32_nonsplat_undef0_eq:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [1,1,1,1]
-; AVX2-NEXT:    vpxor %xmm3, %xmm3, %xmm3
 ; AVX2-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpand %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpcmpeqd %xmm3, %xmm0, %xmm0
+; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; AVX2-NEXT:    vpcmpeqd %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; X64-SSE2-LABEL: vec_4xi32_nonsplat_undef0_eq:

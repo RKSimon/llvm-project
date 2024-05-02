@@ -23,11 +23,15 @@ define <8 x i16> @two_way_i8_i16_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: two_way_i8_i16_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    umlalb z0.h, z2.b, z1.b
-; SME-NEXT:    umlalt z0.h, z2.b, z1.b
+; SME-NEXT:    ptrue p0.h, vl8
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    ld1b { z0.h }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.h }, p0/z, [x2]
+; SME-NEXT:    mad z0.h, p0/m, z1.h, z2.h
+; SME-NEXT:    ld1b { z1.h }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.h }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.h, p0/m, z2.h, z1.h
 ; SME-NEXT:    ret
   %acc = load <8 x i16>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -54,13 +58,24 @@ define <16 x i16> @two_way_i8_i16_vl128_double_width(ptr %accptr, ptr %uptr, ptr
 ;
 ; SME-LABEL: two_way_i8_i16_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    umlalb z0.h, z5.b, z3.b
-; SME-NEXT:    umlalb z1.h, z4.b, z2.b
-; SME-NEXT:    umlalt z0.h, z5.b, z3.b
-; SME-NEXT:    umlalt z1.h, z4.b, z2.b
+; SME-NEXT:    ptrue p0.h, vl8
+; SME-NEXT:    mov w8, #16 // =0x10
+; SME-NEXT:    mov w9, #8 // =0x8
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1b { z1.h }, p0/z, [x1]
+; SME-NEXT:    ld1b { z3.h }, p0/z, [x2]
+; SME-NEXT:    ld1b { z0.h }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.h }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #24 // =0x18
+; SME-NEXT:    ld1b { z6.h }, p0/z, [x1, x8]
+; SME-NEXT:    mad z1.h, p0/m, z3.h, z5.h
+; SME-NEXT:    ld1b { z3.h }, p0/z, [x2, x8]
+; SME-NEXT:    mad z2.h, p0/m, z0.h, z4.h
+; SME-NEXT:    ld1b { z0.h }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.h }, p0/z, [x2, x9]
+; SME-NEXT:    mad z0.h, p0/m, z4.h, z1.h
+; SME-NEXT:    movprfx z1, z2
+; SME-NEXT:    mla z1.h, p0/m, z3.h, z6.h
 ; SME-NEXT:    ret
   %acc = load <16 x i16>, ptr %accptr
   %u = load <32 x i8>, ptr %uptr
@@ -88,16 +103,14 @@ define <16 x i16> @two_way_i8_i16_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE-LABEL: two_way_i8_i16_vl256:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    ldr z0, [x1]
-; SVE-NEXT:    ldr z1, [x2]
 ; SVE-NEXT:    ptrue p0.h
-; SVE-NEXT:    ldr z4, [x0]
-; SVE-NEXT:    uunpklo z2.h, z0.b
-; SVE-NEXT:    uunpklo z3.h, z1.b
-; SVE-NEXT:    uunpkhi z0.h, z0.b
-; SVE-NEXT:    uunpkhi z1.h, z1.b
-; SVE-NEXT:    mad z2.h, p0/m, z3.h, z4.h
-; SVE-NEXT:    mad z0.h, p0/m, z1.h, z2.h
+; SVE-NEXT:    ldr z0, [x0]
+; SVE-NEXT:    ld1b { z1.h }, p0/z, [x1]
+; SVE-NEXT:    ld1b { z2.h }, p0/z, [x2]
+; SVE-NEXT:    mla z0.h, p0/m, z2.h, z1.h
+; SVE-NEXT:    ld1b { z1.h }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1b { z2.h }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.h, p0/m, z2.h, z1.h
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -106,11 +119,14 @@ define <16 x i16> @two_way_i8_i16_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE2-LABEL: two_way_i8_i16_vl256:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.h
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    umlalb z0.h, z2.b, z1.b
-; SVE2-NEXT:    umlalt z0.h, z2.b, z1.b
+; SVE2-NEXT:    ld1b { z1.h }, p0/z, [x1]
+; SVE2-NEXT:    ld1b { z2.h }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.h, p0/m, z2.h, z1.h
+; SVE2-NEXT:    ld1b { z1.h }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1b { z2.h }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.h, p0/m, z2.h, z1.h
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -119,11 +135,14 @@ define <16 x i16> @two_way_i8_i16_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SME-LABEL: two_way_i8_i16_vl256:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.h
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    umlalb z0.h, z2.b, z1.b
-; SME-NEXT:    umlalt z0.h, z2.b, z1.b
+; SME-NEXT:    ld1b { z1.h }, p0/z, [x1]
+; SME-NEXT:    ld1b { z2.h }, p0/z, [x2]
+; SME-NEXT:    mla z0.h, p0/m, z2.h, z1.h
+; SME-NEXT:    ld1b { z1.h }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1b { z2.h }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.h, p0/m, z2.h, z1.h
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -154,11 +173,15 @@ define <4 x i32> @two_way_i16_i32_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: two_way_i16_i32_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    umlalb z0.s, z2.h, z1.h
-; SME-NEXT:    umlalt z0.s, z2.h, z1.h
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov x8, #4 // =0x4
+; SME-NEXT:    ld1h { z0.s }, p0/z, [x1]
+; SME-NEXT:    ld1h { z1.s }, p0/z, [x2]
+; SME-NEXT:    mad z0.s, p0/m, z1.s, z2.s
+; SME-NEXT:    ld1h { z1.s }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.s }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    ret
   %acc = load <4 x i32>, ptr %accptr
   %u = load <8 x i16>, ptr %uptr
@@ -185,13 +208,24 @@ define <8 x i32> @two_way_i16_i32_vl128_double_width(ptr %accptr, ptr %uptr, ptr
 ;
 ; SME-LABEL: two_way_i16_i32_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    umlalb z0.s, z5.h, z3.h
-; SME-NEXT:    umlalb z1.s, z4.h, z2.h
-; SME-NEXT:    umlalt z0.s, z5.h, z3.h
-; SME-NEXT:    umlalt z1.s, z4.h, z2.h
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    mov x8, #8 // =0x8
+; SME-NEXT:    mov x9, #4 // =0x4
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1h { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1h { z3.s }, p0/z, [x2]
+; SME-NEXT:    ld1h { z0.s }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.s }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x8, #12 // =0xc
+; SME-NEXT:    ld1h { z6.s }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    mad z1.s, p0/m, z3.s, z5.s
+; SME-NEXT:    ld1h { z3.s }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mad z2.s, p0/m, z0.s, z4.s
+; SME-NEXT:    ld1h { z0.s }, p0/z, [x1, x9, lsl #1]
+; SME-NEXT:    ld1h { z4.s }, p0/z, [x2, x9, lsl #1]
+; SME-NEXT:    mad z0.s, p0/m, z4.s, z1.s
+; SME-NEXT:    movprfx z1, z2
+; SME-NEXT:    mla z1.s, p0/m, z3.s, z6.s
 ; SME-NEXT:    ret
   %acc = load <8 x i32>, ptr %accptr
   %u = load <16 x i16>, ptr %uptr
@@ -219,16 +253,14 @@ define <8 x i32> @two_way_i16_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE-LABEL: two_way_i16_i32_vl256:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    ldr z0, [x1]
-; SVE-NEXT:    ldr z1, [x2]
 ; SVE-NEXT:    ptrue p0.s
-; SVE-NEXT:    ldr z4, [x0]
-; SVE-NEXT:    uunpklo z2.s, z0.h
-; SVE-NEXT:    uunpklo z3.s, z1.h
-; SVE-NEXT:    uunpkhi z0.s, z0.h
-; SVE-NEXT:    uunpkhi z1.s, z1.h
-; SVE-NEXT:    mad z2.s, p0/m, z3.s, z4.s
-; SVE-NEXT:    mad z0.s, p0/m, z1.s, z2.s
+; SVE-NEXT:    ldr z0, [x0]
+; SVE-NEXT:    ld1h { z1.s }, p0/z, [x1]
+; SVE-NEXT:    ld1h { z2.s }, p0/z, [x2]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1h { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1h { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -237,11 +269,14 @@ define <8 x i32> @two_way_i16_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE2-LABEL: two_way_i16_i32_vl256:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.s
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    umlalb z0.s, z2.h, z1.h
-; SVE2-NEXT:    umlalt z0.s, z2.h, z1.h
+; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x1]
+; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1h { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1h { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -250,11 +285,14 @@ define <8 x i32> @two_way_i16_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SME-LABEL: two_way_i16_i32_vl256:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.s
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    umlalb z0.s, z2.h, z1.h
-; SME-NEXT:    umlalt z0.s, z2.h, z1.h
+; SME-NEXT:    ld1h { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1h { z2.s }, p0/z, [x2]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1h { z1.s }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1h { z2.s }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -285,11 +323,15 @@ define <2 x i64> @two_way_i32_i64_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: two_way_i32_i64_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    umlalb z0.d, z2.s, z1.s
-; SME-NEXT:    umlalt z0.d, z2.s, z1.s
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov x8, #2 // =0x2
+; SME-NEXT:    ld1w { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1w { z1.d }, p0/z, [x2]
+; SME-NEXT:    mad z0.d, p0/m, z1.d, z2.d
+; SME-NEXT:    ld1w { z1.d }, p0/z, [x1, x8, lsl #2]
+; SME-NEXT:    ld1w { z2.d }, p0/z, [x2, x8, lsl #2]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    ret
   %acc = load <2 x i64>, ptr %accptr
   %u = load <4 x i32>, ptr %uptr
@@ -316,13 +358,24 @@ define <4 x i64> @two_way_i32_i64_vl128_double_width(ptr %accptr, ptr %uptr, ptr
 ;
 ; SME-LABEL: two_way_i32_i64_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    umlalb z0.d, z5.s, z3.s
-; SME-NEXT:    umlalb z1.d, z4.s, z2.s
-; SME-NEXT:    umlalt z0.d, z5.s, z3.s
-; SME-NEXT:    umlalt z1.d, z4.s, z2.s
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    mov x8, #4 // =0x4
+; SME-NEXT:    mov x9, #2 // =0x2
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1w { z1.d }, p0/z, [x1]
+; SME-NEXT:    ld1w { z3.d }, p0/z, [x2]
+; SME-NEXT:    ld1w { z0.d }, p0/z, [x1, x8, lsl #2]
+; SME-NEXT:    ld1w { z2.d }, p0/z, [x2, x8, lsl #2]
+; SME-NEXT:    mov x8, #6 // =0x6
+; SME-NEXT:    ld1w { z6.d }, p0/z, [x1, x8, lsl #2]
+; SME-NEXT:    mad z1.d, p0/m, z3.d, z5.d
+; SME-NEXT:    ld1w { z3.d }, p0/z, [x2, x8, lsl #2]
+; SME-NEXT:    mad z2.d, p0/m, z0.d, z4.d
+; SME-NEXT:    ld1w { z0.d }, p0/z, [x1, x9, lsl #2]
+; SME-NEXT:    ld1w { z4.d }, p0/z, [x2, x9, lsl #2]
+; SME-NEXT:    mad z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    movprfx z1, z2
+; SME-NEXT:    mla z1.d, p0/m, z3.d, z6.d
 ; SME-NEXT:    ret
   %acc = load <4 x i64>, ptr %accptr
   %u = load <8 x i32>, ptr %uptr
@@ -350,16 +403,14 @@ define <4 x i64> @two_way_i32_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE-LABEL: two_way_i32_i64_vl256:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    ldr z0, [x1]
-; SVE-NEXT:    ldr z1, [x2]
 ; SVE-NEXT:    ptrue p0.d
-; SVE-NEXT:    ldr z4, [x0]
-; SVE-NEXT:    uunpklo z2.d, z0.s
-; SVE-NEXT:    uunpklo z3.d, z1.s
-; SVE-NEXT:    uunpkhi z0.d, z0.s
-; SVE-NEXT:    uunpkhi z1.d, z1.s
-; SVE-NEXT:    mad z2.d, p0/m, z3.d, z4.d
-; SVE-NEXT:    mad z0.d, p0/m, z1.d, z2.d
+; SVE-NEXT:    ldr z0, [x0]
+; SVE-NEXT:    ld1w { z1.d }, p0/z, [x1]
+; SVE-NEXT:    ld1w { z2.d }, p0/z, [x2]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1w { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1w { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -368,11 +419,14 @@ define <4 x i64> @two_way_i32_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE2-LABEL: two_way_i32_i64_vl256:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.d
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    umlalb z0.d, z2.s, z1.s
-; SVE2-NEXT:    umlalt z0.d, z2.s, z1.s
+; SVE2-NEXT:    ld1w { z1.d }, p0/z, [x1]
+; SVE2-NEXT:    ld1w { z2.d }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1w { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1w { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -381,11 +435,14 @@ define <4 x i64> @two_way_i32_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SME-LABEL: two_way_i32_i64_vl256:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.d
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    umlalb z0.d, z2.s, z1.s
-; SME-NEXT:    umlalt z0.d, z2.s, z1.s
+; SME-NEXT:    ld1w { z1.d }, p0/z, [x1]
+; SME-NEXT:    ld1w { z2.d }, p0/z, [x2]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1w { z1.d }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1w { z2.d }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -433,10 +490,23 @@ define <4 x i32> @four_way_i8_i32_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: four_way_i8_i32_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    udot z0.s, z2.b, z1.b
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #4 // =0x4
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x2]
+; SME-NEXT:    mad z0.s, p0/m, z1.s, z2.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #12 // =0xc
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    ret
   %acc = load <4 x i32>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -459,10 +529,23 @@ define <4 x i32> @four_way_i8_i32_vl128_usdot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SME-LABEL: four_way_i8_i32_vl128_usdot:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    usdot z0.s, z1.b, z2.b
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #4 // =0x4
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1]
+; SME-NEXT:    ld1sb { z1.s }, p0/z, [x2]
+; SME-NEXT:    mad z0.s, p0/m, z1.s, z2.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #12 // =0xc
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    ret
   %acc = load <4 x i32>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -485,10 +568,23 @@ define <4 x i32> @four_way_i8_i32_vl128_sudot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SME-LABEL: four_way_i8_i32_vl128_sudot:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    usdot z0.s, z2.b, z1.b
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #4 // =0x4
+; SME-NEXT:    ld1sb { z0.s }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x2]
+; SME-NEXT:    mad z0.s, p0/m, z1.s, z2.s
+; SME-NEXT:    ld1sb { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1sb { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #12 // =0xc
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1sb { z1.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    ret
   %acc = load <4 x i32>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -513,13 +609,39 @@ define <2 x i64> @four_way_i8_i64_vl128_usdot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SME-LABEL: four_way_i8_i64_vl128_usdot:
 ; SME:       // %bb.0:
-; SME-NEXT:    mov z1.s, #0 // =0x0
-; SME-NEXT:    ldr q0, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    ptrue p0.d
-; SME-NEXT:    usdot z1.s, z0.b, z2.b
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    sadalp z0.d, p0/m, z1.s
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #2 // =0x2
+; SME-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1sb { z1.d }, p0/z, [x2]
+; SME-NEXT:    mad z0.d, p0/m, z1.d, z2.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #4 // =0x4
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #6 // =0x6
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #10 // =0xa
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #12 // =0xc
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #14 // =0xe
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    ret
   %acc = load <2 x i64>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -579,42 +701,61 @@ define <2 x i64> @four_way_i16_i64_vl128_usdot(ptr %accptr, ptr %uptr, ptr %sptr
 
 define <8 x i32> @four_way_i8_i32_vl128_double_width(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
-; NEON-LABEL: four_way_i8_i32_vl128_double_width:
-; NEON:       // %bb.0:
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    ldp q3, q2, [x1]
-; NEON-NEXT:    ldp q5, q4, [x2]
-; NEON-NEXT:    udot v0.4s, v5.16b, v3.16b
-; NEON-NEXT:    udot v1.4s, v4.16b, v2.16b
-; NEON-NEXT:    ret
-;
-; SVE-LABEL: four_way_i8_i32_vl128_double_width:
-; SVE:       // %bb.0:
-; SVE-NEXT:    ldp q0, q1, [x0]
-; SVE-NEXT:    ldp q3, q2, [x1]
-; SVE-NEXT:    ldp q5, q4, [x2]
-; SVE-NEXT:    udot v0.4s, v5.16b, v3.16b
-; SVE-NEXT:    udot v1.4s, v4.16b, v2.16b
-; SVE-NEXT:    ret
-;
-; SVE2-LABEL: four_way_i8_i32_vl128_double_width:
-; SVE2:       // %bb.0:
-; SVE2-NEXT:    ldp q0, q1, [x0]
-; SVE2-NEXT:    ldp q3, q2, [x1]
-; SVE2-NEXT:    ldp q5, q4, [x2]
-; SVE2-NEXT:    udot z0.s, z5.b, z3.b
-; SVE2-NEXT:    udot z1.s, z4.b, z2.b
-; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
-; SVE2-NEXT:    // kill: def $q1 killed $q1 killed $z1
-; SVE2-NEXT:    ret
+; COMMON-LABEL: four_way_i8_i32_vl128_double_width:
+; COMMON:       // %bb.0:
+; COMMON-NEXT:    ldp q0, q1, [x1]
+; COMMON-NEXT:    ldp q2, q3, [x2]
+; COMMON-NEXT:    ldp q7, q6, [x0]
+; COMMON-NEXT:    umull v4.8h, v3.8b, v1.8b
+; COMMON-NEXT:    umull v5.8h, v2.8b, v0.8b
+; COMMON-NEXT:    umull2 v1.8h, v3.16b, v1.16b
+; COMMON-NEXT:    umull2 v0.8h, v2.16b, v0.16b
+; COMMON-NEXT:    uaddw v7.4s, v7.4s, v5.4h
+; COMMON-NEXT:    uaddw v6.4s, v6.4s, v4.4h
+; COMMON-NEXT:    uaddw2 v2.4s, v7.4s, v5.8h
+; COMMON-NEXT:    uaddw2 v3.4s, v6.4s, v4.8h
+; COMMON-NEXT:    uaddw v2.4s, v2.4s, v0.4h
+; COMMON-NEXT:    uaddw v3.4s, v3.4s, v1.4h
+; COMMON-NEXT:    uaddw2 v0.4s, v2.4s, v0.8h
+; COMMON-NEXT:    uaddw2 v1.4s, v3.4s, v1.8h
+; COMMON-NEXT:    ret
 ;
 ; SME-LABEL: four_way_i8_i32_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    udot z0.s, z5.b, z3.b
-; SME-NEXT:    udot z1.s, z4.b, z2.b
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    mov w8, #16 // =0x10
+; SME-NEXT:    mov w9, #4 // =0x4
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1b { z3.s }, p0/z, [x2]
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #20 // =0x14
+; SME-NEXT:    ld1b { z6.s }, p0/z, [x1, x8]
+; SME-NEXT:    mad z1.s, p0/m, z3.s, z5.s
+; SME-NEXT:    ld1b { z3.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #24 // =0x18
+; SME-NEXT:    mad z0.s, p0/m, z2.s, z4.s
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    mov w9, #8 // =0x8
+; SME-NEXT:    ld1b { z5.s }, p0/z, [x1, x8]
+; SME-NEXT:    mla z1.s, p0/m, z4.s, z2.s
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    mla z0.s, p0/m, z3.s, z6.s
+; SME-NEXT:    ld1b { z3.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w9, #12 // =0xc
+; SME-NEXT:    mov w8, #28 // =0x1c
+; SME-NEXT:    ld1b { z6.s }, p0/z, [x1, x8]
+; SME-NEXT:    mla z1.s, p0/m, z4.s, z2.s
+; SME-NEXT:    ld1b { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mad z3.s, p0/m, z5.s, z0.s
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1, x9]
+; SME-NEXT:    mad z0.s, p0/m, z4.s, z1.s
+; SME-NEXT:    movprfx z1, z3
+; SME-NEXT:    mla z1.s, p0/m, z2.s, z6.s
 ; SME-NEXT:    ret
   %acc = load <8 x i32>, ptr %accptr
   %u = load <32 x i8>, ptr %uptr
@@ -639,11 +780,40 @@ define <8 x i32> @four_way_i8_i32_vl128_double_width_usdot(ptr %accptr, ptr %upt
 ;
 ; SME-LABEL: four_way_i8_i32_vl128_double_width_usdot:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    usdot z0.s, z3.b, z5.b
-; SME-NEXT:    usdot z1.s, z2.b, z4.b
+; SME-NEXT:    ptrue p0.s, vl4
+; SME-NEXT:    mov w8, #16 // =0x10
+; SME-NEXT:    mov w9, #4 // =0x4
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1sb { z3.s }, p0/z, [x2]
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1, x8]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #20 // =0x14
+; SME-NEXT:    ld1b { z6.s }, p0/z, [x1, x8]
+; SME-NEXT:    mad z1.s, p0/m, z3.s, z5.s
+; SME-NEXT:    ld1sb { z3.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #24 // =0x18
+; SME-NEXT:    mad z0.s, p0/m, z2.s, z4.s
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x1, x9]
+; SME-NEXT:    ld1sb { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    mov w9, #8 // =0x8
+; SME-NEXT:    ld1b { z5.s }, p0/z, [x1, x8]
+; SME-NEXT:    mla z1.s, p0/m, z4.s, z2.s
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x1, x9]
+; SME-NEXT:    ld1sb { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    mla z0.s, p0/m, z3.s, z6.s
+; SME-NEXT:    ld1sb { z3.s }, p0/z, [x2, x8]
+; SME-NEXT:    mov w9, #12 // =0xc
+; SME-NEXT:    mov w8, #28 // =0x1c
+; SME-NEXT:    ld1b { z6.s }, p0/z, [x1, x8]
+; SME-NEXT:    mla z1.s, p0/m, z4.s, z2.s
+; SME-NEXT:    ld1sb { z4.s }, p0/z, [x2, x9]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, x8]
+; SME-NEXT:    mad z3.s, p0/m, z5.s, z0.s
+; SME-NEXT:    ld1b { z0.s }, p0/z, [x1, x9]
+; SME-NEXT:    mad z0.s, p0/m, z4.s, z1.s
+; SME-NEXT:    movprfx z1, z3
+; SME-NEXT:    mla z1.s, p0/m, z2.s, z6.s
 ; SME-NEXT:    ret
   %acc = load <8 x i32>, ptr %accptr
   %u = load <32 x i8>, ptr %uptr
@@ -660,19 +830,39 @@ define <8 x i32> @four_way_i8_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; NEON-LABEL: four_way_i8_i32_vl256:
 ; NEON:       // %bb.0:
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    ldp q3, q2, [x1]
-; NEON-NEXT:    ldp q5, q4, [x2]
-; NEON-NEXT:    udot v0.4s, v5.16b, v3.16b
-; NEON-NEXT:    udot v1.4s, v4.16b, v2.16b
+; NEON-NEXT:    ldp q0, q1, [x1]
+; NEON-NEXT:    ldp q2, q3, [x2]
+; NEON-NEXT:    ldp q7, q6, [x0]
+; NEON-NEXT:    umull v4.8h, v3.8b, v1.8b
+; NEON-NEXT:    umull v5.8h, v2.8b, v0.8b
+; NEON-NEXT:    umull2 v1.8h, v3.16b, v1.16b
+; NEON-NEXT:    umull2 v0.8h, v2.16b, v0.16b
+; NEON-NEXT:    uaddw v7.4s, v7.4s, v5.4h
+; NEON-NEXT:    uaddw v6.4s, v6.4s, v4.4h
+; NEON-NEXT:    uaddw2 v2.4s, v7.4s, v5.8h
+; NEON-NEXT:    uaddw2 v3.4s, v6.4s, v4.8h
+; NEON-NEXT:    uaddw v2.4s, v2.4s, v0.4h
+; NEON-NEXT:    uaddw v3.4s, v3.4s, v1.4h
+; NEON-NEXT:    uaddw2 v0.4s, v2.4s, v0.8h
+; NEON-NEXT:    uaddw2 v1.4s, v3.4s, v1.8h
 ; NEON-NEXT:    ret
 ;
 ; SVE-LABEL: four_way_i8_i32_vl256:
 ; SVE:       // %bb.0:
+; SVE-NEXT:    ptrue p0.s
 ; SVE-NEXT:    ldr z0, [x0]
-; SVE-NEXT:    ldr z1, [x1]
-; SVE-NEXT:    ldr z2, [x2]
-; SVE-NEXT:    udot z0.s, z2.b, z1.b
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SVE-NEXT:    ld1b { z2.s }, p0/z, [x2]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1b { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SVE-NEXT:    ld1b { z2.s }, p0/z, [x2, #2, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SVE-NEXT:    ld1b { z2.s }, p0/z, [x2, #3, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -681,10 +871,20 @@ define <8 x i32> @four_way_i8_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE2-LABEL: four_way_i8_i32_vl256:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.s
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    udot z0.s, z2.b, z1.b
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SVE2-NEXT:    ld1b { z2.s }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1b { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SVE2-NEXT:    ld1b { z2.s }, p0/z, [x2, #2, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SVE2-NEXT:    ld1b { z2.s }, p0/z, [x2, #3, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -693,10 +893,20 @@ define <8 x i32> @four_way_i8_i32_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SME-LABEL: four_way_i8_i32_vl256:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.s
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    udot z0.s, z2.b, z1.b
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, #2, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SME-NEXT:    ld1b { z2.s }, p0/z, [x2, #3, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -724,10 +934,20 @@ define <8 x i32> @four_way_i8_i32_vl256_usdot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SVE-LABEL: four_way_i8_i32_vl256_usdot:
 ; SVE:       // %bb.0:
+; SVE-NEXT:    ptrue p0.s
 ; SVE-NEXT:    ldr z0, [x0]
-; SVE-NEXT:    ldr z1, [x1]
-; SVE-NEXT:    ldr z2, [x2]
-; SVE-NEXT:    usdot z0.s, z1.b, z2.b
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SVE-NEXT:    ld1sb { z2.s }, p0/z, [x2]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1sb { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SVE-NEXT:    ld1sb { z2.s }, p0/z, [x2, #2, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SVE-NEXT:    ld1sb { z2.s }, p0/z, [x2, #3, mul vl]
+; SVE-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -736,10 +956,20 @@ define <8 x i32> @four_way_i8_i32_vl256_usdot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SVE2-LABEL: four_way_i8_i32_vl256_usdot:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.s
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    usdot z0.s, z1.b, z2.b
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SVE2-NEXT:    ld1sb { z2.s }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1sb { z2.s }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SVE2-NEXT:    ld1sb { z2.s }, p0/z, [x2, #2, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SVE2-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SVE2-NEXT:    ld1sb { z2.s }, p0/z, [x2, #3, mul vl]
+; SVE2-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -748,10 +978,20 @@ define <8 x i32> @four_way_i8_i32_vl256_usdot(ptr %accptr, ptr %uptr, ptr %sptr)
 ;
 ; SME-LABEL: four_way_i8_i32_vl256_usdot:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.s
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    usdot z0.s, z1.b, z2.b
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #2, mul vl]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, #2, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
+; SME-NEXT:    ld1b { z1.s }, p0/z, [x1, #3, mul vl]
+; SME-NEXT:    ld1sb { z2.s }, p0/z, [x2, #3, mul vl]
+; SME-NEXT:    mla z0.s, p0/m, z2.s, z1.s
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -802,10 +1042,23 @@ define <2 x i64> @four_way_i16_i64_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: four_way_i16_i64_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    ldr q1, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    udot z0.d, z2.h, z1.h
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov x8, #2 // =0x2
+; SME-NEXT:    ld1h { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x2]
+; SME-NEXT:    mad z0.d, p0/m, z1.d, z2.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x8, #4 // =0x4
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x8, #6 // =0x6
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    ret
   %acc = load <2 x i64>, ptr %accptr
   %u = load <8 x i16>, ptr %uptr
@@ -819,50 +1072,61 @@ define <2 x i64> @four_way_i16_i64_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 
 define <4 x i64> @four_way_i16_i64_vl128_double_width(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
-; NEON-LABEL: four_way_i16_i64_vl128_double_width:
-; NEON:       // %bb.0:
-; NEON-NEXT:    ldp q2, q5, [x2]
-; NEON-NEXT:    ldp q3, q4, [x1]
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    umull v6.4s, v2.4h, v3.4h
-; NEON-NEXT:    umull v7.4s, v5.4h, v4.4h
-; NEON-NEXT:    umull2 v2.4s, v2.8h, v3.8h
-; NEON-NEXT:    umull2 v3.4s, v5.8h, v4.8h
-; NEON-NEXT:    uadalp v0.2d, v6.4s
-; NEON-NEXT:    uadalp v1.2d, v7.4s
-; NEON-NEXT:    uadalp v0.2d, v2.4s
-; NEON-NEXT:    uadalp v1.2d, v3.4s
-; NEON-NEXT:    ret
-;
-; SVE-LABEL: four_way_i16_i64_vl128_double_width:
-; SVE:       // %bb.0:
-; SVE-NEXT:    ldp q0, q1, [x0]
-; SVE-NEXT:    ldp q3, q2, [x1]
-; SVE-NEXT:    ldp q5, q4, [x2]
-; SVE-NEXT:    udot z0.d, z5.h, z3.h
-; SVE-NEXT:    udot z1.d, z4.h, z2.h
-; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
-; SVE-NEXT:    // kill: def $q1 killed $q1 killed $z1
-; SVE-NEXT:    ret
-;
-; SVE2-LABEL: four_way_i16_i64_vl128_double_width:
-; SVE2:       // %bb.0:
-; SVE2-NEXT:    ldp q0, q1, [x0]
-; SVE2-NEXT:    ldp q3, q2, [x1]
-; SVE2-NEXT:    ldp q5, q4, [x2]
-; SVE2-NEXT:    udot z0.d, z5.h, z3.h
-; SVE2-NEXT:    udot z1.d, z4.h, z2.h
-; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
-; SVE2-NEXT:    // kill: def $q1 killed $q1 killed $z1
-; SVE2-NEXT:    ret
+; COMMON-LABEL: four_way_i16_i64_vl128_double_width:
+; COMMON:       // %bb.0:
+; COMMON-NEXT:    ldp q0, q1, [x1]
+; COMMON-NEXT:    ldp q2, q3, [x2]
+; COMMON-NEXT:    ldp q7, q6, [x0]
+; COMMON-NEXT:    umull v4.4s, v3.4h, v1.4h
+; COMMON-NEXT:    umull v5.4s, v2.4h, v0.4h
+; COMMON-NEXT:    umull2 v1.4s, v3.8h, v1.8h
+; COMMON-NEXT:    umull2 v0.4s, v2.8h, v0.8h
+; COMMON-NEXT:    uaddw v7.2d, v7.2d, v5.2s
+; COMMON-NEXT:    uaddw v6.2d, v6.2d, v4.2s
+; COMMON-NEXT:    uaddw2 v2.2d, v7.2d, v5.4s
+; COMMON-NEXT:    uaddw2 v3.2d, v6.2d, v4.4s
+; COMMON-NEXT:    uaddw v2.2d, v2.2d, v0.2s
+; COMMON-NEXT:    uaddw v3.2d, v3.2d, v1.2s
+; COMMON-NEXT:    uaddw2 v0.2d, v2.2d, v0.4s
+; COMMON-NEXT:    uaddw2 v1.2d, v3.2d, v1.4s
+; COMMON-NEXT:    ret
 ;
 ; SME-LABEL: four_way_i16_i64_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    ldp q3, q2, [x1]
-; SME-NEXT:    ldp q5, q4, [x2]
-; SME-NEXT:    udot z0.d, z5.h, z3.h
-; SME-NEXT:    udot z1.d, z4.h, z2.h
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    mov x8, #8 // =0x8
+; SME-NEXT:    mov x9, #2 // =0x2
+; SME-NEXT:    ldp q5, q4, [x0]
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1]
+; SME-NEXT:    ld1h { z3.d }, p0/z, [x2]
+; SME-NEXT:    ld1h { z0.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x8, #10 // =0xa
+; SME-NEXT:    ld1h { z6.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    mad z1.d, p0/m, z3.d, z5.d
+; SME-NEXT:    ld1h { z3.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x8, #12 // =0xc
+; SME-NEXT:    mad z0.d, p0/m, z2.d, z4.d
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x1, x9, lsl #1]
+; SME-NEXT:    ld1h { z4.d }, p0/z, [x2, x9, lsl #1]
+; SME-NEXT:    mov x9, #4 // =0x4
+; SME-NEXT:    ld1h { z5.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    mla z1.d, p0/m, z4.d, z2.d
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x1, x9, lsl #1]
+; SME-NEXT:    ld1h { z4.d }, p0/z, [x2, x9, lsl #1]
+; SME-NEXT:    mla z0.d, p0/m, z3.d, z6.d
+; SME-NEXT:    ld1h { z3.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mov x9, #6 // =0x6
+; SME-NEXT:    mov x8, #14 // =0xe
+; SME-NEXT:    ld1h { z6.d }, p0/z, [x1, x8, lsl #1]
+; SME-NEXT:    mla z1.d, p0/m, z4.d, z2.d
+; SME-NEXT:    ld1h { z4.d }, p0/z, [x2, x9, lsl #1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, x8, lsl #1]
+; SME-NEXT:    mad z3.d, p0/m, z5.d, z0.d
+; SME-NEXT:    ld1h { z0.d }, p0/z, [x1, x9, lsl #1]
+; SME-NEXT:    mad z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    movprfx z1, z3
+; SME-NEXT:    mla z1.d, p0/m, z2.d, z6.d
 ; SME-NEXT:    ret
   %acc = load <4 x i64>, ptr %accptr
   %u = load <16 x i16>, ptr %uptr
@@ -879,25 +1143,39 @@ define <4 x i64> @four_way_i16_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vsca
 ;
 ; NEON-LABEL: four_way_i16_i64_vl256:
 ; NEON:       // %bb.0:
-; NEON-NEXT:    ldp q2, q5, [x2]
-; NEON-NEXT:    ldp q3, q4, [x1]
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    umull v6.4s, v2.4h, v3.4h
-; NEON-NEXT:    umull v7.4s, v5.4h, v4.4h
-; NEON-NEXT:    umull2 v2.4s, v2.8h, v3.8h
-; NEON-NEXT:    umull2 v3.4s, v5.8h, v4.8h
-; NEON-NEXT:    uadalp v0.2d, v6.4s
-; NEON-NEXT:    uadalp v1.2d, v7.4s
-; NEON-NEXT:    uadalp v0.2d, v2.4s
-; NEON-NEXT:    uadalp v1.2d, v3.4s
+; NEON-NEXT:    ldp q0, q1, [x1]
+; NEON-NEXT:    ldp q2, q3, [x2]
+; NEON-NEXT:    ldp q7, q6, [x0]
+; NEON-NEXT:    umull v4.4s, v3.4h, v1.4h
+; NEON-NEXT:    umull v5.4s, v2.4h, v0.4h
+; NEON-NEXT:    umull2 v1.4s, v3.8h, v1.8h
+; NEON-NEXT:    umull2 v0.4s, v2.8h, v0.8h
+; NEON-NEXT:    uaddw v7.2d, v7.2d, v5.2s
+; NEON-NEXT:    uaddw v6.2d, v6.2d, v4.2s
+; NEON-NEXT:    uaddw2 v2.2d, v7.2d, v5.4s
+; NEON-NEXT:    uaddw2 v3.2d, v6.2d, v4.4s
+; NEON-NEXT:    uaddw v2.2d, v2.2d, v0.2s
+; NEON-NEXT:    uaddw v3.2d, v3.2d, v1.2s
+; NEON-NEXT:    uaddw2 v0.2d, v2.2d, v0.4s
+; NEON-NEXT:    uaddw2 v1.2d, v3.2d, v1.4s
 ; NEON-NEXT:    ret
 ;
 ; SVE-LABEL: four_way_i16_i64_vl256:
 ; SVE:       // %bb.0:
+; SVE-NEXT:    ptrue p0.d
 ; SVE-NEXT:    ldr z0, [x0]
-; SVE-NEXT:    ldr z1, [x1]
-; SVE-NEXT:    ldr z2, [x2]
-; SVE-NEXT:    udot z0.d, z2.h, z1.h
+; SVE-NEXT:    ld1h { z1.d }, p0/z, [x1]
+; SVE-NEXT:    ld1h { z2.d }, p0/z, [x2]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1h { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1h { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1h { z1.d }, p0/z, [x1, #2, mul vl]
+; SVE-NEXT:    ld1h { z2.d }, p0/z, [x2, #2, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1h { z1.d }, p0/z, [x1, #3, mul vl]
+; SVE-NEXT:    ld1h { z2.d }, p0/z, [x2, #3, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -906,10 +1184,20 @@ define <4 x i64> @four_way_i16_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vsca
 ;
 ; SVE2-LABEL: four_way_i16_i64_vl256:
 ; SVE2:       // %bb.0:
+; SVE2-NEXT:    ptrue p0.d
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    ldr z1, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
-; SVE2-NEXT:    udot z0.d, z2.h, z1.h
+; SVE2-NEXT:    ld1h { z1.d }, p0/z, [x1]
+; SVE2-NEXT:    ld1h { z2.d }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1h { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1h { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1h { z1.d }, p0/z, [x1, #2, mul vl]
+; SVE2-NEXT:    ld1h { z2.d }, p0/z, [x2, #2, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1h { z1.d }, p0/z, [x1, #3, mul vl]
+; SVE2-NEXT:    ld1h { z2.d }, p0/z, [x2, #3, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -918,10 +1206,20 @@ define <4 x i64> @four_way_i16_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vsca
 ;
 ; SME-LABEL: four_way_i16_i64_vl256:
 ; SME:       // %bb.0:
+; SME-NEXT:    ptrue p0.d
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    ldr z1, [x1]
-; SME-NEXT:    ldr z2, [x2]
-; SME-NEXT:    udot z0.d, z2.h, z1.h
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, #2, mul vl]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, #2, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1h { z1.d }, p0/z, [x1, #3, mul vl]
+; SME-NEXT:    ld1h { z2.d }, p0/z, [x2, #3, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret
@@ -974,13 +1272,39 @@ define <2 x i64> @eight_way_i8_i64_vl128(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
 ; SME-LABEL: eight_way_i8_i64_vl128:
 ; SME:       // %bb.0:
-; SME-NEXT:    mov z1.s, #0 // =0x0
-; SME-NEXT:    ldr q0, [x1]
-; SME-NEXT:    ldr q2, [x2]
-; SME-NEXT:    ptrue p0.d
-; SME-NEXT:    udot z1.s, z2.b, z0.b
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    uadalp z0.d, p0/m, z1.s
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    ldr q2, [x0]
+; SME-NEXT:    mov w8, #2 // =0x2
+; SME-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x2]
+; SME-NEXT:    mad z0.d, p0/m, z1.d, z2.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #4 // =0x4
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #6 // =0x6
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #8 // =0x8
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #10 // =0xa
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #12 // =0xc
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #14 // =0xe
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, x8]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    ret
   %acc = load <2 x i64>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -1011,33 +1335,101 @@ define <2 x i64> @eight_way_i8_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vsca
 ;
 ; SVE-LABEL: eight_way_i8_i64_vl256:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    movi v1.2d, #0000000000000000
-; SVE-NEXT:    ldr q0, [x1]
-; SVE-NEXT:    ldr q2, [x2]
-; SVE-NEXT:    udot v1.4s, v2.16b, v0.16b
-; SVE-NEXT:    ldr q0, [x0]
-; SVE-NEXT:    uadalp v0.2d, v1.4s
+; SVE-NEXT:    ptrue p0.d
+; SVE-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SVE-NEXT:    ld1b { z3.d }, p0/z, [x1, #2, mul vl]
+; SVE-NEXT:    ld1b { z4.d }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    ld1b { z5.d }, p0/z, [x2, #2, mul vl]
+; SVE-NEXT:    mul z0.d, p0/m, z0.d, z2.d
+; SVE-NEXT:    ldr q2, [x0]
+; SVE-NEXT:    mul z3.d, p0/m, z3.d, z5.d
+; SVE-NEXT:    mul z1.d, p0/m, z1.d, z4.d
+; SVE-NEXT:    ld1b { z4.d }, p0/z, [x1, #3, mul vl]
+; SVE-NEXT:    ld1b { z5.d }, p0/z, [x2, #3, mul vl]
+; SVE-NEXT:    add v2.2d, v2.2d, v0.2d
+; SVE-NEXT:    ext z0.b, z0.b, z0.b, #16
+; SVE-NEXT:    movprfx z6, z1
+; SVE-NEXT:    ext z6.b, z6.b, z1.b, #16
+; SVE-NEXT:    movprfx z7, z3
+; SVE-NEXT:    ext z7.b, z7.b, z3.b, #16
+; SVE-NEXT:    mul z4.d, p0/m, z4.d, z5.d
+; SVE-NEXT:    add v0.2d, v0.2d, v2.2d
+; SVE-NEXT:    add v1.2d, v6.2d, v1.2d
+; SVE-NEXT:    add v2.2d, v7.2d, v3.2d
+; SVE-NEXT:    add v0.2d, v1.2d, v0.2d
+; SVE-NEXT:    add v1.2d, v2.2d, v4.2d
+; SVE-NEXT:    add v0.2d, v1.2d, v0.2d
+; SVE-NEXT:    movprfx z1, z4
+; SVE-NEXT:    ext z1.b, z1.b, z4.b, #16
+; SVE-NEXT:    add v0.2d, v1.2d, v0.2d
 ; SVE-NEXT:    ret
 ;
 ; SVE2-LABEL: eight_way_i8_i64_vl256:
 ; SVE2:       // %bb.0:
-; SVE2-NEXT:    movi v1.2d, #0000000000000000
-; SVE2-NEXT:    ldr q0, [x1]
-; SVE2-NEXT:    ldr q2, [x2]
-; SVE2-NEXT:    udot z1.s, z2.b, z0.b
-; SVE2-NEXT:    ldr q0, [x0]
-; SVE2-NEXT:    uadalp v0.2d, v1.4s
+; SVE2-NEXT:    ptrue p0.d
+; SVE2-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SVE2-NEXT:    ld1b { z3.d }, p0/z, [x1, #2, mul vl]
+; SVE2-NEXT:    ld1b { z4.d }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    ld1b { z5.d }, p0/z, [x2, #2, mul vl]
+; SVE2-NEXT:    mul z0.d, z2.d, z0.d
+; SVE2-NEXT:    mul z2.d, z5.d, z3.d
+; SVE2-NEXT:    mul z1.d, z4.d, z1.d
+; SVE2-NEXT:    ldr q3, [x0]
+; SVE2-NEXT:    ld1b { z4.d }, p0/z, [x1, #3, mul vl]
+; SVE2-NEXT:    ld1b { z5.d }, p0/z, [x2, #3, mul vl]
+; SVE2-NEXT:    add v3.2d, v3.2d, v0.2d
+; SVE2-NEXT:    ext z0.b, z0.b, z0.b, #16
+; SVE2-NEXT:    movprfx z6, z1
+; SVE2-NEXT:    ext z6.b, z6.b, z1.b, #16
+; SVE2-NEXT:    movprfx z7, z2
+; SVE2-NEXT:    ext z7.b, z7.b, z2.b, #16
+; SVE2-NEXT:    mul z4.d, z5.d, z4.d
+; SVE2-NEXT:    add v0.2d, v0.2d, v3.2d
+; SVE2-NEXT:    add v1.2d, v6.2d, v1.2d
+; SVE2-NEXT:    add v2.2d, v7.2d, v2.2d
+; SVE2-NEXT:    add v0.2d, v1.2d, v0.2d
+; SVE2-NEXT:    add v1.2d, v2.2d, v4.2d
+; SVE2-NEXT:    add v0.2d, v1.2d, v0.2d
+; SVE2-NEXT:    movprfx z1, z4
+; SVE2-NEXT:    ext z1.b, z1.b, z4.b, #16
+; SVE2-NEXT:    add v0.2d, v1.2d, v0.2d
 ; SVE2-NEXT:    ret
 ;
 ; SME-LABEL: eight_way_i8_i64_vl256:
 ; SME:       // %bb.0:
-; SME-NEXT:    mov z1.s, #0 // =0x0
-; SME-NEXT:    ldr q0, [x1]
-; SME-NEXT:    ldr q2, [x2]
 ; SME-NEXT:    ptrue p0.d
-; SME-NEXT:    udot z1.s, z2.b, z0.b
-; SME-NEXT:    ldr q0, [x0]
-; SME-NEXT:    uadalp z0.d, p0/m, z1.s
+; SME-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, #2, mul vl]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, #2, mul vl]
+; SME-NEXT:    mul z0.d, z2.d, z0.d
+; SME-NEXT:    mul z2.d, z5.d, z3.d
+; SME-NEXT:    mul z1.d, z4.d, z1.d
+; SME-NEXT:    ldr q3, [x0]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x1, #3, mul vl]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, #3, mul vl]
+; SME-NEXT:    add z3.d, z3.d, z0.d
+; SME-NEXT:    ext z0.b, z0.b, z0.b, #16
+; SME-NEXT:    movprfx z6, z1
+; SME-NEXT:    ext z6.b, z6.b, z1.b, #16
+; SME-NEXT:    movprfx z7, z2
+; SME-NEXT:    ext z7.b, z7.b, z2.b, #16
+; SME-NEXT:    mul z4.d, z5.d, z4.d
+; SME-NEXT:    add z0.d, z0.d, z3.d
+; SME-NEXT:    add z1.d, z6.d, z1.d
+; SME-NEXT:    add z2.d, z7.d, z2.d
+; SME-NEXT:    add z0.d, z1.d, z0.d
+; SME-NEXT:    add z1.d, z2.d, z4.d
+; SME-NEXT:    add z0.d, z1.d, z0.d
+; SME-NEXT:    movprfx z1, z4
+; SME-NEXT:    ext z1.b, z1.b, z4.b, #16
+; SME-NEXT:    add z0.d, z1.d, z0.d
 ; SME-NEXT:    ret
   %acc = load <2 x i64>, ptr %accptr
   %u = load <16 x i8>, ptr %uptr
@@ -1051,57 +1443,108 @@ define <2 x i64> @eight_way_i8_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vsca
 
 define <4 x i64> @four_way_i8_i64_vl128_double_width(ptr %accptr, ptr %uptr, ptr %sptr) {
 ;
-; NEON-LABEL: four_way_i8_i64_vl128_double_width:
-; NEON:       // %bb.0:
-; NEON-NEXT:    movi v2.2d, #0000000000000000
-; NEON-NEXT:    movi v3.2d, #0000000000000000
-; NEON-NEXT:    ldp q0, q5, [x2]
-; NEON-NEXT:    ldp q1, q4, [x1]
-; NEON-NEXT:    udot v2.4s, v0.16b, v1.16b
-; NEON-NEXT:    udot v3.4s, v5.16b, v4.16b
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    uadalp v0.2d, v2.4s
-; NEON-NEXT:    uadalp v1.2d, v3.4s
-; NEON-NEXT:    ret
-;
-; SVE-LABEL: four_way_i8_i64_vl128_double_width:
-; SVE:       // %bb.0:
-; SVE-NEXT:    movi v2.2d, #0000000000000000
-; SVE-NEXT:    movi v3.2d, #0000000000000000
-; SVE-NEXT:    ldp q0, q5, [x2]
-; SVE-NEXT:    ldp q1, q4, [x1]
-; SVE-NEXT:    udot v2.4s, v0.16b, v1.16b
-; SVE-NEXT:    udot v3.4s, v5.16b, v4.16b
-; SVE-NEXT:    ldp q0, q1, [x0]
-; SVE-NEXT:    uadalp v0.2d, v2.4s
-; SVE-NEXT:    uadalp v1.2d, v3.4s
-; SVE-NEXT:    ret
-;
-; SVE2-LABEL: four_way_i8_i64_vl128_double_width:
-; SVE2:       // %bb.0:
-; SVE2-NEXT:    movi v2.2d, #0000000000000000
-; SVE2-NEXT:    movi v3.2d, #0000000000000000
-; SVE2-NEXT:    ldp q0, q5, [x2]
-; SVE2-NEXT:    ldp q1, q4, [x1]
-; SVE2-NEXT:    udot z2.s, z0.b, z1.b
-; SVE2-NEXT:    udot z3.s, z5.b, z4.b
-; SVE2-NEXT:    ldp q0, q1, [x0]
-; SVE2-NEXT:    uadalp v0.2d, v2.4s
-; SVE2-NEXT:    uadalp v1.2d, v3.4s
-; SVE2-NEXT:    ret
+; COMMON-LABEL: four_way_i8_i64_vl128_double_width:
+; COMMON:       // %bb.0:
+; COMMON-NEXT:    ldp q0, q1, [x1]
+; COMMON-NEXT:    ldp q2, q3, [x2]
+; COMMON-NEXT:    ldp q17, q16, [x0]
+; COMMON-NEXT:    umull v4.8h, v3.8b, v1.8b
+; COMMON-NEXT:    umull v5.8h, v2.8b, v0.8b
+; COMMON-NEXT:    umull2 v1.8h, v3.16b, v1.16b
+; COMMON-NEXT:    umull2 v0.8h, v2.16b, v0.16b
+; COMMON-NEXT:    ushll v6.4s, v4.4h, #0
+; COMMON-NEXT:    ushll v7.4s, v5.4h, #0
+; COMMON-NEXT:    ushll2 v4.4s, v4.8h, #0
+; COMMON-NEXT:    ushll2 v5.4s, v5.8h, #0
+; COMMON-NEXT:    uaddw v17.2d, v17.2d, v7.2s
+; COMMON-NEXT:    uaddw v16.2d, v16.2d, v6.2s
+; COMMON-NEXT:    uaddw2 v7.2d, v17.2d, v7.4s
+; COMMON-NEXT:    uaddw2 v6.2d, v16.2d, v6.4s
+; COMMON-NEXT:    uaddw v2.2d, v7.2d, v5.2s
+; COMMON-NEXT:    uaddw v3.2d, v6.2d, v4.2s
+; COMMON-NEXT:    ushll v6.4s, v1.4h, #0
+; COMMON-NEXT:    ushll v7.4s, v0.4h, #0
+; COMMON-NEXT:    ushll2 v1.4s, v1.8h, #0
+; COMMON-NEXT:    ushll2 v0.4s, v0.8h, #0
+; COMMON-NEXT:    uaddw2 v2.2d, v2.2d, v5.4s
+; COMMON-NEXT:    uaddw2 v3.2d, v3.2d, v4.4s
+; COMMON-NEXT:    uaddw v2.2d, v2.2d, v7.2s
+; COMMON-NEXT:    uaddw v3.2d, v3.2d, v6.2s
+; COMMON-NEXT:    uaddw2 v2.2d, v2.2d, v7.4s
+; COMMON-NEXT:    uaddw2 v3.2d, v3.2d, v6.4s
+; COMMON-NEXT:    uaddw v2.2d, v2.2d, v0.2s
+; COMMON-NEXT:    uaddw v3.2d, v3.2d, v1.2s
+; COMMON-NEXT:    uaddw2 v0.2d, v2.2d, v0.4s
+; COMMON-NEXT:    uaddw2 v1.2d, v3.2d, v1.4s
+; COMMON-NEXT:    ret
 ;
 ; SME-LABEL: four_way_i8_i64_vl128_double_width:
 ; SME:       // %bb.0:
-; SME-NEXT:    mov z2.s, #0 // =0x0
-; SME-NEXT:    mov z3.s, #0 // =0x0
-; SME-NEXT:    ptrue p0.d
-; SME-NEXT:    ldp q0, q5, [x2]
-; SME-NEXT:    ldp q1, q4, [x1]
-; SME-NEXT:    udot z2.s, z0.b, z1.b
-; SME-NEXT:    udot z3.s, z5.b, z4.b
-; SME-NEXT:    ldp q0, q1, [x0]
-; SME-NEXT:    uadalp z0.d, p0/m, z2.s
-; SME-NEXT:    uadalp z1.d, p0/m, z3.s
+; SME-NEXT:    ptrue p0.d, vl2
+; SME-NEXT:    mov w8, #16 // =0x10
+; SME-NEXT:    mov w9, #2 // =0x2
+; SME-NEXT:    ldp q4, q5, [x0]
+; SME-NEXT:    ld1b { z0.d }, p0/z, [x1]
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x2]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #18 // =0x12
+; SME-NEXT:    mad z0.d, p0/m, z1.d, z4.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mad z2.d, p0/m, z3.d, z5.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #20 // =0x14
+; SME-NEXT:    mov w9, #4 // =0x4
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #22 // =0x16
+; SME-NEXT:    mov w9, #6 // =0x6
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #24 // =0x18
+; SME-NEXT:    mov w9, #8 // =0x8
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #26 // =0x1a
+; SME-NEXT:    mov w9, #10 // =0xa
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #28 // =0x1c
+; SME-NEXT:    mov w9, #12 // =0xc
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x8]
+; SME-NEXT:    mov w8, #30 // =0x1e
+; SME-NEXT:    mov w9, #14 // =0xe
+; SME-NEXT:    mla z0.d, p0/m, z4.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, x8]
+; SME-NEXT:    ld1b { z4.d }, p0/z, [x2, x8]
+; SME-NEXT:    mla z2.d, p0/m, z5.d, z3.d
+; SME-NEXT:    ld1b { z3.d }, p0/z, [x1, x9]
+; SME-NEXT:    ld1b { z5.d }, p0/z, [x2, x9]
+; SME-NEXT:    mla z0.d, p0/m, z5.d, z3.d
+; SME-NEXT:    mad z1.d, p0/m, z4.d, z2.d
 ; SME-NEXT:    ret
   %acc = load <4 x i64>, ptr %accptr
   %u = load <32 x i8>, ptr %uptr
@@ -1122,29 +1565,67 @@ define <4 x i64> @four_way_i8_i64_vl128_double_width(ptr %accptr, ptr %uptr, ptr
 define <4 x i64> @four_way_i8_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscale_range(2,2) {
 ; NEON-LABEL: four_way_i8_i64_vl256:
 ; NEON:       // %bb.0:
-; NEON-NEXT:    movi v2.2d, #0000000000000000
-; NEON-NEXT:    movi v3.2d, #0000000000000000
-; NEON-NEXT:    ldp q0, q5, [x2]
-; NEON-NEXT:    ldp q1, q4, [x1]
-; NEON-NEXT:    udot v2.4s, v0.16b, v1.16b
-; NEON-NEXT:    udot v3.4s, v5.16b, v4.16b
-; NEON-NEXT:    ldp q0, q1, [x0]
-; NEON-NEXT:    uadalp v0.2d, v2.4s
-; NEON-NEXT:    uadalp v1.2d, v3.4s
+; NEON-NEXT:    ldp q0, q1, [x1]
+; NEON-NEXT:    ldp q2, q3, [x2]
+; NEON-NEXT:    ldp q17, q16, [x0]
+; NEON-NEXT:    umull v4.8h, v3.8b, v1.8b
+; NEON-NEXT:    umull v5.8h, v2.8b, v0.8b
+; NEON-NEXT:    umull2 v1.8h, v3.16b, v1.16b
+; NEON-NEXT:    umull2 v0.8h, v2.16b, v0.16b
+; NEON-NEXT:    ushll v6.4s, v4.4h, #0
+; NEON-NEXT:    ushll v7.4s, v5.4h, #0
+; NEON-NEXT:    ushll2 v4.4s, v4.8h, #0
+; NEON-NEXT:    ushll2 v5.4s, v5.8h, #0
+; NEON-NEXT:    uaddw v17.2d, v17.2d, v7.2s
+; NEON-NEXT:    uaddw v16.2d, v16.2d, v6.2s
+; NEON-NEXT:    uaddw2 v7.2d, v17.2d, v7.4s
+; NEON-NEXT:    uaddw2 v6.2d, v16.2d, v6.4s
+; NEON-NEXT:    uaddw v2.2d, v7.2d, v5.2s
+; NEON-NEXT:    uaddw v3.2d, v6.2d, v4.2s
+; NEON-NEXT:    ushll v6.4s, v1.4h, #0
+; NEON-NEXT:    ushll v7.4s, v0.4h, #0
+; NEON-NEXT:    ushll2 v1.4s, v1.8h, #0
+; NEON-NEXT:    ushll2 v0.4s, v0.8h, #0
+; NEON-NEXT:    uaddw2 v2.2d, v2.2d, v5.4s
+; NEON-NEXT:    uaddw2 v3.2d, v3.2d, v4.4s
+; NEON-NEXT:    uaddw v2.2d, v2.2d, v7.2s
+; NEON-NEXT:    uaddw v3.2d, v3.2d, v6.2s
+; NEON-NEXT:    uaddw2 v2.2d, v2.2d, v7.4s
+; NEON-NEXT:    uaddw2 v3.2d, v3.2d, v6.4s
+; NEON-NEXT:    uaddw v2.2d, v2.2d, v0.2s
+; NEON-NEXT:    uaddw v3.2d, v3.2d, v1.2s
+; NEON-NEXT:    uaddw2 v0.2d, v2.2d, v0.4s
+; NEON-NEXT:    uaddw2 v1.2d, v3.2d, v1.4s
 ; NEON-NEXT:    ret
 ;
 ; SVE-LABEL: four_way_i8_i64_vl256:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    movi v0.2d, #0000000000000000
-; SVE-NEXT:    ldr z1, [x1]
-; SVE-NEXT:    ldr z2, [x2]
-; SVE-NEXT:    udot z0.s, z2.b, z1.b
-; SVE-NEXT:    ldr z2, [x0]
-; SVE-NEXT:    uunpklo z1.d, z0.s
-; SVE-NEXT:    ext z0.b, z0.b, z0.b, #16
-; SVE-NEXT:    uunpklo z0.d, z0.s
-; SVE-NEXT:    add z1.d, z2.d, z1.d
-; SVE-NEXT:    add z0.d, z1.d, z0.d
+; SVE-NEXT:    ptrue p0.d
+; SVE-NEXT:    ldr z0, [x0]
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #2, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #2, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #3, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #3, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #4, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #4, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #5, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #5, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #6, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #6, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE-NEXT:    ld1b { z1.d }, p0/z, [x1, #7, mul vl]
+; SVE-NEXT:    ld1b { z2.d }, p0/z, [x2, #7, mul vl]
+; SVE-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE-NEXT:    movprfx z1, z0
 ; SVE-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -1153,13 +1634,32 @@ define <4 x i64> @four_way_i8_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SVE2-LABEL: four_way_i8_i64_vl256:
 ; SVE2:       // %bb.0:
-; SVE2-NEXT:    movi v1.2d, #0000000000000000
-; SVE2-NEXT:    ldr z0, [x1]
-; SVE2-NEXT:    ldr z2, [x2]
 ; SVE2-NEXT:    ptrue p0.d
-; SVE2-NEXT:    udot z1.s, z2.b, z0.b
 ; SVE2-NEXT:    ldr z0, [x0]
-; SVE2-NEXT:    uadalp z0.d, p0/m, z1.s
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #1, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #2, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #2, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #3, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #3, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #4, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #4, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #5, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #5, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #6, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #6, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SVE2-NEXT:    ld1b { z1.d }, p0/z, [x1, #7, mul vl]
+; SVE2-NEXT:    ld1b { z2.d }, p0/z, [x2, #7, mul vl]
+; SVE2-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SVE2-NEXT:    movprfx z1, z0
 ; SVE2-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SVE2-NEXT:    // kill: def $q0 killed $q0 killed $z0
@@ -1168,13 +1668,32 @@ define <4 x i64> @four_way_i8_i64_vl256(ptr %accptr, ptr %uptr, ptr %sptr) vscal
 ;
 ; SME-LABEL: four_way_i8_i64_vl256:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldr z0, [x1]
-; SME-NEXT:    ldr z1, [x2]
-; SME-NEXT:    mov z2.s, #0 // =0x0
 ; SME-NEXT:    ptrue p0.d
-; SME-NEXT:    udot z2.s, z1.b, z0.b
 ; SME-NEXT:    ldr z0, [x0]
-; SME-NEXT:    uadalp z0.d, p0/m, z2.s
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #1, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #1, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #2, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #2, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #3, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #3, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #4, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #4, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #5, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #5, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #6, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #6, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
+; SME-NEXT:    ld1b { z1.d }, p0/z, [x1, #7, mul vl]
+; SME-NEXT:    ld1b { z2.d }, p0/z, [x2, #7, mul vl]
+; SME-NEXT:    mla z0.d, p0/m, z2.d, z1.d
 ; SME-NEXT:    movprfx z1, z0
 ; SME-NEXT:    ext z1.b, z1.b, z0.b, #16
 ; SME-NEXT:    ret

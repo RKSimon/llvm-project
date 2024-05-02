@@ -146,15 +146,17 @@ define <4 x i32> @vec(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; X64-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[0,2,2,3]
 ; X64-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1]
 ; X64-NEXT:    psrld $2, %xmm3
-; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,3,2,3]
-; X64-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[1,3,2,3]
-; X64-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
-; X64-NEXT:    movdqa %xmm0, %xmm1
+; X64-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[1,3,2,3]
+; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,3,2,3]
+; X64-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
+; X64-NEXT:    movdqa %xmm2, %xmm1
 ; X64-NEXT:    pslld $30, %xmm1
 ; X64-NEXT:    por %xmm3, %xmm1
-; X64-NEXT:    pxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-NEXT:    pcmpgtd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-NEXT:    por %xmm1, %xmm0
+; X64-NEXT:    pxor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; X64-NEXT:    pcmpgtd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; X64-NEXT:    movdqa %xmm2, %xmm0
+; X64-NEXT:    pandn %xmm1, %xmm0
+; X64-NEXT:    por %xmm2, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: vec:
@@ -328,13 +330,15 @@ define <4 x i32> @vec2(<4 x i32> %x, <4 x i32> %y) nounwind {
 ; X64-NEXT:    pmuludq %xmm2, %xmm1
 ; X64-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[0,2,2,3]
 ; X64-NEXT:    punpckldq {{.*#+}} xmm3 = xmm3[0],xmm2[0],xmm3[1],xmm2[1]
-; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,3,2,3]
-; X64-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[1,3,2,3]
-; X64-NEXT:    punpckldq {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
-; X64-NEXT:    movdqa {{.*#+}} xmm1 = [2147483648,2147483648,2147483648,2147483648]
-; X64-NEXT:    pxor %xmm1, %xmm0
-; X64-NEXT:    pcmpgtd %xmm1, %xmm0
-; X64-NEXT:    por %xmm3, %xmm0
+; X64-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[1,3,2,3]
+; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,3,2,3]
+; X64-NEXT:    punpckldq {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1]
+; X64-NEXT:    movdqa {{.*#+}} xmm0 = [2147483648,2147483648,2147483648,2147483648]
+; X64-NEXT:    pxor %xmm0, %xmm2
+; X64-NEXT:    pcmpgtd %xmm0, %xmm2
+; X64-NEXT:    movdqa %xmm2, %xmm0
+; X64-NEXT:    pandn %xmm3, %xmm0
+; X64-NEXT:    por %xmm2, %xmm0
 ; X64-NEXT:    retq
 ;
 ; X86-LABEL: vec2:

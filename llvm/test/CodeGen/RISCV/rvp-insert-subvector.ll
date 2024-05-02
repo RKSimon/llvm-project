@@ -10,7 +10,24 @@ define <8 x i8> @insert_zero_v4i8(<4 x i8> %v) {
 ;
 ; RV64-LABEL: insert_zero_v4i8:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    pack a0, a0, zero
+; RV64-NEXT:    pzext.h.b a1, zero
+; RV64-NEXT:    pzext.h.b a2, a0
+; RV64-NEXT:    ppaire.h a3, a1, a1
+; RV64-NEXT:    ppaire.h a1, a2, a1
+; RV64-NEXT:    lui a2, 16
+; RV64-NEXT:    pack a1, a1, a3
+; RV64-NEXT:    andi a3, a0, -256
+; RV64-NEXT:    addi a2, a2, -256
+; RV64-NEXT:    mvm a1, a3, a2
+; RV64-NEXT:    lui a2, 1048560
+; RV64-NEXT:    and a2, a0, a2
+; RV64-NEXT:    lui a3, 4080
+; RV64-NEXT:    mvm a1, a2, a3
+; RV64-NEXT:    lui a2, 1044480
+; RV64-NEXT:    li a3, 255
+; RV64-NEXT:    and a0, a0, a2
+; RV64-NEXT:    slli a3, a3, 24
+; RV64-NEXT:    mvmn a0, a1, a3
 ; RV64-NEXT:    ret
   %r = call <8 x i8> @llvm.vector.insert.v8i8.v4i8(<8 x i8> zeroinitializer, <4 x i8> %v, i64 0)
   ret <8 x i8> %r
@@ -24,7 +41,14 @@ define <4 x i16> @insert_zero_v2i16(<2 x i16> %v) {
 ;
 ; RV64-LABEL: insert_zero_v2i16:
 ; RV64:       # %bb.0:
-; RV64-NEXT:    pack a0, a0, zero
+; RV64-NEXT:    lui a1, 1048560
+; RV64-NEXT:    and a1, a0, a1
+; RV64-NEXT:    pzext.w.h a0, a0
+; RV64-NEXT:    pzext.w.h a2, zero
+; RV64-NEXT:    lui a3, 65535
+; RV64-NEXT:    pack a0, a0, a2
+; RV64-NEXT:    slli a3, a3, 4
+; RV64-NEXT:    mvm a0, a1, a3
 ; RV64-NEXT:    ret
   %r = call <4 x i16> @llvm.vector.insert.v4i16.v2i16(<4 x i16> zeroinitializer, <2 x i16> %v, i64 0)
   ret <4 x i16> %r

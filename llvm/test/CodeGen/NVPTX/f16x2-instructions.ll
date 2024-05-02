@@ -44,10 +44,10 @@ define <2 x half> @test_ret_const() #0 {
 define half @test_extract_0(<2 x half> %a) #0 {
 ; CHECK-LABEL: test_extract_0(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_extract_0_param_0];
+; CHECK-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_0_param_0];
 ; CHECK-NEXT:    st.param.b16 [func_retval0], %rs1;
 ; CHECK-NEXT:    ret;
   %e = extractelement <2 x half> %a, i32 0
@@ -57,11 +57,11 @@ define half @test_extract_0(<2 x half> %a) #0 {
 define half @test_extract_1(<2 x half> %a) #0 {
 ; CHECK-LABEL: test_extract_1(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_extract_1_param_0+2];
-; CHECK-NEXT:    st.param.b16 [func_retval0], %rs1;
+; CHECK-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_1_param_0];
+; CHECK-NEXT:    st.param.b16 [func_retval0], %rs2;
 ; CHECK-NEXT:    ret;
   %e = extractelement <2 x half> %a, i32 1
   ret half %e
@@ -2084,12 +2084,12 @@ define <2 x half> @test_shufflevector(<2 x half> %a) #0 {
 define <2 x half> @test_insertelement(<2 x half> %a, half %x) #0 {
 ; CHECK-LABEL: test_insertelement(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<3>;
+; CHECK-NEXT:    .reg .b16 %rs<4>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_insertelement_param_1];
-; CHECK-NEXT:    ld.param.b16 %rs2, [test_insertelement_param_0];
-; CHECK-NEXT:    st.param.v2.b16 [func_retval0], {%rs2, %rs1};
+; CHECK-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_insertelement_param_0];
+; CHECK-NEXT:    ld.param.b16 %rs3, [test_insertelement_param_1];
+; CHECK-NEXT:    st.param.v2.b16 [func_retval0], {%rs1, %rs3};
 ; CHECK-NEXT:    ret;
   %i = insertelement <2 x half> %a, half %x, i64 1
   ret <2 x half> %i
