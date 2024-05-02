@@ -12,16 +12,16 @@ define preserve_nonecc i32 @callee(i32 %a1, i32 %a2, i32 %a3, i32 %a4, i32 %a5, 
 ; CHECK-NEXT:    add x10, sp, #136
 ; CHECK-NEXT:    movk x8, #65408, lsl #32
 ; CHECK-NEXT:    add x9, x9, #128
-; CHECK-NEXT:    stp x6, x7, [sp, #144]
+; CHECK-NEXT:    stp q0, q1, [sp]
 ; CHECK-NEXT:    stp x9, x8, [sp, #176]
 ; CHECK-NEXT:    add x9, x10, #24
 ; CHECK-NEXT:    add x10, sp, #192
 ; CHECK-NEXT:    mov w8, #-24 // =0xffffffe8
-; CHECK-NEXT:    str x5, [sp, #136]
-; CHECK-NEXT:    stp q0, q1, [sp]
 ; CHECK-NEXT:    stp q2, q3, [sp, #32]
 ; CHECK-NEXT:    stp q4, q5, [sp, #64]
 ; CHECK-NEXT:    stp q6, q7, [sp, #96]
+; CHECK-NEXT:    stp x6, x7, [sp, #144]
+; CHECK-NEXT:    str x5, [sp, #136]
 ; CHECK-NEXT:    stp x10, x9, [sp, #160]
 ; CHECK-NEXT:    tbz w8, #31, .LBB0_3
 ; CHECK-NEXT:  // %bb.1: // %maybe_reg

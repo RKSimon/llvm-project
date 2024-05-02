@@ -115,8 +115,18 @@ define { <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 1
 define { <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8> } @foo_ld4_nxv16i8_mask_of_interleaved_ones(ptr %p) {
 ; CHECK-LABEL: foo_ld4_nxv16i8_mask_of_interleaved_ones:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.b
-; CHECK-NEXT:    ld4b { z0.b - z3.b }, p0/z, [x0]
+; CHECK-NEXT:    ldr z0, [x0, #1, mul vl]
+; CHECK-NEXT:    ldr z1, [x0]
+; CHECK-NEXT:    ldr z2, [x0, #3, mul vl]
+; CHECK-NEXT:    ldr z3, [x0, #2, mul vl]
+; CHECK-NEXT:    uzp1 z5.b, z1.b, z0.b
+; CHECK-NEXT:    uzp2 z6.b, z1.b, z0.b
+; CHECK-NEXT:    uzp1 z4.b, z3.b, z2.b
+; CHECK-NEXT:    uzp2 z3.b, z3.b, z2.b
+; CHECK-NEXT:    uzp1 z0.b, z5.b, z4.b
+; CHECK-NEXT:    uzp1 z1.b, z6.b, z3.b
+; CHECK-NEXT:    uzp2 z2.b, z5.b, z4.b
+; CHECK-NEXT:    uzp2 z3.b, z6.b, z3.b
 ; CHECK-NEXT:    ret
   %interleaved.mask = call <vscale x 64 x i1> @llvm.vector.interleave4.nxv64i1(<vscale x 16 x i1> splat(i1 1), <vscale x 16 x i1> splat(i1 1), <vscale x 16 x i1> splat(i1 1), <vscale x 16 x i1> splat(i1 1))
   %wide.masked.vec = call <vscale x 64 x i8> @llvm.masked.load.nxv64i8(ptr %p, i32 4, <vscale x 64 x i1> %interleaved.mask, <vscale x 64 x i8> poison)
@@ -127,8 +137,18 @@ define { <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 1
 define { <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8> } @foo_ld4_nxv16i8_mask_of_ones(ptr %p) {
 ; CHECK-LABEL: foo_ld4_nxv16i8_mask_of_ones:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.b
-; CHECK-NEXT:    ld4b { z0.b - z3.b }, p0/z, [x0]
+; CHECK-NEXT:    ldr z0, [x0, #1, mul vl]
+; CHECK-NEXT:    ldr z1, [x0]
+; CHECK-NEXT:    ldr z2, [x0, #3, mul vl]
+; CHECK-NEXT:    ldr z3, [x0, #2, mul vl]
+; CHECK-NEXT:    uzp1 z5.b, z1.b, z0.b
+; CHECK-NEXT:    uzp2 z6.b, z1.b, z0.b
+; CHECK-NEXT:    uzp1 z4.b, z3.b, z2.b
+; CHECK-NEXT:    uzp2 z3.b, z3.b, z2.b
+; CHECK-NEXT:    uzp1 z0.b, z5.b, z4.b
+; CHECK-NEXT:    uzp1 z1.b, z6.b, z3.b
+; CHECK-NEXT:    uzp2 z2.b, z5.b, z4.b
+; CHECK-NEXT:    uzp2 z3.b, z6.b, z3.b
 ; CHECK-NEXT:    ret
   %wide.masked.vec = call <vscale x 64 x i8> @llvm.masked.load.nxv64i8(ptr %p, i32 4, <vscale x 64 x i1> splat(i1 1), <vscale x 64 x i8> poison)
   %deinterleaved.vec = call { <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8>, <vscale x 16 x i8> } @llvm.vector.deinterleave4.nxv64i8(<vscale x 64 x i8> %wide.masked.vec)

@@ -272,8 +272,8 @@ define <4 x i16> @v_abs_v4i16(<4 x i16> %arg) {
 ; GFX6-NEXT:    v_max_i32_e32 v1, v4, v1
 ; GFX6-NEXT:    v_sub_i32_e32 v4, vcc, 0, v0
 ; GFX6-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
-; GFX6-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; GFX6-NEXT:    v_max_i32_e32 v0, v4, v0
+; GFX6-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; GFX6-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX6-NEXT:    v_or_b32_e32 v1, v1, v3
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -293,8 +293,8 @@ define <4 x i16> @v_abs_v4i16(<4 x i16> %arg) {
 ; GFX7-NEXT:    v_max_i32_e32 v1, v4, v1
 ; GFX7-NEXT:    v_sub_i32_e32 v4, vcc, 0, v0
 ; GFX7-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
-; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; GFX7-NEXT:    v_max_i32_e32 v0, v4, v0
+; GFX7-NEXT:    v_lshlrev_b32_e32 v2, 16, v2
 ; GFX7-NEXT:    v_or_b32_e32 v0, v0, v2
 ; GFX7-NEXT:    v_or_b32_e32 v1, v1, v3
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]

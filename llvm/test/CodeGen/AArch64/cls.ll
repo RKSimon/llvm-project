@@ -76,7 +76,10 @@ define i64 @cls_i64_not_32(i64 %x) {
 ; CHECK-SD-LABEL: cls_i64_not_32:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    asr x8, x0, #16
-; CHECK-SD-NEXT:    cls x8, x8
+; CHECK-SD-NEXT:    mov w9, #1 // =0x1
+; CHECK-SD-NEXT:    eor x8, x8, x0, asr #63
+; CHECK-SD-NEXT:    orr x8, x9, x8, lsl #1
+; CHECK-SD-NEXT:    clz x8, x8
 ; CHECK-SD-NEXT:    orr x0, x8, #0x10
 ; CHECK-SD-NEXT:    ret
 ;
@@ -139,7 +142,9 @@ define i32 @cls_i32_knownbits_no_overestimate(i32 signext %x) {
 ; CHECK-SD-LABEL: cls_i32_knownbits_no_overestimate:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    asr w8, w0, #15
-; CHECK-SD-NEXT:    cls w8, w8
+; CHECK-SD-NEXT:    eor w8, w8, w0, asr #31
+; CHECK-SD-NEXT:    clz w8, w8
+; CHECK-SD-NEXT:    sub w8, w8, #1
 ; CHECK-SD-NEXT:    orr w0, w8, #0x10
 ; CHECK-SD-NEXT:    ret
 ;

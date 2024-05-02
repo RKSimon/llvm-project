@@ -100,18 +100,18 @@ define void @concat_v32i8(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v64i8(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v64i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v64i8:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <32 x i8>, ptr %a
   %op2 = load <32 x i8>, ptr %b
@@ -202,18 +202,18 @@ define void @concat_v16i16(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v32i16(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v32i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v32i16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x i16>, ptr %a
   %op2 = load <16 x i16>, ptr %b
@@ -293,18 +293,18 @@ define void @concat_v8i32(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v16i32(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v16i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v16i32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x i32>, ptr %a
   %op2 = load <8 x i32>, ptr %b
@@ -360,18 +360,18 @@ define void @concat_v4i64(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v8i64(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v8i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v8i64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x i64>, ptr %a
   %op2 = load <4 x i64>, ptr %b
@@ -447,18 +447,18 @@ define void @concat_v16f16(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v32f16(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v32f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v32f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
   %op2 = load <16 x half>, ptr %b
@@ -538,18 +538,18 @@ define void @concat_v8f32(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v16f32(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v16f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v16f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
   %op2 = load <8 x float>, ptr %b
@@ -605,18 +605,18 @@ define void @concat_v4f64(ptr %a, ptr %b, ptr %c)  {
 define void @concat_v8f64(ptr %a, ptr %b, ptr %c) {
 ; CHECK-LABEL: concat_v8f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x1]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x2, #32]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x1]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x2, #32]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: concat_v8f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x1]
-; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x2, #32]
-; NONEON-NOSVE-NEXT:    stp q3, q2, [x2]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
+; NONEON-NOSVE-NEXT:    ldp q2, q3, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x2, #32]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [x2]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
   %op2 = load <4 x double>, ptr %b

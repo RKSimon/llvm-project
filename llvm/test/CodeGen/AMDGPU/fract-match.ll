@@ -56,14 +56,14 @@ define float @safe_math_fract_f32(float %x, ptr addrspace(1) writeonly captures(
 ; GFX6-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX6-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
 ; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v4, v0, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -71,15 +71,15 @@ define float @safe_math_fract_f32(float %x, ptr addrspace(1) writeonly captures(
 ; GFX7-LABEL: safe_math_fract_f32:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -87,11 +87,11 @@ define float @safe_math_fract_f32(float %x, ptr addrspace(1) writeonly captures(
 ; GFX8-LABEL: safe_math_fract_f32:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -100,10 +100,10 @@ define float @safe_math_fract_f32(float %x, ptr addrspace(1) writeonly captures(
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -115,11 +115,11 @@ define float @safe_math_fract_f32(float %x, ptr addrspace(1) writeonly captures(
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -168,14 +168,14 @@ define float @safe_math_fract_f32_swap(float %x, ptr addrspace(1) writeonly capt
 ; GFX6-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX6-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
 ; GFX6-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v0, v4, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -183,15 +183,15 @@ define float @safe_math_fract_f32_swap(float %x, ptr addrspace(1) writeonly capt
 ; GFX7-LABEL: safe_math_fract_f32_swap:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -199,11 +199,11 @@ define float @safe_math_fract_f32_swap(float %x, ptr addrspace(1) writeonly capt
 ; GFX8-LABEL: safe_math_fract_f32_swap:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -212,10 +212,10 @@ define float @safe_math_fract_f32_swap(float %x, ptr addrspace(1) writeonly capt
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -227,11 +227,11 @@ define float @safe_math_fract_f32_swap(float %x, ptr addrspace(1) writeonly capt
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -353,14 +353,14 @@ define float @no_nan_check_math_fract_f32(float %x, ptr addrspace(1) writeonly c
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX6-NEXT:    v_floor_f32_e32 v3, v0
 ; GFX6-NEXT:    v_sub_f32_e32 v4, v0, v3
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -370,14 +370,14 @@ define float @no_nan_check_math_fract_f32(float %x, ptr addrspace(1) writeonly c
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
 ; GFX7-NEXT:    v_sub_f32_e32 v4, v0, v3
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -387,10 +387,10 @@ define float @no_nan_check_math_fract_f32(float %x, ptr addrspace(1) writeonly c
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
 ; GFX8-NEXT:    v_sub_f32_e32 v4, v0, v3
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -399,12 +399,12 @@ define float @no_nan_check_math_fract_f32(float %x, ptr addrspace(1) writeonly c
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_floor_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_2) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX11-NEXT:    global_store_b32 v[1:2], v3, off
 ; GFX11-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc_lo
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: no_nan_check_math_fract_f32:
@@ -415,13 +415,13 @@ define float @no_nan_check_math_fract_f32(float %x, ptr addrspace(1) writeonly c
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_floor_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_3) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX12-NEXT:    global_store_b32 v[1:2], v3, off
 ; GFX12-NEXT:    v_min_num_f32_e32 v4, 0x3f7fffff, v4
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s0
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %floor = tail call float @llvm.floor.f32(float %x)
@@ -2387,17 +2387,16 @@ define double @safe_math_fract_f64(double %x, ptr addrspace(1) writeonly capture
 ; GFX6-NEXT:    v_add_f64 v[6:7], v[0:1], -v[4:5]
 ; GFX6-NEXT:    v_cmp_u_f64_e32 vcc, v[0:1], v[0:1]
 ; GFX6-NEXT:    v_min_f64 v[6:7], v[6:7], s[8:9]
-; GFX6-NEXT:    s_mov_b32 s8, 0
-; GFX6-NEXT:    s_mov_b32 s9, 0x7ff00000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
+; GFX6-NEXT:    v_cmp_class_f64_e64 s[8:9], v[0:1], s8
+; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v7, v7, v1, vcc
 ; GFX6-NEXT:    v_cndmask_b32_e32 v6, v6, v0, vcc
-; GFX6-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[8:9]
-; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v6, vcc
-; GFX6-NEXT:    v_cndmask_b32_e32 v1, 0, v7, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v6, 0, s[8:9]
+; GFX6-NEXT:    v_cndmask_b32_e64 v1, v7, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dwordx2 v[4:5], v[2:3], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -2405,17 +2404,16 @@ define double @safe_math_fract_f64(double %x, ptr addrspace(1) writeonly capture
 ; GFX7-LABEL: safe_math_fract_f64:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s4, 0
-; GFX7-NEXT:    s_mov_b32 s5, 0x7ff00000
+; GFX7-NEXT:    s_movk_i32 s4, 0x204
 ; GFX7-NEXT:    v_fract_f64_e32 v[4:5], v[0:1]
-; GFX7-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[4:5]
+; GFX7-NEXT:    v_cmp_class_f64_e64 s[8:9], v[0:1], s4
 ; GFX7-NEXT:    v_floor_f64_e32 v[6:7], v[0:1]
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
-; GFX7-NEXT:    v_cndmask_b32_e32 v1, 0, v5, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
+; GFX7-NEXT:    v_cndmask_b32_e64 v1, v5, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dwordx2 v[6:7], v[2:3], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -2423,13 +2421,12 @@ define double @safe_math_fract_f64(double %x, ptr addrspace(1) writeonly capture
 ; GFX8-LABEL: safe_math_fract_f64:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0
-; GFX8-NEXT:    s_mov_b32 s5, 0x7ff00000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f64_e32 v[4:5], v[0:1]
-; GFX8-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[4:5]
+; GFX8-NEXT:    v_cmp_class_f64_e64 s[4:5], v[0:1], s4
 ; GFX8-NEXT:    v_floor_f64_e32 v[6:7], v[0:1]
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
-; GFX8-NEXT:    v_cndmask_b32_e32 v1, 0, v5, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
+; GFX8-NEXT:    v_cndmask_b32_e64 v1, v5, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dwordx2 v[2:3], v[6:7], off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -2438,10 +2435,11 @@ define double @safe_math_fract_f64(double %x, ptr addrspace(1) writeonly capture
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f64_e32 v[4:5], v[0:1]
-; GFX11-NEXT:    v_cmp_neq_f64_e64 vcc_lo, 0x7ff00000, |v[0:1]|
+; GFX11-NEXT:    v_cmp_class_f64_e64 s0, v[0:1], 0x204
 ; GFX11-NEXT:    v_floor_f64_e32 v[6:7], v[0:1]
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, 0, v4 :: v_dual_cndmask_b32 v1, 0, v5
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_4)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s0
+; GFX11-NEXT:    v_cndmask_b32_e64 v1, v5, 0, s0
 ; GFX11-NEXT:    global_store_b64 v[2:3], v[6:7], off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2453,11 +2451,12 @@ define double @safe_math_fract_f64(double %x, ptr addrspace(1) writeonly capture
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f64_e32 v[4:5], v[0:1]
-; GFX12-NEXT:    v_cmp_neq_f64_e64 vcc_lo, 0x7ff00000, |v[0:1]|
+; GFX12-NEXT:    v_cmp_class_f64_e64 s0, v[0:1], 0x204
 ; GFX12-NEXT:    v_floor_f64_e32 v[6:7], v[0:1]
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_dual_cndmask_b32 v0, 0, v4 :: v_dual_cndmask_b32 v1, 0, v5
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_4)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s0
+; GFX12-NEXT:    v_cndmask_b32_e64 v1, v5, 0, s0
 ; GFX12-NEXT:    global_store_b64 v[2:3], v[6:7], off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -2568,11 +2567,11 @@ define half @safe_math_fract_f16(half %x, ptr addrspace(1) writeonly captures(no
 ; GFX8-LABEL: safe_math_fract_f16:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_movk_i32 s4, 0x7c00
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f16_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f16_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f16_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f16_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_short v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -2581,10 +2580,10 @@ define half @safe_math_fract_f16(half %x, ptr addrspace(1) writeonly captures(no
 ; GFX11-TRUE16:       ; %bb.0: ; %entry
 ; GFX11-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_fract_f16_e32 v0.h, v0.l
-; GFX11-TRUE16-NEXT:    v_cmp_neq_f16_e64 s0, 0x7c00, |v0.l|
+; GFX11-TRUE16-NEXT:    v_cmp_class_f16_e64 s0, v0.l, 0x204
 ; GFX11-TRUE16-NEXT:    v_floor_f16_e32 v3.l, v0.l
 ; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-TRUE16-NEXT:    v_cndmask_b16 v0.l, 0, v0.h, s0
+; GFX11-TRUE16-NEXT:    v_cndmask_b16 v0.l, v0.h, 0, s0
 ; GFX11-TRUE16-NEXT:    global_store_b16 v[1:2], v3, off
 ; GFX11-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2592,10 +2591,10 @@ define half @safe_math_fract_f16(half %x, ptr addrspace(1) writeonly captures(no
 ; GFX11-FAKE16:       ; %bb.0: ; %entry
 ; GFX11-FAKE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_fract_f16_e32 v3, v0
-; GFX11-FAKE16-NEXT:    v_cmp_neq_f16_e64 vcc_lo, 0x7c00, |v0|
+; GFX11-FAKE16-NEXT:    v_cmp_class_f16_e64 s0, v0, 0x204
 ; GFX11-FAKE16-NEXT:    v_floor_f16_e32 v4, v0
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-FAKE16-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-FAKE16-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-FAKE16-NEXT:    global_store_b16 v[1:2], v4, off
 ; GFX11-FAKE16-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2607,11 +2606,11 @@ define half @safe_math_fract_f16(half %x, ptr addrspace(1) writeonly captures(no
 ; GFX12-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-TRUE16-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-TRUE16-NEXT:    v_fract_f16_e32 v0.h, v0.l
-; GFX12-TRUE16-NEXT:    v_cmp_neq_f16_e64 s0, 0x7c00, |v0.l|
+; GFX12-TRUE16-NEXT:    v_cmp_class_f16_e64 s0, v0.l, 0x204
 ; GFX12-TRUE16-NEXT:    v_floor_f16_e32 v3.l, v0.l
 ; GFX12-TRUE16-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX12-TRUE16-NEXT:    v_cndmask_b16 v0.l, 0, v0.h, s0
+; GFX12-TRUE16-NEXT:    v_cndmask_b16 v0.l, v0.h, 0, s0
 ; GFX12-TRUE16-NEXT:    global_store_b16 v[1:2], v3, off
 ; GFX12-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2623,11 +2622,11 @@ define half @safe_math_fract_f16(half %x, ptr addrspace(1) writeonly captures(no
 ; GFX12-FAKE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-FAKE16-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-FAKE16-NEXT:    v_fract_f16_e32 v3, v0
-; GFX12-FAKE16-NEXT:    v_cmp_neq_f16_e64 vcc_lo, 0x7c00, |v0|
+; GFX12-FAKE16-NEXT:    v_cmp_class_f16_e64 s0, v0, 0x204
 ; GFX12-FAKE16-NEXT:    v_floor_f16_e32 v4, v0
-; GFX12-FAKE16-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-FAKE16-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-FAKE16-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-FAKE16-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-FAKE16-NEXT:    global_store_b16 v[1:2], v4, off
 ; GFX12-FAKE16-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -3088,14 +3087,14 @@ define float @safe_math_fract_f32_minimum(float %x, ptr addrspace(1) writeonly c
 ; GFX6-NEXT:    v_cmp_o_f32_e32 vcc, v4, v4
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v6, v5, vcc
 ; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v4, v0, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -3103,15 +3102,15 @@ define float @safe_math_fract_f32_minimum(float %x, ptr addrspace(1) writeonly c
 ; GFX7-LABEL: safe_math_fract_f32_minimum:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -3119,11 +3118,11 @@ define float @safe_math_fract_f32_minimum(float %x, ptr addrspace(1) writeonly c
 ; GFX8-LABEL: safe_math_fract_f32_minimum:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -3132,10 +3131,10 @@ define float @safe_math_fract_f32_minimum(float %x, ptr addrspace(1) writeonly c
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -3147,11 +3146,11 @@ define float @safe_math_fract_f32_minimum(float %x, ptr addrspace(1) writeonly c
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -3203,14 +3202,14 @@ define float @safe_math_fract_f32_minimum_swap(float %x, ptr addrspace(1) writeo
 ; GFX6-NEXT:    v_cmp_o_f32_e32 vcc, v4, v4
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v6, v5, vcc
 ; GFX6-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v0, v4, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -3218,15 +3217,15 @@ define float @safe_math_fract_f32_minimum_swap(float %x, ptr addrspace(1) writeo
 ; GFX7-LABEL: safe_math_fract_f32_minimum_swap:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -3234,11 +3233,11 @@ define float @safe_math_fract_f32_minimum_swap(float %x, ptr addrspace(1) writeo
 ; GFX8-LABEL: safe_math_fract_f32_minimum_swap:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -3247,10 +3246,10 @@ define float @safe_math_fract_f32_minimum_swap(float %x, ptr addrspace(1) writeo
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -3262,11 +3261,11 @@ define float @safe_math_fract_f32_minimum_swap(float %x, ptr addrspace(1) writeo
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -3315,14 +3314,14 @@ define float @safe_math_fract_f32_minimumnum(float %x, ptr addrspace(1) writeonl
 ; GFX6-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX6-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
 ; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v4, v0, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -3330,15 +3329,15 @@ define float @safe_math_fract_f32_minimumnum(float %x, ptr addrspace(1) writeonl
 ; GFX7-LABEL: safe_math_fract_f32_minimumnum:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -3346,11 +3345,11 @@ define float @safe_math_fract_f32_minimumnum(float %x, ptr addrspace(1) writeonl
 ; GFX8-LABEL: safe_math_fract_f32_minimumnum:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -3359,10 +3358,10 @@ define float @safe_math_fract_f32_minimumnum(float %x, ptr addrspace(1) writeonl
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -3374,11 +3373,11 @@ define float @safe_math_fract_f32_minimumnum(float %x, ptr addrspace(1) writeonl
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -3427,14 +3426,14 @@ define float @safe_math_fract_f32_minimumnum_swap(float %x, ptr addrspace(1) wri
 ; GFX6-NEXT:    v_sub_f32_e32 v4, v0, v3
 ; GFX6-NEXT:    v_min_f32_e32 v4, 0x3f7fffff, v4
 ; GFX6-NEXT:    v_cmp_o_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX6-NEXT:    s_movk_i32 s8, 0x204
 ; GFX6-NEXT:    s_mov_b32 s6, 0
 ; GFX6-NEXT:    v_cndmask_b32_e32 v4, v0, v4, vcc
-; GFX6-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX6-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX6-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
@@ -3442,15 +3441,15 @@ define float @safe_math_fract_f32_minimumnum_swap(float %x, ptr addrspace(1) wri
 ; GFX7-LABEL: safe_math_fract_f32_minimumnum_swap:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s8, 0x7f800000
+; GFX7-NEXT:    s_movk_i32 s8, 0x204
 ; GFX7-NEXT:    s_mov_b32 s6, 0
 ; GFX7-NEXT:    v_fract_f32_e32 v4, v0
-; GFX7-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s8
+; GFX7-NEXT:    v_cmp_class_f32_e64 s[8:9], v0, s8
 ; GFX7-NEXT:    s_mov_b32 s7, 0xf000
 ; GFX7-NEXT:    s_mov_b32 s4, s6
 ; GFX7-NEXT:    s_mov_b32 s5, s6
 ; GFX7-NEXT:    v_floor_f32_e32 v3, v0
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[8:9]
 ; GFX7-NEXT:    buffer_store_dword v3, v[1:2], s[4:7], 0 addr64
 ; GFX7-NEXT:    s_waitcnt vmcnt(0)
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
@@ -3458,11 +3457,11 @@ define float @safe_math_fract_f32_minimumnum_swap(float %x, ptr addrspace(1) wri
 ; GFX8-LABEL: safe_math_fract_f32_minimumnum_swap:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0x7f800000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f32_e32 v4, v0
-; GFX8-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
+; GFX8-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s4
 ; GFX8-NEXT:    v_floor_f32_e32 v3, v0
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v4, 0, s[4:5]
 ; GFX8-NEXT:    global_store_dword v[1:2], v3, off
 ; GFX8-NEXT:    s_waitcnt vmcnt(0)
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
@@ -3471,10 +3470,10 @@ define float @safe_math_fract_f32_minimumnum_swap(float %x, ptr addrspace(1) wri
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f32_e32 v3, v0
-; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX11-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX11-NEXT:    v_floor_f32_e32 v4, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX11-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -3486,11 +3485,11 @@ define float @safe_math_fract_f32_minimumnum_swap(float %x, ptr addrspace(1) wri
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f32_e32 v3, v0
-; GFX12-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
+; GFX12-NEXT:    v_cmp_class_f32_e64 s0, v0, 0x204
 ; GFX12-NEXT:    v_floor_f32_e32 v4, v0
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0, v3, vcc_lo
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v3, 0, s0
 ; GFX12-NEXT:    global_store_b32 v[1:2], v4, off
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
@@ -3887,42 +3886,40 @@ define double @fract_match_f64_assume_not_nan(double %x) #0 {
 ; GFX6-NEXT:    s_mov_b32 s5, 0x3fefffff
 ; GFX6-NEXT:    v_add_f64 v[2:3], v[0:1], -v[2:3]
 ; GFX6-NEXT:    v_min_f64 v[2:3], v[2:3], s[4:5]
-; GFX6-NEXT:    s_mov_b32 s4, 0
-; GFX6-NEXT:    s_mov_b32 s5, 0x7ff00000
-; GFX6-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[4:5]
-; GFX6-NEXT:    v_cndmask_b32_e32 v0, 0, v2, vcc
-; GFX6-NEXT:    v_cndmask_b32_e32 v1, 0, v3, vcc
+; GFX6-NEXT:    s_movk_i32 s4, 0x204
+; GFX6-NEXT:    v_cmp_class_f64_e64 s[4:5], v[0:1], s4
+; GFX6-NEXT:    v_cndmask_b32_e64 v0, v2, 0, s[4:5]
+; GFX6-NEXT:    v_cndmask_b32_e64 v1, v3, 0, s[4:5]
 ; GFX6-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX7-LABEL: fract_match_f64_assume_not_nan:
 ; GFX7:       ; %bb.0: ; %entry
 ; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-NEXT:    s_mov_b32 s4, 0
-; GFX7-NEXT:    s_mov_b32 s5, 0x7ff00000
+; GFX7-NEXT:    s_movk_i32 s4, 0x204
 ; GFX7-NEXT:    v_fract_f64_e32 v[2:3], v[0:1]
-; GFX7-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[4:5]
-; GFX7-NEXT:    v_cndmask_b32_e32 v0, 0, v2, vcc
-; GFX7-NEXT:    v_cndmask_b32_e32 v1, 0, v3, vcc
+; GFX7-NEXT:    v_cmp_class_f64_e64 s[4:5], v[0:1], s4
+; GFX7-NEXT:    v_cndmask_b32_e64 v0, v2, 0, s[4:5]
+; GFX7-NEXT:    v_cndmask_b32_e64 v1, v3, 0, s[4:5]
 ; GFX7-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX8-LABEL: fract_match_f64_assume_not_nan:
 ; GFX8:       ; %bb.0: ; %entry
 ; GFX8-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-NEXT:    s_mov_b32 s4, 0
-; GFX8-NEXT:    s_mov_b32 s5, 0x7ff00000
+; GFX8-NEXT:    s_movk_i32 s4, 0x204
 ; GFX8-NEXT:    v_fract_f64_e32 v[2:3], v[0:1]
-; GFX8-NEXT:    v_cmp_neq_f64_e64 vcc, |v[0:1]|, s[4:5]
-; GFX8-NEXT:    v_cndmask_b32_e32 v0, 0, v2, vcc
-; GFX8-NEXT:    v_cndmask_b32_e32 v1, 0, v3, vcc
+; GFX8-NEXT:    v_cmp_class_f64_e64 s[4:5], v[0:1], s4
+; GFX8-NEXT:    v_cndmask_b32_e64 v0, v2, 0, s[4:5]
+; GFX8-NEXT:    v_cndmask_b32_e64 v1, v3, 0, s[4:5]
 ; GFX8-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: fract_match_f64_assume_not_nan:
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_fract_f64_e32 v[2:3], v[0:1]
-; GFX11-NEXT:    v_cmp_neq_f64_e64 vcc_lo, 0x7ff00000, |v[0:1]|
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, 0, v2 :: v_dual_cndmask_b32 v1, 0, v3
+; GFX11-NEXT:    v_cmp_class_f64_e64 s0, v[0:1], 0x204
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_cndmask_b32_e64 v0, v2, 0, s0
+; GFX11-NEXT:    v_cndmask_b32_e64 v1, v3, 0, s0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: fract_match_f64_assume_not_nan:
@@ -3933,10 +3930,11 @@ define double @fract_match_f64_assume_not_nan(double %x) #0 {
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_fract_f64_e32 v[2:3], v[0:1]
-; GFX12-NEXT:    v_cmp_neq_f64_e64 vcc_lo, 0x7ff00000, |v[0:1]|
-; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX12-NEXT:    v_dual_cndmask_b32 v0, 0, v2 :: v_dual_cndmask_b32 v1, 0, v3
+; GFX12-NEXT:    v_cmp_class_f64_e64 s0, v[0:1], 0x204
+; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX12-NEXT:    v_cndmask_b32_e64 v0, v2, 0, s0
+; GFX12-NEXT:    v_cndmask_b32_e64 v1, v3, 0, s0
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %is.ord = fcmp ord double %x, 0.000000e+00

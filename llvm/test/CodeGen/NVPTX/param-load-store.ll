@@ -311,9 +311,8 @@ define signext i16 @test_i16s(i16 signext %a) {
 ; CHECK-DAG:  st.param.b32    [param0], [[E0]];
 ; CHECK-DAG:  st.param.b16    [param0+4], [[E2]];
 ; CHECK:      call.uni (retval0), test_v3i16,
-; CHECK:      ld.param.b32 [[RE:%r[0-9]+]], [retval0];
+; CHECK:      ld.param.v2.b16 {[[RE0:%rs[0-9]+]], [[RE1:%rs[0-9]+]]}, [retval0];
 ; CHECK:      ld.param.b16    [[RE2:%rs[0-9]+]], [retval0+4];
-; CHECK-DAG:  mov.b32       {[[RE0:%rs[0-9]+]], [[RE1:%rs[0-9]+]]}, [[RE]];
 ; CHECK-DAG:  st.param.v2.b16 [func_retval0], {[[RE0]], [[RE1]]};
 ; CHECK-DAG:  st.param.b16    [func_retval0+4], [[RE2]];
 ; CHECK-NEXT: ret;
@@ -433,9 +432,8 @@ define <2 x bfloat> @test_v2bf16(<2 x bfloat> %a) {
 ; CHECK-DAG:  st.param.b32    [param0], [[E0]];
 ; CHECK-DAG:  st.param.b16    [param0+4], [[E2]];
 ; CHECK:      call.uni (retval0),      test_v3f16,
-; CHECK-DAG:  ld.param.b32 [[R:%r[0-9]+]], [retval0];
+; CHECK-DAG:  ld.param.v2.b16 {[[R0:%rs[0-9]+]], [[R1:%rs[0-9]+]]}, [retval0];
 ; CHECK-DAG:  ld.param.b16    [[R2:%rs[0-9]+]], [retval0+4];
-; CHECK-DAG:  mov.b32       {[[R0:%rs[0-9]+]], [[R1:%rs[0-9]+]]}, [[R]];
 ; CHECK-DAG:  st.param.v2.b16 [func_retval0], {[[R0]], [[R1]]};
 ; CHECK-DAG:  st.param.b16    [func_retval0+4], [[R2]];
 ; CHECK:      ret;

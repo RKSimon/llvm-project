@@ -251,103 +251,105 @@ define <vscale x 32 x i1> @mask_exclude_active_nxv32(<vscale x 32 x i1> %mask.in
 ; CHECK-NEXT:    .cfi_escape 0x10, 0x4d, 0x09, 0x92, 0x2e, 0x00, 0x11, 0x50, 0x1e, 0x22, 0x40, 0x1c // $d13 @ cfa - 48 * VG - 16
 ; CHECK-NEXT:    .cfi_escape 0x10, 0x4e, 0x09, 0x92, 0x2e, 0x00, 0x11, 0x48, 0x1e, 0x22, 0x40, 0x1c // $d14 @ cfa - 56 * VG - 16
 ; CHECK-NEXT:    .cfi_escape 0x10, 0x4f, 0x09, 0x92, 0x2e, 0x00, 0x11, 0x40, 0x1e, 0x22, 0x40, 0x1c // $d15 @ cfa - 64 * VG - 16
-; CHECK-NEXT:    index z2.d, #0, #-1
+; CHECK-NEXT:    index z3.d, #0, #-1
 ; CHECK-NEXT:    cnth x8
-; CHECK-NEXT:    punpkhi p5.h, p0.b
+; CHECK-NEXT:    rdvl x9, #-1
 ; CHECK-NEXT:    neg x8, x8
 ; CHECK-NEXT:    punpkhi p4.h, p1.b
-; CHECK-NEXT:    cntw x9
+; CHECK-NEXT:    mov z1.d, x9
 ; CHECK-NEXT:    mov z0.d, x8
-; CHECK-NEXT:    punpklo p3.h, p5.b
-; CHECK-NEXT:    rdvl x8, #-1
+; CHECK-NEXT:    cntd x9
+; CHECK-NEXT:    punpkhi p5.h, p0.b
+; CHECK-NEXT:    cntw x8
+; CHECK-NEXT:    neg x9, x9
 ; CHECK-NEXT:    punpklo p2.h, p4.b
-; CHECK-NEXT:    mov z1.d, x8
-; CHECK-NEXT:    neg x8, x9
-; CHECK-NEXT:    incd z2.d, all, mul #16
-; CHECK-NEXT:    punpklo p10.h, p0.b
-; CHECK-NEXT:    mov z5.d, x8
-; CHECK-NEXT:    punpklo p9.h, p3.b
-; CHECK-NEXT:    cntd x8
+; CHECK-NEXT:    mov z2.d, z3.d
+; CHECK-NEXT:    neg x8, x8
+; CHECK-NEXT:    mov z4.d, x9
+; CHECK-NEXT:    punpklo p3.h, p5.b
+; CHECK-NEXT:    mov z7.d, x8
 ; CHECK-NEXT:    rdvl x9, #2
 ; CHECK-NEXT:    punpklo p1.h, p1.b
-; CHECK-NEXT:    neg x8, x8
-; CHECK-NEXT:    add z4.d, z2.d, z0.d
-; CHECK-NEXT:    punpklo p8.h, p2.b
-; CHECK-NEXT:    mov z7.d, p9/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    punpklo p6.h, p10.b
-; CHECK-NEXT:    mov z28.d, x8
-; CHECK-NEXT:    add z25.d, z2.d, z5.d
-; CHECK-NEXT:    punpklo p7.h, p1.b
-; CHECK-NEXT:    mov z3.d, p8/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    add z6.d, z4.d, z1.d
-; CHECK-NEXT:    punpklo p8.h, p6.b
-; CHECK-NEXT:    and z4.d, z4.d, z7.d
-; CHECK-NEXT:    punpkhi p0.h, p1.b
-; CHECK-NEXT:    add z28.d, z2.d, z28.d
-; CHECK-NEXT:    add z26.d, z25.d, z0.d
-; CHECK-NEXT:    punpkhi p1.h, p10.b
-; CHECK-NEXT:    ldr p10, [sp, #1, mul vl] // 2-byte Reload
-; CHECK-NEXT:    mov z7.d, p8/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    punpklo p11.h, p7.b
-; CHECK-NEXT:    and z3.d, z6.d, z3.d
-; CHECK-NEXT:    add z6.d, z2.d, z1.d
-; CHECK-NEXT:    punpklo p9.h, p0.b
-; CHECK-NEXT:    add z29.d, z25.d, z1.d
-; CHECK-NEXT:    add z5.d, z28.d, z5.d
-; CHECK-NEXT:    punpklo p8.h, p1.b
-; CHECK-NEXT:    mov z24.d, p11/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    ldr p11, [sp] // 2-byte Reload
-; CHECK-NEXT:    punpkhi p5.h, p5.b
-; CHECK-NEXT:    mov z27.d, p9/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    add z31.d, z26.d, z1.d
-; CHECK-NEXT:    punpkhi p4.h, p4.b
-; CHECK-NEXT:    mov z30.d, p8/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    and z2.d, z2.d, z7.d
-; CHECK-NEXT:    punpklo p9.h, p5.b
-; CHECK-NEXT:    and z6.d, z6.d, z24.d
-; CHECK-NEXT:    add z12.d, z5.d, z1.d
-; CHECK-NEXT:    punpklo p8.h, p4.b
-; CHECK-NEXT:    and z7.d, z29.d, z27.d
-; CHECK-NEXT:    add z29.d, z28.d, z0.d
-; CHECK-NEXT:    mov z24.d, p9/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    ldr p9, [sp, #2, mul vl] // 2-byte Reload
-; CHECK-NEXT:    punpkhi p3.h, p3.b
-; CHECK-NEXT:    mov z8.d, p8/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    ldr p8, [sp, #3, mul vl] // 2-byte Reload
-; CHECK-NEXT:    punpkhi p2.h, p2.b
-; CHECK-NEXT:    add z0.d, z5.d, z0.d
-; CHECK-NEXT:    punpkhi p7.h, p7.b
-; CHECK-NEXT:    and z25.d, z25.d, z30.d
-; CHECK-NEXT:    punpkhi p6.h, p6.b
-; CHECK-NEXT:    and z24.d, z26.d, z24.d
-; CHECK-NEXT:    mov z10.d, p2/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    and z26.d, z31.d, z8.d
+; CHECK-NEXT:    incd z2.d, all, mul #16
+; CHECK-NEXT:    punpklo p7.h, p2.b
+; CHECK-NEXT:    add z4.d, z3.d, z4.d
+; CHECK-NEXT:    punpklo p8.h, p0.b
+; CHECK-NEXT:    punpklo p6.h, p3.b
+; CHECK-NEXT:    mov z6.d, p7/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    add z5.d, z2.d, z0.d
+; CHECK-NEXT:    punpklo p0.h, p1.b
+; CHECK-NEXT:    add z25.d, z2.d, z7.d
 ; CHECK-NEXT:    punpkhi p1.h, p1.b
-; CHECK-NEXT:    mov z8.d, p3/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z26.d, p6/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    incd z4.d, all, mul #16
+; CHECK-NEXT:    punpkhi p7.h, p8.b
+; CHECK-NEXT:    add z24.d, z5.d, z1.d
+; CHECK-NEXT:    punpklo p10.h, p0.b
+; CHECK-NEXT:    add z29.d, z25.d, z1.d
+; CHECK-NEXT:    punpklo p9.h, p8.b
+; CHECK-NEXT:    and z5.d, z5.d, z26.d
+; CHECK-NEXT:    add z7.d, z4.d, z7.d
+; CHECK-NEXT:    punpklo p8.h, p1.b
+; CHECK-NEXT:    mov z27.d, p10/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    ldr p10, [sp, #1, mul vl] // 2-byte Reload
+; CHECK-NEXT:    punpklo p6.h, p7.b
+; CHECK-NEXT:    and z3.d, z24.d, z6.d
+; CHECK-NEXT:    add z6.d, z2.d, z1.d
+; CHECK-NEXT:    punpkhi p5.h, p5.b
+; CHECK-NEXT:    add z24.d, z25.d, z0.d
+; CHECK-NEXT:    mov z26.d, p8/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpkhi p4.h, p4.b
+; CHECK-NEXT:    mov z30.d, p6/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    add z12.d, z7.d, z1.d
+; CHECK-NEXT:    punpklo p11.h, p9.b
+; CHECK-NEXT:    and z6.d, z6.d, z27.d
+; CHECK-NEXT:    punpklo p8.h, p5.b
+; CHECK-NEXT:    add z31.d, z24.d, z1.d
+; CHECK-NEXT:    and z26.d, z29.d, z26.d
+; CHECK-NEXT:    punpklo p6.h, p4.b
+; CHECK-NEXT:    mov z28.d, p11/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    ldr p11, [sp] // 2-byte Reload
+; CHECK-NEXT:    mov z27.d, p8/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    ldr p8, [sp, #3, mul vl] // 2-byte Reload
 ; CHECK-NEXT:    punpkhi p0.h, p0.b
-; CHECK-NEXT:    add z27.d, z28.d, z1.d
-; CHECK-NEXT:    mov z30.d, p7/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z8.d, p6/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpkhi p6.h, p9.b
+; CHECK-NEXT:    ldr p9, [sp, #2, mul vl] // 2-byte Reload
+; CHECK-NEXT:    punpkhi p2.h, p2.b
+; CHECK-NEXT:    add z29.d, z4.d, z0.d
+; CHECK-NEXT:    add z0.d, z7.d, z0.d
+; CHECK-NEXT:    and z2.d, z2.d, z28.d
+; CHECK-NEXT:    and z24.d, z24.d, z27.d
+; CHECK-NEXT:    punpkhi p3.h, p3.b
+; CHECK-NEXT:    and z27.d, z31.d, z8.d
+; CHECK-NEXT:    mov z28.d, p6/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpkhi p6.h, p7.b
 ; CHECK-NEXT:    ldr p7, [sp, #4, mul vl] // 2-byte Reload
-; CHECK-NEXT:    punpkhi p3.h, p5.b
-; CHECK-NEXT:    mov z31.d, p6/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    ldr p6, [sp, #5, mul vl] // 2-byte Reload
-; CHECK-NEXT:    punpkhi p2.h, p4.b
-; CHECK-NEXT:    add z9.d, z29.d, z1.d
+; CHECK-NEXT:    mov z31.d, p0/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpkhi p0.h, p1.b
+; CHECK-NEXT:    punpkhi p1.h, p5.b
 ; CHECK-NEXT:    ldr p5, [sp, #6, mul vl] // 2-byte Reload
-; CHECK-NEXT:    mov z11.d, p1/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    mov z13.d, p0/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z10.d, p2/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpkhi p2.h, p4.b
 ; CHECK-NEXT:    ldr p4, [sp, #7, mul vl] // 2-byte Reload
-; CHECK-NEXT:    mov z14.d, p3/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    and z25.d, z25.d, z30.d
+; CHECK-NEXT:    add z30.d, z4.d, z1.d
+; CHECK-NEXT:    mov z8.d, p3/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    add z9.d, z29.d, z1.d
+; CHECK-NEXT:    mov z11.d, p6/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    ldr p6, [sp, #5, mul vl] // 2-byte Reload
+; CHECK-NEXT:    mov z13.d, p0/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z14.d, p1/z, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    add z1.d, z0.d, z1.d
 ; CHECK-NEXT:    mov z15.d, p2/z, #-1 // =0xffffffffffffffff
-; CHECK-NEXT:    and z27.d, z27.d, z30.d
-; CHECK-NEXT:    and z28.d, z28.d, z31.d
+; CHECK-NEXT:    and z4.d, z4.d, z28.d
+; CHECK-NEXT:    and z28.d, z30.d, z31.d
 ; CHECK-NEXT:    and z29.d, z29.d, z8.d
 ; CHECK-NEXT:    ldr z8, [sp, #8, mul vl] // 16-byte Folded Reload
 ; CHECK-NEXT:    and z30.d, z9.d, z10.d
 ; CHECK-NEXT:    ldr z10, [sp, #6, mul vl] // 16-byte Folded Reload
 ; CHECK-NEXT:    ldr z9, [sp, #7, mul vl] // 16-byte Folded Reload
-; CHECK-NEXT:    and z5.d, z5.d, z11.d
+; CHECK-NEXT:    and z7.d, z7.d, z11.d
 ; CHECK-NEXT:    ldr z11, [sp, #5, mul vl] // 16-byte Folded Reload
 ; CHECK-NEXT:    and z31.d, z12.d, z13.d
 ; CHECK-NEXT:    ldr z13, [sp, #3, mul vl] // 16-byte Folded Reload
@@ -357,20 +359,20 @@ define <vscale x 32 x i1> @mask_exclude_active_nxv32(<vscale x 32 x i1> %mask.in
 ; CHECK-NEXT:    and z1.d, z1.d, z15.d
 ; CHECK-NEXT:    ldr z15, [sp, #1, mul vl] // 16-byte Folded Reload
 ; CHECK-NEXT:    ptrue p0.d
-; CHECK-NEXT:    umax z3.d, p0/m, z3.d, z4.d
+; CHECK-NEXT:    umax z3.d, p0/m, z3.d, z5.d
 ; CHECK-NEXT:    umax z2.d, p0/m, z2.d, z6.d
-; CHECK-NEXT:    umax z7.d, p0/m, z7.d, z25.d
-; CHECK-NEXT:    umax z24.d, p0/m, z24.d, z26.d
-; CHECK-NEXT:    umax z27.d, p0/m, z27.d, z28.d
+; CHECK-NEXT:    umax z25.d, p0/m, z25.d, z26.d
+; CHECK-NEXT:    umax z24.d, p0/m, z24.d, z27.d
+; CHECK-NEXT:    umax z4.d, p0/m, z4.d, z28.d
 ; CHECK-NEXT:    umax z29.d, p0/m, z29.d, z30.d
-; CHECK-NEXT:    umax z5.d, p0/m, z5.d, z31.d
+; CHECK-NEXT:    umax z7.d, p0/m, z7.d, z31.d
 ; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    umax z2.d, p0/m, z2.d, z3.d
-; CHECK-NEXT:    umax z7.d, p0/m, z7.d, z24.d
-; CHECK-NEXT:    umax z27.d, p0/m, z27.d, z29.d
-; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z5.d
-; CHECK-NEXT:    umax z2.d, p0/m, z2.d, z7.d
-; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z27.d
+; CHECK-NEXT:    umax z24.d, p0/m, z24.d, z25.d
+; CHECK-NEXT:    umax z4.d, p0/m, z4.d, z29.d
+; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z7.d
+; CHECK-NEXT:    umax z2.d, p0/m, z2.d, z24.d
+; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z4.d
 ; CHECK-NEXT:    umax z0.d, p0/m, z0.d, z2.d
 ; CHECK-NEXT:    umaxv d0, p0, z0.d
 ; CHECK-NEXT:    fmov x8, d0

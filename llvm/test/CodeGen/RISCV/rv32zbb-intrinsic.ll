@@ -16,10 +16,10 @@ define i32 @orcb(i32 %a) nounwind {
 define i32 @orcb_knownbits(i32 %a) nounwind {
 ; RV32ZBB-LABEL: orcb_knownbits:
 ; RV32ZBB:       # %bb.0:
+; RV32ZBB-NEXT:    orc.b a0, a0
 ; RV32ZBB-NEXT:    lui a1, 1044480
 ; RV32ZBB-NEXT:    and a0, a0, a1
 ; RV32ZBB-NEXT:    lui a1, 4080
-; RV32ZBB-NEXT:    orc.b a0, a0
 ; RV32ZBB-NEXT:    addi a1, a1, 255
 ; RV32ZBB-NEXT:    or a0, a0, a1
 ; RV32ZBB-NEXT:    ret

@@ -327,7 +327,8 @@ define i32 @csinv_inplace(i32 %a, i32 %b) {
 ; CHECK-LABEL: csinv_inplace:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    cmp r1, #45
-; CHECK-NEXT:    cinv r0, r0, gt
+; CHECK-NEXT:    csetm r1, gt
+; CHECK-NEXT:    eors r0, r1
 ; CHECK-NEXT:    bx lr
 entry:
   %cmp = icmp sgt i32 %b, 45

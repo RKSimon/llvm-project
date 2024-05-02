@@ -12,7 +12,7 @@ define zeroext i1 @foo(ptr %s_a, ptr %s_b) local_unnamed_addr {
 ; CHECK-NEXT:    lbz 3, 0(3)
 ; CHECK-NEXT:    lbz 4, 0(4)
 ; CHECK-NEXT:    xor 3, 3, 4
-; CHECK-NEXT:    rldicl 3, 3, 61, 63
+; CHECK-NEXT:    rlwinm 3, 3, 29, 31, 31
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i32, ptr %s_a, align 8, !tbaa !1

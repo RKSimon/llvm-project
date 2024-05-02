@@ -16,10 +16,11 @@
 define <1 x i8> @out_v1i8(<1 x i8> %x, <1 x i8> %y, <1 x i8> %mask) nounwind {
 ; CHECK-LABEL: out_v1i8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movl %edi, %eax
-; CHECK-NEXT:    xorl %esi, %eax
-; CHECK-NEXT:    andl %edx, %eax
-; CHECK-NEXT:    xorl %esi, %eax
+; CHECK-NEXT:    movl %edx, %eax
+; CHECK-NEXT:    andl %edx, %edi
+; CHECK-NEXT:    notb %al
+; CHECK-NEXT:    andb %sil, %al
+; CHECK-NEXT:    orb %dil, %al
 ; CHECK-NEXT:    # kill: def $al killed $al killed $eax
 ; CHECK-NEXT:    retq
   %mx = and <1 x i8> %x, %mask
@@ -36,28 +37,32 @@ define <1 x i8> @out_v1i8(<1 x i8> %x, <1 x i8> %y, <1 x i8> %mask) nounwind {
 define <2 x i8> @out_v2i8(<2 x i8> %x, <2 x i8> %y, <2 x i8> %mask) nounwind {
 ; CHECK-BASELINE-LABEL: out_v2i8:
 ; CHECK-BASELINE:       # %bb.0:
-; CHECK-BASELINE-NEXT:    movl %edi, %eax
-; CHECK-BASELINE-NEXT:    xorl %edx, %eax
-; CHECK-BASELINE-NEXT:    andl %r8d, %eax
-; CHECK-BASELINE-NEXT:    xorl %edx, %eax
-; CHECK-BASELINE-NEXT:    xorl %ecx, %esi
+; CHECK-BASELINE-NEXT:    movl %r8d, %eax
 ; CHECK-BASELINE-NEXT:    andl %r9d, %esi
-; CHECK-BASELINE-NEXT:    xorl %ecx, %esi
+; CHECK-BASELINE-NEXT:    andl %r8d, %edi
+; CHECK-BASELINE-NEXT:    notb %al
+; CHECK-BASELINE-NEXT:    notb %r9b
+; CHECK-BASELINE-NEXT:    andb %cl, %r9b
+; CHECK-BASELINE-NEXT:    andb %dl, %al
+; CHECK-BASELINE-NEXT:    orb %dil, %al
+; CHECK-BASELINE-NEXT:    orb %sil, %r9b
 ; CHECK-BASELINE-NEXT:    # kill: def $al killed $al killed $eax
-; CHECK-BASELINE-NEXT:    movl %esi, %edx
+; CHECK-BASELINE-NEXT:    movl %r9d, %edx
 ; CHECK-BASELINE-NEXT:    retq
 ;
 ; CHECK-SSE1-LABEL: out_v2i8:
 ; CHECK-SSE1:       # %bb.0:
-; CHECK-SSE1-NEXT:    movl %edi, %eax
-; CHECK-SSE1-NEXT:    xorl %edx, %eax
-; CHECK-SSE1-NEXT:    andl %r8d, %eax
-; CHECK-SSE1-NEXT:    xorl %edx, %eax
-; CHECK-SSE1-NEXT:    xorl %ecx, %esi
+; CHECK-SSE1-NEXT:    movl %r8d, %eax
 ; CHECK-SSE1-NEXT:    andl %r9d, %esi
-; CHECK-SSE1-NEXT:    xorl %ecx, %esi
+; CHECK-SSE1-NEXT:    andl %r8d, %edi
+; CHECK-SSE1-NEXT:    notb %al
+; CHECK-SSE1-NEXT:    notb %r9b
+; CHECK-SSE1-NEXT:    andb %cl, %r9b
+; CHECK-SSE1-NEXT:    andb %dl, %al
+; CHECK-SSE1-NEXT:    orb %dil, %al
+; CHECK-SSE1-NEXT:    orb %sil, %r9b
 ; CHECK-SSE1-NEXT:    # kill: def $al killed $al killed $eax
-; CHECK-SSE1-NEXT:    movl %esi, %edx
+; CHECK-SSE1-NEXT:    movl %r9d, %edx
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: out_v2i8:
@@ -3142,12 +3147,12 @@ define <4 x i32> @in_v4i32(ptr%px, ptr%py, ptr%pmask) nounwind {
 ; CHECK-SSE1-LABEL: in_v4i32:
 ; CHECK-SSE1:       # %bb.0:
 ; CHECK-SSE1-NEXT:    movq %rdi, %rax
-; CHECK-SSE1-NEXT:    movaps (%rcx), %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, %xmm1
-; CHECK-SSE1-NEXT:    andnps (%rdx), %xmm1
-; CHECK-SSE1-NEXT:    andps (%rsi), %xmm0
-; CHECK-SSE1-NEXT:    orps %xmm1, %xmm0
-; CHECK-SSE1-NEXT:    movaps %xmm0, (%rdi)
+; CHECK-SSE1-NEXT:    movaps (%rdx), %xmm0
+; CHECK-SSE1-NEXT:    movaps (%rsi), %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    andps (%rcx), %xmm1
+; CHECK-SSE1-NEXT:    xorps %xmm0, %xmm1
+; CHECK-SSE1-NEXT:    movaps %xmm1, (%rdi)
 ; CHECK-SSE1-NEXT:    retq
 ;
 ; CHECK-SSE2-LABEL: in_v4i32:

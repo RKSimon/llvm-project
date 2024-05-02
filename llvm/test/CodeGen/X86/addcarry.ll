@@ -317,21 +317,13 @@ define %S @readd(ptr nocapture readonly %this, %S %arg.b) nounwind {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    addq (%rsi), %rdx
-; CHECK-NEXT:    movq 8(%rsi), %rdi
-; CHECK-NEXT:    adcq $0, %rdi
-; CHECK-NEXT:    setb %r10b
-; CHECK-NEXT:    movzbl %r10b, %r10d
-; CHECK-NEXT:    addq %rcx, %rdi
-; CHECK-NEXT:    adcq 16(%rsi), %r10
-; CHECK-NEXT:    setb %cl
-; CHECK-NEXT:    movzbl %cl, %ecx
-; CHECK-NEXT:    addq %r8, %r10
-; CHECK-NEXT:    adcq 24(%rsi), %rcx
-; CHECK-NEXT:    addq %r9, %rcx
-; CHECK-NEXT:    movq %rdx, (%rax)
-; CHECK-NEXT:    movq %rdi, 8(%rax)
-; CHECK-NEXT:    movq %r10, 16(%rax)
-; CHECK-NEXT:    movq %rcx, 24(%rax)
+; CHECK-NEXT:    adcq 8(%rsi), %rcx
+; CHECK-NEXT:    adcq 16(%rsi), %r8
+; CHECK-NEXT:    adcq 24(%rsi), %r9
+; CHECK-NEXT:    movq %rdx, (%rdi)
+; CHECK-NEXT:    movq %rcx, 8(%rdi)
+; CHECK-NEXT:    movq %r8, 16(%rdi)
+; CHECK-NEXT:    movq %r9, 24(%rdi)
 ; CHECK-NEXT:    retq
 entry:
   %0 = extractvalue %S %arg.b, 0
@@ -420,15 +412,15 @@ define { i128, i1 } @saddo_carry_not_1(i128 %x) nounwind {
 define i128 @addcarry_to_subcarry(i64 %a, i64 %b) nounwind {
 ; CHECK-LABEL: addcarry_to_subcarry:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    movq %rsi, %rcx
+; CHECK-NEXT:    notq %rcx
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    addq %rdi, %rcx
+; CHECK-NEXT:    setb %dl
+; CHECK-NEXT:    xorl %eax, %eax
 ; CHECK-NEXT:    cmpq %rsi, %rdi
-; CHECK-NEXT:    notq %rsi
-; CHECK-NEXT:    setae %cl
-; CHECK-NEXT:    addb $-1, %cl
-; CHECK-NEXT:    adcq $0, %rax
-; CHECK-NEXT:    setb %cl
-; CHECK-NEXT:    movzbl %cl, %edx
-; CHECK-NEXT:    addq %rsi, %rax
+; CHECK-NEXT:    setae %al
+; CHECK-NEXT:    addq %rcx, %rax
 ; CHECK-NEXT:    adcq $0, %rdx
 ; CHECK-NEXT:    retq
   %notb = xor i64 %b, -1
@@ -447,9 +439,12 @@ define { i64, i64, i1 } @addcarry_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1) nounw
 ; CHECK-LABEL: addcarry_2x64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -477,9 +472,12 @@ define { i64, i64, i1 } @addcarry_hidden_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1
 ; CHECK-LABEL: addcarry_hidden_2x64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -511,9 +509,12 @@ define { i64, i64, i1 } @addcarry_hidden2_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y
 ; CHECK-LABEL: addcarry_hidden2_2x64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -545,9 +546,12 @@ define { i64, i64, i1 } @addcarry_2x64_or_reversed(i64 %x0, i64 %x1, i64 %y0, i6
 ; CHECK-LABEL: addcarry_2x64_or_reversed:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -575,9 +579,12 @@ define { i64, i64, i1 } @addcarry_2x64_xor_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; CHECK-LABEL: addcarry_2x64_xor_reversed:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    xorb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -605,10 +612,13 @@ define { i64, i64, i1 } @addcarry_2x64_and_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; CHECK-LABEL: addcarry_2x64_and_reversed:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    andb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
-; CHECK-NEXT:    xorl %ecx, %ecx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
   %s0 = extractvalue { i64, i1 } %t0, 0
@@ -635,9 +645,12 @@ define { i64, i64, i1 } @addcarry_2x64_add_reversed(i64 %x0, i64 %x1, i64 %y0, i
 ; CHECK-LABEL: addcarry_2x64_add_reversed:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %rdx, %rax
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    xorb %dil, %cl
 ; CHECK-NEXT:    movq %rsi, %rdx
 ; CHECK-NEXT:    retq
   %t0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %x0, i64 %y0)
@@ -794,17 +807,20 @@ define { i64, i64, i1 } @addcarry_mixed_2x64(i64 %x0, i64 %x1, i64 %y0, i64 %y1)
 define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: add_U320_without_i128_add:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    pushq %rbx
 ; CHECK-NEXT:    movq 16(%rdi), %rax
 ; CHECK-NEXT:    movq 24(%rdi), %r10
 ; CHECK-NEXT:    movq 32(%rdi), %r11
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    movq %rax, %rbx
+; CHECK-NEXT:    adcq %rcx, %rbx
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
-; CHECK-NEXT:    movq %rax, %rdx
-; CHECK-NEXT:    adcq %rcx, %rdx
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    adcq $0, %rbx
 ; CHECK-NEXT:    addq %rcx, %rax
 ; CHECK-NEXT:    movq %r10, %rcx
 ; CHECK-NEXT:    adcq %r8, %rcx
-; CHECK-NEXT:    cmpq %rax, %rdx
+; CHECK-NEXT:    cmpq %rax, %rbx
 ; CHECK-NEXT:    adcq $0, %rcx
 ; CHECK-NEXT:    leaq (%r11,%r9), %rsi
 ; CHECK-NEXT:    addq %r8, %r10
@@ -816,10 +832,12 @@ define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 
 ; CHECK-NEXT:    cmpq %rsi, %r8
 ; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %r9, %r11
-; CHECK-NEXT:    movq %rdx, 16(%rdi)
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    movq %rbx, 16(%rdi)
 ; CHECK-NEXT:    movq %rcx, 24(%rdi)
 ; CHECK-NEXT:    movq %r8, 32(%rdi)
 ; CHECK-NEXT:    adcl $0, %eax
+; CHECK-NEXT:    popq %rbx
 ; CHECK-NEXT:    retq
   %7 = load i64, ptr %0, align 8
   %8 = getelementptr inbounds %struct.U320, ptr %0, i64 0, i32 0, i64 1
@@ -872,10 +890,22 @@ define i32 @add_U320_without_i128_add(ptr nocapture dereferenceable(40) %0, i64 
 define i32 @add_U320_without_i128_or(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: add_U320_without_i128_or:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %sil
+; CHECK-NEXT:    orb %al, %sil
+; CHECK-NEXT:    addq 24(%rdi), %r8
+; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    addb $-1, %sil
 ; CHECK-NEXT:    adcq %rcx, 16(%rdi)
-; CHECK-NEXT:    adcq %r8, 24(%rdi)
+; CHECK-NEXT:    adcq $0, %r8
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %al, %cl
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    movq %r8, 24(%rdi)
+; CHECK-NEXT:    addb $-1, %cl
 ; CHECK-NEXT:    adcq %r9, 32(%rdi)
 ; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    movzbl %al, %eax
@@ -927,10 +957,22 @@ define i32 @add_U320_without_i128_or(ptr nocapture dereferenceable(40) %0, i64 %
 define i32 @add_U320_without_i128_xor(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: add_U320_without_i128_xor:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %sil
+; CHECK-NEXT:    xorb %al, %sil
+; CHECK-NEXT:    addq 24(%rdi), %r8
+; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    addb $-1, %sil
 ; CHECK-NEXT:    adcq %rcx, 16(%rdi)
-; CHECK-NEXT:    adcq %r8, 24(%rdi)
+; CHECK-NEXT:    adcq $0, %r8
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    xorb %al, %cl
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    movq %r8, 24(%rdi)
+; CHECK-NEXT:    addb $-1, %cl
 ; CHECK-NEXT:    adcq %r9, 32(%rdi)
 ; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    movzbl %al, %eax
@@ -984,9 +1026,15 @@ define i32 @add_U320_without_i128_xor(ptr nocapture dereferenceable(40) %0, i64 
 define i32 @bogus_add_U320_without_i128_and(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: bogus_add_U320_without_i128_and:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
-; CHECK-NEXT:    addq %rcx, 16(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %sil
+; CHECK-NEXT:    andb %al, %sil
+; CHECK-NEXT:    addb $-1, %sil
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    adcq %rcx, 16(%rdi)
 ; CHECK-NEXT:    addq %r8, 24(%rdi)
 ; CHECK-NEXT:    addq %r9, 32(%rdi)
 ; CHECK-NEXT:    xorl %eax, %eax
@@ -1038,11 +1086,25 @@ define i32 @bogus_add_U320_without_i128_and(ptr nocapture dereferenceable(40) %0
 define void @add_U320_without_i128_or_no_ret(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: add_U320_without_i128_or_no_ret:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %sil
+; CHECK-NEXT:    orb %al, %sil
+; CHECK-NEXT:    addq 24(%rdi), %r8
+; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    addb $-1, %sil
 ; CHECK-NEXT:    adcq %rcx, 16(%rdi)
-; CHECK-NEXT:    adcq %r8, 24(%rdi)
-; CHECK-NEXT:    adcq %r9, 32(%rdi)
+; CHECK-NEXT:    adcq $0, %r8
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    addq 32(%rdi), %r9
+; CHECK-NEXT:    orb %al, %cl
+; CHECK-NEXT:    movzbl %cl, %eax
+; CHECK-NEXT:    addq %r9, %rax
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    movq %r8, 24(%rdi)
+; CHECK-NEXT:    movq %rax, 32(%rdi)
 ; CHECK-NEXT:    retq
   %7 = load i64, ptr %0, align 8
   %8 = getelementptr inbounds %struct.U320, ptr %0, i64 0, i32 0, i64 1
@@ -1087,12 +1149,24 @@ define void @add_U320_without_i128_or_no_ret(ptr nocapture dereferenceable(40) %
 define i32 @add_U320_uaddo(ptr nocapture dereferenceable(40) %0, i64 %1, i64 %2, i64 %3, i64 %4, i64 %5) nounwind {
 ; CHECK-LABEL: add_U320_uaddo:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq 8(%rdi), %rdx
+; CHECK-NEXT:    setb %al
 ; CHECK-NEXT:    addq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rdx, 8(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %sil
+; CHECK-NEXT:    orb %al, %sil
+; CHECK-NEXT:    addq 24(%rdi), %r8
+; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    addb $-1, %sil
 ; CHECK-NEXT:    adcq %rcx, 16(%rdi)
-; CHECK-NEXT:    adcq %r8, 24(%rdi)
+; CHECK-NEXT:    adcq $0, %r8
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %al, %cl
+; CHECK-NEXT:    addb $-1, %cl
 ; CHECK-NEXT:    adcq %r9, 32(%rdi)
 ; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    movq %rdx, 8(%rdi)
+; CHECK-NEXT:    movq %r8, 24(%rdi)
 ; CHECK-NEXT:    movzbl %al, %eax
 ; CHECK-NEXT:    retq
   %7 = load i64, ptr %0, align 8
@@ -1155,14 +1229,22 @@ define void @PR39464(ptr noalias nocapture sret(%struct.U192) %0, ptr nocapture 
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    movq (%rsi), %rcx
-; CHECK-NEXT:    addq (%rdx), %rcx
-; CHECK-NEXT:    movq %rcx, (%rdi)
-; CHECK-NEXT:    movq 8(%rsi), %rcx
-; CHECK-NEXT:    adcq 8(%rdx), %rcx
-; CHECK-NEXT:    movq %rcx, 8(%rdi)
-; CHECK-NEXT:    movq 16(%rsi), %rcx
-; CHECK-NEXT:    adcq 16(%rdx), %rcx
-; CHECK-NEXT:    movq %rcx, 16(%rdi)
+; CHECK-NEXT:    movq (%rdx), %rdi
+; CHECK-NEXT:    leaq (%rcx,%rdi), %r8
+; CHECK-NEXT:    movq %r8, (%rax)
+; CHECK-NEXT:    movq 8(%rsi), %r8
+; CHECK-NEXT:    addq 8(%rdx), %r8
+; CHECK-NEXT:    setb %r9b
+; CHECK-NEXT:    addq %rdi, %rcx
+; CHECK-NEXT:    adcq $0, %r8
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    orb %r9b, %cl
+; CHECK-NEXT:    movzbl %cl, %ecx
+; CHECK-NEXT:    movq %r8, 8(%rax)
+; CHECK-NEXT:    movq 16(%rsi), %rsi
+; CHECK-NEXT:    addq 16(%rdx), %rsi
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    movq %rsi, 16(%rax)
 ; CHECK-NEXT:    retq
   %4 = load i64, ptr %1, align 8
   %5 = load i64, ptr %2, align 8
@@ -1202,9 +1284,12 @@ define void @PR39464(ptr noalias nocapture sret(%struct.U192) %0, ptr nocapture 
 define zeroext i1 @uaddo_U128_without_i128_or(i64 %0, i64 %1, i64 %2, i64 %3, ptr nocapture %4) nounwind {
 ; CHECK-LABEL: uaddo_U128_without_i128_or:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    addq %rcx, %rsi
+; CHECK-NEXT:    setb %cl
 ; CHECK-NEXT:    addq %rdx, %rdi
-; CHECK-NEXT:    adcq %rcx, %rsi
+; CHECK-NEXT:    adcq $0, %rsi
 ; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    orb %cl, %al
 ; CHECK-NEXT:    movq %rsi, (%r8)
 ; CHECK-NEXT:    movq %rdi, 8(%r8)
 ; CHECK-NEXT:    retq
@@ -1229,12 +1314,18 @@ define void @add_U192_without_i128_or(ptr sret(%uint192) %0, i64 %1, i64 %2, i64
 ; CHECK-LABEL: add_U192_without_i128_or:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    movq %rdi, %rax
+; CHECK-NEXT:    addq %r9, %rdx
+; CHECK-NEXT:    setb %dil
 ; CHECK-NEXT:    addq %r8, %rsi
-; CHECK-NEXT:    adcq %r9, %rdx
-; CHECK-NEXT:    adcq {{[0-9]+}}(%rsp), %rcx
-; CHECK-NEXT:    movq %rcx, (%rdi)
-; CHECK-NEXT:    movq %rdx, 8(%rdi)
-; CHECK-NEXT:    movq %rsi, 16(%rdi)
+; CHECK-NEXT:    adcq $0, %rdx
+; CHECK-NEXT:    setb %r8b
+; CHECK-NEXT:    orb %dil, %r8b
+; CHECK-NEXT:    addq {{[0-9]+}}(%rsp), %rcx
+; CHECK-NEXT:    movzbl %r8b, %edi
+; CHECK-NEXT:    addq %rcx, %rdi
+; CHECK-NEXT:    movq %rdi, (%rax)
+; CHECK-NEXT:    movq %rdx, 8(%rax)
+; CHECK-NEXT:    movq %rsi, 16(%rax)
 ; CHECK-NEXT:    retq
   %8 = add i64 %4, %1
   %9 = icmp ult i64 %8, %1
@@ -1266,9 +1357,14 @@ define void @add_U256_without_i128_or_by_i64_words(ptr sret(%uint256) %0, ptr %1
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    movq (%rdx), %rcx
 ; CHECK-NEXT:    movq 8(%rdx), %rdi
+; CHECK-NEXT:    addq 8(%rsi), %rdi
+; CHECK-NEXT:    setb %r8b
 ; CHECK-NEXT:    addq (%rsi), %rcx
-; CHECK-NEXT:    adcq 8(%rsi), %rdi
+; CHECK-NEXT:    adcq $0, %rdi
+; CHECK-NEXT:    setb %r9b
+; CHECK-NEXT:    orb %r8b, %r9b
 ; CHECK-NEXT:    movq 16(%rdx), %r8
+; CHECK-NEXT:    addb $-1, %r9b
 ; CHECK-NEXT:    adcq 16(%rsi), %r8
 ; CHECK-NEXT:    movq 24(%rdx), %rdx
 ; CHECK-NEXT:    adcq 24(%rsi), %rdx
@@ -1326,15 +1422,22 @@ define void @add_U256_without_i128_or_recursive(ptr sret(%uint256) %0, ptr %1, p
 ; CHECK-NEXT:    movq %rdi, %rax
 ; CHECK-NEXT:    movq (%rdx), %rcx
 ; CHECK-NEXT:    movq 8(%rdx), %rdi
+; CHECK-NEXT:    addq 8(%rsi), %rdi
+; CHECK-NEXT:    setb %r8b
 ; CHECK-NEXT:    addq (%rsi), %rcx
-; CHECK-NEXT:    adcq 8(%rsi), %rdi
+; CHECK-NEXT:    adcq $0, %rdi
+; CHECK-NEXT:    setb %r9b
+; CHECK-NEXT:    orb %r8b, %r9b
 ; CHECK-NEXT:    movq 16(%rdx), %r8
 ; CHECK-NEXT:    movq 24(%rdx), %rdx
-; CHECK-NEXT:    adcq 16(%rsi), %r8
+; CHECK-NEXT:    addq 16(%rsi), %r8
 ; CHECK-NEXT:    adcq 24(%rsi), %rdx
+; CHECK-NEXT:    movzbl %r9b, %esi
+; CHECK-NEXT:    addq %r8, %rsi
+; CHECK-NEXT:    adcq $0, %rdx
 ; CHECK-NEXT:    movq %rcx, (%rax)
 ; CHECK-NEXT:    movq %rdi, 8(%rax)
-; CHECK-NEXT:    movq %r8, 16(%rax)
+; CHECK-NEXT:    movq %rsi, 16(%rax)
 ; CHECK-NEXT:    movq %rdx, 24(%rax)
 ; CHECK-NEXT:    retq
   %4 = load i64, ptr %1, align 8
@@ -1494,12 +1597,7 @@ define { i64, i64 } @addcarry_commutative_2(i64 %x0, i64 %x1, i64 %y0, i64 %y1) 
 define i1 @pr84831(i64 %arg) {
 ; CHECK-LABEL: pr84831:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    testq %rdi, %rdi
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    xorl %ecx, %ecx
-; CHECK-NEXT:    addb $-1, %al
-; CHECK-NEXT:    adcq $1, %rcx
-; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    xorl %eax, %eax
 ; CHECK-NEXT:    retq
   %a = icmp ult i64 0, %arg
   %add1 = add i64 0, 1
@@ -1517,9 +1615,18 @@ define i1 @pr84831(i64 %arg) {
 define void @pr169691(ptr %p0, i64 %implicit, i1 zeroext %carry) {
 ; CHECK-LABEL: pr169691:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    addb $-1, %dl
-; CHECK-NEXT:    adcq %rsi, (%rdi)
-; CHECK-NEXT:    adcq %rsi, 8(%rdi)
+; CHECK-NEXT:    movq (%rdi), %rax
+; CHECK-NEXT:    addq %rsi, %rax
+; CHECK-NEXT:    setb %cl
+; CHECK-NEXT:    movl %edx, %edx
+; CHECK-NEXT:    addq %rax, %rdx
+; CHECK-NEXT:    setb %al
+; CHECK-NEXT:    orb %cl, %al
+; CHECK-NEXT:    movq %rdx, (%rdi)
+; CHECK-NEXT:    addq 8(%rdi), %rsi
+; CHECK-NEXT:    movzbl %al, %eax
+; CHECK-NEXT:    addq %rsi, %rax
+; CHECK-NEXT:    movq %rax, 8(%rdi)
 ; CHECK-NEXT:    retq
   %a0 = load i64, ptr %p0, align 8
   %uaddo0 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %a0, i64 %implicit)

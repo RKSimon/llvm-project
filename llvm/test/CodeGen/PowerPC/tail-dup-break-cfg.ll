@@ -104,8 +104,9 @@ define void @tail_dup_dont_break_cfg(i32 %tag) {
 ; CHECK-NEXT:    bl a
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:  .LBB1_2: # %test2
-; CHECK-NEXT:    andi. 3, 30, 2
-; CHECK-NEXT:    beq 0, .LBB1_4
+; CHECK-NEXT:    srwi 3, 30, 1
+; CHECK-NEXT:    andi. 3, 3, 1
+; CHECK-NEXT:    bc 4, 1, .LBB1_4
 ; CHECK-NEXT:  # %bb.3: # %body2
 ; CHECK-NEXT:    bl b
 ; CHECK-NEXT:    nop

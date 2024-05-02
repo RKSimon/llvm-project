@@ -138,7 +138,7 @@ define i16 @clmul_i16(i16 %a, i16 %b) nounwind {
 ; SCALAR-NEXT:    andl $16384, %eax # imm = 0x4000
 ; SCALAR-NEXT:    imull %edi, %eax
 ; SCALAR-NEXT:    xorl %r8d, %eax
-; SCALAR-NEXT:    andl $-32768, %esi # imm = 0x8000
+; SCALAR-NEXT:    andl $32768, %esi # imm = 0x8000
 ; SCALAR-NEXT:    imull %edi, %esi
 ; SCALAR-NEXT:    xorl %esi, %eax
 ; SCALAR-NEXT:    xorl %ecx, %eax
@@ -660,9 +660,9 @@ define i64 @clmul_i64(i64 %a, i64 %b) nounwind {
 define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ; SCALAR-LABEL: clmulr_i8:
 ; SCALAR:       # %bb.0:
+; SCALAR-NEXT:    movzbl %dil, %eax
 ; SCALAR-NEXT:    movl %esi, %ecx
 ; SCALAR-NEXT:    andl $2, %ecx
-; SCALAR-NEXT:    movzbl %dil, %eax
 ; SCALAR-NEXT:    imull %eax, %ecx
 ; SCALAR-NEXT:    movl %esi, %edx
 ; SCALAR-NEXT:    andl $1, %edx
@@ -697,9 +697,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulr_i8:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -709,9 +709,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ;
 ; AVX-LABEL: clmulr_i8:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzbl %sil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movzbl %sil, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -729,9 +729,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ; SCALAR-LABEL: clmulr_i16:
 ; SCALAR:       # %bb.0:
+; SCALAR-NEXT:    movzwl %di, %eax
 ; SCALAR-NEXT:    movl %esi, %ecx
 ; SCALAR-NEXT:    andl $2, %ecx
-; SCALAR-NEXT:    movzwl %di, %eax
 ; SCALAR-NEXT:    imull %eax, %ecx
 ; SCALAR-NEXT:    movl %esi, %edx
 ; SCALAR-NEXT:    andl $1, %edx
@@ -798,9 +798,9 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulr_i16:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzwl %si, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzwl %di, %eax
+; SSE-PCLMUL-NEXT:    movzwl %si, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -810,9 +810,9 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ;
 ; AVX-LABEL: clmulr_i16:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzwl %si, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzwl %di, %eax
+; AVX-NEXT:    movzwl %si, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -1403,9 +1403,9 @@ define i64 @clmulr_i64(i64 %a, i64 %b) nounwind {
 define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ; SCALAR-LABEL: clmulh_i8:
 ; SCALAR:       # %bb.0:
+; SCALAR-NEXT:    movzbl %dil, %eax
 ; SCALAR-NEXT:    movl %esi, %ecx
 ; SCALAR-NEXT:    andl $2, %ecx
-; SCALAR-NEXT:    movzbl %dil, %eax
 ; SCALAR-NEXT:    imull %eax, %ecx
 ; SCALAR-NEXT:    movl %esi, %edx
 ; SCALAR-NEXT:    andl $1, %edx
@@ -1440,9 +1440,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulh_i8:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -1452,9 +1452,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ;
 ; AVX-LABEL: clmulh_i8:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzbl %sil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzbl %dil, %eax
+; AVX-NEXT:    movzbl %sil, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -1472,9 +1472,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ; SCALAR-LABEL: clmulh_i16:
 ; SCALAR:       # %bb.0:
+; SCALAR-NEXT:    movzwl %di, %eax
 ; SCALAR-NEXT:    movl %esi, %ecx
 ; SCALAR-NEXT:    andl $2, %ecx
-; SCALAR-NEXT:    movzwl %di, %eax
 ; SCALAR-NEXT:    imull %eax, %ecx
 ; SCALAR-NEXT:    movl %esi, %edx
 ; SCALAR-NEXT:    andl $1, %edx
@@ -1541,9 +1541,9 @@ define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ;
 ; SSE-PCLMUL-LABEL: clmulh_i16:
 ; SSE-PCLMUL:       # %bb.0:
-; SSE-PCLMUL-NEXT:    movzwl %si, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
 ; SSE-PCLMUL-NEXT:    movzwl %di, %eax
+; SSE-PCLMUL-NEXT:    movzwl %si, %ecx
+; SSE-PCLMUL-NEXT:    movd %ecx, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -1553,9 +1553,9 @@ define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ;
 ; AVX-LABEL: clmulh_i16:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    movzwl %si, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
 ; AVX-NEXT:    movzwl %di, %eax
+; AVX-NEXT:    movzwl %si, %ecx
+; AVX-NEXT:    vmovd %ecx, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -2278,47 +2278,47 @@ define void @commutative_clmul_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-LABEL: commutative_clmulh_i8:
 ; SCALAR:       # %bb.0:
-; SCALAR-NEXT:    movl %edi, %r8d
-; SCALAR-NEXT:    andl $2, %r8d
-; SCALAR-NEXT:    movzbl %sil, %eax
+; SCALAR-NEXT:    movzbl %dil, %eax
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $2, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r8d
+; SCALAR-NEXT:    andl $1, %r8d
 ; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $1, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %r8d, %esi
-; SCALAR-NEXT:    movl %edi, %r8d
-; SCALAR-NEXT:    andl $4, %r8d
-; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    movl %edi, %r9d
+; SCALAR-NEXT:    xorl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $4, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r9d
 ; SCALAR-NEXT:    andl $8, %r9d
 ; SCALAR-NEXT:    imull %eax, %r9d
+; SCALAR-NEXT:    xorl %edi, %r9d
 ; SCALAR-NEXT:    xorl %r8d, %r9d
-; SCALAR-NEXT:    xorl %esi, %r9d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $16, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    movl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $16, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r8d
 ; SCALAR-NEXT:    andl $32, %r8d
 ; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    xorl %esi, %r8d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $64, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %r8d, %esi
-; SCALAR-NEXT:    xorl %r9d, %esi
-; SCALAR-NEXT:    andl $128, %edi
+; SCALAR-NEXT:    xorl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $64, %edi
 ; SCALAR-NEXT:    imull %eax, %edi
-; SCALAR-NEXT:    xorl %esi, %edi
-; SCALAR-NEXT:    shrl $8, %edi
-; SCALAR-NEXT:    movb %dil, (%rdx)
-; SCALAR-NEXT:    movb %dil, (%rcx)
+; SCALAR-NEXT:    xorl %r8d, %edi
+; SCALAR-NEXT:    xorl %r9d, %edi
+; SCALAR-NEXT:    andl $128, %esi
+; SCALAR-NEXT:    imull %eax, %esi
+; SCALAR-NEXT:    xorl %edi, %esi
+; SCALAR-NEXT:    shrl $8, %esi
+; SCALAR-NEXT:    movb %sil, (%rdx)
+; SCALAR-NEXT:    movb %sil, (%rcx)
 ; SCALAR-NEXT:    retq
 ;
 ; SSE-PCLMUL-LABEL: commutative_clmulh_i8:
 ; SSE-PCLMUL:       # %bb.0:
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %esi
+; SSE-PCLMUL-NEXT:    movd %esi, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2330,8 +2330,8 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; AVX-LABEL: commutative_clmulh_i8:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    movzbl %dil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
-; AVX-NEXT:    movzbl %sil, %eax
+; AVX-NEXT:    movzbl %sil, %esi
+; AVX-NEXT:    vmovd %esi, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax
@@ -2355,47 +2355,47 @@ define void @commutative_clmulh_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; SCALAR-LABEL: commutative_clmulr_i8:
 ; SCALAR:       # %bb.0:
-; SCALAR-NEXT:    movl %edi, %r8d
-; SCALAR-NEXT:    andl $2, %r8d
-; SCALAR-NEXT:    movzbl %sil, %eax
+; SCALAR-NEXT:    movzbl %dil, %eax
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $2, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r8d
+; SCALAR-NEXT:    andl $1, %r8d
 ; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $1, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %r8d, %esi
-; SCALAR-NEXT:    movl %edi, %r8d
-; SCALAR-NEXT:    andl $4, %r8d
-; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    movl %edi, %r9d
+; SCALAR-NEXT:    xorl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $4, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r9d
 ; SCALAR-NEXT:    andl $8, %r9d
 ; SCALAR-NEXT:    imull %eax, %r9d
+; SCALAR-NEXT:    xorl %edi, %r9d
 ; SCALAR-NEXT:    xorl %r8d, %r9d
-; SCALAR-NEXT:    xorl %esi, %r9d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $16, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    movl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $16, %edi
+; SCALAR-NEXT:    imull %eax, %edi
+; SCALAR-NEXT:    movl %esi, %r8d
 ; SCALAR-NEXT:    andl $32, %r8d
 ; SCALAR-NEXT:    imull %eax, %r8d
-; SCALAR-NEXT:    xorl %esi, %r8d
-; SCALAR-NEXT:    movl %edi, %esi
-; SCALAR-NEXT:    andl $64, %esi
-; SCALAR-NEXT:    imull %eax, %esi
-; SCALAR-NEXT:    xorl %r8d, %esi
-; SCALAR-NEXT:    xorl %r9d, %esi
-; SCALAR-NEXT:    andl $128, %edi
+; SCALAR-NEXT:    xorl %edi, %r8d
+; SCALAR-NEXT:    movl %esi, %edi
+; SCALAR-NEXT:    andl $64, %edi
 ; SCALAR-NEXT:    imull %eax, %edi
-; SCALAR-NEXT:    xorl %esi, %edi
-; SCALAR-NEXT:    shrl $7, %edi
-; SCALAR-NEXT:    movb %dil, (%rdx)
-; SCALAR-NEXT:    movb %dil, (%rcx)
+; SCALAR-NEXT:    xorl %r8d, %edi
+; SCALAR-NEXT:    xorl %r9d, %edi
+; SCALAR-NEXT:    andl $128, %esi
+; SCALAR-NEXT:    imull %eax, %esi
+; SCALAR-NEXT:    xorl %edi, %esi
+; SCALAR-NEXT:    shrl $7, %esi
+; SCALAR-NEXT:    movb %sil, (%rdx)
+; SCALAR-NEXT:    movb %sil, (%rcx)
 ; SCALAR-NEXT:    retq
 ;
 ; SSE-PCLMUL-LABEL: commutative_clmulr_i8:
 ; SSE-PCLMUL:       # %bb.0:
 ; SSE-PCLMUL-NEXT:    movzbl %dil, %eax
-; SSE-PCLMUL-NEXT:    movd %eax, %xmm0
-; SSE-PCLMUL-NEXT:    movzbl %sil, %eax
+; SSE-PCLMUL-NEXT:    movzbl %sil, %esi
+; SSE-PCLMUL-NEXT:    movd %esi, %xmm0
 ; SSE-PCLMUL-NEXT:    movd %eax, %xmm1
 ; SSE-PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; SSE-PCLMUL-NEXT:    movq %xmm1, %rax
@@ -2407,8 +2407,8 @@ define void @commutative_clmulr_i8(i8 %x, i8 %y, ptr %p0, ptr %p1) nounwind {
 ; AVX-LABEL: commutative_clmulr_i8:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    movzbl %dil, %eax
-; AVX-NEXT:    vmovd %eax, %xmm0
-; AVX-NEXT:    movzbl %sil, %eax
+; AVX-NEXT:    movzbl %sil, %esi
+; AVX-NEXT:    vmovd %esi, %xmm0
 ; AVX-NEXT:    vmovd %eax, %xmm1
 ; AVX-NEXT:    vpclmulqdq $0, %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vmovq %xmm0, %rax

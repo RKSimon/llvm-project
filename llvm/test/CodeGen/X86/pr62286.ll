@@ -32,12 +32,13 @@ define i64 @PR62286(i32 %a) {
 ; AVX1-NEXT:    vpaddd %xmm0, %xmm0, %xmm0
 ; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; AVX1-NEXT:    vblendps {{.*#+}} ymm0 = ymm0[0],ymm1[1,2,3],ymm0[4],ymm1[5,6,7]
-; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm1
-; AVX1-NEXT:    vorps %xmm1, %xmm0, %xmm0
-; AVX1-NEXT:    vpmovsxdq %xmm0, %xmm1
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vshufps {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX1-NEXT:    vpmovsxdq %xmm1, %xmm1
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm2
+; AVX1-NEXT:    vpmovzxdq {{.*#+}} xmm2 = xmm2[0],zero,xmm2[1],zero
 ; AVX1-NEXT:    vpmovsxdq %xmm0, %xmm0
-; AVX1-NEXT:    vpaddq %xmm0, %xmm1, %xmm0
+; AVX1-NEXT:    vpor %xmm2, %xmm0, %xmm0
+; AVX1-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX1-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vmovq %xmm0, %rax
@@ -52,10 +53,11 @@ define i64 @PR62286(i32 %a) {
 ; AVX2-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
 ; AVX2-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0],ymm0[1,2,3],ymm1[4],ymm0[5,6,7]
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpor %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpmovzxdq {{.*#+}} ymm1 = xmm1[0],zero,xmm1[1],zero,xmm1[2],zero,xmm1[3],zero
 ; AVX2-NEXT:    vpmovsxdq %xmm0, %ymm0
+; AVX2-NEXT:    vpor %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovq %xmm0, %rax
@@ -66,16 +68,16 @@ define i64 @PR62286(i32 %a) {
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vmovd %edi, %xmm0
 ; AVX512-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,1,0]
-; AVX512-NEXT:    vpaddd %ymm0, %ymm0, %ymm1
-; AVX512-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm0
+; AVX512-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm1
 ; AVX512-NEXT:    movw $4369, %ax # imm = 0x1111
 ; AVX512-NEXT:    kmovd %eax, %k1
-; AVX512-NEXT:    vmovdqa32 %zmm1, %zmm0 {%k1}
-; AVX512-NEXT:    vpmovsxdq %ymm0, %zmm0
-; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
-; AVX512-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpslld $1, %zmm0, %zmm1 {%k1}
+; AVX512-NEXT:    vextracti64x4 $1, %zmm1, %ymm0
+; AVX512-NEXT:    vpmovzxdq {{.*#+}} zmm0 = ymm0[0],zero,ymm0[1],zero,ymm0[2],zero,ymm0[3],zero,ymm0[4],zero,ymm0[5],zero,ymm0[6],zero,ymm0[7],zero
+; AVX512-NEXT:    vpmovsxdq %ymm1, %zmm1
+; AVX512-NEXT:    vporq %zmm0, %zmm1, %zmm0
 ; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX512-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX512-NEXT:    vmovq %xmm0, %rax

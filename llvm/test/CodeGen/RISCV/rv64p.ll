@@ -316,8 +316,12 @@ define i64 @cls_i64_2(i64 %x) {
 define i64 @cls_i64_not_32(i64 %x) {
 ; CHECK-LABEL: cls_i64_not_32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srai a0, a0, 16
-; CHECK-NEXT:    cls a0, a0
+; CHECK-NEXT:    srai a1, a0, 16
+; CHECK-NEXT:    srai a0, a0, 63
+; CHECK-NEXT:    xor a0, a1, a0
+; CHECK-NEXT:    slli a0, a0, 1
+; CHECK-NEXT:    addi a0, a0, 1
+; CHECK-NEXT:    clz a0, a0
 ; CHECK-NEXT:    ori a0, a0, 16
 ; CHECK-NEXT:    ret
   %val = ashr i64 %x, 16

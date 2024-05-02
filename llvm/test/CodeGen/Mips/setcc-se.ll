@@ -346,8 +346,7 @@ if.end:
 define void @sltiu_beq1(i32 %a) {
 ; CHECK-LABEL: sltiu_beq1:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    addiu $1, $zero, 32767
-; CHECK-NEXT:    sltu $1, $1, $4
+; CHECK-NEXT:    srl $1, $4, 15
 ; CHECK-NEXT:    bnez $1, $BB7_2
 ; CHECK-NEXT:    nop
 ; CHECK-NEXT:  # %bb.1: # %if.then
@@ -370,14 +369,10 @@ define void @sltiu_beq1(i32 %a) {
 ; MMR6-NEXT:    # <MCOperand Reg:V0>
 ; MMR6-NEXT:    # <MCOperand Reg:V0>
 ; MMR6-NEXT:    # <MCOperand Reg:T9>>
-; MMR6-NEXT:    addiu $1, $zero, 32767 # <MCInst #[[#MCINST15]] ADDiu_MM
+; MMR6-NEXT:    srl $1, $4, 15 # <MCInst #[[#MCINST16:]] SRL_MM
 ; MMR6-NEXT:    # <MCOperand Reg:AT>
-; MMR6-NEXT:    # <MCOperand Reg:ZERO>
-; MMR6-NEXT:    # <MCOperand Imm:32767>>
-; MMR6-NEXT:    sltu $1, $1, $4 # <MCInst #[[#MCINST3]] SLTu_MM
-; MMR6-NEXT:    # <MCOperand Reg:AT>
-; MMR6-NEXT:    # <MCOperand Reg:AT>
-; MMR6-NEXT:    # <MCOperand Reg:A0>>
+; MMR6-NEXT:    # <MCOperand Reg:A0>
+; MMR6-NEXT:    # <MCOperand Imm:15>>
 ; MMR6-NEXT:    bnezc $1, $BB7_2 # <MCInst #[[#MCINST14]] BNEZC_MMR6
 ; MMR6-NEXT:    # <MCOperand Reg:AT>
 ; MMR6-NEXT:    # <MCOperand Expr:$BB7_2>>

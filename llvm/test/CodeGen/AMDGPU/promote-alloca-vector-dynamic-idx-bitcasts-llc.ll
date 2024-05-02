@@ -11,9 +11,9 @@ define amdgpu_kernel void @test_bitcast_llc_v128i8_v16i8(ptr addrspace(1) %out, 
 ; GFX9-NEXT:    s_lshl_b32 s0, s0, 8
 ; GFX9-NEXT:    s_and_b32 s1, s0, 0xff
 ; GFX9-NEXT:    s_or_b32 s0, s1, s0
-; GFX9-NEXT:    s_and_b32 s1, s0, 0xffff
-; GFX9-NEXT:    s_lshl_b32 s0, s0, 16
-; GFX9-NEXT:    s_or_b32 s0, s1, s0
+; GFX9-NEXT:    s_lshl_b32 s1, s0, 16
+; GFX9-NEXT:    s_and_b32 s0, s0, 0xffff
+; GFX9-NEXT:    s_or_b32 s0, s0, s1
 ; GFX9-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX9-NEXT:    s_add_i32 s33, s33, s33
 ; GFX9-NEXT:    s_mov_b32 s1, s0
@@ -90,10 +90,10 @@ define amdgpu_kernel void @test_bitcast_llc_v128i8_v16i8(ptr addrspace(1) %out, 
 ; GFX11-NEXT:    s_and_b32 s1, s0, 0xff
 ; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
 ; GFX11-NEXT:    s_or_b32 s0, s1, s0
-; GFX11-NEXT:    s_and_b32 s1, s0, 0xffff
-; GFX11-NEXT:    s_lshl_b32 s0, s0, 16
+; GFX11-NEXT:    s_lshl_b32 s1, s0, 16
+; GFX11-NEXT:    s_and_b32 s0, s0, 0xffff
 ; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
-; GFX11-NEXT:    s_or_b32 s0, s1, s0
+; GFX11-NEXT:    s_or_b32 s0, s0, s1
 ; GFX11-NEXT:    s_mov_b32 s1, s0
 ; GFX11-NEXT:    s_mov_b32 s2, s0
 ; GFX11-NEXT:    s_mov_b32 s3, s0
@@ -163,10 +163,10 @@ define amdgpu_kernel void @test_bitcast_llc_v128i8_v16i8(ptr addrspace(1) %out, 
 ; GFX12-NEXT:    s_and_b32 s1, s0, 0xff
 ; GFX12-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
 ; GFX12-NEXT:    s_or_b32 s0, s1, s0
-; GFX12-NEXT:    s_and_b32 s1, s0, 0xffff
-; GFX12-NEXT:    s_lshl_b32 s0, s0, 16
+; GFX12-NEXT:    s_lshl_b32 s1, s0, 16
+; GFX12-NEXT:    s_and_b32 s0, s0, 0xffff
 ; GFX12-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
-; GFX12-NEXT:    s_or_b32 s0, s1, s0
+; GFX12-NEXT:    s_or_b32 s0, s0, s1
 ; GFX12-NEXT:    s_mov_b32 s1, s0
 ; GFX12-NEXT:    s_mov_b32 s2, s0
 ; GFX12-NEXT:    s_mov_b32 s3, s0

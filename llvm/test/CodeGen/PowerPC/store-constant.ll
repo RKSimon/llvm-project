@@ -154,12 +154,14 @@ define void @setExcessiveNeg() {
 ; CHECK-LABEL: setExcessiveNeg:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    addis 3, 2, .LC2@toc@ha
-; CHECK-NEXT:    lis 4, -1
+; CHECK-NEXT:    li 4, -2
 ; CHECK-NEXT:    ld 3, .LC2@toc@l(3)
-; CHECK-NEXT:    ori 4, 4, 32767
+; CHECK-NEXT:    rldicl 4, 4, 15, 32
 ; CHECK-NEXT:    stw 4, 0(3)
 ; CHECK-NEXT:    addis 3, 2, .LC3@toc@ha
+; CHECK-NEXT:    lis 4, -1
 ; CHECK-NEXT:    ld 3, .LC3@toc@l(3)
+; CHECK-NEXT:    ori 4, 4, 32767
 ; CHECK-NEXT:    std 4, 0(3)
 ; CHECK-NEXT:    blr
 entry:

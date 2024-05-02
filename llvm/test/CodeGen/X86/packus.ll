@@ -141,25 +141,47 @@ define <8 x i16> @trunc_lshr_v8i32(<8 x i32> %a) nounwind {
 }
 
 define <8 x i16> @trunc_lshr_v4i64_demandedelts(<4 x i64> %a0) {
-; SSE2-LABEL: trunc_lshr_v4i64_demandedelts:
-; SSE2:       # %bb.0:
-; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [1,1,1,1]
-; SSE2-NEXT:    pand %xmm2, %xmm1
-; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
-; SSE2-NEXT:    pand %xmm2, %xmm0
-; SSE2-NEXT:    packuswb %xmm1, %xmm0
-; SSE2-NEXT:    ret{{[l|q]}}
+; X86-SSE2-LABEL: trunc_lshr_v4i64_demandedelts:
+; X86-SSE2:       # %bb.0:
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
+; X86-SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [1,1,1,1]
+; X86-SSE2-NEXT:    pand %xmm2, %xmm1
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; X86-SSE2-NEXT:    pand %xmm2, %xmm0
+; X86-SSE2-NEXT:    packuswb %xmm1, %xmm0
+; X86-SSE2-NEXT:    retl
 ;
-; SSE4-LABEL: trunc_lshr_v4i64_demandedelts:
-; SSE4:       # %bb.0:
-; SSE4-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
-; SSE4-NEXT:    pmovsxbd {{.*#+}} xmm2 = [1,1,1,1]
-; SSE4-NEXT:    pand %xmm2, %xmm1
-; SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
-; SSE4-NEXT:    pand %xmm2, %xmm0
-; SSE4-NEXT:    packusdw %xmm1, %xmm0
-; SSE4-NEXT:    ret{{[l|q]}}
+; X64-SSE2-LABEL: trunc_lshr_v4i64_demandedelts:
+; X64-SSE2:       # %bb.0:
+; X64-SSE2-NEXT:    movl $1, %eax
+; X64-SSE2-NEXT:    movq %rax, %xmm2
+; X64-SSE2-NEXT:    pand %xmm2, %xmm0
+; X64-SSE2-NEXT:    pand %xmm2, %xmm1
+; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
+; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; X64-SSE2-NEXT:    packuswb %xmm1, %xmm0
+; X64-SSE2-NEXT:    retq
+;
+; X86-SSE4-LABEL: trunc_lshr_v4i64_demandedelts:
+; X86-SSE4:       # %bb.0:
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
+; X86-SSE4-NEXT:    pmovsxbd {{.*#+}} xmm2 = [1,1,1,1]
+; X86-SSE4-NEXT:    pand %xmm2, %xmm1
+; X86-SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; X86-SSE4-NEXT:    pand %xmm2, %xmm0
+; X86-SSE4-NEXT:    packusdw %xmm1, %xmm0
+; X86-SSE4-NEXT:    retl
+;
+; X64-SSE4-LABEL: trunc_lshr_v4i64_demandedelts:
+; X64-SSE4:       # %bb.0:
+; X64-SSE4-NEXT:    movl $1, %eax
+; X64-SSE4-NEXT:    movq %rax, %xmm2
+; X64-SSE4-NEXT:    pand %xmm2, %xmm0
+; X64-SSE4-NEXT:    pand %xmm2, %xmm1
+; X64-SSE4-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,0,0,0]
+; X64-SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; X64-SSE4-NEXT:    packusdw %xmm1, %xmm0
+; X64-SSE4-NEXT:    retq
 ;
 ; X86-AVX1-LABEL: trunc_lshr_v4i64_demandedelts:
 ; X86-AVX1:       # %bb.0:
@@ -564,9 +586,9 @@ define <32 x i8> @_mm256_packus_epi16_manual(<16 x i16> %a, <16 x i16> %b) nounw
 ;
 ; AVX1-LABEL: _mm256_packus_epi16_manual:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm2
-; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm3
-; AVX1-NEXT:    vpackuswb %xmm3, %xmm2, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm3
+; AVX1-NEXT:    vpackuswb %xmm2, %xmm3, %xmm2
 ; AVX1-NEXT:    vpackuswb %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vinsertf128 $1, %xmm2, %ymm0, %ymm0
 ; AVX1-NEXT:    ret{{[l|q]}}
@@ -697,16 +719,16 @@ define <8 x i16> @_mm_packus_epi32_manual(<4 x i32> %a, <4 x i32> %b) nounwind {
 ; X86-SSE2-NEXT:    movdqa %xmm0, %xmm1
 ; X86-SSE2-NEXT:    pcmpgtd %xmm3, %xmm1
 ; X86-SSE2-NEXT:    pand %xmm1, %xmm0
-; X86-SSE2-NEXT:    pcmpeqd %xmm3, %xmm3
 ; X86-SSE2-NEXT:    movdqa {{.*#+}} xmm1 = [65535,65535,65535,65535]
-; X86-SSE2-NEXT:    movdqa %xmm1, %xmm4
-; X86-SSE2-NEXT:    pcmpgtd %xmm0, %xmm4
-; X86-SSE2-NEXT:    pand %xmm4, %xmm0
-; X86-SSE2-NEXT:    pxor %xmm3, %xmm4
-; X86-SSE2-NEXT:    por %xmm4, %xmm0
+; X86-SSE2-NEXT:    movdqa %xmm1, %xmm3
+; X86-SSE2-NEXT:    pcmpgtd %xmm0, %xmm3
+; X86-SSE2-NEXT:    pand %xmm3, %xmm0
+; X86-SSE2-NEXT:    pcmpeqd %xmm4, %xmm4
+; X86-SSE2-NEXT:    pxor %xmm4, %xmm3
+; X86-SSE2-NEXT:    por %xmm3, %xmm0
 ; X86-SSE2-NEXT:    pcmpgtd %xmm2, %xmm1
 ; X86-SSE2-NEXT:    pand %xmm1, %xmm2
-; X86-SSE2-NEXT:    pxor %xmm3, %xmm1
+; X86-SSE2-NEXT:    pxor %xmm4, %xmm1
 ; X86-SSE2-NEXT:    por %xmm2, %xmm1
 ; X86-SSE2-NEXT:    pslld $16, %xmm1
 ; X86-SSE2-NEXT:    psrad $16, %xmm1
@@ -724,22 +746,22 @@ define <8 x i16> @_mm_packus_epi32_manual(<4 x i32> %a, <4 x i32> %b) nounwind {
 ; X64-SSE2-NEXT:    movdqa %xmm0, %xmm1
 ; X64-SSE2-NEXT:    pcmpgtd %xmm2, %xmm1
 ; X64-SSE2-NEXT:    pand %xmm1, %xmm0
-; X64-SSE2-NEXT:    pcmpeqd %xmm1, %xmm1
-; X64-SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [65535,65535,65535,65535]
-; X64-SSE2-NEXT:    movdqa %xmm2, %xmm4
-; X64-SSE2-NEXT:    pcmpgtd %xmm0, %xmm4
-; X64-SSE2-NEXT:    pand %xmm4, %xmm0
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm4
-; X64-SSE2-NEXT:    por %xmm4, %xmm0
-; X64-SSE2-NEXT:    pcmpgtd %xmm3, %xmm2
-; X64-SSE2-NEXT:    pand %xmm2, %xmm3
-; X64-SSE2-NEXT:    pxor %xmm1, %xmm2
-; X64-SSE2-NEXT:    por %xmm3, %xmm2
-; X64-SSE2-NEXT:    pslld $16, %xmm2
-; X64-SSE2-NEXT:    psrad $16, %xmm2
+; X64-SSE2-NEXT:    movdqa {{.*#+}} xmm1 = [65535,65535,65535,65535]
+; X64-SSE2-NEXT:    movdqa %xmm1, %xmm2
+; X64-SSE2-NEXT:    pcmpgtd %xmm0, %xmm2
+; X64-SSE2-NEXT:    pand %xmm2, %xmm0
+; X64-SSE2-NEXT:    pcmpeqd %xmm4, %xmm4
+; X64-SSE2-NEXT:    pxor %xmm4, %xmm2
+; X64-SSE2-NEXT:    por %xmm2, %xmm0
+; X64-SSE2-NEXT:    pcmpgtd %xmm3, %xmm1
+; X64-SSE2-NEXT:    pand %xmm1, %xmm3
+; X64-SSE2-NEXT:    pxor %xmm4, %xmm1
+; X64-SSE2-NEXT:    por %xmm3, %xmm1
+; X64-SSE2-NEXT:    pslld $16, %xmm1
+; X64-SSE2-NEXT:    psrad $16, %xmm1
 ; X64-SSE2-NEXT:    pslld $16, %xmm0
 ; X64-SSE2-NEXT:    psrad $16, %xmm0
-; X64-SSE2-NEXT:    packssdw %xmm2, %xmm0
+; X64-SSE2-NEXT:    packssdw %xmm1, %xmm0
 ; X64-SSE2-NEXT:    retq
 ;
 ; SSE4-LABEL: _mm_packus_epi32_manual:
@@ -794,11 +816,11 @@ define <16 x i16> @_mm256_packus_epi32_manual(<8 x i32> %a, <8 x i32> %b) nounwi
 ; X86-SSE2-NEXT:    movdqa %xmm1, %xmm2
 ; X86-SSE2-NEXT:    pcmpgtd %xmm5, %xmm2
 ; X86-SSE2-NEXT:    pand %xmm2, %xmm1
-; X86-SSE2-NEXT:    pcmpeqd %xmm5, %xmm5
 ; X86-SSE2-NEXT:    movdqa {{.*#+}} xmm4 = [65535,65535,65535,65535]
 ; X86-SSE2-NEXT:    movdqa %xmm4, %xmm2
 ; X86-SSE2-NEXT:    pcmpgtd %xmm1, %xmm2
 ; X86-SSE2-NEXT:    pand %xmm2, %xmm1
+; X86-SSE2-NEXT:    pcmpeqd %xmm5, %xmm5
 ; X86-SSE2-NEXT:    pxor %xmm5, %xmm2
 ; X86-SSE2-NEXT:    por %xmm2, %xmm1
 ; X86-SSE2-NEXT:    movdqa %xmm4, %xmm2
@@ -844,11 +866,11 @@ define <16 x i16> @_mm256_packus_epi32_manual(<8 x i32> %a, <8 x i32> %b) nounwi
 ; X64-SSE2-NEXT:    movdqa %xmm1, %xmm2
 ; X64-SSE2-NEXT:    pcmpgtd %xmm5, %xmm2
 ; X64-SSE2-NEXT:    pand %xmm2, %xmm1
-; X64-SSE2-NEXT:    pcmpeqd %xmm5, %xmm5
 ; X64-SSE2-NEXT:    movdqa {{.*#+}} xmm3 = [65535,65535,65535,65535]
 ; X64-SSE2-NEXT:    movdqa %xmm3, %xmm2
 ; X64-SSE2-NEXT:    pcmpgtd %xmm1, %xmm2
 ; X64-SSE2-NEXT:    pand %xmm2, %xmm1
+; X64-SSE2-NEXT:    pcmpeqd %xmm5, %xmm5
 ; X64-SSE2-NEXT:    pxor %xmm5, %xmm2
 ; X64-SSE2-NEXT:    por %xmm2, %xmm1
 ; X64-SSE2-NEXT:    movdqa %xmm3, %xmm2
@@ -897,9 +919,9 @@ define <16 x i16> @_mm256_packus_epi32_manual(<8 x i32> %a, <8 x i32> %b) nounwi
 ;
 ; AVX1-LABEL: _mm256_packus_epi32_manual:
 ; AVX1:       # %bb.0:
-; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm2
-; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm3
-; AVX1-NEXT:    vpackusdw %xmm3, %xmm2, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm2
+; AVX1-NEXT:    vextractf128 $1, %ymm0, %xmm3
+; AVX1-NEXT:    vpackusdw %xmm2, %xmm3, %xmm2
 ; AVX1-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vinsertf128 $1, %xmm2, %ymm0, %ymm0
 ; AVX1-NEXT:    ret{{[l|q]}}
@@ -1070,11 +1092,11 @@ define <32 x i16> @_mm512_packus_epi32_manual(<16 x i32> %a, <16 x i32> %b) noun
 ; X64-SSE2-NEXT:    movdqa %xmm3, %xmm4
 ; X64-SSE2-NEXT:    pcmpgtd %xmm11, %xmm4
 ; X64-SSE2-NEXT:    pand %xmm4, %xmm3
-; X64-SSE2-NEXT:    pcmpeqd %xmm7, %xmm7
 ; X64-SSE2-NEXT:    movdqa {{.*#+}} xmm5 = [65535,65535,65535,65535]
 ; X64-SSE2-NEXT:    movdqa %xmm5, %xmm4
 ; X64-SSE2-NEXT:    pcmpgtd %xmm3, %xmm4
 ; X64-SSE2-NEXT:    pand %xmm4, %xmm3
+; X64-SSE2-NEXT:    pcmpeqd %xmm7, %xmm7
 ; X64-SSE2-NEXT:    pxor %xmm7, %xmm4
 ; X64-SSE2-NEXT:    por %xmm4, %xmm3
 ; X64-SSE2-NEXT:    movdqa %xmm5, %xmm4

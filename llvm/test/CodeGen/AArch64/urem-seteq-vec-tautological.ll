@@ -20,16 +20,22 @@ define <4 x i1> @t0_all_tautological(<4 x i32> %X) nounwind {
 define <4 x i1> @t1_all_odd_eq(<4 x i32> %X) nounwind {
 ; CHECK-LABEL: t1_all_odd_eq:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #43691 // =0xaaab
-; CHECK-NEXT:    movk w8, #43690, lsl #16
-; CHECK-NEXT:    dup v1.4s, w8
 ; CHECK-NEXT:    adrp x8, .LCPI1_0
-; CHECK-NEXT:    mul v0.4s, v0.4s, v1.4s
 ; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI1_0]
-; CHECK-NEXT:    cmhs v0.4s, v1.4s, v0.4s
-; CHECK-NEXT:    movi d1, #0xffff0000ffff0000
+; CHECK-NEXT:    adrp x8, .LCPI1_1
+; CHECK-NEXT:    umull2 v2.2d, v0.4s, v1.4s
+; CHECK-NEXT:    umull v1.2d, v0.2s, v1.2s
+; CHECK-NEXT:    uzp2 v1.4s, v1.4s, v2.4s
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI1_1]
+; CHECK-NEXT:    adrp x8, .LCPI1_2
+; CHECK-NEXT:    ushr v1.4s, v1.4s, #1
+; CHECK-NEXT:    bit v1.16b, v0.16b, v2.16b
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI1_2]
+; CHECK-NEXT:    adrp x8, .LCPI1_3
+; CHECK-NEXT:    mls v0.4s, v1.4s, v2.4s
+; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI1_3]
+; CHECK-NEXT:    cmeq v0.4s, v0.4s, v1.4s
 ; CHECK-NEXT:    xtn v0.4h, v0.4s
-; CHECK-NEXT:    eor v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    ret
   %urem = urem <4 x i32> %X, <i32 3, i32 1, i32 1, i32 9>
   %cmp = icmp eq <4 x i32> %urem, <i32 0, i32 42, i32 0, i32 42>
@@ -39,16 +45,23 @@ define <4 x i1> @t1_all_odd_eq(<4 x i32> %X) nounwind {
 define <4 x i1> @t1_all_odd_ne(<4 x i32> %X) nounwind {
 ; CHECK-LABEL: t1_all_odd_ne:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #43691 // =0xaaab
-; CHECK-NEXT:    movk w8, #43690, lsl #16
-; CHECK-NEXT:    dup v1.4s, w8
 ; CHECK-NEXT:    adrp x8, .LCPI2_0
-; CHECK-NEXT:    mul v0.4s, v0.4s, v1.4s
 ; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI2_0]
-; CHECK-NEXT:    cmhi v0.4s, v0.4s, v1.4s
-; CHECK-NEXT:    movi d1, #0xffff0000ffff0000
+; CHECK-NEXT:    adrp x8, .LCPI2_1
+; CHECK-NEXT:    umull2 v2.2d, v0.4s, v1.4s
+; CHECK-NEXT:    umull v1.2d, v0.2s, v1.2s
+; CHECK-NEXT:    uzp2 v1.4s, v1.4s, v2.4s
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI2_1]
+; CHECK-NEXT:    adrp x8, .LCPI2_2
+; CHECK-NEXT:    ushr v1.4s, v1.4s, #1
+; CHECK-NEXT:    bit v1.16b, v0.16b, v2.16b
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI2_2]
+; CHECK-NEXT:    adrp x8, .LCPI2_3
+; CHECK-NEXT:    mls v0.4s, v1.4s, v2.4s
+; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI2_3]
+; CHECK-NEXT:    cmeq v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    mvn v0.16b, v0.16b
 ; CHECK-NEXT:    xtn v0.4h, v0.4s
-; CHECK-NEXT:    eor v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    ret
   %urem = urem <4 x i32> %X, <i32 3, i32 1, i32 1, i32 9>
   %cmp = icmp ne <4 x i32> %urem, <i32 0, i32 42, i32 0, i32 42>
@@ -58,15 +71,23 @@ define <4 x i1> @t1_all_odd_ne(<4 x i32> %X) nounwind {
 define <8 x i1> @t2_narrow(<8 x i16> %X) nounwind {
 ; CHECK-LABEL: t2_narrow:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #43691 // =0xaaab
-; CHECK-NEXT:    dup v1.8h, w8
 ; CHECK-NEXT:    adrp x8, .LCPI3_0
-; CHECK-NEXT:    mul v0.8h, v0.8h, v1.8h
+; CHECK-NEXT:    movi v3.2d, #0x00ffffffff0000
 ; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI3_0]
-; CHECK-NEXT:    cmhs v0.8h, v1.8h, v0.8h
-; CHECK-NEXT:    movi d1, #0xffff0000ffff0000
+; CHECK-NEXT:    adrp x8, .LCPI3_1
+; CHECK-NEXT:    umull2 v2.4s, v0.8h, v1.8h
+; CHECK-NEXT:    umull v1.4s, v0.4h, v1.4h
+; CHECK-NEXT:    uzp2 v1.8h, v1.8h, v2.8h
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI3_1]
+; CHECK-NEXT:    adrp x8, .LCPI3_2
+; CHECK-NEXT:    ushl v1.8h, v1.8h, v2.8h
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI3_2]
+; CHECK-NEXT:    adrp x8, .LCPI3_3
+; CHECK-NEXT:    bit v1.16b, v0.16b, v3.16b
+; CHECK-NEXT:    mls v0.8h, v1.8h, v2.8h
+; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI3_3]
+; CHECK-NEXT:    cmeq v0.8h, v0.8h, v1.8h
 ; CHECK-NEXT:    xtn v0.8b, v0.8h
-; CHECK-NEXT:    eor v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    ret
   %urem = urem <8 x i16> %X, <i16 3, i16 1, i16 1, i16 9, i16 3, i16 1, i16 1, i16 9>
   %cmp = icmp eq <8 x i16> %urem, <i16 0, i16 0, i16 42, i16 42, i16 0, i16 0, i16 42, i16 42>

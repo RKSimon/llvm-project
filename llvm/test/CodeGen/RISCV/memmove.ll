@@ -499,10 +499,10 @@ entry:
 define void @aligned_memmove8(ptr nocapture %dest, ptr %src) nounwind {
 ; RV32-BOTH-LABEL: aligned_memmove8:
 ; RV32-BOTH:       # %bb.0: # %entry
-; RV32-BOTH-NEXT:    lw a2, 0(a1)
-; RV32-BOTH-NEXT:    sw a2, 0(a0)
-; RV32-BOTH-NEXT:    lw a1, 4(a1)
-; RV32-BOTH-NEXT:    sw a1, 4(a0)
+; RV32-BOTH-NEXT:    lw a2, 4(a1)
+; RV32-BOTH-NEXT:    sw a2, 4(a0)
+; RV32-BOTH-NEXT:    lw a1, 0(a1)
+; RV32-BOTH-NEXT:    sw a1, 0(a0)
 ; RV32-BOTH-NEXT:    ret
 ;
 ; RV64-BOTH-LABEL: aligned_memmove8:
@@ -518,14 +518,14 @@ entry:
 define void @aligned_memmove15(ptr nocapture %dest, ptr %src) nounwind {
 ; RV32-BOTH-LABEL: aligned_memmove15:
 ; RV32-BOTH:       # %bb.0: # %entry
-; RV32-BOTH-NEXT:    lw a2, 0(a1)
-; RV32-BOTH-NEXT:    lw a3, 8(a1)
+; RV32-BOTH-NEXT:    lw a2, 8(a1)
+; RV32-BOTH-NEXT:    lw a3, 0(a1)
 ; RV32-BOTH-NEXT:    lh a4, 12(a1)
 ; RV32-BOTH-NEXT:    lbu a5, 14(a1)
-; RV32-BOTH-NEXT:    sw a2, 0(a0)
+; RV32-BOTH-NEXT:    sw a2, 8(a0)
 ; RV32-BOTH-NEXT:    lw a1, 4(a1)
+; RV32-BOTH-NEXT:    sw a3, 0(a0)
 ; RV32-BOTH-NEXT:    sw a1, 4(a0)
-; RV32-BOTH-NEXT:    sw a3, 8(a0)
 ; RV32-BOTH-NEXT:    sh a4, 12(a0)
 ; RV32-BOTH-NEXT:    sb a5, 14(a0)
 ; RV32-BOTH-NEXT:    ret
@@ -549,14 +549,14 @@ entry:
 define void @aligned_memmove16(ptr nocapture %dest, ptr %src) nounwind {
 ; RV32-BOTH-LABEL: aligned_memmove16:
 ; RV32-BOTH:       # %bb.0: # %entry
+; RV32-BOTH-NEXT:    lw a2, 12(a1)
+; RV32-BOTH-NEXT:    lw a3, 4(a1)
+; RV32-BOTH-NEXT:    sw a2, 12(a0)
 ; RV32-BOTH-NEXT:    lw a2, 0(a1)
-; RV32-BOTH-NEXT:    lw a3, 8(a1)
+; RV32-BOTH-NEXT:    lw a1, 8(a1)
 ; RV32-BOTH-NEXT:    sw a2, 0(a0)
-; RV32-BOTH-NEXT:    lw a2, 4(a1)
-; RV32-BOTH-NEXT:    lw a1, 12(a1)
-; RV32-BOTH-NEXT:    sw a2, 4(a0)
-; RV32-BOTH-NEXT:    sw a3, 8(a0)
-; RV32-BOTH-NEXT:    sw a1, 12(a0)
+; RV32-BOTH-NEXT:    sw a3, 4(a0)
+; RV32-BOTH-NEXT:    sw a1, 8(a0)
 ; RV32-BOTH-NEXT:    ret
 ;
 ; RV64-BOTH-LABEL: aligned_memmove16:
@@ -640,12 +640,12 @@ entry:
 define i32 @memmove11_align8(ptr nocapture %dest, ptr %src) {
 ; RV32-BOTH-LABEL: memmove11_align8:
 ; RV32-BOTH:       # %bb.0: # %entry
-; RV32-BOTH-NEXT:    lw a2, 0(a1)
+; RV32-BOTH-NEXT:    lw a2, 4(a1)
 ; RV32-BOTH-NEXT:    lh a3, 8(a1)
 ; RV32-BOTH-NEXT:    lbu a4, 10(a1)
-; RV32-BOTH-NEXT:    sw a2, 0(a0)
-; RV32-BOTH-NEXT:    lw a1, 4(a1)
-; RV32-BOTH-NEXT:    sw a1, 4(a0)
+; RV32-BOTH-NEXT:    sw a2, 4(a0)
+; RV32-BOTH-NEXT:    lw a1, 0(a1)
+; RV32-BOTH-NEXT:    sw a1, 0(a0)
 ; RV32-BOTH-NEXT:    sh a3, 8(a0)
 ; RV32-BOTH-NEXT:    sb a4, 10(a0)
 ; RV32-BOTH-NEXT:    li a0, 0

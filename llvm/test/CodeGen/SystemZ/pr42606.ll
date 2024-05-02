@@ -4,16 +4,12 @@
 define i64 @test(i64 %lo, i64 %hi) {
 ; CHECK-LABEL: test:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    la %r0, 0(%r2,%r2)
-; CHECK-NEXT:    clgr %r0, %r2
-; CHECK-NEXT:    ipm %r0
-; CHECK-NEXT:    la %r1, 1(%r2,%r2)
-; CHECK-NEXT:    cghi %r1, 0
-; CHECK-NEXT:    ipm %r1
-; CHECK-NEXT:    afi %r1, -268435456
-; CHECK-NEXT:    srl %r1, 31
-; CHECK-NEXT:    rosbg %r1, %r0, 63, 63, 36
-; CHECK-NEXT:    algfr %r3, %r1
+; CHECK-NEXT:    lgr %r0, %r2
+; CHECK-NEXT:    algfi %r0, 1
+; CHECK-NEXT:    lghi %r1, 0
+; CHECK-NEXT:    alcgr %r3, %r1
+; CHECK-NEXT:    algr %r0, %r2
+; CHECK-NEXT:    alcgr %r3, %r1
 ; CHECK-NEXT:    lgr %r2, %r3
 ; CHECK-NEXT:    br %r14
   %tmp = tail call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %lo, i64 1)

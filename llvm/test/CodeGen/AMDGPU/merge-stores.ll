@@ -151,18 +151,35 @@ define amdgpu_kernel void @merge_global_store_2_constants_f32_i32(ptr addrspace(
 }
 
 define amdgpu_kernel void @merge_global_store_4_constants_i32(ptr addrspace(1) %out) #0 {
-; GCN-LABEL: merge_global_store_4_constants_i32:
-; GCN:       ; %bb.0:
-; GCN-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
-; GCN-NEXT:    s_mov_b32 s3, 0xf000
-; GCN-NEXT:    s_mov_b32 s2, -1
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x4d2
-; GCN-NEXT:    v_mov_b32_e32 v1, 0x7b
-; GCN-NEXT:    v_mov_b32_e32 v2, 0x1c8
-; GCN-NEXT:    v_mov_b32_e32 v3, 0x14d
-; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
-; GCN-NEXT:    s_endpgm
+; SI-LABEL: merge_global_store_4_constants_i32:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; SI-NEXT:    s_mov_b32 s3, 0xf000
+; SI-NEXT:    s_mov_b32 s2, -1
+; SI-NEXT:    v_mov_b32_e32 v0, 0x7b
+; SI-NEXT:    v_mov_b32_e32 v1, 0x1c8
+; SI-NEXT:    s_waitcnt lgkmcnt(0)
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:4
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0x14d
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0 offset:12
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0x4d2
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0
+; SI-NEXT:    s_endpgm
+;
+; CI-LABEL: merge_global_store_4_constants_i32:
+; CI:       ; %bb.0:
+; CI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; CI-NEXT:    s_mov_b32 s3, 0xf000
+; CI-NEXT:    s_mov_b32 s2, -1
+; CI-NEXT:    v_mov_b32_e32 v1, 0x7b
+; CI-NEXT:    v_mov_b32_e32 v2, 0x1c8
+; CI-NEXT:    v_mov_b32_e32 v3, 0x14d
+; CI-NEXT:    v_mov_b32_e32 v0, 0x4d2
+; CI-NEXT:    s_waitcnt lgkmcnt(0)
+; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
+; CI-NEXT:    s_endpgm
   %out.gep.1 = getelementptr i32, ptr addrspace(1) %out, i32 1
   %out.gep.2 = getelementptr i32, ptr addrspace(1) %out, i32 2
   %out.gep.3 = getelementptr i32, ptr addrspace(1) %out, i32 3
@@ -200,18 +217,35 @@ define amdgpu_kernel void @merge_global_store_4_constants_f32_order(ptr addrspac
 
 ; First store is out of order.
 define amdgpu_kernel void @merge_global_store_4_constants_f32(ptr addrspace(1) %out) #0 {
-; GCN-LABEL: merge_global_store_4_constants_f32:
-; GCN:       ; %bb.0:
-; GCN-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
-; GCN-NEXT:    s_mov_b32 s3, 0xf000
-; GCN-NEXT:    s_mov_b32 s2, -1
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x41000000
-; GCN-NEXT:    v_mov_b32_e32 v1, 1.0
-; GCN-NEXT:    v_mov_b32_e32 v2, 2.0
-; GCN-NEXT:    v_mov_b32_e32 v3, 4.0
-; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
-; GCN-NEXT:    s_endpgm
+; SI-LABEL: merge_global_store_4_constants_f32:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; SI-NEXT:    s_mov_b32 s3, 0xf000
+; SI-NEXT:    s_mov_b32 s2, -1
+; SI-NEXT:    v_mov_b32_e32 v0, 1.0
+; SI-NEXT:    v_mov_b32_e32 v1, 2.0
+; SI-NEXT:    s_waitcnt lgkmcnt(0)
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:4
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 4.0
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0 offset:12
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0x41000000
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0
+; SI-NEXT:    s_endpgm
+;
+; CI-LABEL: merge_global_store_4_constants_f32:
+; CI:       ; %bb.0:
+; CI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; CI-NEXT:    s_mov_b32 s3, 0xf000
+; CI-NEXT:    s_mov_b32 s2, -1
+; CI-NEXT:    v_mov_b32_e32 v1, 1.0
+; CI-NEXT:    v_mov_b32_e32 v2, 2.0
+; CI-NEXT:    v_mov_b32_e32 v3, 4.0
+; CI-NEXT:    v_mov_b32_e32 v0, 0x41000000
+; CI-NEXT:    s_waitcnt lgkmcnt(0)
+; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
+; CI-NEXT:    s_endpgm
   %out.gep.1 = getelementptr float, ptr addrspace(1) %out, i32 1
   %out.gep.2 = getelementptr float, ptr addrspace(1) %out, i32 2
   %out.gep.3 = getelementptr float, ptr addrspace(1) %out, i32 3
@@ -224,18 +258,35 @@ define amdgpu_kernel void @merge_global_store_4_constants_f32(ptr addrspace(1) %
 }
 
 define amdgpu_kernel void @merge_global_store_4_constants_mixed_i32_f32(ptr addrspace(1) %out) #0 {
-; GCN-LABEL: merge_global_store_4_constants_mixed_i32_f32:
-; GCN:       ; %bb.0:
-; GCN-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
-; GCN-NEXT:    s_mov_b32 s3, 0xf000
-; GCN-NEXT:    s_mov_b32 s2, -1
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x41000000
-; GCN-NEXT:    v_mov_b32_e32 v1, 11
-; GCN-NEXT:    v_mov_b32_e32 v2, 2.0
-; GCN-NEXT:    v_mov_b32_e32 v3, 17
-; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
-; GCN-NEXT:    s_endpgm
+; SI-LABEL: merge_global_store_4_constants_mixed_i32_f32:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; SI-NEXT:    s_mov_b32 s3, 0xf000
+; SI-NEXT:    s_mov_b32 s2, -1
+; SI-NEXT:    v_mov_b32_e32 v0, 11
+; SI-NEXT:    v_mov_b32_e32 v1, 2.0
+; SI-NEXT:    s_waitcnt lgkmcnt(0)
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:4
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 17
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0 offset:12
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0x41000000
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0
+; SI-NEXT:    s_endpgm
+;
+; CI-LABEL: merge_global_store_4_constants_mixed_i32_f32:
+; CI:       ; %bb.0:
+; CI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
+; CI-NEXT:    s_mov_b32 s3, 0xf000
+; CI-NEXT:    s_mov_b32 s2, -1
+; CI-NEXT:    v_mov_b32_e32 v1, 11
+; CI-NEXT:    v_mov_b32_e32 v2, 2.0
+; CI-NEXT:    v_mov_b32_e32 v3, 17
+; CI-NEXT:    v_mov_b32_e32 v0, 0x41000000
+; CI-NEXT:    s_waitcnt lgkmcnt(0)
+; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
+; CI-NEXT:    s_endpgm
   %out.gep.1 = getelementptr float, ptr addrspace(1) %out, i32 1
   %out.gep.2 = getelementptr float, ptr addrspace(1) %out, i32 2
   %out.gep.3 = getelementptr float, ptr addrspace(1) %out, i32 3
@@ -254,13 +305,13 @@ define amdgpu_kernel void @merge_global_store_3_constants_i32(ptr addrspace(1) %
 ; SI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
 ; SI-NEXT:    s_mov_b32 s3, 0xf000
 ; SI-NEXT:    s_mov_b32 s2, -1
+; SI-NEXT:    v_mov_b32_e32 v0, 0x7b
 ; SI-NEXT:    v_mov_b32_e32 v1, 0x1c8
-; SI-NEXT:    v_mov_b32_e32 v0, 0x4d2
 ; SI-NEXT:    s_waitcnt lgkmcnt(0)
-; SI-NEXT:    buffer_store_dword v1, off, s[0:3], 0 offset:8
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:4
 ; SI-NEXT:    s_waitcnt expcnt(0)
-; SI-NEXT:    v_mov_b32_e32 v1, 0x7b
-; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
+; SI-NEXT:    v_mov_b32_e32 v0, 0x4d2
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0
 ; SI-NEXT:    s_endpgm
 ;
 ; CI-LABEL: merge_global_store_3_constants_i32:
@@ -268,9 +319,9 @@ define amdgpu_kernel void @merge_global_store_3_constants_i32(ptr addrspace(1) %
 ; CI-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x9
 ; CI-NEXT:    s_mov_b32 s3, 0xf000
 ; CI-NEXT:    s_mov_b32 s2, -1
+; CI-NEXT:    v_mov_b32_e32 v1, 0x7b
 ; CI-NEXT:    v_mov_b32_e32 v2, 0x1c8
 ; CI-NEXT:    v_mov_b32_e32 v0, 0x4d2
-; CI-NEXT:    v_mov_b32_e32 v1, 0x7b
 ; CI-NEXT:    s_waitcnt lgkmcnt(0)
 ; CI-NEXT:    buffer_store_dwordx3 v[0:2], off, s[0:3], 0
 ; CI-NEXT:    s_endpgm
@@ -310,15 +361,17 @@ define amdgpu_kernel void @merge_global_store_4_constants_i64(ptr addrspace(1) %
 ; SI-NEXT:    v_mov_b32_e32 v1, 0
 ; SI-NEXT:    s_mov_b32 s3, 0xf000
 ; SI-NEXT:    s_mov_b32 s2, -1
-; SI-NEXT:    v_mov_b32_e32 v0, 0x1c8
-; SI-NEXT:    v_mov_b32_e32 v2, 0x14d
+; SI-NEXT:    v_mov_b32_e32 v0, 0x7b
+; SI-NEXT:    v_mov_b32_e32 v2, 0x1c8
 ; SI-NEXT:    v_mov_b32_e32 v3, v1
 ; SI-NEXT:    s_waitcnt lgkmcnt(0)
-; SI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0 offset:16
+; SI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0 offset:8
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0x14d
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:24
 ; SI-NEXT:    s_waitcnt expcnt(0)
 ; SI-NEXT:    v_mov_b32_e32 v0, 0x4d2
-; SI-NEXT:    v_mov_b32_e32 v2, 0x7b
-; SI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
+; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
 ; SI-NEXT:    s_endpgm
 ;
 ; CI-LABEL: merge_global_store_4_constants_i64:
@@ -327,15 +380,16 @@ define amdgpu_kernel void @merge_global_store_4_constants_i64(ptr addrspace(1) %
 ; CI-NEXT:    v_mov_b32_e32 v1, 0
 ; CI-NEXT:    s_mov_b32 s3, 0xf000
 ; CI-NEXT:    s_mov_b32 s2, -1
-; CI-NEXT:    v_mov_b32_e32 v0, 0x1c8
-; CI-NEXT:    v_mov_b32_e32 v2, 0x14d
+; CI-NEXT:    v_mov_b32_e32 v0, 0x7b
+; CI-NEXT:    v_mov_b32_e32 v2, 0x1c8
 ; CI-NEXT:    v_mov_b32_e32 v3, v1
 ; CI-NEXT:    s_waitcnt lgkmcnt(0)
-; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0 offset:16
+; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0 offset:8
 ; CI-NEXT:    s_nop 0
+; CI-NEXT:    v_mov_b32_e32 v0, 0x14d
+; CI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:24
 ; CI-NEXT:    v_mov_b32_e32 v0, 0x4d2
-; CI-NEXT:    v_mov_b32_e32 v2, 0x7b
-; CI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
+; CI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0
 ; CI-NEXT:    s_endpgm
   %out.gep.1 = getelementptr i64, ptr addrspace(1) %out, i64 1
   %out.gep.2 = getelementptr i64, ptr addrspace(1) %out, i64 2
@@ -480,14 +534,14 @@ define amdgpu_kernel void @merge_global_store_3_adjacent_loads_i32(ptr addrspace
 ; SI-NEXT:    s_waitcnt lgkmcnt(0)
 ; SI-NEXT:    s_mov_b32 s8, s2
 ; SI-NEXT:    s_mov_b32 s9, s3
-; SI-NEXT:    buffer_load_dword v2, off, s[8:11], 0 offset:8
 ; SI-NEXT:    buffer_load_dwordx2 v[0:1], off, s[8:11], 0
+; SI-NEXT:    buffer_load_dword v2, off, s[8:11], 0 offset:8
 ; SI-NEXT:    s_mov_b32 s4, s0
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(1)
-; SI-NEXT:    buffer_store_dword v2, off, s[4:7], 0 offset:8
-; SI-NEXT:    s_waitcnt vmcnt(1)
 ; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[4:7], 0
+; SI-NEXT:    s_waitcnt vmcnt(1)
+; SI-NEXT:    buffer_store_dword v2, off, s[4:7], 0 offset:8
 ; SI-NEXT:    s_endpgm
 ;
 ; CI-LABEL: merge_global_store_3_adjacent_loads_i32:
@@ -713,11 +767,17 @@ define amdgpu_kernel void @merge_global_store_4_adjacent_loads_i8(ptr addrspace(
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
 ; GCN-NEXT:    s_mov_b32 s8, s2
 ; GCN-NEXT:    s_mov_b32 s9, s3
-; GCN-NEXT:    buffer_load_dword v0, off, s[8:11], 0
+; GCN-NEXT:    buffer_load_ushort v0, off, s[8:11], 0
+; GCN-NEXT:    buffer_load_ubyte v1, off, s[8:11], 0 offset:2
+; GCN-NEXT:    buffer_load_ubyte v2, off, s[8:11], 0 offset:3
 ; GCN-NEXT:    s_mov_b32 s4, s0
 ; GCN-NEXT:    s_mov_b32 s5, s1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    buffer_store_dword v0, off, s[4:7], 0
+; GCN-NEXT:    s_waitcnt vmcnt(2)
+; GCN-NEXT:    buffer_store_short v0, off, s[4:7], 0
+; GCN-NEXT:    s_waitcnt vmcnt(2)
+; GCN-NEXT:    buffer_store_byte v1, off, s[4:7], 0 offset:2
+; GCN-NEXT:    s_waitcnt vmcnt(2)
+; GCN-NEXT:    buffer_store_byte v2, off, s[4:7], 0 offset:3
 ; GCN-NEXT:    s_endpgm
   %out.gep.1 = getelementptr i8, ptr addrspace(1) %out, i8 1
   %out.gep.2 = getelementptr i8, ptr addrspace(1) %out, i8 2
@@ -881,15 +941,15 @@ define amdgpu_kernel void @merge_local_store_4_constants_i32(ptr addrspace(3) %o
 ; CI-LABEL: merge_local_store_4_constants_i32:
 ; CI:       ; %bb.0:
 ; CI-NEXT:    s_load_dword s0, s[4:5], 0x9
-; CI-NEXT:    v_mov_b32_e32 v0, 0x1c8
-; CI-NEXT:    v_mov_b32_e32 v1, 0x14d
+; CI-NEXT:    v_mov_b32_e32 v0, 0x7b
+; CI-NEXT:    v_mov_b32_e32 v1, 0x1c8
 ; CI-NEXT:    s_mov_b32 m0, -1
-; CI-NEXT:    v_mov_b32_e32 v2, 0x4d2
+; CI-NEXT:    v_mov_b32_e32 v2, 0x14d
 ; CI-NEXT:    s_waitcnt lgkmcnt(0)
 ; CI-NEXT:    v_mov_b32_e32 v3, s0
-; CI-NEXT:    ds_write2_b32 v3, v0, v1 offset0:2 offset1:3
-; CI-NEXT:    v_mov_b32_e32 v0, 0x7b
-; CI-NEXT:    ds_write2_b32 v3, v2, v0 offset1:1
+; CI-NEXT:    ds_write2_b32 v3, v0, v1 offset0:1 offset1:2
+; CI-NEXT:    v_mov_b32_e32 v0, 0x4d2
+; CI-NEXT:    ds_write2_b32 v3, v0, v2 offset1:3
 ; CI-NEXT:    s_endpgm
   %out.gep.1 = getelementptr i32, ptr addrspace(3) %out, i32 1
   %out.gep.2 = getelementptr i32, ptr addrspace(3) %out, i32 2
@@ -1007,12 +1067,12 @@ define amdgpu_kernel void @merge_global_store_7_constants_i32(ptr addrspace(1) %
 ; SI-NEXT:    s_waitcnt lgkmcnt(0)
 ; SI-NEXT:    buffer_store_dwordx4 v[0:3], off, s[0:3], 0
 ; SI-NEXT:    s_waitcnt expcnt(0)
-; SI-NEXT:    v_mov_b32_e32 v0, 0xd4
-; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0 offset:24
-; SI-NEXT:    s_waitcnt expcnt(0)
 ; SI-NEXT:    v_mov_b32_e32 v0, 0x62
 ; SI-NEXT:    v_mov_b32_e32 v1, 0x5b
 ; SI-NEXT:    buffer_store_dwordx2 v[0:1], off, s[0:3], 0 offset:16
+; SI-NEXT:    s_waitcnt expcnt(0)
+; SI-NEXT:    v_mov_b32_e32 v0, 0xd4
+; SI-NEXT:    buffer_store_dword v0, off, s[0:3], 0 offset:24
 ; SI-NEXT:    s_endpgm
 ;
 ; CI-LABEL: merge_global_store_7_constants_i32:

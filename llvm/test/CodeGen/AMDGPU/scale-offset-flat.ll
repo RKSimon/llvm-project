@@ -234,14 +234,27 @@ entry:
 }
 
 define amdgpu_ps <3 x float> @flat_load_b96_idxprom_range(ptr align 4 inreg %p, ptr align 4 %pp) {
-; GCN-LABEL: flat_load_b96_idxprom_range:
-; GCN:       ; %bb.0: ; %entry
-; GCN-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
-; GCN-NEXT:    flat_load_b32 v0, v[0:1]
-; GCN-NEXT:    s_wait_loadcnt_dscnt 0x0
-; GCN-NEXT:    flat_load_b96 v[0:2], v0, s[0:1] scale_offset
-; GCN-NEXT:    s_wait_loadcnt_dscnt 0x0
-; GCN-NEXT:    ; return to shader part epilog
+; SDAG-LABEL: flat_load_b96_idxprom_range:
+; SDAG:       ; %bb.0: ; %entry
+; SDAG-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
+; SDAG-NEXT:    flat_load_b32 v0, v[0:1]
+; SDAG-NEXT:    s_wait_loadcnt_dscnt 0x0
+; SDAG-NEXT:    v_mul_hi_u32_u24_e32 v1, 12, v0
+; SDAG-NEXT:    v_mul_u32_u24_e32 v0, 12, v0
+; SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; SDAG-NEXT:    v_add_nc_u64_e32 v[0:1], s[0:1], v[0:1]
+; SDAG-NEXT:    flat_load_b96 v[0:2], v[0:1]
+; SDAG-NEXT:    s_wait_loadcnt_dscnt 0x0
+; SDAG-NEXT:    ; return to shader part epilog
+;
+; GISEL-LABEL: flat_load_b96_idxprom_range:
+; GISEL:       ; %bb.0: ; %entry
+; GISEL-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
+; GISEL-NEXT:    flat_load_b32 v0, v[0:1]
+; GISEL-NEXT:    s_wait_loadcnt_dscnt 0x0
+; GISEL-NEXT:    flat_load_b96 v[0:2], v0, s[0:1] scale_offset
+; GISEL-NEXT:    s_wait_loadcnt_dscnt 0x0
+; GISEL-NEXT:    ; return to shader part epilog
 entry:
   %idx = load i32, ptr %pp, align 4, !range !0
   %idxprom = sext i32 %idx to i64
@@ -251,14 +264,27 @@ entry:
 }
 
 define amdgpu_ps <3 x float> @flat_load_b96_idxprom_range_ioffset(ptr align 4 inreg %p, ptr align 4 %pp) {
-; GCN-LABEL: flat_load_b96_idxprom_range_ioffset:
-; GCN:       ; %bb.0: ; %entry
-; GCN-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
-; GCN-NEXT:    flat_load_b32 v0, v[0:1]
-; GCN-NEXT:    s_wait_loadcnt_dscnt 0x0
-; GCN-NEXT:    flat_load_b96 v[0:2], v0, s[0:1] offset:192 scale_offset
-; GCN-NEXT:    s_wait_loadcnt_dscnt 0x0
-; GCN-NEXT:    ; return to shader part epilog
+; SDAG-LABEL: flat_load_b96_idxprom_range_ioffset:
+; SDAG:       ; %bb.0: ; %entry
+; SDAG-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
+; SDAG-NEXT:    flat_load_b32 v0, v[0:1]
+; SDAG-NEXT:    s_wait_loadcnt_dscnt 0x0
+; SDAG-NEXT:    v_mul_hi_u32_u24_e32 v1, 12, v0
+; SDAG-NEXT:    v_mul_u32_u24_e32 v0, 12, v0
+; SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; SDAG-NEXT:    v_add_nc_u64_e32 v[0:1], s[0:1], v[0:1]
+; SDAG-NEXT:    flat_load_b96 v[0:2], v[0:1] offset:192
+; SDAG-NEXT:    s_wait_loadcnt_dscnt 0x0
+; SDAG-NEXT:    ; return to shader part epilog
+;
+; GISEL-LABEL: flat_load_b96_idxprom_range_ioffset:
+; GISEL:       ; %bb.0: ; %entry
+; GISEL-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1
+; GISEL-NEXT:    flat_load_b32 v0, v[0:1]
+; GISEL-NEXT:    s_wait_loadcnt_dscnt 0x0
+; GISEL-NEXT:    flat_load_b96 v[0:2], v0, s[0:1] offset:192 scale_offset
+; GISEL-NEXT:    s_wait_loadcnt_dscnt 0x0
+; GISEL-NEXT:    ; return to shader part epilog
 entry:
   %idx = load i32, ptr %pp, align 4, !range !0
   %idxprom = sext i32 %idx to i64

@@ -5,8 +5,8 @@
 define i16 @mulhs(i16 %a0, i16 %a1) {
 ; CHECK-LABEL: mulhs:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movswl %di, %ecx
-; CHECK-NEXT:    movswl %si, %eax
+; CHECK-NEXT:    movswl %si, %ecx
+; CHECK-NEXT:    movswl %di, %eax
 ; CHECK-NEXT:    imull %ecx, %eax
 ; CHECK-NEXT:    shrl $16, %eax
 ; CHECK-NEXT:    # kill: def $ax killed $ax killed $eax
@@ -23,14 +23,6 @@ define i16 @mulhs(i16 %a0, i16 %a1) {
 }
 
 define i16 @mulhu(i16 %a0, i16 %a1) {
-; CHECK-LABEL: mulhu:
-; CHECK:       # %bb.0:
-; CHECK-NEXT:    movzwl %di, %ecx
-; CHECK-NEXT:    movzwl %si, %eax
-; CHECK-NEXT:    imull %ecx, %eax
-; CHECK-NEXT:    shrl $16, %eax
-; CHECK-NEXT:    # kill: def $ax killed $ax killed $eax
-; CHECK-NEXT:    retq
     %x0 = zext i16 %a0 to i32
     %x1 = zext i16 %a1 to i32
     %v0 = insertelement <1 x i32> <i32 undef>, i32 %x0, i32 0

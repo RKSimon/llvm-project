@@ -190,9 +190,9 @@ define void @f4(float %f, ptr nocapture byval(%struct.S3) %s3, ptr nocapture byv
 ; CHECK-NEXT:    sw $ra, 44($sp) # 4-byte Folded Spill
 ; CHECK-NEXT:    addu $gp, $2, $25
 ; CHECK-NEXT:    move $4, $7
+; CHECK-NEXT:    sw $7, 60($sp)
 ; CHECK-NEXT:    sw $6, 56($sp)
 ; CHECK-NEXT:    sw $5, 52($sp)
-; CHECK-NEXT:    sw $7, 60($sp)
 ; CHECK-NEXT:    lw $1, 80($sp)
 ; CHECK-NEXT:    sll $2, $5, 24
 ; CHECK-NEXT:    sra $2, $2, 24

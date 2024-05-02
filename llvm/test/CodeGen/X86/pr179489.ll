@@ -9,13 +9,13 @@ define void @foo(<8 x i16> %arg, ptr addrspace(1) %add.ptr) {
 ; X86-LABEL: foo:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    vmovw %xmm0, %ecx
+; X86-NEXT:    vpextrw $0, %xmm0, %ecx
 ; X86-NEXT:    movb %ch, (%eax)
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: foo:
 ; X64:       # %bb.0: # %entry
-; X64-NEXT:    vmovw %xmm0, %eax
+; X64-NEXT:    vpextrw $0, %xmm0, %eax
 ; X64-NEXT:    movb %ah, (%rdi)
 ; X64-NEXT:    retq
 entry:

@@ -2156,10 +2156,9 @@ define i1 @test112(float %arg1, float %arg2, float %arg3, float %arg4, float %ar
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    v_dual_max_f32 v3, v3, v3 :: v_dual_max_f32 v2, v2, v2
 ; GCN-NEXT:    v_cmp_nge_f32_e32 vcc_lo, v4, v8
-; GCN-NEXT:    v_dual_max_f32 v5, v5, v5 :: v_dual_min_f32 v2, v2, v3
-; GCN-NEXT:    v_max_f32_e32 v3, v6, v6
+; GCN-NEXT:    v_min_f32_e32 v2, v2, v3
 ; GCN-NEXT:    v_min3_f32 v0, v0, v1, v2
-; GCN-NEXT:    v_min3_f32 v0, v0, v5, v3
+; GCN-NEXT:    v_min3_f32 v0, v0, v5, v6
 ; GCN-NEXT:    v_cmp_lt_f32_e64 s0, v0, v8
 ; GCN-NEXT:    s_or_b32 s0, s0, vcc_lo
 ; GCN-NEXT:    v_cndmask_b32_e64 v0, 0, 1, s0
@@ -2249,7 +2248,6 @@ define i1 @test116(float %arg1, float %arg2, float %arg3, float %arg4, float %ar
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    v_dual_max_f32 v9, v9, v9 :: v_dual_max_f32 v8, v8, v8
-; GCN-NEXT:    v_dual_max_f32 v1, v1, v1 :: v_dual_max_f32 v0, v0, v0
 ; GCN-NEXT:    v_dual_max_f32 v3, v3, v3 :: v_dual_max_f32 v2, v2, v2
 ; GCN-NEXT:    v_dual_max_f32 v5, v5, v5 :: v_dual_max_f32 v4, v4, v4
 ; GCN-NEXT:    v_dual_max_f32 v7, v7, v7 :: v_dual_max_f32 v6, v6, v6

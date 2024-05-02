@@ -7864,8 +7864,7 @@ define <4 x double> @constrained_vector_uitofp_v4f64_v4i64(<4 x i64> %x) #0 {
 ; AVX1-NEXT:    vunpcklpd {{.*#+}} xmm2 = xmm3[0],xmm2[0]
 ; AVX1-NEXT:    vextractps $2, %xmm0, %eax
 ; AVX1-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm3
-; AVX1-NEXT:    vmovq %xmm0, %rax
-; AVX1-NEXT:    movl %eax, %eax
+; AVX1-NEXT:    vmovd %xmm0, %eax
 ; AVX1-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm4
 ; AVX1-NEXT:    vunpcklpd {{.*#+}} xmm3 = xmm4[0],xmm3[0]
 ; AVX1-NEXT:    vinsertf128 $1, %xmm2, %ymm3, %ymm2

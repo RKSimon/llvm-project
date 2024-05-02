@@ -86,15 +86,14 @@ define i32 @extract_last_active_v2i32(<2 x i32> %a, <2 x i1> %c) {
 define i32 @extract_last_active_v3i32(<3 x i32> %a, <3 x i1> %c) {
 ; CHECK-LABEL: extract_last_active_v3i32:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movd %edx, %xmm1
-; CHECK-NEXT:    movd %esi, %xmm2
-; CHECK-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[0,0,1,1]
-; CHECK-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm1[0]
 ; CHECK-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
-; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; CHECK-NEXT:    movd %edx, %xmm0
+; CHECK-NEXT:    movd %esi, %xmm1
+; CHECK-NEXT:    shufps {{.*#+}} xmm1 = xmm1[1,0],xmm0[0,1]
+; CHECK-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
 ; CHECK-NEXT:    movd %xmm0, %ecx
-; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[1,1,1,1]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
 ; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    cmpl %ecx, %eax
 ; CHECK-NEXT:    cmoval %eax, %ecx
@@ -265,8 +264,7 @@ define i32 @extract_last_active_v4i32_penryn(<4 x i32> %a, <4 x i1> %c) "target-
 ; CHECK-NEXT:    cmpl %ecx, %eax
 ; CHECK-NEXT:    cmovbel %ecx, %eax
 ; CHECK-NEXT:    movaps %xmm2, -{{[0-9]+}}(%rsp)
-; CHECK-NEXT:    shll $2, %eax
-; CHECK-NEXT:    movl -24(%rsp,%rax), %eax
+; CHECK-NEXT:    movl -24(%rsp,%rax,4), %eax
 ; CHECK-NEXT:    retq
   %res = call i32 @llvm.experimental.vector.extract.last.active.v4i32(<4 x i32> %a, <4 x i1> %c, i32 poison)
   ret i32 %res

@@ -30,7 +30,7 @@ define <32 x i8> @clmul_v32i8(<32 x i8> %a, <32 x i8> %b) nounwind {
 ; AVX1-NEXT:    vpmullw %xmm7, %xmm2, %xmm8
 ; AVX1-NEXT:    vpmullw %xmm6, %xmm0, %xmm9
 ; AVX1-NEXT:    vinsertf128 $1, %xmm8, %ymm9, %ymm8
-; AVX1-NEXT:    vandps %ymm4, %ymm8, %ymm8
+; AVX1-NEXT:    vandps %ymm3, %ymm8, %ymm8
 ; AVX1-NEXT:    vpandn %xmm6, %xmm3, %xmm6
 ; AVX1-NEXT:    vpmaddubsw %xmm6, %xmm0, %xmm6
 ; AVX1-NEXT:    vpsllw $8, %xmm6, %xmm6
@@ -104,7 +104,7 @@ define <32 x i8> @clmul_v32i8(<32 x i8> %a, <32 x i8> %b) nounwind {
 ; AVX1-NEXT:    vpmullw %xmm2, %xmm8, %xmm9
 ; AVX1-NEXT:    vpmullw %xmm7, %xmm0, %xmm10
 ; AVX1-NEXT:    vinsertf128 $1, %xmm9, %ymm10, %ymm9
-; AVX1-NEXT:    vandps %ymm4, %ymm9, %ymm4
+; AVX1-NEXT:    vandps %ymm4, %ymm9, %ymm9
 ; AVX1-NEXT:    vpandn %xmm7, %xmm3, %xmm7
 ; AVX1-NEXT:    vpmaddubsw %xmm7, %xmm0, %xmm7
 ; AVX1-NEXT:    vpsllw $8, %xmm7, %xmm7
@@ -112,24 +112,24 @@ define <32 x i8> @clmul_v32i8(<32 x i8> %a, <32 x i8> %b) nounwind {
 ; AVX1-NEXT:    vpmaddubsw %xmm8, %xmm2, %xmm8
 ; AVX1-NEXT:    vpsllw $8, %xmm8, %xmm8
 ; AVX1-NEXT:    vinsertf128 $1, %xmm8, %ymm7, %ymm7
-; AVX1-NEXT:    vorps %ymm7, %ymm4, %ymm4
-; AVX1-NEXT:    vxorps %ymm4, %ymm6, %ymm4
-; AVX1-NEXT:    vxorps %ymm4, %ymm5, %ymm4
+; AVX1-NEXT:    vorps %ymm7, %ymm9, %ymm7
+; AVX1-NEXT:    vxorps %ymm7, %ymm6, %ymm6
+; AVX1-NEXT:    vxorps %ymm6, %ymm5, %ymm5
 ; AVX1-NEXT:    vandps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
-; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm5
-; AVX1-NEXT:    vpmullw %xmm5, %xmm2, %xmm6
-; AVX1-NEXT:    vpmullw %xmm1, %xmm0, %xmm7
-; AVX1-NEXT:    vinsertf128 $1, %xmm6, %ymm7, %ymm6
-; AVX1-NEXT:    vandps %ymm3, %ymm6, %ymm6
+; AVX1-NEXT:    vextractf128 $1, %ymm1, %xmm6
+; AVX1-NEXT:    vpmullw %xmm6, %xmm2, %xmm7
+; AVX1-NEXT:    vpmullw %xmm1, %xmm0, %xmm8
+; AVX1-NEXT:    vinsertf128 $1, %xmm7, %ymm8, %ymm7
+; AVX1-NEXT:    vandps %ymm4, %ymm7, %ymm4
 ; AVX1-NEXT:    vpandn %xmm1, %xmm3, %xmm1
 ; AVX1-NEXT:    vpmaddubsw %xmm1, %xmm0, %xmm0
 ; AVX1-NEXT:    vpsllw $8, %xmm0, %xmm0
-; AVX1-NEXT:    vpandn %xmm5, %xmm3, %xmm1
+; AVX1-NEXT:    vpandn %xmm6, %xmm3, %xmm1
 ; AVX1-NEXT:    vpmaddubsw %xmm1, %xmm2, %xmm1
 ; AVX1-NEXT:    vpsllw $8, %xmm1, %xmm1
 ; AVX1-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
-; AVX1-NEXT:    vorps %ymm0, %ymm6, %ymm0
-; AVX1-NEXT:    vxorps %ymm0, %ymm4, %ymm0
+; AVX1-NEXT:    vorps %ymm0, %ymm4, %ymm0
+; AVX1-NEXT:    vxorps %ymm0, %ymm5, %ymm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: clmul_v32i8:

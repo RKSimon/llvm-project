@@ -9,12 +9,10 @@ define arm_aapcs_vfpcc <4 x i32> @unscaled_i32_i32_gather(ptr %base, ptr %offptr
 ; NOGATSCAT-NEXT:    vadd.i32 q0, q0, r0
 ; NOGATSCAT-NEXT:    vmov r0, r1, d1
 ; NOGATSCAT-NEXT:    vmov r2, r3, d0
-; NOGATSCAT-NEXT:    ldr r0, [r0]
-; NOGATSCAT-NEXT:    ldr r2, [r2]
-; NOGATSCAT-NEXT:    ldr r1, [r1]
-; NOGATSCAT-NEXT:    ldr r3, [r3]
-; NOGATSCAT-NEXT:    vmov q0[2], q0[0], r2, r0
-; NOGATSCAT-NEXT:    vmov q0[3], q0[1], r3, r1
+; NOGATSCAT-NEXT:    vldr s3, [r1]
+; NOGATSCAT-NEXT:    vldr s2, [r0]
+; NOGATSCAT-NEXT:    vldr s1, [r3]
+; NOGATSCAT-NEXT:    vldr s0, [r2]
 ; NOGATSCAT-NEXT:    bx lr
 ;
 ; NOMVE-LABEL: unscaled_i32_i32_gather:

@@ -739,13 +739,31 @@ define <2 x i32> @test_non_const_splat_i32(i32 %elt) {
 define <8 x i8> @test_build_vector_i8(i8 %a, i8 %b, i8 %c, i8 %d, i8 %e, i8 %f, i8 %g, i8 %h) {
 ; CHECK-LABEL: test_build_vector_i8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    ppaire.b a6, a6, a7
-; CHECK-NEXT:    ppaire.b a4, a4, a5
-; CHECK-NEXT:    ppaire.b a2, a2, a3
-; CHECK-NEXT:    ppaire.b a0, a0, a1
-; CHECK-NEXT:    ppaire.h a1, a4, a6
-; CHECK-NEXT:    ppaire.h a0, a0, a2
-; CHECK-NEXT:    pack a0, a0, a1
+; CHECK-NEXT:    padd.bs a0, zero, a0
+; CHECK-NEXT:    slli a1, a1, 8
+; CHECK-NEXT:    lui t0, 16
+; CHECK-NEXT:    slli a2, a2, 16
+; CHECK-NEXT:    addi t0, t0, -256
+; CHECK-NEXT:    mvm a0, a1, t0
+; CHECK-NEXT:    lui a1, 4080
+; CHECK-NEXT:    slli a3, a3, 24
+; CHECK-NEXT:    li t0, 255
+; CHECK-NEXT:    slli a4, a4, 32
+; CHECK-NEXT:    slli a5, a5, 40
+; CHECK-NEXT:    slli a6, a6, 48
+; CHECK-NEXT:    slli a7, a7, 56
+; CHECK-NEXT:    mvm a0, a2, a1
+; CHECK-NEXT:    li a1, -1
+; CHECK-NEXT:    slli a2, t0, 24
+; CHECK-NEXT:    mvm a0, a3, a2
+; CHECK-NEXT:    slli a2, t0, 32
+; CHECK-NEXT:    slli a3, t0, 40
+; CHECK-NEXT:    slli t0, t0, 48
+; CHECK-NEXT:    mvm a0, a4, a2
+; CHECK-NEXT:    mvm a0, a5, a3
+; CHECK-NEXT:    mvm a0, a6, t0
+; CHECK-NEXT:    slli a1, a1, 56
+; CHECK-NEXT:    mvm a0, a7, a1
 ; CHECK-NEXT:    ret
   %v0 = insertelement <8 x i8> poison, i8 %a, i32 0
   %v1 = insertelement <8 x i8> %v0, i8 %b, i32 1
@@ -761,9 +779,18 @@ define <8 x i8> @test_build_vector_i8(i8 %a, i8 %b, i8 %c, i8 %d, i8 %e, i8 %f, 
 define <4 x i16> @test_build_vector_i16(i16 %a, i16 %b, i16 %c, i16 %d) {
 ; CHECK-LABEL: test_build_vector_i16:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    ppaire.h a2, a2, a3
-; CHECK-NEXT:    ppaire.h a0, a0, a1
-; CHECK-NEXT:    pack a0, a0, a2
+; CHECK-NEXT:    padd.hs a0, zero, a0
+; CHECK-NEXT:    slli a1, a1, 16
+; CHECK-NEXT:    lui a4, 65535
+; CHECK-NEXT:    slli a2, a2, 32
+; CHECK-NEXT:    slli a3, a3, 48
+; CHECK-NEXT:    slli a5, a4, 4
+; CHECK-NEXT:    mvm a0, a1, a5
+; CHECK-NEXT:    li a1, -1
+; CHECK-NEXT:    slli a4, a4, 20
+; CHECK-NEXT:    mvm a0, a2, a4
+; CHECK-NEXT:    slli a1, a1, 48
+; CHECK-NEXT:    mvm a0, a3, a1
 ; CHECK-NEXT:    ret
   %v0 = insertelement <4 x i16> poison, i16 %a, i32 0
   %v1 = insertelement <4 x i16> %v0, i16 %b, i32 1
@@ -775,6 +802,7 @@ define <4 x i16> @test_build_vector_i16(i16 %a, i16 %b, i16 %c, i16 %d) {
 define <2 x i32> @test_build_vector_i32(i32 %a, i32 %b) {
 ; CHECK-LABEL: test_build_vector_i32:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    padd.ws a0, zero, a0
 ; CHECK-NEXT:    pack a0, a0, a1
 ; CHECK-NEXT:    ret
   %v0 = insertelement <2 x i32> poison, i32 %a, i32 0

@@ -164,10 +164,9 @@ define i1 @lt64_u16_and_23(i64 %0) {
 define i1 @test_disjoint(i1 %0, i32 %1, i32 %2) {
 ; CHECK-LABEL: test_disjoint:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w8, #1 // =0x1
-; CHECK-NEXT:    orr w9, w2, #0x800000
-; CHECK-NEXT:    lsl w8, w8, w1
-; CHECK-NEXT:    tst w9, w8
+; CHECK-NEXT:    orr w8, w2, #0x800000
+; CHECK-NEXT:    lsr w8, w8, w1
+; CHECK-NEXT:    tst w8, #0x1
 ; CHECK-NEXT:    cset w8, eq
 ; CHECK-NEXT:    orr w8, w0, w8
 ; CHECK-NEXT:    and w0, w8, #0x1
@@ -330,10 +329,9 @@ entry:
 define i1 @test_disjoint_64(i1 %0, i64 %1, i64 %2) {
 ; CHECK-LABEL: test_disjoint_64:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w8, #1 // =0x1
-; CHECK-NEXT:    orr x9, x2, #0x80000000000000
-; CHECK-NEXT:    lsl x8, x8, x1
-; CHECK-NEXT:    tst x9, x8
+; CHECK-NEXT:    orr x8, x2, #0x80000000000000
+; CHECK-NEXT:    lsr x8, x8, x1
+; CHECK-NEXT:    tst x8, #0x1
 ; CHECK-NEXT:    cset w8, eq
 ; CHECK-NEXT:    orr w8, w0, w8
 ; CHECK-NEXT:    and w0, w8, #0x1

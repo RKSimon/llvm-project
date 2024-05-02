@@ -1011,6 +1011,7 @@ define i1 @unreachableblock(i1 %arg) {
 ; CHECK-NEXT:    mov w0, wzr
 ; CHECK-NEXT:    ret
 ; CHECK-NEXT:  LBB15_2: ; %bb2
+; CHECK-NEXT:    mov w8, #1 ; =0x1
 ; CHECK-NEXT:    str xzr, [x8]
 ; CHECK-NEXT:    mov w0, #1 ; =0x1
 ; CHECK-NEXT:    ret

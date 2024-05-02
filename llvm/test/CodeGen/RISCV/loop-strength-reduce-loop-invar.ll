@@ -36,7 +36,7 @@ define void @test(i32 signext %row, i32 signext %N.in) nounwind {
 ; RV32-NEXT:    lui a3, %hi(A)
 ; RV32-NEXT:    addi a3, a3, %lo(A)
 ; RV32-NEXT:    li a0, 4
-; RV32-NEXT:    add a2, a2, a3
+; RV32-NEXT:    add a2, a3, a2
 ; RV32-NEXT:    addi a2, a2, 8
 ; RV32-NEXT:    li a3, 5
 ; RV32-NEXT:  .LBB0_2: # %cond_true
@@ -59,7 +59,7 @@ define void @test(i32 signext %row, i32 signext %N.in) nounwind {
 ; RV64-NEXT:    addiw a1, a1, 2
 ; RV64-NEXT:    li a0, 2
 ; RV64-NEXT:    li a2, 4
-; RV64-NEXT:    add a3, a3, a4
+; RV64-NEXT:    add a3, a4, a3
 ; RV64-NEXT:    addi a4, a3, 4
 ; RV64-NEXT:    li a5, 5
 ; RV64-NEXT:  .LBB0_2: # %cond_true

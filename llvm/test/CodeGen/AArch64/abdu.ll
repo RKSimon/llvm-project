@@ -8,9 +8,11 @@
 define i8 @abd_ext_i8(i8 %a, i8 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    subs w8, w8, w1, uxtb
-; CHECK-NEXT:    cneg w0, w8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xff
+; CHECK-NEXT:    subs x8, x8, w1, uxtb
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i8 %a to i64
   %bext = zext i8 %b to i64
@@ -23,9 +25,11 @@ define i8 @abd_ext_i8(i8 %a, i8 %b) nounwind {
 define i8 @abd_ext_i8_i16(i8 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i8_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    subs w8, w8, w1, uxth
-; CHECK-NEXT:    cneg w0, w8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xff
+; CHECK-NEXT:    subs x8, x8, w1, uxth
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i8 %a to i64
   %bext = zext i16 %b to i64
@@ -38,9 +42,11 @@ define i8 @abd_ext_i8_i16(i8 %a, i16 %b) nounwind {
 define i8 @abd_ext_i8_undef(i8 %a, i8 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i8_undef:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xff
-; CHECK-NEXT:    subs w8, w8, w1, uxtb
-; CHECK-NEXT:    cneg w0, w8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xff
+; CHECK-NEXT:    subs x8, x8, w1, uxtb
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i8 %a to i64
   %bext = zext i8 %b to i64
@@ -53,9 +59,11 @@ define i8 @abd_ext_i8_undef(i8 %a, i8 %b) nounwind {
 define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xffff
-; CHECK-NEXT:    subs w8, w8, w1, uxth
-; CHECK-NEXT:    cneg w0, w8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xffff
+; CHECK-NEXT:    subs x8, x8, w1, uxth
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i16 %a to i64
   %bext = zext i16 %b to i64
@@ -68,9 +76,11 @@ define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i16_i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xffff
-; CHECK-NEXT:    subs w8, w8, w1
-; CHECK-NEXT:    cneg w0, w8, ls
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xffff
+; CHECK-NEXT:    subs x8, x8, w1, uxtw
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i16 %a to i64
   %bext = zext i32 %b to i64
@@ -83,9 +93,11 @@ define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 define i16 @abd_ext_i16_undef(i16 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i16_undef:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w0, #0xffff
-; CHECK-NEXT:    subs w8, w8, w1, uxth
-; CHECK-NEXT:    cneg w0, w8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    and x8, x0, #0xffff
+; CHECK-NEXT:    subs x8, x8, w1, uxth
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i16 %a to i64
   %bext = zext i16 %b to i64
@@ -112,8 +124,10 @@ define i32 @abd_ext_i32(i32 %a, i32 %b) nounwind {
 define i32 @abd_ext_i32_i16(i32 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i32_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    subs w8, w0, w1, uxth
-; CHECK-NEXT:    cneg w0, w8, ls
+; CHECK-NEXT:    mov w8, w0
+; CHECK-NEXT:    subs x8, x8, w1, uxth
+; CHECK-NEXT:    cneg x0, x8, mi
+; CHECK-NEXT:    // kill: def $w0 killed $w0 killed $x0
 ; CHECK-NEXT:    ret
   %aext = zext i32 %a to i64
   %bext = zext i16 %b to i64

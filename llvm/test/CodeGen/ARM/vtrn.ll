@@ -451,16 +451,16 @@ define void @test_15xi16(ptr %next.gep, ptr %next.gep13) {
 ; CHECK-LABEL: test_15xi16:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    add r2, r0, #2
-; CHECK-NEXT:    add r3, r0, #6
+; CHECK-NEXT:    add r0, r0, #6
 ; CHECK-NEXT:    vld1.16 {d16, d17}, [r2]!
 ; CHECK-NEXT:    vld1.16 {d18}, [r2]!
-; CHECK-NEXT:    vld1.16 {d20, d21}, [r3]!
-; CHECK-NEXT:    ldr r2, [r2]
-; CHECK-NEXT:    vld1.16 {d22}, [r3]!
-; CHECK-NEXT:    vmov.16 d19[0], r2
-; CHECK-NEXT:    ldr r3, [r3]
-; CHECK-NEXT:    add r2, r0, #30
-; CHECK-NEXT:    add r0, r0, #34
+; CHECK-NEXT:    vld1.16 {d20, d21}, [r0]!
+; CHECK-NEXT:    ldr r12, [r2]
+; CHECK-NEXT:    add r2, r2, #4
+; CHECK-NEXT:    vld1.16 {d22}, [r0]!
+; CHECK-NEXT:    ldr r3, [r0]
+; CHECK-NEXT:    vmov.16 d19[0], r12
+; CHECK-NEXT:    add r0, r0, #4
 ; CHECK-NEXT:    vmov.16 d19[1], r3
 ; CHECK-NEXT:    vld1.16 {d19[2]}, [r2:16]
 ; CHECK-NEXT:    vtrn.16 q8, q10

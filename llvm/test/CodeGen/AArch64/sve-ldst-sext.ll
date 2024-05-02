@@ -386,14 +386,14 @@ define <vscale x 16 x i64> @load_frozen_before_zext_multiuse5_dst_illegal(ptr %s
 ; CHECK-NEXT:    ld1sb { z5.d }, p0/z, [x0, #5, mul vl]
 ; CHECK-NEXT:    ld1sb { z6.d }, p0/z, [x0, #6, mul vl]
 ; CHECK-NEXT:    ld1sb { z7.d }, p0/z, [x0, #7, mul vl]
-; CHECK-NEXT:    str z24, [x1, #6, mul vl]
 ; CHECK-NEXT:    str z24, [x1, #7, mul vl]
-; CHECK-NEXT:    str z24, [x1, #4, mul vl]
+; CHECK-NEXT:    str z24, [x1, #6, mul vl]
 ; CHECK-NEXT:    str z24, [x1, #5, mul vl]
-; CHECK-NEXT:    str z24, [x1, #2, mul vl]
+; CHECK-NEXT:    str z24, [x1, #4, mul vl]
 ; CHECK-NEXT:    str z24, [x1, #3, mul vl]
-; CHECK-NEXT:    str z24, [x1]
+; CHECK-NEXT:    str z24, [x1, #2, mul vl]
 ; CHECK-NEXT:    str z24, [x1, #1, mul vl]
+; CHECK-NEXT:    str z24, [x1]
 ; CHECK-NEXT:    ret
   %load = load <vscale x 16 x i8>, ptr %src, align 1
   %load.frozen = freeze <vscale x 16 x i8> %load

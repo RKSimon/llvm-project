@@ -236,10 +236,8 @@ define dso_local zeroext i32 @func(double noundef %0, double noundef %1) #0 {
 ; PPC-NEXT:    lis 5, -15888
 ; PPC-NEXT:    li 6, 0
 ; PPC-NEXT:    bl __muldf3
-; PPC-NEXT:    mr 5, 3
-; PPC-NEXT:    lwz 3, 8(1) # 4-byte Folded Reload
-; PPC-NEXT:    mr 6, 4
-; PPC-NEXT:    lwz 4, 12(1) # 4-byte Folded Reload
+; PPC-NEXT:    lwz 5, 8(1) # 4-byte Folded Reload
+; PPC-NEXT:    lwz 6, 12(1) # 4-byte Folded Reload
 ; PPC-NEXT:    bl __adddf3
 ; PPC-NEXT:    bl __fixunsdfsi
 ; PPC-NEXT:    lwz 0, 36(1)
@@ -261,8 +259,7 @@ define dso_local zeroext i32 @func(double noundef %0, double noundef %1) #0 {
 ; PPC64-NEXT:    rldic 4, 4, 52, 0
 ; PPC64-NEXT:    bl __muldf3
 ; PPC64-NEXT:    nop
-; PPC64-NEXT:    mr 4, 3
-; PPC64-NEXT:    ld 3, 120(1) # 8-byte Folded Reload
+; PPC64-NEXT:    ld 4, 120(1) # 8-byte Folded Reload
 ; PPC64-NEXT:    bl __adddf3
 ; PPC64-NEXT:    nop
 ; PPC64-NEXT:    bl __fixunsdfsi
@@ -288,8 +285,7 @@ define dso_local zeroext i32 @func(double noundef %0, double noundef %1) #0 {
 ; PPC64LE-NEXT:    rldic 4, 4, 52, 0
 ; PPC64LE-NEXT:    bl __muldf3
 ; PPC64LE-NEXT:    nop
-; PPC64LE-NEXT:    mr 4, 3
-; PPC64LE-NEXT:    ld 3, 40(1) # 8-byte Folded Reload
+; PPC64LE-NEXT:    ld 4, 40(1) # 8-byte Folded Reload
 ; PPC64LE-NEXT:    bl __adddf3
 ; PPC64LE-NEXT:    nop
 ; PPC64LE-NEXT:    bl __fixunsdfsi

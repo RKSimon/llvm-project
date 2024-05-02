@@ -1229,7 +1229,15 @@ define <8 x i8> @testDUP.v1i8(<1 x i8> %a) {
 ; CHECK-SD-LABEL: testDUP.v1i8:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    dup v0.8b, v0.b[0]
+; CHECK-SD-NEXT:    fmov d1, d0
+; CHECK-SD-NEXT:    mov v0.b[1], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[2], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[3], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[4], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[5], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[6], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[7], v1.b[0]
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: testDUP.v1i8:
@@ -1250,11 +1258,25 @@ define <8 x i8> @testDUP.v1i8(<1 x i8> %a) {
 }
 
 define <8 x i16> @testDUP.v1i16(<1 x i16> %a) {
-; CHECK-LABEL: testDUP.v1i16:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    dup v0.8h, v0.h[0]
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: testDUP.v1i16:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v1.16b, v0.16b
+; CHECK-SD-NEXT:    mov v1.h[1], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[2], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[3], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[4], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[5], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[6], v0.h[0]
+; CHECK-SD-NEXT:    mov v1.h[7], v0.h[0]
+; CHECK-SD-NEXT:    mov v0.16b, v1.16b
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: testDUP.v1i16:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-GI-NEXT:    dup v0.8h, v0.h[0]
+; CHECK-GI-NEXT:    ret
   %b = extractelement <1 x i16> %a, i32 0
   %c = insertelement <8 x i16> undef, i16 %b, i32 0
   %d = insertelement <8 x i16> %c, i16 %b, i32 1
@@ -1268,11 +1290,21 @@ define <8 x i16> @testDUP.v1i16(<1 x i16> %a) {
 }
 
 define <4 x i32> @testDUP.v1i32(<1 x i32> %a) {
-; CHECK-LABEL: testDUP.v1i32:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    dup v0.4s, v0.s[0]
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: testDUP.v1i32:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v1.16b, v0.16b
+; CHECK-SD-NEXT:    mov v1.s[1], v0.s[0]
+; CHECK-SD-NEXT:    mov v1.s[2], v0.s[0]
+; CHECK-SD-NEXT:    mov v1.s[3], v0.s[0]
+; CHECK-SD-NEXT:    mov v0.16b, v1.16b
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: testDUP.v1i32:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-GI-NEXT:    dup v0.4s, v0.s[0]
+; CHECK-GI-NEXT:    ret
   %b = extractelement <1 x i32> %a, i32 0
   %c = insertelement <4 x i32> undef, i32 %b, i32 0
   %d = insertelement <4 x i32> %c, i32 %b, i32 1
@@ -1284,7 +1316,15 @@ define <4 x i32> @testDUP.v1i32(<1 x i32> %a) {
 define <8 x i8> @getl(<16 x i8> %x) #0 {
 ; CHECK-SD-LABEL: getl:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
+; CHECK-SD-NEXT:    mov v1.16b, v0.16b
+; CHECK-SD-NEXT:    mov v1.b[1], v0.b[1]
+; CHECK-SD-NEXT:    mov v1.b[2], v0.b[2]
+; CHECK-SD-NEXT:    mov v1.b[3], v0.b[3]
+; CHECK-SD-NEXT:    mov v1.b[4], v0.b[4]
+; CHECK-SD-NEXT:    mov v1.b[5], v0.b[5]
+; CHECK-SD-NEXT:    mov v1.b[6], v0.b[6]
+; CHECK-SD-NEXT:    mov v1.b[7], v0.b[7]
+; CHECK-SD-NEXT:    fmov d0, d1
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: getl:
@@ -1666,11 +1706,18 @@ entry:
 }
 
 define <2 x i32> @test_concat_same_v1i32_v1i32(<2 x i32> %a) {
-; CHECK-LABEL: test_concat_same_v1i32_v1i32:
-; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    dup v0.2s, v0.s[0]
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: test_concat_same_v1i32_v1i32:
+; CHECK-SD:       // %bb.0: // %entry
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v0.s[1], v0.s[0]
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: test_concat_same_v1i32_v1i32:
+; CHECK-GI:       // %bb.0: // %entry
+; CHECK-GI-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-GI-NEXT:    dup v0.2s, v0.s[0]
+; CHECK-GI-NEXT:    ret
 entry:
   %0 = extractelement <2 x i32> %a, i32 0
   %vecinit.i = insertelement <2 x i32> undef, i32 %0, i32 0
@@ -1721,7 +1768,16 @@ define <16 x i8> @test_concat_v16i8_v8i8_v16i8(<8 x i8> %x, <16 x i8> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v16i8_v8i8_v16i8:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v2.16b, v0.16b
+; CHECK-SD-NEXT:    mov v2.b[1], v0.b[1]
+; CHECK-SD-NEXT:    mov v2.b[2], v0.b[2]
+; CHECK-SD-NEXT:    mov v2.b[3], v0.b[3]
+; CHECK-SD-NEXT:    mov v2.b[4], v0.b[4]
+; CHECK-SD-NEXT:    mov v2.b[5], v0.b[5]
+; CHECK-SD-NEXT:    mov v2.b[6], v0.b[6]
+; CHECK-SD-NEXT:    mov v2.b[7], v0.b[7]
+; CHECK-SD-NEXT:    mov v2.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v0.16b, v2.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v16i8_v8i8_v16i8:
@@ -1765,7 +1821,14 @@ define <16 x i8> @test_concat_v16i8_v16i8_v8i8(<16 x i8> %x, <8 x i8> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v16i8_v16i8_v8i8:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v0.b[8], v1.b[0]
+; CHECK-SD-NEXT:    mov v0.b[9], v1.b[1]
+; CHECK-SD-NEXT:    mov v0.b[10], v1.b[2]
+; CHECK-SD-NEXT:    mov v0.b[11], v1.b[3]
+; CHECK-SD-NEXT:    mov v0.b[12], v1.b[4]
+; CHECK-SD-NEXT:    mov v0.b[13], v1.b[5]
+; CHECK-SD-NEXT:    mov v0.b[14], v1.b[6]
+; CHECK-SD-NEXT:    mov v0.b[15], v1.b[7]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v16i8_v16i8_v8i8:
@@ -1829,8 +1892,24 @@ define <16 x i8> @test_concat_v16i8_v8i8_v8i8(<8 x i8> %x, <8 x i8> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v16i8_v8i8_v8i8:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v2.16b, v0.16b
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v2.b[1], v0.b[1]
+; CHECK-SD-NEXT:    mov v2.b[2], v0.b[2]
+; CHECK-SD-NEXT:    mov v2.b[3], v0.b[3]
+; CHECK-SD-NEXT:    mov v2.b[4], v0.b[4]
+; CHECK-SD-NEXT:    mov v2.b[5], v0.b[5]
+; CHECK-SD-NEXT:    mov v2.b[6], v0.b[6]
+; CHECK-SD-NEXT:    mov v2.b[7], v0.b[7]
+; CHECK-SD-NEXT:    mov v2.b[8], v1.b[0]
+; CHECK-SD-NEXT:    mov v2.b[9], v1.b[1]
+; CHECK-SD-NEXT:    mov v2.b[10], v1.b[2]
+; CHECK-SD-NEXT:    mov v2.b[11], v1.b[3]
+; CHECK-SD-NEXT:    mov v2.b[12], v1.b[4]
+; CHECK-SD-NEXT:    mov v2.b[13], v1.b[5]
+; CHECK-SD-NEXT:    mov v2.b[14], v1.b[6]
+; CHECK-SD-NEXT:    mov v2.b[15], v1.b[7]
+; CHECK-SD-NEXT:    mov v0.16b, v2.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v16i8_v8i8_v8i8:
@@ -1914,7 +1993,12 @@ define <8 x i16> @test_concat_v8i16_v4i16_v8i16(<4 x i16> %x, <8 x i16> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v8i16_v4i16_v8i16:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v2.16b, v0.16b
+; CHECK-SD-NEXT:    mov v2.h[1], v0.h[1]
+; CHECK-SD-NEXT:    mov v2.h[2], v0.h[2]
+; CHECK-SD-NEXT:    mov v2.h[3], v0.h[3]
+; CHECK-SD-NEXT:    mov v2.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v0.16b, v2.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v8i16_v4i16_v8i16:
@@ -1946,7 +2030,10 @@ define <8 x i16> @test_concat_v8i16_v8i16_v4i16(<8 x i16> %x, <4 x i16> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v8i16_v8i16_v4i16:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v0.h[4], v1.h[0]
+; CHECK-SD-NEXT:    mov v0.h[5], v1.h[1]
+; CHECK-SD-NEXT:    mov v0.h[6], v1.h[2]
+; CHECK-SD-NEXT:    mov v0.h[7], v1.h[3]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v8i16_v8i16_v4i16:
@@ -1986,8 +2073,16 @@ define <8 x i16> @test_concat_v8i16_v4i16_v4i16(<4 x i16> %x, <4 x i16> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v8i16_v4i16_v4i16:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v2.16b, v0.16b
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v2.h[1], v0.h[1]
+; CHECK-SD-NEXT:    mov v2.h[2], v0.h[2]
+; CHECK-SD-NEXT:    mov v2.h[3], v0.h[3]
+; CHECK-SD-NEXT:    mov v2.h[4], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[5], v1.h[1]
+; CHECK-SD-NEXT:    mov v2.h[6], v1.h[2]
+; CHECK-SD-NEXT:    mov v2.h[7], v1.h[3]
+; CHECK-SD-NEXT:    mov v0.16b, v2.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v8i16_v4i16_v4i16:
@@ -2047,6 +2142,7 @@ define <4 x i32> @test_concat_v4i32_v2i32_v4i32(<2 x i32> %x, <4 x i32> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v4i32_v2i32_v4i32:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    mov v0.s[1], v0.s[1]
 ; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
 ; CHECK-SD-NEXT:    ret
 ;
@@ -2073,7 +2169,8 @@ define <4 x i32> @test_concat_v4i32_v4i32_v2i32(<4 x i32> %x, <2 x i32> %y) #0 {
 ; CHECK-SD-LABEL: test_concat_v4i32_v4i32_v2i32:
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mov v0.d[1], v1.d[0]
+; CHECK-SD-NEXT:    mov v0.s[2], v1.s[0]
+; CHECK-SD-NEXT:    mov v0.s[3], v1.s[1]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_concat_v4i32_v4i32_v2i32:

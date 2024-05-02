@@ -149,11 +149,10 @@ define i8 @ccmp8rr_sf(i8 %a, i8 %b, i8* nocapture %c)  {
 ; SETZUCC-LABEL: ccmp8rr_sf:
 ; SETZUCC:       # %bb.0: # %entry
 ; SETZUCC-NEXT:    testb %dil, %dil # encoding: [0x40,0x84,0xff]
-; SETZUCC-NEXT:    setzune %al # encoding: [0x62,0xf4,0x7f,0x18,0x45,0xc0]
+; SETZUCC-NEXT:    setzue %al # encoding: [0x62,0xf4,0x7f,0x18,0x44,0xc0]
 ; SETZUCC-NEXT:    cmpb $2, %sil # encoding: [0x40,0x80,0xfe,0x02]
-; SETZUCC-NEXT:    setzuge %cl # encoding: [0x62,0xf4,0x7f,0x18,0x4d,0xc1]
-; SETZUCC-NEXT:    andb %al, %cl # encoding: [0x20,0xc1]
-; SETZUCC-NEXT:    cmpb $1, %cl # encoding: [0x80,0xf9,0x01]
+; SETZUCC-NEXT:    setzul %cl # encoding: [0x62,0xf4,0x7f,0x18,0x4c,0xc1]
+; SETZUCC-NEXT:    orb %al, %cl # encoding: [0x08,0xc1]
 ; SETZUCC-NEXT:    jne .LBB2_2 # encoding: [0x75,A]
 ; SETZUCC-NEXT:    # fixup A - offset: 1, value: .LBB2_2, kind: FK_PCRel_1
 ; SETZUCC-NEXT:  # %bb.1: # %if.then
@@ -203,11 +202,10 @@ define i8 @ccmp8rr_none(i8 %a, i8 %b, i8* nocapture %c)  {
 ; SETZUCC-LABEL: ccmp8rr_none:
 ; SETZUCC:       # %bb.0: # %entry
 ; SETZUCC-NEXT:    testb %dil, %dil # encoding: [0x40,0x84,0xff]
-; SETZUCC-NEXT:    setzune %al # encoding: [0x62,0xf4,0x7f,0x18,0x45,0xc0]
+; SETZUCC-NEXT:    setzue %al # encoding: [0x62,0xf4,0x7f,0x18,0x44,0xc0]
 ; SETZUCC-NEXT:    cmpb $2, %sil # encoding: [0x40,0x80,0xfe,0x02]
-; SETZUCC-NEXT:    setzuge %cl # encoding: [0x62,0xf4,0x7f,0x18,0x4d,0xc1]
-; SETZUCC-NEXT:    orb %al, %cl # encoding: [0x08,0xc1]
-; SETZUCC-NEXT:    cmpb $1, %cl # encoding: [0x80,0xf9,0x01]
+; SETZUCC-NEXT:    setzul %cl # encoding: [0x62,0xf4,0x7f,0x18,0x4c,0xc1]
+; SETZUCC-NEXT:    testb %cl, %al # encoding: [0x84,0xc8]
 ; SETZUCC-NEXT:    jne .LBB3_2 # encoding: [0x75,A]
 ; SETZUCC-NEXT:    # fixup A - offset: 1, value: .LBB3_2, kind: FK_PCRel_1
 ; SETZUCC-NEXT:  # %bb.1: # %if.then
@@ -573,11 +571,10 @@ define i8 @ccmp8ri_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ccmp8ri_zf_double_p:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpb $123, %dil # encoding: [0x40,0x80,0xff,0x7b]
-; CHECK-NEXT:    setne %al # encoding: [0x0f,0x95,0xc0]
+; CHECK-NEXT:    sete %al # encoding: [0x0f,0x94,0xc0]
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0 # encoding: [0x66,0x0f,0x2e,0xc0]
-; CHECK-NEXT:    setp %cl # encoding: [0x0f,0x9a,0xc1]
-; CHECK-NEXT:    andb %al, %cl # encoding: [0x20,0xc1]
-; CHECK-NEXT:    cmpb $1, %cl # encoding: [0x80,0xf9,0x01]
+; CHECK-NEXT:    setnp %cl # encoding: [0x0f,0x9b,0xc1]
+; CHECK-NEXT:    orb %al, %cl # encoding: [0x08,0xc1]
 ; CHECK-NEXT:    jne .LBB10_2 # encoding: [0x75,A]
 ; CHECK-NEXT:    # fixup A - offset: 1, value: .LBB10_2, kind: FK_PCRel_1
 ; CHECK-NEXT:  # %bb.1: # %if.then
@@ -589,11 +586,10 @@ define i8 @ccmp8ri_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ccmp8ri_zf_double_p:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    cmpb $123, %dil # encoding: [0x40,0x80,0xff,0x7b]
-; NDD-NEXT:    setne %al # encoding: [0x0f,0x95,0xc0]
+; NDD-NEXT:    sete %al # encoding: [0x0f,0x94,0xc0]
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0 # encoding: [0x66,0x0f,0x2e,0xc0]
-; NDD-NEXT:    setp %cl # encoding: [0x0f,0x9a,0xc1]
-; NDD-NEXT:    andb %cl, %al # EVEX TO LEGACY Compression encoding: [0x20,0xc8]
-; NDD-NEXT:    cmpb $1, %al # encoding: [0x3c,0x01]
+; NDD-NEXT:    setnp %cl # encoding: [0x0f,0x9b,0xc1]
+; NDD-NEXT:    orb %cl, %al # EVEX TO LEGACY Compression encoding: [0x08,0xc8]
 ; NDD-NEXT:    jne .LBB10_2 # encoding: [0x75,A]
 ; NDD-NEXT:    # fixup A - offset: 1, value: .LBB10_2, kind: FK_PCRel_1
 ; NDD-NEXT:  # %bb.1: # %if.then
@@ -634,11 +630,10 @@ define i8 @ccmp8ri_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ccmp8ri_zf_double_np:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpb $123, %dil # encoding: [0x40,0x80,0xff,0x7b]
-; CHECK-NEXT:    setne %al # encoding: [0x0f,0x95,0xc0]
+; CHECK-NEXT:    sete %al # encoding: [0x0f,0x94,0xc0]
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0 # encoding: [0x66,0x0f,0x2e,0xc0]
-; CHECK-NEXT:    setnp %cl # encoding: [0x0f,0x9b,0xc1]
-; CHECK-NEXT:    andb %al, %cl # encoding: [0x20,0xc1]
-; CHECK-NEXT:    cmpb $1, %cl # encoding: [0x80,0xf9,0x01]
+; CHECK-NEXT:    setp %cl # encoding: [0x0f,0x9a,0xc1]
+; CHECK-NEXT:    orb %al, %cl # encoding: [0x08,0xc1]
 ; CHECK-NEXT:    jne .LBB11_2 # encoding: [0x75,A]
 ; CHECK-NEXT:    # fixup A - offset: 1, value: .LBB11_2, kind: FK_PCRel_1
 ; CHECK-NEXT:  # %bb.1: # %if.then
@@ -650,11 +645,10 @@ define i8 @ccmp8ri_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ccmp8ri_zf_double_np:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    cmpb $123, %dil # encoding: [0x40,0x80,0xff,0x7b]
-; NDD-NEXT:    setne %al # encoding: [0x0f,0x95,0xc0]
+; NDD-NEXT:    sete %al # encoding: [0x0f,0x94,0xc0]
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0 # encoding: [0x66,0x0f,0x2e,0xc0]
-; NDD-NEXT:    setnp %cl # encoding: [0x0f,0x9b,0xc1]
-; NDD-NEXT:    andb %cl, %al # EVEX TO LEGACY Compression encoding: [0x20,0xc8]
-; NDD-NEXT:    cmpb $1, %al # encoding: [0x3c,0x01]
+; NDD-NEXT:    setp %cl # encoding: [0x0f,0x9a,0xc1]
+; NDD-NEXT:    orb %cl, %al # EVEX TO LEGACY Compression encoding: [0x08,0xc8]
 ; NDD-NEXT:    jne .LBB11_2 # encoding: [0x75,A]
 ; NDD-NEXT:    # fixup A - offset: 1, value: .LBB11_2, kind: FK_PCRel_1
 ; NDD-NEXT:  # %bb.1: # %if.then

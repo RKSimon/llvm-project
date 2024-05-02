@@ -91,6 +91,7 @@ define i32 @pick_i32_3(i32 %a, i32 %b) {
 ; LA64-LABEL: pick_i32_3:
 ; LA64:       # %bb.0:
 ; LA64-NEXT:    bstrpick.d $a1, $a1, 31, 8
+; LA64-NEXT:    bstrpick.d $a1, $a1, 55, 0
 ; LA64-NEXT:    slli.d $a0, $a0, 24
 ; LA64-NEXT:    or $a0, $a1, $a0
 ; LA64-NEXT:    ret
@@ -110,7 +111,11 @@ define signext i32 @pick_i32_3_sext(i32 %a, i32 %b) {
 ;
 ; LA64-LABEL: pick_i32_3_sext:
 ; LA64:       # %bb.0:
-; LA64-NEXT:    bytepick.w $a0, $a1, $a0, 3
+; LA64-NEXT:    bstrpick.d $a1, $a1, 31, 8
+; LA64-NEXT:    bstrpick.d $a1, $a1, 55, 0
+; LA64-NEXT:    slli.d $a0, $a0, 24
+; LA64-NEXT:    or $a0, $a1, $a0
+; LA64-NEXT:    addi.w $a0, $a0, 0
 ; LA64-NEXT:    ret
   %1 = lshr i32 %b, 8
   %2 = shl i32 %a, 24

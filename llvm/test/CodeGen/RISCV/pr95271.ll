@@ -35,12 +35,11 @@ define i32 @PR95271(ptr %p) {
 ; RV64I-NEXT:    lw a0, 0(a0)
 ; RV64I-NEXT:    lui a1, 349525
 ; RV64I-NEXT:    addi a1, a1, 1365
-; RV64I-NEXT:    addi a2, a0, 1
-; RV64I-NEXT:    srli a2, a2, 1
+; RV64I-NEXT:    addi a0, a0, 1
+; RV64I-NEXT:    srli a2, a0, 1
 ; RV64I-NEXT:    and a1, a2, a1
 ; RV64I-NEXT:    lui a2, 209715
 ; RV64I-NEXT:    addi a2, a2, 819
-; RV64I-NEXT:    addiw a0, a0, 1
 ; RV64I-NEXT:    sub a0, a0, a1
 ; RV64I-NEXT:    and a1, a0, a2
 ; RV64I-NEXT:    srli a0, a0, 2
@@ -50,12 +49,15 @@ define i32 @PR95271(ptr %p) {
 ; RV64I-NEXT:    srli a1, a0, 4
 ; RV64I-NEXT:    add a0, a0, a1
 ; RV64I-NEXT:    addi a1, a2, -241
-; RV64I-NEXT:    and a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 8
+; RV64I-NEXT:    and a1, a0, a1
+; RV64I-NEXT:    slli a0, a0, 8
+; RV64I-NEXT:    addi a2, a2, -256
+; RV64I-NEXT:    and a0, a0, a2
+; RV64I-NEXT:    add a0, a1, a0
+; RV64I-NEXT:    slli a1, a0, 48
+; RV64I-NEXT:    srli a1, a1, 32
 ; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    slli a1, a0, 16
-; RV64I-NEXT:    add a0, a0, a1
-; RV64I-NEXT:    srliw a0, a0, 24
+; RV64I-NEXT:    srli a0, a0, 24
 ; RV64I-NEXT:    ret
   %load = load i32, ptr %p, align 4
   %inc = add i32 %load, 1

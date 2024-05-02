@@ -913,33 +913,17 @@ declare %struct.__neon_float32x4x4_t @llvm.arm.neon.vld4lane.v4f32.p0(ptr, <4 x 
 ; we don't currently have a QQQQ_VFP2 super-regclass.  (The "0" for the low
 ; part of %ins67 is supposed to be loaded by a VLDRS instruction in this test.)
 define <8 x i16> @test_qqqq_regsequence_subreg([6 x i64] %b) nounwind {
-; DEFAULT-LABEL: test_qqqq_regsequence_subreg:
-; DEFAULT:       @ %bb.0:
-; DEFAULT-NEXT:    add r0, sp, #24
-; DEFAULT-NEXT:    vld1.32 {d21[0]}, [r0:32]
-; DEFAULT-NEXT:    add r0, sp, #28
-; DEFAULT-NEXT:    vmov.i32 d20, #0x0
-; DEFAULT-NEXT:    vld1.32 {d21[1]}, [r0:32]
-; DEFAULT-NEXT:    vld3.16 {d16[1], d18[1], d20[1]}, [r0]
-; DEFAULT-NEXT:    vadd.i16 q12, q8, q9
-; DEFAULT-NEXT:    vadd.i16 q8, q10, q12
-; DEFAULT-NEXT:    vmov r0, r1, d16
-; DEFAULT-NEXT:    vmov r2, r3, d17
-; DEFAULT-NEXT:    mov pc, lr
-;
-; BASIC-LABEL: test_qqqq_regsequence_subreg:
-; BASIC:       @ %bb.0:
-; BASIC-NEXT:    add r0, sp, #24
-; BASIC-NEXT:    vld1.32 {d23[0]}, [r0:32]
-; BASIC-NEXT:    add r0, sp, #28
-; BASIC-NEXT:    vmov.i32 d22, #0x0
-; BASIC-NEXT:    vld1.32 {d23[1]}, [r0:32]
-; BASIC-NEXT:    vld3.16 {d18[1], d20[1], d22[1]}, [r0]
-; BASIC-NEXT:    vadd.i16 q8, q9, q10
-; BASIC-NEXT:    vadd.i16 q8, q11, q8
-; BASIC-NEXT:    vmov r0, r1, d16
-; BASIC-NEXT:    vmov r2, r3, d17
-; BASIC-NEXT:    mov pc, lr
+; CHECK-LABEL: test_qqqq_regsequence_subreg:
+; CHECK:       @ %bb.0:
+; CHECK-NEXT:    vmov.i32 d4, #0x0
+; CHECK-NEXT:    vldr s10, [sp, #24]
+; CHECK-NEXT:    vldr s11, [sp, #28]
+; CHECK-NEXT:    vld3.16 {d0[1], d2[1], d4[1]}, [r0]
+; CHECK-NEXT:    vadd.i16 q8, q0, q1
+; CHECK-NEXT:    vadd.i16 q8, q2, q8
+; CHECK-NEXT:    vmov r0, r1, d16
+; CHECK-NEXT:    vmov r2, r3, d17
+; CHECK-NEXT:    mov pc, lr
   %tmp63 = extractvalue [6 x i64] %b, 5
   %tmp64 = zext i64 %tmp63 to i128
   %tmp65 = shl i128 %tmp64, 64

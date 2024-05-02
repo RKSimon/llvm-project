@@ -587,7 +587,7 @@ define amdgpu_kernel void @v_extractelement_v8f16_dynamic_sgpr(ptr addrspace(1) 
 ; SI-NEXT:    s_mov_b64 s[2:3], s[6:7]
 ; SI-NEXT:    s_cmp_eq_u32 s8, 1
 ; SI-NEXT:    s_waitcnt vmcnt(0)
-; SI-NEXT:    v_lshrrev_b32_e32 v0, 16, v1
+; SI-NEXT:    v_alignbit_b32 v0, v2, v1, 16
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 2
 ; SI-NEXT:    v_lshrrev_b32_e32 v5, 16, v2
@@ -762,30 +762,30 @@ define amdgpu_kernel void @v_extractelement_v16f16_dynamic_sgpr(ptr addrspace(1)
 ; SI-NEXT:    buffer_load_dwordx4 v[5:8], v[5:6], s[4:7], 0 addr64 offset:16
 ; SI-NEXT:    s_cmp_eq_u32 s8, 1
 ; SI-NEXT:    s_waitcnt vmcnt(1)
-; SI-NEXT:    v_lshrrev_b32_e32 v0, 16, v1
+; SI-NEXT:    v_alignbit_b32 v0, v4, v3, 16
+; SI-NEXT:    v_alignbit_b32 v11, v2, v1, 16
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 2
-; SI-NEXT:    v_lshrrev_b32_e32 v11, 16, v2
-; SI-NEXT:    v_lshrrev_b32_e32 v12, 16, v3
+; SI-NEXT:    v_lshrrev_b32_e32 v12, 16, v2
 ; SI-NEXT:    v_lshrrev_b32_e32 v13, 16, v4
 ; SI-NEXT:    s_waitcnt vmcnt(0)
-; SI-NEXT:    v_lshrrev_b32_e32 v14, 16, v5
+; SI-NEXT:    v_alignbit_b32 v14, v6, v5, 16
 ; SI-NEXT:    v_lshrrev_b32_e32 v15, 16, v6
 ; SI-NEXT:    v_lshrrev_b32_e32 v16, 16, v7
 ; SI-NEXT:    v_lshrrev_b32_e32 v17, 16, v8
-; SI-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc
+; SI-NEXT:    v_cndmask_b32_e32 v1, v1, v11, vcc
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 3
-; SI-NEXT:    v_cndmask_b32_e32 v0, v0, v2, vcc
+; SI-NEXT:    v_cndmask_b32_e32 v1, v1, v2, vcc
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 4
-; SI-NEXT:    v_cndmask_b32_e32 v0, v0, v11, vcc
+; SI-NEXT:    v_cndmask_b32_e32 v1, v1, v12, vcc
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 5
-; SI-NEXT:    v_cndmask_b32_e32 v0, v0, v3, vcc
+; SI-NEXT:    v_cndmask_b32_e32 v1, v1, v3, vcc
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 6
-; SI-NEXT:    v_cndmask_b32_e32 v0, v0, v12, vcc
+; SI-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc
 ; SI-NEXT:    s_cselect_b64 vcc, -1, 0
 ; SI-NEXT:    s_cmp_eq_u32 s8, 7
 ; SI-NEXT:    v_cndmask_b32_e32 v0, v0, v4, vcc

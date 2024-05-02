@@ -157,11 +157,11 @@ define void @large_caller_new_value(%twenty_bytes* byval(%twenty_bytes) align 4 
 ; X32-NEXT:    mov dword ptr [esp + 8], 2
 ; X32-NEXT:    mov dword ptr [esp + 12], 3
 ; X32-NEXT:    mov dword ptr [esp + 16], 4
-; X32-NEXT:    mov dword ptr [esp + 24], 0
-; X32-NEXT:    mov dword ptr [esp + 28], 1
-; X32-NEXT:    mov dword ptr [esp + 32], 2
-; X32-NEXT:    mov dword ptr [esp + 36], 3
 ; X32-NEXT:    mov dword ptr [esp + 40], 4
+; X32-NEXT:    mov dword ptr [esp + 36], 3
+; X32-NEXT:    mov dword ptr [esp + 32], 2
+; X32-NEXT:    mov dword ptr [esp + 28], 1
+; X32-NEXT:    mov dword ptr [esp + 24], 0
 ; X32-NEXT:    add esp, 20
 ; X32-NEXT:    .cfi_def_cfa_offset 4
 ; X32-NEXT:    jmp large_callee@PLT # TAILCALL
@@ -173,8 +173,8 @@ define void @large_caller_new_value(%twenty_bytes* byval(%twenty_bytes) align 4 
 ; X64-NEXT:    movabs rcx, 12884901890
 ; X64-NEXT:    mov qword ptr [rsp - 12], rcx
 ; X64-NEXT:    mov dword ptr [rsp - 4], 4
-; X64-NEXT:    mov qword ptr [rsp + 8], rax
 ; X64-NEXT:    mov qword ptr [rsp + 16], rcx
+; X64-NEXT:    mov qword ptr [rsp + 8], rax
 ; X64-NEXT:    mov dword ptr [rsp + 24], 4
 ; X64-NEXT:    jmp large_callee@PLT # TAILCALL
 entry:

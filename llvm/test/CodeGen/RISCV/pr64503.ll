@@ -16,8 +16,24 @@ define i1 @f(i64 %LGV1) {
 define i64 @g(ptr %A, i64 %0) {
 ; CHECK-LABEL: g:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    li a0, 1
-; CHECK-NEXT:    sb a0, 0(zero)
+; CHECK-NEXT:    mv a3, a0
+; CHECK-NEXT:    lw a0, 0(a0)
+; CHECK-NEXT:    lw a3, 4(a3)
+; CHECK-NEXT:    beqz a2, .LBB1_2
+; CHECK-NEXT:  # %bb.1:
+; CHECK-NEXT:    slti a1, a2, 1
+; CHECK-NEXT:    j .LBB1_3
+; CHECK-NEXT:  .LBB1_2:
+; CHECK-NEXT:    li a2, 1
+; CHECK-NEXT:    addi a4, a0, -32
+; CHECK-NEXT:    srl a2, a2, a0
+; CHECK-NEXT:    srai a4, a4, 31
+; CHECK-NEXT:    and a2, a4, a2
+; CHECK-NEXT:    sltu a1, a2, a1
+; CHECK-NEXT:    xori a1, a1, 1
+; CHECK-NEXT:  .LBB1_3:
+; CHECK-NEXT:    sb a1, 0(zero)
+; CHECK-NEXT:    mv a1, a3
 ; CHECK-NEXT:    ret
   store i64 poison, ptr %A, align 4
   %LGV1 = load i64, ptr %A, align 4
