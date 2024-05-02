@@ -163,7 +163,7 @@ define { half, half } @v_fneg_add_multi_use_add_f16(half %a, half %b) #0 {
 ; VI-NSZ:       ; %bb.0:
 ; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NSZ-NEXT:    v_sub_f16_e64 v0, -v0, v1
-; VI-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; VI-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-SAFE-LABEL: v_fneg_add_multi_use_add_f16:
@@ -180,7 +180,7 @@ define { half, half } @v_fneg_add_multi_use_add_f16(half %a, half %b) #0 {
 ; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NSZ-NEXT:    v_sub_f16_e64 v0, -v0, v1
 ; GFX11-NSZ-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; GFX11-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_multi_use_add_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
@@ -207,53 +207,31 @@ define { half, half } @v_fneg_add_multi_use_add_f16(half %a, half %b) #0 {
 }
 
 define half @v_fneg_add_fneg_x_f16(half %a, half %b) #0 {
-; SI-SAFE-LABEL: v_fneg_add_fneg_x_f16:
-; SI-SAFE:       ; %bb.0:
-; SI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-SAFE-NEXT:    v_sub_f32_e32 v0, v1, v0
-; SI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
-; SI-SAFE-NEXT:    s_setpc_b64 s[30:31]
+; SI-LABEL: v_fneg_add_fneg_x_f16:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_sub_f32_e32 v0, v1, v0
+; SI-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
+; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; SI-NSZ-LABEL: v_fneg_add_fneg_x_f16:
-; SI-NSZ:       ; %bb.0:
-; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NSZ-NEXT:    v_sub_f32_e32 v0, v0, v1
-; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; VI-LABEL: v_fneg_add_fneg_x_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_sub_f16_e32 v0, v1, v0
+; VI-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-SAFE-LABEL: v_fneg_add_fneg_x_f16:
-; VI-SAFE:       ; %bb.0:
-; VI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-SAFE-NEXT:    v_sub_f16_e32 v0, v1, v0
-; VI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; VI-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; VI-NSZ-LABEL: v_fneg_add_fneg_x_f16:
-; VI-NSZ:       ; %bb.0:
-; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NSZ-NEXT:    v_sub_f16_e32 v0, v0, v1
-; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-SAFE-LABEL: v_fneg_add_fneg_x_f16:
-; GFX11-SAFE:       ; %bb.0:
-; GFX11-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SAFE-NEXT:    v_sub_f16_e32 v0, v1, v0
-; GFX11-SAFE-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; GFX11-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-NSZ-LABEL: v_fneg_add_fneg_x_f16:
-; GFX11-NSZ:       ; %bb.0:
-; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NSZ-NEXT:    v_sub_f16_e32 v0, v0, v1
-; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-LABEL: v_fneg_add_fneg_x_f16:
+; GFX11:       ; %bb.0:
+; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_sub_f16_e32 v0, v1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_fneg_x_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
 ; GFX11-SAFE-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
@@ -273,53 +251,31 @@ define half @v_fneg_add_fneg_x_f16(half %a, half %b) #0 {
 }
 
 define half @v_fneg_add_x_fneg_f16(half %a, half %b) #0 {
-; SI-SAFE-LABEL: v_fneg_add_x_fneg_f16:
-; SI-SAFE:       ; %bb.0:
-; SI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-SAFE-NEXT:    v_sub_f32_e32 v0, v0, v1
-; SI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
-; SI-SAFE-NEXT:    s_setpc_b64 s[30:31]
+; SI-LABEL: v_fneg_add_x_fneg_f16:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-NEXT:    v_sub_f32_e32 v0, v0, v1
+; SI-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
+; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; SI-NSZ-LABEL: v_fneg_add_x_fneg_f16:
-; SI-NSZ:       ; %bb.0:
-; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-NSZ-NEXT:    v_sub_f32_e32 v0, v1, v0
-; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; VI-LABEL: v_fneg_add_x_fneg_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_sub_f16_e32 v0, v0, v1
+; VI-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-SAFE-LABEL: v_fneg_add_x_fneg_f16:
-; VI-SAFE:       ; %bb.0:
-; VI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-SAFE-NEXT:    v_sub_f16_e32 v0, v0, v1
-; VI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; VI-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; VI-NSZ-LABEL: v_fneg_add_x_fneg_f16:
-; VI-NSZ:       ; %bb.0:
-; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NSZ-NEXT:    v_sub_f16_e32 v0, v1, v0
-; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-SAFE-LABEL: v_fneg_add_x_fneg_f16:
-; GFX11-SAFE:       ; %bb.0:
-; GFX11-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SAFE-NEXT:    v_sub_f16_e32 v0, v0, v1
-; GFX11-SAFE-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; GFX11-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-NSZ-LABEL: v_fneg_add_x_fneg_f16:
-; GFX11-NSZ:       ; %bb.0:
-; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NSZ-NEXT:    v_sub_f16_e32 v0, v1, v0
-; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-LABEL: v_fneg_add_x_fneg_f16:
+; GFX11:       ; %bb.0:
+; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_sub_f16_e32 v0, v0, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_x_fneg_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
 ; GFX11-SAFE-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
@@ -339,53 +295,31 @@ define half @v_fneg_add_x_fneg_f16(half %a, half %b) #0 {
 }
 
 define half @v_fneg_add_fneg_fneg_f16(half %a, half %b) #0 {
-; SI-SAFE-LABEL: v_fneg_add_fneg_fneg_f16:
-; SI-SAFE:       ; %bb.0:
-; SI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e64 v0, -v0
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-SAFE-NEXT:    v_sub_f32_e32 v0, v0, v1
-; SI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
-; SI-SAFE-NEXT:    s_setpc_b64 s[30:31]
+; SI-LABEL: v_fneg_add_fneg_fneg_f16:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NEXT:    v_cvt_f16_f32_e64 v0, -v0
+; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-NEXT:    v_sub_f32_e32 v0, v0, v1
+; SI-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
+; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; SI-NSZ-LABEL: v_fneg_add_fneg_fneg_f16:
-; SI-NSZ:       ; %bb.0:
-; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NSZ-NEXT:    v_add_f32_e32 v0, v0, v1
-; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; VI-LABEL: v_fneg_add_fneg_fneg_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_sub_f16_e64 v0, -v0, v1
+; VI-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-SAFE-LABEL: v_fneg_add_fneg_fneg_f16:
-; VI-SAFE:       ; %bb.0:
-; VI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-SAFE-NEXT:    v_sub_f16_e64 v0, -v0, v1
-; VI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; VI-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; VI-NSZ-LABEL: v_fneg_add_fneg_fneg_f16:
-; VI-NSZ:       ; %bb.0:
-; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NSZ-NEXT:    v_add_f16_e32 v0, v0, v1
-; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-SAFE-LABEL: v_fneg_add_fneg_fneg_f16:
-; GFX11-SAFE:       ; %bb.0:
-; GFX11-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SAFE-NEXT:    v_sub_f16_e64 v0, -v0, v1
-; GFX11-SAFE-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; GFX11-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-NSZ-LABEL: v_fneg_add_fneg_fneg_f16:
-; GFX11-NSZ:       ; %bb.0:
-; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NSZ-NEXT:    v_add_f16_e32 v0, v0, v1
-; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-LABEL: v_fneg_add_fneg_fneg_f16:
+; GFX11:       ; %bb.0:
+; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_sub_f16_e64 v0, -v0, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_fneg_fneg_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
 ; GFX11-SAFE-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
@@ -409,12 +343,12 @@ define { half, half } @v_fneg_add_store_use_fneg_x_f16(half %a, half %b) #0 {
 ; SI-SAFE-LABEL: v_fneg_add_store_use_fneg_x_f16:
 ; SI-SAFE:       ; %bb.0:
 ; SI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v0, v0
 ; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v2, v0
+; SI-SAFE-NEXT:    v_cvt_f16_f32_e64 v2, -v0
 ; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v3, v1
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e64 v1, -v0
-; SI-SAFE-NEXT:    v_sub_f32_e32 v0, v3, v2
+; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v2, v2
+; SI-SAFE-NEXT:    v_xor_b32_e32 v1, 0x80000000, v0
+; SI-SAFE-NEXT:    v_add_f32_e32 v0, v2, v3
 ; SI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
 ; SI-SAFE-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -422,48 +356,31 @@ define { half, half } @v_fneg_add_store_use_fneg_x_f16(half %a, half %b) #0 {
 ; SI-NSZ:       ; %bb.0:
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v1, -v0
-; SI-NSZ-NEXT:    v_sub_f32_e32 v0, v3, v2
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v0
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v1
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
+; SI-NSZ-NEXT:    v_xor_b32_e32 v1, 0x80000000, v0
+; SI-NSZ-NEXT:    v_sub_f32_e32 v0, v2, v3
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-SAFE-LABEL: v_fneg_add_store_use_fneg_x_f16:
-; VI-SAFE:       ; %bb.0:
-; VI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-SAFE-NEXT:    v_xor_b32_e32 v2, 0x8000, v0
-; VI-SAFE-NEXT:    v_sub_f16_e32 v0, v1, v0
-; VI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; VI-SAFE-NEXT:    v_mov_b32_e32 v1, v2
-; VI-SAFE-NEXT:    s_setpc_b64 s[30:31]
+; VI-LABEL: v_fneg_add_store_use_fneg_x_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_xor_b32_e32 v2, 0x8000, v0
+; VI-NEXT:    v_sub_f16_e32 v0, v1, v0
+; VI-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
+; VI-NEXT:    v_mov_b32_e32 v1, v2
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-NSZ-LABEL: v_fneg_add_store_use_fneg_x_f16:
-; VI-NSZ:       ; %bb.0:
-; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NSZ-NEXT:    v_xor_b32_e32 v2, 0x8000, v0
-; VI-NSZ-NEXT:    v_sub_f16_e32 v0, v0, v1
-; VI-NSZ-NEXT:    v_mov_b32_e32 v1, v2
-; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-SAFE-LABEL: v_fneg_add_store_use_fneg_x_f16:
-; GFX11-SAFE:       ; %bb.0:
-; GFX11-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SAFE-NEXT:    v_sub_f16_e32 v1, v1, v0
-; GFX11-SAFE-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v2, 0x8000, v1
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v1, 0x8000, v0
-; GFX11-SAFE-NEXT:    v_mov_b32_e32 v0, v2
-; GFX11-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-NSZ-LABEL: v_fneg_add_store_use_fneg_x_f16:
-; GFX11-NSZ:       ; %bb.0:
-; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NSZ-NEXT:    v_sub_f16_e32 v2, v0, v1
-; GFX11-NSZ-NEXT:    v_xor_b32_e32 v1, 0x8000, v0
-; GFX11-NSZ-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NSZ-NEXT:    v_mov_b32_e32 v0, v2
-; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-LABEL: v_fneg_add_store_use_fneg_x_f16:
+; GFX11:       ; %bb.0:
+; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_sub_f16_e32 v1, v1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_xor_b32_e32 v2, 0x8000, v1
+; GFX11-NEXT:    v_xor_b32_e32 v1, 0x8000, v0
+; GFX11-NEXT:    v_mov_b32_e32 v0, v2
+; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_store_use_fneg_x_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
 ; GFX11-SAFE-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
@@ -493,16 +410,15 @@ define { half, half } @v_fneg_add_multi_use_fneg_x_f16(half %a, half %b, half %c
 ; SI-SAFE-LABEL: v_fneg_add_multi_use_fneg_x_f16:
 ; SI-SAFE:       ; %bb.0:
 ; SI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v0, v0
 ; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-SAFE-NEXT:    v_cvt_f16_f32_e64 v0, -v0
 ; SI-SAFE-NEXT:    v_cvt_f16_f32_e32 v2, v2
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v3, v0
 ; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v3, v0
 ; SI-SAFE-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; SI-SAFE-NEXT:    v_cvt_f32_f16_e64 v4, -v0
-; SI-SAFE-NEXT:    v_sub_f32_e32 v0, v1, v3
+; SI-SAFE-NEXT:    v_add_f32_e32 v0, v3, v1
 ; SI-SAFE-NEXT:    v_xor_b32_e32 v0, 0x80000000, v0
-; SI-SAFE-NEXT:    v_mul_f32_e32 v1, v4, v2
+; SI-SAFE-NEXT:    v_mul_f32_e32 v1, v3, v2
 ; SI-SAFE-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; SI-NSZ-LABEL: v_fneg_add_multi_use_fneg_x_f16:
@@ -510,50 +426,34 @@ define { half, half } @v_fneg_add_multi_use_fneg_x_f16(half %a, half %b, half %c
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v3, v0
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e64 v0, -v0
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v4, -v0
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v3
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v4, v0
 ; SI-NSZ-NEXT:    v_sub_f32_e32 v0, v3, v1
 ; SI-NSZ-NEXT:    v_mul_f32_e32 v1, v4, v2
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-SAFE-LABEL: v_fneg_add_multi_use_fneg_x_f16:
-; VI-SAFE:       ; %bb.0:
-; VI-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-SAFE-NEXT:    v_sub_f16_e32 v1, v1, v0
-; VI-SAFE-NEXT:    v_xor_b32_e32 v3, 0x8000, v1
-; VI-SAFE-NEXT:    v_mul_f16_e64 v1, -v0, v2
-; VI-SAFE-NEXT:    v_mov_b32_e32 v0, v3
-; VI-SAFE-NEXT:    s_setpc_b64 s[30:31]
+; VI-LABEL: v_fneg_add_multi_use_fneg_x_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_sub_f16_e32 v1, v1, v0
+; VI-NEXT:    v_xor_b32_e32 v3, 0x8000, v1
+; VI-NEXT:    v_mul_f16_e64 v1, -v0, v2
+; VI-NEXT:    v_mov_b32_e32 v0, v3
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
-; VI-NSZ-LABEL: v_fneg_add_multi_use_fneg_x_f16:
-; VI-NSZ:       ; %bb.0:
-; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NSZ-NEXT:    v_sub_f16_e32 v3, v0, v1
-; VI-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, v2
-; VI-NSZ-NEXT:    v_mov_b32_e32 v0, v3
-; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-SAFE-LABEL: v_fneg_add_multi_use_fneg_x_f16:
-; GFX11-SAFE:       ; %bb.0:
-; GFX11-SAFE-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SAFE-NEXT:    v_sub_f16_e32 v1, v1, v0
-; GFX11-SAFE-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX11-SAFE-NEXT:    v_xor_b32_e32 v3, 0x8000, v1
-; GFX11-SAFE-NEXT:    v_mul_f16_e64 v1, -v0, v2
-; GFX11-SAFE-NEXT:    v_mov_b32_e32 v0, v3
-; GFX11-SAFE-NEXT:    s_setpc_b64 s[30:31]
-;
-; GFX11-NSZ-LABEL: v_fneg_add_multi_use_fneg_x_f16:
-; GFX11-NSZ:       ; %bb.0:
-; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NSZ-NEXT:    v_sub_f16_e32 v3, v0, v1
-; GFX11-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, v2
-; GFX11-NSZ-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NSZ-NEXT:    v_mov_b32_e32 v0, v3
-; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-LABEL: v_fneg_add_multi_use_fneg_x_f16:
+; GFX11:       ; %bb.0:
+; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_sub_f16_e32 v1, v1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_xor_b32_e32 v3, 0x8000, v1
+; GFX11-NEXT:    v_mul_f16_e64 v1, -v0, v2
+; GFX11-NEXT:    v_mov_b32_e32 v0, v3
+; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_add_multi_use_fneg_x_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
 ; GFX11-SAFE-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
@@ -808,7 +708,7 @@ define { half, half } @v_fneg_mul_multi_use_mul_f16(half %a, half %b) #0 {
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NEXT:    v_mul_f16_e64 v0, v0, -v1
-; VI-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; VI-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: v_fneg_mul_multi_use_mul_f16:
@@ -816,7 +716,7 @@ define { half, half } @v_fneg_mul_multi_use_mul_f16(half %a, half %b) #0 {
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_mul_f16_e64 v0, v0, -v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; GFX11-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_mul_multi_use_mul_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
@@ -882,10 +782,10 @@ define half @v_fneg_mul_x_fneg_f16(half %a, half %b) #0 {
 ; SI-LABEL: v_fneg_mul_x_fneg_f16:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
 ; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
 ; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NEXT:    v_mul_f32_e32 v0, v0, v1
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -959,12 +859,12 @@ define { half, half } @v_fneg_mul_store_use_fneg_x_f16(half %a, half %b) #0 {
 ; SI-LABEL: v_fneg_mul_store_use_fneg_x_f16:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NEXT:    v_cvt_f32_f16_e32 v2, v1
-; SI-NEXT:    v_cvt_f32_f16_e32 v3, v0
-; SI-NEXT:    v_cvt_f32_f16_e64 v1, -v0
-; SI-NEXT:    v_mul_f32_e32 v0, v3, v2
+; SI-NEXT:    v_cvt_f16_f32_e64 v2, -v0
+; SI-NEXT:    v_cvt_f16_f32_e64 v1, -v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v2, v2
+; SI-NEXT:    v_cvt_f32_f16_e32 v3, v1
+; SI-NEXT:    v_xor_b32_e32 v1, 0x80000000, v0
+; SI-NEXT:    v_mul_f32_e32 v0, v2, v3
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: v_fneg_mul_store_use_fneg_x_f16:
@@ -1011,15 +911,14 @@ define { half, half } @v_fneg_mul_multi_use_fneg_x_f16(half %a, half %b, half %c
 ; SI-LABEL: v_fneg_mul_multi_use_fneg_x_f16:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NEXT:    v_cvt_f16_f32_e64 v0, -v0
+; SI-NEXT:    v_cvt_f16_f32_e64 v1, -v1
 ; SI-NEXT:    v_cvt_f16_f32_e32 v2, v2
-; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NEXT:    v_cvt_f32_f16_e32 v3, v0
-; SI-NEXT:    v_cvt_f32_f16_e64 v4, -v0
-; SI-NEXT:    v_mul_f32_e32 v0, v3, v1
-; SI-NEXT:    v_mul_f32_e32 v1, v4, v2
+; SI-NEXT:    v_cvt_f32_f16_e32 v0, v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v2
+; SI-NEXT:    v_mul_f32_e32 v0, v3, v0
+; SI-NEXT:    v_mul_f32_e32 v1, v3, v1
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: v_fneg_mul_multi_use_fneg_x_f16:
@@ -1745,19 +1644,19 @@ define { half, half } @v_fneg_minnum_multi_use_minnum_f16_ieee(half %a, half %b)
 ; VI-LABEL: v_fneg_minnum_multi_use_minnum_f16_ieee:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_max_f16_e64 v1, -v1, -v1
-; VI-NEXT:    v_max_f16_e64 v0, -v0, -v0
-; VI-NEXT:    v_max_f16_e32 v0, v0, v1
+; VI-NEXT:    v_max_f16_e32 v1, v1, v1
+; VI-NEXT:    v_max_f16_e32 v0, v0, v0
+; VI-NEXT:    v_max_f16_e64 v0, -v0, -v1
 ; VI-NEXT:    v_mul_f16_e32 v1, -4.0, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: v_fneg_minnum_multi_use_minnum_f16_ieee:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_max_f16_e64 v1, -v1, -v1
-; GFX11-NEXT:    v_max_f16_e64 v0, -v0, -v0
+; GFX11-NEXT:    v_max_f16_e32 v1, v1, v1
+; GFX11-NEXT:    v_max_f16_e32 v0, v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_max_f16_e32 v0, v0, v1
+; GFX11-NEXT:    v_max_f16_e64 v0, -v0, -v1
 ; GFX11-NEXT:    v_mul_f16_e32 v1, -4.0, v0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_minnum_multi_use_minnum_f16_ieee:
@@ -1802,8 +1701,8 @@ define <2 x half> @v_fneg_minnum_multi_use_minnum_f16_no_ieee(half %a, half %b) 
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NEXT:    v_max_f16_e64 v0, -v0, -v1
-; VI-NEXT:    v_mov_b32_e32 v1, 0xc400
-; VI-NEXT:    v_mul_f16_sdwa v1, v0, v1 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
+; VI-NEXT:    v_mov_b32_e32 v1, 0x4400
+; VI-NEXT:    v_mul_f16_sdwa v1, -v0, v1 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
 ; VI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2379,19 +2278,19 @@ define { half, half } @v_fneg_maxnum_multi_use_maxnum_f16_ieee(half %a, half %b)
 ; VI-LABEL: v_fneg_maxnum_multi_use_maxnum_f16_ieee:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_max_f16_e64 v1, -v1, -v1
-; VI-NEXT:    v_max_f16_e64 v0, -v0, -v0
-; VI-NEXT:    v_min_f16_e32 v0, v0, v1
+; VI-NEXT:    v_max_f16_e32 v1, v1, v1
+; VI-NEXT:    v_max_f16_e32 v0, v0, v0
+; VI-NEXT:    v_min_f16_e64 v0, -v0, -v1
 ; VI-NEXT:    v_mul_f16_e32 v1, -4.0, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: v_fneg_maxnum_multi_use_maxnum_f16_ieee:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_max_f16_e64 v1, -v1, -v1
-; GFX11-NEXT:    v_max_f16_e64 v0, -v0, -v0
+; GFX11-NEXT:    v_max_f16_e32 v1, v1, v1
+; GFX11-NEXT:    v_max_f16_e32 v0, v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_min_f16_e32 v0, v0, v1
+; GFX11-NEXT:    v_min_f16_e64 v0, -v0, -v1
 ; GFX11-NEXT:    v_mul_f16_e32 v1, -4.0, v0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_maxnum_multi_use_maxnum_f16_ieee:
@@ -2436,8 +2335,8 @@ define <2 x half> @v_fneg_maxnum_multi_use_maxnum_f16_no_ieee(half %a, half %b) 
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NEXT:    v_min_f16_e64 v0, -v0, -v1
-; VI-NEXT:    v_mov_b32_e32 v1, 0xc400
-; VI-NEXT:    v_mul_f16_sdwa v1, v0, v1 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
+; VI-NEXT:    v_mov_b32_e32 v1, 0x4400
+; VI-NEXT:    v_mul_f16_sdwa v1, -v0, v1 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:DWORD src1_sel:DWORD
 ; VI-NEXT:    v_or_b32_e32 v0, v0, v1
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2613,13 +2512,13 @@ define { half, half } @v_fneg_fma_multi_use_fma_f16(half %a, half %b, half %c) #
 ; SI-NSZ-LABEL: v_fneg_fma_multi_use_fma_f16:
 ; SI-NSZ:       ; %bb.0:
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NSZ-NEXT:    v_fma_f32 v0, v0, -v1, -v2
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v2, -v2
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v1, -v1
+; SI-NSZ-NEXT:    v_fma_f32 v0, v0, v1, v2
 ; SI-NSZ-NEXT:    v_mul_f32_e32 v1, -4.0, v0
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2635,7 +2534,7 @@ define { half, half } @v_fneg_fma_multi_use_fma_f16(half %a, half %b, half %c) #
 ; VI-NSZ:       ; %bb.0:
 ; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NSZ-NEXT:    v_fma_f16 v0, v0, -v1, -v2
-; VI-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; VI-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-SAFE-LABEL: v_fneg_fma_multi_use_fma_f16:
@@ -2652,7 +2551,7 @@ define { half, half } @v_fneg_fma_multi_use_fma_f16(half %a, half %b, half %c) #
 ; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NSZ-NEXT:    v_fma_f16 v0, v0, -v1, -v2
 ; GFX11-NSZ-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; GFX11-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_fma_multi_use_fma_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
@@ -3049,12 +2948,12 @@ define { half, half } @v_fneg_fma_store_use_fneg_x_y_f16(half %a, half %b, half 
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e64 v3, -v0
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v1
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v4, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v1, -v0
-; SI-NSZ-NEXT:    v_fma_f32 v0, v4, v3, -v2
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v4, v1
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v3
+; SI-NSZ-NEXT:    v_xor_b32_e32 v1, 0x80000000, v0
+; SI-NSZ-NEXT:    v_fma_f32 v0, v3, -v4, -v2
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-SAFE-LABEL: v_fneg_fma_store_use_fneg_x_y_f16:
@@ -3137,17 +3036,16 @@ define { half, half } @v_fneg_fma_multi_use_fneg_x_y_f16(half %a, half %b, half 
 ; SI-NSZ-LABEL: v_fneg_fma_multi_use_fneg_x_y_f16:
 ; SI-NSZ:       ; %bb.0:
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v3, v3
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v3
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e64 v0, -v0
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v3, v3
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v4, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v5, -v0
-; SI-NSZ-NEXT:    v_fma_f32 v0, v4, v1, -v2
-; SI-NSZ-NEXT:    v_mul_f32_e32 v1, v5, v3
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v3
+; SI-NSZ-NEXT:    v_fma_f32 v0, v4, -v1, -v2
+; SI-NSZ-NEXT:    v_mul_f32_e32 v1, v4, v3
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-SAFE-LABEL: v_fneg_fma_multi_use_fneg_x_y_f16:
@@ -3325,34 +3223,42 @@ define <4 x half> @v_fneg_fmad_v4f32(<4 x half> %a, <4 x half> %b, <4 x half> %c
 ; SI-NSZ-LABEL: v_fneg_fmad_v4f32:
 ; SI-NSZ:       ; %bb.0:
 ; SI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v11, v11
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v3, v3
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v10, v10
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v7, v7
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v9, v9
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v5, v5
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v6, v6
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v4, v4
+; SI-NSZ-NEXT:    v_lshlrev_b32_e32 v7, 16, v7
+; SI-NSZ-NEXT:    v_lshlrev_b32_e32 v5, 16, v5
+; SI-NSZ-NEXT:    v_or_b32_e32 v6, v6, v7
+; SI-NSZ-NEXT:    v_or_b32_e32 v4, v4, v5
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v5, v11
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v3, v3
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v7, v9
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v9, v10
+; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v8, v8
 ; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v4, v4
-; SI-NSZ-NEXT:    v_cvt_f16_f32_e32 v5, v5
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v11, v11
+; SI-NSZ-NEXT:    v_xor_b32_e32 v4, 0x80008000, v4
+; SI-NSZ-NEXT:    v_xor_b32_e32 v6, 0x80008000, v6
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v10, v4
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v11, v6
+; SI-NSZ-NEXT:    v_lshrrev_b32_e32 v4, 16, v4
+; SI-NSZ-NEXT:    v_lshrrev_b32_e32 v6, 16, v6
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v5, v5
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v3, v3
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v10, v10
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v9, v9
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v7, v7
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v1, v1
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v9, v9
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v2, v2
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v8, v8
 ; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v4, -v4
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v5, -v5
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v6, -v6
-; SI-NSZ-NEXT:    v_cvt_f32_f16_e64 v7, -v7
-; SI-NSZ-NEXT:    v_mad_f32 v0, v0, v4, -v8
-; SI-NSZ-NEXT:    v_mad_f32 v1, v1, v5, -v9
-; SI-NSZ-NEXT:    v_mad_f32 v2, v2, v6, -v10
-; SI-NSZ-NEXT:    v_mad_f32 v3, v3, v7, -v11
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v4, v4
+; SI-NSZ-NEXT:    v_cvt_f32_f16_e32 v6, v6
+; SI-NSZ-NEXT:    v_mad_f32 v2, v2, v11, -v9
+; SI-NSZ-NEXT:    v_mad_f32 v0, v0, v10, -v8
+; SI-NSZ-NEXT:    v_mad_f32 v1, v1, v4, -v7
+; SI-NSZ-NEXT:    v_mad_f32 v3, v3, v6, -v5
 ; SI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-SAFE-LABEL: v_fneg_fmad_v4f32:
@@ -3456,7 +3362,7 @@ define { half, half } @v_fneg_fmad_multi_use_fmad_f16(half %a, half %b, half %c)
 ; VI-NSZ:       ; %bb.0:
 ; VI-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; VI-NSZ-NEXT:    v_fma_f16 v0, v0, -v1, -v2
-; VI-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; VI-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; VI-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-SAFE-LABEL: v_fneg_fmad_multi_use_fmad_f16:
@@ -3473,7 +3379,7 @@ define { half, half } @v_fneg_fmad_multi_use_fmad_f16(half %a, half %b, half %c)
 ; GFX11-NSZ-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NSZ-NEXT:    v_fma_f16 v0, v0, -v1, -v2
 ; GFX11-NSZ-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NSZ-NEXT:    v_mul_f16_e32 v1, -4.0, v0
+; GFX11-NSZ-NEXT:    v_mul_f16_e64 v1, -v0, 4.0
 ; GFX11-NSZ-NEXT:    s_setpc_b64 s[30:31]
 ; GFX11-SAFE-TRUE16-LABEL: v_fneg_fmad_multi_use_fmad_f16:
 ; GFX11-SAFE-TRUE16:       ; %bb.0:
@@ -4571,8 +4477,7 @@ define { half, half } @v_fneg_multi_use_fp_round_fneg_f64_to_f16(double %a) #0 {
 ; SI-NEXT:    v_cndmask_b32_e32 v0, v2, v0, vcc
 ; SI-NEXT:    v_and_b32_e32 v1, 0x8000, v1
 ; SI-NEXT:    v_or_b32_e32 v1, v1, v0
-; SI-NEXT:    v_and_b32_e32 v0, 0xffff, v1
-; SI-NEXT:    v_cvt_f32_f16_e64 v0, -v0
+; SI-NEXT:    v_cvt_f32_f16_e64 v0, -v1
 ; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -5317,9 +5222,9 @@ define half @v_fneg_inlineasm_multi_use_src_f16(ptr addrspace(1) %out, half %a, 
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NEXT:    v_cvt_f16_f32_e32 v0, v2
-; SI-NEXT:    v_cvt_f16_f32_e64 v1, -v3
+; SI-NEXT:    v_cvt_f16_f32_e32 v1, v3
 ; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
-; SI-NEXT:    v_cvt_f32_f16_e64 v1, -v1
+; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
 ; SI-NEXT:    v_mul_f32_e32 v0, v0, v1
 ; SI-NEXT:    v_cvt_f16_f32_e64 v1, -v0
 ; SI-NEXT:    ;;#ASMSTART

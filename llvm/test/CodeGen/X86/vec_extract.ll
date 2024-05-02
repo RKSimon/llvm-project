@@ -107,26 +107,27 @@ declare <2 x double> @foo()
 define i64 @pr150117(<31 x i8> %a0) nounwind {
 ; X86-LABEL: pr150117:
 ; X86:       # %bb.0:
+; X86-NEXT:    pushl %ebp
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %esi
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %edi
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ebx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    shll $8, %edx
-; X86-NEXT:    orl %ebx, %edx
-; X86-NEXT:    shll $8, %edi
-; X86-NEXT:    orl %esi, %edi
-; X86-NEXT:    shll $16, %ecx
-; X86-NEXT:    orl %edi, %ecx
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ebp
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-NEXT:    shll $24, %esi
-; X86-NEXT:    orl %ecx, %esi
-; X86-NEXT:    movd %esi, %xmm0
-; X86-NEXT:    pinsrw $2, %edx, %xmm0
+; X86-NEXT:    shll $8, %esi
+; X86-NEXT:    orl %ebp, %esi
+; X86-NEXT:    shll $8, %ebx
+; X86-NEXT:    orl %edi, %ebx
+; X86-NEXT:    shll $16, %edx
+; X86-NEXT:    orl %ebx, %edx
+; X86-NEXT:    shll $24, %ecx
+; X86-NEXT:    orl %edx, %ecx
+; X86-NEXT:    movd %ecx, %xmm0
+; X86-NEXT:    pinsrw $2, %esi, %xmm0
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    shll $8, %ecx
 ; X86-NEXT:    orl %eax, %ecx
@@ -137,6 +138,7 @@ define i64 @pr150117(<31 x i8> %a0) nounwind {
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    popl %ebx
+; X86-NEXT:    popl %ebp
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: pr150117:
@@ -146,18 +148,18 @@ define i64 @pr150117(<31 x i8> %a0) nounwind {
 ; X64-NEXT:    movzbl {{[0-9]+}}(%rsp), %edx
 ; X64-NEXT:    movzbl {{[0-9]+}}(%rsp), %esi
 ; X64-NEXT:    movzbl {{[0-9]+}}(%rsp), %edi
-; X64-NEXT:    movl {{[0-9]+}}(%rsp), %r8d
-; X64-NEXT:    shll $8, %r8d
-; X64-NEXT:    orl %edi, %r8d
-; X64-NEXT:    shll $8, %esi
-; X64-NEXT:    orl %edx, %esi
-; X64-NEXT:    shll $16, %ecx
-; X64-NEXT:    orl %esi, %ecx
-; X64-NEXT:    movl {{[0-9]+}}(%rsp), %edx
-; X64-NEXT:    shll $24, %edx
-; X64-NEXT:    orl %ecx, %edx
-; X64-NEXT:    movd %edx, %xmm0
-; X64-NEXT:    pinsrw $2, %r8d, %xmm0
+; X64-NEXT:    movzbl {{[0-9]+}}(%rsp), %r8d
+; X64-NEXT:    movl {{[0-9]+}}(%rsp), %r9d
+; X64-NEXT:    shll $8, %r9d
+; X64-NEXT:    orl %r8d, %r9d
+; X64-NEXT:    shll $8, %edi
+; X64-NEXT:    orl %esi, %edi
+; X64-NEXT:    shll $16, %edx
+; X64-NEXT:    orl %edi, %edx
+; X64-NEXT:    shll $24, %ecx
+; X64-NEXT:    orl %edx, %ecx
+; X64-NEXT:    movd %ecx, %xmm0
+; X64-NEXT:    pinsrw $2, %r9d, %xmm0
 ; X64-NEXT:    movl {{[0-9]+}}(%rsp), %ecx
 ; X64-NEXT:    shll $8, %ecx
 ; X64-NEXT:    orl %eax, %ecx

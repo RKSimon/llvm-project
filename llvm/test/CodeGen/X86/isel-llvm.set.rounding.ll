@@ -19,7 +19,9 @@ define void @func_01() nounwind {
 ; X86-NOSSE:       # %bb.0:
 ; X86-NOSSE-NEXT:    pushl %eax
 ; X86-NOSSE-NEXT:    fnstcw (%esp)
-; X86-NOSSE-NEXT:    orb $12, {{[0-9]+}}(%esp)
+; X86-NOSSE-NEXT:    movzwl (%esp), %eax
+; X86-NOSSE-NEXT:    orl $3072, %eax # imm = 0xC00
+; X86-NOSSE-NEXT:    movw %ax, (%esp)
 ; X86-NOSSE-NEXT:    fldcw (%esp)
 ; X86-NOSSE-NEXT:    popl %eax
 ; X86-NOSSE-NEXT:    retl
@@ -39,7 +41,9 @@ define void @func_01() nounwind {
 ; X64-NOSSE-LABEL: func_01:
 ; X64-NOSSE:       # %bb.0:
 ; X64-NOSSE-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NOSSE-NEXT:    orb $12, -{{[0-9]+}}(%rsp)
+; X64-NOSSE-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NOSSE-NEXT:    orl $3072, %eax # imm = 0xC00
+; X64-NOSSE-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NOSSE-NEXT:    fldcw -{{[0-9]+}}(%rsp)
 ; X64-NOSSE-NEXT:    retq
 ;
@@ -57,7 +61,9 @@ define void @func_01() nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
 ; X86-NEXT:    fnstcw (%esp)
-; X86-NEXT:    orb $12, {{[0-9]+}}(%esp)
+; X86-NEXT:    movzwl (%esp), %eax
+; X86-NEXT:    orl $3072, %eax # imm = 0xC00
+; X86-NEXT:    movw %ax, (%esp)
 ; X86-NEXT:    fldcw (%esp)
 ; X86-NEXT:    popl %eax
 ; X86-NEXT:    retl
@@ -77,7 +83,9 @@ define void @func_01() nounwind {
 ; X64-LABEL: func_01:
 ; X64:       # %bb.0:
 ; X64-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NEXT:    orb $12, -{{[0-9]+}}(%rsp)
+; X64-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    orl $3072, %eax # imm = 0xC00
+; X64-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    fldcw -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    stmxcsr -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    orb $96, -{{[0-9]+}}(%rsp)
@@ -197,8 +205,8 @@ define void @func_03() nounwind {
 ; X86-NOSSE:       # %bb.0:
 ; X86-NOSSE-NEXT:    pushl %eax
 ; X86-NOSSE-NEXT:    fnstcw (%esp)
-; X86-NOSSE-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X86-NOSSE-NEXT:    andl (%esp), %eax
+; X86-NOSSE-NEXT:    movzwl (%esp), %eax
+; X86-NOSSE-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X86-NOSSE-NEXT:    orl $2048, %eax # imm = 0x800
 ; X86-NOSSE-NEXT:    movw %ax, (%esp)
 ; X86-NOSSE-NEXT:    fldcw (%esp)
@@ -220,8 +228,8 @@ define void @func_03() nounwind {
 ; X64-NOSSE-LABEL: func_03:
 ; X64-NOSSE:       # %bb.0:
 ; X64-NOSSE-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NOSSE-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X64-NOSSE-NEXT:    andl -{{[0-9]+}}(%rsp), %eax
+; X64-NOSSE-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NOSSE-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X64-NOSSE-NEXT:    orl $2048, %eax # imm = 0x800
 ; X64-NOSSE-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NOSSE-NEXT:    fldcw -{{[0-9]+}}(%rsp)
@@ -241,8 +249,8 @@ define void @func_03() nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
 ; X86-NEXT:    fnstcw (%esp)
-; X86-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X86-NEXT:    andl (%esp), %eax
+; X86-NEXT:    movzwl (%esp), %eax
+; X86-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X86-NEXT:    orl $2048, %eax # imm = 0x800
 ; X86-NEXT:    movw %ax, (%esp)
 ; X86-NEXT:    fldcw (%esp)
@@ -264,8 +272,8 @@ define void @func_03() nounwind {
 ; X64-LABEL: func_03:
 ; X64:       # %bb.0:
 ; X64-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X64-NEXT:    andl -{{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X64-NEXT:    orl $2048, %eax # imm = 0x800
 ; X64-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    fldcw -{{[0-9]+}}(%rsp)
@@ -301,8 +309,8 @@ define void @func_04() nounwind {
 ; X86-NOSSE:       # %bb.0:
 ; X86-NOSSE-NEXT:    pushl %eax
 ; X86-NOSSE-NEXT:    fnstcw (%esp)
-; X86-NOSSE-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X86-NOSSE-NEXT:    andl (%esp), %eax
+; X86-NOSSE-NEXT:    movzwl (%esp), %eax
+; X86-NOSSE-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X86-NOSSE-NEXT:    orl $1024, %eax # imm = 0x400
 ; X86-NOSSE-NEXT:    movw %ax, (%esp)
 ; X86-NOSSE-NEXT:    fldcw (%esp)
@@ -324,8 +332,8 @@ define void @func_04() nounwind {
 ; X64-NOSSE-LABEL: func_04:
 ; X64-NOSSE:       # %bb.0:
 ; X64-NOSSE-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NOSSE-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X64-NOSSE-NEXT:    andl -{{[0-9]+}}(%rsp), %eax
+; X64-NOSSE-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NOSSE-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X64-NOSSE-NEXT:    orl $1024, %eax # imm = 0x400
 ; X64-NOSSE-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NOSSE-NEXT:    fldcw -{{[0-9]+}}(%rsp)
@@ -345,8 +353,8 @@ define void @func_04() nounwind {
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %eax
 ; X86-NEXT:    fnstcw (%esp)
-; X86-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X86-NEXT:    andl (%esp), %eax
+; X86-NEXT:    movzwl (%esp), %eax
+; X86-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X86-NEXT:    orl $1024, %eax # imm = 0x400
 ; X86-NEXT:    movw %ax, (%esp)
 ; X86-NEXT:    fldcw (%esp)
@@ -368,8 +376,8 @@ define void @func_04() nounwind {
 ; X64-LABEL: func_04:
 ; X64:       # %bb.0:
 ; X64-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NEXT:    movl $-3073, %eax # imm = 0xF3FF
-; X64-NEXT:    andl -{{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    movzwl -{{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    andl $62463, %eax # imm = 0xF3FF
 ; X64-NEXT:    orl $1024, %eax # imm = 0x400
 ; X64-NEXT:    movw %ax, -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    fldcw -{{[0-9]+}}(%rsp)
@@ -411,8 +419,8 @@ define void @func_05(i32 %x) nounwind {
 ; X86-NOSSE-NEXT:    shll %cl, %eax
 ; X86-NOSSE-NEXT:    andl $3072, %eax # imm = 0xC00
 ; X86-NOSSE-NEXT:    fnstcw (%esp)
-; X86-NOSSE-NEXT:    movl $-3073, %ecx # imm = 0xF3FF
-; X86-NOSSE-NEXT:    andl (%esp), %ecx
+; X86-NOSSE-NEXT:    movzwl (%esp), %ecx
+; X86-NOSSE-NEXT:    andl $62463, %ecx # imm = 0xF3FF
 ; X86-NOSSE-NEXT:    orl %eax, %ecx
 ; X86-NOSSE-NEXT:    movw %cx, (%esp)
 ; X86-NOSSE-NEXT:    fldcw (%esp)
@@ -447,8 +455,8 @@ define void @func_05(i32 %x) nounwind {
 ; X64-NOSSE-NEXT:    shll %cl, %eax
 ; X64-NOSSE-NEXT:    andl $3072, %eax # imm = 0xC00
 ; X64-NOSSE-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NOSSE-NEXT:    movl $-3073, %ecx # imm = 0xF3FF
-; X64-NOSSE-NEXT:    andl -{{[0-9]+}}(%rsp), %ecx
+; X64-NOSSE-NEXT:    movzwl -{{[0-9]+}}(%rsp), %ecx
+; X64-NOSSE-NEXT:    andl $62463, %ecx # imm = 0xF3FF
 ; X64-NOSSE-NEXT:    orl %eax, %ecx
 ; X64-NOSSE-NEXT:    movw %cx, -{{[0-9]+}}(%rsp)
 ; X64-NOSSE-NEXT:    fldcw -{{[0-9]+}}(%rsp)
@@ -481,8 +489,8 @@ define void @func_05(i32 %x) nounwind {
 ; X86-NEXT:    shll %cl, %eax
 ; X86-NEXT:    andl $3072, %eax # imm = 0xC00
 ; X86-NEXT:    fnstcw (%esp)
-; X86-NEXT:    movl $-3073, %ecx # imm = 0xF3FF
-; X86-NEXT:    andl (%esp), %ecx
+; X86-NEXT:    movzwl (%esp), %ecx
+; X86-NEXT:    andl $62463, %ecx # imm = 0xF3FF
 ; X86-NEXT:    orl %eax, %ecx
 ; X86-NEXT:    movw %cx, (%esp)
 ; X86-NEXT:    fldcw (%esp)
@@ -517,8 +525,8 @@ define void @func_05(i32 %x) nounwind {
 ; X64-NEXT:    shll %cl, %eax
 ; X64-NEXT:    andl $3072, %eax # imm = 0xC00
 ; X64-NEXT:    fnstcw -{{[0-9]+}}(%rsp)
-; X64-NEXT:    movl $-3073, %ecx # imm = 0xF3FF
-; X64-NEXT:    andl -{{[0-9]+}}(%rsp), %ecx
+; X64-NEXT:    movzwl -{{[0-9]+}}(%rsp), %ecx
+; X64-NEXT:    andl $62463, %ecx # imm = 0xF3FF
 ; X64-NEXT:    orl %eax, %ecx
 ; X64-NEXT:    movw %cx, -{{[0-9]+}}(%rsp)
 ; X64-NEXT:    fldcw -{{[0-9]+}}(%rsp)

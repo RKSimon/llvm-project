@@ -637,8 +637,9 @@ define amdgpu_kernel void @v_fneg_fold_v2bf16(ptr addrspace(1) %out, ptr addrspa
 ; CI-NEXT:    v_lshlrev_b32_e32 v3, 16, v3
 ; CI-NEXT:    v_mul_f32_e64 v2, -v2, v2
 ; CI-NEXT:    v_mul_f32_e32 v3, v3, v4
-; CI-NEXT:    v_lshrrev_b32_e32 v2, 16, v2
-; CI-NEXT:    v_alignbit_b32 v2, v2, v3, 16
+; CI-NEXT:    v_lshrrev_b32_e32 v3, 16, v3
+; CI-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
+; CI-NEXT:    v_or_b32_e32 v2, v3, v2
 ; CI-NEXT:    flat_store_dword v[0:1], v2
 ; CI-NEXT:    s_endpgm
 ;
@@ -674,8 +675,8 @@ define amdgpu_kernel void @v_fneg_fold_v2bf16(ptr addrspace(1) %out, ptr addrspa
 ; GFX8-NEXT:    v_cndmask_b32_e32 v3, v4, v5, vcc
 ; GFX8-NEXT:    v_cmp_u_f32_e32 vcc, v2, v2
 ; GFX8-NEXT:    v_cndmask_b32_e32 v2, v6, v7, vcc
-; GFX8-NEXT:    v_lshrrev_b32_e32 v2, 16, v2
-; GFX8-NEXT:    v_alignbit_b32 v2, v2, v3, 16
+; GFX8-NEXT:    v_and_b32_e32 v2, 0xffff0000, v2
+; GFX8-NEXT:    v_or_b32_sdwa v2, v3, v2 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; GFX8-NEXT:    flat_store_dword v[0:1], v2
 ; GFX8-NEXT:    s_endpgm
 ;
@@ -938,16 +939,21 @@ define amdgpu_kernel void @v_extract_fneg_no_fold_v2bf16(ptr addrspace(1) %in) #
 ; CI:       ; %bb.0:
 ; CI-NEXT:    s_load_dwordx2 s[0:1], s[8:9], 0x0
 ; CI-NEXT:    s_add_i32 s12, s12, s17
-; CI-NEXT:    s_mov_b32 flat_scratch_lo, s13
 ; CI-NEXT:    s_lshr_b32 flat_scratch_hi, s12, 8
+; CI-NEXT:    s_mov_b32 flat_scratch_lo, s13
 ; CI-NEXT:    s_waitcnt lgkmcnt(0)
+; CI-NEXT:    s_add_u32 s2, s0, 2
+; CI-NEXT:    s_addc_u32 s3, s1, 0
+; CI-NEXT:    v_mov_b32_e32 v2, s2
 ; CI-NEXT:    v_mov_b32_e32 v0, s0
+; CI-NEXT:    v_mov_b32_e32 v3, s3
 ; CI-NEXT:    v_mov_b32_e32 v1, s1
-; CI-NEXT:    flat_load_dword v0, v[0:1]
+; CI-NEXT:    flat_load_ushort v2, v[2:3]
+; CI-NEXT:    flat_load_ushort v0, v[0:1]
+; CI-NEXT:    s_waitcnt vmcnt(1)
+; CI-NEXT:    v_xor_b32_e32 v1, 0x8000, v2
 ; CI-NEXT:    s_waitcnt vmcnt(0)
-; CI-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
 ; CI-NEXT:    v_xor_b32_e32 v0, 0x8000, v0
-; CI-NEXT:    v_xor_b32_e32 v1, 0x8000, v1
 ; CI-NEXT:    flat_store_short v[0:1], v0
 ; CI-NEXT:    s_waitcnt vmcnt(0)
 ; CI-NEXT:    flat_store_short v[0:1], v1

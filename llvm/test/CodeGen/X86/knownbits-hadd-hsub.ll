@@ -29,7 +29,7 @@ define <8 x i8> @hadd_trunc_v8i16(<8 x i16> %x, <8 x i16> %y) {
 ; CHECK-NEXT:    vpand %xmm2, %xmm0, %xmm0
 ; CHECK-NEXT:    vpand %xmm2, %xmm1, %xmm1
 ; CHECK-NEXT:    vphaddw %xmm1, %xmm0, %xmm0
-; CHECK-NEXT:    vpackuswb %xmm0, %xmm0, %xmm0
+; CHECK-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,2,4,6,8,10,12,14,8,9,10,11,12,13,14,15]
 ; CHECK-NEXT:    retq
 entry:
   %and1 = and <8 x i16> %x, <i16 3, i16 3, i16 3, i16 3, i16 3, i16 3, i16 3, i16 3>
@@ -102,7 +102,11 @@ define <4 x i32> @hsub_select_shl_v4i32(<4 x i32> %x, <4 x i32> %y) {
 define <8 x i8> @hsub_trunc_v8i16(<8 x i16> %x, <8 x i16> %y) {
 ; CHECK-LABEL: hsub_trunc_v8i16:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vxorps %xmm0, %xmm0, %xmm0
+; CHECK-NEXT:    vpbroadcastw {{.*#+}} xmm2 = [255,255,255,255,255,255,255,255]
+; CHECK-NEXT:    vpor %xmm2, %xmm0, %xmm0
+; CHECK-NEXT:    vpor %xmm2, %xmm1, %xmm1
+; CHECK-NEXT:    vphsubw %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NEXT:    retq
 entry:
   %or1 = or <8 x i16> %x, <i16 255, i16 255, i16 255, i16 255, i16 255, i16 255, i16 255, i16 255>
@@ -143,7 +147,9 @@ define <8 x i16> @hadd_extract_2st_trunc_v8i32(<8 x i32> %x, <8 x i32> %y) {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
 ; CHECK-NEXT:    vphaddd %xmm0, %xmm0, %xmm0
-; CHECK-NEXT:    vpshufb {{.*#+}} xmm0 = zero,zero,xmm0[4,5],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
+; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; CHECK-NEXT:    vpblendd {{.*#+}} xmm0 = xmm1[0],xmm0[1],xmm1[2,3]
+; CHECK-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    retq
 entry:
@@ -158,12 +164,12 @@ entry:
 define <8 x i16> @hadd_extract_8th_trunc_v8i32(<8 x i32> %x, <8 x i32> %y) {
 ; CHECK-LABEL: hadd_extract_8th_trunc_v8i32:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
-; CHECK-NEXT:    vphaddd %ymm1, %ymm0, %ymm0
-; CHECK-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,16,17,20,21,24,25,28,29,u,u,u,u,u,u,u,u]
-; CHECK-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,2,2,3]
+; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm0
+; CHECK-NEXT:    vphaddd %ymm0, %ymm0, %ymm0
 ; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; CHECK-NEXT:    vpblendw {{.*#+}} xmm0 = xmm1[0,1,2,3,4,5,6],xmm0[7]
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0,1,2,3,4,5,6],ymm0[7]
+; CHECK-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; CHECK-NEXT:    vpackusdw %xmm1, %xmm0, %xmm0
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    retq
 entry:
@@ -195,14 +201,10 @@ entry:
 define <8 x i16> @hadd_extract_4th_trunc_redundant_and_v4i32(<8 x i32> %x, <8 x i32> %y) {
 ; CHECK-LABEL: hadd_extract_4th_trunc_redundant_and_v4i32:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [3,3,3,3,3,3,3,3]
-; CHECK-NEXT:    vpand %ymm2, %ymm0, %ymm0
-; CHECK-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1
 ; CHECK-NEXT:    vphaddd %ymm1, %ymm0, %ymm0
-; CHECK-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,16,17,20,21,24,25,28,29,u,u,u,u,u,u,u,u]
+; CHECK-NEXT:    vpshufb {{.*#+}} ymm0 = zero,zero,zero,zero,zero,zero,zero,zero,ymm0[u,u,u,u,u,u,u,u],zero,zero,zero,zero,zero,zero,ymm0[28,29,u,u,u,u,u,u,u,u]
 ; CHECK-NEXT:    vpermq {{.*#+}} ymm0 = ymm0[0,2,2,3]
-; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; CHECK-NEXT:    vpblendw {{.*#+}} xmm0 = xmm1[0,1,2,3,4,5,6],xmm0[7]
+; CHECK-NEXT:    # kill: def $xmm0 killed $xmm0 killed $ymm0
 ; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    retq
 entry:

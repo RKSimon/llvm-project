@@ -147,8 +147,8 @@ define i32 @fun6() {
 ; CHECK-NEXT:    #APP
 ; CHECK-NEXT:    ltgr %r3,%r3
 ; CHECK-NEXT:    #NO_APP
-; CHECK-NEXT:    stg %r2, 0(%r1)
 ; CHECK-NEXT:    stg %r3, 8(%r1)
+; CHECK-NEXT:    stg %r2, 0(%r1)
 ; CHECK-NEXT:    br %r14
 entry:
   %0 = load i128, ptr @V128

@@ -7,14 +7,13 @@
 define i32 @mulwide16(i16 %a, i16 %b) {
 ; OPT-LABEL: mulwide16(
 ; OPT:       {
-; OPT-NEXT:    .reg .b16 %rs<3>;
-; OPT-NEXT:    .reg .b32 %r<2>;
+; OPT-NEXT:    .reg .b32 %r<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b16 %rs1, [mulwide16_param_0];
-; OPT-NEXT:    ld.param.b16 %rs2, [mulwide16_param_1];
-; OPT-NEXT:    mul.wide.s16 %r1, %rs1, %rs2;
-; OPT-NEXT:    st.param.b32 [func_retval0], %r1;
+; OPT-NEXT:    ld.param.s16 %r1, [mulwide16_param_0];
+; OPT-NEXT:    ld.param.s16 %r2, [mulwide16_param_1];
+; OPT-NEXT:    mul.lo.s32 %r3, %r1, %r2;
+; OPT-NEXT:    st.param.b32 [func_retval0], %r3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwide16(
@@ -39,14 +38,13 @@ define i32 @mulwide16(i16 %a, i16 %b) {
 define i32 @mulwideu16(i16 %a, i16 %b) {
 ; OPT-LABEL: mulwideu16(
 ; OPT:       {
-; OPT-NEXT:    .reg .b16 %rs<3>;
-; OPT-NEXT:    .reg .b32 %r<2>;
+; OPT-NEXT:    .reg .b32 %r<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b16 %rs1, [mulwideu16_param_0];
-; OPT-NEXT:    ld.param.b16 %rs2, [mulwideu16_param_1];
-; OPT-NEXT:    mul.wide.u16 %r1, %rs1, %rs2;
-; OPT-NEXT:    st.param.b32 [func_retval0], %r1;
+; OPT-NEXT:    ld.param.b16 %r1, [mulwideu16_param_0];
+; OPT-NEXT:    ld.param.b16 %r2, [mulwideu16_param_1];
+; OPT-NEXT:    mul.lo.s32 %r3, %r1, %r2;
+; OPT-NEXT:    st.param.b32 [func_retval0], %r3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwideu16(
@@ -71,14 +69,13 @@ define i32 @mulwideu16(i16 %a, i16 %b) {
 define i32 @mulwide8(i8 %a, i8 %b) {
 ; OPT-LABEL: mulwide8(
 ; OPT:       {
-; OPT-NEXT:    .reg .b16 %rs<3>;
-; OPT-NEXT:    .reg .b32 %r<2>;
+; OPT-NEXT:    .reg .b32 %r<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.s8 %rs1, [mulwide8_param_0];
-; OPT-NEXT:    ld.param.s8 %rs2, [mulwide8_param_1];
-; OPT-NEXT:    mul.wide.s16 %r1, %rs1, %rs2;
-; OPT-NEXT:    st.param.b32 [func_retval0], %r1;
+; OPT-NEXT:    ld.param.s8 %r1, [mulwide8_param_0];
+; OPT-NEXT:    ld.param.s8 %r2, [mulwide8_param_1];
+; OPT-NEXT:    mul.lo.s32 %r3, %r1, %r2;
+; OPT-NEXT:    st.param.b32 [func_retval0], %r3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwide8(
@@ -105,14 +102,13 @@ define i32 @mulwide8(i8 %a, i8 %b) {
 define i32 @mulwideu8(i8 %a, i8 %b) {
 ; OPT-LABEL: mulwideu8(
 ; OPT:       {
-; OPT-NEXT:    .reg .b16 %rs<3>;
-; OPT-NEXT:    .reg .b32 %r<2>;
+; OPT-NEXT:    .reg .b32 %r<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b8 %rs1, [mulwideu8_param_0];
-; OPT-NEXT:    ld.param.b8 %rs2, [mulwideu8_param_1];
-; OPT-NEXT:    mul.wide.u16 %r1, %rs1, %rs2;
-; OPT-NEXT:    st.param.b32 [func_retval0], %r1;
+; OPT-NEXT:    ld.param.b8 %r1, [mulwideu8_param_0];
+; OPT-NEXT:    ld.param.b8 %r2, [mulwideu8_param_1];
+; OPT-NEXT:    mul.lo.s32 %r3, %r1, %r2;
+; OPT-NEXT:    st.param.b32 [func_retval0], %r3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwideu8(
@@ -137,14 +133,13 @@ define i32 @mulwideu8(i8 %a, i8 %b) {
 define i64 @mulwide32(i32 %a, i32 %b) {
 ; OPT-LABEL: mulwide32(
 ; OPT:       {
-; OPT-NEXT:    .reg .b32 %r<3>;
-; OPT-NEXT:    .reg .b64 %rd<2>;
+; OPT-NEXT:    .reg .b64 %rd<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b32 %r1, [mulwide32_param_0];
-; OPT-NEXT:    ld.param.b32 %r2, [mulwide32_param_1];
-; OPT-NEXT:    mul.wide.s32 %rd1, %r1, %r2;
-; OPT-NEXT:    st.param.b64 [func_retval0], %rd1;
+; OPT-NEXT:    ld.param.s32 %rd1, [mulwide32_param_0];
+; OPT-NEXT:    ld.param.s32 %rd2, [mulwide32_param_1];
+; OPT-NEXT:    mul.lo.s64 %rd3, %rd1, %rd2;
+; OPT-NEXT:    st.param.b64 [func_retval0], %rd3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwide32(
@@ -169,14 +164,13 @@ define i64 @mulwide32(i32 %a, i32 %b) {
 define i64 @mulwideu32(i32 %a, i32 %b) {
 ; OPT-LABEL: mulwideu32(
 ; OPT:       {
-; OPT-NEXT:    .reg .b32 %r<3>;
-; OPT-NEXT:    .reg .b64 %rd<2>;
+; OPT-NEXT:    .reg .b64 %rd<4>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b32 %r1, [mulwideu32_param_0];
-; OPT-NEXT:    ld.param.b32 %r2, [mulwideu32_param_1];
-; OPT-NEXT:    mul.wide.u32 %rd1, %r1, %r2;
-; OPT-NEXT:    st.param.b64 [func_retval0], %rd1;
+; OPT-NEXT:    ld.param.b32 %rd1, [mulwideu32_param_0];
+; OPT-NEXT:    ld.param.b32 %rd2, [mulwideu32_param_1];
+; OPT-NEXT:    mul.lo.s64 %rd3, %rd1, %rd2;
+; OPT-NEXT:    st.param.b64 [func_retval0], %rd3;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwideu32(
@@ -201,16 +195,15 @@ define i64 @mulwideu32(i32 %a, i32 %b) {
 define i64 @mulwideu7(i7 %a, i7 %b) {
 ; OPT-LABEL: mulwideu7(
 ; OPT:       {
-; OPT-NEXT:    .reg .b32 %r<5>;
-; OPT-NEXT:    .reg .b64 %rd<2>;
+; OPT-NEXT:    .reg .b64 %rd<6>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b8 %r1, [mulwideu7_param_1];
-; OPT-NEXT:    and.b32 %r2, %r1, 127;
-; OPT-NEXT:    ld.param.b8 %r3, [mulwideu7_param_0];
-; OPT-NEXT:    and.b32 %r4, %r3, 127;
-; OPT-NEXT:    mul.wide.u32 %rd1, %r4, %r2;
-; OPT-NEXT:    st.param.b64 [func_retval0], %rd1;
+; OPT-NEXT:    ld.param.b8 %rd1, [mulwideu7_param_0];
+; OPT-NEXT:    and.b64 %rd2, %rd1, 127;
+; OPT-NEXT:    ld.param.b8 %rd3, [mulwideu7_param_1];
+; OPT-NEXT:    and.b64 %rd4, %rd3, 127;
+; OPT-NEXT:    mul.lo.s64 %rd5, %rd2, %rd4;
+; OPT-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwideu7(
@@ -243,16 +236,15 @@ define i64 @mulwideu7(i7 %a, i7 %b) {
 define i64 @mulwides7(i7 %a, i7 %b) {
 ; OPT-LABEL: mulwides7(
 ; OPT:       {
-; OPT-NEXT:    .reg .b32 %r<5>;
-; OPT-NEXT:    .reg .b64 %rd<2>;
+; OPT-NEXT:    .reg .b64 %rd<6>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b8 %r1, [mulwides7_param_0];
-; OPT-NEXT:    ld.param.b8 %r2, [mulwides7_param_1];
-; OPT-NEXT:    bfe.s32 %r3, %r2, 0, 7;
-; OPT-NEXT:    bfe.s32 %r4, %r1, 0, 7;
-; OPT-NEXT:    mul.wide.s32 %rd1, %r4, %r3;
-; OPT-NEXT:    st.param.b64 [func_retval0], %rd1;
+; OPT-NEXT:    ld.param.b8 %rd1, [mulwides7_param_1];
+; OPT-NEXT:    ld.param.b8 %rd2, [mulwides7_param_0];
+; OPT-NEXT:    bfe.s64 %rd3, %rd2, 0, 7;
+; OPT-NEXT:    bfe.s64 %rd4, %rd1, 0, 7;
+; OPT-NEXT:    mul.lo.s64 %rd5, %rd3, %rd4;
+; OPT-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: mulwides7(
@@ -285,13 +277,12 @@ define i64 @mulwides7(i7 %a, i7 %b) {
 define i64 @shl30(i32 %a) {
 ; OPT-LABEL: shl30(
 ; OPT:       {
-; OPT-NEXT:    .reg .b32 %r<2>;
-; OPT-NEXT:    .reg .b64 %rd<2>;
+; OPT-NEXT:    .reg .b64 %rd<3>;
 ; OPT-EMPTY:
 ; OPT-NEXT:  // %bb.0:
-; OPT-NEXT:    ld.param.b32 %r1, [shl30_param_0];
-; OPT-NEXT:    mul.wide.s32 %rd1, %r1, 1073741824;
-; OPT-NEXT:    st.param.b64 [func_retval0], %rd1;
+; OPT-NEXT:    ld.param.s32 %rd1, [shl30_param_0];
+; OPT-NEXT:    shl.b64 %rd2, %rd1, 30;
+; OPT-NEXT:    st.param.b64 [func_retval0], %rd2;
 ; OPT-NEXT:    ret;
 ;
 ; NOOPT-LABEL: shl30(

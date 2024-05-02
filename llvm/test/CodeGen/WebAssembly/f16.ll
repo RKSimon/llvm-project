@@ -80,50 +80,28 @@ define dso_local float @loadf(ptr nocapture readonly %a) local_unnamed_addr noun
 }
 
 define dso_local void @stored(ptr nocapture %a, double %b) local_unnamed_addr nounwind {
-; DEFISEL-LABEL: stored:
-; DEFISEL:         .functype stored (i32, f64) -> ()
-; DEFISEL-NEXT:  # %bb.0:
-; DEFISEL-NEXT:    local.get $push2=, 0
-; DEFISEL-NEXT:    local.get $push1=, 1
-; DEFISEL-NEXT:    call $push0=, __truncdfhf2, $pop1
-; DEFISEL-NEXT:    i32.store16 0($pop2), $pop0
-; DEFISEL-NEXT:    return
-;
-; FASTISEL-LABEL: stored:
-; FASTISEL:         .functype stored (i32, f64) -> ()
-; FASTISEL-NEXT:  # %bb.0:
-; FASTISEL-NEXT:    local.get $push4=, 0
-; FASTISEL-NEXT:    local.get $push3=, 1
-; FASTISEL-NEXT:    call $push2=, __truncdfhf2, $pop3
-; FASTISEL-NEXT:    i32.const $push1=, 65535
-; FASTISEL-NEXT:    i32.and $push0=, $pop2, $pop1
-; FASTISEL-NEXT:    i32.store16 0($pop4), $pop0
-; FASTISEL-NEXT:    return
+; ALL-LABEL: stored:
+; ALL:         .functype stored (i32, f64) -> ()
+; ALL-NEXT:  # %bb.0:
+; ALL-NEXT:    local.get $push2=, 0
+; ALL-NEXT:    local.get $push1=, 1
+; ALL-NEXT:    call $push0=, __truncdfhf2, $pop1
+; ALL-NEXT:    i32.store16 0($pop2), $pop0
+; ALL-NEXT:    return
   %x = tail call i16 @llvm.convert.to.fp16.f64(double %b)
   store i16 %x, ptr %a, align 2
   ret void
 }
 
 define dso_local void @storef(ptr nocapture %a, float %b) local_unnamed_addr nounwind {
-; DEFISEL-LABEL: storef:
-; DEFISEL:         .functype storef (i32, f32) -> ()
-; DEFISEL-NEXT:  # %bb.0:
-; DEFISEL-NEXT:    local.get $push2=, 0
-; DEFISEL-NEXT:    local.get $push1=, 1
-; DEFISEL-NEXT:    call $push0=, __truncsfhf2, $pop1
-; DEFISEL-NEXT:    i32.store16 0($pop2), $pop0
-; DEFISEL-NEXT:    return
-;
-; FASTISEL-LABEL: storef:
-; FASTISEL:         .functype storef (i32, f32) -> ()
-; FASTISEL-NEXT:  # %bb.0:
-; FASTISEL-NEXT:    local.get $push4=, 0
-; FASTISEL-NEXT:    local.get $push3=, 1
-; FASTISEL-NEXT:    call $push2=, __truncsfhf2, $pop3
-; FASTISEL-NEXT:    i32.const $push1=, 65535
-; FASTISEL-NEXT:    i32.and $push0=, $pop2, $pop1
-; FASTISEL-NEXT:    i32.store16 0($pop4), $pop0
-; FASTISEL-NEXT:    return
+; ALL-LABEL: storef:
+; ALL:         .functype storef (i32, f32) -> ()
+; ALL-NEXT:  # %bb.0:
+; ALL-NEXT:    local.get $push2=, 0
+; ALL-NEXT:    local.get $push1=, 1
+; ALL-NEXT:    call $push0=, __truncsfhf2, $pop1
+; ALL-NEXT:    i32.store16 0($pop2), $pop0
+; ALL-NEXT:    return
   %x = tail call i16 @llvm.convert.to.fp16.f32(float %b)
   store i16 %x, ptr %a, align 2
   ret void
@@ -180,23 +158,12 @@ define half @from_bits(i16 %x) nounwind {
 }
 
 define i16 @to_bits(half %x) nounwind {
-; DEFISEL-LABEL: to_bits:
-; DEFISEL:         .functype to_bits (f32) -> (i32)
-; DEFISEL-NEXT:  # %bb.0:
-; DEFISEL-NEXT:    local.get $push3=, 0
-; DEFISEL-NEXT:    call $push1=, __truncsfhf2, $pop3
-; DEFISEL-NEXT:    i32.const $push0=, 65535
-; DEFISEL-NEXT:    i32.and $push2=, $pop1, $pop0
-; DEFISEL-NEXT:    return $pop2
-;
-; FASTISEL-LABEL: to_bits:
-; FASTISEL:         .functype to_bits (f32) -> (i32)
-; FASTISEL-NEXT:  # %bb.0:
-; FASTISEL-NEXT:    local.get $push3=, 0
-; FASTISEL-NEXT:    call $push2=, __truncsfhf2, $pop3
-; FASTISEL-NEXT:    i32.const $push1=, 65535
-; FASTISEL-NEXT:    i32.and $push0=, $pop2, $pop1
-; FASTISEL-NEXT:    return $pop0
+; ALL-LABEL: to_bits:
+; ALL:         .functype to_bits (f32) -> (i32)
+; ALL-NEXT:  # %bb.0:
+; ALL-NEXT:    local.get $push1=, 0
+; ALL-NEXT:    call $push0=, __truncsfhf2, $pop1
+; ALL-NEXT:    return $pop0
     %res = bitcast half %x to i16
     ret i16 %res
 }

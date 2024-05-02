@@ -6,7 +6,10 @@ define <2 x i16> @test_add2x16(ptr %a_ptr, ptr %b_ptr) {
 ; CHECK-LABEL: test_add2x16:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_mov_b32_e32 v0, 0x300030
+; CHECK-NEXT:    flat_load_dword v4, v[2:3]
+; CHECK-NEXT:    flat_load_dword v5, v[0:1]
+; CHECK-NEXT:    s_waitcnt vmcnt(0) lgkmcnt(0)
+; CHECK-NEXT:    v_or_b32_e32 v0, v5, v4
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %a = load <2 x i16>, ptr %a_ptr, !range !0, !noundef !{}
   %b = load <2 x i16>, ptr %b_ptr, !range !1, !noundef !{}

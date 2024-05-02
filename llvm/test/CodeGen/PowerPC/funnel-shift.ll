@@ -34,22 +34,23 @@ define i32 @fshl_i32(i32 %x, i32 %y, i32 %z) {
 define i64 @fshl_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK32-LABEL: fshl_i64:
 ; CHECK32:       # %bb.0:
-; CHECK32-NEXT:    andi. 7, 8, 32
+; CHECK32-NEXT:    srwi 7, 8, 5
+; CHECK32-NEXT:    andi. 7, 7, 1
 ; CHECK32-NEXT:    mr 7, 5
-; CHECK32-NEXT:    bne 0, .LBB1_2
+; CHECK32-NEXT:    bc 12, 1, .LBB1_2
 ; CHECK32-NEXT:  # %bb.1:
 ; CHECK32-NEXT:    mr 7, 4
 ; CHECK32-NEXT:  .LBB1_2:
 ; CHECK32-NEXT:    clrlwi 8, 8, 27
 ; CHECK32-NEXT:    subfic 9, 8, 32
 ; CHECK32-NEXT:    srw 10, 7, 9
-; CHECK32-NEXT:    bne 0, .LBB1_4
+; CHECK32-NEXT:    bc 12, 1, .LBB1_4
 ; CHECK32-NEXT:  # %bb.3:
 ; CHECK32-NEXT:    mr 4, 3
 ; CHECK32-NEXT:  .LBB1_4:
 ; CHECK32-NEXT:    slw 3, 4, 8
 ; CHECK32-NEXT:    or 3, 3, 10
-; CHECK32-NEXT:    bne 0, .LBB1_6
+; CHECK32-NEXT:    bc 12, 1, .LBB1_6
 ; CHECK32-NEXT:  # %bb.5:
 ; CHECK32-NEXT:    mr 6, 5
 ; CHECK32-NEXT:  .LBB1_6:
@@ -76,41 +77,43 @@ define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK32_32-NEXT:    stwu 1, -32(1)
 ; CHECK32_32-NEXT:    lwz 12, 52(1)
 ; CHECK32_32-NEXT:    stw 29, 20(1) # 4-byte Folded Spill
-; CHECK32_32-NEXT:    andi. 11, 12, 64
-; CHECK32_32-NEXT:    mcrf 1, 0
+; CHECK32_32-NEXT:    srwi 11, 12, 6
+; CHECK32_32-NEXT:    andi. 11, 11, 1
+; CHECK32_32-NEXT:    crmove 20, 1
 ; CHECK32_32-NEXT:    mr 11, 6
 ; CHECK32_32-NEXT:    stw 30, 24(1) # 4-byte Folded Spill
-; CHECK32_32-NEXT:    bne 0, .LBB2_2
+; CHECK32_32-NEXT:    bc 12, 1, .LBB2_2
 ; CHECK32_32-NEXT:  # %bb.1:
 ; CHECK32_32-NEXT:    mr 11, 4
 ; CHECK32_32-NEXT:  .LBB2_2:
 ; CHECK32_32-NEXT:    mr 30, 7
-; CHECK32_32-NEXT:    bne 1, .LBB2_4
+; CHECK32_32-NEXT:    bc 12, 20, .LBB2_4
 ; CHECK32_32-NEXT:  # %bb.3:
 ; CHECK32_32-NEXT:    mr 30, 5
 ; CHECK32_32-NEXT:  .LBB2_4:
-; CHECK32_32-NEXT:    andi. 4, 12, 32
+; CHECK32_32-NEXT:    srwi 4, 12, 5
+; CHECK32_32-NEXT:    andi. 4, 4, 1
 ; CHECK32_32-NEXT:    mr 4, 30
-; CHECK32_32-NEXT:    beq 0, .LBB2_18
+; CHECK32_32-NEXT:    bc 4, 1, .LBB2_18
 ; CHECK32_32-NEXT:  # %bb.5:
-; CHECK32_32-NEXT:    beq 1, .LBB2_19
+; CHECK32_32-NEXT:    bc 4, 20, .LBB2_19
 ; CHECK32_32-NEXT:  .LBB2_6:
-; CHECK32_32-NEXT:    beq 0, .LBB2_20
+; CHECK32_32-NEXT:    bc 4, 1, .LBB2_20
 ; CHECK32_32-NEXT:  .LBB2_7:
 ; CHECK32_32-NEXT:    mr 5, 8
-; CHECK32_32-NEXT:    beq 1, .LBB2_21
+; CHECK32_32-NEXT:    bc 4, 20, .LBB2_21
 ; CHECK32_32-NEXT:  .LBB2_8:
 ; CHECK32_32-NEXT:    mr 3, 5
-; CHECK32_32-NEXT:    beq 0, .LBB2_22
+; CHECK32_32-NEXT:    bc 4, 1, .LBB2_22
 ; CHECK32_32-NEXT:  .LBB2_9:
 ; CHECK32_32-NEXT:    clrlwi 6, 12, 27
-; CHECK32_32-NEXT:    bne 1, .LBB2_11
+; CHECK32_32-NEXT:    bc 12, 20, .LBB2_11
 ; CHECK32_32-NEXT:  .LBB2_10:
 ; CHECK32_32-NEXT:    mr 9, 7
 ; CHECK32_32-NEXT:  .LBB2_11:
 ; CHECK32_32-NEXT:    subfic 7, 6, 32
 ; CHECK32_32-NEXT:    mr 12, 9
-; CHECK32_32-NEXT:    bne 0, .LBB2_13
+; CHECK32_32-NEXT:    bc 12, 1, .LBB2_13
 ; CHECK32_32-NEXT:  # %bb.12:
 ; CHECK32_32-NEXT:    mr 12, 5
 ; CHECK32_32-NEXT:  .LBB2_13:
@@ -120,14 +123,14 @@ define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK32_32-NEXT:    slw 4, 4, 6
 ; CHECK32_32-NEXT:    srw 30, 12, 7
 ; CHECK32_32-NEXT:    slw 29, 3, 6
-; CHECK32_32-NEXT:    bne 1, .LBB2_15
+; CHECK32_32-NEXT:    bc 12, 20, .LBB2_15
 ; CHECK32_32-NEXT:  # %bb.14:
 ; CHECK32_32-NEXT:    mr 10, 8
 ; CHECK32_32-NEXT:  .LBB2_15:
 ; CHECK32_32-NEXT:    or 3, 11, 5
 ; CHECK32_32-NEXT:    or 4, 4, 0
 ; CHECK32_32-NEXT:    or 5, 29, 30
-; CHECK32_32-NEXT:    bne 0, .LBB2_17
+; CHECK32_32-NEXT:    bc 12, 1, .LBB2_17
 ; CHECK32_32-NEXT:  # %bb.16:
 ; CHECK32_32-NEXT:    mr 10, 9
 ; CHECK32_32-NEXT:  .LBB2_17:
@@ -140,64 +143,66 @@ define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK32_32-NEXT:    blr
 ; CHECK32_32-NEXT:  .LBB2_18:
 ; CHECK32_32-NEXT:    mr 4, 11
-; CHECK32_32-NEXT:    bne 1, .LBB2_6
+; CHECK32_32-NEXT:    bc 12, 20, .LBB2_6
 ; CHECK32_32-NEXT:  .LBB2_19:
 ; CHECK32_32-NEXT:    mr 5, 3
-; CHECK32_32-NEXT:    bne 0, .LBB2_7
+; CHECK32_32-NEXT:    bc 12, 1, .LBB2_7
 ; CHECK32_32-NEXT:  .LBB2_20:
 ; CHECK32_32-NEXT:    mr 11, 5
 ; CHECK32_32-NEXT:    mr 5, 8
-; CHECK32_32-NEXT:    bne 1, .LBB2_8
+; CHECK32_32-NEXT:    bc 12, 20, .LBB2_8
 ; CHECK32_32-NEXT:  .LBB2_21:
 ; CHECK32_32-NEXT:    mr 5, 6
 ; CHECK32_32-NEXT:    mr 3, 5
-; CHECK32_32-NEXT:    bne 0, .LBB2_9
+; CHECK32_32-NEXT:    bc 12, 1, .LBB2_9
 ; CHECK32_32-NEXT:  .LBB2_22:
 ; CHECK32_32-NEXT:    mr 3, 30
 ; CHECK32_32-NEXT:    clrlwi 6, 12, 27
-; CHECK32_32-NEXT:    beq 1, .LBB2_10
+; CHECK32_32-NEXT:    bc 4, 20, .LBB2_10
 ; CHECK32_32-NEXT:    b .LBB2_11
 ;
 ; CHECK32_64-LABEL: fshl_i128:
 ; CHECK32_64:       # %bb.0:
 ; CHECK32_64-NEXT:    stwu 1, -32(1)
 ; CHECK32_64-NEXT:    lwz 12, 52(1)
-; CHECK32_64-NEXT:    andi. 11, 12, 64
+; CHECK32_64-NEXT:    srwi 11, 12, 6
 ; CHECK32_64-NEXT:    stw 29, 20(1) # 4-byte Folded Spill
-; CHECK32_64-NEXT:    mcrf 1, 0
+; CHECK32_64-NEXT:    andi. 11, 11, 1
+; CHECK32_64-NEXT:    crmove 20, 1
 ; CHECK32_64-NEXT:    mr 11, 6
 ; CHECK32_64-NEXT:    stw 30, 24(1) # 4-byte Folded Spill
-; CHECK32_64-NEXT:    bne 0, .LBB2_2
+; CHECK32_64-NEXT:    bc 12, 1, .LBB2_2
 ; CHECK32_64-NEXT:  # %bb.1:
 ; CHECK32_64-NEXT:    mr 11, 4
 ; CHECK32_64-NEXT:  .LBB2_2:
 ; CHECK32_64-NEXT:    mr 30, 7
-; CHECK32_64-NEXT:    bne 1, .LBB2_4
+; CHECK32_64-NEXT:    bc 12, 20, .LBB2_4
 ; CHECK32_64-NEXT:  # %bb.3:
 ; CHECK32_64-NEXT:    mr 30, 5
 ; CHECK32_64-NEXT:  .LBB2_4:
-; CHECK32_64-NEXT:    andi. 4, 12, 32
+; CHECK32_64-NEXT:    srwi 4, 12, 5
+; CHECK32_64-NEXT:    andi. 4, 4, 1
 ; CHECK32_64-NEXT:    mr 4, 30
-; CHECK32_64-NEXT:    beq 0, .LBB2_18
+; CHECK32_64-NEXT:    bc 4, 1, .LBB2_18
 ; CHECK32_64-NEXT:  # %bb.5:
-; CHECK32_64-NEXT:    beq 1, .LBB2_19
+; CHECK32_64-NEXT:    bc 4, 20, .LBB2_19
 ; CHECK32_64-NEXT:  .LBB2_6:
-; CHECK32_64-NEXT:    beq 0, .LBB2_20
+; CHECK32_64-NEXT:    bc 4, 1, .LBB2_20
 ; CHECK32_64-NEXT:  .LBB2_7:
 ; CHECK32_64-NEXT:    mr 5, 8
-; CHECK32_64-NEXT:    beq 1, .LBB2_21
+; CHECK32_64-NEXT:    bc 4, 20, .LBB2_21
 ; CHECK32_64-NEXT:  .LBB2_8:
 ; CHECK32_64-NEXT:    mr 3, 5
-; CHECK32_64-NEXT:    beq 0, .LBB2_22
+; CHECK32_64-NEXT:    bc 4, 1, .LBB2_22
 ; CHECK32_64-NEXT:  .LBB2_9:
 ; CHECK32_64-NEXT:    clrlwi 6, 12, 27
-; CHECK32_64-NEXT:    bne 1, .LBB2_11
+; CHECK32_64-NEXT:    bc 12, 20, .LBB2_11
 ; CHECK32_64-NEXT:  .LBB2_10:
 ; CHECK32_64-NEXT:    mr 9, 7
 ; CHECK32_64-NEXT:  .LBB2_11:
 ; CHECK32_64-NEXT:    subfic 7, 6, 32
 ; CHECK32_64-NEXT:    mr 12, 9
-; CHECK32_64-NEXT:    bne 0, .LBB2_13
+; CHECK32_64-NEXT:    bc 12, 1, .LBB2_13
 ; CHECK32_64-NEXT:  # %bb.12:
 ; CHECK32_64-NEXT:    mr 12, 5
 ; CHECK32_64-NEXT:  .LBB2_13:
@@ -207,14 +212,14 @@ define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK32_64-NEXT:    slw 4, 4, 6
 ; CHECK32_64-NEXT:    srw 30, 12, 7
 ; CHECK32_64-NEXT:    slw 29, 3, 6
-; CHECK32_64-NEXT:    bne 1, .LBB2_15
+; CHECK32_64-NEXT:    bc 12, 20, .LBB2_15
 ; CHECK32_64-NEXT:  # %bb.14:
 ; CHECK32_64-NEXT:    mr 10, 8
 ; CHECK32_64-NEXT:  .LBB2_15:
 ; CHECK32_64-NEXT:    or 3, 11, 5
 ; CHECK32_64-NEXT:    or 4, 4, 0
 ; CHECK32_64-NEXT:    or 5, 29, 30
-; CHECK32_64-NEXT:    bne 0, .LBB2_17
+; CHECK32_64-NEXT:    bc 12, 1, .LBB2_17
 ; CHECK32_64-NEXT:  # %bb.16:
 ; CHECK32_64-NEXT:    mr 10, 9
 ; CHECK32_64-NEXT:  .LBB2_17:
@@ -227,32 +232,33 @@ define i128 @fshl_i128(i128 %x, i128 %y, i128 %z) nounwind {
 ; CHECK32_64-NEXT:    blr
 ; CHECK32_64-NEXT:  .LBB2_18:
 ; CHECK32_64-NEXT:    mr 4, 11
-; CHECK32_64-NEXT:    bne 1, .LBB2_6
+; CHECK32_64-NEXT:    bc 12, 20, .LBB2_6
 ; CHECK32_64-NEXT:  .LBB2_19:
 ; CHECK32_64-NEXT:    mr 5, 3
-; CHECK32_64-NEXT:    bne 0, .LBB2_7
+; CHECK32_64-NEXT:    bc 12, 1, .LBB2_7
 ; CHECK32_64-NEXT:  .LBB2_20:
 ; CHECK32_64-NEXT:    mr 11, 5
 ; CHECK32_64-NEXT:    mr 5, 8
-; CHECK32_64-NEXT:    bne 1, .LBB2_8
+; CHECK32_64-NEXT:    bc 12, 20, .LBB2_8
 ; CHECK32_64-NEXT:  .LBB2_21:
 ; CHECK32_64-NEXT:    mr 5, 6
 ; CHECK32_64-NEXT:    mr 3, 5
-; CHECK32_64-NEXT:    bne 0, .LBB2_9
+; CHECK32_64-NEXT:    bc 12, 1, .LBB2_9
 ; CHECK32_64-NEXT:  .LBB2_22:
 ; CHECK32_64-NEXT:    mr 3, 30
 ; CHECK32_64-NEXT:    clrlwi 6, 12, 27
-; CHECK32_64-NEXT:    beq 1, .LBB2_10
+; CHECK32_64-NEXT:    bc 4, 20, .LBB2_10
 ; CHECK32_64-NEXT:    b .LBB2_11
 ;
 ; CHECK64-LABEL: fshl_i128:
 ; CHECK64:       # %bb.0:
-; CHECK64-NEXT:    andi. 8, 7, 64
+; CHECK64-NEXT:    rldicl 8, 7, 58, 6
 ; CHECK64-NEXT:    clrlwi 7, 7, 26
+; CHECK64-NEXT:    andi. 8, 8, 1
 ; CHECK64-NEXT:    subfic 8, 7, 64
-; CHECK64-NEXT:    iseleq 5, 6, 5
-; CHECK64-NEXT:    iseleq 6, 3, 6
-; CHECK64-NEXT:    iseleq 3, 4, 3
+; CHECK64-NEXT:    iselgt 5, 5, 6
+; CHECK64-NEXT:    iselgt 6, 6, 3
+; CHECK64-NEXT:    iselgt 3, 3, 4
 ; CHECK64-NEXT:    srd 5, 5, 8
 ; CHECK64-NEXT:    sld 9, 6, 7
 ; CHECK64-NEXT:    srd 6, 6, 8
@@ -293,23 +299,24 @@ define i37 @fshl_i37(i37 %x, i37 %y, i37 %z) {
 ; CHECK32_32-NEXT:    li 6, 37
 ; CHECK32_32-NEXT:    bl __umoddi3
 ; CHECK32_32-NEXT:    rotlwi 5, 30, 27
+; CHECK32_32-NEXT:    srwi 3, 4, 5
 ; CHECK32_32-NEXT:    rlwimi 5, 27, 27, 0, 4
-; CHECK32_32-NEXT:    andi. 3, 4, 32
+; CHECK32_32-NEXT:    andi. 3, 3, 1
 ; CHECK32_32-NEXT:    mr 6, 5
-; CHECK32_32-NEXT:    bne 0, .LBB3_2
+; CHECK32_32-NEXT:    bc 12, 1, .LBB3_2
 ; CHECK32_32-NEXT:  # %bb.1:
 ; CHECK32_32-NEXT:    mr 6, 29
 ; CHECK32_32-NEXT:  .LBB3_2:
 ; CHECK32_32-NEXT:    clrlwi 4, 4, 27
 ; CHECK32_32-NEXT:    subfic 7, 4, 32
 ; CHECK32_32-NEXT:    srw 3, 6, 7
-; CHECK32_32-NEXT:    bne 0, .LBB3_4
+; CHECK32_32-NEXT:    bc 12, 1, .LBB3_4
 ; CHECK32_32-NEXT:  # %bb.3:
 ; CHECK32_32-NEXT:    mr 29, 28
 ; CHECK32_32-NEXT:  .LBB3_4:
 ; CHECK32_32-NEXT:    slw 8, 29, 4
 ; CHECK32_32-NEXT:    or 3, 8, 3
-; CHECK32_32-NEXT:    beq 0, .LBB3_6
+; CHECK32_32-NEXT:    bc 4, 1, .LBB3_6
 ; CHECK32_32-NEXT:  # %bb.5:
 ; CHECK32_32-NEXT:    slwi 5, 30, 27
 ; CHECK32_32-NEXT:  .LBB3_6:
@@ -350,23 +357,24 @@ define i37 @fshl_i37(i37 %x, i37 %y, i37 %z) {
 ; CHECK32_64-NEXT:    li 6, 37
 ; CHECK32_64-NEXT:    bl __umoddi3
 ; CHECK32_64-NEXT:    rotlwi 5, 30, 27
-; CHECK32_64-NEXT:    andi. 3, 4, 32
+; CHECK32_64-NEXT:    srwi 3, 4, 5
 ; CHECK32_64-NEXT:    rlwimi 5, 27, 27, 0, 4
+; CHECK32_64-NEXT:    andi. 3, 3, 1
 ; CHECK32_64-NEXT:    mr 6, 5
-; CHECK32_64-NEXT:    bne 0, .LBB3_2
+; CHECK32_64-NEXT:    bc 12, 1, .LBB3_2
 ; CHECK32_64-NEXT:  # %bb.1:
 ; CHECK32_64-NEXT:    mr 6, 29
 ; CHECK32_64-NEXT:  .LBB3_2:
 ; CHECK32_64-NEXT:    clrlwi 4, 4, 27
 ; CHECK32_64-NEXT:    subfic 7, 4, 32
 ; CHECK32_64-NEXT:    srw 3, 6, 7
-; CHECK32_64-NEXT:    bne 0, .LBB3_4
+; CHECK32_64-NEXT:    bc 12, 1, .LBB3_4
 ; CHECK32_64-NEXT:  # %bb.3:
 ; CHECK32_64-NEXT:    mr 29, 28
 ; CHECK32_64-NEXT:  .LBB3_4:
 ; CHECK32_64-NEXT:    slw 8, 29, 4
 ; CHECK32_64-NEXT:    or 3, 8, 3
-; CHECK32_64-NEXT:    beq 0, .LBB3_6
+; CHECK32_64-NEXT:    bc 4, 1, .LBB3_6
 ; CHECK32_64-NEXT:  # %bb.5:
 ; CHECK32_64-NEXT:    slwi 5, 30, 27
 ; CHECK32_64-NEXT:  .LBB3_6:

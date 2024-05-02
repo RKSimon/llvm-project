@@ -114,7 +114,8 @@ define void @store_trunc_v2i64i8(ptr %ap, ptr %dest) {
 ; NONEON-NOSVE-NEXT:    ldr q0, [x0]
 ; NONEON-NOSVE-NEXT:    str q0, [sp, #-32]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 32
-; NONEON-NOSVE-NEXT:    ldp x8, x9, [sp]
+; NONEON-NOSVE-NEXT:    ldr w9, [sp, #8]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp]
 ; NONEON-NOSVE-NEXT:    stp w8, w9, [sp, #24]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #24]
 ; NONEON-NOSVE-NEXT:    str d0, [x1]

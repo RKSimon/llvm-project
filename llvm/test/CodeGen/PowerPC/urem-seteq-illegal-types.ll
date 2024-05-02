@@ -67,25 +67,28 @@ define i1 @test_urem_even(i27 %X) nounwind {
 define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ; PPC-LABEL: test_urem_odd_setne:
 ; PPC:       # %bb.0:
-; PPC-NEXT:    mulli 3, 3, 13
+; PPC-NEXT:    clrlwi 4, 3, 28
+; PPC-NEXT:    mulli 4, 4, 13
+; PPC-NEXT:    srwi 4, 4, 6
+; PPC-NEXT:    mulli 4, 4, 5
+; PPC-NEXT:    sub 3, 3, 4
 ; PPC-NEXT:    clrlwi 3, 3, 28
-; PPC-NEXT:    cmplwi 3, 3
-; PPC-NEXT:    li 3, 1
-; PPC-NEXT:    bclr 12, 1, 0
-; PPC-NEXT:  # %bb.1:
-; PPC-NEXT:    li 3, 0
+; PPC-NEXT:    cntlzw 3, 3
+; PPC-NEXT:    not 3, 3
+; PPC-NEXT:    rlwinm 3, 3, 27, 31, 31
 ; PPC-NEXT:    blr
 ;
 ; PPC64LE-LABEL: test_urem_odd_setne:
 ; PPC64LE:       # %bb.0:
-; PPC64LE-NEXT:    slwi 4, 3, 1
-; PPC64LE-NEXT:    add 3, 3, 4
-; PPC64LE-NEXT:    li 4, 1
-; PPC64LE-NEXT:    neg 3, 3
+; PPC64LE-NEXT:    clrlwi 4, 3, 28
+; PPC64LE-NEXT:    mulli 4, 4, 13
+; PPC64LE-NEXT:    srwi 4, 4, 6
+; PPC64LE-NEXT:    rlwimi 4, 4, 2, 28, 29
+; PPC64LE-NEXT:    sub 3, 3, 4
 ; PPC64LE-NEXT:    clrlwi 3, 3, 28
-; PPC64LE-NEXT:    cmplwi 3, 3
-; PPC64LE-NEXT:    li 3, 0
-; PPC64LE-NEXT:    iselgt 3, 4, 3
+; PPC64LE-NEXT:    cntlzw 3, 3
+; PPC64LE-NEXT:    not 3, 3
+; PPC64LE-NEXT:    rlwinm 3, 3, 27, 31, 31
 ; PPC64LE-NEXT:    blr
   %urem = urem i4 %X, 5
   %cmp = icmp ne i4 %urem, 0
@@ -207,36 +210,36 @@ define i1 @test_urem_oversized(i66 %X) nounwind {
 ; PPC:       # %bb.0:
 ; PPC-NEXT:    lis 6, -12795
 ; PPC-NEXT:    ori 6, 6, 40665
-; PPC-NEXT:    mulhwu 8, 5, 6
-; PPC-NEXT:    lis 9, 12057
-; PPC-NEXT:    ori 9, 9, 37186
-; PPC-NEXT:    mullw 11, 4, 6
-; PPC-NEXT:    addc 8, 11, 8
-; PPC-NEXT:    lis 11, -5526
-; PPC-NEXT:    ori 11, 11, 61135
-; PPC-NEXT:    mulhwu 7, 4, 6
-; PPC-NEXT:    addze 7, 7
-; PPC-NEXT:    mulhwu 10, 5, 9
-; PPC-NEXT:    mullw 4, 4, 9
-; PPC-NEXT:    mullw 9, 5, 9
-; PPC-NEXT:    addc 8, 9, 8
-; PPC-NEXT:    adde 7, 7, 10
-; PPC-NEXT:    add 4, 4, 7
-; PPC-NEXT:    rotlwi 9, 8, 31
+; PPC-NEXT:    mulhwu 7, 5, 6
+; PPC-NEXT:    lis 8, 12057
+; PPC-NEXT:    ori 8, 8, 37186
+; PPC-NEXT:    mullw 10, 4, 6
+; PPC-NEXT:    addc 7, 10, 7
 ; PPC-NEXT:    mullw 3, 3, 6
-; PPC-NEXT:    mullw 6, 5, 6
+; PPC-NEXT:    mullw 11, 5, 6
+; PPC-NEXT:    mulhwu 6, 4, 6
+; PPC-NEXT:    addze 6, 6
+; PPC-NEXT:    slwi 4, 4, 1
+; PPC-NEXT:    mulhwu 9, 5, 8
+; PPC-NEXT:    mullw 8, 5, 8
+; PPC-NEXT:    addc 7, 8, 7
 ; PPC-NEXT:    slwi 5, 5, 1
+; PPC-NEXT:    adde 6, 6, 9
 ; PPC-NEXT:    add 3, 5, 3
-; PPC-NEXT:    rotlwi 5, 6, 31
+; PPC-NEXT:    sub 4, 6, 4
+; PPC-NEXT:    lis 5, -5526
+; PPC-NEXT:    rotlwi 8, 11, 31
+; PPC-NEXT:    rotlwi 9, 7, 31
 ; PPC-NEXT:    add 3, 4, 3
-; PPC-NEXT:    rlwimi 5, 8, 31, 0, 0
+; PPC-NEXT:    ori 5, 5, 61135
+; PPC-NEXT:    rlwimi 8, 7, 31, 0, 0
 ; PPC-NEXT:    rlwimi 9, 3, 31, 0, 0
-; PPC-NEXT:    cmplw 5, 11
+; PPC-NEXT:    cmplw 8, 5
 ; PPC-NEXT:    cmplwi 1, 9, 13
 ; PPC-NEXT:    rlwinm 3, 3, 31, 31, 31
 ; PPC-NEXT:    crandc 20, 4, 6
 ; PPC-NEXT:    crand 21, 6, 0
-; PPC-NEXT:    rlwimi. 3, 6, 1, 30, 30
+; PPC-NEXT:    rlwimi. 3, 11, 1, 30, 30
 ; PPC-NEXT:    cror 20, 21, 20
 ; PPC-NEXT:    crnand 20, 2, 20
 ; PPC-NEXT:    li 3, 0

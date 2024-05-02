@@ -549,10 +549,10 @@ define <2 x bfloat> @test_fdiv(<2 x bfloat> %a, <2 x bfloat> %b) #0 {
 define bfloat @test_extract_0(<2 x bfloat> %a) #0 {
 ; CHECK-LABEL: test_extract_0(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_extract_0_param_0];
+; CHECK-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_0_param_0];
 ; CHECK-NEXT:    st.param.b16 [func_retval0], %rs1;
 ; CHECK-NEXT:    ret;
   %e = extractelement <2 x bfloat> %a, i32 0
@@ -562,11 +562,11 @@ define bfloat @test_extract_0(<2 x bfloat> %a) #0 {
 define bfloat @test_extract_1(<2 x bfloat> %a) #0 {
 ; CHECK-LABEL: test_extract_1(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<2>;
+; CHECK-NEXT:    .reg .b16 %rs<3>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_extract_1_param_0+2];
-; CHECK-NEXT:    st.param.b16 [func_retval0], %rs1;
+; CHECK-NEXT:    ld.param.v2.b16 {%rs1, %rs2}, [test_extract_1_param_0];
+; CHECK-NEXT:    st.param.b16 [func_retval0], %rs2;
 ; CHECK-NEXT:    ret;
   %e = extractelement <2 x bfloat> %a, i32 1
   ret bfloat %e

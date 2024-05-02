@@ -72,9 +72,9 @@ define i64 @f5(i128 %a, i128 %b) {
 define void @f6(ptr %ptr, i128 %a) {
 ; CHECK-LABEL: f6:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r3), 3
-; CHECK-NEXT:    vaq %v0, %v0, %v0
-; CHECK-NEXT:    vsteg %v0, 0(%r2), 1
+; CHECK-NEXT:    lg %r1, 8(%r3)
+; CHECK-NEXT:    la %r0, 0(%r1,%r1)
+; CHECK-NEXT:    stg %r0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   %op = add i128 %a, %a
   %res = trunc i128 %op to i64
@@ -153,9 +153,9 @@ define i32 @f11(i128 %a, i128 %b) {
 define void @f12(ptr %ptr, i128 %a) {
 ; CHECK-LABEL: f12:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r3), 3
-; CHECK-NEXT:    vaq %v0, %v0, %v0
-; CHECK-NEXT:    vstef %v0, 0(%r2), 3
+; CHECK-NEXT:    l %r0, 12(%r3)
+; CHECK-NEXT:    ar %r0, %r0
+; CHECK-NEXT:    st %r0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   %op = add i128 %a, %a
   %res = trunc i128 %op to i32
@@ -235,9 +235,9 @@ define i16 @f17(i128 %a, i128 %b) {
 define void @f18(ptr %ptr, i128 %a) {
 ; CHECK-LABEL: f18:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r3), 3
-; CHECK-NEXT:    vaq %v0, %v0, %v0
-; CHECK-NEXT:    vsteh %v0, 0(%r2), 7
+; CHECK-NEXT:    lh %r0, 14(%r3)
+; CHECK-NEXT:    ar %r0, %r0
+; CHECK-NEXT:    sth %r0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   %op = add i128 %a, %a
   %res = trunc i128 %op to i16
@@ -317,9 +317,9 @@ define i8 @f23(i128 %a, i128 %b) {
 define void @f24(ptr %ptr, i128 %a) {
 ; CHECK-LABEL: f24:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r3), 3
-; CHECK-NEXT:    vaq %v0, %v0, %v0
-; CHECK-NEXT:    vsteb %v0, 0(%r2), 15
+; CHECK-NEXT:    lb %r0, 15(%r3)
+; CHECK-NEXT:    ar %r0, %r0
+; CHECK-NEXT:    stc %r0, 0(%r2)
 ; CHECK-NEXT:    br %r14
   %op = add i128 %a, %a
   %res = trunc i128 %op to i8
@@ -407,12 +407,7 @@ define i1 @f29(i128 %a, i128 %b) {
 define void @f30(ptr %ptr, i128 %a) {
 ; CHECK-LABEL: f30:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r3), 3
-; CHECK-NEXT:    larl %r1, .LCPI29_0
-; CHECK-NEXT:    vl %v1, 0(%r1), 3
-; CHECK-NEXT:    vaq %v0, %v0, %v0
-; CHECK-NEXT:    vn %v0, %v0, %v1
-; CHECK-NEXT:    vsteb %v0, 0(%r2), 15
+; CHECK-NEXT:    mvi 0(%r2), 0
 ; CHECK-NEXT:    br %r14
   %op = add i128 %a, %a
   %res = trunc i128 %op to i1

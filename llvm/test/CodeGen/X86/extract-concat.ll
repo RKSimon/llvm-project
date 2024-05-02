@@ -157,11 +157,25 @@ define <4 x i32> @cat_ext_straddle(ptr %px, ptr %py) {
 ; SSE-NEXT:    unpcklpd {{.*#+}} xmm0 = xmm0[0],mem[0]
 ; SSE-NEXT:    retq
 ;
-; AVX-LABEL: cat_ext_straddle:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vmovaps 16(%rdi), %xmm0
-; AVX-NEXT:    vunpcklpd {{.*#+}} xmm0 = xmm0[0],mem[0]
-; AVX-NEXT:    retq
+; AVX1-LABEL: cat_ext_straddle:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vmovaps 16(%rdi), %xmm0
+; AVX1-NEXT:    vunpcklpd {{.*#+}} xmm0 = xmm0[0],mem[0]
+; AVX1-NEXT:    retq
+;
+; AVX2-LABEL: cat_ext_straddle:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vmovddup {{.*#+}} xmm0 = mem[0,0]
+; AVX2-NEXT:    vmovaps 16(%rdi), %xmm1
+; AVX2-NEXT:    vmovlhps {{.*#+}} xmm0 = xmm1[0],xmm0[0]
+; AVX2-NEXT:    retq
+;
+; AVX512F-LABEL: cat_ext_straddle:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    vmovddup {{.*#+}} xmm0 = mem[0,0]
+; AVX512F-NEXT:    vmovaps 16(%rdi), %xmm1
+; AVX512F-NEXT:    vmovlhps {{.*#+}} xmm0 = xmm1[0],xmm0[0]
+; AVX512F-NEXT:    retq
   %x = load <6 x i32>, ptr %px
   %y = load <6 x i32>, ptr %py
   %cat = shufflevector <6 x i32> %x, <6 x i32> %y, <12 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11>

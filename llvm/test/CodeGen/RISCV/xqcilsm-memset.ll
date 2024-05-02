@@ -379,8 +379,8 @@ define i64 @test6b_ll() nounwind {
 ; RV32I-NEXT:    addi sp, sp, -16
 ; RV32I-NEXT:    sw zero, 8(sp)
 ; RV32I-NEXT:    sw zero, 12(sp)
-; RV32I-NEXT:    lw a0, 8(sp)
 ; RV32I-NEXT:    lw a1, 12(sp)
+; RV32I-NEXT:    lw a0, 8(sp)
 ; RV32I-NEXT:    addi sp, sp, 16
 ; RV32I-NEXT:    ret
 ;
@@ -389,8 +389,8 @@ define i64 @test6b_ll() nounwind {
 ; RV32IXQCILSM-NEXT:    addi sp, sp, -16
 ; RV32IXQCILSM-NEXT:    sw zero, 8(sp)
 ; RV32IXQCILSM-NEXT:    sw zero, 12(sp)
-; RV32IXQCILSM-NEXT:    lw a0, 8(sp)
 ; RV32IXQCILSM-NEXT:    lw a1, 12(sp)
+; RV32IXQCILSM-NEXT:    lw a0, 8(sp)
 ; RV32IXQCILSM-NEXT:    addi sp, sp, 16
 ; RV32IXQCILSM-NEXT:    ret
 entry:

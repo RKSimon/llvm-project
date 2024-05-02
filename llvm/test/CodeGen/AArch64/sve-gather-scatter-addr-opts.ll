@@ -359,7 +359,7 @@ define <vscale x 4 x i32> @masked_gather_nxv4i32_u8_offsets(ptr %base, <vscale x
 ; CHECK-LABEL: masked_gather_nxv4i32_u8_offsets:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and z0.s, z0.s, #0xff
-; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    ret
   %offsets.zext = zext <vscale x 4 x i8> %offsets to <vscale x 4 x i32>
   %ptrs = getelementptr i32, ptr %base, <vscale x 4 x i32> %offsets.zext
@@ -435,7 +435,7 @@ define void @masked_scatter_nxv4i32_u8_offsets(ptr %base, <vscale x 4 x i8> %off
 ; CHECK-LABEL: masked_scatter_nxv4i32_u8_offsets:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and z0.s, z0.s, #0xff
-; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    ret
   %offsets.zext = zext <vscale x 4 x i8> %offsets to <vscale x 4 x i32>
   %ptrs = getelementptr i32, ptr %base, <vscale x 4 x i32> %offsets.zext

@@ -758,7 +758,7 @@ define i32 @test_ctlz_i512(i512 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %ebx
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    cmovnel %eax, %ebx
-; SSE-NEXT:    subl $-128, %ebx
+; SSE-NEXT:    orl $128, %ebx
 ; SSE-NEXT:    movq %r10, %rax
 ; SSE-NEXT:    orq %r11, %rax
 ; SSE-NEXT:    cmovnel %r14d, %ebx
@@ -919,7 +919,7 @@ define i32 @load_ctlz_i512(ptr %p0) nounwind {
 ; SSE-NEXT:    testq %rdx, %rdx
 ; SSE-NEXT:    cmovnel %eax, %r11d
 ; SSE-NEXT:    movq 24(%rdi), %rbx
-; SSE-NEXT:    subl $-128, %r11d
+; SSE-NEXT:    orl $128, %r11d
 ; SSE-NEXT:    movq %rsi, %rax
 ; SSE-NEXT:    orq %r8, %rax
 ; SSE-NEXT:    cmovnel %r14d, %r11d
@@ -1094,7 +1094,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    testq %r14, %r14
 ; SSE-NEXT:    cmovnel %edx, %eax
 ; SSE-NEXT:    movq {{[0-9]+}}(%rsp), %r13
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    movq %r15, %rdx
 ; SSE-NEXT:    orq %r8, %rdx
 ; SSE-NEXT:    movq %r8, %r14
@@ -1114,7 +1114,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %ebp
 ; SSE-NEXT:    testq %r10, %r10
 ; SSE-NEXT:    cmovnel %ecx, %ebp
-; SSE-NEXT:    subl $-128, %ebp
+; SSE-NEXT:    orl $128, %ebp
 ; SSE-NEXT:    movq %rbx, %rcx
 ; SSE-NEXT:    orq %r13, %rcx
 ; SSE-NEXT:    cmovnel %edx, %ebp
@@ -1141,7 +1141,7 @@ define i32 @test_ctlz_i1024(i1024 %a0) nounwind {
 ; SSE-NEXT:    orl $64, %edx
 ; SSE-NEXT:    testq %r11, %r11
 ; SSE-NEXT:    cmovnel %eax, %edx
-; SSE-NEXT:    subl $-128, %edx
+; SSE-NEXT:    orl $128, %edx
 ; SSE-NEXT:    movq %r15, %rax
 ; SSE-NEXT:    orq %r14, %rax
 ; SSE-NEXT:    cmovnel %ecx, %edx
@@ -1461,7 +1461,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    testq %r9, %r9
 ; SSE-NEXT:    movq %r9, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
 ; SSE-NEXT:    cmovnel %edx, %eax
-; SSE-NEXT:    subl $-128, %eax
+; SSE-NEXT:    orl $128, %eax
 ; SSE-NEXT:    movq %r10, %rdx
 ; SSE-NEXT:    movq %r10, {{[-0-9]+}}(%r{{[sb]}}p) # 8-byte Spill
 ; SSE-NEXT:    orq %r8, %rdx
@@ -1482,7 +1482,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %r15d
 ; SSE-NEXT:    testq %r11, %r11
 ; SSE-NEXT:    cmovnel %ecx, %r15d
-; SSE-NEXT:    subl $-128, %r15d
+; SSE-NEXT:    orl $128, %r15d
 ; SSE-NEXT:    movq %r12, %rcx
 ; SSE-NEXT:    orq %r14, %rcx
 ; SSE-NEXT:    cmovnel %edx, %r15d
@@ -1511,7 +1511,7 @@ define i32 @load_ctlz_i1024(ptr %p0) nounwind {
 ; SSE-NEXT:    orl $64, %ebp
 ; SSE-NEXT:    testq %r10, %r10
 ; SSE-NEXT:    cmovnel %eax, %ebp
-; SSE-NEXT:    subl $-128, %ebp
+; SSE-NEXT:    orl $128, %ebp
 ; SSE-NEXT:    movq %r12, %rax
 ; SSE-NEXT:    orq %r13, %rax
 ; SSE-NEXT:    cmovnel %ecx, %ebp

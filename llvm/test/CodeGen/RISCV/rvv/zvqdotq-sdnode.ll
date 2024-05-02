@@ -73,27 +73,17 @@ entry:
 }
 
 define i32 @vqdotu_vv(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b) {
-; NODOT-LABEL: vqdotu_vv:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsumu.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vqdotu_vv:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vqdotu.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, zero
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vqdotu_vv:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsumu.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -306,27 +296,17 @@ entry:
 }
 
 define i32 @vqdotu_vv_accum(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, <vscale x 16 x i32> %x) {
-; NODOT-LABEL: vqdotu_vv_accum:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwaddu.wv v16, v16, v12
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, zero
-; NODOT-NEXT:    vredsum.vs v8, v16, v8
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vqdotu_vv_accum:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.s.x v12, zero
-; DOT-NEXT:    vqdotu.vv v16, v8, v10
-; DOT-NEXT:    vsetvli a0, zero, e32, m8, ta, ma
-; DOT-NEXT:    vredsum.vs v8, v16, v12
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vqdotu_vv_accum:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwaddu.wv v16, v16, v12
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, zero
+; CHECK-NEXT:    vredsum.vs v8, v16, v8
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -399,27 +379,17 @@ entry:
 }
 
 define i32 @vqdotu_vv_scalar_add(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, i32 %x) {
-; NODOT-LABEL: vqdotu_vv_scalar_add:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v12, v8, v10
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.s.x v8, a0
-; NODOT-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
-; NODOT-NEXT:    vwredsumu.vs v8, v12, v8
-; NODOT-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
-; NODOT-NEXT:    vmv.x.s a0, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: vqdotu_vv_scalar_add:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a1, zero, e32, m2, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vqdotu.vv v12, v8, v10
-; DOT-NEXT:    vmv.s.x v8, a0
-; DOT-NEXT:    vredsum.vs v8, v12, v8
-; DOT-NEXT:    vmv.x.s a0, v8
-; DOT-NEXT:    ret
+; CHECK-LABEL: vqdotu_vv_scalar_add:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a1, zero, e8, m2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v12, v8, v10
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.s.x v8, a0
+; CHECK-NEXT:    vsetvli zero, zero, e16, m4, ta, ma
+; CHECK-NEXT:    vwredsumu.vs v8, v12, v8
+; CHECK-NEXT:    vsetvli zero, zero, e32, m8, ta, ma
+; CHECK-NEXT:    vmv.x.s a0, v8
+; CHECK-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 16 x i8> %a to <vscale x 16 x i32>
   %b.zext = zext <vscale x 16 x i8> %b to <vscale x 16 x i32>
@@ -877,30 +847,22 @@ entry:
 }
 
 define <vscale x 1 x i32> @partial_reduce_vqdotu(<vscale x 4 x i8> %a, <vscale x 4 x i8> %b) {
-; NODOT-LABEL: partial_reduce_vqdotu:
-; NODOT:       # %bb.0: # %entry
-; NODOT-NEXT:    vsetvli a0, zero, e8, mf2, ta, ma
-; NODOT-NEXT:    vwmulu.vv v10, v8, v9
-; NODOT-NEXT:    csrr a0, vlenb
-; NODOT-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
-; NODOT-NEXT:    vzext.vf2 v8, v10
-; NODOT-NEXT:    srli a0, a0, 3
-; NODOT-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
-; NODOT-NEXT:    vslidedown.vx v10, v9, a0
-; NODOT-NEXT:    vslidedown.vx v11, v8, a0
-; NODOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; NODOT-NEXT:    vadd.vv v8, v10, v8
-; NODOT-NEXT:    vadd.vv v9, v11, v9
-; NODOT-NEXT:    vadd.vv v8, v9, v8
-; NODOT-NEXT:    ret
-;
-; DOT-LABEL: partial_reduce_vqdotu:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
-; DOT-NEXT:    vmv.v.i v10, 0
-; DOT-NEXT:    vqdotu.vv v10, v8, v9
-; DOT-NEXT:    vmv1r.v v8, v10
-; DOT-NEXT:    ret
+; CHECK-LABEL: partial_reduce_vqdotu:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vsetvli a0, zero, e8, mf2, ta, ma
+; CHECK-NEXT:    vwmulu.vv v10, v8, v9
+; CHECK-NEXT:    csrr a0, vlenb
+; CHECK-NEXT:    vsetvli zero, zero, e32, m2, ta, ma
+; CHECK-NEXT:    vzext.vf2 v8, v10
+; CHECK-NEXT:    srli a0, a0, 3
+; CHECK-NEXT:    vsetvli a1, zero, e32, m1, ta, ma
+; CHECK-NEXT:    vslidedown.vx v10, v9, a0
+; CHECK-NEXT:    vslidedown.vx v11, v8, a0
+; CHECK-NEXT:    vsetvli a0, zero, e32, mf2, ta, ma
+; CHECK-NEXT:    vadd.vv v8, v10, v8
+; CHECK-NEXT:    vadd.vv v9, v11, v9
+; CHECK-NEXT:    vadd.vv v8, v9, v8
+; CHECK-NEXT:    ret
 entry:
   %a.sext = zext <vscale x 4 x i8> %a to <vscale x 4 x i32>
   %b.sext = zext <vscale x 4 x i8> %b to <vscale x 4 x i32>

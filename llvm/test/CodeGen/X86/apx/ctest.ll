@@ -80,11 +80,10 @@ define i8 @ctest8rr_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ctest8rr_zf_double_p:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    testb %dil, %dil
-; CHECK-NEXT:    setne %al
+; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0
-; CHECK-NEXT:    setp %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    setnp %cl
+; CHECK-NEXT:    orb %al, %cl
 ; CHECK-NEXT:    jne .LBB2_2
 ; CHECK-NEXT:  # %bb.1: # %if.then
 ; CHECK-NEXT:    movb %dil, (%rsi)
@@ -95,11 +94,10 @@ define i8 @ctest8rr_zf_double_p(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ctest8rr_zf_double_p:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    testb %dil, %dil
-; NDD-NEXT:    setne %al
+; NDD-NEXT:    sete %al
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0
-; NDD-NEXT:    setp %cl
-; NDD-NEXT:    andb %cl, %al
-; NDD-NEXT:    cmpb $1, %al
+; NDD-NEXT:    setnp %cl
+; NDD-NEXT:    orb %cl, %al
 ; NDD-NEXT:    jne .LBB2_2
 ; NDD-NEXT:  # %bb.1: # %if.then
 ; NDD-NEXT:    movb %dil, (%rsi)
@@ -124,11 +122,10 @@ define i8 @ctest8rr_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; CHECK-LABEL: ctest8rr_zf_double_np:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    testb %dil, %dil
-; CHECK-NEXT:    setne %al
+; CHECK-NEXT:    sete %al
 ; CHECK-NEXT:    ucomisd %xmm0, %xmm0
-; CHECK-NEXT:    setnp %cl
-; CHECK-NEXT:    andb %al, %cl
-; CHECK-NEXT:    cmpb $1, %cl
+; CHECK-NEXT:    setp %cl
+; CHECK-NEXT:    orb %al, %cl
 ; CHECK-NEXT:    jne .LBB3_2
 ; CHECK-NEXT:  # %bb.1: # %if.then
 ; CHECK-NEXT:    movb %dil, (%rsi)
@@ -139,11 +136,10 @@ define i8 @ctest8rr_zf_double_np(i8 %a, double %b, i8* nocapture %c)  {
 ; NDD-LABEL: ctest8rr_zf_double_np:
 ; NDD:       # %bb.0: # %entry
 ; NDD-NEXT:    testb %dil, %dil
-; NDD-NEXT:    setne %al
+; NDD-NEXT:    sete %al
 ; NDD-NEXT:    ucomisd %xmm0, %xmm0
-; NDD-NEXT:    setnp %cl
-; NDD-NEXT:    andb %cl, %al
-; NDD-NEXT:    cmpb $1, %al
+; NDD-NEXT:    setp %cl
+; NDD-NEXT:    orb %cl, %al
 ; NDD-NEXT:    jne .LBB3_2
 ; NDD-NEXT:  # %bb.1: # %if.then
 ; NDD-NEXT:    movb %dil, (%rsi)
@@ -384,9 +380,8 @@ if.end:                                           ; preds = %entry, %if.then
 define void @ctest16ri_zf(i16 noundef %a, i16 noundef %b) {
 ; CHECK-LABEL: ctest16ri_zf:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    andl $1234, %esi # imm = 0x4D2
 ; CHECK-NEXT:    testw %di, %di
-; CHECK-NEXT:    ctestnew {dfv=zf} %si, %si
+; CHECK-NEXT:    ctestnel {dfv=zf} $1234, %esi # imm = 0x4D2
 ; CHECK-NEXT:    jne .LBB10_1
 ; CHECK-NEXT:  # %bb.2: # %if.then
 ; CHECK-NEXT:    xorl %eax, %eax
@@ -691,9 +686,8 @@ define void @ctest16mi_zf(i16 noundef %a, ptr %ptr) {
 ; CHECK-LABEL: ctest16mi_zf:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    movzwl (%rsi), %eax
-; CHECK-NEXT:    andl $1234, %eax # imm = 0x4D2
 ; CHECK-NEXT:    testw %di, %di
-; CHECK-NEXT:    ctestnew {dfv=zf} %ax, %ax
+; CHECK-NEXT:    ctestnel {dfv=zf} $1234, %eax # imm = 0x4D2
 ; CHECK-NEXT:    jne .LBB18_1
 ; CHECK-NEXT:  # %bb.2: # %if.then
 ; CHECK-NEXT:    xorl %eax, %eax
@@ -730,10 +724,9 @@ if.end:                                           ; preds = %entry, %if.then
 define void @ctest32mi_zf(i32 noundef %a, ptr %ptr) {
 ; CHECK-LABEL: ctest32mi_zf:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    movzwl (%rsi), %eax
-; CHECK-NEXT:    andl $12345, %eax # imm = 0x3039
 ; CHECK-NEXT:    testl %edi, %edi
-; CHECK-NEXT:    ctestnew {dfv=zf} %ax, %ax
+; CHECK-NEXT:    movzwl (%rsi), %eax
+; CHECK-NEXT:    ctestnel {dfv=zf} $12345, %eax # imm = 0x3039
 ; CHECK-NEXT:    jne .LBB19_1
 ; CHECK-NEXT:  # %bb.2: # %if.then
 ; CHECK-NEXT:    xorl %eax, %eax

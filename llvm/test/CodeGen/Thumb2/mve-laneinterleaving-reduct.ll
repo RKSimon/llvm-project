@@ -67,12 +67,12 @@ define arm_aapcs_vfpcc i32 @mlapred_v4i32_v4i64_zext(<8 x i16> %x, <8 x i16> %y,
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
 ; CHECK-NEXT:    vorr q2, q2, q3
-; CHECK-NEXT:    mov r0, sp
+; CHECK-NEXT:    add r0, sp, #16
 ; CHECK-NEXT:    vstrw.32 q2, [r0]
 ; CHECK-NEXT:    vmov.i8 q3, #0xff
 ; CHECK-NEXT:    vldrh.u32 q2, [r0, #8]
 ; CHECK-NEXT:    vldrh.u32 q5, [r0]
-; CHECK-NEXT:    add r0, sp, #16
+; CHECK-NEXT:    mov r0, sp
 ; CHECK-NEXT:    vcmp.i32 eq, q2, zr
 ; CHECK-NEXT:    vmov.i8 q2, #0x0
 ; CHECK-NEXT:    vpsel q4, q3, q2
