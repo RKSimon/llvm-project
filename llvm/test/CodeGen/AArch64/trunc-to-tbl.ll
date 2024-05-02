@@ -571,27 +571,27 @@ define void @trunc_v8i19_to_v8i8_in_loop(ptr %A, ptr %dst) {
 ; CHECK-NEXT:    mov x8, xzr
 ; CHECK-NEXT:  LBB5_1: ; %loop
 ; CHECK-NEXT:    ; =>This Inner Loop Header: Depth=1
-; CHECK-NEXT:    ldp x9, x10, [x0]
+; CHECK-NEXT:    ldp x10, x9, [x0]
 ; CHECK-NEXT:    ldrb w14, [x0, #18]
-; CHECK-NEXT:    ldrh w15, [x0, #16]
+; CHECK-NEXT:    lsr w11, w9, #12
+; CHECK-NEXT:    fmov s0, w10
+; CHECK-NEXT:    lsr x12, x10, #19
+; CHECK-NEXT:    lsr x13, x9, #31
+; CHECK-NEXT:    fmov s1, w11
+; CHECK-NEXT:    ldrh w11, [x0, #16]
 ; CHECK-NEXT:    add x0, x0, #32
-; CHECK-NEXT:    lsr w12, w10, #12
-; CHECK-NEXT:    fmov s1, w9
-; CHECK-NEXT:    lsr x11, x9, #19
-; CHECK-NEXT:    lsr x13, x10, #31
-; CHECK-NEXT:    fmov s0, w12
-; CHECK-NEXT:    lsr x12, x9, #38
-; CHECK-NEXT:    extr x9, x10, x9, #57
-; CHECK-NEXT:    mov.s v1[1], w11
-; CHECK-NEXT:    orr x11, x15, x14, lsl #16
-; CHECK-NEXT:    mov.s v0[1], w13
-; CHECK-NEXT:    extr x13, x11, x10, #50
+; CHECK-NEXT:    mov.s v0[1], w12
+; CHECK-NEXT:    lsr x12, x10, #38
+; CHECK-NEXT:    mov.s v1[1], w13
+; CHECK-NEXT:    extr x13, x11, x9, #50
+; CHECK-NEXT:    orr w11, w11, w14, lsl #16
+; CHECK-NEXT:    extr x9, x9, x10, #57
+; CHECK-NEXT:    mov.s v0[2], w12
 ; CHECK-NEXT:    lsr w10, w11, #5
-; CHECK-NEXT:    mov.s v1[2], w12
-; CHECK-NEXT:    mov.s v0[2], w13
-; CHECK-NEXT:    mov.s v1[3], w9
-; CHECK-NEXT:    mov.s v0[3], w10
-; CHECK-NEXT:    uzp1.8h v0, v1, v0
+; CHECK-NEXT:    mov.s v1[2], w13
+; CHECK-NEXT:    mov.s v0[3], w9
+; CHECK-NEXT:    mov.s v1[3], w10
+; CHECK-NEXT:    uzp1.8h v0, v0, v1
 ; CHECK-NEXT:    xtn.8b v0, v0
 ; CHECK-NEXT:    str d0, [x1, x8, lsl #3]
 ; CHECK-NEXT:    add x8, x8, #1
@@ -605,35 +605,34 @@ define void @trunc_v8i19_to_v8i8_in_loop(ptr %A, ptr %dst) {
 ; CHECK-BE-NEXT:    mov x8, xzr
 ; CHECK-BE-NEXT:  .LBB5_1: // %loop
 ; CHECK-BE-NEXT:    // =>This Inner Loop Header: Depth=1
-; CHECK-BE-NEXT:    ldp x10, x9, [x0]
-; CHECK-BE-NEXT:    ldrh w16, [x0, #16]
-; CHECK-BE-NEXT:    ldrb w17, [x0, #18]
+; CHECK-BE-NEXT:    ldp x9, x10, [x0]
+; CHECK-BE-NEXT:    ldrh w15, [x0, #16]
+; CHECK-BE-NEXT:    extr x11, x9, x10, #40
+; CHECK-BE-NEXT:    lsl x12, x10, #24
+; CHECK-BE-NEXT:    lsr x13, x9, #40
+; CHECK-BE-NEXT:    lsr x9, x9, #45
+; CHECK-BE-NEXT:    lsr w10, w10, #14
+; CHECK-BE-NEXT:    extr x14, x11, x12, #57
+; CHECK-BE-NEXT:    extr x13, x13, x11, #50
+; CHECK-BE-NEXT:    fmov s0, w9
+; CHECK-BE-NEXT:    lsl x9, x15, #8
+; CHECK-BE-NEXT:    fmov s1, w14
+; CHECK-BE-NEXT:    mov v0.s[1], w13
+; CHECK-BE-NEXT:    mov v1.s[1], w10
+; CHECK-BE-NEXT:    orr w10, w9, w12
+; CHECK-BE-NEXT:    lsr x12, x11, #31
+; CHECK-BE-NEXT:    lsr w10, w10, #19
+; CHECK-BE-NEXT:    lsr w11, w11, #12
+; CHECK-BE-NEXT:    mov v0.s[2], w12
+; CHECK-BE-NEXT:    mov v1.s[2], w10
+; CHECK-BE-NEXT:    ldrb w10, [x0, #18]
 ; CHECK-BE-NEXT:    add x0, x0, #32
-; CHECK-BE-NEXT:    lsl x11, x9, #24
-; CHECK-BE-NEXT:    lsr x12, x9, #40
-; CHECK-BE-NEXT:    lsr x13, x10, #45
-; CHECK-BE-NEXT:    lsl x14, x10, #24
-; CHECK-BE-NEXT:    lsr x15, x10, #40
-; CHECK-BE-NEXT:    extr x12, x12, x11, #57
-; CHECK-BE-NEXT:    fmov s0, w13
-; CHECK-BE-NEXT:    lsr w13, w10, #7
-; CHECK-BE-NEXT:    extr x14, x15, x14, #50
-; CHECK-BE-NEXT:    lsr w15, w9, #14
-; CHECK-BE-NEXT:    extr x9, x10, x9, #40
-; CHECK-BE-NEXT:    fmov s1, w12
-; CHECK-BE-NEXT:    orr w12, w17, w16, lsl #8
-; CHECK-BE-NEXT:    mov v0.s[1], w14
-; CHECK-BE-NEXT:    lsr w9, w9, #12
-; CHECK-BE-NEXT:    orr w11, w12, w11
-; CHECK-BE-NEXT:    mov v1.s[1], w15
-; CHECK-BE-NEXT:    lsr w11, w11, #19
-; CHECK-BE-NEXT:    mov v0.s[2], w13
-; CHECK-BE-NEXT:    mov v1.s[2], w11
-; CHECK-BE-NEXT:    mov v0.s[3], w9
+; CHECK-BE-NEXT:    orr w9, w10, w9
+; CHECK-BE-NEXT:    mov v0.s[3], w11
+; CHECK-BE-NEXT:    mov v1.s[3], w9
 ; CHECK-BE-NEXT:    add x9, x1, x8, lsl #3
 ; CHECK-BE-NEXT:    add x8, x8, #1
 ; CHECK-BE-NEXT:    cmp x8, #1000
-; CHECK-BE-NEXT:    mov v1.s[3], w12
 ; CHECK-BE-NEXT:    uzp1 v0.8h, v0.8h, v1.8h
 ; CHECK-BE-NEXT:    xtn v0.8b, v0.8h
 ; CHECK-BE-NEXT:    st1 { v0.8b }, [x9]
@@ -646,35 +645,34 @@ define void @trunc_v8i19_to_v8i8_in_loop(ptr %A, ptr %dst) {
 ; CHECK-DISABLE-NEXT:    mov x8, xzr
 ; CHECK-DISABLE-NEXT:  .LBB5_1: // %loop
 ; CHECK-DISABLE-NEXT:    // =>This Inner Loop Header: Depth=1
-; CHECK-DISABLE-NEXT:    ldp x10, x9, [x0]
-; CHECK-DISABLE-NEXT:    ldrh w16, [x0, #16]
-; CHECK-DISABLE-NEXT:    ldrb w17, [x0, #18]
+; CHECK-DISABLE-NEXT:    ldp x9, x10, [x0]
+; CHECK-DISABLE-NEXT:    ldrh w15, [x0, #16]
+; CHECK-DISABLE-NEXT:    extr x11, x9, x10, #40
+; CHECK-DISABLE-NEXT:    lsl x12, x10, #24
+; CHECK-DISABLE-NEXT:    lsr x13, x9, #40
+; CHECK-DISABLE-NEXT:    lsr x9, x9, #45
+; CHECK-DISABLE-NEXT:    lsr w10, w10, #14
+; CHECK-DISABLE-NEXT:    extr x14, x11, x12, #57
+; CHECK-DISABLE-NEXT:    extr x13, x13, x11, #50
+; CHECK-DISABLE-NEXT:    fmov s0, w9
+; CHECK-DISABLE-NEXT:    lsl x9, x15, #8
+; CHECK-DISABLE-NEXT:    fmov s1, w14
+; CHECK-DISABLE-NEXT:    mov v0.s[1], w13
+; CHECK-DISABLE-NEXT:    mov v1.s[1], w10
+; CHECK-DISABLE-NEXT:    orr w10, w9, w12
+; CHECK-DISABLE-NEXT:    lsr x12, x11, #31
+; CHECK-DISABLE-NEXT:    lsr w10, w10, #19
+; CHECK-DISABLE-NEXT:    lsr w11, w11, #12
+; CHECK-DISABLE-NEXT:    mov v0.s[2], w12
+; CHECK-DISABLE-NEXT:    mov v1.s[2], w10
+; CHECK-DISABLE-NEXT:    ldrb w10, [x0, #18]
 ; CHECK-DISABLE-NEXT:    add x0, x0, #32
-; CHECK-DISABLE-NEXT:    lsl x11, x9, #24
-; CHECK-DISABLE-NEXT:    lsr x12, x9, #40
-; CHECK-DISABLE-NEXT:    lsr x13, x10, #45
-; CHECK-DISABLE-NEXT:    lsl x14, x10, #24
-; CHECK-DISABLE-NEXT:    lsr x15, x10, #40
-; CHECK-DISABLE-NEXT:    extr x12, x12, x11, #57
-; CHECK-DISABLE-NEXT:    fmov s0, w13
-; CHECK-DISABLE-NEXT:    lsr w13, w10, #7
-; CHECK-DISABLE-NEXT:    extr x14, x15, x14, #50
-; CHECK-DISABLE-NEXT:    lsr w15, w9, #14
-; CHECK-DISABLE-NEXT:    extr x9, x10, x9, #40
-; CHECK-DISABLE-NEXT:    fmov s1, w12
-; CHECK-DISABLE-NEXT:    orr w12, w17, w16, lsl #8
-; CHECK-DISABLE-NEXT:    mov v0.s[1], w14
-; CHECK-DISABLE-NEXT:    lsr w9, w9, #12
-; CHECK-DISABLE-NEXT:    orr w11, w12, w11
-; CHECK-DISABLE-NEXT:    mov v1.s[1], w15
-; CHECK-DISABLE-NEXT:    lsr w11, w11, #19
-; CHECK-DISABLE-NEXT:    mov v0.s[2], w13
-; CHECK-DISABLE-NEXT:    mov v1.s[2], w11
-; CHECK-DISABLE-NEXT:    mov v0.s[3], w9
+; CHECK-DISABLE-NEXT:    orr w9, w10, w9
+; CHECK-DISABLE-NEXT:    mov v0.s[3], w11
+; CHECK-DISABLE-NEXT:    mov v1.s[3], w9
 ; CHECK-DISABLE-NEXT:    add x9, x1, x8, lsl #3
 ; CHECK-DISABLE-NEXT:    add x8, x8, #1
 ; CHECK-DISABLE-NEXT:    cmp x8, #1000
-; CHECK-DISABLE-NEXT:    mov v1.s[3], w12
 ; CHECK-DISABLE-NEXT:    uzp1 v0.8h, v0.8h, v1.8h
 ; CHECK-DISABLE-NEXT:    xtn v0.8b, v0.8h
 ; CHECK-DISABLE-NEXT:    st1 { v0.8b }, [x9]

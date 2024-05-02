@@ -243,42 +243,54 @@ define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ;
 ; RV32M-LABEL: test_urem_odd_setne:
 ; RV32M:       # %bb.0:
-; RV32M-NEXT:    slli a1, a0, 1
-; RV32M-NEXT:    neg a0, a0
+; RV32M-NEXT:    andi a1, a0, 15
+; RV32M-NEXT:    li a2, 13
+; RV32M-NEXT:    mul a1, a1, a2
+; RV32M-NEXT:    srli a1, a1, 6
+; RV32M-NEXT:    slli a2, a1, 2
+; RV32M-NEXT:    or a1, a2, a1
 ; RV32M-NEXT:    sub a0, a0, a1
 ; RV32M-NEXT:    andi a0, a0, 15
-; RV32M-NEXT:    sltiu a0, a0, 4
-; RV32M-NEXT:    xori a0, a0, 1
+; RV32M-NEXT:    snez a0, a0
 ; RV32M-NEXT:    ret
 ;
 ; RV64M-LABEL: test_urem_odd_setne:
 ; RV64M:       # %bb.0:
-; RV64M-NEXT:    slli a1, a0, 1
-; RV64M-NEXT:    neg a0, a0
+; RV64M-NEXT:    andi a1, a0, 15
+; RV64M-NEXT:    li a2, 13
+; RV64M-NEXT:    mul a1, a1, a2
+; RV64M-NEXT:    srli a1, a1, 6
+; RV64M-NEXT:    slli a2, a1, 2
+; RV64M-NEXT:    or a1, a2, a1
 ; RV64M-NEXT:    sub a0, a0, a1
 ; RV64M-NEXT:    andi a0, a0, 15
-; RV64M-NEXT:    sltiu a0, a0, 4
-; RV64M-NEXT:    xori a0, a0, 1
+; RV64M-NEXT:    snez a0, a0
 ; RV64M-NEXT:    ret
 ;
 ; RV32MV-LABEL: test_urem_odd_setne:
 ; RV32MV:       # %bb.0:
-; RV32MV-NEXT:    slli a1, a0, 1
-; RV32MV-NEXT:    neg a0, a0
+; RV32MV-NEXT:    andi a1, a0, 15
+; RV32MV-NEXT:    li a2, 13
+; RV32MV-NEXT:    mul a1, a1, a2
+; RV32MV-NEXT:    srli a1, a1, 6
+; RV32MV-NEXT:    slli a2, a1, 2
+; RV32MV-NEXT:    or a1, a2, a1
 ; RV32MV-NEXT:    sub a0, a0, a1
 ; RV32MV-NEXT:    andi a0, a0, 15
-; RV32MV-NEXT:    sltiu a0, a0, 4
-; RV32MV-NEXT:    xori a0, a0, 1
+; RV32MV-NEXT:    snez a0, a0
 ; RV32MV-NEXT:    ret
 ;
 ; RV64MV-LABEL: test_urem_odd_setne:
 ; RV64MV:       # %bb.0:
-; RV64MV-NEXT:    slli a1, a0, 1
-; RV64MV-NEXT:    neg a0, a0
+; RV64MV-NEXT:    andi a1, a0, 15
+; RV64MV-NEXT:    li a2, 13
+; RV64MV-NEXT:    mul a1, a1, a2
+; RV64MV-NEXT:    srli a1, a1, 6
+; RV64MV-NEXT:    slli a2, a1, 2
+; RV64MV-NEXT:    or a1, a2, a1
 ; RV64MV-NEXT:    sub a0, a0, a1
 ; RV64MV-NEXT:    andi a0, a0, 15
-; RV64MV-NEXT:    sltiu a0, a0, 4
-; RV64MV-NEXT:    xori a0, a0, 1
+; RV64MV-NEXT:    snez a0, a0
 ; RV64MV-NEXT:    ret
   %urem = urem i4 %X, 5
   %cmp = icmp ne i4 %urem, 0
@@ -364,57 +376,59 @@ define void @test_urem_vec(ptr %X) nounwind {
 ; RV32-NEXT:    slli a1, a1, 10
 ; RV32-NEXT:    srli a3, a2, 22
 ; RV32-NEXT:    srli a4, a2, 11
-; RV32-NEXT:    andi a2, a2, 2047
+; RV32-NEXT:    andi a5, a2, 2047
+; RV32-NEXT:    srli a2, a2, 8
 ; RV32-NEXT:    or a1, a3, a1
-; RV32-NEXT:    slli a3, a2, 2
-; RV32-NEXT:    slli a5, a2, 4
-; RV32-NEXT:    slli a6, a2, 6
-; RV32-NEXT:    slli a7, a2, 8
-; RV32-NEXT:    slli t0, a2, 10
-; RV32-NEXT:    addi a4, a4, -1
-; RV32-NEXT:    addi a1, a1, -2
-; RV32-NEXT:    add a2, a2, a3
-; RV32-NEXT:    add a5, a5, a6
-; RV32-NEXT:    sub a3, t0, a7
-; RV32-NEXT:    slli a6, a4, 3
-; RV32-NEXT:    slli a7, a4, 6
-; RV32-NEXT:    slli t0, a4, 9
-; RV32-NEXT:    add a2, a2, a5
-; RV32-NEXT:    slli a5, a1, 2
-; RV32-NEXT:    add a4, a4, a6
-; RV32-NEXT:    slli a6, a1, 4
+; RV32-NEXT:    slli a3, a3, 10
+; RV32-NEXT:    slli a6, a5, 2
+; RV32-NEXT:    slli a7, a5, 4
+; RV32-NEXT:    slli t0, a5, 6
 ; RV32-NEXT:    add a7, a7, t0
-; RV32-NEXT:    slli t0, a1, 6
-; RV32-NEXT:    sub a6, a6, t0
+; RV32-NEXT:    slli t0, a5, 8
+; RV32-NEXT:    add a6, a5, a6
+; RV32-NEXT:    slli a5, a5, 10
+; RV32-NEXT:    andi a2, a2, 2040
+; RV32-NEXT:    sub a5, a5, t0
+; RV32-NEXT:    slli t0, a4, 6
+; RV32-NEXT:    add a2, a4, a2
+; RV32-NEXT:    slli a4, a4, 9
+; RV32-NEXT:    add a4, t0, a4
 ; RV32-NEXT:    slli t0, a1, 8
-; RV32-NEXT:    sub a5, a5, a1
-; RV32-NEXT:    slli a1, a1, 10
-; RV32-NEXT:    sub a1, t0, a1
-; RV32-NEXT:    sub a3, a3, a2
-; RV32-NEXT:    add a4, a4, a7
-; RV32-NEXT:    sub a2, a5, a6
-; RV32-NEXT:    slli a5, a3, 10
-; RV32-NEXT:    slli a3, a3, 21
-; RV32-NEXT:    neg a4, a4
-; RV32-NEXT:    sub a2, a2, a1
-; RV32-NEXT:    srli a3, a3, 22
-; RV32-NEXT:    andi a1, a4, 2047
-; RV32-NEXT:    andi a2, a2, 2047
-; RV32-NEXT:    or a3, a3, a5
-; RV32-NEXT:    sltiu a1, a1, 293
-; RV32-NEXT:    sltiu a2, a2, 2
-; RV32-NEXT:    andi a3, a3, 2047
-; RV32-NEXT:    addi a1, a1, -1
-; RV32-NEXT:    xori a4, a2, 1
-; RV32-NEXT:    sltiu a3, a3, 342
-; RV32-NEXT:    addi a2, a2, -1
+; RV32-NEXT:    sub a3, t0, a3
+; RV32-NEXT:    li t0, -1463
 ; RV32-NEXT:    andi a1, a1, 2047
-; RV32-NEXT:    addi a3, a3, -1
-; RV32-NEXT:    slli a1, a1, 11
-; RV32-NEXT:    slli a2, a2, 22
+; RV32-NEXT:    add a6, a6, a7
+; RV32-NEXT:    slli a7, a1, 2
+; RV32-NEXT:    add a2, a2, a4
+; RV32-NEXT:    slli a4, a1, 4
+; RV32-NEXT:    sub a7, a7, a1
+; RV32-NEXT:    slli a1, a1, 6
+; RV32-NEXT:    sub a4, a4, a1
+; RV32-NEXT:    sub a1, a5, a6
+; RV32-NEXT:    sub a2, t0, a2
+; RV32-NEXT:    sub a4, a7, a4
+; RV32-NEXT:    slli a5, a1, 10
+; RV32-NEXT:    slli a1, a1, 21
+; RV32-NEXT:    andi a2, a2, 2047
+; RV32-NEXT:    sub a4, a4, a3
+; RV32-NEXT:    srli a1, a1, 22
+; RV32-NEXT:    sltiu a2, a2, 293
+; RV32-NEXT:    addi a3, a4, -1638
+; RV32-NEXT:    or a1, a1, a5
+; RV32-NEXT:    addi a2, a2, -1
 ; RV32-NEXT:    andi a3, a3, 2047
+; RV32-NEXT:    andi a1, a1, 2047
+; RV32-NEXT:    andi a2, a2, 2047
+; RV32-NEXT:    sltiu a3, a3, 2
+; RV32-NEXT:    sltiu a1, a1, 342
+; RV32-NEXT:    slli a2, a2, 11
+; RV32-NEXT:    xori a4, a3, 1
+; RV32-NEXT:    addi a3, a3, -1
+; RV32-NEXT:    addi a1, a1, -1
+; RV32-NEXT:    andi a1, a1, 2047
+; RV32-NEXT:    slli a3, a3, 22
 ; RV32-NEXT:    or a1, a1, a2
-; RV32-NEXT:    or a1, a3, a1
+; RV32-NEXT:    or a1, a1, a3
 ; RV32-NEXT:    sw a1, 0(a0)
 ; RV32-NEXT:    sb a4, 4(a0)
 ; RV32-NEXT:    ret
@@ -425,61 +439,62 @@ define void @test_urem_vec(ptr %X) nounwind {
 ; RV64-NEXT:    lwu a2, 0(a0)
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    or a1, a2, a1
-; RV64-NEXT:    srli a2, a1, 22
-; RV64-NEXT:    srli a3, a1, 11
+; RV64-NEXT:    srli a2, a1, 11
+; RV64-NEXT:    srli a3, a1, 22
+; RV64-NEXT:    andi a4, a1, 2047
+; RV64-NEXT:    srli a1, a1, 8
+; RV64-NEXT:    slli a5, a4, 2
+; RV64-NEXT:    slli a6, a4, 4
+; RV64-NEXT:    slli a7, a4, 6
+; RV64-NEXT:    slli t0, a4, 8
+; RV64-NEXT:    slli t1, a4, 10
+; RV64-NEXT:    add a4, a4, a5
+; RV64-NEXT:    slli a5, a3, 2
+; RV64-NEXT:    add a6, a6, a7
+; RV64-NEXT:    slli a7, a3, 4
+; RV64-NEXT:    sub t0, t1, t0
+; RV64-NEXT:    slli t1, a3, 6
+; RV64-NEXT:    sub a7, a7, t1
+; RV64-NEXT:    slli t1, a3, 8
+; RV64-NEXT:    sub a5, a5, a3
+; RV64-NEXT:    slli a3, a3, 10
+; RV64-NEXT:    andi a1, a1, 2040
+; RV64-NEXT:    sub a3, t1, a3
+; RV64-NEXT:    slli t1, a2, 6
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    slli a2, a2, 9
+; RV64-NEXT:    add a2, t1, a2
+; RV64-NEXT:    add a4, a4, a6
+; RV64-NEXT:    sub a5, a5, a7
+; RV64-NEXT:    li a6, -1463
+; RV64-NEXT:    add a1, a1, a2
+; RV64-NEXT:    sub a2, t0, a4
+; RV64-NEXT:    sub a5, a5, a3
+; RV64-NEXT:    sub a1, a6, a1
+; RV64-NEXT:    slli a3, a2, 10
+; RV64-NEXT:    slli a2, a2, 53
+; RV64-NEXT:    addi a4, a5, -1638
 ; RV64-NEXT:    andi a1, a1, 2047
-; RV64-NEXT:    slli a4, a1, 2
-; RV64-NEXT:    slli a5, a1, 4
-; RV64-NEXT:    slli a6, a1, 6
-; RV64-NEXT:    slli a7, a1, 8
-; RV64-NEXT:    slli t0, a1, 10
-; RV64-NEXT:    addi a3, a3, -1
-; RV64-NEXT:    addi a2, a2, -2
-; RV64-NEXT:    add a1, a1, a4
-; RV64-NEXT:    add a5, a5, a6
-; RV64-NEXT:    sub a4, t0, a7
-; RV64-NEXT:    slli a6, a3, 3
-; RV64-NEXT:    slli a7, a3, 6
-; RV64-NEXT:    slli t0, a3, 9
-; RV64-NEXT:    add a1, a1, a5
-; RV64-NEXT:    slli a5, a2, 2
-; RV64-NEXT:    add a3, a3, a6
-; RV64-NEXT:    slli a6, a2, 4
-; RV64-NEXT:    add a7, a7, t0
-; RV64-NEXT:    slli t0, a2, 6
-; RV64-NEXT:    sub a6, a6, t0
-; RV64-NEXT:    slli t0, a2, 8
-; RV64-NEXT:    sub a5, a5, a2
-; RV64-NEXT:    slli a2, a2, 10
-; RV64-NEXT:    sub a2, t0, a2
-; RV64-NEXT:    sub a4, a4, a1
-; RV64-NEXT:    add a3, a3, a7
-; RV64-NEXT:    sub a1, a5, a6
-; RV64-NEXT:    slli a5, a4, 10
-; RV64-NEXT:    slli a4, a4, 53
-; RV64-NEXT:    neg a3, a3
-; RV64-NEXT:    sub a1, a1, a2
-; RV64-NEXT:    srli a4, a4, 54
-; RV64-NEXT:    andi a2, a3, 2047
-; RV64-NEXT:    andi a1, a1, 2047
-; RV64-NEXT:    or a4, a4, a5
-; RV64-NEXT:    sltiu a2, a2, 293
-; RV64-NEXT:    sltiu a1, a1, 2
-; RV64-NEXT:    andi a3, a4, 2047
+; RV64-NEXT:    srli a2, a2, 54
+; RV64-NEXT:    andi a4, a4, 2047
+; RV64-NEXT:    sltiu a1, a1, 293
+; RV64-NEXT:    or a2, a2, a3
+; RV64-NEXT:    sltiu a3, a4, 2
 ; RV64-NEXT:    addi a1, a1, -1
-; RV64-NEXT:    addi a2, a2, -1
-; RV64-NEXT:    sltiu a3, a3, 342
 ; RV64-NEXT:    andi a2, a2, 2047
-; RV64-NEXT:    slli a1, a1, 22
 ; RV64-NEXT:    addi a3, a3, -1
-; RV64-NEXT:    slli a2, a2, 11
-; RV64-NEXT:    andi a3, a3, 2047
+; RV64-NEXT:    andi a1, a1, 2047
+; RV64-NEXT:    sltiu a2, a2, 342
+; RV64-NEXT:    slli a4, a3, 31
+; RV64-NEXT:    slli a1, a1, 11
+; RV64-NEXT:    slli a3, a3, 22
+; RV64-NEXT:    addi a2, a2, -1
+; RV64-NEXT:    srli a4, a4, 63
+; RV64-NEXT:    or a1, a1, a3
+; RV64-NEXT:    andi a2, a2, 2047
 ; RV64-NEXT:    or a1, a2, a1
-; RV64-NEXT:    or a1, a3, a1
-; RV64-NEXT:    slli a2, a1, 31
-; RV64-NEXT:    srli a2, a2, 63
 ; RV64-NEXT:    sw a1, 0(a0)
-; RV64-NEXT:    sb a2, 4(a0)
+; RV64-NEXT:    sb a4, 4(a0)
 ; RV64-NEXT:    ret
 ;
 ; RV32M-LABEL: test_urem_vec:
@@ -528,41 +543,41 @@ define void @test_urem_vec(ptr %X) nounwind {
 ; RV64M-NEXT:    lbu a1, 4(a0)
 ; RV64M-NEXT:    lwu a2, 0(a0)
 ; RV64M-NEXT:    li a3, 683
-; RV64M-NEXT:    li a4, 1463
+; RV64M-NEXT:    li a4, 819
 ; RV64M-NEXT:    slli a1, a1, 32
 ; RV64M-NEXT:    or a1, a2, a1
 ; RV64M-NEXT:    andi a2, a1, 2047
 ; RV64M-NEXT:    mul a2, a2, a3
-; RV64M-NEXT:    srli a3, a1, 11
+; RV64M-NEXT:    srli a3, a1, 22
 ; RV64M-NEXT:    mul a3, a3, a4
-; RV64M-NEXT:    li a4, 819
-; RV64M-NEXT:    srli a1, a1, 22
+; RV64M-NEXT:    li a4, 1463
+; RV64M-NEXT:    srli a1, a1, 11
 ; RV64M-NEXT:    mul a1, a1, a4
 ; RV64M-NEXT:    slli a4, a2, 10
 ; RV64M-NEXT:    slli a2, a2, 53
-; RV64M-NEXT:    addi a3, a3, -1463
-; RV64M-NEXT:    addi a1, a1, -1638
+; RV64M-NEXT:    addi a3, a3, -1638
+; RV64M-NEXT:    addi a1, a1, -1463
 ; RV64M-NEXT:    srli a2, a2, 54
 ; RV64M-NEXT:    andi a3, a3, 2047
 ; RV64M-NEXT:    andi a1, a1, 2047
 ; RV64M-NEXT:    or a2, a2, a4
-; RV64M-NEXT:    sltiu a3, a3, 293
-; RV64M-NEXT:    sltiu a1, a1, 2
+; RV64M-NEXT:    sltiu a3, a3, 2
+; RV64M-NEXT:    sltiu a1, a1, 293
 ; RV64M-NEXT:    andi a2, a2, 2047
 ; RV64M-NEXT:    addi a1, a1, -1
 ; RV64M-NEXT:    addi a3, a3, -1
 ; RV64M-NEXT:    sltiu a2, a2, 342
-; RV64M-NEXT:    andi a3, a3, 2047
-; RV64M-NEXT:    slli a1, a1, 22
+; RV64M-NEXT:    slli a4, a3, 31
+; RV64M-NEXT:    andi a1, a1, 2047
+; RV64M-NEXT:    slli a3, a3, 22
 ; RV64M-NEXT:    addi a2, a2, -1
-; RV64M-NEXT:    slli a3, a3, 11
+; RV64M-NEXT:    srli a4, a4, 63
+; RV64M-NEXT:    slli a1, a1, 11
 ; RV64M-NEXT:    andi a2, a2, 2047
-; RV64M-NEXT:    or a1, a3, a1
+; RV64M-NEXT:    or a1, a1, a3
 ; RV64M-NEXT:    or a1, a2, a1
-; RV64M-NEXT:    slli a2, a1, 31
-; RV64M-NEXT:    srli a2, a2, 63
 ; RV64M-NEXT:    sw a1, 0(a0)
-; RV64M-NEXT:    sb a2, 4(a0)
+; RV64M-NEXT:    sb a4, 4(a0)
 ; RV64M-NEXT:    ret
 ;
 ; RV32MV-LABEL: test_urem_vec:
@@ -671,19 +686,19 @@ define void @test_urem_vec(ptr %X) nounwind {
 ; RV64MV-NEXT:    vmsltu.vv v0, v10, v8
 ; RV64MV-NEXT:    vmv.v.i v8, 0
 ; RV64MV-NEXT:    vmerge.vim v8, v8, -1, v0
+; RV64MV-NEXT:    vslidedown.vi v9, v8, 2
 ; RV64MV-NEXT:    vmv.x.s a1, v8
-; RV64MV-NEXT:    vslidedown.vi v9, v8, 1
-; RV64MV-NEXT:    vslidedown.vi v8, v8, 2
-; RV64MV-NEXT:    andi a1, a1, 2047
+; RV64MV-NEXT:    vslidedown.vi v8, v8, 1
 ; RV64MV-NEXT:    vmv.x.s a2, v9
-; RV64MV-NEXT:    vmv.x.s a3, v8
-; RV64MV-NEXT:    andi a2, a2, 2047
-; RV64MV-NEXT:    slli a3, a3, 22
-; RV64MV-NEXT:    slli a2, a2, 11
+; RV64MV-NEXT:    andi a1, a1, 2047
+; RV64MV-NEXT:    slli a3, a2, 22
 ; RV64MV-NEXT:    or a1, a1, a3
-; RV64MV-NEXT:    or a1, a1, a2
-; RV64MV-NEXT:    slli a2, a1, 31
+; RV64MV-NEXT:    vmv.x.s a3, v8
+; RV64MV-NEXT:    slli a2, a2, 53
+; RV64MV-NEXT:    andi a3, a3, 2047
 ; RV64MV-NEXT:    srli a2, a2, 63
+; RV64MV-NEXT:    slli a3, a3, 11
+; RV64MV-NEXT:    or a1, a1, a3
 ; RV64MV-NEXT:    sw a1, 0(a0)
 ; RV64MV-NEXT:    sb a2, 4(a0)
 ; RV64MV-NEXT:    ret

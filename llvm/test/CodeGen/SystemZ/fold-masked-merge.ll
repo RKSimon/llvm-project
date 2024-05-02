@@ -36,9 +36,9 @@ define i16 @masked_merge1(i16 %a0, i16 %a1, i16 %a2) {
 ;
 ; MISC3-LABEL: masked_merge1:
 ; MISC3:       # %bb.0:
-; MISC3-NEXT:    ncrk %r0, %r4, %r2
-; MISC3-NEXT:    nr %r2, %r3
-; MISC3-NEXT:    or %r2, %r0
+; MISC3-NEXT:    nr %r3, %r2
+; MISC3-NEXT:    ncrk %r2, %r4, %r2
+; MISC3-NEXT:    or %r2, %r3
 ; MISC3-NEXT:    br %r14
   %and0 = and i16 %a0, %a1
   %not = xor i16 %a0, -1

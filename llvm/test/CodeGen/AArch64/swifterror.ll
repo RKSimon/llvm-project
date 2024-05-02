@@ -914,15 +914,14 @@ define float @foo_vararg(ptr swifterror %error_ptr_ref, ...) {
 ; CHECK-APPLE-AARCH64-NEXT:    ldr w9, [x29, #16]
 ; CHECK-APPLE-AARCH64-NEXT:    strb w8, [x0, #8]
 ; CHECK-APPLE-AARCH64-NEXT:    add x8, x29, #16
-; CHECK-APPLE-AARCH64-NEXT:    orr x8, x8, #0x8
 ; CHECK-APPLE-AARCH64-NEXT:    stur w9, [x29, #-12]
-; CHECK-APPLE-AARCH64-NEXT:    ldr w9, [x8], #8
-; CHECK-APPLE-AARCH64-NEXT:    str w9, [sp, #16]
 ; CHECK-APPLE-AARCH64-NEXT:    fmov s0, #1.00000000
-; CHECK-APPLE-AARCH64-NEXT:    ldr w9, [x8], #8
+; CHECK-APPLE-AARCH64-NEXT:    add x8, x8, #24
+; CHECK-APPLE-AARCH64-NEXT:    ldr w9, [x29, #24]
+; CHECK-APPLE-AARCH64-NEXT:    ldr w10, [x29, #32]
 ; CHECK-APPLE-AARCH64-NEXT:    stur x8, [x29, #-8]
+; CHECK-APPLE-AARCH64-NEXT:    stp w10, w9, [sp, #12]
 ; CHECK-APPLE-AARCH64-NEXT:    mov x21, x0
-; CHECK-APPLE-AARCH64-NEXT:    str w9, [sp, #12]
 ; CHECK-APPLE-AARCH64-NEXT:    ldp x29, x30, [sp, #32] ; 16-byte Folded Reload
 ; CHECK-APPLE-AARCH64-NEXT:    add sp, sp, #48
 ; CHECK-APPLE-AARCH64-NEXT:    ret
@@ -1167,13 +1166,13 @@ define float @caller4(ptr %error_ref) {
 ; CHECK-APPLE-ARM64_32-NEXT:    mov w8, #10 ; =0xa
 ; CHECK-APPLE-ARM64_32-NEXT:    mov w9, #11 ; =0xb
 ; CHECK-APPLE-ARM64_32-NEXT:    stp w9, w8, [sp, #20]
-; CHECK-APPLE-ARM64_32-NEXT:    mov w10, #12 ; =0xc
-; CHECK-APPLE-ARM64_32-NEXT:    str w10, [sp, #16]
+; CHECK-APPLE-ARM64_32-NEXT:    mov w8, #12 ; =0xc
+; CHECK-APPLE-ARM64_32-NEXT:    str w8, [sp, #16]
 ; CHECK-APPLE-ARM64_32-NEXT:    mov x21, xzr
-; CHECK-APPLE-ARM64_32-NEXT:    mov x9, #11 ; =0xb
-; CHECK-APPLE-ARM64_32-NEXT:    movk x9, #12, lsl #32
-; CHECK-APPLE-ARM64_32-NEXT:    stur x9, [sp, #4]
-; CHECK-APPLE-ARM64_32-NEXT:    str w8, [sp]
+; CHECK-APPLE-ARM64_32-NEXT:    str w8, [sp, #8]
+; CHECK-APPLE-ARM64_32-NEXT:    mov x8, #10 ; =0xa
+; CHECK-APPLE-ARM64_32-NEXT:    movk x8, #11, lsl #32
+; CHECK-APPLE-ARM64_32-NEXT:    str x8, [sp]
 ; CHECK-APPLE-ARM64_32-NEXT:    bl _foo_vararg
 ; CHECK-APPLE-ARM64_32-NEXT:    mov x0, x21
 ; CHECK-APPLE-ARM64_32-NEXT:    cbnz w0, LBB8_2

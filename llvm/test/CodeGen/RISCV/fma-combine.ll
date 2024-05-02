@@ -27,12 +27,12 @@ define double @fnmadd_non_trivial(ptr %p0, ptr %p1, ptr %dst, double %mul425) {
 ; CHECK-NEXT:    lui a3, %hi(.LCPI0_0)
 ; CHECK-NEXT:    ld a3, %lo(.LCPI0_0)(a3)
 ; CHECK-NEXT:    fmul.d fa5, fa0, fa5
-; CHECK-NEXT:    fnmadd.d fa4, fa4, fa2, fa3
-; CHECK-NEXT:    fnmadd.d fa3, fa1, fa2, fa3
+; CHECK-NEXT:    fmadd.d fa4, fa4, fa2, fa3
+; CHECK-NEXT:    fmadd.d fa3, fa1, fa2, fa3
 ; CHECK-NEXT:    sd a3, 0(a2)
 ; CHECK-NEXT:    fsd fa5, 0(a0)
-; CHECK-NEXT:    fnmadd.d fa5, fa4, fa2, fa0
-; CHECK-NEXT:    fnmadd.d fa0, fa0, fa2, fa3
+; CHECK-NEXT:    fmsub.d fa5, fa4, fa2, fa0
+; CHECK-NEXT:    fnmsub.d fa0, fa0, fa2, fa3
 ; CHECK-NEXT:    fsd fa5, 0(a1)
 ; CHECK-NEXT:    ret
   store double 0x3FEE666666666666, ptr %dst, align 8

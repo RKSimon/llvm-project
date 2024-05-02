@@ -7,15 +7,15 @@ target triple = "nvptx64-nvidia-cuda"
 define i16  @test_v2i8(i16 %a) {
 ; CHECK-LABEL: test_v2i8(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<5>;
+; CHECK-NEXT:    .reg .b16 %rs<6>;
 ; CHECK-NEXT:    .reg .b32 %r<2>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_v2i8_param_0];
-; CHECK-NEXT:    cvt.s16.s8 %rs2, %rs1;
-; CHECK-NEXT:    shr.s16 %rs3, %rs1, 8;
-; CHECK-NEXT:    add.s16 %rs4, %rs2, %rs3;
-; CHECK-NEXT:    cvt.u32.u16 %r1, %rs4;
+; CHECK-NEXT:    ld.param.v2.b8 {%rs1, %rs2}, [test_v2i8_param_0];
+; CHECK-NEXT:    cvt.s16.s8 %rs3, %rs1;
+; CHECK-NEXT:    cvt.s16.s8 %rs4, %rs2;
+; CHECK-NEXT:    add.s16 %rs5, %rs3, %rs4;
+; CHECK-NEXT:    cvt.u32.u16 %r1, %rs5;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r1;
 ; CHECK-NEXT:    ret;
   %v = bitcast i16 %a to <2 x i8>
@@ -126,12 +126,12 @@ define i32  @test_v4i8_u32(i32 %a) {
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b32 %r1, [test_v4i8_u32_param_0];
-; CHECK-NEXT:    prmt.b32 %r2, %r1, 0, 0x7771U;
-; CHECK-NEXT:    prmt.b32 %r3, %r1, 0, 0x7772U;
-; CHECK-NEXT:    prmt.b32 %r4, %r1, 0, 0x7773U;
-; CHECK-NEXT:    and.b32 %r5, %r1, 255;
-; CHECK-NEXT:    add.s32 %r6, %r5, %r2;
-; CHECK-NEXT:    add.s32 %r7, %r3, %r4;
+; CHECK-NEXT:    prmt.b32 %r2, %r1, 0, 0x7770U;
+; CHECK-NEXT:    prmt.b32 %r3, %r1, 0, 0x7771U;
+; CHECK-NEXT:    prmt.b32 %r4, %r1, 0, 0x7772U;
+; CHECK-NEXT:    prmt.b32 %r5, %r1, 0, 0x7773U;
+; CHECK-NEXT:    add.s32 %r6, %r2, %r3;
+; CHECK-NEXT:    add.s32 %r7, %r4, %r5;
 ; CHECK-NEXT:    add.s32 %r8, %r6, %r7;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r8;
 ; CHECK-NEXT:    ret;

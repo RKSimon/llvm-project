@@ -299,22 +299,22 @@ define amdgpu_cs_chain void @amdgpu_cs_chain_spill(<24 x i32> inreg %sgprs, <24 
 ; DAGISEL-GFX10-NEXT:    v_mov_b32_e32 v38, v9
 ; DAGISEL-GFX10-NEXT:    v_mov_b32_e32 v39, v8
 ; DAGISEL-GFX10-NEXT:    s_mov_b32 s32, 0
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v16, off, s[48:51], s32
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v17, off, s[48:51], s32 offset:4
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v18, off, s[48:51], s32 offset:8
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v19, off, s[48:51], s32 offset:12
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v20, off, s[48:51], s32 offset:16
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v21, off, s[48:51], s32 offset:20
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v22, off, s[48:51], s32 offset:24
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v23, off, s[48:51], s32 offset:28
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v24, off, s[48:51], s32 offset:32
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v25, off, s[48:51], s32 offset:36
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v26, off, s[48:51], s32 offset:40
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v27, off, s[48:51], s32 offset:44
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v28, off, s[48:51], s32 offset:48
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v29, off, s[48:51], s32 offset:52
-; DAGISEL-GFX10-NEXT:    buffer_store_dword v30, off, s[48:51], s32 offset:56
 ; DAGISEL-GFX10-NEXT:    buffer_store_dword v31, off, s[48:51], s32 offset:60
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v30, off, s[48:51], s32 offset:56
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v29, off, s[48:51], s32 offset:52
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v28, off, s[48:51], s32 offset:48
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v27, off, s[48:51], s32 offset:44
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v26, off, s[48:51], s32 offset:40
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v25, off, s[48:51], s32 offset:36
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v24, off, s[48:51], s32 offset:32
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v23, off, s[48:51], s32 offset:28
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v22, off, s[48:51], s32 offset:24
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v21, off, s[48:51], s32 offset:20
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v20, off, s[48:51], s32 offset:16
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v19, off, s[48:51], s32 offset:12
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v18, off, s[48:51], s32 offset:8
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v17, off, s[48:51], s32 offset:4
+; DAGISEL-GFX10-NEXT:    buffer_store_dword v16, off, s[48:51], s32
 ; DAGISEL-GFX10-NEXT:    v_mov_b32_e32 v0, s0
 ; DAGISEL-GFX10-NEXT:    v_mov_b32_e32 v1, s1
 ; DAGISEL-GFX10-NEXT:    v_mov_b32_e32 v2, s2

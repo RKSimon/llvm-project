@@ -6,25 +6,26 @@ define { <16 x i8>, <16 x i8> } @foo_ld2_v16i8(<16 x i1> %mask, ptr %p) {
 ; CHECK-LABEL: foo_ld2_v16i8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    zip2 v1.16b, v0.16b, v0.16b
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v0.16b
+; CHECK-NEXT:    zip1 v2.16b, v0.16b, v0.16b
 ; CHECK-NEXT:    adrp x8, .LCPI0_0
-; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI0_0]
+; CHECK-NEXT:    ldr q3, [x8, :lo12:.LCPI0_0]
+; CHECK-NEXT:    umov w9, v0.b[0]
 ; CHECK-NEXT:    shl v1.16b, v1.16b, #7
-; CHECK-NEXT:    shl v0.16b, v0.16b, #7
+; CHECK-NEXT:    shl v2.16b, v2.16b, #7
 ; CHECK-NEXT:    cmlt v1.16b, v1.16b, #0
-; CHECK-NEXT:    cmlt v0.16b, v0.16b, #0
-; CHECK-NEXT:    and v1.16b, v1.16b, v2.16b
-; CHECK-NEXT:    and v0.16b, v0.16b, v2.16b
-; CHECK-NEXT:    ext v2.16b, v1.16b, v1.16b, #8
-; CHECK-NEXT:    ext v3.16b, v0.16b, v0.16b, #8
-; CHECK-NEXT:    zip1 v1.16b, v1.16b, v2.16b
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v3.16b
+; CHECK-NEXT:    cmlt v2.16b, v2.16b, #0
+; CHECK-NEXT:    and v1.16b, v1.16b, v3.16b
+; CHECK-NEXT:    and v2.16b, v2.16b, v3.16b
+; CHECK-NEXT:    ext v3.16b, v1.16b, v1.16b, #8
+; CHECK-NEXT:    ext v4.16b, v2.16b, v2.16b, #8
+; CHECK-NEXT:    zip1 v1.16b, v1.16b, v3.16b
+; CHECK-NEXT:    zip1 v2.16b, v2.16b, v4.16b
 ; CHECK-NEXT:    addv h1, v1.8h
-; CHECK-NEXT:    addv h0, v0.8h
-; CHECK-NEXT:    fmov w9, s1
-; CHECK-NEXT:    fmov w8, s0
-; CHECK-NEXT:    bfi w8, w9, #16, #16
-; CHECK-NEXT:    tbz w8, #0, .LBB0_2
+; CHECK-NEXT:    addv h2, v2.8h
+; CHECK-NEXT:    fmov w10, s1
+; CHECK-NEXT:    fmov w8, s2
+; CHECK-NEXT:    bfi w8, w10, #16, #16
+; CHECK-NEXT:    tbz w9, #0, .LBB0_2
 ; CHECK-NEXT:  // %bb.1: // %cond.load
 ; CHECK-NEXT:    ldr b1, [x0]
 ; CHECK-NEXT:    tbnz w8, #1, .LBB0_3
@@ -230,17 +231,18 @@ define { <8 x i16>, <8 x i16> } @foo_ld2_v8i16(<8 x i1> %mask, ptr %p) {
 ; CHECK-LABEL: foo_ld2_v8i16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    zip1 v1.16b, v0.16b, v0.16b
 ; CHECK-NEXT:    adrp x8, .LCPI1_0
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v0.16b
-; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI1_0]
-; CHECK-NEXT:    shl v0.16b, v0.16b, #7
-; CHECK-NEXT:    cmlt v0.16b, v0.16b, #0
-; CHECK-NEXT:    and v0.16b, v0.16b, v1.16b
-; CHECK-NEXT:    ext v1.16b, v0.16b, v0.16b, #8
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v1.16b
-; CHECK-NEXT:    addv h0, v0.8h
+; CHECK-NEXT:    umov w9, v0.b[0]
+; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI1_0]
+; CHECK-NEXT:    shl v1.16b, v1.16b, #7
+; CHECK-NEXT:    cmlt v1.16b, v1.16b, #0
+; CHECK-NEXT:    and v1.16b, v1.16b, v2.16b
+; CHECK-NEXT:    ext v2.16b, v1.16b, v1.16b, #8
+; CHECK-NEXT:    zip1 v1.16b, v1.16b, v2.16b
+; CHECK-NEXT:    addv h0, v1.8h
 ; CHECK-NEXT:    fmov w8, s0
-; CHECK-NEXT:    tbz w8, #0, .LBB1_2
+; CHECK-NEXT:    tbz w9, #0, .LBB1_2
 ; CHECK-NEXT:  // %bb.1: // %cond.load
 ; CHECK-NEXT:    ldr h1, [x0]
 ; CHECK-NEXT:    tbnz w8, #1, .LBB1_3
@@ -349,16 +351,18 @@ define { <8 x i16>, <8 x i16> } @foo_ld2_v8i16(<8 x i1> %mask, ptr %p) {
 define { <4 x float>, <4 x float> } @foo_ld2_v4f32(<4 x i1> %mask, ptr %p) {
 ; CHECK-LABEL: foo_ld2_v4f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    uzp1 v0.8b, v0.8b, v0.8b
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    uzp1 v1.8b, v0.8b, v0.8b
 ; CHECK-NEXT:    adrp x8, .LCPI2_0
-; CHECK-NEXT:    ldr d1, [x8, :lo12:.LCPI2_0]
-; CHECK-NEXT:    zip1 v0.8b, v0.8b, v0.8b
-; CHECK-NEXT:    shl v0.8b, v0.8b, #7
-; CHECK-NEXT:    cmlt v0.8b, v0.8b, #0
-; CHECK-NEXT:    and v0.8b, v0.8b, v1.8b
-; CHECK-NEXT:    addv b0, v0.8b
+; CHECK-NEXT:    umov w9, v0.h[0]
+; CHECK-NEXT:    ldr d2, [x8, :lo12:.LCPI2_0]
+; CHECK-NEXT:    zip1 v1.8b, v1.8b, v1.8b
+; CHECK-NEXT:    shl v1.8b, v1.8b, #7
+; CHECK-NEXT:    cmlt v1.8b, v1.8b, #0
+; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
+; CHECK-NEXT:    addv b0, v1.8b
 ; CHECK-NEXT:    fmov w8, s0
-; CHECK-NEXT:    tbz w8, #0, .LBB2_2
+; CHECK-NEXT:    tbz w9, #0, .LBB2_2
 ; CHECK-NEXT:  // %bb.1: // %cond.load
 ; CHECK-NEXT:    ldr s1, [x0]
 ; CHECK-NEXT:    tbnz w8, #1, .LBB2_3
@@ -419,16 +423,18 @@ define { <4 x float>, <4 x float> } @foo_ld2_v4f32(<4 x i1> %mask, ptr %p) {
 define { <2 x double>, <2 x double> } @foo_ld2_v2f64(<2 x i1> %mask, ptr %p) {
 ; CHECK-LABEL: foo_ld2_v2f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    uzp1 v0.4h, v0.4h, v0.4h
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    uzp1 v1.4h, v0.4h, v0.4h
 ; CHECK-NEXT:    adrp x8, .LCPI3_0
-; CHECK-NEXT:    ldr d1, [x8, :lo12:.LCPI3_0]
-; CHECK-NEXT:    zip1 v0.4h, v0.4h, v0.4h
-; CHECK-NEXT:    shl v0.4h, v0.4h, #15
-; CHECK-NEXT:    cmlt v0.4h, v0.4h, #0
-; CHECK-NEXT:    and v0.8b, v0.8b, v1.8b
-; CHECK-NEXT:    addv h0, v0.4h
-; CHECK-NEXT:    fmov w8, s0
-; CHECK-NEXT:    tbz w8, #0, .LBB3_2
+; CHECK-NEXT:    fmov w9, s0
+; CHECK-NEXT:    ldr d2, [x8, :lo12:.LCPI3_0]
+; CHECK-NEXT:    zip1 v1.4h, v1.4h, v1.4h
+; CHECK-NEXT:    shl v1.4h, v1.4h, #15
+; CHECK-NEXT:    cmlt v1.4h, v1.4h, #0
+; CHECK-NEXT:    and v1.8b, v1.8b, v2.8b
+; CHECK-NEXT:    addv h1, v1.4h
+; CHECK-NEXT:    fmov w8, s1
+; CHECK-NEXT:    tbz w9, #0, .LBB3_2
 ; CHECK-NEXT:  // %bb.1: // %cond.load
 ; CHECK-NEXT:    ldr d1, [x0]
 ; CHECK-NEXT:    tbnz w8, #1, .LBB3_3

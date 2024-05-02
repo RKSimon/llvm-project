@@ -55,7 +55,7 @@ define <2 x bfloat> @shuffle_chained_v16bf16(<16 x bfloat> %a) {
 define <2 x bfloat> @shuffle_chained_v8bf16(<8 x bfloat> %a) {
 ; CHECK-LABEL: shuffle_chained_v8bf16:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,1,8,9,2,3,10,11,4,5,12,13,6,7,14,15]
+; CHECK-NEXT:    vpmovqw %xmm0, %xmm0
 ; CHECK-NEXT:    retq
   %s = shufflevector <8 x bfloat> %a, <8 x bfloat> zeroinitializer, <8 x i32> <i32 0, i32 4, i32 1, i32 5, i32 2, i32 6, i32 3, i32 7>
   %s2 = shufflevector <8 x bfloat> %s, <8 x bfloat> zeroinitializer, <2 x i32> <i32 0, i32 1>

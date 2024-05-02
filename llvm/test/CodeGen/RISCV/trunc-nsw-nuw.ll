@@ -4,7 +4,9 @@
 define signext i8 @trunc_nsw_add(i32 signext %x) nounwind {
 ; CHECK-LABEL: trunc_nsw_add:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    addiw a0, a0, 1
+; CHECK-NEXT:    addi a0, a0, 1
+; CHECK-NEXT:    slli a0, a0, 56
+; CHECK-NEXT:    srai a0, a0, 56
 ; CHECK-NEXT:    ret
 entry:
   %add = add nsw i32 %x, 1

@@ -100,9 +100,12 @@ define i64 @f5(i64 %dummy, i64 %a) {
 define i64 @f6(i64 %dummy, i64 %a, ptr %src) {
 ; CHECK-LABEL: f6:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, 0(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r4), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %b = load i64, ptr %src
   %ax = zext i64 %a to i128
@@ -117,9 +120,13 @@ define i64 @f6(i64 %dummy, i64 %a, ptr %src) {
 define i64 @f7(i64 %dummy, i64 %a, ptr %src) {
 ; CHECK-LABEL: f7:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, 524280(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    lay %r1, 524280(%r4)
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r1), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %ptr = getelementptr i64, ptr %src, i64 65535
   %b = load i64, ptr %ptr
@@ -137,9 +144,12 @@ define i64 @f8(i64 %dummy, i64 %a, ptr %src) {
 ; CHECK-LABEL: f8:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    agfi %r4, 524288
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, 0(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r4), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %ptr = getelementptr i64, ptr %src, i64 65536
   %b = load i64, ptr %ptr
@@ -155,9 +165,13 @@ define i64 @f8(i64 %dummy, i64 %a, ptr %src) {
 define i64 @f9(i64 %dummy, i64 %a, ptr %src) {
 ; CHECK-LABEL: f9:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, -8(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    aghi %r4, -8
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r4), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %ptr = getelementptr i64, ptr %src, i64 -1
   %b = load i64, ptr %ptr
@@ -173,9 +187,13 @@ define i64 @f9(i64 %dummy, i64 %a, ptr %src) {
 define i64 @f10(i64 %dummy, i64 %a, ptr %src) {
 ; CHECK-LABEL: f10:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, -524288(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    lay %r1, -524288(%r4)
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r1), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %ptr = getelementptr i64, ptr %src, i64 -65536
   %b = load i64, ptr %ptr
@@ -193,9 +211,12 @@ define i64 @f11(ptr %dest, i64 %a, ptr %src) {
 ; CHECK-LABEL: f11:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    agfi %r4, -524296
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, 0(%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r4), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %ptr = getelementptr i64, ptr %src, i64 -65537
   %b = load i64, ptr %ptr
@@ -211,9 +232,13 @@ define i64 @f11(ptr %dest, i64 %a, ptr %src) {
 define i64 @f12(ptr %dest, i64 %a, i64 %src, i64 %index) {
 ; CHECK-LABEL: f12:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $r3d killed $r3d def $r2q
-; CHECK-NEXT:    mlg %r2, 524287(%r5,%r4)
-; CHECK-NEXT:    # kill: def $r2d killed $r2d killed $r2q
+; CHECK-NEXT:    lay %r1, 524287(%r5,%r4)
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vleg %v1, 0(%r1), 1
+; CHECK-NEXT:    vgbm %v0, 0
+; CHECK-NEXT:    vlvgg %v0, %r3, 1
+; CHECK-NEXT:    vmlq %v0, %v0, %v1
+; CHECK-NEXT:    vlgvg %r2, %v0, 0
 ; CHECK-NEXT:    br %r14
   %add1 = add i64 %src, %index
   %add2 = add i64 %add1, 524287

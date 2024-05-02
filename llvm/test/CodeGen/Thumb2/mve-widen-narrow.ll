@@ -344,10 +344,10 @@ define void @foo_int32_int8_both(ptr %dest, ptr readonly %src, i32 %n) {
 ; CHECK-LE-NEXT:    .pad #32
 ; CHECK-LE-NEXT:    sub sp, #32
 ; CHECK-LE-NEXT:    vldrb.s16 q0, [r1, #8]
-; CHECK-LE-NEXT:    add r2, sp, #16
+; CHECK-LE-NEXT:    mov r2, sp
 ; CHECK-LE-NEXT:    vstrw.32 q0, [r2]
 ; CHECK-LE-NEXT:    vldrb.s16 q0, [r1]
-; CHECK-LE-NEXT:    mov r1, sp
+; CHECK-LE-NEXT:    add r1, sp, #16
 ; CHECK-LE-NEXT:    vstrw.32 q0, [r1]
 ; CHECK-LE-NEXT:    vldrh.u32 q0, [r2, #8]
 ; CHECK-LE-NEXT:    vstrw.32 q0, [r0, #48]
@@ -365,10 +365,10 @@ define void @foo_int32_int8_both(ptr %dest, ptr readonly %src, i32 %n) {
 ; CHECK-BE-NEXT:    .pad #32
 ; CHECK-BE-NEXT:    sub sp, #32
 ; CHECK-BE-NEXT:    vldrb.s16 q0, [r1, #8]
-; CHECK-BE-NEXT:    add r2, sp, #16
+; CHECK-BE-NEXT:    mov r2, sp
 ; CHECK-BE-NEXT:    vstrh.16 q0, [r2]
 ; CHECK-BE-NEXT:    vldrb.s16 q0, [r1]
-; CHECK-BE-NEXT:    mov r1, sp
+; CHECK-BE-NEXT:    add r1, sp, #16
 ; CHECK-BE-NEXT:    vstrh.16 q0, [r1]
 ; CHECK-BE-NEXT:    vldrh.u32 q0, [r2, #8]
 ; CHECK-BE-NEXT:    vstrw.32 q0, [r0, #48]
@@ -410,12 +410,12 @@ define ptr @foo_uint32_uint16_quad_offset(ptr %dest, ptr readonly %src, i32 %n) 
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    vldrh.s32 q0, [r1, #32]!
 ; CHECK-NEXT:    vldrh.s32 q1, [r1, #8]
-; CHECK-NEXT:    vldrh.s32 q2, [r1, #24]
-; CHECK-NEXT:    vldrh.s32 q3, [r1, #16]
+; CHECK-NEXT:    vldrh.s32 q2, [r1, #16]
+; CHECK-NEXT:    vldrh.s32 q3, [r1, #24]
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vstrw.32 q2, [r0, #48]
+; CHECK-NEXT:    vstrw.32 q2, [r0, #32]
 ; CHECK-NEXT:    vstrw.32 q1, [r0, #16]
-; CHECK-NEXT:    vstrw.32 q3, [r0, #32]
+; CHECK-NEXT:    vstrw.32 q3, [r0, #48]
 ; CHECK-NEXT:    mov r0, r1
 ; CHECK-NEXT:    bx lr
 entry:

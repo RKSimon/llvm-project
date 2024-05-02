@@ -8,7 +8,7 @@ define i32 @f(i32 %x) nounwind {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    stp x30, x19, [sp, #-16]! // 16-byte Folded Spill
 ; CHECK-NEXT:    mov w19, w0
-; CHECK-NEXT:    neg w0, w0
+; CHECK-NEXT:    mov w0, wzr
 ; CHECK-NEXT:    bl use
 ; CHECK-NEXT:    mov w8, #4 // =0x4
 ; CHECK-NEXT:    sub w0, w8, w19

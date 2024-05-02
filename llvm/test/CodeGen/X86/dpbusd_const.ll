@@ -25,45 +25,17 @@ entry:
 }
 
 define i32 @mul_4xi8_zc(<4 x i8> %a, i32 %c) {
-; AVXVNNI-AVX-LABEL: mul_4xi8_zc:
-; AVXVNNI-AVX:       # %bb.0: # %entry
-; AVXVNNI-AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVXVNNI-AVX-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVXVNNI-AVX-NEXT:    vmovd %xmm1, %eax
-; AVXVNNI-AVX-NEXT:    addl %edi, %eax
-; AVXVNNI-AVX-NEXT:    retq
-;
-; AVXVNNI-AVX512-LABEL: mul_4xi8_zc:
-; AVXVNNI-AVX512:       # %bb.0: # %entry
-; AVXVNNI-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX512-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVXVNNI-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVXVNNI-AVX512-NEXT:    vmovd %xmm1, %eax
-; AVXVNNI-AVX512-NEXT:    addl %edi, %eax
-; AVXVNNI-AVX512-NEXT:    retq
-;
-; AVX512VNNI-LABEL: mul_4xi8_zc:
-; AVX512VNNI:       # %bb.0: # %entry
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm1
-; AVX512VNNI-NEXT:    vmovd %xmm1, %eax
-; AVX512VNNI-NEXT:    addl %edi, %eax
-; AVX512VNNI-NEXT:    vzeroupper
-; AVX512VNNI-NEXT:    retq
-;
-; AVX512VLVNNI-LABEL: mul_4xi8_zc:
-; AVX512VLVNNI:       # %bb.0: # %entry
-; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VLVNNI-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VLVNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVX512VLVNNI-NEXT:    vmovd %xmm1, %eax
-; AVX512VLVNNI-NEXT:    addl %edi, %eax
-; AVX512VLVNNI-NEXT:    retq
+; CHECK-LABEL: mul_4xi8_zc:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vpmovzxbd {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero
+; CHECK-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,127,0]
+; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; CHECK-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; CHECK-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vmovd %xmm0, %eax
+; CHECK-NEXT:    addl %edi, %eax
+; CHECK-NEXT:    retq
 entry:
   %0 = zext <4 x i8> %a to <4 x i32>
   %1 = mul nsw <4 x i32> %0, <i32 16, i32 1, i32 2, i32 127>
@@ -75,45 +47,51 @@ entry:
 define i32 @mul_4xi4_cz(<4 x i4> %a, i32 %c) {
 ; AVXVNNI-AVX-LABEL: mul_4xi4_cz:
 ; AVXVNNI-AVX:       # %bb.0: # %entry
-; AVXVNNI-AVX-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,u,u,u,u,u,u,u,u,u,u,u,u]
-; AVXVNNI-AVX-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVXVNNI-AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVXVNNI-AVX-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVXVNNI-AVX-NEXT:    vmovd %xmm1, %eax
+; AVXVNNI-AVX-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [15,15,15,15]
+; AVXVNNI-AVX-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,127,0]
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vmovd %xmm0, %eax
 ; AVXVNNI-AVX-NEXT:    addl %edi, %eax
 ; AVXVNNI-AVX-NEXT:    retq
 ;
 ; AVXVNNI-AVX512-LABEL: mul_4xi4_cz:
 ; AVXVNNI-AVX512:       # %bb.0: # %entry
-; AVXVNNI-AVX512-NEXT:    vpmovdb %xmm0, %xmm0
 ; AVXVNNI-AVX512-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm0, %xmm0
-; AVXVNNI-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVXVNNI-AVX512-NEXT:    vmovd %xmm1, %eax
+; AVXVNNI-AVX512-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,127,0]
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vmovd %xmm0, %eax
 ; AVXVNNI-AVX512-NEXT:    addl %edi, %eax
 ; AVXVNNI-AVX512-NEXT:    retq
 ;
 ; AVX512VNNI-LABEL: mul_4xi4_cz:
 ; AVX512VNNI:       # %bb.0: # %entry
-; AVX512VNNI-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,u,u,u,u,u,u,u,u,u,u,u,u]
-; AVX512VNNI-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm1
-; AVX512VNNI-NEXT:    vmovd %xmm1, %eax
+; AVX512VNNI-NEXT:    vpbroadcastd {{.*#+}} xmm1 = [15,15,15,15]
+; AVX512VNNI-NEXT:    vpand %xmm1, %xmm0, %xmm0
+; AVX512VNNI-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,127,0]
+; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VNNI-NEXT:    vmovd %xmm0, %eax
 ; AVX512VNNI-NEXT:    addl %edi, %eax
-; AVX512VNNI-NEXT:    vzeroupper
 ; AVX512VNNI-NEXT:    retq
 ;
 ; AVX512VLVNNI-LABEL: mul_4xi4_cz:
 ; AVX512VLVNNI:       # %bb.0: # %entry
-; AVX512VLVNNI-NEXT:    vpmovdb %xmm0, %xmm0
 ; AVX512VLVNNI-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm0, %xmm0
-; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VLVNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVX512VLVNNI-NEXT:    vmovd %xmm1, %eax
+; AVX512VLVNNI-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,127,0]
+; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512VLVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512VLVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VLVNNI-NEXT:    vmovd %xmm0, %eax
 ; AVX512VLVNNI-NEXT:    addl %edi, %eax
 ; AVX512VLVNNI-NEXT:    retq
 entry:
@@ -125,49 +103,17 @@ entry:
 }
 
 define i32 @mul_4xi8_cs(<4 x i8> %a, i32 %c) {
-; AVXVNNI-AVX-LABEL: mul_4xi8_cs:
-; AVXVNNI-AVX:       # %bb.0: # %entry
-; AVXVNNI-AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVXVNNI-AVX-NEXT:    vmovd {{.*#+}} xmm2 = [16,1,2,255,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVXVNNI-AVX-NEXT:    {vex} vpdpbusd %xmm0, %xmm2, %xmm1
-; AVXVNNI-AVX-NEXT:    vmovd %xmm1, %eax
-; AVXVNNI-AVX-NEXT:    addl %edi, %eax
-; AVXVNNI-AVX-NEXT:    retq
-;
-; AVXVNNI-AVX512-LABEL: mul_4xi8_cs:
-; AVXVNNI-AVX512:       # %bb.0: # %entry
-; AVXVNNI-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-AVX512-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVXVNNI-AVX512-NEXT:    vmovd {{.*#+}} xmm1 = [16,1,2,255,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVXVNNI-AVX512-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd %xmm0, %xmm1, %xmm2
-; AVXVNNI-AVX512-NEXT:    vmovd %xmm2, %eax
-; AVXVNNI-AVX512-NEXT:    addl %edi, %eax
-; AVXVNNI-AVX512-NEXT:    retq
-;
-; AVX512VNNI-LABEL: mul_4xi8_cs:
-; AVX512VNNI:       # %bb.0: # %entry
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVX512VNNI-NEXT:    vmovd {{.*#+}} xmm1 = [16,1,2,255,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX512VNNI-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX512VNNI-NEXT:    vpdpbusd %zmm0, %zmm1, %zmm2
-; AVX512VNNI-NEXT:    vmovd %xmm2, %eax
-; AVX512VNNI-NEXT:    addl %edi, %eax
-; AVX512VNNI-NEXT:    vzeroupper
-; AVX512VNNI-NEXT:    retq
-;
-; AVX512VLVNNI-LABEL: mul_4xi8_cs:
-; AVX512VLVNNI:       # %bb.0: # %entry
-; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VLVNNI-NEXT:    vpblendd {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
-; AVX512VLVNNI-NEXT:    vmovd {{.*#+}} xmm1 = [16,1,2,255,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX512VLVNNI-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; AVX512VLVNNI-NEXT:    vpdpbusd %xmm0, %xmm1, %xmm2
-; AVX512VLVNNI-NEXT:    vmovd %xmm2, %eax
-; AVX512VLVNNI-NEXT:    addl %edi, %eax
-; AVX512VLVNNI-NEXT:    retq
+; CHECK-LABEL: mul_4xi8_cs:
+; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    vpmovsxbd %xmm0, %xmm0
+; CHECK-NEXT:    vpmaddwd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0 # [16,0,1,0,2,0,255,0]
+; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; CHECK-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; CHECK-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vmovd %xmm0, %eax
+; CHECK-NEXT:    addl %edi, %eax
+; CHECK-NEXT:    retq
 entry:
   %0 = sext <4 x i8> %a to <4 x i32>
   %1 = mul nsw <4 x i32> <i32 16, i32 1, i32 2, i32 255>, %0
@@ -197,43 +143,60 @@ entry:
 }
 
 define i32 @mul_16xi8_zc(<16 x i8> %a, i32 %c) {
-; AVXVNNI-LABEL: mul_16xi8_zc:
-; AVXVNNI:       # %bb.0: # %entry
-; AVXVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm1
-; AVXVNNI-NEXT:    vpshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; AVXVNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVXVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVXVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVXVNNI-NEXT:    vmovd %xmm0, %eax
-; AVXVNNI-NEXT:    addl %edi, %eax
-; AVXVNNI-NEXT:    retq
+; AVXVNNI-AVX-LABEL: mul_16xi8_zc:
+; AVXVNNI-AVX:       # %bb.0: # %entry
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm1 = xmm1[0],zero,zero,zero,xmm1[1],zero,zero,zero,xmm1[2],zero,zero,zero,xmm1[3],zero,zero,zero,xmm1[4],zero,zero,zero,xmm1[5],zero,zero,zero,xmm1[6],zero,zero,zero,xmm1[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vbroadcasti128 {{.*#+}} ymm2 = [0,0,1,0,2,0,64,0,0,0,1,0,2,0,64,0]
+; AVXVNNI-AVX-NEXT:    # ymm2 = mem[0,1,0,1]
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm2, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm2, %ymm1, %ymm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vmovd %xmm0, %eax
+; AVXVNNI-AVX-NEXT:    addl %edi, %eax
+; AVXVNNI-AVX-NEXT:    vzeroupper
+; AVXVNNI-AVX-NEXT:    retq
 ;
-; AVX512VNNI-LABEL: mul_16xi8_zc:
-; AVX512VNNI:       # %bb.0: # %entry
-; AVX512VNNI-NEXT:    vmovdqa %xmm0, %xmm0
-; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm1
-; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; AVX512VNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVX512VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVX512VNNI-NEXT:    vmovd %xmm0, %eax
-; AVX512VNNI-NEXT:    addl %edi, %eax
-; AVX512VNNI-NEXT:    vzeroupper
-; AVX512VNNI-NEXT:    retq
+; AVXVNNI-AVX512-LABEL: mul_16xi8_zc:
+; AVXVNNI-AVX512:       # %bb.0: # %entry
+; AVXVNNI-AVX512-NEXT:    vpmovzxbd {{.*#+}} zmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero,xmm0[8],zero,zero,zero,xmm0[9],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[11],zero,zero,zero,xmm0[12],zero,zero,zero,xmm0[13],zero,zero,zero,xmm0[14],zero,zero,zero,xmm0[15],zero,zero,zero
+; AVXVNNI-AVX512-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm0
+; AVXVNNI-AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVXVNNI-AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vmovd %xmm0, %eax
+; AVXVNNI-AVX512-NEXT:    addl %edi, %eax
+; AVXVNNI-AVX512-NEXT:    vzeroupper
+; AVXVNNI-AVX512-NEXT:    retq
 ;
-; AVX512VLVNNI-LABEL: mul_16xi8_zc:
-; AVX512VLVNNI:       # %bb.0: # %entry
-; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512VLVNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm0, %xmm1
-; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
-; AVX512VLVNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVX512VLVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVX512VLVNNI-NEXT:    vmovd %xmm0, %eax
-; AVX512VLVNNI-NEXT:    addl %edi, %eax
-; AVX512VLVNNI-NEXT:    retq
+; AVX512-LABEL: mul_16xi8_zc:
+; AVX512:       # %bb.0: # %entry
+; AVX512-NEXT:    vpmovzxbd {{.*#+}} zmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero,xmm0[8],zero,zero,zero,xmm0[9],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[11],zero,zero,zero,xmm0[12],zero,zero,zero,xmm0[13],zero,zero,zero,xmm0[14],zero,zero,zero,xmm0[15],zero,zero,zero
+; AVX512-NEXT:    vpmulld {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm0
+; AVX512-NEXT:    vextracti64x4 $1, %zmm0, %ymm1
+; AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vmovd %xmm0, %eax
+; AVX512-NEXT:    addl %edi, %eax
+; AVX512-NEXT:    vzeroupper
+; AVX512-NEXT:    retq
 entry:
   %0 = zext <16 x i8> %a to <16 x i32>
   %1 = mul nsw <16 x i32> %0, <i32 0, i32 1, i32 2, i32 64, i32 0, i32 1, i32 2, i32 64, i32 0, i32 1, i32 2, i32 64, i32 0, i32 1, i32 2, i32 64>
@@ -243,20 +206,49 @@ entry:
 }
 
 define i32 @mul_32xi8_zc(<32 x i8> %a, i32 %c) {
-; AVXVNNI-LABEL: mul_32xi8_zc:
-; AVXVNNI:       # %bb.0: # %entry
-; AVXVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVXVNNI-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
-; AVXVNNI-NEXT:    vextracti128 $1, %ymm1, %xmm0
-; AVXVNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
-; AVXVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVXVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVXVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; AVXVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
-; AVXVNNI-NEXT:    vmovd %xmm0, %eax
-; AVXVNNI-NEXT:    addl %edi, %eax
-; AVXVNNI-NEXT:    vzeroupper
-; AVXVNNI-NEXT:    retq
+; AVXVNNI-AVX-LABEL: mul_32xi8_zc:
+; AVXVNNI-AVX:       # %bb.0: # %entry
+; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm2 = xmm1[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm2 = xmm2[0],zero,zero,zero,xmm2[1],zero,zero,zero,xmm2[2],zero,zero,zero,xmm2[3],zero,zero,zero,xmm2[4],zero,zero,zero,xmm2[5],zero,zero,zero,xmm2[6],zero,zero,zero,xmm2[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm1 = xmm1[0],zero,zero,zero,xmm1[1],zero,zero,zero,xmm1[2],zero,zero,zero,xmm1[3],zero,zero,zero,xmm1[4],zero,zero,zero,xmm1[5],zero,zero,zero,xmm1[6],zero,zero,zero,xmm1[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm3 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vbroadcasti128 {{.*#+}} ymm4 = [0,0,1,0,2,0,64,0,0,0,1,0,2,0,64,0]
+; AVXVNNI-AVX-NEXT:    # ymm4 = mem[0,1,0,1]
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm4, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm4, %ymm3, %ymm3
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm4, %ymm1, %ymm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm3, %ymm1
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm4, %ymm2, %ymm2
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
+; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vmovd %xmm0, %eax
+; AVXVNNI-AVX-NEXT:    addl %edi, %eax
+; AVXVNNI-AVX-NEXT:    vzeroupper
+; AVXVNNI-AVX-NEXT:    retq
+;
+; AVXVNNI-AVX512-LABEL: mul_32xi8_zc:
+; AVXVNNI-AVX512:       # %bb.0: # %entry
+; AVXVNNI-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm1
+; AVXVNNI-AVX512-NEXT:    vextracti128 $1, %ymm1, %xmm0
+; AVXVNNI-AVX512-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; AVXVNNI-AVX512-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
+; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vmovd %xmm0, %eax
+; AVXVNNI-AVX512-NEXT:    addl %edi, %eax
+; AVXVNNI-AVX512-NEXT:    vzeroupper
+; AVXVNNI-AVX512-NEXT:    retq
 ;
 ; AVX512VNNI-LABEL: mul_32xi8_zc:
 ; AVX512VNNI:       # %bb.0: # %entry
@@ -264,9 +256,9 @@ define i32 @mul_32xi8_zc(<32 x i8> %a, i32 %c) {
 ; AVX512VNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX512VNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %zmm1
 ; AVX512VNNI-NEXT:    vextracti128 $1, %ymm1, %xmm0
-; AVX512VNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX512VNNI-NEXT:    vpaddd %zmm0, %zmm1, %zmm0
 ; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VNNI-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512VNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512VNNI-NEXT:    vmovd %xmm0, %eax
@@ -279,9 +271,9 @@ define i32 @mul_32xi8_zc(<32 x i8> %a, i32 %c) {
 ; AVX512VLVNNI-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX512VLVNNI-NEXT:    vpdpbusd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %ymm0, %ymm1
 ; AVX512VLVNNI-NEXT:    vextracti128 $1, %ymm1, %xmm0
-; AVX512VLVNNI-NEXT:    vpaddd %xmm0, %xmm1, %xmm0
+; AVX512VLVNNI-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512VLVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VLVNNI-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVX512VLVNNI-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512VLVNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512VLVNNI-NEXT:    vmovd %xmm0, %eax
@@ -299,16 +291,41 @@ entry:
 define i32 @mul_64xi8_zc(<64 x i8> %a, i32 %c) {
 ; AVXVNNI-AVX-LABEL: mul_64xi8_zc:
 ; AVXVNNI-AVX:       # %bb.0: # %entry
-; AVXVNNI-AVX-NEXT:    vpbroadcastd {{.*#+}} ymm2 = [0,1,2,64,0,1,2,64,0,1,2,64,0,1,2,64,0,1,2,64,0,1,2,64,0,1,2,64,0,1,2,64]
-; AVXVNNI-AVX-NEXT:    vpxor %xmm3, %xmm3, %xmm3
-; AVXVNNI-AVX-NEXT:    vpxor %xmm4, %xmm4, %xmm4
-; AVXVNNI-AVX-NEXT:    {vex} vpdpbusd %ymm2, %ymm1, %ymm4
-; AVXVNNI-AVX-NEXT:    {vex} vpdpbusd %ymm2, %ymm0, %ymm3
-; AVXVNNI-AVX-NEXT:    vpaddd %ymm4, %ymm3, %ymm0
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm2 = xmm1[0],zero,zero,zero,xmm1[1],zero,zero,zero,xmm1[2],zero,zero,zero,xmm1[3],zero,zero,zero,xmm1[4],zero,zero,zero,xmm1[5],zero,zero,zero,xmm1[6],zero,zero,zero,xmm1[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm1, %xmm3
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm4 = xmm3[0],zero,zero,zero,xmm3[1],zero,zero,zero,xmm3[2],zero,zero,zero,xmm3[3],zero,zero,zero,xmm3[4],zero,zero,zero,xmm3[5],zero,zero,zero,xmm3[6],zero,zero,zero,xmm3[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm1 = xmm1[0],zero,zero,zero,xmm1[1],zero,zero,zero,xmm1[2],zero,zero,zero,xmm1[3],zero,zero,zero,xmm1[4],zero,zero,zero,xmm1[5],zero,zero,zero,xmm1[6],zero,zero,zero,xmm1[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm3 = xmm3[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm3 = xmm3[0],zero,zero,zero,xmm3[1],zero,zero,zero,xmm3[2],zero,zero,zero,xmm3[3],zero,zero,zero,xmm3[4],zero,zero,zero,xmm3[5],zero,zero,zero,xmm3[6],zero,zero,zero,xmm3[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm0, %xmm5
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm6 = xmm5[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm6 = xmm6[0],zero,zero,zero,xmm6[1],zero,zero,zero,xmm6[2],zero,zero,zero,xmm6[3],zero,zero,zero,xmm6[4],zero,zero,zero,xmm6[5],zero,zero,zero,xmm6[6],zero,zero,zero,xmm6[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm7 = xmm0[2,3,2,3]
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm7 = xmm7[0],zero,zero,zero,xmm7[1],zero,zero,zero,xmm7[2],zero,zero,zero,xmm7[3],zero,zero,zero,xmm7[4],zero,zero,zero,xmm7[5],zero,zero,zero,xmm7[6],zero,zero,zero,xmm7[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm5 = xmm5[0],zero,zero,zero,xmm5[1],zero,zero,zero,xmm5[2],zero,zero,zero,xmm5[3],zero,zero,zero,xmm5[4],zero,zero,zero,xmm5[5],zero,zero,zero,xmm5[6],zero,zero,zero,xmm5[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vpmovzxbd {{.*#+}} ymm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero
+; AVXVNNI-AVX-NEXT:    vbroadcasti128 {{.*#+}} ymm8 = [0,0,1,0,2,0,64,0,0,0,1,0,2,0,64,0]
+; AVXVNNI-AVX-NEXT:    # ymm8 = mem[0,1,0,1]
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm0, %ymm8, %ymm0
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm5, %ymm8, %ymm5
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm7, %ymm8, %ymm7
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm6, %ymm8, %ymm6
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm3, %ymm8, %ymm3
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm3, %ymm6, %ymm3
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm1, %ymm8, %ymm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm7, %ymm1
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm3, %ymm1, %ymm1
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm4, %ymm8, %ymm3
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm3, %ymm5, %ymm3
+; AVXVNNI-AVX-NEXT:    vpmaddwd %ymm2, %ymm8, %ymm2
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm3, %ymm0, %ymm0
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVXVNNI-AVX-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX-NEXT:    vpaddd %ymm1, %ymm0, %ymm0
 ; AVXVNNI-AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVXVNNI-AVX-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVXVNNI-AVX-NEXT:    vmovd %xmm0, %eax
@@ -324,11 +341,12 @@ define i32 @mul_64xi8_zc(<64 x i8> %a, i32 %c) {
 ; AVXVNNI-AVX512-NEXT:    vpxor %xmm4, %xmm4, %xmm4
 ; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd %ymm2, %ymm1, %ymm4
 ; AVXVNNI-AVX512-NEXT:    {vex} vpdpbusd %ymm2, %ymm0, %ymm3
-; AVXVNNI-AVX512-NEXT:    vpaddd %ymm4, %ymm3, %ymm0
+; AVXVNNI-AVX512-NEXT:    vinserti64x4 $1, %ymm4, %zmm3, %zmm0
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm4, %zmm0, %zmm0
 ; AVXVNNI-AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVXVNNI-AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVXVNNI-AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVXVNNI-AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVXVNNI-AVX512-NEXT:    vmovd %xmm0, %eax
@@ -343,9 +361,9 @@ define i32 @mul_64xi8_zc(<64 x i8> %a, i32 %c) {
 ; AVX512-NEXT:    vextracti64x4 $1, %zmm1, %ymm0
 ; AVX512-NEXT:    vpaddd %zmm0, %zmm1, %zmm0
 ; AVX512-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; AVX512-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; AVX512-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
 ; AVX512-NEXT:    vmovd %xmm0, %eax
@@ -364,3 +382,5 @@ declare i32 @llvm.vector.reduce.add.v4i32(<4 x i32>)
 declare i32 @llvm.vector.reduce.add.v16i32(<16 x i32>)
 declare i32 @llvm.vector.reduce.add.v32i32(<32 x i32>)
 declare i32 @llvm.vector.reduce.add.v64i32(<64 x i32>)
+;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
+; AVXVNNI: {{.*}}

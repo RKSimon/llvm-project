@@ -56,7 +56,11 @@ define i64 @f4(i64 %a, i64 %amt) {
 define i64 @f5(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f5:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rllg %r2, %r2, 10(%r3)
+; CHECK-NEXT:    sllg %r0, %r2, 10(%r3)
+; CHECK-NEXT:    lhi %r1, 54
+; CHECK-NEXT:    sr %r1, %r3
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %add = add i64 %amt, 10
   %sub = sub i64 64, %add
@@ -103,7 +107,11 @@ define i64 @f7(i64 %a, i32 %amt) {
 define i64 @f8(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rllg %r2, %r2, -1(%r3)
+; CHECK-NEXT:    sllg %r0, %r2, 524287(%r3)
+; CHECK-NEXT:    iilf %r1, 4294443073
+; CHECK-NEXT:    sr %r1, %r3
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %add = add i64 %amt, 524287
   %sub = sub i64 64, %add
@@ -118,8 +126,11 @@ define i64 @f8(i64 %a, i64 %amt) {
 define i64 @f9(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f9:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    afi %r3, 524288
-; CHECK-NEXT:    rllg %r2, %r2, 0(%r3)
+; CHECK-NEXT:    lcr %r1, %r3
+; CHECK-NEXT:    agfi %r3, 524288
+; CHECK-NEXT:    sllg %r0, %r2, 0(%r3)
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %add = add i64 %amt, 524288
   %sub = sub i64 64, %add
@@ -133,7 +144,11 @@ define i64 @f9(i64 %a, i64 %amt) {
 define i64 @f10(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f10:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rllg %r2, %r2, -1(%r3)
+; CHECK-NEXT:    sllg %r0, %r2, -1(%r3)
+; CHECK-NEXT:    lhi %r1, 65
+; CHECK-NEXT:    sr %r1, %r3
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %suba = sub i64 %amt, 1
   %subb = sub i64 64, %suba
@@ -148,7 +163,10 @@ define i64 @f10(i64 %a, i64 %amt) {
 define i64 @f11(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f11:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rllg %r2, %r2, -524288(%r3)
+; CHECK-NEXT:    sllg %r0, %r2, -524288(%r3)
+; CHECK-NEXT:    lcr %r1, %r3
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %suba = sub i64 %amt, 524288
   %subb = sub i64 64, %suba
@@ -162,7 +180,12 @@ define i64 @f11(i64 %a, i64 %amt) {
 define i64 @f12(i64 %a, i64 %amt) {
 ; CHECK-LABEL: f12:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rllg %r2, %r2, -1(%r3)
+; CHECK-NEXT:    iilf %r1, 524353
+; CHECK-NEXT:    sr %r1, %r3
+; CHECK-NEXT:    agfi %r3, -524289
+; CHECK-NEXT:    sllg %r0, %r2, 0(%r3)
+; CHECK-NEXT:    srlg %r2, %r2, 0(%r1)
+; CHECK-NEXT:    ogr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %suba = sub i64 %amt, 524289
   %subb = sub i64 64, %suba

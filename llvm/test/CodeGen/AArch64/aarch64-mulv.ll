@@ -455,7 +455,7 @@ define i64 @mulv_v3i64(<3 x i64> %a) {
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
 ; CHECK-SD-NEXT:    mul x8, x9, x8
 ; CHECK-SD-NEXT:    fmov x9, d1
-; CHECK-SD-NEXT:    mul x0, x9, x8
+; CHECK-SD-NEXT:    mul x0, x8, x9
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: mulv_v3i64:

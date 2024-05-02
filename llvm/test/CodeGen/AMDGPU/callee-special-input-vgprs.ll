@@ -900,16 +900,16 @@ define amdgpu_kernel void @kern_call_too_many_args_use_workitem_id_x_byval() #1 
 ; GCN-NEXT:    s_addc_u32 s1, s1, 0
 ; GCN-NEXT:    v_mov_b32_e32 v31, v0
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0x3e7
-; GCN-NEXT:    s_movk_i32 s32, 0x400
 ; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], 0
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x140
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32
 ; GCN-NEXT:    buffer_load_dword v0, off, s[0:3], 0
 ; GCN-NEXT:    s_getpc_b64 s[4:5]
 ; GCN-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
 ; GCN-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
 ; GCN-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GCN-NEXT:    s_movk_i32 s32, 0x400
+; GCN-NEXT:    v_mov_b32_e32 v1, 0x140
+; GCN-NEXT:    buffer_store_dword v1, off, s[0:3], s32
 ; GCN-NEXT:    v_mov_b32_e32 v1, 20
 ; GCN-NEXT:    v_mov_b32_e32 v2, 30
 ; GCN-NEXT:    v_mov_b32_e32 v3, 40
@@ -940,7 +940,7 @@ define amdgpu_kernel void @kern_call_too_many_args_use_workitem_id_x_byval() #1 
 ; GCN-NEXT:    v_mov_b32_e32 v28, 0x122
 ; GCN-NEXT:    v_mov_b32_e32 v29, 0x12c
 ; GCN-NEXT:    v_mov_b32_e32 v30, 0x136
-; GCN-NEXT:    s_waitcnt vmcnt(0)
+; GCN-NEXT:    s_waitcnt vmcnt(1)
 ; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
 ; GCN-NEXT:    v_mov_b32_e32 v0, 10
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
@@ -971,18 +971,18 @@ define void @func_call_too_many_args_use_workitem_id_x_byval() #1 {
 ; GCN-NEXT:    buffer_store_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Spill
 ; GCN-NEXT:    s_mov_b64 exec, s[6:7]
 ; GCN-NEXT:    v_mov_b32_e32 v0, 0x3e7
-; GCN-NEXT:    s_addk_i32 s32, 0x400
 ; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s33
 ; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x140
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32
 ; GCN-NEXT:    buffer_load_dword v0, off, s[0:3], s33
+; GCN-NEXT:    s_addk_i32 s32, 0x400
 ; GCN-NEXT:    v_writelane_b32 v40, s4, 2
 ; GCN-NEXT:    s_getpc_b64 s[4:5]
 ; GCN-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
 ; GCN-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
 ; GCN-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GCN-NEXT:    v_mov_b32_e32 v1, 0x140
 ; GCN-NEXT:    v_writelane_b32 v40, s30, 0
+; GCN-NEXT:    buffer_store_dword v1, off, s[0:3], s32
 ; GCN-NEXT:    v_mov_b32_e32 v1, 20
 ; GCN-NEXT:    v_mov_b32_e32 v2, 30
 ; GCN-NEXT:    v_mov_b32_e32 v3, 40
@@ -1014,7 +1014,7 @@ define void @func_call_too_many_args_use_workitem_id_x_byval() #1 {
 ; GCN-NEXT:    v_mov_b32_e32 v29, 0x12c
 ; GCN-NEXT:    v_mov_b32_e32 v30, 0x136
 ; GCN-NEXT:    v_writelane_b32 v40, s31, 1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
+; GCN-NEXT:    s_waitcnt vmcnt(1)
 ; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
 ; GCN-NEXT:    v_mov_b32_e32 v0, 10
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)

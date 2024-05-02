@@ -22,7 +22,7 @@ define amdgpu_kernel void @udiv24_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
-; SI-NEXT:    v_rcp_iflag_f32_e32 v2, v1
+; SI-NEXT:    v_rcp_f32_e32 v2, v1
 ; SI-NEXT:    v_mul_f32_e32 v2, v0, v2
 ; SI-NEXT:    v_trunc_f32_e32 v2, v2
 ; SI-NEXT:    v_fma_f32 v0, -v2, v1, v0
@@ -48,7 +48,7 @@ define amdgpu_kernel void @udiv24_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; VI-NEXT:    v_rcp_f32_e32 v2, v0
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; VI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -125,7 +125,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_in_out(ptr addrspace(1) %out, 
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
-; SI-NEXT:    v_rcp_iflag_f32_e32 v2, v1
+; SI-NEXT:    v_rcp_f32_e32 v2, v1
 ; SI-NEXT:    v_mul_f32_e32 v2, v0, v2
 ; SI-NEXT:    v_trunc_f32_e32 v2, v2
 ; SI-NEXT:    v_fma_f32 v0, -v2, v1, v0
@@ -151,7 +151,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_in_out(ptr addrspace(1) %out, 
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; VI-NEXT:    v_rcp_f32_e32 v2, v0
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; VI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -228,7 +228,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_in(ptr addrspace(1) %out, ptr 
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
-; SI-NEXT:    v_rcp_iflag_f32_e32 v2, v1
+; SI-NEXT:    v_rcp_f32_e32 v2, v1
 ; SI-NEXT:    v_mul_f32_e32 v2, v0, v2
 ; SI-NEXT:    v_trunc_f32_e32 v2, v2
 ; SI-NEXT:    v_fma_f32 v0, -v2, v1, v0
@@ -254,7 +254,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_in(ptr addrspace(1) %out, ptr 
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; VI-NEXT:    v_rcp_f32_e32 v2, v0
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; VI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -331,7 +331,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_out(ptr addrspace(1) %out, ptr
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
-; SI-NEXT:    v_rcp_iflag_f32_e32 v2, v1
+; SI-NEXT:    v_rcp_f32_e32 v2, v1
 ; SI-NEXT:    v_mul_f32_e32 v2, v0, v2
 ; SI-NEXT:    v_trunc_f32_e32 v2, v2
 ; SI-NEXT:    v_fma_f32 v0, -v2, v1, v0
@@ -357,7 +357,7 @@ define amdgpu_kernel void @udiv24_i8_denorm_flush_out(ptr addrspace(1) %out, ptr
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v0, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v2, v0
+; VI-NEXT:    v_rcp_f32_e32 v2, v0
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v1, v1
 ; VI-NEXT:    v_mul_f32_e32 v2, v1, v2
@@ -1267,7 +1267,7 @@ define amdgpu_kernel void @urem24_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v2, v0
 ; SI-NEXT:    s_waitcnt vmcnt(0)
 ; SI-NEXT:    v_cvt_f32_ubyte0_e32 v3, v1
-; SI-NEXT:    v_rcp_iflag_f32_e32 v4, v3
+; SI-NEXT:    v_rcp_f32_e32 v4, v3
 ; SI-NEXT:    v_mul_f32_e32 v4, v2, v4
 ; SI-NEXT:    v_trunc_f32_e32 v4, v4
 ; SI-NEXT:    v_fma_f32 v2, -v4, v3, v2
@@ -1295,7 +1295,7 @@ define amdgpu_kernel void @urem24_i8(ptr addrspace(1) %out, ptr addrspace(1) %in
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(1)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v2, v0
-; VI-NEXT:    v_rcp_iflag_f32_e32 v3, v2
+; VI-NEXT:    v_rcp_f32_e32 v3, v2
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_cvt_f32_ubyte0_e32 v4, v1
 ; VI-NEXT:    v_mul_f32_e32 v3, v4, v3

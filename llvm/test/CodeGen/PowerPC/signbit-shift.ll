@@ -45,9 +45,8 @@ define <4 x i32> @add_zext_ifpos_vec_splat(<4 x i32> %x) {
 define i32 @sel_ifpos_tval_bigger(i32 %x) {
 ; CHECK-LABEL: sel_ifpos_tval_bigger:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rlwinm 3, 3, 1, 31, 31
-; CHECK-NEXT:    xori 3, 3, 1
-; CHECK-NEXT:    addi 3, 3, 41
+; CHECK-NEXT:    srawi 3, 3, 31
+; CHECK-NEXT:    addi 3, 3, 42
 ; CHECK-NEXT:    blr
   %c = icmp sgt i32 %x, -1
   %r = select i1 %c, i32 42, i32 41
@@ -68,8 +67,9 @@ define i32 @sext_ifpos(i32 %x) {
 define i32 @add_sext_ifpos(i32 %x) {
 ; CHECK-LABEL: add_sext_ifpos:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srwi 3, 3, 31
-; CHECK-NEXT:    addi 3, 3, 41
+; CHECK-NEXT:    not 3, 3
+; CHECK-NEXT:    srawi 3, 3, 31
+; CHECK-NEXT:    addi 3, 3, 42
 ; CHECK-NEXT:    blr
   %c = icmp sgt i32 %x, -1
   %e = sext i1 %c to i32
@@ -96,9 +96,8 @@ define <4 x i32> @add_sext_ifpos_vec_splat(<4 x i32> %x) {
 define i32 @sel_ifpos_fval_bigger(i32 %x) {
 ; CHECK-LABEL: sel_ifpos_fval_bigger:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rlwinm 3, 3, 1, 31, 31
-; CHECK-NEXT:    xori 3, 3, 1
-; CHECK-NEXT:    subfic 3, 3, 42
+; CHECK-NEXT:    srwi 3, 3, 31
+; CHECK-NEXT:    addi 3, 3, 41
 ; CHECK-NEXT:    blr
   %c = icmp sgt i32 %x, -1
   %r = select i1 %c, i32 41, i32 42
@@ -132,7 +131,7 @@ define i32 @add_zext_ifneg(i32 %x) {
 define i32 @sel_ifneg_tval_bigger(i32 %x) {
 ; CHECK-LABEL: sel_ifneg_tval_bigger:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rlwinm 3, 3, 1, 31, 31
+; CHECK-NEXT:    srwi 3, 3, 31
 ; CHECK-NEXT:    addi 3, 3, 41
 ; CHECK-NEXT:    blr
   %c = icmp slt i32 %x, 0
@@ -165,8 +164,8 @@ define i32 @add_sext_ifneg(i32 %x) {
 define i32 @sel_ifneg_fval_bigger(i32 %x) {
 ; CHECK-LABEL: sel_ifneg_fval_bigger:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rlwinm 3, 3, 1, 31, 31
-; CHECK-NEXT:    subfic 3, 3, 42
+; CHECK-NEXT:    srawi 3, 3, 31
+; CHECK-NEXT:    addi 3, 3, 42
 ; CHECK-NEXT:    blr
   %c = icmp slt i32 %x, 0
   %r = select i1 %c, i32 41, i32 42
@@ -189,9 +188,10 @@ define <4 x i32> @add_lshr_not_vec_splat(<4 x i32> %x) {
 ; CHECK-LABEL: add_lshr_not_vec_splat:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    addis 3, 2, .LCPI15_0@toc@ha
+; CHECK-NEXT:    xxlnor 34, 34, 34
 ; CHECK-NEXT:    xxleqv 35, 35, 35
-; CHECK-NEXT:    vsraw 2, 2, 3
 ; CHECK-NEXT:    addi 3, 3, .LCPI15_0@toc@l
+; CHECK-NEXT:    vsrw 2, 2, 3
 ; CHECK-NEXT:    lxvd2x 35, 0, 3
 ; CHECK-NEXT:    vadduwm 2, 2, 3
 ; CHECK-NEXT:    blr
@@ -217,11 +217,12 @@ define <4 x i32> @sub_lshr_not_vec_splat(<4 x i32> %x) {
 ; CHECK-LABEL: sub_lshr_not_vec_splat:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    addis 3, 2, .LCPI17_0@toc@ha
+; CHECK-NEXT:    xxlnor 34, 34, 34
 ; CHECK-NEXT:    xxleqv 35, 35, 35
-; CHECK-NEXT:    vsrw 2, 2, 3
 ; CHECK-NEXT:    addi 3, 3, .LCPI17_0@toc@l
+; CHECK-NEXT:    vsrw 2, 2, 3
 ; CHECK-NEXT:    lxvd2x 35, 0, 3
-; CHECK-NEXT:    vadduwm 2, 2, 3
+; CHECK-NEXT:    vsubuwm 2, 3, 2
 ; CHECK-NEXT:    blr
   %c = xor <4 x i32> %x, <i32 -1, i32 -1, i32 -1, i32 -1>
   %e = lshr <4 x i32> %c, <i32 31, i32 31, i32 31, i32 31>
@@ -244,8 +245,8 @@ define <4 x i32> @sub_lshr_vec(<4 x i32> %x, <4 x i32> %y) {
 ; CHECK-LABEL: sub_lshr_vec:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    xxleqv 36, 36, 36
-; CHECK-NEXT:    vsraw 2, 2, 4
-; CHECK-NEXT:    vadduwm 2, 3, 2
+; CHECK-NEXT:    vsrw 2, 2, 4
+; CHECK-NEXT:    vsubuwm 2, 3, 2
 ; CHECK-NEXT:    blr
   %sh = lshr <4 x i32> %x, <i32 31, i32 31, i32 31, i32 31>
   %r = sub <4 x i32> %y, %sh
@@ -268,10 +269,10 @@ define <4 x i32> @sub_const_op_lshr_vec(<4 x i32> %x) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    addis 3, 2, .LCPI21_0@toc@ha
 ; CHECK-NEXT:    xxleqv 35, 35, 35
-; CHECK-NEXT:    vsraw 2, 2, 3
+; CHECK-NEXT:    vsrw 2, 2, 3
 ; CHECK-NEXT:    addi 3, 3, .LCPI21_0@toc@l
 ; CHECK-NEXT:    lxvd2x 35, 0, 3
-; CHECK-NEXT:    vadduwm 2, 2, 3
+; CHECK-NEXT:    vsubuwm 2, 3, 2
 ; CHECK-NEXT:    blr
   %sh = lshr <4 x i32> %x, <i32 31, i32 31, i32 31, i32 31>
   %r = sub <4 x i32> <i32 42, i32 42, i32 42, i32 42>, %sh

@@ -232,15 +232,15 @@ define i64 @load8_and16_zext(ptr %p, i8 %y) {
 ; CHECK-LABEL: load8_and16_zext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ldrb w8, [x0]
-; CHECK-NEXT:    and w8, w1, w8
-; CHECK-NEXT:    and x0, x8, #0xff
+; CHECK-NEXT:    // kill: def $w1 killed $w1 def $x1
+; CHECK-NEXT:    and x0, x1, x8
 ; CHECK-NEXT:    ret
 ;
 ; CHECKBE-LABEL: load8_and16_zext:
 ; CHECKBE:       // %bb.0:
 ; CHECKBE-NEXT:    ldrb w8, [x0]
-; CHECKBE-NEXT:    and w8, w1, w8
-; CHECKBE-NEXT:    and x0, x8, #0xff
+; CHECKBE-NEXT:    // kill: def $w1 killed $w1 def $x1
+; CHECKBE-NEXT:    and x0, x1, x8
 ; CHECKBE-NEXT:    ret
   %x = load i8, ptr %p, align 4
   %xz = zext i8 %x to i64

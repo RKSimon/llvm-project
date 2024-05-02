@@ -906,13 +906,15 @@ define void @masked_scatter_32b_scaled_sext_f16(ptr %a, ptr %b, ptr %base) vscal
 ; CHECK-LABEL: masked_scatter_32b_scaled_sext_f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    ptrue p1.d, vl32
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    ld1w { z1.s }, p1/z, [x1]
+; CHECK-NEXT:    ld1sw { z1.d }, p1/z, [x1]
 ; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
 ; CHECK-NEXT:    uunpklo z0.s, z0.h
+; CHECK-NEXT:    uunpklo z0.d, z0.s
 ; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    st1h { z0.s }, p0, [x2, z1.s, sxtw #1]
+; CHECK-NEXT:    punpklo p0.h, p0.b
+; CHECK-NEXT:    st1h { z0.d }, p0, [x2, z1.d, lsl #1]
 ; CHECK-NEXT:    ret
   %vals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -927,10 +929,13 @@ define void @masked_scatter_32b_scaled_sext_f32(ptr %a, ptr %b, ptr %base) vscal
 ; CHECK-LABEL: masked_scatter_32b_scaled_sext_f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
+; CHECK-NEXT:    ptrue p1.d, vl32
 ; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x0]
-; CHECK-NEXT:    ld1w { z1.s }, p0/z, [x1]
-; CHECK-NEXT:    fcmeq p1.s, p0/z, z0.s, #0.0
-; CHECK-NEXT:    st1w { z0.s }, p1, [x2, z1.s, sxtw #2]
+; CHECK-NEXT:    ld1sw { z1.d }, p1/z, [x1]
+; CHECK-NEXT:    fcmeq p0.s, p0/z, z0.s, #0.0
+; CHECK-NEXT:    uunpklo z0.d, z0.s
+; CHECK-NEXT:    punpklo p0.h, p0.b
+; CHECK-NEXT:    st1w { z0.d }, p0, [x2, z1.d, lsl #2]
 ; CHECK-NEXT:    ret
   %vals = load <32 x float>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -963,13 +968,15 @@ define void @masked_scatter_32b_scaled_zext(ptr %a, ptr %b, ptr %base) vscale_ra
 ; CHECK-LABEL: masked_scatter_32b_scaled_zext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    ptrue p1.d, vl32
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    ld1w { z1.s }, p1/z, [x1]
+; CHECK-NEXT:    ld1w { z1.d }, p1/z, [x1]
 ; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
 ; CHECK-NEXT:    uunpklo z0.s, z0.h
+; CHECK-NEXT:    uunpklo z0.d, z0.s
 ; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    st1h { z0.s }, p0, [x2, z1.s, uxtw #1]
+; CHECK-NEXT:    punpklo p0.h, p0.b
+; CHECK-NEXT:    st1h { z0.d }, p0, [x2, z1.d, lsl #1]
 ; CHECK-NEXT:    ret
   %vals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -984,13 +991,15 @@ define void @masked_scatter_32b_unscaled_sext(ptr %a, ptr %b, ptr %base) vscale_
 ; CHECK-LABEL: masked_scatter_32b_unscaled_sext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    ptrue p1.d, vl32
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    ld1w { z1.s }, p1/z, [x1]
+; CHECK-NEXT:    ld1sw { z1.d }, p1/z, [x1]
 ; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
 ; CHECK-NEXT:    uunpklo z0.s, z0.h
+; CHECK-NEXT:    uunpklo z0.d, z0.s
 ; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    st1h { z0.s }, p0, [x2, z1.s, sxtw]
+; CHECK-NEXT:    punpklo p0.h, p0.b
+; CHECK-NEXT:    st1h { z0.d }, p0, [x2, z1.d]
 ; CHECK-NEXT:    ret
   %vals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -1006,13 +1015,15 @@ define void @masked_scatter_32b_unscaled_zext(ptr %a, ptr %b, ptr %base) vscale_
 ; CHECK-LABEL: masked_scatter_32b_unscaled_zext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    ptrue p1.d, vl32
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    ld1w { z1.s }, p1/z, [x1]
+; CHECK-NEXT:    ld1w { z1.d }, p1/z, [x1]
 ; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
 ; CHECK-NEXT:    uunpklo z0.s, z0.h
+; CHECK-NEXT:    uunpklo z0.d, z0.s
 ; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    st1h { z0.s }, p0, [x2, z1.s, uxtw]
+; CHECK-NEXT:    punpklo p0.h, p0.b
+; CHECK-NEXT:    st1h { z0.d }, p0, [x2, z1.d]
 ; CHECK-NEXT:    ret
   %vals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b

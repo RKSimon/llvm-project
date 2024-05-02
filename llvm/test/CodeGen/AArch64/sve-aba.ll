@@ -232,10 +232,12 @@ define <vscale x 16 x i8> @uaba_b(<vscale x 16 x i8> %a, <vscale x 16 x i8> %b, 
 define <vscale x 16 x i8> @uaba_b_promoted_ops(<vscale x 16 x i8> %a, <vscale x 16 x i1> %b, <vscale x 16 x i1> %c) #0 {
 ; CHECK-LABEL: uaba_b_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p2.b
-; CHECK-NEXT:    mov z1.b, #1 // =0x1
-; CHECK-NEXT:    eor p0.b, p2/z, p0.b, p1.b
-; CHECK-NEXT:    add z0.b, p0/m, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov z2.b, p0/z, #1 // =0x1
+; CHECK-NEXT:    ptrue p0.b
+; CHECK-NEXT:    add z2.b, p1/m, z2.b, z1.b
+; CHECK-NEXT:    abs z2.b, p0/m, z2.b
+; CHECK-NEXT:    add z0.b, z0.b, z2.b
 ; CHECK-NEXT:    ret
   %b.zext = zext <vscale x 16 x i1> %b to <vscale x 16 x i8>
   %c.zext = zext <vscale x 16 x i1> %c to <vscale x 16 x i8>
@@ -283,9 +285,9 @@ define <vscale x 8 x i16> @uaba_h(<vscale x 8 x i16> %a, <vscale x 8 x i16> %b, 
 define <vscale x 8 x i16> @uaba_h_promoted_ops(<vscale x 8 x i16> %a, <vscale x 8 x i8> %b, <vscale x 8 x i8> %c) #0 {
 ; CHECK-LABEL: uaba_h_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z2.h, z2.h, #0xff
 ; CHECK-NEXT:    and z1.h, z1.h, #0xff
-; CHECK-NEXT:    uaba z0.h, z1.h, z2.h
+; CHECK-NEXT:    and z2.h, z2.h, #0xff
+; CHECK-NEXT:    uaba z0.h, z2.h, z1.h
 ; CHECK-NEXT:    ret
   %b.zext = zext <vscale x 8 x i8> %b to <vscale x 8 x i16>
   %c.zext = zext <vscale x 8 x i8> %c to <vscale x 8 x i16>
@@ -333,9 +335,9 @@ define <vscale x 4 x i32> @uaba_s(<vscale x 4 x i32> %a, <vscale x 4 x i32> %b, 
 define <vscale x 4 x i32> @uaba_s_promoted_ops(<vscale x 4 x i32> %a, <vscale x 4 x i16> %b, <vscale x 4 x i16> %c) #0 {
 ; CHECK-LABEL: uaba_s_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z2.s, z2.s, #0xffff
 ; CHECK-NEXT:    and z1.s, z1.s, #0xffff
-; CHECK-NEXT:    uaba z0.s, z1.s, z2.s
+; CHECK-NEXT:    and z2.s, z2.s, #0xffff
+; CHECK-NEXT:    uaba z0.s, z2.s, z1.s
 ; CHECK-NEXT:    ret
   %b.zext = zext <vscale x 4 x i16> %b to <vscale x 4 x i32>
   %c.zext = zext <vscale x 4 x i16> %c to <vscale x 4 x i32>
@@ -383,9 +385,9 @@ define <vscale x 2 x i64> @uaba_d(<vscale x 2 x i64> %a, <vscale x 2 x i64> %b, 
 define <vscale x 2 x i64> @uaba_d_promoted_ops(<vscale x 2 x i64> %a, <vscale x 2 x i32> %b, <vscale x 2 x i32> %c) #0 {
 ; CHECK-LABEL: uaba_d_promoted_ops:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and z2.d, z2.d, #0xffffffff
 ; CHECK-NEXT:    and z1.d, z1.d, #0xffffffff
-; CHECK-NEXT:    uaba z0.d, z1.d, z2.d
+; CHECK-NEXT:    and z2.d, z2.d, #0xffffffff
+; CHECK-NEXT:    uaba z0.d, z2.d, z1.d
 ; CHECK-NEXT:    ret
   %b.zext = zext <vscale x 2 x i32> %b to <vscale x 2 x i64>
   %c.zext = zext <vscale x 2 x i32> %c to <vscale x 2 x i64>

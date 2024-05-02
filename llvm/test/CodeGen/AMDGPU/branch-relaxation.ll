@@ -1290,11 +1290,9 @@ define amdgpu_kernel void @long_branch_hang(ptr addrspace(1) nocapture %arg, i32
 ; GCN-NEXT:  .LBB10_2:
 ; GCN-NEXT:    s_mov_b64 s[8:9], 0
 ; GCN-NEXT:  .LBB10_3: ; %bb9
-; GCN-NEXT:    s_cmp_lt_i32 s3, 11
+; GCN-NEXT:    s_min_i32 s0, s2, 10
+; GCN-NEXT:    s_cmp_ge_i32 s0, s3
 ; GCN-NEXT:    s_cselect_b64 s[8:9], -1, 0
-; GCN-NEXT:    s_cmp_ge_i32 s2, s3
-; GCN-NEXT:    s_cselect_b64 s[10:11], -1, 0
-; GCN-NEXT:    s_and_b64 s[8:9], s[10:11], s[8:9]
 ; GCN-NEXT:  .LBB10_4: ; %Flow5
 ; GCN-NEXT:    s_andn2_b64 vcc, exec, s[8:9]
 ; GCN-NEXT:    s_cbranch_vccz .LBB10_5
@@ -1357,12 +1355,10 @@ define amdgpu_kernel void @long_branch_hang(ptr addrspace(1) nocapture %arg, i32
 ; GFX11-NEXT:  .LBB10_2:
 ; GFX11-NEXT:    s_mov_b64 s[8:9], 0
 ; GFX11-NEXT:  .LBB10_3: ; %bb9
-; GFX11-NEXT:    s_cmp_lt_i32 s3, 11
-; GFX11-NEXT:    s_cselect_b64 s[8:9], -1, 0
-; GFX11-NEXT:    s_cmp_ge_i32 s2, s3
-; GFX11-NEXT:    s_cselect_b64 s[10:11], -1, 0
+; GFX11-NEXT:    s_min_i32 s0, s2, 10
 ; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
-; GFX11-NEXT:    s_and_b64 s[8:9], s[10:11], s[8:9]
+; GFX11-NEXT:    s_cmp_ge_i32 s0, s3
+; GFX11-NEXT:    s_cselect_b64 s[8:9], -1, 0
 ; GFX11-NEXT:  .LBB10_4: ; %Flow5
 ; GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
 ; GFX11-NEXT:    s_and_not1_b64 vcc, exec, s[8:9]
@@ -1471,12 +1467,10 @@ define amdgpu_kernel void @long_branch_hang(ptr addrspace(1) nocapture %arg, i32
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-NEXT:    s_setpc_b64 s[8:9]
 ; GFX12-NEXT:  .LBB10_5: ; %bb9
-; GFX12-NEXT:    s_cmp_lt_i32 s3, 11
+; GFX12-NEXT:    s_min_i32 s0, s2, 10
+; GFX12-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(SKIP_1) | instid1(SALU_CYCLE_1)
+; GFX12-NEXT:    s_cmp_ge_i32 s0, s3
 ; GFX12-NEXT:    s_cselect_b32 s0, -1, 0
-; GFX12-NEXT:    s_cmp_ge_i32 s2, s3
-; GFX12-NEXT:    s_cselect_b32 s7, -1, 0
-; GFX12-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1)
-; GFX12-NEXT:    s_and_b32 s0, s7, s0
 ; GFX12-NEXT:    s_and_not1_b32 vcc_lo, exec_lo, s0
 ; GFX12-NEXT:    s_cbranch_vccnz .LBB10_6
 ; GFX12-NEXT:  ; %bb.16: ; %bb9

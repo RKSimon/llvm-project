@@ -32,6 +32,7 @@ define void @main(<16 x i32> %0, i32 %1) {
 ; AVX-LABEL: main:
 ; AVX:       # %bb.0: # %entry
 ; AVX-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX-NEXT:    vpblendd {{.*#+}} xmm2 = xmm2[0],xmm0[1,2,3]
 ; AVX-NEXT:    movl $1, %eax
 ; AVX-NEXT:    vpinsrd $1, %eax, %xmm2, %xmm2
 ; AVX-NEXT:    vpinsrd $3, %edi, %xmm2, %xmm2
@@ -47,7 +48,7 @@ define void @main(<16 x i32> %0, i32 %1) {
 ; AVX-NEXT:    vpermd %ymm2, %ymm1, %ymm1
 ; AVX-NEXT:    vpxor %ymm0, %ymm1, %ymm0
 ; AVX-NEXT:    vextracti128 $1, %ymm0, %xmm1
-; AVX-NEXT:    vpxor %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpxor %ymm1, %ymm0, %ymm0
 ; AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; AVX-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; AVX-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]

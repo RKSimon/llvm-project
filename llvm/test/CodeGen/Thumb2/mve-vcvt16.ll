@@ -325,14 +325,12 @@ entry:
 define arm_aapcs_vfpcc <4 x float> @load_ext_4(ptr %src) {
 ; CHECK-MVE-LABEL: load_ext_4:
 ; CHECK-MVE:       @ %bb.0: @ %entry
-; CHECK-MVE-NEXT:    ldrd r0, r1, [r0]
-; CHECK-MVE-NEXT:    vmov.32 q0[0], r0
-; CHECK-MVE-NEXT:    vmov q1, q0
+; CHECK-MVE-NEXT:    vldr s0, [r0]
+; CHECK-MVE-NEXT:    vldr s2, [r0, #4]
 ; CHECK-MVE-NEXT:    vcvtt.f32.f16 s1, s0
-; CHECK-MVE-NEXT:    vmov.32 q1[1], r1
 ; CHECK-MVE-NEXT:    vcvtb.f32.f16 s0, s0
-; CHECK-MVE-NEXT:    vcvtt.f32.f16 s3, s5
-; CHECK-MVE-NEXT:    vcvtb.f32.f16 s2, s5
+; CHECK-MVE-NEXT:    vcvtt.f32.f16 s3, s2
+; CHECK-MVE-NEXT:    vcvtb.f32.f16 s2, s2
 ; CHECK-MVE-NEXT:    bx lr
 ;
 ; CHECK-MVEFP-LABEL: load_ext_4:
@@ -567,9 +565,18 @@ define arm_aapcs_vfpcc void @store_shuffletrunc_8(ptr %src, <4 x float> %val1, <
 ;
 ; CHECK-MVEFP-LABEL: store_shuffletrunc_8:
 ; CHECK-MVEFP:       @ %bb.0: @ %entry
-; CHECK-MVEFP-NEXT:    vcvtb.f16.f32 q0, q0
-; CHECK-MVEFP-NEXT:    vcvtt.f16.f32 q0, q1
-; CHECK-MVEFP-NEXT:    vstrw.32 q0, [r0]
+; CHECK-MVEFP-NEXT:    vmov.f32 s8, s2
+; CHECK-MVEFP-NEXT:    vmov.f32 s9, s6
+; CHECK-MVEFP-NEXT:    vmov.f32 s10, s3
+; CHECK-MVEFP-NEXT:    vmov.f32 s11, s7
+; CHECK-MVEFP-NEXT:    vcvtb.f16.f32 q2, q2
+; CHECK-MVEFP-NEXT:    vstrh.32 q2, [r0, #8]
+; CHECK-MVEFP-NEXT:    vmov.f32 s8, s0
+; CHECK-MVEFP-NEXT:    vmov.f32 s9, s4
+; CHECK-MVEFP-NEXT:    vmov.f32 s10, s1
+; CHECK-MVEFP-NEXT:    vmov.f32 s11, s5
+; CHECK-MVEFP-NEXT:    vcvtb.f16.f32 q0, q2
+; CHECK-MVEFP-NEXT:    vstrh.32 q0, [r0]
 ; CHECK-MVEFP-NEXT:    bx lr
 entry:
   %strided.vec = shufflevector <4 x float> %val1, <4 x float> %val2, <8 x i32> <i32 0, i32 4, i32 1, i32 5, i32 2, i32 6, i32 3, i32 7>

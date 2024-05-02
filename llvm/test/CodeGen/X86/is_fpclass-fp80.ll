@@ -237,7 +237,7 @@ entry:
 define i1 @is_inf_f80(x86_fp80 %x) nounwind {
 ; X86-LABEL: is_inf_f80:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    notl %eax
 ; X86-NEXT:    movl $-2147483648, %ecx # imm = 0x80000000
 ; X86-NEXT:    xorl {{[0-9]+}}(%esp), %ecx
@@ -249,7 +249,7 @@ define i1 @is_inf_f80(x86_fp80 %x) nounwind {
 ;
 ; X64-LABEL: is_inf_f80:
 ; X64:       # %bb.0: # %entry
-; X64-NEXT:    movl {{[0-9]+}}(%rsp), %eax
+; X64-NEXT:    movzwl {{[0-9]+}}(%rsp), %eax
 ; X64-NEXT:    notl %eax
 ; X64-NEXT:    movabsq $-9223372036854775808, %rcx # imm = 0x8000000000000000
 ; X64-NEXT:    xorq {{[0-9]+}}(%rsp), %rcx
@@ -292,9 +292,9 @@ define i1 @is_neginf_f80(x86_fp80 %x) nounwind {
 ; X86-LABEL: is_neginf_f80:
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X86-NEXT:    movl $-2147483648, %ecx # imm = 0x80000000
 ; X86-NEXT:    xorl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    xorl $65535, %eax # imm = 0xFFFF
 ; X86-NEXT:    orl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    orl %ecx, %eax
 ; X86-NEXT:    sete %al
@@ -303,10 +303,10 @@ define i1 @is_neginf_f80(x86_fp80 %x) nounwind {
 ; X64-LABEL: is_neginf_f80:
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movzwl {{[0-9]+}}(%rsp), %eax
-; X64-NEXT:    xorq $65535, %rax # imm = 0xFFFF
 ; X64-NEXT:    movabsq $-9223372036854775808, %rcx # imm = 0x8000000000000000
 ; X64-NEXT:    xorq {{[0-9]+}}(%rsp), %rcx
-; X64-NEXT:    orq %rax, %rcx
+; X64-NEXT:    xorq $65535, %rax # imm = 0xFFFF
+; X64-NEXT:    orq %rcx, %rax
 ; X64-NEXT:    sete %al
 ; X64-NEXT:    retq
 entry:
@@ -353,7 +353,7 @@ define i1 @is_posnormal_f80(x86_fp80 %x) nounwind {
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    pushl %esi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movswl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl %ecx, %edx
 ; X86-NEXT:    andl $32767, %edx # imm = 0x7FFF
 ; X86-NEXT:    decl %edx
@@ -362,7 +362,7 @@ define i1 @is_posnormal_f80(x86_fp80 %x) nounwind {
 ; X86-NEXT:    cmpl $32766, %edx # imm = 0x7FFE
 ; X86-NEXT:    sbbl %esi, %esi
 ; X86-NEXT:    setb %dl
-; X86-NEXT:    testl $32768, %ecx # imm = 0x8000
+; X86-NEXT:    testl $-2147483648, %ecx # imm = 0x80000000
 ; X86-NEXT:    sete %cl
 ; X86-NEXT:    shrl $31, %eax
 ; X86-NEXT:    andb %cl, %al
@@ -417,9 +417,10 @@ define i1 @is_negnormal_f80(x86_fp80 %x) nounwind {
 ;
 ; X64-LABEL: is_negnormal_f80:
 ; X64:       # %bb.0: # %entry
+; X64-NEXT:    movzwl {{[0-9]+}}(%rsp), %ecx
+; X64-NEXT:    movswq %cx, %rdx
 ; X64-NEXT:    movq {{[0-9]+}}(%rsp), %rax
-; X64-NEXT:    movswq {{[0-9]+}}(%rsp), %rcx
-; X64-NEXT:    testq %rcx, %rcx
+; X64-NEXT:    testq %rdx, %rdx
 ; X64-NEXT:    sets %dl
 ; X64-NEXT:    andl $32767, %ecx # imm = 0x7FFF
 ; X64-NEXT:    decl %ecx

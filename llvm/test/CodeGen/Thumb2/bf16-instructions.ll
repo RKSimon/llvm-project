@@ -559,13 +559,14 @@ define i1 @test_fcmp_ueq(bfloat %a, bfloat %b) {
 ; CHECK-NOFP-NEXT:    lsls r5, r1, #16
 ; CHECK-NOFP-NEXT:    mov r0, r4
 ; CHECK-NOFP-NEXT:    mov r1, r5
-; CHECK-NOFP-NEXT:    bl __aeabi_fcmpeq
+; CHECK-NOFP-NEXT:    bl __aeabi_fcmpun
 ; CHECK-NOFP-NEXT:    mov r6, r0
 ; CHECK-NOFP-NEXT:    mov r0, r4
 ; CHECK-NOFP-NEXT:    mov r1, r5
-; CHECK-NOFP-NEXT:    bl __aeabi_fcmpun
-; CHECK-NOFP-NEXT:    orrs r0, r6
+; CHECK-NOFP-NEXT:    bl __aeabi_fcmpeq
+; CHECK-NOFP-NEXT:    cmp r0, #0
 ; CHECK-NOFP-NEXT:    cset r0, ne
+; CHECK-NOFP-NEXT:    orrs r0, r6
 ; CHECK-NOFP-NEXT:    pop {r4, r5, r6, pc}
 ;
 ; CHECK-FP-LABEL: test_fcmp_ueq:
@@ -2072,12 +2073,11 @@ define bfloat @test_copysign(bfloat %a, bfloat %b) {
 ;
 ; CHECK-FP-LABEL: test_copysign:
 ; CHECK-FP:       @ %bb.0:
-; CHECK-FP-NEXT:    vmov r0, s0
-; CHECK-FP-NEXT:    vmov r1, s1
-; CHECK-FP-NEXT:    and r1, r1, #32768
-; CHECK-FP-NEXT:    bfc r0, #15, #17
-; CHECK-FP-NEXT:    add r0, r1
-; CHECK-FP-NEXT:    vmov.f16 s0, r0
+; CHECK-FP-NEXT:    vmov r0, s1
+; CHECK-FP-NEXT:    vmov r1, s0
+; CHECK-FP-NEXT:    lsrs r0, r0, #15
+; CHECK-FP-NEXT:    bfi r1, r0, #15, #17
+; CHECK-FP-NEXT:    vmov.f16 s0, r1
 ; CHECK-FP-NEXT:    vmov.f16 r0, s0
 ; CHECK-FP-NEXT:    vmov s0, r0
 ; CHECK-FP-NEXT:    bx lr
@@ -2148,12 +2148,11 @@ define float @test_copysign_extended(bfloat %a, bfloat %b) {
 ;
 ; CHECK-FP-LABEL: test_copysign_extended:
 ; CHECK-FP:       @ %bb.0:
-; CHECK-FP-NEXT:    vmov r0, s0
-; CHECK-FP-NEXT:    vmov r1, s1
-; CHECK-FP-NEXT:    and r1, r1, #32768
-; CHECK-FP-NEXT:    bfc r0, #15, #17
-; CHECK-FP-NEXT:    add r0, r1
-; CHECK-FP-NEXT:    lsls r0, r0, #16
+; CHECK-FP-NEXT:    vmov r0, s1
+; CHECK-FP-NEXT:    vmov r1, s0
+; CHECK-FP-NEXT:    lsrs r0, r0, #15
+; CHECK-FP-NEXT:    bfi r1, r0, #15, #17
+; CHECK-FP-NEXT:    lsls r0, r1, #16
 ; CHECK-FP-NEXT:    vmov s0, r0
 ; CHECK-FP-NEXT:    bx lr
   %r = call bfloat @llvm.copysign.bf16(bfloat %a, bfloat %b)

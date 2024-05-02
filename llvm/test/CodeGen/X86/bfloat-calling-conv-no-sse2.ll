@@ -1061,24 +1061,52 @@ define void @call_ret_v16bf16(ptr %ptr) #0 {
 ; NOSSE-NEXT:    subl $4, %esp
 ; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; NOSSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; NOSSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; NOSSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %ebx
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; NOSSE-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; NOSSE-NEXT:    movl %edx, 28(%esi)
-; NOSSE-NEXT:    movl %eax, 24(%esi)
-; NOSSE-NEXT:    movl %ecx, 20(%esi)
-; NOSSE-NEXT:    movl %ebx, 16(%esi)
-; NOSSE-NEXT:    movl %edi, 12(%esi)
-; NOSSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
-; NOSSE-NEXT:    movl %eax, 8(%esi)
-; NOSSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
-; NOSSE-NEXT:    movl %eax, 4(%esi)
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; NOSSE-NEXT:    movzwl {{[0-9]+}}(%esp), %ebx
+; NOSSE-NEXT:    movw %bx, 30(%esi)
+; NOSSE-NEXT:    movw %ax, 28(%esi)
+; NOSSE-NEXT:    movw %cx, 26(%esi)
+; NOSSE-NEXT:    movw %dx, 24(%esi)
+; NOSSE-NEXT:    movw %di, 22(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 20(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 18(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 16(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 14(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 12(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 10(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 8(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 6(%esi)
+; NOSSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; NOSSE-NEXT:    movw %ax, 4(%esi)
 ; NOSSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; NOSSE-NEXT:    movl %eax, (%esi)
 ; NOSSE-NEXT:    leal -12(%ebp), %esp
@@ -1208,24 +1236,52 @@ define void @call_ret_v16bf16(ptr %ptr) #0 {
 ; SSE-NEXT:    subl $4, %esp
 ; SSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; SSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; SSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; SSE-NEXT:    movl %eax, {{[-0-9]+}}(%e{{[sb]}}p) # 4-byte Spill
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %ebx
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; SSE-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; SSE-NEXT:    movl %edx, 28(%esi)
-; SSE-NEXT:    movl %eax, 24(%esi)
-; SSE-NEXT:    movl %ecx, 20(%esi)
-; SSE-NEXT:    movl %ebx, 16(%esi)
-; SSE-NEXT:    movl %edi, 12(%esi)
-; SSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
-; SSE-NEXT:    movl %eax, 8(%esi)
-; SSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
-; SSE-NEXT:    movl %eax, 4(%esi)
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movw %ax, {{[-0-9]+}}(%e{{[sb]}}p) # 2-byte Spill
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %edi
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %edx
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
+; SSE-NEXT:    movzwl {{[0-9]+}}(%esp), %ebx
+; SSE-NEXT:    movw %bx, 30(%esi)
+; SSE-NEXT:    movw %ax, 28(%esi)
+; SSE-NEXT:    movw %cx, 26(%esi)
+; SSE-NEXT:    movw %dx, 24(%esi)
+; SSE-NEXT:    movw %di, 22(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 20(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 18(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 16(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 14(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 12(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 10(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 8(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 6(%esi)
+; SSE-NEXT:    movzwl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 2-byte Folded Reload
+; SSE-NEXT:    movw %ax, 4(%esi)
 ; SSE-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %eax # 4-byte Reload
 ; SSE-NEXT:    movl %eax, (%esi)
 ; SSE-NEXT:    leal -12(%ebp), %esp

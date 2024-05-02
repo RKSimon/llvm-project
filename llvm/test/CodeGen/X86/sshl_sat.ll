@@ -127,14 +127,13 @@ define i16 @func3(i15 %x, i8 %y) nounwind {
 ; X86-LABEL: func3:
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl %esi
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    shlb $7, %cl
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    shll $7, %ecx
 ; X86-NEXT:    addl %eax, %eax
 ; X86-NEXT:    movl %eax, %edx
 ; X86-NEXT:    shll %cl, %edx
 ; X86-NEXT:    movswl %dx, %esi
-; X86-NEXT:    # kill: def $cl killed $cl killed $ecx
 ; X86-NEXT:    sarl %cl, %esi
 ; X86-NEXT:    xorl %ecx, %ecx
 ; X86-NEXT:    testw %ax, %ax

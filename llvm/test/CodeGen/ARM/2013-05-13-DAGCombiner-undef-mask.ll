@@ -11,9 +11,10 @@ define <3 x i64> @shuffle(i1 %dec1, i1 %dec0, <3 x i64> %b) {
 ; CHECK-NEXT:    tst r2, #1
 ; CHECK-NEXT:    moveq r1, #0
 ; CHECK-NEXT:    vmoveq d18, r1, r1
+; CHECK-NEXT:    mov r1, #20
 ; CHECK-NEXT:    vldrne d18, [sp, #8]
 ; CHECK-NEXT:    vorr d17, d18, d18
-; CHECK-NEXT:    vst1.64 {d16, d17}, [r0:128]
+; CHECK-NEXT:    vst1.64 {d16, d17}, [r0:128], r1
 ; CHECK-NEXT:    bx lr
 entry:
   %.sink = select i1 %dec1, <3 x i64> %b, <3 x i64> zeroinitializer

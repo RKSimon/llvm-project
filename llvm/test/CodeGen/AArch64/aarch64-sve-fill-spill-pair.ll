@@ -57,49 +57,66 @@ define void @nxv16i8(ptr %ldptr, ptr %stptr) {
 define void @nxv16i8_max_range(ptr %ldptr, ptr %stptr) {
 ; CHECK-LABEL: nxv16i8_max_range:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0, #-1024]
+; CHECK-NEXT:    rdvl x8, #1
+; CHECK-NEXT:    mov w9, #1024 // =0x400
+; CHECK-NEXT:    ldr z1, [x0, #-63, mul vl]
+; CHECK-NEXT:    lsr x8, x8, #4
+; CHECK-NEXT:    msub x8, x8, x9, x0
+; CHECK-NEXT:    ldr z0, [x8]
 ; CHECK-NEXT:    stp q0, q1, [x1, #1008]
 ; CHECK-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: nxv16i8_max_range:
 ; CHECK-BE:       // %bb.0:
 ; CHECK-BE-NEXT:    rdvl x8, #1
-; CHECK-BE-NEXT:    mov x9, #-1008 // =0xfffffffffffffc10
-; CHECK-BE-NEXT:    mov x10, #-1024 // =0xfffffffffffffc00
+; CHECK-BE-NEXT:    mov w9, #1024 // =0x400
+; CHECK-BE-NEXT:    mov x10, #-1008 // =0xfffffffffffffc10
 ; CHECK-BE-NEXT:    lsr x8, x8, #4
 ; CHECK-BE-NEXT:    mov w11, #1008 // =0x3f0
-; CHECK-BE-NEXT:    mov w12, #1024 // =0x400
 ; CHECK-BE-NEXT:    ptrue p0.b
 ; CHECK-BE-NEXT:    mul x9, x8, x9
 ; CHECK-BE-NEXT:    mul x10, x8, x10
-; CHECK-BE-NEXT:    mul x11, x8, x11
-; CHECK-BE-NEXT:    ld1b { z1.b }, p0/z, [x0, x9]
-; CHECK-BE-NEXT:    mul x8, x8, x12
-; CHECK-BE-NEXT:    ld1b { z0.b }, p0/z, [x0, x10]
-; CHECK-BE-NEXT:    st1b { z0.b }, p0, [x1, x11]
-; CHECK-BE-NEXT:    st1b { z1.b }, p0, [x1, x8]
+; CHECK-BE-NEXT:    mul x8, x8, x11
+; CHECK-BE-NEXT:    sub x11, x0, x9
+; CHECK-BE-NEXT:    ld1b { z0.b }, p0/z, [x11]
+; CHECK-BE-NEXT:    ld1b { z1.b }, p0/z, [x0, x10]
+; CHECK-BE-NEXT:    st1b { z0.b }, p0, [x1, x8]
+; CHECK-BE-NEXT:    st1b { z1.b }, p0, [x1, x9]
 ; CHECK-BE-NEXT:    ret
 ;
 ; CHECK-LDPALIGNEDONLY-LABEL: nxv16i8_max_range:
 ; CHECK-LDPALIGNEDONLY:       // %bb.0:
-; CHECK-LDPALIGNEDONLY-NEXT:    ldr z0, [x0, #-64, mul vl]
+; CHECK-LDPALIGNEDONLY-NEXT:    rdvl x8, #1
+; CHECK-LDPALIGNEDONLY-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-LDPALIGNEDONLY-NEXT:    ldr z1, [x0, #-63, mul vl]
+; CHECK-LDPALIGNEDONLY-NEXT:    lsr x8, x8, #4
+; CHECK-LDPALIGNEDONLY-NEXT:    msub x8, x8, x9, x0
+; CHECK-LDPALIGNEDONLY-NEXT:    ldr z0, [x8]
 ; CHECK-LDPALIGNEDONLY-NEXT:    stp q0, q1, [x1, #1008]
 ; CHECK-LDPALIGNEDONLY-NEXT:    ret
 ;
 ; CHECK-STPALIGNEDONLY-LABEL: nxv16i8_max_range:
 ; CHECK-STPALIGNEDONLY:       // %bb.0:
-; CHECK-STPALIGNEDONLY-NEXT:    ldp q0, q1, [x0, #-1024]
-; CHECK-STPALIGNEDONLY-NEXT:    str z0, [x1, #63, mul vl]
+; CHECK-STPALIGNEDONLY-NEXT:    rdvl x8, #1
+; CHECK-STPALIGNEDONLY-NEXT:    mov w9, #1024 // =0x400
+; CHECK-STPALIGNEDONLY-NEXT:    ldr z1, [x0, #-63, mul vl]
+; CHECK-STPALIGNEDONLY-NEXT:    lsr x8, x8, #4
+; CHECK-STPALIGNEDONLY-NEXT:    msub x8, x8, x9, x0
+; CHECK-STPALIGNEDONLY-NEXT:    ldr z0, [x8]
 ; CHECK-STPALIGNEDONLY-NEXT:    str z1, [x1, #64, mul vl]
+; CHECK-STPALIGNEDONLY-NEXT:    str z0, [x1, #63, mul vl]
 ; CHECK-STPALIGNEDONLY-NEXT:    ret
 ;
 ; CHECK-OFF-LABEL: nxv16i8_max_range:
 ; CHECK-OFF:       // %bb.0:
-; CHECK-OFF-NEXT:    ldr z0, [x0, #-64, mul vl]
+; CHECK-OFF-NEXT:    rdvl x8, #1
+; CHECK-OFF-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-OFF-NEXT:    ldr z1, [x0, #-63, mul vl]
-; CHECK-OFF-NEXT:    str z0, [x1, #63, mul vl]
+; CHECK-OFF-NEXT:    lsr x8, x8, #4
+; CHECK-OFF-NEXT:    msub x8, x8, x9, x0
+; CHECK-OFF-NEXT:    ldr z0, [x8]
 ; CHECK-OFF-NEXT:    str z1, [x1, #64, mul vl]
+; CHECK-OFF-NEXT:    str z0, [x1, #63, mul vl]
 ; CHECK-OFF-NEXT:    ret
   %vscale = tail call i64 @llvm.vscale()
   %ldoff1 = mul i64 %vscale, -1024
@@ -120,8 +137,12 @@ define void @nxv16i8_max_range(ptr %ldptr, ptr %stptr) {
 define void @nxv16i8_outside_range(ptr %ldptr, ptr %stptr) {
 ; CHECK-LABEL: nxv16i8_outside_range:
 ; CHECK:       // %bb.0:
+; CHECK-NEXT:    rdvl x8, #1
+; CHECK-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-NEXT:    ldr z0, [x0, #-65, mul vl]
-; CHECK-NEXT:    ldr z1, [x0, #-64, mul vl]
+; CHECK-NEXT:    lsr x8, x8, #4
+; CHECK-NEXT:    msub x8, x8, x9, x0
+; CHECK-NEXT:    ldr z1, [x8]
 ; CHECK-NEXT:    str z0, [x1, #64, mul vl]
 ; CHECK-NEXT:    str z1, [x1, #65, mul vl]
 ; CHECK-NEXT:    ret
@@ -129,42 +150,53 @@ define void @nxv16i8_outside_range(ptr %ldptr, ptr %stptr) {
 ; CHECK-BE-LABEL: nxv16i8_outside_range:
 ; CHECK-BE:       // %bb.0:
 ; CHECK-BE-NEXT:    rdvl x8, #1
+; CHECK-BE-NEXT:    mov w10, #1024 // =0x400
 ; CHECK-BE-NEXT:    mov x9, #-1040 // =0xfffffffffffffbf0
-; CHECK-BE-NEXT:    mov x10, #-1024 // =0xfffffffffffffc00
 ; CHECK-BE-NEXT:    lsr x8, x8, #4
-; CHECK-BE-NEXT:    mov w11, #1024 // =0x400
-; CHECK-BE-NEXT:    mov w12, #1040 // =0x410
+; CHECK-BE-NEXT:    mov w11, #1040 // =0x410
 ; CHECK-BE-NEXT:    ptrue p0.b
-; CHECK-BE-NEXT:    mul x9, x8, x9
 ; CHECK-BE-NEXT:    mul x10, x8, x10
-; CHECK-BE-NEXT:    mul x11, x8, x11
+; CHECK-BE-NEXT:    mul x9, x8, x9
+; CHECK-BE-NEXT:    mul x8, x8, x11
+; CHECK-BE-NEXT:    sub x11, x0, x10
+; CHECK-BE-NEXT:    ld1b { z1.b }, p0/z, [x11]
 ; CHECK-BE-NEXT:    ld1b { z0.b }, p0/z, [x0, x9]
-; CHECK-BE-NEXT:    mul x8, x8, x12
-; CHECK-BE-NEXT:    ld1b { z1.b }, p0/z, [x0, x10]
-; CHECK-BE-NEXT:    st1b { z0.b }, p0, [x1, x11]
+; CHECK-BE-NEXT:    st1b { z0.b }, p0, [x1, x10]
 ; CHECK-BE-NEXT:    st1b { z1.b }, p0, [x1, x8]
 ; CHECK-BE-NEXT:    ret
 ;
 ; CHECK-LDPALIGNEDONLY-LABEL: nxv16i8_outside_range:
 ; CHECK-LDPALIGNEDONLY:       // %bb.0:
+; CHECK-LDPALIGNEDONLY-NEXT:    rdvl x8, #1
+; CHECK-LDPALIGNEDONLY-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-LDPALIGNEDONLY-NEXT:    ldr z0, [x0, #-65, mul vl]
-; CHECK-LDPALIGNEDONLY-NEXT:    ldr z1, [x0, #-64, mul vl]
+; CHECK-LDPALIGNEDONLY-NEXT:    lsr x8, x8, #4
+; CHECK-LDPALIGNEDONLY-NEXT:    msub x8, x8, x9, x0
+; CHECK-LDPALIGNEDONLY-NEXT:    ldr z1, [x8]
 ; CHECK-LDPALIGNEDONLY-NEXT:    str z0, [x1, #64, mul vl]
 ; CHECK-LDPALIGNEDONLY-NEXT:    str z1, [x1, #65, mul vl]
 ; CHECK-LDPALIGNEDONLY-NEXT:    ret
 ;
 ; CHECK-STPALIGNEDONLY-LABEL: nxv16i8_outside_range:
 ; CHECK-STPALIGNEDONLY:       // %bb.0:
+; CHECK-STPALIGNEDONLY-NEXT:    rdvl x8, #1
+; CHECK-STPALIGNEDONLY-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-STPALIGNEDONLY-NEXT:    ldr z0, [x0, #-65, mul vl]
-; CHECK-STPALIGNEDONLY-NEXT:    ldr z1, [x0, #-64, mul vl]
+; CHECK-STPALIGNEDONLY-NEXT:    lsr x8, x8, #4
+; CHECK-STPALIGNEDONLY-NEXT:    msub x8, x8, x9, x0
+; CHECK-STPALIGNEDONLY-NEXT:    ldr z1, [x8]
 ; CHECK-STPALIGNEDONLY-NEXT:    str z0, [x1, #64, mul vl]
 ; CHECK-STPALIGNEDONLY-NEXT:    str z1, [x1, #65, mul vl]
 ; CHECK-STPALIGNEDONLY-NEXT:    ret
 ;
 ; CHECK-OFF-LABEL: nxv16i8_outside_range:
 ; CHECK-OFF:       // %bb.0:
+; CHECK-OFF-NEXT:    rdvl x8, #1
+; CHECK-OFF-NEXT:    mov w9, #1024 // =0x400
 ; CHECK-OFF-NEXT:    ldr z0, [x0, #-65, mul vl]
-; CHECK-OFF-NEXT:    ldr z1, [x0, #-64, mul vl]
+; CHECK-OFF-NEXT:    lsr x8, x8, #4
+; CHECK-OFF-NEXT:    msub x8, x8, x9, x0
+; CHECK-OFF-NEXT:    ldr z1, [x8]
 ; CHECK-OFF-NEXT:    str z0, [x1, #64, mul vl]
 ; CHECK-OFF-NEXT:    str z1, [x1, #65, mul vl]
 ; CHECK-OFF-NEXT:    ret

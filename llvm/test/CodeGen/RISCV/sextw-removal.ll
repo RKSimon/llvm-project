@@ -1061,8 +1061,8 @@ define signext i32 @bug(i32 signext %x) {
 ; CHECK-NEXT:    sllw a0, a0, a3
 ; CHECK-NEXT:    andi a2, a2, -2
 ; CHECK-NEXT:    add a1, a1, a2
+; CHECK-NEXT:    srai a0, a0, 31
 ; CHECK-NEXT:    not a0, a0
-; CHECK-NEXT:    srli a0, a0, 31
 ; CHECK-NEXT:    addw a0, a1, a0
 ; CHECK-NEXT:  .LBB18_5: # %cleanup
 ; CHECK-NEXT:    ret
@@ -1103,10 +1103,11 @@ define signext i32 @bug(i32 signext %x) {
 ; NOREMOVAL-NEXT:    sllw a0, a0, a3
 ; NOREMOVAL-NEXT:    andi a2, a2, -2
 ; NOREMOVAL-NEXT:    add a1, a1, a2
+; NOREMOVAL-NEXT:    srai a0, a0, 31
 ; NOREMOVAL-NEXT:    not a0, a0
-; NOREMOVAL-NEXT:    srli a0, a0, 31
-; NOREMOVAL-NEXT:    addw a0, a1, a0
+; NOREMOVAL-NEXT:    add a0, a1, a0
 ; NOREMOVAL-NEXT:  .LBB18_5: # %cleanup
+; NOREMOVAL-NEXT:    sext.w a0, a0
 ; NOREMOVAL-NEXT:    ret
 entry:
   %tobool.not = icmp eq i32 %x, 0
@@ -1582,26 +1583,27 @@ bb7:                                              ; preds = %bb2
 define signext i32 @test22(i64 %arg1, i64 %arg2, i64 %arg3)  {
 ; RV64I-LABEL: test22:
 ; RV64I:       # %bb.0: # %entry
-; RV64I-NEXT:    addi a2, a2, -1
 ; RV64I-NEXT:    lui a3, %hi(.LCPI26_0)
 ; RV64I-NEXT:    lui a4, %hi(.LCPI26_1)
 ; RV64I-NEXT:    lui a5, %hi(.LCPI26_2)
 ; RV64I-NEXT:    lui a6, %hi(.LCPI26_3)
-; RV64I-NEXT:    li a7, 69
+; RV64I-NEXT:    lui a7, %hi(.LCPI26_4)
+; RV64I-NEXT:    lui t0, %hi(.LCPI26_5)
 ; RV64I-NEXT:    ld a3, %lo(.LCPI26_0)(a3)
 ; RV64I-NEXT:    ld a4, %lo(.LCPI26_1)(a4)
 ; RV64I-NEXT:    ld a5, %lo(.LCPI26_2)(a5)
 ; RV64I-NEXT:    ld a6, %lo(.LCPI26_3)(a6)
-; RV64I-NEXT:    slli a7, a7, 32
-; RV64I-NEXT:    li t0, 65
-; RV64I-NEXT:    slli t0, t0, 28
+; RV64I-NEXT:    ld a7, %lo(.LCPI26_4)(a7)
+; RV64I-NEXT:    ld t0, %lo(.LCPI26_5)(t0)
+; RV64I-NEXT:    addi a2, a2, -1
 ; RV64I-NEXT:    li t1, 256
 ; RV64I-NEXT:  .LBB26_1: # %bb2
 ; RV64I-NEXT:    # =>This Inner Loop Header: Depth=1
-; RV64I-NEXT:    slli t2, a0, 11
+; RV64I-NEXT:    slli t2, a0, 7
 ; RV64I-NEXT:    slli a0, a0, 3
-; RV64I-NEXT:    and t2, t2, a3
-; RV64I-NEXT:    and a0, a0, a4
+; RV64I-NEXT:    and a0, a0, a3
+; RV64I-NEXT:    and t2, t2, a4
+; RV64I-NEXT:    slli t2, t2, 4
 ; RV64I-NEXT:    or a0, a0, t2
 ; RV64I-NEXT:    srli t2, a0, 2
 ; RV64I-NEXT:    and a0, a0, a6
@@ -1614,6 +1616,7 @@ define signext i32 @test22(i64 %arg1, i64 %arg2, i64 %arg3)  {
 ; RV64I-NEXT:    slli a0, a0, 1
 ; RV64I-NEXT:    or a0, t2, a0
 ; RV64I-NEXT:    srli a0, a0, 28
+; RV64I-NEXT:    andi a0, a0, 1234
 ; RV64I-NEXT:    addi a2, a2, 1
 ; RV64I-NEXT:    add a0, a0, a1
 ; RV64I-NEXT:    bltu a2, t1, .LBB26_1

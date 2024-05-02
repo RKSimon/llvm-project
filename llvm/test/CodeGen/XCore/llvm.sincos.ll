@@ -73,9 +73,9 @@ define { fp128, fp128 } @test_sincos_f128(fp128 %a) nounwind {
 
 ; CHECK-LABEL: test_sincos_v2f128:
 ; CHECK: bl sinl
-; CHECK: bl cosl
-; CHECK: bl cosl
 ; CHECK: bl sinl
+; CHECK: bl cosl
+; CHECK: bl cosl
 define { <2 x fp128>, <2 x fp128> } @test_sincos_v2f128(<2 x fp128> %a) nounwind {
   %result = call { <2 x fp128>, <2 x fp128> } @llvm.sincos.v2f128(<2 x fp128> %a)
   ret { <2 x fp128>, <2 x fp128> } %result

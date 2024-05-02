@@ -81,10 +81,10 @@ define double @f5(i64 %a) {
 define void @f6(ptr %a, ptr %b) {
 ; CHECK-LABEL: f6:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lg %r0, 8(%r3)
-; CHECK-NEXT:    lg %r1, 0(%r3)
-; CHECK-NEXT:    stg %r0, 8(%r2)
-; CHECK-NEXT:    stg %r1, 0(%r2)
+; CHECK-NEXT:    ld %f0, 0(%r3)
+; CHECK-NEXT:    ld %f2, 8(%r3)
+; CHECK-NEXT:    std %f0, 0(%r2)
+; CHECK-NEXT:    std %f2, 8(%r2)
 ; CHECK-NEXT:    br %r14
   %val = load i128, ptr %b
   %res = bitcast i128 %val to fp128
@@ -120,10 +120,10 @@ define i64 @f8(double %a) {
 define void @f9(ptr %a, ptr %b) {
 ; CHECK-LABEL: f9:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    ld %f0, 0(%r2)
-; CHECK-NEXT:    ld %f2, 8(%r2)
-; CHECK-NEXT:    std %f0, 0(%r3)
-; CHECK-NEXT:    std %f2, 8(%r3)
+; CHECK-NEXT:    lg %r0, 8(%r2)
+; CHECK-NEXT:    lg %r1, 0(%r2)
+; CHECK-NEXT:    stg %r0, 8(%r3)
+; CHECK-NEXT:    stg %r1, 0(%r3)
 ; CHECK-NEXT:    br %r14
   %val = load fp128, ptr %a
   %res = bitcast fp128 %val to i128

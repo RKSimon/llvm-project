@@ -77,9 +77,8 @@ define i16 @test_i16(i16 %w, i16 %x, i16 %y, i16 %z) {
 ; BMI:       # %bb.0: # %Entry
 ; BMI-NEXT:    andl %edx, %esi
 ; BMI-NEXT:    andnl %edi, %esi, %eax
-; BMI-NEXT:    notl %ecx
-; BMI-NEXT:    orl %edx, %ecx
-; BMI-NEXT:    andl %ecx, %eax
+; BMI-NEXT:    andnl %ecx, %edx, %ecx
+; BMI-NEXT:    andnl %eax, %ecx, %eax
 ; BMI-NEXT:    # kill: def $ax killed $ax killed $eax
 ; BMI-NEXT:    retq
 Entry:

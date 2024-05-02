@@ -44,18 +44,11 @@ entry:
 }
 
 define i32 @test_rev_w_srl16_load(ptr %a) {
-; CHECK-SD-LABEL: test_rev_w_srl16_load:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldrh w8, [x0]
-; CHECK-SD-NEXT:    rev w8, w8
-; CHECK-SD-NEXT:    lsr w0, w8, #16
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_rev_w_srl16_load:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    ldrh w8, [x0]
-; CHECK-GI-NEXT:    rev16 w0, w8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_rev_w_srl16_load:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ldrh w8, [x0]
+; CHECK-NEXT:    rev16 w0, w8
+; CHECK-NEXT:    ret
 entry:
   %0 = load i16, ptr %a
   %1 = zext i16 %0 to i32
@@ -110,18 +103,11 @@ entry:
 }
 
 define i64 @test_rev_x_srl32_load(ptr %a) {
-; CHECK-SD-LABEL: test_rev_x_srl32_load:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr w8, [x0]
-; CHECK-SD-NEXT:    rev x8, x8
-; CHECK-SD-NEXT:    lsr x0, x8, #32
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_rev_x_srl32_load:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    ldr w8, [x0]
-; CHECK-GI-NEXT:    rev32 x0, x8
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_rev_x_srl32_load:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    ldr w8, [x0]
+; CHECK-NEXT:    rev32 x0, x8
+; CHECK-NEXT:    ret
 entry:
   %0 = load i32, ptr %a
   %1 = zext i32 %0 to i64
@@ -463,10 +449,10 @@ define <8 x i16> @test_vrev32Q16_undef(ptr %A) nounwind {
 define void @test_vrev64(ptr nocapture %source, ptr nocapture %dst) nounwind ssp {
 ; CHECK-SD-LABEL: test_vrev64:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr q0, [x0]
-; CHECK-SD-NEXT:    mov h1, v0[5]
-; CHECK-SD-NEXT:    st1.h { v0 }[6], [x1]
-; CHECK-SD-NEXT:    str h1, [x1, #2]
+; CHECK-SD-NEXT:    ldrh w8, [x0, #10]
+; CHECK-SD-NEXT:    ldrh w9, [x0, #12]
+; CHECK-SD-NEXT:    strh w8, [x1, #2]
+; CHECK-SD-NEXT:    strh w9, [x1]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: test_vrev64:

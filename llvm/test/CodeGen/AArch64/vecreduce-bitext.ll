@@ -160,10 +160,8 @@ define i64 @and_zext_v8i8_i64(<8 x i8> %x) {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    fmov x8, d0
 ; CHECK-NEXT:    and x8, x8, x8, lsr #32
-; CHECK-NEXT:    lsr x9, x8, #16
-; CHECK-NEXT:    and w8, w8, w9
-; CHECK-NEXT:    and w8, w8, w8, lsr #8
-; CHECK-NEXT:    and x0, x8, #0xff
+; CHECK-NEXT:    and x8, x8, x8, lsr #16
+; CHECK-NEXT:    and x0, x8, x8, lsr #8
 ; CHECK-NEXT:    ret
 entry:
   %y = zext <8 x i8> %x to <8 x i64>
@@ -196,10 +194,8 @@ define i64 @and_zext_v16i8_i64(<16 x i8> %x) {
 ; CHECK-NEXT:    and v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    fmov x8, d0
 ; CHECK-NEXT:    and x8, x8, x8, lsr #32
-; CHECK-NEXT:    lsr x9, x8, #16
-; CHECK-NEXT:    and w8, w8, w9
-; CHECK-NEXT:    and w8, w8, w8, lsr #8
-; CHECK-NEXT:    and x0, x8, #0xff
+; CHECK-NEXT:    and x8, x8, x8, lsr #16
+; CHECK-NEXT:    and x0, x8, x8, lsr #8
 ; CHECK-NEXT:    ret
 entry:
   %y = zext <16 x i8> %x to <16 x i64>
@@ -289,8 +285,7 @@ define i64 @and_zext_v4i16_i64(<4 x i16> %x) {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    fmov x8, d0
 ; CHECK-NEXT:    and x8, x8, x8, lsr #32
-; CHECK-NEXT:    lsr x9, x8, #16
-; CHECK-NEXT:    and w0, w8, w9
+; CHECK-NEXT:    and x0, x8, x8, lsr #16
 ; CHECK-NEXT:    ret
 entry:
   %y = zext <4 x i16> %x to <4 x i64>
@@ -322,8 +317,7 @@ define i64 @and_zext_v8i16_i64(<8 x i16> %x) {
 ; CHECK-NEXT:    and v0.8b, v0.8b, v1.8b
 ; CHECK-NEXT:    fmov x8, d0
 ; CHECK-NEXT:    and x8, x8, x8, lsr #32
-; CHECK-NEXT:    lsr x9, x8, #16
-; CHECK-NEXT:    and w0, w8, w9
+; CHECK-NEXT:    and x0, x8, x8, lsr #16
 ; CHECK-NEXT:    ret
 entry:
   %y = zext <8 x i16> %x to <8 x i64>

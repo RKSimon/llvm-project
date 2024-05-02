@@ -6,26 +6,27 @@ define void @foo_st2_v16i8(<16 x i1> %mask, <16 x i8> %val1, <16 x i8> %val2, pt
 ; CHECK-LABEL: foo_st2_v16i8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    zip2 v3.16b, v0.16b, v0.16b
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v0.16b
+; CHECK-NEXT:    zip1 v4.16b, v0.16b, v0.16b
 ; CHECK-NEXT:    adrp x8, .LCPI0_0
-; CHECK-NEXT:    ldr q4, [x8, :lo12:.LCPI0_0]
-; CHECK-NEXT:    shl v3.16b, v3.16b, #7
-; CHECK-NEXT:    shl v0.16b, v0.16b, #7
-; CHECK-NEXT:    cmlt v3.16b, v3.16b, #0
-; CHECK-NEXT:    cmlt v0.16b, v0.16b, #0
-; CHECK-NEXT:    and v3.16b, v3.16b, v4.16b
-; CHECK-NEXT:    and v0.16b, v0.16b, v4.16b
-; CHECK-NEXT:    ext v4.16b, v3.16b, v3.16b, #8
-; CHECK-NEXT:    ext v5.16b, v0.16b, v0.16b, #8
-; CHECK-NEXT:    zip1 v3.16b, v3.16b, v4.16b
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v5.16b
-; CHECK-NEXT:    addv h3, v3.8h
-; CHECK-NEXT:    addv h0, v0.8h
-; CHECK-NEXT:    fmov w9, s3
-; CHECK-NEXT:    fmov w8, s0
+; CHECK-NEXT:    ldr q5, [x8, :lo12:.LCPI0_0]
+; CHECK-NEXT:    umov w9, v0.b[0]
 ; CHECK-NEXT:    zip1 v0.16b, v1.16b, v2.16b
-; CHECK-NEXT:    bfi w8, w9, #16, #16
-; CHECK-NEXT:    tbnz w8, #0, .LBB0_33
+; CHECK-NEXT:    shl v3.16b, v3.16b, #7
+; CHECK-NEXT:    shl v4.16b, v4.16b, #7
+; CHECK-NEXT:    cmlt v3.16b, v3.16b, #0
+; CHECK-NEXT:    cmlt v4.16b, v4.16b, #0
+; CHECK-NEXT:    and v3.16b, v3.16b, v5.16b
+; CHECK-NEXT:    and v4.16b, v4.16b, v5.16b
+; CHECK-NEXT:    ext v5.16b, v3.16b, v3.16b, #8
+; CHECK-NEXT:    ext v6.16b, v4.16b, v4.16b, #8
+; CHECK-NEXT:    zip1 v3.16b, v3.16b, v5.16b
+; CHECK-NEXT:    zip1 v4.16b, v4.16b, v6.16b
+; CHECK-NEXT:    addv h3, v3.8h
+; CHECK-NEXT:    addv h4, v4.8h
+; CHECK-NEXT:    fmov w10, s3
+; CHECK-NEXT:    fmov w8, s4
+; CHECK-NEXT:    bfi w8, w10, #16, #16
+; CHECK-NEXT:    tbnz w9, #0, .LBB0_33
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB0_34
 ; CHECK-NEXT:  .LBB0_2: // %else2
@@ -228,18 +229,19 @@ define void @foo_st2_v8i16(<8 x i1> %mask, <8 x i16> %val1, <8 x i16> %val2, ptr
 ; CHECK-LABEL: foo_st2_v8i16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    zip1 v3.16b, v0.16b, v0.16b
 ; CHECK-NEXT:    adrp x8, .LCPI1_0
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v0.16b
-; CHECK-NEXT:    ldr q3, [x8, :lo12:.LCPI1_0]
-; CHECK-NEXT:    shl v0.16b, v0.16b, #7
-; CHECK-NEXT:    cmlt v0.16b, v0.16b, #0
-; CHECK-NEXT:    and v0.16b, v0.16b, v3.16b
-; CHECK-NEXT:    ext v3.16b, v0.16b, v0.16b, #8
-; CHECK-NEXT:    zip1 v0.16b, v0.16b, v3.16b
-; CHECK-NEXT:    addv h3, v0.8h
+; CHECK-NEXT:    umov w9, v0.b[0]
+; CHECK-NEXT:    ldr q4, [x8, :lo12:.LCPI1_0]
 ; CHECK-NEXT:    zip1 v0.8h, v1.8h, v2.8h
+; CHECK-NEXT:    shl v3.16b, v3.16b, #7
+; CHECK-NEXT:    cmlt v3.16b, v3.16b, #0
+; CHECK-NEXT:    and v3.16b, v3.16b, v4.16b
+; CHECK-NEXT:    ext v4.16b, v3.16b, v3.16b, #8
+; CHECK-NEXT:    zip1 v3.16b, v3.16b, v4.16b
+; CHECK-NEXT:    addv h3, v3.8h
 ; CHECK-NEXT:    fmov w8, s3
-; CHECK-NEXT:    tbnz w8, #0, .LBB1_17
+; CHECK-NEXT:    tbnz w9, #0, .LBB1_17
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB1_18
 ; CHECK-NEXT:  .LBB1_2: // %else2
@@ -345,17 +347,19 @@ define void @foo_st2_v8i16(<8 x i1> %mask, <8 x i16> %val1, <8 x i16> %val2, ptr
 define void @foo_st2_v4i32(<4 x i1> %mask, <4 x i32> %val1, <4 x i32> %val2, ptr %p) {
 ; CHECK-LABEL: foo_st2_v4i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    uzp1 v0.8b, v0.8b, v0.8b
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    uzp1 v3.8b, v0.8b, v0.8b
 ; CHECK-NEXT:    adrp x8, .LCPI2_0
-; CHECK-NEXT:    ldr d3, [x8, :lo12:.LCPI2_0]
-; CHECK-NEXT:    zip1 v0.8b, v0.8b, v0.8b
-; CHECK-NEXT:    shl v0.8b, v0.8b, #7
-; CHECK-NEXT:    cmlt v0.8b, v0.8b, #0
-; CHECK-NEXT:    and v0.8b, v0.8b, v3.8b
-; CHECK-NEXT:    addv b3, v0.8b
+; CHECK-NEXT:    umov w9, v0.h[0]
+; CHECK-NEXT:    ldr d4, [x8, :lo12:.LCPI2_0]
 ; CHECK-NEXT:    zip1 v0.4s, v1.4s, v2.4s
+; CHECK-NEXT:    zip1 v3.8b, v3.8b, v3.8b
+; CHECK-NEXT:    shl v3.8b, v3.8b, #7
+; CHECK-NEXT:    cmlt v3.8b, v3.8b, #0
+; CHECK-NEXT:    and v3.8b, v3.8b, v4.8b
+; CHECK-NEXT:    addv b3, v3.8b
 ; CHECK-NEXT:    fmov w8, s3
-; CHECK-NEXT:    tbnz w8, #0, .LBB2_9
+; CHECK-NEXT:    tbnz w9, #0, .LBB2_9
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB2_10
 ; CHECK-NEXT:  .LBB2_2: // %else2
@@ -413,17 +417,19 @@ define void @foo_st2_v4i32(<4 x i1> %mask, <4 x i32> %val1, <4 x i32> %val2, ptr
 define void @foo_st2_v2i64(<2 x i1> %mask, <2 x i64> %val1, <2 x i64> %val2, ptr %p) {
 ; CHECK-LABEL: foo_st2_v2i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    uzp1 v0.4h, v0.4h, v0.4h
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    uzp1 v3.4h, v0.4h, v0.4h
 ; CHECK-NEXT:    adrp x8, .LCPI3_0
-; CHECK-NEXT:    ldr d3, [x8, :lo12:.LCPI3_0]
-; CHECK-NEXT:    zip1 v0.4h, v0.4h, v0.4h
-; CHECK-NEXT:    shl v0.4h, v0.4h, #15
-; CHECK-NEXT:    cmlt v0.4h, v0.4h, #0
-; CHECK-NEXT:    and v0.8b, v0.8b, v3.8b
-; CHECK-NEXT:    addv h3, v0.4h
-; CHECK-NEXT:    zip1 v0.2d, v1.2d, v2.2d
-; CHECK-NEXT:    fmov w8, s3
-; CHECK-NEXT:    tbnz w8, #0, .LBB3_5
+; CHECK-NEXT:    fmov w9, s0
+; CHECK-NEXT:    ldr d4, [x8, :lo12:.LCPI3_0]
+; CHECK-NEXT:    zip1 v3.4h, v3.4h, v3.4h
+; CHECK-NEXT:    shl v3.4h, v3.4h, #15
+; CHECK-NEXT:    cmlt v3.4h, v3.4h, #0
+; CHECK-NEXT:    and v3.8b, v3.8b, v4.8b
+; CHECK-NEXT:    addv h4, v3.4h
+; CHECK-NEXT:    zip1 v3.2d, v1.2d, v2.2d
+; CHECK-NEXT:    fmov w8, s4
+; CHECK-NEXT:    tbnz w9, #0, .LBB3_5
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB3_6
 ; CHECK-NEXT:  .LBB3_2: // %else2
@@ -434,10 +440,10 @@ define void @foo_st2_v2i64(<2 x i1> %mask, <2 x i64> %val1, <2 x i64> %val2, ptr
 ; CHECK-NEXT:  .LBB3_4: // %else6
 ; CHECK-NEXT:    ret
 ; CHECK-NEXT:  .LBB3_5: // %cond.store
-; CHECK-NEXT:    str d0, [x0]
+; CHECK-NEXT:    str d3, [x0]
 ; CHECK-NEXT:    tbz w8, #1, .LBB3_2
 ; CHECK-NEXT:  .LBB3_6: // %cond.store1
-; CHECK-NEXT:    mov d0, v0.d[1]
+; CHECK-NEXT:    mov d0, v3.d[1]
 ; CHECK-NEXT:    str d0, [x0, #8]
 ; CHECK-NEXT:    zip2 v0.2d, v1.2d, v2.2d
 ; CHECK-NEXT:    tbz w8, #2, .LBB3_3

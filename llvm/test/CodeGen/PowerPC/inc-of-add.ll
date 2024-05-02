@@ -263,8 +263,9 @@ define <16 x i8> @vector_i128_i8(<16 x i8> %x, <16 x i8> %y) nounwind {
 ;
 ; PPC64LE-LABEL: vector_i128_i8:
 ; PPC64LE:       # %bb.0:
-; PPC64LE-NEXT:    xxlnor 34, 34, 34
-; PPC64LE-NEXT:    vsububm 2, 3, 2
+; PPC64LE-NEXT:    vaddubm 2, 2, 3
+; PPC64LE-NEXT:    xxleqv 36, 36, 36
+; PPC64LE-NEXT:    vsububm 2, 2, 4
 ; PPC64LE-NEXT:    blr
   %t0 = add <16 x i8> %x, <i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1>
   %t1 = add <16 x i8> %y, %t0
@@ -363,8 +364,9 @@ define <8 x i16> @vector_i128_i16(<8 x i16> %x, <8 x i16> %y) nounwind {
 ;
 ; PPC64LE-LABEL: vector_i128_i16:
 ; PPC64LE:       # %bb.0:
-; PPC64LE-NEXT:    xxlnor 34, 34, 34
-; PPC64LE-NEXT:    vsubuhm 2, 3, 2
+; PPC64LE-NEXT:    vadduhm 2, 2, 3
+; PPC64LE-NEXT:    xxleqv 36, 36, 36
+; PPC64LE-NEXT:    vsubuhm 2, 2, 4
 ; PPC64LE-NEXT:    blr
   %t0 = add <8 x i16> %x, <i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1>
   %t1 = add <8 x i16> %y, %t0
@@ -398,8 +400,9 @@ define <4 x i32> @vector_i128_i32(<4 x i32> %x, <4 x i32> %y) nounwind {
 ;
 ; PPC64LE-LABEL: vector_i128_i32:
 ; PPC64LE:       # %bb.0:
-; PPC64LE-NEXT:    xxlnor 34, 34, 34
-; PPC64LE-NEXT:    vsubuwm 2, 3, 2
+; PPC64LE-NEXT:    vadduwm 2, 2, 3
+; PPC64LE-NEXT:    xxleqv 36, 36, 36
+; PPC64LE-NEXT:    vsubuwm 2, 2, 4
 ; PPC64LE-NEXT:    blr
   %t0 = add <4 x i32> %x, <i32 1, i32 1, i32 1, i32 1>
   %t1 = add <4 x i32> %y, %t0
@@ -429,8 +432,9 @@ define <2 x i64> @vector_i128_i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ;
 ; PPC64LE-LABEL: vector_i128_i64:
 ; PPC64LE:       # %bb.0:
-; PPC64LE-NEXT:    xxlnor 34, 34, 34
-; PPC64LE-NEXT:    vsubudm 2, 3, 2
+; PPC64LE-NEXT:    vaddudm 2, 2, 3
+; PPC64LE-NEXT:    xxleqv 36, 36, 36
+; PPC64LE-NEXT:    vsubudm 2, 2, 4
 ; PPC64LE-NEXT:    blr
   %t0 = add <2 x i64> %x, <i64 1, i64 1>
   %t1 = add <2 x i64> %y, %t0

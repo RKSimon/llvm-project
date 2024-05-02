@@ -18,13 +18,14 @@ define <4 x i8> @shuffle_ext_byone_v4i8(<4 x i8> %op1, <4 x i8> %op2) {
 ; NONEON-NOSVE:       // %bb.0:
 ; NONEON-NOSVE-NEXT:    str d0, [sp, #-16]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 16
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #2]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #14]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #4]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #12]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #6]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #10]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #8]
-; NONEON-NOSVE-NEXT:    ldur w8, [sp, #2]
-; NONEON-NOSVE-NEXT:    ror w8, w8, #16
-; NONEON-NOSVE-NEXT:    str w8, [sp, #12]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #8]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #16
 ; NONEON-NOSVE-NEXT:    ret
@@ -106,23 +107,13 @@ define void @shuffle_ext_byone_v32i8(ptr %a, ptr %b) {
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v32i8:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #14]
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #31]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #12]
-; NONEON-NOSVE-NEXT:    sturh w8, [sp, #29]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
-; NONEON-NOSVE-NEXT:    stur w8, [sp, #25]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp]
-; NONEON-NOSVE-NEXT:    stur x8, [sp, #17]
-; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
-; NONEON-NOSVE-NEXT:    strb w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #79]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
 ; NONEON-NOSVE-NEXT:    sturh w8, [sp, #77]
@@ -132,8 +123,19 @@ define void @shuffle_ext_byone_v32i8(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    stur x8, [sp, #65]
 ; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #47]
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #14]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #31]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #12]
+; NONEON-NOSVE-NEXT:    sturh w8, [sp, #29]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
+; NONEON-NOSVE-NEXT:    stur w8, [sp, #25]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp]
+; NONEON-NOSVE-NEXT:    stur x8, [sp, #17]
+; NONEON-NOSVE-NEXT:    ldrb w8, [sp, #63]
+; NONEON-NOSVE-NEXT:    strb w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <32 x i8>, ptr %a
@@ -235,21 +237,13 @@ define void @shuffle_ext_byone_v16i16(ptr %a, ptr %b) {
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v16i16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #12]
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #30]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
-; NONEON-NOSVE-NEXT:    stur w8, [sp, #26]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp]
-; NONEON-NOSVE-NEXT:    stur x8, [sp, #18]
-; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
-; NONEON-NOSVE-NEXT:    strh w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #60]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #78]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
 ; NONEON-NOSVE-NEXT:    stur w8, [sp, #74]
@@ -257,8 +251,17 @@ define void @shuffle_ext_byone_v16i16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    stur x8, [sp, #66]
 ; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #46]
 ; NONEON-NOSVE-NEXT:    strh w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #12]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
+; NONEON-NOSVE-NEXT:    stur w8, [sp, #26]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp]
+; NONEON-NOSVE-NEXT:    stur x8, [sp, #18]
+; NONEON-NOSVE-NEXT:    ldrh w8, [sp, #62]
+; NONEON-NOSVE-NEXT:    strh w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x i16>, ptr %a
@@ -332,25 +335,27 @@ define void @shuffle_ext_byone_v8i32(ptr %a, ptr %b) {
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v8i32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
+; NONEON-NOSVE-NEXT:    str w8, [sp, #76]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
+; NONEON-NOSVE-NEXT:    stur x8, [sp, #68]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #44]
+; NONEON-NOSVE-NEXT:    str w8, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
 ; NONEON-NOSVE-NEXT:    str w8, [sp, #28]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp]
 ; NONEON-NOSVE-NEXT:    stur x8, [sp, #20]
-; NONEON-NOSVE-NEXT:    ldp w8, w9, [sp, #56]
-; NONEON-NOSVE-NEXT:    str w8, [sp, #76]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
-; NONEON-NOSVE-NEXT:    str w9, [sp, #16]
-; NONEON-NOSVE-NEXT:    stur x8, [sp, #68]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #44]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
-; NONEON-NOSVE-NEXT:    str w8, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #60]
+; NONEON-NOSVE-NEXT:    str w8, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x i32>, ptr %a
@@ -396,19 +401,20 @@ define void @shuffle_ext_byone_v4i64(ptr %a, ptr %b) {
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v4i64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp x8, x9, [sp, #40]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
+; NONEON-NOSVE-NEXT:    stp x8, x9, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr x9, [sp]
-; NONEON-NOSVE-NEXT:    ldp x11, x10, [sp, #48]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp, #40]
-; NONEON-NOSVE-NEXT:    stp x10, x9, [sp, #16]
-; NONEON-NOSVE-NEXT:    stp x8, x11, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp, #56]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp x8, x9, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x i64>, ptr %a
@@ -475,41 +481,42 @@ define <8 x half> @shuffle_ext_byone_v8f16(<8 x half> %op1, <8 x half> %op2) {
 define void @shuffle_ext_byone_v16f16(ptr %a, ptr %b) {
 ; CHECK-LABEL: shuffle_ext_byone_v16f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q1, q3, [x1]
-; CHECK-NEXT:    ldr q0, [x0, #16]
-; CHECK-NEXT:    mov z0.h, z0.h[7]
-; CHECK-NEXT:    mov z2.h, z1.h[7]
-; CHECK-NEXT:    insr z1.h, h0
+; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldr q1, [x0, #16]
+; CHECK-NEXT:    mov z1.h, z1.h[7]
+; CHECK-NEXT:    mov z2.h, z0.h[7]
+; CHECK-NEXT:    insr z0.h, h1
 ; CHECK-NEXT:    insr z3.h, h2
-; CHECK-NEXT:    stp q1, q3, [x0]
+; CHECK-NEXT:    stp q0, q3, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v16f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #12]
-; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
-; NONEON-NOSVE-NEXT:    str h0, [sp, #30]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
-; NONEON-NOSVE-NEXT:    stur w8, [sp, #26]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp]
-; NONEON-NOSVE-NEXT:    str h0, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
-; NONEON-NOSVE-NEXT:    stur x8, [sp, #18]
 ; NONEON-NOSVE-NEXT:    ldr w8, [sp, #56]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #78]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #46]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
 ; NONEON-NOSVE-NEXT:    stur w8, [sp, #74]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #64]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #12]
 ; NONEON-NOSVE-NEXT:    stur x8, [sp, #66]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr w8, [sp, #8]
+; NONEON-NOSVE-NEXT:    str h0, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    stur w8, [sp, #26]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp]
+; NONEON-NOSVE-NEXT:    str h0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stur x8, [sp, #18]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
@@ -570,36 +577,38 @@ define <4 x float> @shuffle_ext_byone_v4f32(<4 x float> %op1, <4 x float> %op2) 
 define void @shuffle_ext_byone_v8f32(ptr %a, ptr %b) {
 ; CHECK-LABEL: shuffle_ext_byone_v8f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q1, q3, [x1]
-; CHECK-NEXT:    ldr q0, [x0, #16]
-; CHECK-NEXT:    mov z0.s, z0.s[3]
-; CHECK-NEXT:    mov z2.s, z1.s[3]
-; CHECK-NEXT:    insr z1.s, s0
+; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldr q1, [x0, #16]
+; CHECK-NEXT:    mov z1.s, z1.s[3]
+; CHECK-NEXT:    mov z2.s, z0.s[3]
+; CHECK-NEXT:    insr z0.s, s1
 ; CHECK-NEXT:    insr z3.s, s2
-; CHECK-NEXT:    stp q1, q3, [x0]
+; CHECK-NEXT:    stp q0, q3, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v8f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr x8, [sp]
-; NONEON-NOSVE-NEXT:    str s0, [sp, #28]
-; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #56]
-; NONEON-NOSVE-NEXT:    stur x8, [sp, #20]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #48]
 ; NONEON-NOSVE-NEXT:    str s0, [sp, #76]
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #44]
-; NONEON-NOSVE-NEXT:    str s1, [sp, #16]
 ; NONEON-NOSVE-NEXT:    stur x8, [sp, #68]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr x8, [sp]
 ; NONEON-NOSVE-NEXT:    str s0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #8]
+; NONEON-NOSVE-NEXT:    stur x8, [sp, #20]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    str s0, [sp, #28]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
+; NONEON-NOSVE-NEXT:    str s0, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
@@ -633,31 +642,31 @@ define <2 x double> @shuffle_ext_byone_v2f64(<2 x double> %op1, <2 x double> %op
 define void @shuffle_ext_byone_v4f64(ptr %a, ptr %b) {
 ; CHECK-LABEL: shuffle_ext_byone_v4f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q1, q3, [x1]
-; CHECK-NEXT:    ldr q0, [x0, #16]
-; CHECK-NEXT:    mov z0.d, z0.d[1]
-; CHECK-NEXT:    mov z2.d, z1.d[1]
-; CHECK-NEXT:    insr z1.d, d0
+; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldr q1, [x0, #16]
+; CHECK-NEXT:    mov z1.d, z1.d[1]
+; CHECK-NEXT:    mov z2.d, z0.d[1]
+; CHECK-NEXT:    insr z0.d, d1
 ; CHECK-NEXT:    insr z3.d, d2
-; CHECK-NEXT:    stp q1, q3, [x0]
+; CHECK-NEXT:    stp q0, q3, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_v4f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldr q2, [x0, #16]
-; NONEON-NOSVE-NEXT:    str q0, [sp, #-80]!
+; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    stp q2, q1, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp d0, d1, [sp, #40]
+; NONEON-NOSVE-NEXT:    str q2, [sp]
+; NONEON-NOSVE-NEXT:    stp d0, d1, [sp, #64]
 ; NONEON-NOSVE-NEXT:    ldr d1, [sp]
-; NONEON-NOSVE-NEXT:    ldp d0, d2, [sp, #48]
-; NONEON-NOSVE-NEXT:    str d0, [sp, #72]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #40]
-; NONEON-NOSVE-NEXT:    stp d2, d1, [sp, #16]
-; NONEON-NOSVE-NEXT:    str d0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
+; NONEON-NOSVE-NEXT:    stp d0, d1, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
@@ -670,31 +679,31 @@ define void @shuffle_ext_byone_v4f64(ptr %a, ptr %b) {
 define void @shuffle_ext_byone_reverse(ptr %a, ptr %b) {
 ; CHECK-LABEL: shuffle_ext_byone_reverse:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q1, q3, [x0]
-; CHECK-NEXT:    ldr q0, [x1, #16]
-; CHECK-NEXT:    mov z0.d, z0.d[1]
-; CHECK-NEXT:    mov z2.d, z1.d[1]
-; CHECK-NEXT:    insr z1.d, d0
+; CHECK-NEXT:    ldp q0, q3, [x0]
+; CHECK-NEXT:    ldr q1, [x1, #16]
+; CHECK-NEXT:    mov z1.d, z1.d[1]
+; CHECK-NEXT:    mov z2.d, z0.d[1]
+; CHECK-NEXT:    insr z0.d, d1
 ; CHECK-NEXT:    insr z3.d, d2
-; CHECK-NEXT:    stp q1, q3, [x0]
+; CHECK-NEXT:    stp q0, q3, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_byone_reverse:
 ; NONEON-NOSVE:       // %bb.0:
 ; NONEON-NOSVE-NEXT:    sub sp, sp, #80
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 80
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
-; NONEON-NOSVE-NEXT:    ldr q2, [x1, #16]
-; NONEON-NOSVE-NEXT:    str q2, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldp q0, q2, [x0]
+; NONEON-NOSVE-NEXT:    ldr q1, [x1, #16]
+; NONEON-NOSVE-NEXT:    str q1, [sp]
+; NONEON-NOSVE-NEXT:    stp q0, q2, [sp, #32]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #8]
+; NONEON-NOSVE-NEXT:    ldr d1, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp d0, d1, [sp, #16]
 ; NONEON-NOSVE-NEXT:    ldp d0, d1, [sp, #40]
 ; NONEON-NOSVE-NEXT:    stp d0, d1, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr d1, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp d0, d1, [sp, #16]
-; NONEON-NOSVE-NEXT:    ldr q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldr q0, [sp, #16]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr q1, [sp, #16]
+; NONEON-NOSVE-NEXT:    ldr q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #80
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
@@ -707,16 +716,16 @@ define void @shuffle_ext_byone_reverse(ptr %a, ptr %b) {
 define void @shuffle_ext_invalid(ptr %a, ptr %b) {
 ; CHECK-LABEL: shuffle_ext_invalid:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldr q0, [x0, #16]
-; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    ldr q0, [x1]
+; CHECK-NEXT:    ldr q1, [x0, #16]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: shuffle_ext_invalid:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    ldr q0, [x0, #16]
-; NONEON-NOSVE-NEXT:    ldr q1, [x1]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr q0, [x1]
+; NONEON-NOSVE-NEXT:    ldr q1, [x0, #16]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
   %op2 = load <4 x double>, ptr %b

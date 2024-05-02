@@ -167,7 +167,7 @@ define amdgpu_kernel void @basic_smax_smin_sgpr(ptr addrspace(1) %out, i32 inreg
 ; SDAG-VI-NEXT:    v_med3_i32 v1, s2, 0, v0
 ; SDAG-VI-NEXT:    v_med3_i32 v0, s3, 0, v0
 ; SDAG-VI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
-; SDAG-VI-NEXT:    v_or_b32_e32 v2, v1, v0
+; SDAG-VI-NEXT:    v_or_b32_sdwa v2, v1, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_0 src1_sel:DWORD
 ; SDAG-VI-NEXT:    v_mov_b32_e32 v0, s0
 ; SDAG-VI-NEXT:    v_mov_b32_e32 v1, s1
 ; SDAG-VI-NEXT:    flat_store_dword v[0:1], v2
@@ -935,26 +935,30 @@ define i16 @basic_smax_smin_bit_or(i16 %src0, i16 %src1) {
 ; SDAG-GFX9-NEXT:    v_med3_i16 v1, v1, 0, v2
 ; SDAG-GFX9-NEXT:    v_med3_i16 v0, v0, 0, v2
 ; SDAG-GFX9-NEXT:    v_lshlrev_b16_e32 v1, 8, v1
-; SDAG-GFX9-NEXT:    v_or_b32_e32 v0, v0, v1
+; SDAG-GFX9-NEXT:    v_or_b32_sdwa v0, v0, v1 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:BYTE_0 src1_sel:DWORD
 ; SDAG-GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; SDAG-GFX11-TRUE16-LABEL: basic_smax_smin_bit_or:
 ; SDAG-GFX11-TRUE16:       ; %bb.0:
 ; SDAG-GFX11-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SDAG-GFX11-TRUE16-NEXT:    v_med3_i16 v0.h, v1.l, 0, 0xff
 ; SDAG-GFX11-TRUE16-NEXT:    v_med3_i16 v0.l, v0.l, 0, 0xff
-; SDAG-GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; SDAG-GFX11-TRUE16-NEXT:    v_med3_i16 v0.h, v1.l, 0, 0xff
+; SDAG-GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; SDAG-GFX11-TRUE16-NEXT:    v_and_b16 v0.l, 0xff, v0.l
 ; SDAG-GFX11-TRUE16-NEXT:    v_lshlrev_b16 v0.h, 8, v0.h
+; SDAG-GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; SDAG-GFX11-TRUE16-NEXT:    v_or_b16 v0.l, v0.l, v0.h
 ; SDAG-GFX11-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; SDAG-GFX11-FAKE16-LABEL: basic_smax_smin_bit_or:
 ; SDAG-GFX11-FAKE16:       ; %bb.0:
 ; SDAG-GFX11-FAKE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SDAG-GFX11-FAKE16-NEXT:    v_med3_i16 v1, v1, 0, 0xff
 ; SDAG-GFX11-FAKE16-NEXT:    v_med3_i16 v0, v0, 0, 0xff
-; SDAG-GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; SDAG-GFX11-FAKE16-NEXT:    v_med3_i16 v1, v1, 0, 0xff
+; SDAG-GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; SDAG-GFX11-FAKE16-NEXT:    v_and_b32_e32 v0, 0xff, v0
 ; SDAG-GFX11-FAKE16-NEXT:    v_lshlrev_b16 v1, 8, v1
+; SDAG-GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; SDAG-GFX11-FAKE16-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SDAG-GFX11-FAKE16-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -965,10 +969,12 @@ define i16 @basic_smax_smin_bit_or(i16 %src0, i16 %src1) {
 ; SDAG-GFX12-TRUE16-NEXT:    s_wait_samplecnt 0x0
 ; SDAG-GFX12-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; SDAG-GFX12-TRUE16-NEXT:    s_wait_kmcnt 0x0
-; SDAG-GFX12-TRUE16-NEXT:    v_med3_i16 v0.h, v1.l, 0, 0xff
 ; SDAG-GFX12-TRUE16-NEXT:    v_med3_i16 v0.l, v0.l, 0, 0xff
-; SDAG-GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; SDAG-GFX12-TRUE16-NEXT:    v_med3_i16 v0.h, v1.l, 0, 0xff
+; SDAG-GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; SDAG-GFX12-TRUE16-NEXT:    v_and_b16 v0.l, 0xff, v0.l
 ; SDAG-GFX12-TRUE16-NEXT:    v_lshlrev_b16 v0.h, 8, v0.h
+; SDAG-GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; SDAG-GFX12-TRUE16-NEXT:    v_or_b16 v0.l, v0.l, v0.h
 ; SDAG-GFX12-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -979,10 +985,12 @@ define i16 @basic_smax_smin_bit_or(i16 %src0, i16 %src1) {
 ; SDAG-GFX12-FAKE16-NEXT:    s_wait_samplecnt 0x0
 ; SDAG-GFX12-FAKE16-NEXT:    s_wait_bvhcnt 0x0
 ; SDAG-GFX12-FAKE16-NEXT:    s_wait_kmcnt 0x0
-; SDAG-GFX12-FAKE16-NEXT:    v_med3_i16 v1, v1, 0, 0xff
 ; SDAG-GFX12-FAKE16-NEXT:    v_med3_i16 v0, v0, 0, 0xff
-; SDAG-GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; SDAG-GFX12-FAKE16-NEXT:    v_med3_i16 v1, v1, 0, 0xff
+; SDAG-GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; SDAG-GFX12-FAKE16-NEXT:    v_and_b32_e32 v0, 0xff, v0
 ; SDAG-GFX12-FAKE16-NEXT:    v_lshlrev_b16 v1, 8, v1
+; SDAG-GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; SDAG-GFX12-FAKE16-NEXT:    v_or_b32_e32 v0, v0, v1
 ; SDAG-GFX12-FAKE16-NEXT:    s_setpc_b64 s[30:31]
 ;

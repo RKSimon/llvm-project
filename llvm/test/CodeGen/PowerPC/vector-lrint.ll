@@ -471,49 +471,49 @@ define <16 x i64> @lrint_v16i64_v16f16(<16 x half> %x) nounwind {
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 120(r1)
+; BE-NEXT:    std r3, 168(r1)
 ; BE-NEXT:    mr r3, r16
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 112(r1)
+; BE-NEXT:    std r3, 160(r1)
 ; BE-NEXT:    mr r3, r17
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 136(r1)
+; BE-NEXT:    std r3, 152(r1)
 ; BE-NEXT:    mr r3, r18
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 128(r1)
+; BE-NEXT:    std r3, 144(r1)
 ; BE-NEXT:    mr r3, r19
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 152(r1)
+; BE-NEXT:    std r3, 136(r1)
 ; BE-NEXT:    mr r3, r20
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 144(r1)
+; BE-NEXT:    std r3, 128(r1)
 ; BE-NEXT:    mr r3, r21
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 168(r1)
+; BE-NEXT:    std r3, 120(r1)
 ; BE-NEXT:    mr r3, r22
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 160(r1)
+; BE-NEXT:    std r3, 112(r1)
 ; BE-NEXT:    clrldi r3, r23, 48
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
@@ -562,7 +562,7 @@ define <16 x i64> @lrint_v16i64_v16f16(<16 x half> %x) nounwind {
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
 ; BE-NEXT:    std r3, 224(r1)
-; BE-NEXT:    addi r3, r1, 112
+; BE-NEXT:    addi r3, r1, 160
 ; BE-NEXT:    ld r30, 352(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r29, 344(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r28, 336(r1) # 8-byte Folded Reload
@@ -571,7 +571,7 @@ define <16 x i64> @lrint_v16i64_v16f16(<16 x half> %x) nounwind {
 ; BE-NEXT:    ld r25, 312(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r24, 304(r1) # 8-byte Folded Reload
 ; BE-NEXT:    lxvd2x v6, 0, r3
-; BE-NEXT:    addi r3, r1, 128
+; BE-NEXT:    addi r3, r1, 144
 ; BE-NEXT:    ld r23, 296(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r22, 288(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r21, 280(r1) # 8-byte Folded Reload
@@ -581,9 +581,9 @@ define <16 x i64> @lrint_v16i64_v16f16(<16 x half> %x) nounwind {
 ; BE-NEXT:    ld r17, 248(r1) # 8-byte Folded Reload
 ; BE-NEXT:    ld r16, 240(r1) # 8-byte Folded Reload
 ; BE-NEXT:    lxvd2x v7, 0, r3
-; BE-NEXT:    addi r3, r1, 144
+; BE-NEXT:    addi r3, r1, 128
 ; BE-NEXT:    lxvd2x v8, 0, r3
-; BE-NEXT:    addi r3, r1, 160
+; BE-NEXT:    addi r3, r1, 112
 ; BE-NEXT:    lxvd2x v9, 0, r3
 ; BE-NEXT:    addi r3, r1, 176
 ; BE-NEXT:    lxvd2x v2, 0, r3
@@ -933,145 +933,145 @@ define <32 x i64> @lrint_v32i64_v32f16(<32 x half> %x) nounwind {
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 232(r1)
+; BE-NEXT:    std r3, 408(r1)
 ; BE-NEXT:    mr r3, r23
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 224(r1)
+; BE-NEXT:    std r3, 400(r1)
 ; BE-NEXT:    mr r3, r25
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 248(r1)
+; BE-NEXT:    std r3, 392(r1)
 ; BE-NEXT:    mr r3, r26
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 240(r1)
+; BE-NEXT:    std r3, 384(r1)
 ; BE-NEXT:    mr r3, r27
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 264(r1)
+; BE-NEXT:    std r3, 376(r1)
 ; BE-NEXT:    mr r3, r28
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 256(r1)
+; BE-NEXT:    std r3, 368(r1)
 ; BE-NEXT:    mr r3, r29
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 280(r1)
+; BE-NEXT:    std r3, 360(r1)
 ; BE-NEXT:    mr r3, r31
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 272(r1)
+; BE-NEXT:    std r3, 352(r1)
 ; BE-NEXT:    mr r3, r14
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 296(r1)
+; BE-NEXT:    std r3, 344(r1)
 ; BE-NEXT:    mr r3, r15
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 288(r1)
+; BE-NEXT:    std r3, 336(r1)
 ; BE-NEXT:    ld r3, 112(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 312(r1)
+; BE-NEXT:    std r3, 328(r1)
 ; BE-NEXT:    ld r3, 120(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 304(r1)
+; BE-NEXT:    std r3, 320(r1)
 ; BE-NEXT:    ld r3, 128(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 328(r1)
+; BE-NEXT:    std r3, 312(r1)
 ; BE-NEXT:    ld r3, 136(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 320(r1)
+; BE-NEXT:    std r3, 304(r1)
 ; BE-NEXT:    ld r3, 144(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 344(r1)
+; BE-NEXT:    std r3, 296(r1)
 ; BE-NEXT:    ld r3, 152(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 336(r1)
+; BE-NEXT:    std r3, 288(r1)
 ; BE-NEXT:    ld r3, 160(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 360(r1)
+; BE-NEXT:    std r3, 280(r1)
 ; BE-NEXT:    ld r3, 168(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 352(r1)
+; BE-NEXT:    std r3, 272(r1)
 ; BE-NEXT:    ld r3, 176(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 376(r1)
+; BE-NEXT:    std r3, 264(r1)
 ; BE-NEXT:    ld r3, 184(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 368(r1)
+; BE-NEXT:    std r3, 256(r1)
 ; BE-NEXT:    ld r3, 192(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 392(r1)
+; BE-NEXT:    std r3, 248(r1)
 ; BE-NEXT:    ld r3, 200(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 384(r1)
+; BE-NEXT:    std r3, 240(r1)
 ; BE-NEXT:    ld r3, 208(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 408(r1)
+; BE-NEXT:    std r3, 232(r1)
 ; BE-NEXT:    ld r3, 216(r1) # 8-byte Folded Reload
 ; BE-NEXT:    bl __extendhfsf2
 ; BE-NEXT:    nop
 ; BE-NEXT:    bl lrintf
 ; BE-NEXT:    nop
-; BE-NEXT:    std r3, 400(r1)
+; BE-NEXT:    std r3, 224(r1)
 ; BE-NEXT:    addi r3, r1, 416
 ; BE-NEXT:    lxvd2x vs0, 0, r3
 ; BE-NEXT:    addi r3, r1, 432
@@ -1080,29 +1080,29 @@ define <32 x i64> @lrint_v32i64_v32f16(<32 x half> %x) nounwind {
 ; BE-NEXT:    lxvd2x vs2, 0, r3
 ; BE-NEXT:    addi r3, r1, 464
 ; BE-NEXT:    lxvd2x vs3, 0, r3
-; BE-NEXT:    addi r3, r1, 224
-; BE-NEXT:    lxvd2x vs4, 0, r3
-; BE-NEXT:    addi r3, r1, 240
-; BE-NEXT:    lxvd2x vs5, 0, r3
-; BE-NEXT:    addi r3, r1, 256
-; BE-NEXT:    lxvd2x vs6, 0, r3
-; BE-NEXT:    addi r3, r1, 272
-; BE-NEXT:    lxvd2x vs7, 0, r3
-; BE-NEXT:    addi r3, r1, 288
-; BE-NEXT:    lxvd2x vs8, 0, r3
-; BE-NEXT:    addi r3, r1, 304
-; BE-NEXT:    lxvd2x vs9, 0, r3
-; BE-NEXT:    addi r3, r1, 320
-; BE-NEXT:    lxvd2x vs10, 0, r3
-; BE-NEXT:    addi r3, r1, 336
-; BE-NEXT:    lxvd2x vs11, 0, r3
-; BE-NEXT:    addi r3, r1, 352
-; BE-NEXT:    lxvd2x vs12, 0, r3
-; BE-NEXT:    addi r3, r1, 368
-; BE-NEXT:    lxvd2x vs13, 0, r3
-; BE-NEXT:    addi r3, r1, 384
-; BE-NEXT:    lxvd2x v2, 0, r3
 ; BE-NEXT:    addi r3, r1, 400
+; BE-NEXT:    lxvd2x vs4, 0, r3
+; BE-NEXT:    addi r3, r1, 384
+; BE-NEXT:    lxvd2x vs5, 0, r3
+; BE-NEXT:    addi r3, r1, 368
+; BE-NEXT:    lxvd2x vs6, 0, r3
+; BE-NEXT:    addi r3, r1, 352
+; BE-NEXT:    lxvd2x vs7, 0, r3
+; BE-NEXT:    addi r3, r1, 336
+; BE-NEXT:    lxvd2x vs8, 0, r3
+; BE-NEXT:    addi r3, r1, 320
+; BE-NEXT:    lxvd2x vs9, 0, r3
+; BE-NEXT:    addi r3, r1, 304
+; BE-NEXT:    lxvd2x vs10, 0, r3
+; BE-NEXT:    addi r3, r1, 288
+; BE-NEXT:    lxvd2x vs11, 0, r3
+; BE-NEXT:    addi r3, r1, 272
+; BE-NEXT:    lxvd2x vs12, 0, r3
+; BE-NEXT:    addi r3, r1, 256
+; BE-NEXT:    lxvd2x vs13, 0, r3
+; BE-NEXT:    addi r3, r1, 240
+; BE-NEXT:    lxvd2x v2, 0, r3
+; BE-NEXT:    addi r3, r1, 224
 ; BE-NEXT:    lxvd2x v3, 0, r3
 ; BE-NEXT:    li r3, 240
 ; BE-NEXT:    stxvd2x v3, r30, r3

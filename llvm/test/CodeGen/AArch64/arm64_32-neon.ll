@@ -174,7 +174,8 @@ define {{%vec, %vec}, ptr} @test_neon_load_post_exact(ptr %addr) {
 define {%vec, ptr} @test_neon_ld1_post_lane_exact(ptr %addr, %vec %in) {
 ; CHECK-LABEL: test_neon_ld1_post_lane_exact:
 ; CHECK:       ; %bb.0:
-; CHECK-NEXT:    ld1.d { v0 }[0], [x0], #8
+; CHECK-NEXT:    ldr d1, [x0], #8
+; CHECK-NEXT:    mov.d v0[0], v1[0]
 ; CHECK-NEXT:    ret
   %loaded = load double, ptr %addr, align 8
   %newvec = insertelement %vec %in, double %loaded, i32 0

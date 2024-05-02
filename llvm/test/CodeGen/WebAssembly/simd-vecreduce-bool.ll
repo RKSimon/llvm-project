@@ -28,10 +28,12 @@ define i1 @test_any_v8i1(<8 x i1> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 15
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 15
-; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 15
+; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %ret = call i1 @llvm.vector.reduce.or.v8i1(<8 x i1> %x)
   ret i1 %ret
 }
@@ -42,10 +44,12 @@ define i1 @test_all_v8i1(<8 x i1> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 15
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 15
-; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i16x8.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 15
+; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 255
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %ret = call i1 @llvm.vector.reduce.and.v8i1(<8 x i1> %x)
   ret i1 %ret
 }
@@ -56,12 +60,11 @@ define i1 @test_none_v8i1(<8 x i1> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 15
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push6=, 15
-; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    i32.const $push4=, 1
-; CHECK-NEXT:    i32.xor $push5=, $pop3, $pop4
-; CHECK-NEXT:    return $pop5
+; CHECK-NEXT:    i32.const $push5=, 15
+; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop5
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.eqz $push4=, $pop3
+; CHECK-NEXT:    return $pop4
   %any = call i1 @llvm.vector.reduce.or.v8i1(<8 x i1> %x)
   %none = xor i1 %any, 1
   ret i1 %none
@@ -75,9 +78,9 @@ define i1 @test_not_all_v8i1(<8 x i1> %x) {
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
 ; CHECK-NEXT:    i32.const $push6=, 15
 ; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
-; CHECK-NEXT:    i16x8.all_true $push3=, $pop2
-; CHECK-NEXT:    i32.const $push4=, 1
-; CHECK-NEXT:    i32.xor $push5=, $pop3, $pop4
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 255
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
 ; CHECK-NEXT:    return $pop5
   %all = call i1 @llvm.vector.reduce.and.v8i1(<8 x i1> %x)
   %notall = xor i1 %all, 1
@@ -90,10 +93,12 @@ define i1 @test_any_v16i1(<16 x i1> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 7
 ; CHECK-NEXT:    i8x16.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 7
-; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 7
+; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i8x16.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %ret = call i1 @llvm.vector.reduce.or.v16i1(<16 x i1> %x)
   ret i1 %ret
 }
@@ -104,10 +109,12 @@ define i1 @test_all_v16i1(<16 x i1> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 7
 ; CHECK-NEXT:    i8x16.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 7
-; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i8x16.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 7
+; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i8x16.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 65535
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %ret = call i1 @llvm.vector.reduce.and.v16i1(<16 x i1> %x)
   ret i1 %ret
 }
@@ -122,10 +129,12 @@ define i1 @test_any_v16i8(<16 x i8> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 7
 ; CHECK-NEXT:    i8x16.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 7
-; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 7
+; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i8x16.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <16 x i8> %x to <16 x i1>
   %ret = call i1 @llvm.vector.reduce.or.v16i1(<16 x i1> %bits)
   ret i1 %ret
@@ -137,10 +146,12 @@ define i1 @test_all_v16i8(<16 x i8> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 7
 ; CHECK-NEXT:    i8x16.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 7
-; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i8x16.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 7
+; CHECK-NEXT:    i8x16.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i8x16.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 65535
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <16 x i8> %x to <16 x i1>
   %ret = call i1 @llvm.vector.reduce.and.v16i1(<16 x i1> %bits)
   ret i1 %ret
@@ -152,10 +163,12 @@ define i1 @test_any_v8i16(<8 x i16> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 15
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 15
-; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 15
+; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <8 x i16> %x to <8 x i1>
   %ret = call i1 @llvm.vector.reduce.or.v8i1(<8 x i1> %bits)
   ret i1 %ret
@@ -167,10 +180,12 @@ define i1 @test_all_v8i16(<8 x i16> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 15
 ; CHECK-NEXT:    i16x8.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 15
-; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i16x8.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 15
+; CHECK-NEXT:    i16x8.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i16x8.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 255
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <8 x i16> %x to <8 x i1>
   %ret = call i1 @llvm.vector.reduce.and.v8i1(<8 x i1> %bits)
   ret i1 %ret
@@ -182,10 +197,12 @@ define i1 @test_any_v4i32(<4 x i32> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 31
 ; CHECK-NEXT:    i32x4.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 31
-; CHECK-NEXT:    i32x4.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 31
+; CHECK-NEXT:    i32x4.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i32x4.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <4 x i32> %x to <4 x i1>
   %ret = call i1 @llvm.vector.reduce.or.v4i1(<4 x i1> %bits)
   ret i1 %ret
@@ -197,10 +214,12 @@ define i1 @test_all_v4i32(<4 x i32> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 31
 ; CHECK-NEXT:    i32x4.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 31
-; CHECK-NEXT:    i32x4.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i32x4.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 31
+; CHECK-NEXT:    i32x4.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i32x4.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 15
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <4 x i32> %x to <4 x i1>
   %ret = call i1 @llvm.vector.reduce.and.v4i1(<4 x i1> %bits)
   ret i1 %ret
@@ -212,10 +231,12 @@ define i1 @test_any_v2i64(<2 x i64> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 63
 ; CHECK-NEXT:    i64x2.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 63
-; CHECK-NEXT:    i64x2.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    v128.any_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 63
+; CHECK-NEXT:    i64x2.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i64x2.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 0
+; CHECK-NEXT:    i32.ne $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <2 x i64> %x to <2 x i1>
   %ret = call i1 @llvm.vector.reduce.or.v2i1(<2 x i1> %bits)
   ret i1 %ret
@@ -227,10 +248,12 @@ define i1 @test_all_v2i64(<2 x i64> %x) {
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    i32.const $push0=, 63
 ; CHECK-NEXT:    i64x2.shl $push1=, $0, $pop0
-; CHECK-NEXT:    i32.const $push4=, 63
-; CHECK-NEXT:    i64x2.shr_s $push2=, $pop1, $pop4
-; CHECK-NEXT:    i64x2.all_true $push3=, $pop2
-; CHECK-NEXT:    return $pop3
+; CHECK-NEXT:    i32.const $push6=, 63
+; CHECK-NEXT:    i64x2.shr_s $push2=, $pop1, $pop6
+; CHECK-NEXT:    i64x2.bitmask $push3=, $pop2
+; CHECK-NEXT:    i32.const $push4=, 3
+; CHECK-NEXT:    i32.eq $push5=, $pop3, $pop4
+; CHECK-NEXT:    return $pop5
   %bits = trunc <2 x i64> %x to <2 x i1>
   %ret = call i1 @llvm.vector.reduce.and.v2i1(<2 x i1> %bits)
   ret i1 %ret
@@ -279,10 +302,12 @@ define i1 @test_any_v8i8(<8 x i8> %x) {
 ; CHECK-NEXT:    i16x8.extend_low_i8x16_u $push0=, $0
 ; CHECK-NEXT:    i32.const $push1=, 15
 ; CHECK-NEXT:    i16x8.shl $push2=, $pop0, $pop1
-; CHECK-NEXT:    i32.const $push5=, 15
-; CHECK-NEXT:    i16x8.shr_s $push3=, $pop2, $pop5
-; CHECK-NEXT:    v128.any_true $push4=, $pop3
-; CHECK-NEXT:    return $pop4
+; CHECK-NEXT:    i32.const $push7=, 15
+; CHECK-NEXT:    i16x8.shr_s $push3=, $pop2, $pop7
+; CHECK-NEXT:    i16x8.bitmask $push4=, $pop3
+; CHECK-NEXT:    i32.const $push5=, 0
+; CHECK-NEXT:    i32.ne $push6=, $pop4, $pop5
+; CHECK-NEXT:    return $pop6
   %bits = trunc <8 x i8> %x to <8 x i1>
   %ret = call i1 @llvm.vector.reduce.or.v8i1(<8 x i1> %bits)
   ret i1 %ret
@@ -295,10 +320,12 @@ define i1 @test_all_v8i8(<8 x i8> %x) {
 ; CHECK-NEXT:    i16x8.extend_low_i8x16_u $push0=, $0
 ; CHECK-NEXT:    i32.const $push1=, 15
 ; CHECK-NEXT:    i16x8.shl $push2=, $pop0, $pop1
-; CHECK-NEXT:    i32.const $push5=, 15
-; CHECK-NEXT:    i16x8.shr_s $push3=, $pop2, $pop5
-; CHECK-NEXT:    i16x8.all_true $push4=, $pop3
-; CHECK-NEXT:    return $pop4
+; CHECK-NEXT:    i32.const $push7=, 15
+; CHECK-NEXT:    i16x8.shr_s $push3=, $pop2, $pop7
+; CHECK-NEXT:    i16x8.bitmask $push4=, $pop3
+; CHECK-NEXT:    i32.const $push5=, 255
+; CHECK-NEXT:    i32.eq $push6=, $pop4, $pop5
+; CHECK-NEXT:    return $pop6
   %bits = trunc <8 x i8> %x to <8 x i1>
   %ret = call i1 @llvm.vector.reduce.and.v8i1(<8 x i1> %bits)
   ret i1 %ret
@@ -1086,10 +1113,12 @@ define i1 @test_cmp_v16i8(<16 x i8> %x) {
 ; CHECK-LABEL: test_cmp_v16i8:
 ; CHECK:         .functype test_cmp_v16i8 (v128) -> (i32)
 ; CHECK-NEXT:  # %bb.0:
-; CHECK-NEXT:    i8x16.all_true $push0=, $0
-; CHECK-NEXT:    i32.const $push1=, 1
-; CHECK-NEXT:    i32.xor $push2=, $pop0, $pop1
-; CHECK-NEXT:    return $pop2
+; CHECK-NEXT:    v128.const $push0=, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+; CHECK-NEXT:    i8x16.eq $push1=, $0, $pop0
+; CHECK-NEXT:    i8x16.bitmask $push2=, $pop1
+; CHECK-NEXT:    i32.const $push3=, 0
+; CHECK-NEXT:    i32.ne $push4=, $pop2, $pop3
+; CHECK-NEXT:    return $pop4
   %zero = icmp eq <16 x i8> %x, zeroinitializer
   %ret = call i1 @llvm.vector.reduce.or.v16i1(<16 x i1> %zero)
   ret i1 %ret

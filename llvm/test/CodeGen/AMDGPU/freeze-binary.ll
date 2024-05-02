@@ -149,9 +149,9 @@ define <8 x float> @freeze_frem_vec(<8 x float> %input) nounwind {
 ; CHECK-NEXT:    v_rcp_f32_e32 v13, v11
 ; CHECK-NEXT:    v_rcp_f32_e32 v10, v8
 ; CHECK-NEXT:    v_div_scale_f32 v14, vcc_lo, v2, 0x40400000, v2
-; CHECK-NEXT:    v_trunc_f32_e32 v12, v0
+; CHECK-NEXT:    v_trunc_f32_e64 v12, -v0
 ; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_1)
-; CHECK-NEXT:    v_sub_f32_e32 v0, v0, v12
+; CHECK-NEXT:    v_add_f32_e32 v0, v12, v0
 ; CHECK-NEXT:    s_waitcnt_depctr depctr_va_vdst(0)
 ; CHECK-NEXT:    v_fma_f32 v17, -v11, v13, 1.0
 ; CHECK-NEXT:    v_fmac_f32_e32 v13, v17, v13
@@ -215,35 +215,36 @@ define <8 x float> @freeze_frem_vec(<8 x float> %input) nounwind {
 ; CHECK-NEXT:    v_div_fmas_f32 v9, v9, v18, v10
 ; CHECK-NEXT:    v_mul_f32_e32 v10, 0x3e800000, v0
 ; CHECK-NEXT:    v_fmac_f32_e32 v5, 0xc0400000, v8
-; CHECK-NEXT:    v_trunc_f32_e32 v8, v7
+; CHECK-NEXT:    v_trunc_f32_e64 v8, -v7
 ; CHECK-NEXT:    v_fmac_f32_e32 v11, v13, v24
-; CHECK-NEXT:    v_div_fixup_f32 v9, v9, 0x40400000, v1
 ; CHECK-NEXT:    v_mul_f32_e32 v13, 0.5, v2
+; CHECK-NEXT:    v_div_fixup_f32 v9, v9, 0x40400000, v1
 ; CHECK-NEXT:    s_mov_b32 vcc_lo, s2
-; CHECK-NEXT:    v_sub_f32_e32 v7, v7, v8
+; CHECK-NEXT:    v_add_f32_e32 v7, v8, v7
 ; CHECK-NEXT:    v_trunc_f32_e32 v8, v10
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; CHECK-NEXT:    v_trunc_f32_e32 v9, v9
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_3) | instid1(VALU_DEP_3)
-; CHECK-NEXT:    v_dual_fmac_f32 v0, -4.0, v8 :: v_dual_fmac_f32 v1, 0xc0400000, v9
+; CHECK-NEXT:    v_fmac_f32_e32 v0, -4.0, v8
 ; CHECK-NEXT:    v_mul_f32_e32 v8, 0.5, v5
 ; CHECK-NEXT:    v_fma_f32 v10, -v21, v11, v12
 ; CHECK-NEXT:    v_trunc_f32_e32 v12, v13
+; CHECK-NEXT:    v_fmac_f32_e32 v1, 0xc0400000, v9
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
 ; CHECK-NEXT:    v_trunc_f32_e32 v8, v8
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; CHECK-NEXT:    v_div_fmas_f32 v10, v10, v24, v11
-; CHECK-NEXT:    v_trunc_f32_e32 v11, v3
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_4)
 ; CHECK-NEXT:    v_fmac_f32_e32 v2, -2.0, v12
-; CHECK-NEXT:    v_trunc_f32_e32 v12, v4
+; CHECK-NEXT:    v_trunc_f32_e32 v11, v3
+; CHECK-NEXT:    v_trunc_f32_e64 v12, -v4
 ; CHECK-NEXT:    v_fmac_f32_e32 v5, -2.0, v8
 ; CHECK-NEXT:    v_div_fixup_f32 v9, v10, 0x40400000, v6
-; CHECK-NEXT:    v_sub_f32_e32 v3, v3, v11
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; CHECK-NEXT:    v_trunc_f32_e32 v9, v9
-; CHECK-NEXT:    v_fmac_f32_e32 v6, 0xc0400000, v9
 ; CHECK-NEXT:    v_mul_f32_e32 v10, 0x3e800000, v7
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; CHECK-NEXT:    v_dual_sub_f32 v3, v3, v11 :: v_dual_add_f32 v4, v12, v4
+; CHECK-NEXT:    v_trunc_f32_e32 v9, v9
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; CHECK-NEXT:    v_trunc_f32_e32 v10, v10
-; CHECK-NEXT:    v_dual_sub_f32 v4, v4, v12 :: v_dual_fmac_f32 v7, -4.0, v10
+; CHECK-NEXT:    v_dual_fmac_f32 v6, 0xc0400000, v9 :: v_dual_fmac_f32 v7, -4.0, v10
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %x = frem reassoc nsz arcp contract afn <8 x float> %input, <float 1.000000e+00, float 2.000000e+00, float 3.000000e+00, float 4.000000e+00, float 4.000000e+00, float 3.000000e+00, float 2.000000e+00, float 1.000000e+00>
   %y = freeze <8 x float> %x

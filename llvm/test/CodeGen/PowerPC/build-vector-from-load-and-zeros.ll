@@ -26,25 +26,22 @@ define  <2 x i64> @build_v2i64_extload_0(ptr nocapture noundef readonly %p) {
 ;
 ; PWR7-LE-LABEL: build_v2i64_extload_0:
 ; PWR7-LE:       # %bb.0: # %entry
-; PWR7-LE-NEXT:    lfiwzx 0, 0, 3
-; PWR7-LE-NEXT:    addis 3, 2, .LCPI0_0@toc@ha
-; PWR7-LE-NEXT:    xxlxor 36, 36, 36
-; PWR7-LE-NEXT:    addi 3, 3, .LCPI0_0@toc@l
-; PWR7-LE-NEXT:    xxspltw 34, 0, 1
+; PWR7-LE-NEXT:    lwz 3, 0(3)
+; PWR7-LE-NEXT:    li 4, 0
+; PWR7-LE-NEXT:    std 4, -8(1)
+; PWR7-LE-NEXT:    std 3, -16(1)
+; PWR7-LE-NEXT:    addi 3, 1, -16
 ; PWR7-LE-NEXT:    lxvd2x 0, 0, 3
-; PWR7-LE-NEXT:    xxswapd 35, 0
-; PWR7-LE-NEXT:    vperm 2, 4, 2, 3
+; PWR7-LE-NEXT:    xxswapd 34, 0
 ; PWR7-LE-NEXT:    blr
 ;
 ; PWR8-LE-LABEL: build_v2i64_extload_0:
 ; PWR8-LE:       # %bb.0: # %entry
 ; PWR8-LE-NEXT:    lwz 3, 0(3)
 ; PWR8-LE-NEXT:    li 4, 0
-; PWR8-LE-NEXT:    rldimi 3, 4, 32, 0
-; PWR8-LE-NEXT:    rldimi 4, 4, 32, 0
-; PWR8-LE-NEXT:    mtfprd 0, 3
-; PWR8-LE-NEXT:    mtfprd 1, 4
-; PWR8-LE-NEXT:    xxmrghd 34, 1, 0
+; PWR8-LE-NEXT:    mtfprd 0, 4
+; PWR8-LE-NEXT:    mtfprd 1, 3
+; PWR8-LE-NEXT:    xxmrghd 34, 0, 1
 ; PWR8-LE-NEXT:    blr
 entry:
   %0 = load i32, ptr %p, align 4

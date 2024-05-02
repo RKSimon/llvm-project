@@ -76,18 +76,30 @@ define <vscale x 2 x i64> @no_dag_combine_zext(<vscale x 2 x i1> %pg,
 define <vscale x 16 x i8> @narrow_i64_gather_index_i8_zext(ptr %out, ptr %in, <vscale x 16 x i8> %d, i64 %ptr){
 ; CHECK-LABEL: narrow_i64_gather_index_i8_zext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    add x8, x1, x2
-; CHECK-NEXT:    ld1b { z0.s }, p0/z, [x8, #3, mul vl]
-; CHECK-NEXT:    ld1b { z1.s }, p0/z, [x8, #2, mul vl]
-; CHECK-NEXT:    ld1b { z2.s }, p0/z, [x1, x2]
-; CHECK-NEXT:    ld1b { z3.s }, p0/z, [x8, #1, mul vl]
-; CHECK-NEXT:    ld1b { z0.s }, p0/z, [x1, z0.s, uxtw]
-; CHECK-NEXT:    ld1b { z1.s }, p0/z, [x1, z1.s, uxtw]
-; CHECK-NEXT:    ld1b { z2.s }, p0/z, [x1, z2.s, uxtw]
-; CHECK-NEXT:    ld1b { z3.s }, p0/z, [x1, z3.s, uxtw]
+; CHECK-NEXT:    ld1b { z0.d }, p0/z, [x8, #7, mul vl]
+; CHECK-NEXT:    ld1b { z1.d }, p0/z, [x8, #6, mul vl]
+; CHECK-NEXT:    ld1b { z2.d }, p0/z, [x8, #5, mul vl]
+; CHECK-NEXT:    ld1b { z3.d }, p0/z, [x8, #4, mul vl]
+; CHECK-NEXT:    ld1b { z4.d }, p0/z, [x8, #3, mul vl]
+; CHECK-NEXT:    ld1b { z5.d }, p0/z, [x8, #2, mul vl]
+; CHECK-NEXT:    ld1b { z6.d }, p0/z, [x1, x2]
+; CHECK-NEXT:    ld1b { z7.d }, p0/z, [x8, #1, mul vl]
+; CHECK-NEXT:    ld1b { z0.d }, p0/z, [x1, z0.d]
+; CHECK-NEXT:    ld1b { z1.d }, p0/z, [x1, z1.d]
+; CHECK-NEXT:    ld1b { z2.d }, p0/z, [x1, z2.d]
+; CHECK-NEXT:    uzp1 z0.s, z1.s, z0.s
+; CHECK-NEXT:    ld1b { z3.d }, p0/z, [x1, z3.d]
+; CHECK-NEXT:    ld1b { z4.d }, p0/z, [x1, z4.d]
+; CHECK-NEXT:    uzp1 z1.s, z3.s, z2.s
 ; CHECK-NEXT:    uzp1 z0.h, z1.h, z0.h
-; CHECK-NEXT:    uzp1 z1.h, z2.h, z3.h
+; CHECK-NEXT:    ld1b { z5.d }, p0/z, [x1, z5.d]
+; CHECK-NEXT:    ld1b { z6.d }, p0/z, [x1, z6.d]
+; CHECK-NEXT:    uzp1 z2.s, z5.s, z4.s
+; CHECK-NEXT:    ld1b { z7.d }, p0/z, [x1, z7.d]
+; CHECK-NEXT:    uzp1 z3.s, z6.s, z7.s
+; CHECK-NEXT:    uzp1 z1.h, z3.h, z2.h
 ; CHECK-NEXT:    uzp1 z0.b, z1.b, z0.b
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %in, i64 %ptr
@@ -102,18 +114,30 @@ define <vscale x 16 x i8> @narrow_i64_gather_index_i8_zext(ptr %out, ptr %in, <v
 define <vscale x 16 x i8> @narrow_i64_gather_index_i8_sext(ptr %out, ptr %in, <vscale x 16 x i8> %d, i64 %ptr){
 ; CHECK-LABEL: narrow_i64_gather_index_i8_sext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    add x8, x1, x2
-; CHECK-NEXT:    ld1sb { z0.s }, p0/z, [x8, #3, mul vl]
-; CHECK-NEXT:    ld1sb { z1.s }, p0/z, [x8, #2, mul vl]
-; CHECK-NEXT:    ld1sb { z2.s }, p0/z, [x1, x2]
-; CHECK-NEXT:    ld1sb { z3.s }, p0/z, [x8, #1, mul vl]
-; CHECK-NEXT:    ld1b { z0.s }, p0/z, [x1, z0.s, sxtw]
-; CHECK-NEXT:    ld1b { z1.s }, p0/z, [x1, z1.s, sxtw]
-; CHECK-NEXT:    ld1b { z2.s }, p0/z, [x1, z2.s, sxtw]
-; CHECK-NEXT:    ld1b { z3.s }, p0/z, [x1, z3.s, sxtw]
+; CHECK-NEXT:    ld1sb { z0.d }, p0/z, [x8, #7, mul vl]
+; CHECK-NEXT:    ld1sb { z1.d }, p0/z, [x8, #6, mul vl]
+; CHECK-NEXT:    ld1sb { z2.d }, p0/z, [x8, #5, mul vl]
+; CHECK-NEXT:    ld1sb { z3.d }, p0/z, [x8, #4, mul vl]
+; CHECK-NEXT:    ld1sb { z4.d }, p0/z, [x8, #3, mul vl]
+; CHECK-NEXT:    ld1sb { z5.d }, p0/z, [x8, #2, mul vl]
+; CHECK-NEXT:    ld1sb { z6.d }, p0/z, [x1, x2]
+; CHECK-NEXT:    ld1sb { z7.d }, p0/z, [x8, #1, mul vl]
+; CHECK-NEXT:    ld1b { z0.d }, p0/z, [x1, z0.d]
+; CHECK-NEXT:    ld1b { z1.d }, p0/z, [x1, z1.d]
+; CHECK-NEXT:    ld1b { z2.d }, p0/z, [x1, z2.d]
+; CHECK-NEXT:    uzp1 z0.s, z1.s, z0.s
+; CHECK-NEXT:    ld1b { z3.d }, p0/z, [x1, z3.d]
+; CHECK-NEXT:    ld1b { z4.d }, p0/z, [x1, z4.d]
+; CHECK-NEXT:    uzp1 z1.s, z3.s, z2.s
 ; CHECK-NEXT:    uzp1 z0.h, z1.h, z0.h
-; CHECK-NEXT:    uzp1 z1.h, z2.h, z3.h
+; CHECK-NEXT:    ld1b { z5.d }, p0/z, [x1, z5.d]
+; CHECK-NEXT:    ld1b { z6.d }, p0/z, [x1, z6.d]
+; CHECK-NEXT:    uzp1 z2.s, z5.s, z4.s
+; CHECK-NEXT:    ld1b { z7.d }, p0/z, [x1, z7.d]
+; CHECK-NEXT:    uzp1 z3.s, z6.s, z7.s
+; CHECK-NEXT:    uzp1 z1.h, z3.h, z2.h
 ; CHECK-NEXT:    uzp1 z0.b, z1.b, z0.b
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %in, i64 %ptr
@@ -128,12 +152,18 @@ define <vscale x 16 x i8> @narrow_i64_gather_index_i8_sext(ptr %out, ptr %in, <v
 define <vscale x 8 x i16> @narrow_i64_gather_index_i16_zext(ptr %out, ptr %in, <vscale x 8 x i16> %d, i64 %ptr){
 ; CHECK-LABEL: narrow_i64_gather_index_i16_zext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    add x8, x1, x2, lsl #1
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1, x2, lsl #1]
-; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x8, #1, mul vl]
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1, z0.s, uxtw #1]
-; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x1, z1.s, uxtw #1]
+; CHECK-NEXT:    ld1h { z0.d }, p0/z, [x1, x2, lsl #1]
+; CHECK-NEXT:    ld1h { z1.d }, p0/z, [x8, #3, mul vl]
+; CHECK-NEXT:    ld1h { z2.d }, p0/z, [x8, #2, mul vl]
+; CHECK-NEXT:    ld1h { z3.d }, p0/z, [x8, #1, mul vl]
+; CHECK-NEXT:    ld1h { z1.d }, p0/z, [x1, z1.d, lsl #1]
+; CHECK-NEXT:    ld1h { z2.d }, p0/z, [x1, z2.d, lsl #1]
+; CHECK-NEXT:    ld1h { z0.d }, p0/z, [x1, z0.d, lsl #1]
+; CHECK-NEXT:    uzp1 z1.s, z2.s, z1.s
+; CHECK-NEXT:    ld1h { z3.d }, p0/z, [x1, z3.d, lsl #1]
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z3.s
 ; CHECK-NEXT:    uzp1 z0.h, z0.h, z1.h
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i16, ptr %in, i64 %ptr
@@ -148,12 +178,18 @@ define <vscale x 8 x i16> @narrow_i64_gather_index_i16_zext(ptr %out, ptr %in, <
 define <vscale x 8 x i16> @narrow_i64_gather_index_i16_sext(ptr %out, ptr %in, <vscale x 8 x i16> %d, i64 %ptr){
 ; CHECK-LABEL: narrow_i64_gather_index_i16_sext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    add x8, x1, x2, lsl #1
-; CHECK-NEXT:    ld1sh { z0.s }, p0/z, [x1, x2, lsl #1]
-; CHECK-NEXT:    ld1sh { z1.s }, p0/z, [x8, #1, mul vl]
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x1, z0.s, sxtw #1]
-; CHECK-NEXT:    ld1h { z1.s }, p0/z, [x1, z1.s, sxtw #1]
+; CHECK-NEXT:    ld1sh { z0.d }, p0/z, [x1, x2, lsl #1]
+; CHECK-NEXT:    ld1sh { z1.d }, p0/z, [x8, #3, mul vl]
+; CHECK-NEXT:    ld1sh { z2.d }, p0/z, [x8, #2, mul vl]
+; CHECK-NEXT:    ld1sh { z3.d }, p0/z, [x8, #1, mul vl]
+; CHECK-NEXT:    ld1h { z1.d }, p0/z, [x1, z1.d, lsl #1]
+; CHECK-NEXT:    ld1h { z2.d }, p0/z, [x1, z2.d, lsl #1]
+; CHECK-NEXT:    ld1h { z0.d }, p0/z, [x1, z0.d, lsl #1]
+; CHECK-NEXT:    uzp1 z1.s, z2.s, z1.s
+; CHECK-NEXT:    ld1h { z3.d }, p0/z, [x1, z3.d, lsl #1]
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z3.s
 ; CHECK-NEXT:    uzp1 z0.h, z0.h, z1.h
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i16, ptr %in, i64 %ptr
@@ -168,9 +204,13 @@ define <vscale x 8 x i16> @narrow_i64_gather_index_i16_sext(ptr %out, ptr %in, <
 define <vscale x 4 x i32> @no_narrow_i64_gather_index_i32(ptr %out, ptr %in, <vscale x 4 x i32> %d, i64 %ptr){
 ; CHECK-LABEL: no_narrow_i64_gather_index_i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ptrue p0.s
-; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x1, x2, lsl #2]
-; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x1, z0.s, uxtw #2]
+; CHECK-NEXT:    ptrue p0.d
+; CHECK-NEXT:    add x8, x1, x2, lsl #2
+; CHECK-NEXT:    ld1w { z0.d }, p0/z, [x1, x2, lsl #2]
+; CHECK-NEXT:    ld1w { z1.d }, p0/z, [x8, #1, mul vl]
+; CHECK-NEXT:    ld1w { z0.d }, p0/z, [x1, z0.d, lsl #2]
+; CHECK-NEXT:    ld1w { z1.d }, p0/z, [x1, z1.d, lsl #2]
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z1.s
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i32, ptr %in, i64 %ptr
   %2 = bitcast ptr %1 to ptr

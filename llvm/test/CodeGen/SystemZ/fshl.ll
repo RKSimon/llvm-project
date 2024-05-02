@@ -81,30 +81,31 @@ define i128 @var_shift_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-NEXT:    .cfi_offset %r15, -40
 ; CHECK-NEXT:    lg %r1, 8(%r5)
 ; CHECK-NEXT:    lg %r0, 0(%r4)
-; CHECK-NEXT:    lg %r14, 8(%r3)
-; CHECK-NEXT:    tmll %r1, 64
+; CHECK-NEXT:    lg %r5, 8(%r3)
+; CHECK-NEXT:    risbg %r14, %r1, 63, 191, 58
+; CHECK-NEXT:    chi %r14, 0
 ; CHECK-NEXT:    lgr %r13, %r0
-; CHECK-NEXT:    jne .LBB4_2
+; CHECK-NEXT:    jlh .LBB4_2
 ; CHECK-NEXT:  # %bb.1:
-; CHECK-NEXT:    lgr %r13, %r14
+; CHECK-NEXT:    lgr %r13, %r5
 ; CHECK-NEXT:  .LBB4_2:
-; CHECK-NEXT:    sllg %r5, %r13, 0(%r1)
+; CHECK-NEXT:    sllg %r14, %r13, 0(%r1)
 ; CHECK-NEXT:    je .LBB4_4
 ; CHECK-NEXT:  # %bb.3:
 ; CHECK-NEXT:    lg %r0, 8(%r4)
 ; CHECK-NEXT:    j .LBB4_5
 ; CHECK-NEXT:  .LBB4_4:
-; CHECK-NEXT:    lg %r14, 0(%r3)
+; CHECK-NEXT:    lg %r5, 0(%r3)
 ; CHECK-NEXT:  .LBB4_5:
-; CHECK-NEXT:    sllg %r3, %r14, 0(%r1)
+; CHECK-NEXT:    sllg %r3, %r5, 0(%r1)
 ; CHECK-NEXT:    srlg %r4, %r13, 1
 ; CHECK-NEXT:    xilf %r1, 4294967295
 ; CHECK-NEXT:    srlg %r4, %r4, 0(%r1)
 ; CHECK-NEXT:    ogr %r4, %r3
 ; CHECK-NEXT:    srlg %r0, %r0, 1
 ; CHECK-NEXT:    srlg %r0, %r0, 0(%r1)
-; CHECK-NEXT:    ogr %r5, %r0
-; CHECK-NEXT:    stg %r5, 8(%r2)
+; CHECK-NEXT:    ogr %r14, %r0
+; CHECK-NEXT:    stg %r14, 8(%r2)
 ; CHECK-NEXT:    stg %r4, 0(%r2)
 ; CHECK-NEXT:    lmg %r13, %r15, 104(%r15)
 ; CHECK-NEXT:    br %r14

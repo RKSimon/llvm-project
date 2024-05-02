@@ -285,13 +285,13 @@ define dso_local i64 @atomicrmw_xchg_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_xchg_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xchg_i128_aligned_monotonic:
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xchg_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x8, [x0]
@@ -302,13 +302,13 @@ define dso_local i128 @atomicrmw_xchg_i128_aligned_monotonic(ptr %ptr, i128 %val
 
 define dso_local i128 @atomicrmw_xchg_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xchg_i128_aligned_acquire:
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xchg_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x8, [x0]
@@ -319,13 +319,13 @@ define dso_local i128 @atomicrmw_xchg_i128_aligned_acquire(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_xchg_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xchg_i128_aligned_release:
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xchg_i128_aligned_release:
 ; -O1:    ldxp x1, x8, [x0]
@@ -336,13 +336,13 @@ define dso_local i128 @atomicrmw_xchg_i128_aligned_release(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_xchg_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xchg_i128_aligned_acq_rel:
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xchg_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x8, [x0]
@@ -353,13 +353,13 @@ define dso_local i128 @atomicrmw_xchg_i128_aligned_acq_rel(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_xchg_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xchg_i128_aligned_seq_cst:
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xchg_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x8, [x0]
@@ -900,14 +900,14 @@ define dso_local i64 @atomicrmw_add_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_add_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_add_i128_aligned_monotonic:
-; -O0:    adds x14, x11, x10
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    adds x14, x10, x9
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_add_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -919,14 +919,14 @@ define dso_local i128 @atomicrmw_add_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_add_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_add_i128_aligned_acquire:
-; -O0:    adds x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    adds x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_add_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -938,14 +938,14 @@ define dso_local i128 @atomicrmw_add_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_add_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_add_i128_aligned_release:
-; -O0:    adds x14, x11, x10
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    adds x14, x10, x9
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_add_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -957,14 +957,14 @@ define dso_local i128 @atomicrmw_add_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_add_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_add_i128_aligned_acq_rel:
-; -O0:    adds x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    adds x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_add_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -976,14 +976,14 @@ define dso_local i128 @atomicrmw_add_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_add_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_add_i128_aligned_seq_cst:
-; -O0:    adds x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    adds x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_add_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -1640,14 +1640,14 @@ define dso_local i64 @atomicrmw_sub_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_sub_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_sub_i128_aligned_monotonic:
-; -O0:    subs x14, x11, x10
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x14, x10, x9
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_sub_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -1659,14 +1659,14 @@ define dso_local i128 @atomicrmw_sub_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_sub_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_sub_i128_aligned_acquire:
-; -O0:    subs x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_sub_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -1678,14 +1678,14 @@ define dso_local i128 @atomicrmw_sub_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_sub_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_sub_i128_aligned_release:
-; -O0:    subs x14, x11, x10
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x14, x10, x9
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_sub_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -1697,14 +1697,14 @@ define dso_local i128 @atomicrmw_sub_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_sub_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_sub_i128_aligned_acq_rel:
-; -O0:    subs x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_sub_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -1716,14 +1716,14 @@ define dso_local i128 @atomicrmw_sub_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_sub_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_sub_i128_aligned_seq_cst:
-; -O0:    subs x14, x11, x10
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x14, x10, x9
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_sub_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -2380,15 +2380,15 @@ define dso_local i64 @atomicrmw_and_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_and_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_and_i128_aligned_monotonic:
-; -O0:    and x15, x13, x10
-; -O0:    and x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    and x15, x11, x9
+; -O0:    and x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_and_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -2401,15 +2401,15 @@ define dso_local i128 @atomicrmw_and_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_and_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_and_i128_aligned_acquire:
-; -O0:    and x15, x13, x10
-; -O0:    and x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    and x15, x11, x9
+; -O0:    and x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_and_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -2422,15 +2422,15 @@ define dso_local i128 @atomicrmw_and_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_and_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_and_i128_aligned_release:
-; -O0:    and x15, x13, x10
-; -O0:    and x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    and x15, x11, x9
+; -O0:    and x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_and_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -2443,15 +2443,15 @@ define dso_local i128 @atomicrmw_and_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_and_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_and_i128_aligned_acq_rel:
-; -O0:    and x15, x13, x10
-; -O0:    and x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    and x15, x11, x9
+; -O0:    and x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_and_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -2464,15 +2464,15 @@ define dso_local i128 @atomicrmw_and_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_and_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_and_i128_aligned_seq_cst:
-; -O0:    and x15, x13, x10
-; -O0:    and x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    and x15, x11, x9
+; -O0:    and x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_and_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -3180,17 +3180,17 @@ define dso_local i64 @atomicrmw_nand_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_nand_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_nand_i128_aligned_monotonic:
-; -O0:    and x8, x11, x8
-; -O0:    and x10, x13, x10
-; -O0:    mvn x15, x10
+; -O0:    and x8, x10, x8
+; -O0:    and x9, x11, x9
+; -O0:    mvn x15, x9
 ; -O0:    mvn x14, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_nand_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -3205,17 +3205,17 @@ define dso_local i128 @atomicrmw_nand_i128_aligned_monotonic(ptr %ptr, i128 %val
 
 define dso_local i128 @atomicrmw_nand_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_nand_i128_aligned_acquire:
-; -O0:    and x8, x11, x8
-; -O0:    and x10, x13, x10
-; -O0:    mvn x15, x10
+; -O0:    and x8, x10, x8
+; -O0:    and x9, x11, x9
+; -O0:    mvn x15, x9
 ; -O0:    mvn x14, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_nand_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -3230,17 +3230,17 @@ define dso_local i128 @atomicrmw_nand_i128_aligned_acquire(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_nand_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_nand_i128_aligned_release:
-; -O0:    and x8, x11, x8
-; -O0:    and x10, x13, x10
-; -O0:    mvn x15, x10
+; -O0:    and x8, x10, x8
+; -O0:    and x9, x11, x9
+; -O0:    mvn x15, x9
 ; -O0:    mvn x14, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_nand_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -3255,17 +3255,17 @@ define dso_local i128 @atomicrmw_nand_i128_aligned_release(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_nand_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_nand_i128_aligned_acq_rel:
-; -O0:    and x8, x11, x8
-; -O0:    and x10, x13, x10
-; -O0:    mvn x15, x10
+; -O0:    and x8, x10, x8
+; -O0:    and x9, x11, x9
+; -O0:    mvn x15, x9
 ; -O0:    mvn x14, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_nand_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -3280,17 +3280,17 @@ define dso_local i128 @atomicrmw_nand_i128_aligned_acq_rel(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_nand_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_nand_i128_aligned_seq_cst:
-; -O0:    and x8, x11, x8
-; -O0:    and x10, x13, x10
-; -O0:    mvn x15, x10
+; -O0:    and x8, x10, x8
+; -O0:    and x9, x11, x9
+; -O0:    mvn x15, x9
 ; -O0:    mvn x14, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_nand_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4020,15 +4020,15 @@ define dso_local i64 @atomicrmw_or_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_or_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_or_i128_aligned_monotonic:
-; -O0:    orr x15, x13, x10
-; -O0:    orr x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    orr x15, x11, x9
+; -O0:    orr x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_or_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -4041,15 +4041,15 @@ define dso_local i128 @atomicrmw_or_i128_aligned_monotonic(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_or_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_or_i128_aligned_acquire:
-; -O0:    orr x15, x13, x10
-; -O0:    orr x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    orr x15, x11, x9
+; -O0:    orr x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_or_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4062,15 +4062,15 @@ define dso_local i128 @atomicrmw_or_i128_aligned_acquire(ptr %ptr, i128 %value) 
 
 define dso_local i128 @atomicrmw_or_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_or_i128_aligned_release:
-; -O0:    orr x15, x13, x10
-; -O0:    orr x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    orr x15, x11, x9
+; -O0:    orr x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_or_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -4083,15 +4083,15 @@ define dso_local i128 @atomicrmw_or_i128_aligned_release(ptr %ptr, i128 %value) 
 
 define dso_local i128 @atomicrmw_or_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_or_i128_aligned_acq_rel:
-; -O0:    orr x15, x13, x10
-; -O0:    orr x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    orr x15, x11, x9
+; -O0:    orr x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_or_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4104,15 +4104,15 @@ define dso_local i128 @atomicrmw_or_i128_aligned_acq_rel(ptr %ptr, i128 %value) 
 
 define dso_local i128 @atomicrmw_or_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_or_i128_aligned_seq_cst:
-; -O0:    orr x15, x13, x10
-; -O0:    orr x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    orr x15, x11, x9
+; -O0:    orr x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_or_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4780,15 +4780,15 @@ define dso_local i64 @atomicrmw_xor_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_xor_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xor_i128_aligned_monotonic:
-; -O0:    eor x15, x13, x10
-; -O0:    eor x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    eor x15, x11, x9
+; -O0:    eor x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xor_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -4801,15 +4801,15 @@ define dso_local i128 @atomicrmw_xor_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_xor_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xor_i128_aligned_acquire:
-; -O0:    eor x15, x13, x10
-; -O0:    eor x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    eor x15, x11, x9
+; -O0:    eor x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xor_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4822,15 +4822,15 @@ define dso_local i128 @atomicrmw_xor_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_xor_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xor_i128_aligned_release:
-; -O0:    eor x15, x13, x10
-; -O0:    eor x14, x11, x8
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    eor x15, x11, x9
+; -O0:    eor x14, x10, x8
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xor_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -4843,15 +4843,15 @@ define dso_local i128 @atomicrmw_xor_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_xor_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xor_i128_aligned_acq_rel:
-; -O0:    eor x15, x13, x10
-; -O0:    eor x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    eor x15, x11, x9
+; -O0:    eor x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xor_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -4864,15 +4864,15 @@ define dso_local i128 @atomicrmw_xor_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_xor_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_xor_i128_aligned_seq_cst:
-; -O0:    eor x15, x13, x10
-; -O0:    eor x14, x11, x8
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    eor x15, x11, x9
+; -O0:    eor x14, x10, x8
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_xor_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -5600,16 +5600,16 @@ define dso_local i64 @atomicrmw_max_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_max_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_max_i128_aligned_monotonic:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lt
-; -O0:    csel x14, x11, x8, lt
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lt
+; -O0:    csel x14, x10, x8, lt
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_max_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -5623,16 +5623,16 @@ define dso_local i128 @atomicrmw_max_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_max_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_max_i128_aligned_acquire:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lt
-; -O0:    csel x14, x11, x8, lt
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lt
+; -O0:    csel x14, x10, x8, lt
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_max_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -5646,16 +5646,16 @@ define dso_local i128 @atomicrmw_max_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_max_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_max_i128_aligned_release:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lt
-; -O0:    csel x14, x11, x8, lt
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lt
+; -O0:    csel x14, x10, x8, lt
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_max_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -5669,16 +5669,16 @@ define dso_local i128 @atomicrmw_max_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_max_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_max_i128_aligned_acq_rel:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lt
-; -O0:    csel x14, x11, x8, lt
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lt
+; -O0:    csel x14, x10, x8, lt
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_max_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -5692,16 +5692,16 @@ define dso_local i128 @atomicrmw_max_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_max_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_max_i128_aligned_seq_cst:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lt
-; -O0:    csel x14, x11, x8, lt
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lt
+; -O0:    csel x14, x10, x8, lt
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_max_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -6500,16 +6500,16 @@ define dso_local i64 @atomicrmw_min_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_min_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_min_i128_aligned_monotonic:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, ge
-; -O0:    csel x14, x11, x8, ge
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, ge
+; -O0:    csel x14, x10, x8, ge
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_min_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -6523,16 +6523,16 @@ define dso_local i128 @atomicrmw_min_i128_aligned_monotonic(ptr %ptr, i128 %valu
 
 define dso_local i128 @atomicrmw_min_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_min_i128_aligned_acquire:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, ge
-; -O0:    csel x14, x11, x8, ge
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, ge
+; -O0:    csel x14, x10, x8, ge
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_min_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -6546,16 +6546,16 @@ define dso_local i128 @atomicrmw_min_i128_aligned_acquire(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_min_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_min_i128_aligned_release:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, ge
-; -O0:    csel x14, x11, x8, ge
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, ge
+; -O0:    csel x14, x10, x8, ge
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_min_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -6569,16 +6569,16 @@ define dso_local i128 @atomicrmw_min_i128_aligned_release(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_min_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_min_i128_aligned_acq_rel:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, ge
-; -O0:    csel x14, x11, x8, ge
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, ge
+; -O0:    csel x14, x10, x8, ge
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_min_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -6592,16 +6592,16 @@ define dso_local i128 @atomicrmw_min_i128_aligned_acq_rel(ptr %ptr, i128 %value)
 
 define dso_local i128 @atomicrmw_min_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_min_i128_aligned_seq_cst:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, ge
-; -O0:    csel x14, x11, x8, ge
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, ge
+; -O0:    csel x14, x10, x8, ge
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_min_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -7400,16 +7400,16 @@ define dso_local i64 @atomicrmw_umax_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_umax_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umax_i128_aligned_monotonic:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lo
-; -O0:    csel x14, x11, x8, lo
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lo
+; -O0:    csel x14, x10, x8, lo
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umax_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -7423,16 +7423,16 @@ define dso_local i128 @atomicrmw_umax_i128_aligned_monotonic(ptr %ptr, i128 %val
 
 define dso_local i128 @atomicrmw_umax_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umax_i128_aligned_acquire:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lo
-; -O0:    csel x14, x11, x8, lo
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lo
+; -O0:    csel x14, x10, x8, lo
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umax_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -7446,16 +7446,16 @@ define dso_local i128 @atomicrmw_umax_i128_aligned_acquire(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umax_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umax_i128_aligned_release:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lo
-; -O0:    csel x14, x11, x8, lo
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lo
+; -O0:    csel x14, x10, x8, lo
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umax_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -7469,16 +7469,16 @@ define dso_local i128 @atomicrmw_umax_i128_aligned_release(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umax_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umax_i128_aligned_acq_rel:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lo
-; -O0:    csel x14, x11, x8, lo
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lo
+; -O0:    csel x14, x10, x8, lo
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umax_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -7492,16 +7492,16 @@ define dso_local i128 @atomicrmw_umax_i128_aligned_acq_rel(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umax_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umax_i128_aligned_seq_cst:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, lo
-; -O0:    csel x14, x11, x8, lo
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, lo
+; -O0:    csel x14, x10, x8, lo
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umax_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -8300,16 +8300,16 @@ define dso_local i64 @atomicrmw_umin_i64_aligned_seq_cst(ptr %ptr, i64 %value) {
 
 define dso_local i128 @atomicrmw_umin_i128_aligned_monotonic(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umin_i128_aligned_monotonic:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, hs
-; -O0:    csel x14, x11, x8, hs
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, hs
+; -O0:    csel x14, x10, x8, hs
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umin_i128_aligned_monotonic:
 ; -O1:    ldxp x1, x0, [x8]
@@ -8323,16 +8323,16 @@ define dso_local i128 @atomicrmw_umin_i128_aligned_monotonic(ptr %ptr, i128 %val
 
 define dso_local i128 @atomicrmw_umin_i128_aligned_acquire(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umin_i128_aligned_acquire:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, hs
-; -O0:    csel x14, x11, x8, hs
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stxp w8, x14, x15, [x9]
-; -O0:    stxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, hs
+; -O0:    csel x14, x10, x8, hs
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stxp w12, x14, x15, [x13]
+; -O0:    stxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umin_i128_aligned_acquire:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -8346,16 +8346,16 @@ define dso_local i128 @atomicrmw_umin_i128_aligned_acquire(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umin_i128_aligned_release(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umin_i128_aligned_release:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, hs
-; -O0:    csel x14, x11, x8, hs
-; -O0:    ldxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, hs
+; -O0:    csel x14, x10, x8, hs
+; -O0:    ldxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umin_i128_aligned_release:
 ; -O1:    ldxp x1, x0, [x8]
@@ -8369,16 +8369,16 @@ define dso_local i128 @atomicrmw_umin_i128_aligned_release(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umin_i128_aligned_acq_rel(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umin_i128_aligned_acq_rel:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, hs
-; -O0:    csel x14, x11, x8, hs
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, hs
+; -O0:    csel x14, x10, x8, hs
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umin_i128_aligned_acq_rel:
 ; -O1:    ldaxp x1, x0, [x8]
@@ -8392,16 +8392,16 @@ define dso_local i128 @atomicrmw_umin_i128_aligned_acq_rel(ptr %ptr, i128 %value
 
 define dso_local i128 @atomicrmw_umin_i128_aligned_seq_cst(ptr %ptr, i128 %value) {
 ; -O0-LABEL: atomicrmw_umin_i128_aligned_seq_cst:
-; -O0:    subs x12, x8, x11
-; -O0:    csel x15, x13, x10, hs
-; -O0:    csel x14, x11, x8, hs
-; -O0:    ldaxp x10, x12, [x9]
-; -O0:    cmp x10, x11
-; -O0:    cmp x12, x13
-; -O0:    stlxp w8, x14, x15, [x9]
-; -O0:    stlxp w8, x10, x12, [x9]
-; -O0:    subs x12, x12, x13
-; -O0:    ccmp x10, x11, #0, eq
+; -O0:    subs x12, x8, x10
+; -O0:    csel x15, x11, x9, hs
+; -O0:    csel x14, x10, x8, hs
+; -O0:    ldaxp x8, x9, [x13]
+; -O0:    cmp x8, x10
+; -O0:    cmp x9, x11
+; -O0:    stlxp w12, x14, x15, [x13]
+; -O0:    stlxp w12, x8, x9, [x13]
+; -O0:    subs x11, x9, x11
+; -O0:    ccmp x8, x10, #0, eq
 ;
 ; -O1-LABEL: atomicrmw_umin_i128_aligned_seq_cst:
 ; -O1:    ldaxp x1, x0, [x8]

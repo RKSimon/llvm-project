@@ -1267,8 +1267,24 @@ define <4 x i32> @testDUPv1i32(<1 x i32> %a) {
 define <8 x i8> @getl(<16 x i8> %x) #0 {
 ; CHECK-LABEL: getl:
 ; CHECK:       @ %bb.0:
+; CHECK-NEXT:    .save {r4, lr}
+; CHECK-NEXT:    push {r4, lr}
+; CHECK-NEXT:    vmov.u8 r0, d0[1]
+; CHECK-NEXT:    vmov.u8 r1, d0[2]
+; CHECK-NEXT:    vmov.u8 r2, d0[3]
+; CHECK-NEXT:    vmov.u8 r3, d0[4]
+; CHECK-NEXT:    vmov.u8 r12, d0[5]
+; CHECK-NEXT:    vmov.u8 lr, d0[6]
+; CHECK-NEXT:    vmov.u8 r4, d0[7]
+; CHECK-NEXT:    vmov.8 d0[1], r0
+; CHECK-NEXT:    vmov.8 d0[2], r1
+; CHECK-NEXT:    vmov.8 d0[3], r2
+; CHECK-NEXT:    vmov.8 d0[4], r3
+; CHECK-NEXT:    vmov.8 d0[5], r12
+; CHECK-NEXT:    vmov.8 d0[6], lr
+; CHECK-NEXT:    vmov.8 d0[7], r4
 ; CHECK-NEXT:    @ kill: def $d0 killed $d0 killed $q0
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    pop {r4, pc}
   %vecext = extractelement <16 x i8> %x, i32 0
   %vecinit = insertelement <8 x i8> undef, i8 %vecext, i32 0
   %vecext1 = extractelement <16 x i8> %x, i32 1
@@ -1517,7 +1533,8 @@ entry:
 define <2 x i32> @test_concat_same_v1i32_v1i32(<2 x i32> %a) {
 ; CHECK-LABEL: test_concat_same_v1i32_v1i32:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vdup.32 d0, d0[0]
+; CHECK-NEXT:    vmov.32 r0, d0[0]
+; CHECK-NEXT:    vmov.32 d0[1], r0
 ; CHECK-NEXT:    bx lr
 entry:
   %0 = extractelement <2 x i32> %a, i32 0
@@ -1540,9 +1557,27 @@ entry:
 define <16 x i8> @test_concat_v16i8_v8i8_v16i8(<8 x i8> %x, <16 x i8> %y) #0 {
 ; CHECK-LABEL: test_concat_v16i8_v8i8_v16i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    @ kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    vmov.f64 d1, d2
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    .save {r4, lr}
+; CHECK-NEXT:    push {r4, lr}
+; CHECK-NEXT:    vmov.u8 r0, d0[0]
+; CHECK-NEXT:    vmov.u8 r1, d0[1]
+; CHECK-NEXT:    vmov.u8 r2, d0[2]
+; CHECK-NEXT:    vmov.u8 r3, d0[3]
+; CHECK-NEXT:    vmov.u8 r12, d0[4]
+; CHECK-NEXT:    vmov.u8 lr, d0[5]
+; CHECK-NEXT:    vmov.u8 r4, d0[6]
+; CHECK-NEXT:    vmov.8 d16[0], r0
+; CHECK-NEXT:    vmov.u8 r0, d0[7]
+; CHECK-NEXT:    vmov.8 d16[1], r1
+; CHECK-NEXT:    vmov.8 d16[2], r2
+; CHECK-NEXT:    vmov.8 d16[3], r3
+; CHECK-NEXT:    vmov.8 d16[4], r12
+; CHECK-NEXT:    vmov.8 d16[5], lr
+; CHECK-NEXT:    vmov.8 d16[6], r4
+; CHECK-NEXT:    vmov.8 d16[7], r0
+; CHECK-NEXT:    vorr d17, d2, d2
+; CHECK-NEXT:    vorr q0, q8, q8
+; CHECK-NEXT:    pop {r4, pc}
 entry:
   %vecext = extractelement <8 x i8> %x, i32 0
   %vecinit = insertelement <16 x i8> undef, i8 %vecext, i32 0
@@ -1567,8 +1602,25 @@ entry:
 define <16 x i8> @test_concat_v16i8_v16i8_v8i8(<16 x i8> %x, <8 x i8> %y) #0 {
 ; CHECK-LABEL: test_concat_v16i8_v16i8_v8i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vmov.f64 d1, d2
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    .save {r4, r5, r11, lr}
+; CHECK-NEXT:    push {r4, r5, r11, lr}
+; CHECK-NEXT:    vmov.u8 r3, d2[0]
+; CHECK-NEXT:    vmov.u8 r0, d2[1]
+; CHECK-NEXT:    vmov.u8 r1, d2[2]
+; CHECK-NEXT:    vmov.u8 r4, d2[3]
+; CHECK-NEXT:    vmov.u8 r5, d2[4]
+; CHECK-NEXT:    vmov.u8 r2, d2[5]
+; CHECK-NEXT:    vmov.u8 lr, d2[6]
+; CHECK-NEXT:    vmov.u8 r12, d2[7]
+; CHECK-NEXT:    vmov.8 d1[0], r3
+; CHECK-NEXT:    vmov.8 d1[1], r0
+; CHECK-NEXT:    vmov.8 d1[2], r1
+; CHECK-NEXT:    vmov.8 d1[3], r4
+; CHECK-NEXT:    vmov.8 d1[4], r5
+; CHECK-NEXT:    vmov.8 d1[5], r2
+; CHECK-NEXT:    vmov.8 d1[6], lr
+; CHECK-NEXT:    vmov.8 d1[7], r12
+; CHECK-NEXT:    pop {r4, r5, r11, pc}
 entry:
   %vecext = extractelement <16 x i8> %x, i32 0
   %vecinit = insertelement <16 x i8> undef, i8 %vecext, i32 0
@@ -1608,9 +1660,41 @@ entry:
 define <16 x i8> @test_concat_v16i8_v8i8_v8i8(<8 x i8> %x, <8 x i8> %y) #0 {
 ; CHECK-LABEL: test_concat_v16i8_v8i8_v8i8:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    @ kill: def $d1 killed $d1 killed $q0 def $q0
-; CHECK-NEXT:    @ kill: def $d0 killed $d0 killed $q0 def $q0
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    .save {r4, r5, r6, lr}
+; CHECK-NEXT:    push {r4, r5, r6, lr}
+; CHECK-NEXT:    vorr d16, d1, d1
+; CHECK-NEXT:    @ kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    vmov.u8 r1, d0[1]
+; CHECK-NEXT:    vmov.u8 r3, d0[2]
+; CHECK-NEXT:    vmov.u8 r6, d0[3]
+; CHECK-NEXT:    vmov.u8 r5, d0[4]
+; CHECK-NEXT:    vmov.u8 r0, d0[5]
+; CHECK-NEXT:    vmov.u8 r2, d0[6]
+; CHECK-NEXT:    vmov.u8 lr, d0[7]
+; CHECK-NEXT:    vmov.u8 r12, d16[5]
+; CHECK-NEXT:    vmov.u8 r4, d16[6]
+; CHECK-NEXT:    vmov.8 d0[1], r1
+; CHECK-NEXT:    vmov.u8 r1, d16[1]
+; CHECK-NEXT:    vmov.8 d0[2], r3
+; CHECK-NEXT:    vmov.u8 r3, d16[3]
+; CHECK-NEXT:    vmov.8 d0[3], r6
+; CHECK-NEXT:    vmov.u8 r6, d16[0]
+; CHECK-NEXT:    vmov.8 d0[4], r5
+; CHECK-NEXT:    vmov.u8 r5, d16[2]
+; CHECK-NEXT:    vmov.8 d0[5], r0
+; CHECK-NEXT:    vmov.u8 r0, d16[4]
+; CHECK-NEXT:    vmov.8 d0[6], r2
+; CHECK-NEXT:    vmov.u8 r2, d16[7]
+; CHECK-NEXT:    vmov.8 d0[7], lr
+; CHECK-NEXT:    vmov.8 d1[0], r6
+; CHECK-NEXT:    vmov.8 d1[1], r1
+; CHECK-NEXT:    vmov.8 d1[2], r5
+; CHECK-NEXT:    vmov.8 d1[3], r3
+; CHECK-NEXT:    vmov.8 d1[4], r0
+; CHECK-NEXT:    vmov.8 d1[5], r12
+; CHECK-NEXT:    vmov.8 d1[6], r4
+; CHECK-NEXT:    vmov.8 d1[7], r2
+; CHECK-NEXT:    pop {r4, r5, r6, pc}
 entry:
   %vecext = extractelement <8 x i8> %x, i32 0
   %vecinit = insertelement <16 x i8> undef, i8 %vecext, i32 0
@@ -1660,7 +1744,14 @@ entry:
 define <8 x i16> @test_concat_v8i16_v4i16_v8i16(<4 x i16> %x, <8 x i16> %y) #0 {
 ; CHECK-LABEL: test_concat_v8i16_v4i16_v8i16:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    @ kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    vmov.u16 r0, d0[0]
+; CHECK-NEXT:    vmov.u16 r1, d0[1]
+; CHECK-NEXT:    vmov.u16 r2, d0[2]
+; CHECK-NEXT:    vmov.u16 r3, d0[3]
+; CHECK-NEXT:    vmov.16 d0[0], r0
+; CHECK-NEXT:    vmov.16 d0[1], r1
+; CHECK-NEXT:    vmov.16 d0[2], r2
+; CHECK-NEXT:    vmov.16 d0[3], r3
 ; CHECK-NEXT:    vmov.f64 d1, d2
 ; CHECK-NEXT:    bx lr
 entry:
@@ -1679,7 +1770,14 @@ entry:
 define <8 x i16> @test_concat_v8i16_v8i16_v4i16(<8 x i16> %x, <4 x i16> %y) #0 {
 ; CHECK-LABEL: test_concat_v8i16_v8i16_v4i16:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vmov.f64 d1, d2
+; CHECK-NEXT:    vmov.u16 r0, d2[0]
+; CHECK-NEXT:    vmov.u16 r1, d2[1]
+; CHECK-NEXT:    vmov.u16 r2, d2[2]
+; CHECK-NEXT:    vmov.u16 r3, d2[3]
+; CHECK-NEXT:    vmov.16 d1[0], r0
+; CHECK-NEXT:    vmov.16 d1[1], r1
+; CHECK-NEXT:    vmov.16 d1[2], r2
+; CHECK-NEXT:    vmov.16 d1[3], r3
 ; CHECK-NEXT:    bx lr
 entry:
   %vecext = extractelement <8 x i16> %x, i32 0
@@ -1704,9 +1802,25 @@ entry:
 define <8 x i16> @test_concat_v8i16_v4i16_v4i16(<4 x i16> %x, <4 x i16> %y) #0 {
 ; CHECK-LABEL: test_concat_v8i16_v4i16_v4i16:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    @ kill: def $d1 killed $d1 killed $q0 def $q0
-; CHECK-NEXT:    @ kill: def $d0 killed $d0 killed $q0 def $q0
-; CHECK-NEXT:    bx lr
+; CHECK-NEXT:    .save {r4, lr}
+; CHECK-NEXT:    push {r4, lr}
+; CHECK-NEXT:    vorr d16, d1, d1
+; CHECK-NEXT:    @ kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    vmov.u16 r2, d0[1]
+; CHECK-NEXT:    vmov.u16 r3, d0[2]
+; CHECK-NEXT:    vmov.u16 r0, d0[3]
+; CHECK-NEXT:    vmov.u16 r1, d16[0]
+; CHECK-NEXT:    vmov.u16 r4, d16[1]
+; CHECK-NEXT:    vmov.u16 lr, d16[2]
+; CHECK-NEXT:    vmov.u16 r12, d16[3]
+; CHECK-NEXT:    vmov.16 d0[1], r2
+; CHECK-NEXT:    vmov.16 d0[2], r3
+; CHECK-NEXT:    vmov.16 d0[3], r0
+; CHECK-NEXT:    vmov.16 d1[0], r1
+; CHECK-NEXT:    vmov.16 d1[1], r4
+; CHECK-NEXT:    vmov.16 d1[2], lr
+; CHECK-NEXT:    vmov.16 d1[3], r12
+; CHECK-NEXT:    pop {r4, pc}
 entry:
   %vecext = extractelement <4 x i16> %x, i32 0
   %vecinit = insertelement <8 x i16> undef, i16 %vecext, i32 0
@@ -1741,7 +1855,10 @@ define <4 x i32> @test_concat_v4i32_v2i32_v4i32(<2 x i32> %x, <4 x i32> %y) #0 {
 ; CHECK-LABEL: test_concat_v4i32_v2i32_v4i32:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    @ kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    vmov.f64 d1, d2
+; CHECK-NEXT:    vmov.32 r0, d0[1]
+; CHECK-NEXT:    vmov.32 d0[1], r0
+; CHECK-NEXT:    vext.32 q8, q0, q0, #2
+; CHECK-NEXT:    vext.32 q0, q8, q1, #2
 ; CHECK-NEXT:    bx lr
 entry:
   %vecext = extractelement <2 x i32> %x, i32 0
@@ -1755,7 +1872,10 @@ entry:
 define <4 x i32> @test_concat_v4i32_v4i32_v2i32(<4 x i32> %x, <2 x i32> %y) #0 {
 ; CHECK-LABEL: test_concat_v4i32_v4i32_v2i32:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vmov.f64 d1, d2
+; CHECK-NEXT:    vmov.32 r0, d2[0]
+; CHECK-NEXT:    vmov.32 r1, d2[1]
+; CHECK-NEXT:    vmov.32 d1[0], r0
+; CHECK-NEXT:    vmov.32 d1[1], r1
 ; CHECK-NEXT:    bx lr
 entry:
   %vecext = extractelement <4 x i32> %x, i32 0
@@ -1806,7 +1926,10 @@ entry:
 define <2 x i64> @test_concat_v2i64_v2i64_v1i64(<2 x i64> %x, <1 x i64> %y) #0 {
 ; CHECK-LABEL: test_concat_v2i64_v2i64_v1i64:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vmov.f64 d1, d2
+; CHECK-NEXT:    vmov.32 r0, d2[0]
+; CHECK-NEXT:    vmov.32 r1, d2[1]
+; CHECK-NEXT:    vmov.32 d1[0], r0
+; CHECK-NEXT:    vmov.32 d1[1], r1
 ; CHECK-NEXT:    bx lr
 entry:
   %vecext = extractelement <2 x i64> %x, i32 0
@@ -1819,8 +1942,12 @@ entry:
 define <2 x i64> @test_concat_v2i64_v1i64_v1i64(<1 x i64> %x, <1 x i64> %y) #0 {
 ; CHECK-LABEL: test_concat_v2i64_v1i64_v1i64:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    @ kill: def $d1 killed $d1 killed $q0 def $q0
-; CHECK-NEXT:    @ kill: def $d0 killed $d0 killed $q0 def $q0
+; CHECK-NEXT:    vmov.32 r0, d1[0]
+; CHECK-NEXT:    vorr d16, d0, d0
+; CHECK-NEXT:    vmov.32 r1, d1[1]
+; CHECK-NEXT:    vmov.32 d17[0], r0
+; CHECK-NEXT:    vmov.32 d17[1], r1
+; CHECK-NEXT:    vorr q0, q8, q8
 ; CHECK-NEXT:    bx lr
 entry:
   %vecext = extractelement <1 x i64> %x, i32 0

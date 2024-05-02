@@ -26,7 +26,10 @@ define <8 x i16> @f1(ptr %ptr) {
 define <8 x i16> @f2(ptr %ptr) {
 ; CHECK-LABEL: f2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vllebrzh %v24, 0(%r2)
+; CHECK-NEXT:    larl %r1, .LCPI1_0
+; CHECK-NEXT:    vllezh %v0, 0(%r2)
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vperm %v24, %v0, %v0, %v1
 ; CHECK-NEXT:    br %r14
   %val = load i16, ptr %ptr
   %insert = insertelement <8 x i16> zeroinitializer, i16 %val, i32 3
@@ -50,7 +53,10 @@ define <4 x i32> @f3(ptr %ptr) {
 define <4 x i32> @f4(ptr %ptr) {
 ; CHECK-LABEL: f4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vllebrzf %v24, 0(%r2)
+; CHECK-NEXT:    larl %r1, .LCPI3_0
+; CHECK-NEXT:    vllezf %v0, 0(%r2)
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vperm %v24, %v0, %v0, %v1
 ; CHECK-NEXT:    br %r14
   %val = load i32, ptr %ptr
   %insert = insertelement <4 x i32> zeroinitializer, i32 %val, i32 1
@@ -74,7 +80,10 @@ define <2 x i64> @f5(ptr %ptr) {
 define <2 x i64> @f6(ptr %ptr) {
 ; CHECK-LABEL: f6:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vllebrzg %v24, 0(%r2)
+; CHECK-NEXT:    larl %r1, .LCPI5_0
+; CHECK-NEXT:    vllezg %v0, 0(%r2)
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vperm %v24, %v0, %v0, %v1
 ; CHECK-NEXT:    br %r14
   %val = load i64, ptr %ptr
   %insert = insertelement <2 x i64> zeroinitializer, i64 %val, i32 0
@@ -98,7 +107,10 @@ define <4 x i32> @f7(ptr %ptr) {
 define <4 x i32> @f8(ptr %ptr) {
 ; CHECK-LABEL: f8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vllebrze %v24, 0(%r2)
+; CHECK-NEXT:    larl %r1, .LCPI7_0
+; CHECK-NEXT:    vllezlf %v0, 0(%r2)
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vperm %v24, %v0, %v0, %v1
 ; CHECK-NEXT:    br %r14
   %val = load i32, ptr %ptr
   %insert = insertelement <4 x i32> zeroinitializer, i32 %val, i32 0

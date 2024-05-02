@@ -5,29 +5,29 @@ define <16 x i8> @lower_trunc_16xi8(i16 %a, i16 %b, i16 %c, i16 %d, i16 %e, i16 
 ; CHECK-LABEL: lower_trunc_16xi8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    fmov s0, w0
-; CHECK-NEXT:    mov x8, sp
-; CHECK-NEXT:    mov v0.b[1], w1
-; CHECK-NEXT:    mov v0.b[2], w2
-; CHECK-NEXT:    mov v0.b[3], w3
-; CHECK-NEXT:    mov v0.b[4], w4
-; CHECK-NEXT:    mov v0.b[5], w5
-; CHECK-NEXT:    mov v0.b[6], w6
-; CHECK-NEXT:    mov v0.b[7], w7
-; CHECK-NEXT:    ld1 { v0.b }[8], [x8]
+; CHECK-NEXT:    ldr h1, [sp]
 ; CHECK-NEXT:    add x8, sp, #8
-; CHECK-NEXT:    ld1 { v0.b }[9], [x8]
+; CHECK-NEXT:    ld1 { v1.h }[1], [x8]
 ; CHECK-NEXT:    add x8, sp, #16
-; CHECK-NEXT:    ld1 { v0.b }[10], [x8]
+; CHECK-NEXT:    mov v0.h[1], w1
+; CHECK-NEXT:    ld1 { v1.h }[2], [x8]
 ; CHECK-NEXT:    add x8, sp, #24
-; CHECK-NEXT:    ld1 { v0.b }[11], [x8]
+; CHECK-NEXT:    mov v0.h[2], w2
+; CHECK-NEXT:    ld1 { v1.h }[3], [x8]
 ; CHECK-NEXT:    add x8, sp, #32
-; CHECK-NEXT:    ld1 { v0.b }[12], [x8]
+; CHECK-NEXT:    mov v0.h[3], w3
+; CHECK-NEXT:    ld1 { v1.h }[4], [x8]
 ; CHECK-NEXT:    add x8, sp, #40
-; CHECK-NEXT:    ld1 { v0.b }[13], [x8]
+; CHECK-NEXT:    ld1 { v1.h }[5], [x8]
 ; CHECK-NEXT:    add x8, sp, #48
-; CHECK-NEXT:    ld1 { v0.b }[14], [x8]
+; CHECK-NEXT:    mov v0.h[4], w4
+; CHECK-NEXT:    ld1 { v1.h }[6], [x8]
 ; CHECK-NEXT:    add x8, sp, #56
-; CHECK-NEXT:    ld1 { v0.b }[15], [x8]
+; CHECK-NEXT:    mov v0.h[5], w5
+; CHECK-NEXT:    ld1 { v1.h }[7], [x8]
+; CHECK-NEXT:    mov v0.h[6], w6
+; CHECK-NEXT:    mov v0.h[7], w7
+; CHECK-NEXT:    uzp1 v0.16b, v0.16b, v1.16b
 ; CHECK-NEXT:    add v1.16b, v0.16b, v0.16b
 ; CHECK-NEXT:    eor v0.16b, v0.16b, v1.16b
 ; CHECK-NEXT:    ret
@@ -57,14 +57,15 @@ define <16 x i8> @lower_trunc_16xi8(i16 %a, i16 %b, i16 %c, i16 %d, i16 %e, i16 
 define <8 x i16> @lower_trunc_8xi16(i32 %a, i32 %b, i32 %c, i32 %d, i32 %e, i32 %f, i32 %g, i32 %h) {
 ; CHECK-LABEL: lower_trunc_8xi16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fmov s0, w0
-; CHECK-NEXT:    mov v0.h[1], w1
-; CHECK-NEXT:    mov v0.h[2], w2
-; CHECK-NEXT:    mov v0.h[3], w3
-; CHECK-NEXT:    mov v0.h[4], w4
-; CHECK-NEXT:    mov v0.h[5], w5
-; CHECK-NEXT:    mov v0.h[6], w6
-; CHECK-NEXT:    mov v0.h[7], w7
+; CHECK-NEXT:    fmov s0, w4
+; CHECK-NEXT:    fmov s1, w0
+; CHECK-NEXT:    mov v0.s[1], w5
+; CHECK-NEXT:    mov v1.s[1], w1
+; CHECK-NEXT:    mov v0.s[2], w6
+; CHECK-NEXT:    mov v1.s[2], w2
+; CHECK-NEXT:    mov v0.s[3], w7
+; CHECK-NEXT:    mov v1.s[3], w3
+; CHECK-NEXT:    uzp1 v0.8h, v1.8h, v0.8h
 ; CHECK-NEXT:    add v1.8h, v0.8h, v0.8h
 ; CHECK-NEXT:    eor v0.16b, v0.16b, v1.16b
 ; CHECK-NEXT:    ret

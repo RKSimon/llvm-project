@@ -28,12 +28,19 @@ f:
 }
 
 define i64 @test_set_mask_i64_i32(i64 %x) nounwind {
-; CHECK-LABEL: test_set_mask_i64_i32:
-; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst x0, #0x80000000
-; CHECK-NEXT:    csel x0, x8, x0, ne
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: test_set_mask_i64_i32:
+; CHECK-SD:       // %bb.0: // %entry
+; CHECK-SD-NEXT:    mov w8, #42 // =0x2a
+; CHECK-SD-NEXT:    cmp w0, #0
+; CHECK-SD-NEXT:    csel x0, x8, x0, mi
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: test_set_mask_i64_i32:
+; CHECK-GI:       // %bb.0: // %entry
+; CHECK-GI-NEXT:    mov w8, #42 // =0x2a
+; CHECK-GI-NEXT:    tst x0, #0x80000000
+; CHECK-GI-NEXT:    csel x0, x8, x0, ne
+; CHECK-GI-NEXT:    ret
 entry:
   %a = and i64 %x, 2147483648
   %r = icmp ne i64 %a, 0
@@ -208,12 +215,20 @@ f:
 }
 
 define i16 @test_set_mask_i16_i8(i16 %x) nounwind {
-; CHECK-LABEL: test_set_mask_i16_i8:
-; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst w0, #0x80
-; CHECK-NEXT:    csel w0, w8, w0, ne
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: test_set_mask_i16_i8:
+; CHECK-SD:       // %bb.0: // %entry
+; CHECK-SD-NEXT:    ubfx w9, w0, #7, #1
+; CHECK-SD-NEXT:    mov w8, #42 // =0x2a
+; CHECK-SD-NEXT:    cmp w9, #0
+; CHECK-SD-NEXT:    csel w0, w8, w0, ne
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: test_set_mask_i16_i8:
+; CHECK-GI:       // %bb.0: // %entry
+; CHECK-GI-NEXT:    mov w8, #42 // =0x2a
+; CHECK-GI-NEXT:    tst w0, #0x80
+; CHECK-GI-NEXT:    csel w0, w8, w0, ne
+; CHECK-GI-NEXT:    ret
 entry:
   %a = and i16 %x, 128
   %r = icmp ne i16 %a, 0
@@ -226,12 +241,20 @@ f:
 }
 
 define i16 @test_set_mask_i16_i7(i16 %x) nounwind {
-; CHECK-LABEL: test_set_mask_i16_i7:
-; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w8, #42 // =0x2a
-; CHECK-NEXT:    tst w0, #0x40
-; CHECK-NEXT:    csel w0, w8, w0, ne
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: test_set_mask_i16_i7:
+; CHECK-SD:       // %bb.0: // %entry
+; CHECK-SD-NEXT:    ubfx w9, w0, #6, #1
+; CHECK-SD-NEXT:    mov w8, #42 // =0x2a
+; CHECK-SD-NEXT:    cmp w9, #0
+; CHECK-SD-NEXT:    csel w0, w8, w0, ne
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: test_set_mask_i16_i7:
+; CHECK-GI:       // %bb.0: // %entry
+; CHECK-GI-NEXT:    mov w8, #42 // =0x2a
+; CHECK-GI-NEXT:    tst w0, #0x40
+; CHECK-GI-NEXT:    csel w0, w8, w0, ne
+; CHECK-GI-NEXT:    ret
 entry:
   %a = and i16 %x, 64
   %r = icmp ne i16 %a, 0

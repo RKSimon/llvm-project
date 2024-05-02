@@ -287,16 +287,16 @@ define void @fma8(ptr noalias nocapture readonly %A, ptr noalias nocapture reado
 ; CHECK-NEXT:    mov r6, r2
 ; CHECK-NEXT:  .LBB2_4: @ %vector.body
 ; CHECK-NEXT:    @ =>This Inner Loop Header: Depth=1
-; CHECK-NEXT:    vldrw.u32 q0, [r4, #16]
-; CHECK-NEXT:    vldrw.u32 q1, [r5, #16]
-; CHECK-NEXT:    vldrw.u32 q2, [r6, #16]
-; CHECK-NEXT:    vldrw.u32 q3, [r6]
-; CHECK-NEXT:    vfma.f32 q2, q1, q0
 ; CHECK-NEXT:    vldrw.u32 q0, [r4], #32
 ; CHECK-NEXT:    vldrw.u32 q1, [r5], #32
+; CHECK-NEXT:    vldrw.u32 q2, [r6]
+; CHECK-NEXT:    vldrw.u32 q3, [r6, #16]
+; CHECK-NEXT:    vfma.f32 q2, q1, q0
+; CHECK-NEXT:    vldrw.u32 q0, [r4, #-16]
+; CHECK-NEXT:    vldrw.u32 q1, [r5, #-16]
 ; CHECK-NEXT:    vfma.f32 q3, q1, q0
-; CHECK-NEXT:    vstrw.32 q3, [r6], #32
-; CHECK-NEXT:    vstrw.32 q2, [r6, #-16]
+; CHECK-NEXT:    vstrw.32 q3, [r6, #16]
+; CHECK-NEXT:    vstrw.32 q2, [r6], #32
 ; CHECK-NEXT:    le lr, .LBB2_4
 ; CHECK-NEXT:  @ %bb.5: @ %middle.block
 ; CHECK-NEXT:    cmp r12, r3

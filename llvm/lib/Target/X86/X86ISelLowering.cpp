@@ -46921,21 +46921,10 @@ static SDValue combineBasicSADPattern(SDNode *Extract, SelectionDAG &DAG,
     Root = Root.getOperand(0);
 
   // Check whether we have an vXi8 abdu pattern.
-  // TODO: Just match ISD::ABDU once the DAG is topological sorted.
   SDValue Src0, Src1;
-  if (!sd_match(
-          Root,
-          m_AnyOf(
-              m_SpecificVectorElementVT(
-                  MVT::i8, m_c_BinOp(ISD::ABDU, m_Value(Src0), m_Value(Src1))),
-              m_SpecificVectorElementVT(
-                  MVT::i8, m_Sub(m_UMax(m_Value(Src0), m_Value(Src1)),
-                                 m_UMin(m_Deferred(Src0), m_Deferred(Src1)))),
-              m_Abs(
-                  m_Sub(m_AllOf(m_Value(Src0),
-                                m_ZExt(m_SpecificVectorElementVT(MVT::i8))),
-                        m_AllOf(m_Value(Src1),
-                                m_ZExt(m_SpecificVectorElementVT(MVT::i8))))))))
+  if (!sd_match(Root, m_SpecificVectorElementVT(
+                          MVT::i8,
+                          m_c_BinOp(ISD::ABDU, m_Value(Src0), m_Value(Src1)))))
     return SDValue();
 
   // Create the SAD instruction.

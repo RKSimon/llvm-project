@@ -62,7 +62,7 @@ define <4 x i32> @combine_mul_self_demandedbits_vector(<4 x i32> %x) {
 define i8 @one_demanded_bit(i8 %x) {
 ; CHECK-LABEL: one_demanded_bit:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    lsl w8, w0, #6
+; CHECK-NEXT:    neg w8, w0, lsl #6
 ; CHECK-NEXT:    orr w0, w8, #0xffffffbf
 ; CHECK-NEXT:    ret
   %m = mul i8 %x, 192  ; 0b1100_0000

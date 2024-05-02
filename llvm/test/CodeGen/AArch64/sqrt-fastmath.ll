@@ -264,13 +264,18 @@ define float @frsqrt(float %a) {
 ;
 ; CHECK-LABEL: frsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte s1, s0
-; CHECK-NEXT:    fmul s2, s1, s1
-; CHECK-NEXT:    frsqrts s2, s0, s2
-; CHECK-NEXT:    fmul s1, s1, s2
-; CHECK-NEXT:    fmul s2, s1, s1
-; CHECK-NEXT:    frsqrts s0, s0, s2
-; CHECK-NEXT:    fmul s0, s1, s0
+; CHECK-NEXT:    frsqrte s2, s0
+; CHECK-NEXT:    fcmp s0, #0.0
+; CHECK-NEXT:    fmov s1, #1.00000000
+; CHECK-NEXT:    fmul s3, s2, s2
+; CHECK-NEXT:    frsqrts s3, s0, s3
+; CHECK-NEXT:    fmul s2, s2, s3
+; CHECK-NEXT:    fmul s3, s2, s2
+; CHECK-NEXT:    fmul s2, s0, s2
+; CHECK-NEXT:    frsqrts s3, s0, s3
+; CHECK-NEXT:    fmul s2, s2, s3
+; CHECK-NEXT:    fcsel s0, s0, s2, eq
+; CHECK-NEXT:    fdiv s0, s1, s0
 ; CHECK-NEXT:    ret
   %1 = tail call fast float @llvm.sqrt.f32(float %a)
   %2 = fdiv fast float 1.000000e+00, %1
@@ -287,13 +292,18 @@ define <2 x float> @f2rsqrt(<2 x float> %a) {
 ;
 ; CHECK-LABEL: f2rsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte v1.2s, v0.2s
-; CHECK-NEXT:    fmul v2.2s, v1.2s, v1.2s
-; CHECK-NEXT:    frsqrts v2.2s, v0.2s, v2.2s
-; CHECK-NEXT:    fmul v1.2s, v1.2s, v2.2s
-; CHECK-NEXT:    fmul v2.2s, v1.2s, v1.2s
-; CHECK-NEXT:    frsqrts v0.2s, v0.2s, v2.2s
-; CHECK-NEXT:    fmul v0.2s, v1.2s, v0.2s
+; CHECK-NEXT:    frsqrte v2.2s, v0.2s
+; CHECK-NEXT:    fmov v1.2s, #1.00000000
+; CHECK-NEXT:    fmul v3.2s, v2.2s, v2.2s
+; CHECK-NEXT:    frsqrts v3.2s, v0.2s, v3.2s
+; CHECK-NEXT:    fmul v2.2s, v2.2s, v3.2s
+; CHECK-NEXT:    fmul v3.2s, v2.2s, v2.2s
+; CHECK-NEXT:    fmul v2.2s, v0.2s, v2.2s
+; CHECK-NEXT:    frsqrts v3.2s, v0.2s, v3.2s
+; CHECK-NEXT:    fmul v2.2s, v2.2s, v3.2s
+; CHECK-NEXT:    fcmeq v3.2s, v0.2s, #0.0
+; CHECK-NEXT:    bif v0.8b, v2.8b, v3.8b
+; CHECK-NEXT:    fdiv v0.2s, v1.2s, v0.2s
 ; CHECK-NEXT:    ret
   %1 = tail call fast <2 x float> @llvm.sqrt.v2f32(<2 x float> %a)
   %2 = fdiv fast <2 x float> <float 1.000000e+00, float 1.000000e+00>, %1
@@ -310,13 +320,18 @@ define <4 x float> @f4rsqrt(<4 x float> %a) {
 ;
 ; CHECK-LABEL: f4rsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte v1.4s, v0.4s
-; CHECK-NEXT:    fmul v2.4s, v1.4s, v1.4s
-; CHECK-NEXT:    frsqrts v2.4s, v0.4s, v2.4s
-; CHECK-NEXT:    fmul v1.4s, v1.4s, v2.4s
-; CHECK-NEXT:    fmul v2.4s, v1.4s, v1.4s
-; CHECK-NEXT:    frsqrts v0.4s, v0.4s, v2.4s
-; CHECK-NEXT:    fmul v0.4s, v1.4s, v0.4s
+; CHECK-NEXT:    frsqrte v2.4s, v0.4s
+; CHECK-NEXT:    fmov v1.4s, #1.00000000
+; CHECK-NEXT:    fmul v3.4s, v2.4s, v2.4s
+; CHECK-NEXT:    frsqrts v3.4s, v0.4s, v3.4s
+; CHECK-NEXT:    fmul v2.4s, v2.4s, v3.4s
+; CHECK-NEXT:    fmul v3.4s, v2.4s, v2.4s
+; CHECK-NEXT:    fmul v2.4s, v0.4s, v2.4s
+; CHECK-NEXT:    frsqrts v3.4s, v0.4s, v3.4s
+; CHECK-NEXT:    fmul v2.4s, v2.4s, v3.4s
+; CHECK-NEXT:    fcmeq v3.4s, v0.4s, #0.0
+; CHECK-NEXT:    bif v0.16b, v2.16b, v3.16b
+; CHECK-NEXT:    fdiv v0.4s, v1.4s, v0.4s
 ; CHECK-NEXT:    ret
   %1 = tail call fast <4 x float> @llvm.sqrt.v4f32(<4 x float> %a)
   %2 = fdiv fast <4 x float> <float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00>, %1
@@ -335,20 +350,29 @@ define <8 x float> @f8rsqrt(<8 x float> %a) {
 ;
 ; CHECK-LABEL: f8rsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte v2.4s, v0.4s
-; CHECK-NEXT:    frsqrte v3.4s, v1.4s
-; CHECK-NEXT:    fmul v4.4s, v2.4s, v2.4s
-; CHECK-NEXT:    frsqrts v4.4s, v0.4s, v4.4s
+; CHECK-NEXT:    frsqrte v3.4s, v0.4s
+; CHECK-NEXT:    fmov v2.4s, #1.00000000
+; CHECK-NEXT:    frsqrte v4.4s, v1.4s
 ; CHECK-NEXT:    fmul v5.4s, v3.4s, v3.4s
-; CHECK-NEXT:    frsqrts v5.4s, v1.4s, v5.4s
-; CHECK-NEXT:    fmul v2.4s, v2.4s, v4.4s
-; CHECK-NEXT:    fmul v4.4s, v2.4s, v2.4s
-; CHECK-NEXT:    frsqrts v0.4s, v0.4s, v4.4s
+; CHECK-NEXT:    frsqrts v5.4s, v0.4s, v5.4s
+; CHECK-NEXT:    fmul v6.4s, v4.4s, v4.4s
+; CHECK-NEXT:    frsqrts v6.4s, v1.4s, v6.4s
 ; CHECK-NEXT:    fmul v3.4s, v3.4s, v5.4s
-; CHECK-NEXT:    fmul v4.4s, v3.4s, v3.4s
-; CHECK-NEXT:    frsqrts v1.4s, v1.4s, v4.4s
-; CHECK-NEXT:    fmul v0.4s, v2.4s, v0.4s
-; CHECK-NEXT:    fmul v1.4s, v3.4s, v1.4s
+; CHECK-NEXT:    fmul v5.4s, v3.4s, v3.4s
+; CHECK-NEXT:    fmul v3.4s, v0.4s, v3.4s
+; CHECK-NEXT:    frsqrts v5.4s, v0.4s, v5.4s
+; CHECK-NEXT:    fmul v4.4s, v4.4s, v6.4s
+; CHECK-NEXT:    fmul v6.4s, v4.4s, v4.4s
+; CHECK-NEXT:    frsqrts v6.4s, v1.4s, v6.4s
+; CHECK-NEXT:    fmul v3.4s, v3.4s, v5.4s
+; CHECK-NEXT:    fcmeq v5.4s, v0.4s, #0.0
+; CHECK-NEXT:    bif v0.16b, v3.16b, v5.16b
+; CHECK-NEXT:    fmul v3.4s, v1.4s, v4.4s
+; CHECK-NEXT:    fcmeq v4.4s, v1.4s, #0.0
+; CHECK-NEXT:    fdiv v0.4s, v2.4s, v0.4s
+; CHECK-NEXT:    fmul v3.4s, v3.4s, v6.4s
+; CHECK-NEXT:    bif v1.16b, v3.16b, v4.16b
+; CHECK-NEXT:    fdiv v1.4s, v2.4s, v1.4s
 ; CHECK-NEXT:    ret
   %1 = tail call fast <8 x float> @llvm.sqrt.v8f32(<8 x float> %a)
   %2 = fdiv fast <8 x float> <float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00, float 1.000000e+00>, %1
@@ -365,16 +389,21 @@ define double @drsqrt(double %a) {
 ;
 ; CHECK-LABEL: drsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte d1, d0
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d0, d0, d2
-; CHECK-NEXT:    fmul d0, d1, d0
+; CHECK-NEXT:    frsqrte d2, d0
+; CHECK-NEXT:    fcmp d0, #0.0
+; CHECK-NEXT:    fmov d1, #1.00000000
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    fmul d2, d0, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fcsel d0, d0, d2, eq
+; CHECK-NEXT:    fdiv d0, d1, d0
 ; CHECK-NEXT:    ret
   %1 = tail call fast double @llvm.sqrt.f64(double %a)
   %2 = fdiv fast double 1.000000e+00, %1
@@ -391,16 +420,21 @@ define <2 x double> @d2rsqrt(<2 x double> %a) {
 ;
 ; CHECK-LABEL: d2rsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte v1.2d, v0.2d
-; CHECK-NEXT:    fmul v2.2d, v1.2d, v1.2d
-; CHECK-NEXT:    frsqrts v2.2d, v0.2d, v2.2d
-; CHECK-NEXT:    fmul v1.2d, v1.2d, v2.2d
-; CHECK-NEXT:    fmul v2.2d, v1.2d, v1.2d
-; CHECK-NEXT:    frsqrts v2.2d, v0.2d, v2.2d
-; CHECK-NEXT:    fmul v1.2d, v1.2d, v2.2d
-; CHECK-NEXT:    fmul v2.2d, v1.2d, v1.2d
-; CHECK-NEXT:    frsqrts v0.2d, v0.2d, v2.2d
-; CHECK-NEXT:    fmul v0.2d, v1.2d, v0.2d
+; CHECK-NEXT:    frsqrte v2.2d, v0.2d
+; CHECK-NEXT:    fmov v1.2d, #1.00000000
+; CHECK-NEXT:    fmul v3.2d, v2.2d, v2.2d
+; CHECK-NEXT:    frsqrts v3.2d, v0.2d, v3.2d
+; CHECK-NEXT:    fmul v2.2d, v2.2d, v3.2d
+; CHECK-NEXT:    fmul v3.2d, v2.2d, v2.2d
+; CHECK-NEXT:    frsqrts v3.2d, v0.2d, v3.2d
+; CHECK-NEXT:    fmul v2.2d, v2.2d, v3.2d
+; CHECK-NEXT:    fmul v3.2d, v2.2d, v2.2d
+; CHECK-NEXT:    fmul v2.2d, v0.2d, v2.2d
+; CHECK-NEXT:    frsqrts v3.2d, v0.2d, v3.2d
+; CHECK-NEXT:    fmul v2.2d, v2.2d, v3.2d
+; CHECK-NEXT:    fcmeq v3.2d, v0.2d, #0.0
+; CHECK-NEXT:    bif v0.16b, v2.16b, v3.16b
+; CHECK-NEXT:    fdiv v0.2d, v1.2d, v0.2d
 ; CHECK-NEXT:    ret
   %1 = tail call fast <2 x double> @llvm.sqrt.v2f64(<2 x double> %a)
   %2 = fdiv fast <2 x double> <double 1.000000e+00, double 1.000000e+00>, %1
@@ -419,26 +453,35 @@ define <4 x double> @d4rsqrt(<4 x double> %a) #0 {
 ;
 ; CHECK-LABEL: d4rsqrt:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte v2.2d, v0.2d
-; CHECK-NEXT:    frsqrte v3.2d, v1.2d
-; CHECK-NEXT:    fmul v4.2d, v2.2d, v2.2d
-; CHECK-NEXT:    frsqrts v4.2d, v0.2d, v4.2d
+; CHECK-NEXT:    frsqrte v3.2d, v0.2d
+; CHECK-NEXT:    fmov v2.2d, #1.00000000
+; CHECK-NEXT:    frsqrte v4.2d, v1.2d
 ; CHECK-NEXT:    fmul v5.2d, v3.2d, v3.2d
-; CHECK-NEXT:    frsqrts v5.2d, v1.2d, v5.2d
-; CHECK-NEXT:    fmul v2.2d, v2.2d, v4.2d
-; CHECK-NEXT:    fmul v4.2d, v2.2d, v2.2d
-; CHECK-NEXT:    frsqrts v4.2d, v0.2d, v4.2d
+; CHECK-NEXT:    frsqrts v5.2d, v0.2d, v5.2d
+; CHECK-NEXT:    fmul v6.2d, v4.2d, v4.2d
+; CHECK-NEXT:    frsqrts v6.2d, v1.2d, v6.2d
 ; CHECK-NEXT:    fmul v3.2d, v3.2d, v5.2d
 ; CHECK-NEXT:    fmul v5.2d, v3.2d, v3.2d
-; CHECK-NEXT:    frsqrts v5.2d, v1.2d, v5.2d
-; CHECK-NEXT:    fmul v2.2d, v2.2d, v4.2d
-; CHECK-NEXT:    fmul v4.2d, v2.2d, v2.2d
-; CHECK-NEXT:    frsqrts v0.2d, v0.2d, v4.2d
+; CHECK-NEXT:    frsqrts v5.2d, v0.2d, v5.2d
+; CHECK-NEXT:    fmul v4.2d, v4.2d, v6.2d
+; CHECK-NEXT:    fmul v6.2d, v4.2d, v4.2d
+; CHECK-NEXT:    frsqrts v6.2d, v1.2d, v6.2d
 ; CHECK-NEXT:    fmul v3.2d, v3.2d, v5.2d
-; CHECK-NEXT:    fmul v4.2d, v3.2d, v3.2d
-; CHECK-NEXT:    frsqrts v1.2d, v1.2d, v4.2d
-; CHECK-NEXT:    fmul v0.2d, v2.2d, v0.2d
-; CHECK-NEXT:    fmul v1.2d, v3.2d, v1.2d
+; CHECK-NEXT:    fmul v5.2d, v3.2d, v3.2d
+; CHECK-NEXT:    fmul v3.2d, v0.2d, v3.2d
+; CHECK-NEXT:    frsqrts v5.2d, v0.2d, v5.2d
+; CHECK-NEXT:    fmul v4.2d, v4.2d, v6.2d
+; CHECK-NEXT:    fmul v6.2d, v4.2d, v4.2d
+; CHECK-NEXT:    frsqrts v6.2d, v1.2d, v6.2d
+; CHECK-NEXT:    fmul v3.2d, v3.2d, v5.2d
+; CHECK-NEXT:    fcmeq v5.2d, v0.2d, #0.0
+; CHECK-NEXT:    bif v0.16b, v3.16b, v5.16b
+; CHECK-NEXT:    fmul v3.2d, v1.2d, v4.2d
+; CHECK-NEXT:    fcmeq v4.2d, v1.2d, #0.0
+; CHECK-NEXT:    fdiv v0.2d, v2.2d, v0.2d
+; CHECK-NEXT:    fmul v3.2d, v3.2d, v6.2d
+; CHECK-NEXT:    bif v1.16b, v3.16b, v4.16b
+; CHECK-NEXT:    fdiv v1.2d, v2.2d, v1.2d
 ; CHECK-NEXT:    ret
   %1 = tail call fast <4 x double> @llvm.sqrt.v4f64(<4 x double> %a)
   %2 = fdiv fast <4 x double> <double 1.000000e+00, double 1.000000e+00, double 1.000000e+00, double 1.000000e+00>, %1
@@ -454,6 +497,7 @@ define double @sqrt_fdiv_common_operand(double %x) nounwind {
 ; CHECK-LABEL: sqrt_fdiv_common_operand:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    frsqrte d1, d0
+; CHECK-NEXT:    fcmp d0, #0.0
 ; CHECK-NEXT:    fmul d2, d1, d1
 ; CHECK-NEXT:    frsqrts d2, d0, d2
 ; CHECK-NEXT:    fmul d1, d1, d2
@@ -461,9 +505,11 @@ define double @sqrt_fdiv_common_operand(double %x) nounwind {
 ; CHECK-NEXT:    frsqrts d2, d0, d2
 ; CHECK-NEXT:    fmul d1, d1, d2
 ; CHECK-NEXT:    fmul d2, d1, d1
+; CHECK-NEXT:    fmul d1, d0, d1
 ; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d0, d0, d1
-; CHECK-NEXT:    fmul d0, d0, d2
+; CHECK-NEXT:    fmul d1, d1, d2
+; CHECK-NEXT:    fcsel d1, d0, d1, eq
+; CHECK-NEXT:    fdiv d0, d0, d1
 ; CHECK-NEXT:    ret
   %sqrt = call fast double @llvm.sqrt.f64(double %x)
   %r = fdiv fast double %x, %sqrt
@@ -516,9 +562,9 @@ define double @sqrt_fdiv_common_operand_extra_use(double %x, ptr %p) nounwind {
 ; CHECK-NEXT:    fmul d1, d0, d1
 ; CHECK-NEXT:    frsqrts d2, d0, d2
 ; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fcsel d2, d0, d1, eq
-; CHECK-NEXT:    fmov d0, d1
-; CHECK-NEXT:    str d2, [x0]
+; CHECK-NEXT:    fcsel d1, d0, d1, eq
+; CHECK-NEXT:    fdiv d0, d0, d1
+; CHECK-NEXT:    str d1, [x0]
 ; CHECK-NEXT:    ret
   %sqrt = call fast double @llvm.sqrt.f64(double %x)
   store double %sqrt, ptr %p
@@ -541,17 +587,22 @@ define double @sqrt_simplify_before_recip_3_uses(double %x, ptr %p1, ptr %p2) no
 ;
 ; CHECK-LABEL: sqrt_simplify_before_recip_3_uses:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte d1, d0
+; CHECK-NEXT:    frsqrte d2, d0
+; CHECK-NEXT:    fcmp d0, #0.0
+; CHECK-NEXT:    fmov d1, #1.00000000
 ; CHECK-NEXT:    mov x8, #4631107791820423168 // =0x4045000000000000
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    fmul d2, d0, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fcsel d2, d0, d2, eq
+; CHECK-NEXT:    fdiv d1, d1, d2
 ; CHECK-NEXT:    fmov d2, x8
 ; CHECK-NEXT:    fmul d0, d0, d1
 ; CHECK-NEXT:    fmul d2, d1, d2
@@ -584,17 +635,22 @@ define double @sqrt_simplify_before_recip_3_uses_order(double %x, ptr %p1, ptr %
 ;
 ; CHECK-LABEL: sqrt_simplify_before_recip_3_uses_order:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    frsqrte d1, d0
+; CHECK-NEXT:    frsqrte d2, d0
+; CHECK-NEXT:    fcmp d0, #0.0
+; CHECK-NEXT:    fmov d1, #1.00000000
 ; CHECK-NEXT:    mov x8, #4631107791820423168 // =0x4045000000000000
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d1, d1
-; CHECK-NEXT:    frsqrts d2, d0, d2
-; CHECK-NEXT:    fmul d1, d1, d2
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fmul d3, d2, d2
+; CHECK-NEXT:    fmul d2, d0, d2
+; CHECK-NEXT:    frsqrts d3, d0, d3
+; CHECK-NEXT:    fmul d2, d2, d3
+; CHECK-NEXT:    fcsel d2, d0, d2, eq
+; CHECK-NEXT:    fdiv d1, d1, d2
 ; CHECK-NEXT:    fmov d2, x8
 ; CHECK-NEXT:    mov x8, #140737488355328 // =0x800000000000
 ; CHECK-NEXT:    movk x8, #16453, lsl #48
@@ -645,17 +701,19 @@ define double @sqrt_simplify_before_recip_4_uses(double %x, ptr %p1, ptr %p2, pt
 ; CHECK-NEXT:    frsqrts d2, d0, d2
 ; CHECK-NEXT:    fmul d1, d1, d2
 ; CHECK-NEXT:    fmul d2, d1, d1
+; CHECK-NEXT:    fmul d1, d0, d1
 ; CHECK-NEXT:    frsqrts d2, d0, d2
 ; CHECK-NEXT:    fmul d1, d1, d2
-; CHECK-NEXT:    fmul d2, d0, d1
-; CHECK-NEXT:    str d1, [x0]
-; CHECK-NEXT:    fcsel d2, d0, d2, eq
-; CHECK-NEXT:    fdiv d0, d0, d2
+; CHECK-NEXT:    fmov d2, #1.00000000
+; CHECK-NEXT:    fcsel d1, d0, d1, eq
+; CHECK-NEXT:    fdiv d1, d2, d1
 ; CHECK-NEXT:    fmov d2, x8
 ; CHECK-NEXT:    mov x8, #140737488355328 // =0x800000000000
 ; CHECK-NEXT:    movk x8, #16453, lsl #48
 ; CHECK-NEXT:    fmov d3, x8
 ; CHECK-NEXT:    fmul d2, d1, d2
+; CHECK-NEXT:    fmul d0, d0, d1
+; CHECK-NEXT:    str d1, [x0]
 ; CHECK-NEXT:    fmul d3, d1, d3
 ; CHECK-NEXT:    str d2, [x1]
 ; CHECK-NEXT:    str d3, [x2]

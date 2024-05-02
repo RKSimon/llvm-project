@@ -241,8 +241,12 @@ define i32 @load_i32_by_i8_neg_offset(ptr %arg) {
 define i32 @load_i32_by_i8_nonzero_offset_bswap(ptr %arg) {
 ; CHECK-LABEL: load_i32_by_i8_nonzero_offset_bswap:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldur w8, [x0, #1]
-; CHECK-NEXT:    rev w0, w8
+; CHECK-NEXT:    ldurh w8, [x0, #3]
+; CHECK-NEXT:    ldrb w9, [x0, #2]
+; CHECK-NEXT:    rev w8, w8
+; CHECK-NEXT:    extr w8, w9, w8, #16
+; CHECK-NEXT:    ldrb w9, [x0, #1]
+; CHECK-NEXT:    orr w0, w8, w9, lsl #24
 ; CHECK-NEXT:    ret
 
   %tmp1 = getelementptr inbounds i8, ptr %arg, i32 4
@@ -271,8 +275,12 @@ define i32 @load_i32_by_i8_nonzero_offset_bswap(ptr %arg) {
 define i32 @load_i32_by_i8_neg_offset_bswap(ptr %arg) {
 ; CHECK-LABEL: load_i32_by_i8_neg_offset_bswap:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldur w8, [x0, #-4]
-; CHECK-NEXT:    rev w0, w8
+; CHECK-NEXT:    ldurh w8, [x0, #-2]
+; CHECK-NEXT:    ldurb w9, [x0, #-3]
+; CHECK-NEXT:    rev w8, w8
+; CHECK-NEXT:    extr w8, w9, w8, #16
+; CHECK-NEXT:    ldurb w9, [x0, #-4]
+; CHECK-NEXT:    orr w0, w8, w9, lsl #24
 ; CHECK-NEXT:    ret
 
   %tmp1 = getelementptr inbounds i8, ptr %arg, i32 -1
@@ -303,8 +311,11 @@ declare i16 @llvm.bswap.i16(i16)
 define i32 @load_i32_by_bswap_i16(ptr %arg) {
 ; CHECK-LABEL: load_i32_by_bswap_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldr w8, [x0]
-; CHECK-NEXT:    rev w0, w8
+; CHECK-NEXT:    ldrh w8, [x0]
+; CHECK-NEXT:    ldrh w9, [x0, #2]
+; CHECK-NEXT:    rev16 w8, w8
+; CHECK-NEXT:    rev w9, w9
+; CHECK-NEXT:    extr w0, w8, w9, #16
 ; CHECK-NEXT:    ret
 
   %tmp1 = load i16, ptr %arg, align 4
@@ -609,8 +620,8 @@ define void @short_vector_to_i32_unused_high_i8(ptr %in, ptr %out, ptr %p) {
 ; CHECK-NEXT:    ldrh w9, [x0]
 ; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
 ; CHECK-NEXT:    umov w8, v0.h[2]
-; CHECK-NEXT:    orr w8, w9, w8, lsl #16
-; CHECK-NEXT:    str w8, [x1]
+; CHECK-NEXT:    bfi w9, w8, #16, #8
+; CHECK-NEXT:    str w9, [x1]
 ; CHECK-NEXT:    ret
   %ld = load <4 x i8>, ptr %in, align 4
 

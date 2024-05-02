@@ -63,7 +63,9 @@ define <4 x i1> @fshl_or2_commute_eq_0(<4 x i32> %x, <4 x i32> %y) {
 define i1 @fshr_or_eq_0(i16 %x, i16 %y) {
 ; CHECK-LABEL: fshr_or_eq_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    orr w8, w0, w1, lsl #8
+; CHECK-NEXT:    lsl w8, w0, #16
+; CHECK-NEXT:    orr w9, w0, w1
+; CHECK-NEXT:    extr w8, w9, w8, #24
 ; CHECK-NEXT:    tst w8, #0xffff
 ; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
@@ -76,7 +78,9 @@ define i1 @fshr_or_eq_0(i16 %x, i16 %y) {
 define i1 @fshr_or_commute_eq_0(i16 %x, i16 %y) {
 ; CHECK-LABEL: fshr_or_commute_eq_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    orr w8, w0, w1, lsl #8
+; CHECK-NEXT:    lsl w8, w0, #16
+; CHECK-NEXT:    orr w9, w1, w0
+; CHECK-NEXT:    extr w8, w9, w8, #24
 ; CHECK-NEXT:    tst w8, #0xffff
 ; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
@@ -156,7 +160,8 @@ define <4 x i1> @fshl_or2_commute_ne_0(<4 x i32> %x, <4 x i32> %y) {
 define i1 @fshr_or_ne_0(i64 %x, i64 %y) {
 ; CHECK-LABEL: fshr_or_ne_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    orr x8, x0, x1, lsl #63
+; CHECK-NEXT:    orr w8, w0, w1
+; CHECK-NEXT:    extr x8, x8, x0, #1
 ; CHECK-NEXT:    cmp x8, #0
 ; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
@@ -169,7 +174,8 @@ define i1 @fshr_or_ne_0(i64 %x, i64 %y) {
 define i1 @fshr_or_commute_ne_0(i64 %x, i64 %y) {
 ; CHECK-LABEL: fshr_or_commute_ne_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    orr x8, x0, x1, lsl #63
+; CHECK-NEXT:    orr w8, w1, w0
+; CHECK-NEXT:    extr x8, x8, x0, #1
 ; CHECK-NEXT:    cmp x8, #0
 ; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
@@ -182,8 +188,9 @@ define i1 @fshr_or_commute_ne_0(i64 %x, i64 %y) {
 define i1 @fshr_or2_ne_0(i16 %x, i16 %y) {
 ; CHECK-LABEL: fshr_or2_ne_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w1, #0xfffc
-; CHECK-NEXT:    orr w8, w0, w8, lsr #2
+; CHECK-NEXT:    orr w8, w0, w1
+; CHECK-NEXT:    lsl w8, w8, #16
+; CHECK-NEXT:    extr w8, w0, w8, #18
 ; CHECK-NEXT:    tst w8, #0xffff
 ; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
@@ -196,8 +203,9 @@ define i1 @fshr_or2_ne_0(i16 %x, i16 %y) {
 define i1 @fshr_or2_commute_ne_0(i16 %x, i16 %y) {
 ; CHECK-LABEL: fshr_or2_commute_ne_0:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w1, #0xfffc
-; CHECK-NEXT:    orr w8, w0, w8, lsr #2
+; CHECK-NEXT:    orr w8, w1, w0
+; CHECK-NEXT:    lsl w8, w8, #16
+; CHECK-NEXT:    extr w8, w0, w8, #18
 ; CHECK-NEXT:    tst w8, #0xffff
 ; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret

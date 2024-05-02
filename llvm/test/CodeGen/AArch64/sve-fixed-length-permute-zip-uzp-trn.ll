@@ -35,14 +35,14 @@ define void @zip_v32i16(ptr %a, ptr %b) #0 {
 ; VBITS_EQ_256-NEXT:    ldr z1, [x0]
 ; VBITS_EQ_256-NEXT:    ldr z2, [x1, #1, mul vl]
 ; VBITS_EQ_256-NEXT:    ldr z3, [x1]
-; VBITS_EQ_256-NEXT:    zip1 z5.h, z0.h, z2.h
-; VBITS_EQ_256-NEXT:    zip2 z0.h, z0.h, z2.h
-; VBITS_EQ_256-NEXT:    zip1 z4.h, z1.h, z3.h
-; VBITS_EQ_256-NEXT:    zip2 z1.h, z1.h, z3.h
+; VBITS_EQ_256-NEXT:    zip2 z5.h, z0.h, z2.h
+; VBITS_EQ_256-NEXT:    zip1 z0.h, z0.h, z2.h
+; VBITS_EQ_256-NEXT:    zip2 z4.h, z1.h, z3.h
+; VBITS_EQ_256-NEXT:    zip1 z1.h, z1.h, z3.h
 ; VBITS_EQ_256-NEXT:    add z2.h, z4.h, z5.h
 ; VBITS_EQ_256-NEXT:    add z0.h, z1.h, z0.h
-; VBITS_EQ_256-NEXT:    str z2, [x0]
-; VBITS_EQ_256-NEXT:    str z0, [x0, #1, mul vl]
+; VBITS_EQ_256-NEXT:    str z2, [x0, #1, mul vl]
+; VBITS_EQ_256-NEXT:    str z0, [x0]
 ; VBITS_EQ_256-NEXT:    ret
 ;
 ; VBITS_EQ_512-LABEL: zip_v32i16:
@@ -231,18 +231,18 @@ define void @trn_v32i8(ptr %a, ptr %b) #0 {
 define void @trn_v32i16(ptr %a, ptr %b) #0 {
 ; VBITS_EQ_256-LABEL: trn_v32i16:
 ; VBITS_EQ_256:       // %bb.0:
-; VBITS_EQ_256-NEXT:    ldr z0, [x0]
-; VBITS_EQ_256-NEXT:    ldr z1, [x1]
-; VBITS_EQ_256-NEXT:    ldr z2, [x0, #1, mul vl]
-; VBITS_EQ_256-NEXT:    ldr z3, [x1, #1, mul vl]
+; VBITS_EQ_256-NEXT:    ldr z0, [x0, #1, mul vl]
+; VBITS_EQ_256-NEXT:    ldr z1, [x1, #1, mul vl]
+; VBITS_EQ_256-NEXT:    ldr z2, [x0]
+; VBITS_EQ_256-NEXT:    ldr z3, [x1]
 ; VBITS_EQ_256-NEXT:    trn1 z4.h, z0.h, z1.h
 ; VBITS_EQ_256-NEXT:    trn2 z0.h, z0.h, z1.h
 ; VBITS_EQ_256-NEXT:    trn1 z1.h, z2.h, z3.h
 ; VBITS_EQ_256-NEXT:    trn2 z2.h, z2.h, z3.h
 ; VBITS_EQ_256-NEXT:    add z0.h, z4.h, z0.h
 ; VBITS_EQ_256-NEXT:    add z1.h, z1.h, z2.h
-; VBITS_EQ_256-NEXT:    str z0, [x0]
-; VBITS_EQ_256-NEXT:    str z1, [x0, #1, mul vl]
+; VBITS_EQ_256-NEXT:    str z0, [x0, #1, mul vl]
+; VBITS_EQ_256-NEXT:    str z1, [x0]
 ; VBITS_EQ_256-NEXT:    ret
 ;
 ; VBITS_EQ_512-LABEL: trn_v32i16:
@@ -492,18 +492,18 @@ define void @uzp_v32i8(ptr %a, ptr %b) #1 {
 define void @uzp_v32i16(ptr %a, ptr %b) #1 {
 ; CHECK-LABEL: uzp_v32i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldr z0, [x0, #1, mul vl]
-; CHECK-NEXT:    ldr z1, [x0]
-; CHECK-NEXT:    ldr z2, [x1, #1, mul vl]
-; CHECK-NEXT:    ldr z3, [x1]
+; CHECK-NEXT:    ldr z0, [x1, #1, mul vl]
+; CHECK-NEXT:    ldr z1, [x1]
+; CHECK-NEXT:    ldr z2, [x0, #1, mul vl]
+; CHECK-NEXT:    ldr z3, [x0]
 ; CHECK-NEXT:    uzp1 z4.h, z1.h, z0.h
 ; CHECK-NEXT:    uzp2 z0.h, z1.h, z0.h
 ; CHECK-NEXT:    uzp1 z1.h, z3.h, z2.h
 ; CHECK-NEXT:    uzp2 z2.h, z3.h, z2.h
 ; CHECK-NEXT:    add z0.h, z4.h, z0.h
 ; CHECK-NEXT:    add z1.h, z1.h, z2.h
-; CHECK-NEXT:    str z0, [x0]
-; CHECK-NEXT:    str z1, [x0, #1, mul vl]
+; CHECK-NEXT:    str z0, [x0, #1, mul vl]
+; CHECK-NEXT:    str z1, [x0]
 ; CHECK-NEXT:    ret
   %tmp1 = load <32 x i16>, ptr %a
   %tmp2 = load <32 x i16>, ptr %b

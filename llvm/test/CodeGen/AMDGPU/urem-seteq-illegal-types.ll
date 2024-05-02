@@ -40,10 +40,13 @@ define i1 @test_urem_odd_setne(i4 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_setne:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; CHECK-NEXT:    v_and_b32_e32 v1, 15, v0
+; CHECK-NEXT:    v_mul_u32_u24_e32 v1, 13, v1
+; CHECK-NEXT:    v_lshrrev_b32_e32 v1, 6, v1
+; CHECK-NEXT:    v_mul_u32_u24_e32 v1, 5, v1
+; CHECK-NEXT:    v_sub_i32_e32 v0, vcc, v0, v1
 ; CHECK-NEXT:    v_and_b32_e32 v0, 15, v0
-; CHECK-NEXT:    v_mul_u32_u24_e32 v0, 13, v0
-; CHECK-NEXT:    v_and_b32_e32 v0, 15, v0
-; CHECK-NEXT:    v_cmp_lt_u32_e32 vcc, 3, v0
+; CHECK-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v0
 ; CHECK-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %urem = urem i4 %X, 5
@@ -70,26 +73,28 @@ define <3 x i1> @test_urem_vec(<3 x i11> %X) nounwind {
 ; CHECK-LABEL: test_urem_vec:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_and_b32_e32 v0, 0x7ff, v0
-; CHECK-NEXT:    v_and_b32_e32 v1, 0x7ff, v1
+; CHECK-NEXT:    v_and_b32_e32 v3, 0x7ff, v2
+; CHECK-NEXT:    v_and_b32_e32 v4, 0x7ff, v1
+; CHECK-NEXT:    v_and_b32_e32 v5, 0x7ff, v0
+; CHECK-NEXT:    s_mov_b32 s4, 0x2aaaaaab
+; CHECK-NEXT:    s_mov_b32 s5, 0x24924925
+; CHECK-NEXT:    v_mul_hi_u32 v5, v5, s4
+; CHECK-NEXT:    v_mul_hi_u32 v4, v4, s5
+; CHECK-NEXT:    v_mul_hi_u32_u24_e32 v3, 0x20140d, v3
+; CHECK-NEXT:    v_mul_u32_u24_e32 v5, 6, v5
+; CHECK-NEXT:    v_mul_u32_u24_e32 v4, 7, v4
+; CHECK-NEXT:    v_mul_u32_u24_e32 v3, 0x7fb, v3
+; CHECK-NEXT:    v_sub_i32_e32 v0, vcc, v0, v5
+; CHECK-NEXT:    v_sub_i32_e32 v1, vcc, v1, v4
+; CHECK-NEXT:    v_sub_i32_e32 v2, vcc, v2, v3
 ; CHECK-NEXT:    v_and_b32_e32 v2, 0x7ff, v2
-; CHECK-NEXT:    s_mov_b32 s4, 0x8311eb33
-; CHECK-NEXT:    s_mov_b32 s5, 0x20140c
-; CHECK-NEXT:    s_mov_b32 s6, 0xb6db6db7
-; CHECK-NEXT:    s_mov_b32 s7, 0x24924924
-; CHECK-NEXT:    s_mov_b32 s8, 0xaaaaaaab
-; CHECK-NEXT:    s_mov_b32 s9, 0x2aaaaaaa
-; CHECK-NEXT:    v_mul_lo_u32 v2, v2, s4
-; CHECK-NEXT:    v_mul_lo_u32 v1, v1, s6
-; CHECK-NEXT:    v_mul_lo_u32 v0, v0, s8
-; CHECK-NEXT:    v_add_i32_e32 v2, vcc, 0xf9dc299a, v2
-; CHECK-NEXT:    v_add_i32_e32 v1, vcc, 0x49249249, v1
-; CHECK-NEXT:    v_alignbit_b32 v0, v0, v0, 1
-; CHECK-NEXT:    v_cmp_lt_u32_e32 vcc, s9, v0
+; CHECK-NEXT:    v_and_b32_e32 v1, 0x7ff, v1
+; CHECK-NEXT:    v_and_b32_e32 v0, 0x7ff, v0
+; CHECK-NEXT:    v_cmp_ne_u32_e32 vcc, 0, v0
 ; CHECK-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
-; CHECK-NEXT:    v_cmp_lt_u32_e32 vcc, s7, v1
+; CHECK-NEXT:    v_cmp_ne_u32_e32 vcc, 1, v1
 ; CHECK-NEXT:    v_cndmask_b32_e64 v1, 0, 1, vcc
-; CHECK-NEXT:    v_cmp_lt_u32_e32 vcc, s5, v2
+; CHECK-NEXT:    v_cmp_ne_u32_e32 vcc, 2, v2
 ; CHECK-NEXT:    v_cndmask_b32_e64 v2, 0, 1, vcc
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %urem = urem <3 x i11> %X, <i11 6, i11 7, i11 -5>

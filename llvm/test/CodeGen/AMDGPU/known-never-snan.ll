@@ -179,8 +179,8 @@ define float @v_test_known_not_snan_maxnum_input_fmed3_r_i_i_f32(float %a, float
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    v_rcp_f32_e32 v0, v0
 ; GCN-NEXT:    v_add_f32_e32 v1, 1.0, v1
-; GCN-NEXT:    v_max_f32_e32 v0, v0, v1
-; GCN-NEXT:    v_med3_f32 v0, v0, 2.0, 4.0
+; GCN-NEXT:    v_max3_f32 v0, v0, v1, 2.0
+; GCN-NEXT:    v_min_f32_e32 v0, 4.0, v0
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %a.nnan.add = fdiv nnan float 1.0, %a, !fpmath !0
   %b.nnan.add = fadd nnan float %b, 1.0
@@ -195,9 +195,8 @@ define float @v_maxnum_possible_nan_lhs_input_fmed3_r_i_i_f32(float %a, float %b
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    v_add_f32_e32 v1, 1.0, v1
-; GCN-NEXT:    v_mul_f32_e32 v0, 1.0, v0
-; GCN-NEXT:    v_max_f32_e32 v0, v0, v1
-; GCN-NEXT:    v_med3_f32 v0, v0, 2.0, 4.0
+; GCN-NEXT:    v_max3_f32 v0, v0, v1, 2.0
+; GCN-NEXT:    v_min_f32_e32 v0, 4.0, v0
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %b.nnan.add = fadd nnan float %b, 1.0
   %known.not.snan = call float @llvm.maxnum.f32(float %a, float %b.nnan.add)
@@ -211,9 +210,8 @@ define float @v_maxnum_possible_nan_rhs_input_fmed3_r_i_i_f32(float %a, float %b
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GCN-NEXT:    v_rcp_f32_e32 v0, v0
-; GCN-NEXT:    v_mul_f32_e32 v1, 1.0, v1
-; GCN-NEXT:    v_max_f32_e32 v0, v0, v1
-; GCN-NEXT:    v_med3_f32 v0, v0, 2.0, 4.0
+; GCN-NEXT:    v_max3_f32 v0, v0, v1, 2.0
+; GCN-NEXT:    v_min_f32_e32 v0, 4.0, v0
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %a.nnan.add = fdiv nnan float 1.0, %a, !fpmath !0
   %known.not.snan = call float @llvm.maxnum.f32(float %a.nnan.add, float %b)

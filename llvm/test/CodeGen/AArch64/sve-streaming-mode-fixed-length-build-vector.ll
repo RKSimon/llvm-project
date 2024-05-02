@@ -249,7 +249,13 @@ define void @build_vector_non_const_v4i1(i1 %a, i1 %b, i1 %c, i1 %d, ptr %out) {
 define void @build_vector_non_const_v2f64(double %a, double %b, ptr %out) {
 ; CHECK-LABEL: build_vector_non_const_v2f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    zip1 z0.d, z0.d, z1.d
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z2.d, #0, #1
+; CHECK-NEXT:    ptrue p0.d
+; CHECK-NEXT:    mov z3.d, x8
+; CHECK-NEXT:    mov z0.d, d0
+; CHECK-NEXT:    cmpeq p0.d, p0/z, z2.d, z3.d
+; CHECK-NEXT:    mov z0.d, p0/m, d1
 ; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
@@ -270,7 +276,13 @@ define void @build_vector_non_const_v2f64(double %a, double %b, ptr %out) {
 define void @build_vector_non_const_v2f32(float %a, float %b, ptr %out) {
 ; CHECK-LABEL: build_vector_non_const_v2f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    zip1 z0.s, z0.s, z1.s
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z2.s, #0, #1
+; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    mov z3.s, w8
+; CHECK-NEXT:    mov z0.s, s0
+; CHECK-NEXT:    cmpeq p0.s, p0/z, z2.s, z3.s
+; CHECK-NEXT:    mov z0.s, p0/m, s1
 ; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
 ;
@@ -292,9 +304,21 @@ define void @build_vector_non_const_v2f32(float %a, float %b, ptr %out) {
 define void @build_vector_non_const_v4f32(float %a, float %b, float %c, float %d, ptr %out)  {
 ; CHECK-LABEL: build_vector_non_const_v4f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    zip1 z2.s, z2.s, z3.s
-; CHECK-NEXT:    zip1 z0.s, z0.s, z1.s
-; CHECK-NEXT:    zip1 z0.d, z0.d, z2.d
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z4.s, #0, #1
+; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    mov z5.s, w8
+; CHECK-NEXT:    mov w8, #2 // =0x2
+; CHECK-NEXT:    mov z0.s, s0
+; CHECK-NEXT:    cmpeq p1.s, p0/z, z4.s, z5.s
+; CHECK-NEXT:    mov z5.s, w8
+; CHECK-NEXT:    mov w8, #3 // =0x3
+; CHECK-NEXT:    cmpeq p2.s, p0/z, z4.s, z5.s
+; CHECK-NEXT:    mov z5.s, w8
+; CHECK-NEXT:    mov z0.s, p1/m, s1
+; CHECK-NEXT:    cmpeq p0.s, p0/z, z4.s, z5.s
+; CHECK-NEXT:    mov z0.s, p2/m, s2
+; CHECK-NEXT:    mov z0.s, p0/m, s3
 ; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
@@ -344,13 +368,37 @@ define void @build_vector_non_const_v4f64(double %a, double %b, double %c, doubl
 define void @build_vector_non_const_v8f16(half %a, half %b, half %c, half %d, half %e, half %f, half %g, half %h, ptr %out) {
 ; CHECK-LABEL: build_vector_non_const_v8f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    zip1 z6.h, z6.h, z7.h
-; CHECK-NEXT:    zip1 z4.h, z4.h, z5.h
-; CHECK-NEXT:    zip1 z2.h, z2.h, z3.h
-; CHECK-NEXT:    zip1 z0.h, z0.h, z1.h
-; CHECK-NEXT:    zip1 z1.s, z4.s, z6.s
-; CHECK-NEXT:    zip1 z0.s, z0.s, z2.s
-; CHECK-NEXT:    zip1 z0.d, z0.d, z1.d
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z16.h, #0, #1
+; CHECK-NEXT:    ptrue p0.h
+; CHECK-NEXT:    mov z17.h, w8
+; CHECK-NEXT:    mov w8, #2 // =0x2
+; CHECK-NEXT:    mov z0.h, h0
+; CHECK-NEXT:    cmpeq p1.h, p0/z, z16.h, z17.h
+; CHECK-NEXT:    mov z17.h, w8
+; CHECK-NEXT:    mov w8, #3 // =0x3
+; CHECK-NEXT:    cmpeq p2.h, p0/z, z16.h, z17.h
+; CHECK-NEXT:    mov z17.h, w8
+; CHECK-NEXT:    mov w8, #4 // =0x4
+; CHECK-NEXT:    mov z0.h, p1/m, h1
+; CHECK-NEXT:    mov z1.h, w8
+; CHECK-NEXT:    mov w8, #5 // =0x5
+; CHECK-NEXT:    cmpeq p1.h, p0/z, z16.h, z17.h
+; CHECK-NEXT:    mov z0.h, p2/m, h2
+; CHECK-NEXT:    cmpeq p2.h, p0/z, z16.h, z1.h
+; CHECK-NEXT:    mov z1.h, w8
+; CHECK-NEXT:    mov w8, #6 // =0x6
+; CHECK-NEXT:    mov z0.h, p1/m, h3
+; CHECK-NEXT:    cmpeq p1.h, p0/z, z16.h, z1.h
+; CHECK-NEXT:    mov z1.h, w8
+; CHECK-NEXT:    mov w8, #7 // =0x7
+; CHECK-NEXT:    mov z0.h, p2/m, h4
+; CHECK-NEXT:    cmpeq p2.h, p0/z, z16.h, z1.h
+; CHECK-NEXT:    mov z1.h, w8
+; CHECK-NEXT:    mov z0.h, p1/m, h5
+; CHECK-NEXT:    cmpeq p0.h, p0/z, z16.h, z1.h
+; CHECK-NEXT:    mov z0.h, p2/m, h6
+; CHECK-NEXT:    mov z0.h, p0/m, h7
 ; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
@@ -385,9 +433,13 @@ define void @build_vector_non_const_v8f16(half %a, half %b, half %c, half %d, ha
 define void @build_vector_non_const_v2i32(i32 %a, i32 %b, ptr %out) {
 ; CHECK-LABEL: build_vector_non_const_v2i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    fmov s0, w1
-; CHECK-NEXT:    fmov s1, w0
-; CHECK-NEXT:    zip1 z0.s, z1.s, z0.s
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z0.s, #0, #1
+; CHECK-NEXT:    ptrue p0.s
+; CHECK-NEXT:    mov z1.s, w8
+; CHECK-NEXT:    cmpeq p0.s, p0/z, z0.s, z1.s
+; CHECK-NEXT:    mov z0.s, w0
+; CHECK-NEXT:    mov z0.s, p0/m, w1
 ; CHECK-NEXT:    str d0, [x2]
 ; CHECK-NEXT:    ret
 ;
@@ -409,20 +461,39 @@ define void @build_vector_non_const_v2i32(i32 %a, i32 %b, ptr %out) {
 define void @build_vector_non_const_v8i8(i8 %a, i8 %b, i8 %c, i8 %d, i8 %e, i8 %f, i8 %g, i8 %h, ptr %out) {
 ; CHECK-LABEL: build_vector_non_const_v8i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sub sp, sp, #16
-; CHECK-NEXT:    .cfi_def_cfa_offset 16
-; CHECK-NEXT:    strb w7, [sp, #15]
-; CHECK-NEXT:    ldr x8, [sp, #16]
-; CHECK-NEXT:    strb w6, [sp, #14]
-; CHECK-NEXT:    strb w5, [sp, #13]
-; CHECK-NEXT:    strb w4, [sp, #12]
-; CHECK-NEXT:    strb w3, [sp, #11]
-; CHECK-NEXT:    strb w2, [sp, #10]
-; CHECK-NEXT:    strb w1, [sp, #9]
-; CHECK-NEXT:    strb w0, [sp, #8]
-; CHECK-NEXT:    ldr d0, [sp, #8]
-; CHECK-NEXT:    str d0, [x8]
-; CHECK-NEXT:    add sp, sp, #16
+; CHECK-NEXT:    mov w8, #1 // =0x1
+; CHECK-NEXT:    index z0.b, #0, #1
+; CHECK-NEXT:    ptrue p0.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #2 // =0x2
+; CHECK-NEXT:    mov z2.b, w0
+; CHECK-NEXT:    cmpeq p1.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #3 // =0x3
+; CHECK-NEXT:    cmpeq p2.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #4 // =0x4
+; CHECK-NEXT:    mov z2.b, p1/m, w1
+; CHECK-NEXT:    cmpeq p1.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #5 // =0x5
+; CHECK-NEXT:    mov z2.b, p2/m, w2
+; CHECK-NEXT:    cmpeq p2.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #6 // =0x6
+; CHECK-NEXT:    mov z2.b, p1/m, w3
+; CHECK-NEXT:    cmpeq p1.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    mov w8, #7 // =0x7
+; CHECK-NEXT:    mov z2.b, p2/m, w4
+; CHECK-NEXT:    cmpeq p2.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z1.b, w8
+; CHECK-NEXT:    ldr x8, [sp]
+; CHECK-NEXT:    mov z2.b, p1/m, w5
+; CHECK-NEXT:    cmpeq p0.b, p0/z, z0.b, z1.b
+; CHECK-NEXT:    mov z2.b, p2/m, w6
+; CHECK-NEXT:    mov z2.b, p0/m, w7
+; CHECK-NEXT:    str d2, [x8]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: build_vector_non_const_v8i8:

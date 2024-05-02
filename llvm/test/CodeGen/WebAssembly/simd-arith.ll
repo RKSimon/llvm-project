@@ -1996,31 +1996,47 @@ define void @avgr_undef_shuffle_lanes(ptr %res, <8 x i8> %a, <8 x i8> %b, <8 x i
 ; SIMD128-LABEL: avgr_undef_shuffle_lanes:
 ; SIMD128:         .functype avgr_undef_shuffle_lanes (i32, v128, v128, v128, v128) -> ()
 ; SIMD128-NEXT:  # %bb.0:
-; SIMD128-NEXT:    i8x16.avgr_u $push1=, $1, $2
-; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push8=, $pop1
-; SIMD128-NEXT:    local.tee $push7=, $2=, $pop8
-; SIMD128-NEXT:    i8x16.avgr_u $push0=, $3, $4
-; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push6=, $pop0
-; SIMD128-NEXT:    local.tee $push5=, $4=, $pop6
-; SIMD128-NEXT:    i8x16.shuffle $push3=, $pop7, $pop5, 0, 1, 16, 17, 2, 3, 18, 19, 4, 5, 20, 21, 6, 7, 22, 23
-; SIMD128-NEXT:    i8x16.shuffle $push2=, $2, $4, 8, 9, 24, 25, 10, 11, 26, 27, 12, 13, 28, 29, 14, 15, 30, 31
-; SIMD128-NEXT:    i8x16.narrow_i16x8_u $push4=, $pop3, $pop2
-; SIMD128-NEXT:    v128.store 0($0):p2align=0, $pop4
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push7=, $1
+; SIMD128-NEXT:    i8x16.shuffle $push8=, $pop7, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push5=, $2
+; SIMD128-NEXT:    i8x16.shuffle $push6=, $pop5, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-NEXT:    i8x16.avgr_u $push9=, $pop8, $pop6
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push16=, $pop9
+; SIMD128-NEXT:    local.tee $push15=, $2=, $pop16
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push2=, $3
+; SIMD128-NEXT:    i8x16.shuffle $push3=, $pop2, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push0=, $4
+; SIMD128-NEXT:    i8x16.shuffle $push1=, $pop0, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-NEXT:    i8x16.avgr_u $push4=, $pop3, $pop1
+; SIMD128-NEXT:    i16x8.extend_low_i8x16_u $push14=, $pop4
+; SIMD128-NEXT:    local.tee $push13=, $4=, $pop14
+; SIMD128-NEXT:    i8x16.shuffle $push11=, $pop15, $pop13, 0, 1, 16, 17, 2, 3, 18, 19, 4, 5, 20, 21, 6, 7, 22, 23
+; SIMD128-NEXT:    i8x16.shuffle $push10=, $2, $4, 8, 9, 24, 25, 10, 11, 26, 27, 12, 13, 28, 29, 14, 15, 30, 31
+; SIMD128-NEXT:    i8x16.narrow_i16x8_u $push12=, $pop11, $pop10
+; SIMD128-NEXT:    v128.store 0($0):p2align=0, $pop12
 ; SIMD128-NEXT:    return
 ;
 ; SIMD128-FAST-LABEL: avgr_undef_shuffle_lanes:
 ; SIMD128-FAST:         .functype avgr_undef_shuffle_lanes (i32, v128, v128, v128, v128) -> ()
 ; SIMD128-FAST-NEXT:  # %bb.0:
-; SIMD128-FAST-NEXT:    i8x16.avgr_u $push1=, $1, $2
-; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push8=, $pop1
-; SIMD128-FAST-NEXT:    local.tee $push7=, $2=, $pop8
-; SIMD128-FAST-NEXT:    i8x16.avgr_u $push0=, $3, $4
-; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push6=, $pop0
-; SIMD128-FAST-NEXT:    local.tee $push5=, $4=, $pop6
-; SIMD128-FAST-NEXT:    i8x16.shuffle $push3=, $pop7, $pop5, 0, 1, 16, 17, 2, 3, 18, 19, 4, 5, 20, 21, 6, 7, 22, 23
-; SIMD128-FAST-NEXT:    i8x16.shuffle $push2=, $2, $4, 8, 9, 24, 25, 10, 11, 26, 27, 12, 13, 28, 29, 14, 15, 30, 31
-; SIMD128-FAST-NEXT:    i8x16.narrow_i16x8_u $push4=, $pop3, $pop2
-; SIMD128-FAST-NEXT:    v128.store 0($0):p2align=0, $pop4
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push7=, $1
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push8=, $pop7, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push5=, $2
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push6=, $pop5, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-FAST-NEXT:    i8x16.avgr_u $push9=, $pop8, $pop6
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push16=, $pop9
+; SIMD128-FAST-NEXT:    local.tee $push15=, $2=, $pop16
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push2=, $3
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push3=, $pop2, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push0=, $4
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push1=, $pop0, $4, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+; SIMD128-FAST-NEXT:    i8x16.avgr_u $push4=, $pop3, $pop1
+; SIMD128-FAST-NEXT:    i16x8.extend_low_i8x16_u $push14=, $pop4
+; SIMD128-FAST-NEXT:    local.tee $push13=, $4=, $pop14
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push11=, $pop15, $pop13, 0, 1, 16, 17, 2, 3, 18, 19, 4, 5, 20, 21, 6, 7, 22, 23
+; SIMD128-FAST-NEXT:    i8x16.shuffle $push10=, $2, $4, 8, 9, 24, 25, 10, 11, 26, 27, 12, 13, 28, 29, 14, 15, 30, 31
+; SIMD128-FAST-NEXT:    i8x16.narrow_i16x8_u $push12=, $pop11, $pop10
+; SIMD128-FAST-NEXT:    v128.store 0($0):p2align=0, $pop12
 ; SIMD128-FAST-NEXT:    return
 ;
 ; NO-SIMD128-LABEL: avgr_undef_shuffle_lanes:

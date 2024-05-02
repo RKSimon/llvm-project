@@ -216,7 +216,8 @@ define void @store_v16f16(ptr %a) {
 define void @store_v2i32(ptr %a) {
 ; CHECK-LABEL: store_v2i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    str xzr, [x0]
+; CHECK-NEXT:    mov z0.s, #0 // =0x0
+; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v2i32:
@@ -230,7 +231,8 @@ define void @store_v2i32(ptr %a) {
 define void @store_v2f32(ptr %a) {
 ; CHECK-LABEL: store_v2f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    str xzr, [x0]
+; CHECK-NEXT:    mov z0.s, #0 // =0x0
+; CHECK-NEXT:    str d0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v2f32:
@@ -244,7 +246,8 @@ define void @store_v2f32(ptr %a) {
 define void @store_v4i32(ptr %a) {
 ; CHECK-LABEL: store_v4i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    mov z0.s, #0 // =0x0
+; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v4i32:
@@ -258,7 +261,8 @@ define void @store_v4i32(ptr %a) {
 define void @store_v4f32(ptr %a) {
 ; CHECK-LABEL: store_v4f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    mov z0.s, #0 // =0x0
+; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v4f32:
@@ -346,7 +350,8 @@ define void @store_v1f64(ptr %a) {
 define void @store_v2i64(ptr %a) {
 ; CHECK-LABEL: store_v2i64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    mov z0.d, #0 // =0x0
+; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v2i64:
@@ -360,7 +365,8 @@ define void @store_v2i64(ptr %a) {
 define void @store_v2f64(ptr %a) {
 ; CHECK-LABEL: store_v2f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    stp xzr, xzr, [x0]
+; CHECK-NEXT:    mov z0.d, #0 // =0x0
+; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: store_v2f64:

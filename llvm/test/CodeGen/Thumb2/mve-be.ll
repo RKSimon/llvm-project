@@ -145,8 +145,10 @@ define <4 x i32> @call_soft(<4 x i32> %src1, <4 x i32> %src2) {
 ; CHECK-BE-NEXT:    .pad #16
 ; CHECK-BE-NEXT:    sub sp, #16
 ; CHECK-BE-NEXT:    add.w r12, sp, #24
-; CHECK-BE-NEXT:    vldrw.u32 q0, [r12]
-; CHECK-BE-NEXT:    vstrw.32 q0, [sp]
+; CHECK-BE-NEXT:    vldrb.u8 q0, [r12]
+; CHECK-BE-NEXT:    vrev64.8 q1, q0
+; CHECK-BE-NEXT:    vrev64.8 q0, q1
+; CHECK-BE-NEXT:    vstrb.8 q0, [sp]
 ; CHECK-BE-NEXT:    vmov d1, r3, r2
 ; CHECK-BE-NEXT:    vmov d0, r1, r0
 ; CHECK-BE-NEXT:    vrev64.32 q1, q0

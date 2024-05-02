@@ -90,16 +90,13 @@ define void @i56_or(ptr %a) {
 ;
 ; BE-LABEL: i56_or:
 ; BE:       @ %bb.0:
-; BE-NEXT:    mov r1, r0
-; BE-NEXT:    ldr r0, [r0]
-; BE-NEXT:    ldrh r2, [r1, #4]!
-; BE-NEXT:    ldrb r3, [r1, #2]
-; BE-NEXT:    orr r2, r3, r2, lsl #8
-; BE-NEXT:    orr r0, r2, r0, lsl #24
-; BE-NEXT:    orr r0, r0, #384
-; BE-NEXT:    strb r0, [r1, #2]
-; BE-NEXT:    lsr r0, r0, #8
-; BE-NEXT:    strh r0, [r1]
+; BE-NEXT:    ldrh r1, [r0, #4]!
+; BE-NEXT:    ldrb r2, [r0, #2]
+; BE-NEXT:    orr r1, r2, r1, lsl #8
+; BE-NEXT:    orr r1, r1, #384
+; BE-NEXT:    strb r1, [r0, #2]
+; BE-NEXT:    lsr r1, r1, #8
+; BE-NEXT:    strh r1, [r0]
 ; BE-NEXT:    mov pc, lr
   %aa = load i56, ptr %a
   %b = or i56 %aa, 384

@@ -1602,8 +1602,8 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ; RV32IM-NEXT:    xor a2, a2, a3
 ; RV32IM-NEXT:    mul a0, a0, a1
 ; RV32IM-NEXT:    xor a0, a2, a0
-; RV32IM-NEXT:    slli a0, a0, 17
-; RV32IM-NEXT:    srli a0, a0, 24
+; RV32IM-NEXT:    slli a0, a0, 16
+; RV32IM-NEXT:    srli a0, a0, 23
 ; RV32IM-NEXT:    ret
 ;
 ; RV64IM-LABEL: clmulr_i8:
@@ -1632,8 +1632,8 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ; RV64IM-NEXT:    xor a2, a2, a3
 ; RV64IM-NEXT:    mul a0, a0, a1
 ; RV64IM-NEXT:    xor a0, a2, a0
-; RV64IM-NEXT:    slli a0, a0, 49
-; RV64IM-NEXT:    srli a0, a0, 56
+; RV64IM-NEXT:    slli a0, a0, 48
+; RV64IM-NEXT:    srli a0, a0, 55
 ; RV64IM-NEXT:    ret
   %a.ext = zext i8 %a to i16
   %b.ext = zext i8 %b to i16
@@ -1701,8 +1701,7 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ; RV32IM-NEXT:    xor a1, a1, a2
 ; RV32IM-NEXT:    mul a0, a0, a3
 ; RV32IM-NEXT:    xor a0, a1, a0
-; RV32IM-NEXT:    slli a0, a0, 1
-; RV32IM-NEXT:    srli a0, a0, 16
+; RV32IM-NEXT:    srli a0, a0, 15
 ; RV32IM-NEXT:    ret
 ;
 ; RV64IM-LABEL: clmulr_i16:
@@ -1762,8 +1761,7 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ; RV64IM-NEXT:    xor a1, a1, a2
 ; RV64IM-NEXT:    mul a0, a0, a3
 ; RV64IM-NEXT:    xor a0, a1, a0
-; RV64IM-NEXT:    slli a0, a0, 33
-; RV64IM-NEXT:    srli a0, a0, 48
+; RV64IM-NEXT:    srliw a0, a0, 15
 ; RV64IM-NEXT:    ret
   %a.ext = zext i16 %a to i32
   %b.ext = zext i16 %b to i32
@@ -2195,8 +2193,7 @@ define i32 @clmulr_i32(i32 %a, i32 %b) nounwind {
 ; RV64IM-NEXT:    xor a0, a0, a2
 ; RV64IM-NEXT:    xor a1, a7, a1
 ; RV64IM-NEXT:    xor a0, a0, a1
-; RV64IM-NEXT:    slli a0, a0, 1
-; RV64IM-NEXT:    srli a0, a0, 32
+; RV64IM-NEXT:    srli a0, a0, 31
 ; RV64IM-NEXT:    ld ra, 120(sp) # 8-byte Folded Reload
 ; RV64IM-NEXT:    ld s0, 112(sp) # 8-byte Folded Reload
 ; RV64IM-NEXT:    ld s1, 104(sp) # 8-byte Folded Reload

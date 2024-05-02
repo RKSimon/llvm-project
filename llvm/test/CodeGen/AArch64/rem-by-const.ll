@@ -1668,28 +1668,34 @@ define <3 x i16> @sv3i16_7(<3 x i16> %d, <3 x i16> %e) {
 ; CHECK-SD-NEXT:    smov x10, v0.h[1]
 ; CHECK-SD-NEXT:    movk x8, #37449, lsl #16
 ; CHECK-SD-NEXT:    smov w11, v0.h[0]
-; CHECK-SD-NEXT:    smov x13, v0.h[2]
-; CHECK-SD-NEXT:    smov w12, v0.h[1]
-; CHECK-SD-NEXT:    smov w14, v0.h[2]
+; CHECK-SD-NEXT:    smov x12, v0.h[2]
+; CHECK-SD-NEXT:    smov w13, v0.h[1]
 ; CHECK-SD-NEXT:    smull x9, w9, w8
 ; CHECK-SD-NEXT:    smull x10, w10, w8
-; CHECK-SD-NEXT:    smull x8, w13, w8
+; CHECK-SD-NEXT:    smull x8, w12, w8
 ; CHECK-SD-NEXT:    add x9, x11, x9, lsr #32
-; CHECK-SD-NEXT:    add x10, x12, x10, lsr #32
-; CHECK-SD-NEXT:    asr w13, w9, #2
-; CHECK-SD-NEXT:    add x8, x14, x8, lsr #32
-; CHECK-SD-NEXT:    asr w15, w10, #2
-; CHECK-SD-NEXT:    add w9, w13, w9, lsr #31
-; CHECK-SD-NEXT:    asr w13, w8, #2
-; CHECK-SD-NEXT:    add w10, w15, w10, lsr #31
+; CHECK-SD-NEXT:    smov w11, v0.h[2]
+; CHECK-SD-NEXT:    add x10, x13, x10, lsr #32
+; CHECK-SD-NEXT:    lsr w12, w9, #2
+; CHECK-SD-NEXT:    lsr w13, w10, #2
+; CHECK-SD-NEXT:    add x8, x11, x8, lsr #32
+; CHECK-SD-NEXT:    add w9, w12, w9, lsr #31
+; CHECK-SD-NEXT:    umov w11, v0.h[0]
+; CHECK-SD-NEXT:    add w10, w13, w10, lsr #31
+; CHECK-SD-NEXT:    umov w12, v0.h[1]
 ; CHECK-SD-NEXT:    sub w9, w9, w9, lsl #3
-; CHECK-SD-NEXT:    add w8, w13, w8, lsr #31
+; CHECK-SD-NEXT:    lsr w13, w8, #2
 ; CHECK-SD-NEXT:    sub w10, w10, w10, lsl #3
 ; CHECK-SD-NEXT:    add w9, w11, w9
+; CHECK-SD-NEXT:    add w8, w13, w8, lsr #31
+; CHECK-SD-NEXT:    umov w11, v0.h[2]
+; CHECK-SD-NEXT:    sxth w9, w9
+; CHECK-SD-NEXT:    add w10, w12, w10
+; CHECK-SD-NEXT:    sxth w10, w10
 ; CHECK-SD-NEXT:    sub w8, w8, w8, lsl #3
 ; CHECK-SD-NEXT:    fmov s0, w9
-; CHECK-SD-NEXT:    add w10, w12, w10
-; CHECK-SD-NEXT:    add w8, w14, w8
+; CHECK-SD-NEXT:    add w8, w11, w8
+; CHECK-SD-NEXT:    sxth w8, w8
 ; CHECK-SD-NEXT:    mov v0.h[1], w10
 ; CHECK-SD-NEXT:    mov v0.h[2], w8
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
@@ -1736,20 +1742,23 @@ define <3 x i16> @sv3i16_100(<3 x i16> %d, <3 x i16> %e) {
 ; CHECK-SD-NEXT:    smull x9, w9, w8
 ; CHECK-SD-NEXT:    smull x10, w10, w8
 ; CHECK-SD-NEXT:    smull x8, w11, w8
-; CHECK-SD-NEXT:    smov w11, v0.h[0]
-; CHECK-SD-NEXT:    asr x12, x9, #37
-; CHECK-SD-NEXT:    asr x13, x10, #37
+; CHECK-SD-NEXT:    umov w11, v0.h[0]
+; CHECK-SD-NEXT:    lsr x12, x9, #37
+; CHECK-SD-NEXT:    lsr x13, x10, #37
 ; CHECK-SD-NEXT:    add x9, x12, x9, lsr #63
 ; CHECK-SD-NEXT:    mov w12, #100 // =0x64
 ; CHECK-SD-NEXT:    add x10, x13, x10, lsr #63
-; CHECK-SD-NEXT:    smov w13, v0.h[1]
+; CHECK-SD-NEXT:    umov w13, v0.h[1]
 ; CHECK-SD-NEXT:    msub w9, w9, w12, w11
-; CHECK-SD-NEXT:    asr x11, x8, #37
+; CHECK-SD-NEXT:    lsr x11, x8, #37
 ; CHECK-SD-NEXT:    msub w10, w10, w12, w13
 ; CHECK-SD-NEXT:    add x8, x11, x8, lsr #63
-; CHECK-SD-NEXT:    smov w11, v0.h[2]
-; CHECK-SD-NEXT:    fmov s0, w9
+; CHECK-SD-NEXT:    umov w11, v0.h[2]
+; CHECK-SD-NEXT:    sxth w9, w9
+; CHECK-SD-NEXT:    sxth w10, w10
 ; CHECK-SD-NEXT:    msub w8, w8, w12, w11
+; CHECK-SD-NEXT:    fmov s0, w9
+; CHECK-SD-NEXT:    sxth w8, w8
 ; CHECK-SD-NEXT:    mov v0.h[1], w10
 ; CHECK-SD-NEXT:    mov v0.h[2], w8
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
@@ -2004,20 +2013,24 @@ define <3 x i16> @uv3i16_7(<3 x i16> %d, <3 x i16> %e) {
 ; CHECK-SD-NEXT:    mov w8, #18725 // =0x4925
 ; CHECK-SD-NEXT:    umov w10, v0.h[1]
 ; CHECK-SD-NEXT:    movk w8, #9362, lsl #16
-; CHECK-SD-NEXT:    umov w12, v0.h[2]
-; CHECK-SD-NEXT:    umull x11, w9, w8
-; CHECK-SD-NEXT:    umull x13, w10, w8
-; CHECK-SD-NEXT:    umull x8, w12, w8
-; CHECK-SD-NEXT:    lsr x11, x11, #32
-; CHECK-SD-NEXT:    lsr x13, x13, #32
-; CHECK-SD-NEXT:    sub w11, w11, w11, lsl #3
+; CHECK-SD-NEXT:    umov w11, v0.h[2]
+; CHECK-SD-NEXT:    umov w13, v0.h[0]
+; CHECK-SD-NEXT:    umull x9, w9, w8
+; CHECK-SD-NEXT:    umull x12, w10, w8
+; CHECK-SD-NEXT:    umull x8, w11, w8
+; CHECK-SD-NEXT:    lsr x9, x9, #32
+; CHECK-SD-NEXT:    lsr x12, x12, #32
+; CHECK-SD-NEXT:    sub w9, w9, w9, lsl #3
 ; CHECK-SD-NEXT:    lsr x8, x8, #32
-; CHECK-SD-NEXT:    sub w13, w13, w13, lsl #3
-; CHECK-SD-NEXT:    add w9, w9, w11
+; CHECK-SD-NEXT:    sub w12, w12, w12, lsl #3
+; CHECK-SD-NEXT:    add w9, w13, w9
 ; CHECK-SD-NEXT:    sub w8, w8, w8, lsl #3
+; CHECK-SD-NEXT:    sxth w9, w9
+; CHECK-SD-NEXT:    add w10, w10, w12
+; CHECK-SD-NEXT:    sxth w10, w10
+; CHECK-SD-NEXT:    add w8, w11, w8
 ; CHECK-SD-NEXT:    fmov s0, w9
-; CHECK-SD-NEXT:    add w10, w10, w13
-; CHECK-SD-NEXT:    add w8, w12, w8
+; CHECK-SD-NEXT:    sxth w8, w8
 ; CHECK-SD-NEXT:    mov v0.h[1], w10
 ; CHECK-SD-NEXT:    mov v0.h[2], w8
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
@@ -2078,18 +2091,22 @@ define <3 x i16> @uv3i16_100(<3 x i16> %d, <3 x i16> %e) {
 ; CHECK-SD-NEXT:    mov w8, #23593 // =0x5c29
 ; CHECK-SD-NEXT:    umov w10, v0.h[1]
 ; CHECK-SD-NEXT:    movk w8, #655, lsl #16
-; CHECK-SD-NEXT:    umov w12, v0.h[2]
+; CHECK-SD-NEXT:    umov w11, v0.h[2]
+; CHECK-SD-NEXT:    umov w13, v0.h[0]
 ; CHECK-SD-NEXT:    mov w14, #100 // =0x64
-; CHECK-SD-NEXT:    umull x11, w9, w8
-; CHECK-SD-NEXT:    umull x13, w10, w8
-; CHECK-SD-NEXT:    umull x8, w12, w8
-; CHECK-SD-NEXT:    lsr x11, x11, #32
-; CHECK-SD-NEXT:    msub w9, w11, w14, w9
-; CHECK-SD-NEXT:    lsr x11, x13, #32
+; CHECK-SD-NEXT:    umull x9, w9, w8
+; CHECK-SD-NEXT:    umull x12, w10, w8
+; CHECK-SD-NEXT:    umull x8, w11, w8
+; CHECK-SD-NEXT:    lsr x9, x9, #32
+; CHECK-SD-NEXT:    lsr x12, x12, #32
+; CHECK-SD-NEXT:    msub w9, w9, w14, w13
 ; CHECK-SD-NEXT:    lsr x8, x8, #32
-; CHECK-SD-NEXT:    msub w10, w11, w14, w10
+; CHECK-SD-NEXT:    msub w10, w12, w14, w10
+; CHECK-SD-NEXT:    msub w8, w8, w14, w11
+; CHECK-SD-NEXT:    sxth w9, w9
+; CHECK-SD-NEXT:    sxth w10, w10
 ; CHECK-SD-NEXT:    fmov s0, w9
-; CHECK-SD-NEXT:    msub w8, w8, w14, w12
+; CHECK-SD-NEXT:    sxth w8, w8
 ; CHECK-SD-NEXT:    mov v0.h[1], w10
 ; CHECK-SD-NEXT:    mov v0.h[2], w8
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0

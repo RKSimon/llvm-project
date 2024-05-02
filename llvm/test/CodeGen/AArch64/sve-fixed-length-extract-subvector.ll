@@ -886,10 +886,10 @@ entry:
 define void @extract_v32bfloat_halves(ptr %in, ptr %out, ptr %out2) #0 vscale_range(4,4) {
 ; CHECK-LABEL: extract_v32bfloat_halves:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    ldp q0, q1, [x0, #32]
-; CHECK-NEXT:    ldp q3, q2, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
-; CHECK-NEXT:    stp q3, q2, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x0, #32]
+; CHECK-NEXT:    ldp q2, q3, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
+; CHECK-NEXT:    stp q2, q3, [x2]
 ; CHECK-NEXT:    ret
 entry:
   %b = load <32 x bfloat>, ptr %in

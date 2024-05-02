@@ -103,12 +103,12 @@ define double @test20(i32 %a, ...) {
 ; CHECK-NEXT:    str x8, [sp, #88]
 ; CHECK-NEXT:    add x10, x10, #56
 ; CHECK-NEXT:    ldrsw x8, [sp, #88]
-; CHECK-NEXT:    stp x1, x2, [sp, #8]
-; CHECK-NEXT:    stp x3, x4, [sp, #24]
-; CHECK-NEXT:    stp x5, x6, [sp, #40]
-; CHECK-NEXT:    stp x7, x9, [sp, #56]
-; CHECK-NEXT:    str x10, [sp, #72]
-; CHECK-NEXT:    tbz w8, #31, .LBB7_3
+; CHECK-NEXT:    stp x6, x7, [sp, #48]
+; CHECK-NEXT:    stp x4, x5, [sp, #32]
+; CHECK-NEXT:    stp x2, x3, [sp, #16]
+; CHECK-NEXT:    str x1, [sp, #8]
+; CHECK-NEXT:    stp x9, x10, [sp, #64]
+; CHECK-NEXT:    tbz x8, #63, .LBB7_3
 ; CHECK-NEXT:  // %bb.1: // %vaarg.maybe_reg
 ; CHECK-NEXT:    add w9, w8, #8
 ; CHECK-NEXT:    cmn w8, #8

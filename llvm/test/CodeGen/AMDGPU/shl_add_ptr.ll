@@ -980,11 +980,11 @@ define void @shl_add_ptr_combine_2use_max_lds_offset(i32 %idx) #0 {
 ; CI-LABEL: shl_add_ptr_combine_2use_max_lds_offset:
 ; CI:       ; %bb.0:
 ; CI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CI-NEXT:    v_lshlrev_b32_e32 v1, 4, v0
+; CI-NEXT:    v_add_i32_e32 v1, vcc, 0x1fff, v0
 ; CI-NEXT:    v_lshlrev_b32_e32 v0, 3, v0
 ; CI-NEXT:    v_mov_b32_e32 v2, 9
 ; CI-NEXT:    s_mov_b32 m0, -1
-; CI-NEXT:    v_add_i32_e32 v1, vcc, 0x1fff0, v1
+; CI-NEXT:    v_lshlrev_b32_e32 v1, 4, v1
 ; CI-NEXT:    ds_write_b32 v0, v2 offset:65528
 ; CI-NEXT:    v_mov_b32_e32 v0, 10
 ; CI-NEXT:    ds_write_b32 v1, v0
@@ -994,11 +994,11 @@ define void @shl_add_ptr_combine_2use_max_lds_offset(i32 %idx) #0 {
 ; VI-LABEL: shl_add_ptr_combine_2use_max_lds_offset:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_lshlrev_b32_e32 v1, 4, v0
+; VI-NEXT:    v_add_u32_e32 v1, vcc, 0x1fff, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v0, 3, v0
 ; VI-NEXT:    v_mov_b32_e32 v2, 9
 ; VI-NEXT:    s_mov_b32 m0, -1
-; VI-NEXT:    v_add_u32_e32 v1, vcc, 0x1fff0, v1
+; VI-NEXT:    v_lshlrev_b32_e32 v1, 4, v1
 ; VI-NEXT:    ds_write_b32 v0, v2 offset:65528
 ; VI-NEXT:    v_mov_b32_e32 v0, 10
 ; VI-NEXT:    ds_write_b32 v1, v0
@@ -1080,10 +1080,10 @@ define void @shl_add_ptr_combine_2use_max_private_offset(i16 zeroext %idx.arg) #
 ; CI-LABEL: shl_add_ptr_combine_2use_max_private_offset:
 ; CI:       ; %bb.0:
 ; CI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CI-NEXT:    v_lshlrev_b32_e32 v1, 4, v0
+; CI-NEXT:    v_add_i32_e32 v1, vcc, 0x1ff, v0
 ; CI-NEXT:    v_lshlrev_b32_e32 v0, 3, v0
 ; CI-NEXT:    v_mov_b32_e32 v2, 9
-; CI-NEXT:    v_add_i32_e32 v1, vcc, 0x1ff0, v1
+; CI-NEXT:    v_lshlrev_b32_e32 v1, 4, v1
 ; CI-NEXT:    buffer_store_dword v2, v0, s[0:3], 0 offen offset:4088
 ; CI-NEXT:    s_waitcnt vmcnt(0)
 ; CI-NEXT:    v_mov_b32_e32 v0, 10
@@ -1094,10 +1094,10 @@ define void @shl_add_ptr_combine_2use_max_private_offset(i16 zeroext %idx.arg) #
 ; VI-LABEL: shl_add_ptr_combine_2use_max_private_offset:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_lshlrev_b32_e32 v1, 4, v0
+; VI-NEXT:    v_add_u32_e32 v1, vcc, 0x1ff, v0
 ; VI-NEXT:    v_lshlrev_b32_e32 v0, 3, v0
 ; VI-NEXT:    v_mov_b32_e32 v2, 9
-; VI-NEXT:    v_add_u32_e32 v1, vcc, 0x1ff0, v1
+; VI-NEXT:    v_lshlrev_b32_e32 v1, 4, v1
 ; VI-NEXT:    buffer_store_dword v2, v0, s[0:3], 0 offen offset:4088
 ; VI-NEXT:    s_waitcnt vmcnt(0)
 ; VI-NEXT:    v_mov_b32_e32 v0, 10
@@ -1158,14 +1158,14 @@ define void @shl_or_ptr_combine_2use_lds(i32 %idx) #0 {
 ; GCN-LABEL: shl_or_ptr_combine_2use_lds:
 ; GCN:       ; %bb.0:
 ; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GCN-NEXT:    v_lshlrev_b32_e32 v1, 1, v0
-; GCN-NEXT:    v_lshlrev_b32_e32 v0, 4, v0
+; GCN-NEXT:    v_lshlrev_b32_e32 v0, 1, v0
+; GCN-NEXT:    v_lshlrev_b32_e32 v1, 3, v0
 ; GCN-NEXT:    v_mov_b32_e32 v2, 9
 ; GCN-NEXT:    s_mov_b32 m0, -1
-; GCN-NEXT:    v_lshlrev_b32_e32 v1, 4, v1
-; GCN-NEXT:    ds_write_b32 v0, v2 offset:8
-; GCN-NEXT:    v_mov_b32_e32 v0, 10
-; GCN-NEXT:    ds_write_b32 v1, v0 offset:16
+; GCN-NEXT:    v_lshlrev_b32_e32 v0, 4, v0
+; GCN-NEXT:    ds_write_b32 v1, v2 offset:8
+; GCN-NEXT:    v_mov_b32_e32 v1, 10
+; GCN-NEXT:    ds_write_b32 v0, v1 offset:16
 ; GCN-NEXT:    s_waitcnt lgkmcnt(0)
 ; GCN-NEXT:    s_setpc_b64 s[30:31]
   %idx.shl = shl i32 %idx, 1

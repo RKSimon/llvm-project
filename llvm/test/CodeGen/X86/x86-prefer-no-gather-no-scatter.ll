@@ -13,16 +13,16 @@
 ; This tests the function that if prefer-no-gather can disable lowerMGather
 define void @test() #0 {
 ; GATHER-LABEL: test:
-; GATHER: vpgatherdq
+; GATHER: vpgatherqq
 ;
 ; NO-GATHER-LABEL: test:
-; NO-GATHER-NOT: vpgatherdq
+; NO-GATHER-NOT: vpgatherqq
 ;
 ; GATHER-NO-SCATTER-LABEL: test:
-; GATHER-NO-SCATTER: vpgatherdq
+; GATHER-NO-SCATTER: vpgatherqq
 ;
 ; NO-SCATTER-GATHER-LABEL: test:
-; NO-SCATTER-GATHER-NOT: vpgatherdq
+; NO-SCATTER-GATHER-NOT: vpgatherqq
 iter.check:
   br i1 false, label %vec.epilog.scalar.ph, label %vector.main.loop.iter.check
 

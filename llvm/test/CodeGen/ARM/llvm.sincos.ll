@@ -714,9 +714,9 @@ define { double, double } @test_sincos_f64(double %a) {
 ; IOS-WITH-STRET-NEXT:    mov r1, r0
 ; IOS-WITH-STRET-NEXT:    mov r0, sp
 ; IOS-WITH-STRET-NEXT:    bl ___sincos_stret
-; IOS-WITH-STRET-NEXT:    vldr d16, [sp, #8]
-; IOS-WITH-STRET-NEXT:    ldm sp, {r0, r1}
-; IOS-WITH-STRET-NEXT:    vmov r2, r3, d16
+; IOS-WITH-STRET-NEXT:    vldmia sp, {d16, d17}
+; IOS-WITH-STRET-NEXT:    vmov r2, r3, d17
+; IOS-WITH-STRET-NEXT:    vmov r0, r1, d16
 ; IOS-WITH-STRET-NEXT:    add sp, sp, #16
 ; IOS-WITH-STRET-NEXT:    pop {lr}
 ; IOS-WITH-STRET-NEXT:    bx lr

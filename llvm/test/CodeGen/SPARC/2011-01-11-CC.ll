@@ -659,8 +659,8 @@ define void @test_adde_sube(ptr %a, ptr %b, ptr %sum, ptr %diff) nounwind {
 ; SPARC64-VIS3-NEXT:    ldx [%i1], %i1
 ; SPARC64-VIS3-NEXT:    addcc %i4, %g2, %g2
 ; SPARC64-VIS3-NEXT:    addxccc %i5, %i1, %i1
-; SPARC64-VIS3-NEXT:    stx %i1, [%i2]
 ; SPARC64-VIS3-NEXT:    stx %g2, [%i2+8]
+; SPARC64-VIS3-NEXT:    stx %i1, [%i2]
 ; SPARC64-VIS3-NEXT:    !APP
 ; SPARC64-VIS3-NEXT:    !NO_APP
 ; SPARC64-VIS3-NEXT:    ldx [%i0+8], %i1

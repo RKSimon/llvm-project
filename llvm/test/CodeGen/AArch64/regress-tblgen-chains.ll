@@ -24,7 +24,7 @@ define i64 @test_chains() {
 ; CHECK-NEXT:    sub x0, x29, #1
 ; CHECK-NEXT:    bl _bar
 ; CHECK-NEXT:    ldurb w8, [x29, #-1]
-; CHECK-NEXT:    add x8, x8, #1
+; CHECK-NEXT:    add w8, w8, #1
 ; CHECK-NEXT:    sturb w8, [x29, #-1]
 ; CHECK-NEXT:    ldp x29, x30, [sp, #16] ; 16-byte Folded Reload
 ; CHECK-NEXT:    and x0, x8, #0xff

@@ -999,29 +999,41 @@ define <4 x i8> @unary_interleave_10uu_v4i8(<4 x i8> %x) {
 define <16 x i16> @interleave_slp(<8 x i16> %v0, <8 x i16> %v1) {
 ; V128-LABEL: interleave_slp:
 ; V128:       # %bb.0: # %entry
-; V128-NEXT:    vsetivli zero, 8, e16, m1, ta, ma
-; V128-NEXT:    vmv1r.v v10, v9
-; V128-NEXT:    vmv1r.v v11, v8
-; V128-NEXT:    vwaddu.vv v8, v11, v10
-; V128-NEXT:    li a0, -1
-; V128-NEXT:    vwmaccu.vx v8, a0, v10
+; V128-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
+; V128-NEXT:    vzext.vf2 v10, v8
+; V128-NEXT:    lui a0, 11
+; V128-NEXT:    vzext.vf2 v12, v9
+; V128-NEXT:    addi a0, a0, -1366
+; V128-NEXT:    vmv.s.x v0, a0
+; V128-NEXT:    vsll.vi v8, v12, 16
+; V128-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
+; V128-NEXT:    vmerge.vvm v8, v10, v8, v0
 ; V128-NEXT:    ret
 ;
 ; V512-LABEL: interleave_slp:
 ; V512:       # %bb.0: # %entry
-; V512-NEXT:    vsetivli zero, 8, e16, mf4, ta, ma
-; V512-NEXT:    vwaddu.vv v10, v8, v9
-; V512-NEXT:    li a0, -1
-; V512-NEXT:    vwmaccu.vx v10, a0, v9
-; V512-NEXT:    vmv1r.v v8, v10
+; V512-NEXT:    vsetivli zero, 8, e32, mf2, ta, ma
+; V512-NEXT:    vzext.vf2 v10, v8
+; V512-NEXT:    lui a0, 11
+; V512-NEXT:    vzext.vf2 v8, v9
+; V512-NEXT:    addi a0, a0, -1366
+; V512-NEXT:    vmv.s.x v0, a0
+; V512-NEXT:    vsll.vi v8, v8, 16
+; V512-NEXT:    vsetivli zero, 16, e16, mf2, ta, ma
+; V512-NEXT:    vmerge.vvm v8, v10, v8, v0
 ; V512-NEXT:    ret
 ;
 ; ZIP-LABEL: interleave_slp:
 ; ZIP:       # %bb.0: # %entry
-; ZIP-NEXT:    vsetivli zero, 16, e16, m2, ta, ma
+; ZIP-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
 ; ZIP-NEXT:    vmv1r.v v12, v9
-; ZIP-NEXT:    ri.vzip2a.vv v10, v8, v12
-; ZIP-NEXT:    vmv.v.v v8, v10
+; ZIP-NEXT:    vmv1r.v v10, v8
+; ZIP-NEXT:    vzext.vf2 v8, v10
+; ZIP-NEXT:    lui a0, 11
+; ZIP-NEXT:    addi a0, a0, -1366
+; ZIP-NEXT:    vmv.s.x v0, a0
+; ZIP-NEXT:    vsetivli zero, 16, e16, m2, ta, mu
+; ZIP-NEXT:    ri.vzip2a.vv v8, v10, v12, v0.t
 ; ZIP-NEXT:    ret
 entry:
   %v2 = shufflevector <8 x i16> %v0, <8 x i16> poison, <16 x i32> <i32 0, i32 poison, i32 1, i32 poison, i32 2, i32 poison, i32 3, i32 poison, i32 4, i32 poison, i32 5, i32 poison, i32 6, i32 poison, i32 7, i32 poison>

@@ -2772,7 +2772,15 @@ define <8 x i16> @vmulq_built_dup_fromsmall_test(<8 x i16> %a, <4 x i16> %b) {
 ; CHECK-SD-LABEL: vmulq_built_dup_fromsmall_test:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-SD-NEXT:    mul v0.8h, v0.8h, v1.h[0]
+; CHECK-SD-NEXT:    mov v2.16b, v1.16b
+; CHECK-SD-NEXT:    mov v2.h[1], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[2], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[3], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[4], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[5], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[6], v1.h[0]
+; CHECK-SD-NEXT:    mov v2.h[7], v1.h[0]
+; CHECK-SD-NEXT:    mul v0.8h, v0.8h, v2.8h
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: vmulq_built_dup_fromsmall_test:

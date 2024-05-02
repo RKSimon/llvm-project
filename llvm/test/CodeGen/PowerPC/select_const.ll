@@ -69,7 +69,7 @@ define i32 @select_1_or_0_signext(i1 signext %cond) {
 define i32 @select_0_or_neg1(i1 %cond) {
 ; ALL-LABEL: select_0_or_neg1:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    clrldi 3, 3, 63
+; ALL-NEXT:    clrlwi 3, 3, 31
 ; ALL-NEXT:    addi 3, 3, -1
 ; ALL-NEXT:    blr
   %sel = select i1 %cond, i32 0, i32 -1
@@ -88,7 +88,8 @@ define i32 @select_0_or_neg1_zeroext(i1 zeroext %cond) {
 define i32 @select_0_or_neg1_signext(i1 signext %cond) {
 ; ALL-LABEL: select_0_or_neg1_signext:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    not 3, 3
+; ALL-NEXT:    xori 3, 3, 65535
+; ALL-NEXT:    xoris 3, 3, 65535
 ; ALL-NEXT:    blr
   %sel = select i1 %cond, i32 0, i32 -1
   ret i32 %sel
@@ -99,7 +100,7 @@ define i32 @select_0_or_neg1_signext(i1 signext %cond) {
 define i32 @select_neg1_or_0(i1 %cond) {
 ; ALL-LABEL: select_neg1_or_0:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    clrldi 3, 3, 63
+; ALL-NEXT:    clrlwi 3, 3, 31
 ; ALL-NEXT:    neg 3, 3
 ; ALL-NEXT:    blr
   %sel = select i1 %cond, i32 -1, i32 0
@@ -128,7 +129,7 @@ define i32 @select_neg1_or_0_signext(i1 signext %cond) {
 define i32 @select_Cplus1_C(i1 %cond) {
 ; ALL-LABEL: select_Cplus1_C:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    clrldi 3, 3, 63
+; ALL-NEXT:    clrlwi 3, 3, 31
 ; ALL-NEXT:    addi 3, 3, 41
 ; ALL-NEXT:    blr
   %sel = select i1 %cond, i32 42, i32 41
@@ -158,7 +159,7 @@ define i32 @select_Cplus1_C_signext(i1 signext %cond) {
 define i32 @select_C_Cplus1(i1 %cond) {
 ; ALL-LABEL: select_C_Cplus1:
 ; ALL:       # %bb.0:
-; ALL-NEXT:    clrldi 3, 3, 63
+; ALL-NEXT:    clrlwi 3, 3, 31
 ; ALL-NEXT:    subfic 3, 3, 42
 ; ALL-NEXT:    blr
   %sel = select i1 %cond, i32 41, i32 42

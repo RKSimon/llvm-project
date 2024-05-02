@@ -302,7 +302,9 @@ define <8 x i16> @add_avgfoor_mismatch2(<8 x i16> %a0, <8 x i16> %a1) {
 define <8 x i16> @add_avgceils(<8 x i16> %a0, <8 x i16> %a1) {
 ; CHECK-LABEL: add_avgceils:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    srhadd v0.8h, v0.8h, v1.8h
+; CHECK-NEXT:    mvn v0.16b, v0.16b
+; CHECK-NEXT:    sub v0.8h, v1.8h, v0.8h
+; CHECK-NEXT:    sshr v0.8h, v0.8h, #1
 ; CHECK-NEXT:    ret
   %add0 = add nsw <8 x i16> %a0, splat(i16 1)
   %add = add nsw <8 x i16> %a1, %add0

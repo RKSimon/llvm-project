@@ -976,25 +976,25 @@ define <2 x half> @no_fmin3_v2f16(<2 x half> %a, <2 x half> %b, <2 x half> %c, <
 ; SI:       ; %bb.0: ; %entry
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; SI-NEXT:    v_cvt_f16_f32_e32 v7, v7
-; SI-NEXT:    v_cvt_f16_f32_e32 v5, v5
 ; SI-NEXT:    v_cvt_f16_f32_e32 v6, v6
-; SI-NEXT:    v_cvt_f16_f32_e32 v4, v4
 ; SI-NEXT:    v_cvt_f16_f32_e32 v2, v2
 ; SI-NEXT:    v_cvt_f16_f32_e32 v0, v0
+; SI-NEXT:    v_cvt_f16_f32_e32 v4, v4
 ; SI-NEXT:    v_cvt_f16_f32_e32 v3, v3
 ; SI-NEXT:    v_cvt_f16_f32_e32 v1, v1
+; SI-NEXT:    v_cvt_f16_f32_e32 v5, v5
 ; SI-NEXT:    v_cvt_f32_f16_e32 v7, v7
-; SI-NEXT:    v_cvt_f32_f16_e32 v5, v5
 ; SI-NEXT:    v_cvt_f32_f16_e32 v6, v6
-; SI-NEXT:    v_cvt_f32_f16_e32 v4, v4
 ; SI-NEXT:    v_cvt_f32_f16_e32 v2, v2
 ; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_cvt_f32_f16_e32 v4, v4
 ; SI-NEXT:    v_cvt_f32_f16_e32 v3, v3
 ; SI-NEXT:    v_cvt_f32_f16_e32 v1, v1
-; SI-NEXT:    v_min_f32_e32 v1, v1, v3
-; SI-NEXT:    v_min_f32_e32 v0, v0, v2
-; SI-NEXT:    v_min3_f32 v0, v4, v0, v6
-; SI-NEXT:    v_min3_f32 v1, v5, v1, v7
+; SI-NEXT:    v_cvt_f32_f16_e32 v5, v5
+; SI-NEXT:    v_min3_f32 v1, v5, v1, v3
+; SI-NEXT:    v_min3_f32 v0, v4, v0, v2
+; SI-NEXT:    v_min_f32_e32 v0, v0, v6
+; SI-NEXT:    v_min_f32_e32 v1, v1, v7
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: no_fmin3_v2f16:
@@ -1043,9 +1043,9 @@ define <2 x half> @no_fmin3_v2f16(<2 x half> %a, <2 x half> %b, <2 x half> %c, <
 ; GFX1250:       ; %bb.0: ; %entry
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_pk_min_num_f16 v0, v0, v1
+; GFX1250-NEXT:    v_pk_min3_num_f16 v0, v2, v0, v1
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_pk_min3_num_f16 v0, v2, v0, v3
+; GFX1250-NEXT:    v_pk_min_num_f16 v0, v0, v3
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
 entry:
   %min = call <2 x half> @llvm.minnum.v2f16(<2 x half> %a, <2 x half> %b)

@@ -356,32 +356,32 @@ define void @tail_call_byval_align16(<32 x i32> %val, double %tmp)  {
 ; GFX9-FLATSCR-LABEL: tail_call_byval_align16:
 ; GFX9-FLATSCR:       ; %bb.0: ; %entry
 ; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-FLATSCR-NEXT:    scratch_load_dword v32, off, s32
+; GFX9-FLATSCR-NEXT:    scratch_load_dword v34, off, s32
+; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
+; GFX9-FLATSCR-NEXT:    scratch_load_dwordx2 v[32:33], off, s32 offset:24
 ; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-FLATSCR-NEXT:    s_getpc_b64 s[0:1]
 ; GFX9-FLATSCR-NEXT:    s_add_u32 s0, s0, byval_align16_f64_arg@rel32@lo+4
 ; GFX9-FLATSCR-NEXT:    s_addc_u32 s1, s1, byval_align16_f64_arg@rel32@hi+12
-; GFX9-FLATSCR-NEXT:    scratch_store_dword off, v32, s32
-; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-FLATSCR-NEXT:    scratch_load_dwordx2 v[32:33], off, s32 offset:24
-; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-FLATSCR-NEXT:    scratch_store_dwordx2 off, v[32:33], s32 offset:16
+; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
+; GFX9-FLATSCR-NEXT:    scratch_store_dword off, v34, s32
 ; GFX9-FLATSCR-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-FLATSCR-NEXT:    s_setpc_b64 s[0:1]
 ;
 ; GFX11-LABEL: tail_call_byval_align16:
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    scratch_load_b32 v32, off, s32
+; GFX11-NEXT:    scratch_load_b64 v[32:33], off, s32 offset:24
+; GFX11-NEXT:    s_waitcnt vmcnt(0)
+; GFX11-NEXT:    scratch_load_b32 v34, off, s32
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    s_getpc_b64 s[0:1]
 ; GFX11-NEXT:    s_add_u32 s0, s0, byval_align16_f64_arg@rel32@lo+4
 ; GFX11-NEXT:    s_addc_u32 s1, s1, byval_align16_f64_arg@rel32@hi+12
-; GFX11-NEXT:    scratch_store_b32 off, v32, s32
-; GFX11-NEXT:    s_waitcnt_vscnt null, 0x0
-; GFX11-NEXT:    scratch_load_b64 v[32:33], off, s32 offset:24
-; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    scratch_store_b64 off, v[32:33], s32 offset:16
+; GFX11-NEXT:    s_waitcnt_vscnt null, 0x0
+; GFX11-NEXT:    scratch_store_b32 off, v34, s32
 ; GFX11-NEXT:    s_waitcnt_vscnt null, 0x0
 ; GFX11-NEXT:    s_setpc_b64 s[0:1]
 ;
@@ -392,7 +392,9 @@ define void @tail_call_byval_align16(<32 x i32> %val, double %tmp)  {
 ; GFX12-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
-; GFX12-NEXT:    scratch_load_b32 v32, off, s32
+; GFX12-NEXT:    scratch_load_b64 v[32:33], off, s32 offset:24
+; GFX12-NEXT:    s_wait_loadcnt 0x0
+; GFX12-NEXT:    scratch_load_b32 v34, off, s32
 ; GFX12-NEXT:    s_wait_loadcnt 0x0
 ; GFX12-NEXT:    s_getpc_b64 s[0:1]
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
@@ -400,11 +402,9 @@ define void @tail_call_byval_align16(<32 x i32> %val, double %tmp)  {
 ; GFX12-NEXT:    s_add_co_u32 s0, s0, byval_align16_f64_arg@rel32@lo+12
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-NEXT:    s_add_co_ci_u32 s1, s1, byval_align16_f64_arg@rel32@hi+24
-; GFX12-NEXT:    scratch_store_b32 off, v32, s32
-; GFX12-NEXT:    s_wait_storecnt 0x0
-; GFX12-NEXT:    scratch_load_b64 v[32:33], off, s32 offset:24
-; GFX12-NEXT:    s_wait_loadcnt 0x0
 ; GFX12-NEXT:    scratch_store_b64 off, v[32:33], s32 offset:16
+; GFX12-NEXT:    s_wait_storecnt 0x0
+; GFX12-NEXT:    scratch_store_b32 off, v34, s32
 ; GFX12-NEXT:    s_wait_storecnt 0x0
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-NEXT:    s_setpc_b64 s[0:1]

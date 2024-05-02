@@ -6,10 +6,37 @@ target triple = "aarch64"
 define <4 x i32> @predicate_dot_fixed_length(<4 x i32> %acc, <16 x i1> %p, <16 x i8> %a, <16 x i8> %b) #0 {
 ; CHECK-LABEL: predicate_dot_fixed_length:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    shl v1.16b, v1.16b, #7
-; CHECK-NEXT:    cmlt v1.16b, v1.16b, #0
-; CHECK-NEXT:    and v1.16b, v1.16b, v3.16b
-; CHECK-NEXT:    sdot v0.4s, v2.16b, v1.16b
+; CHECK-NEXT:    ext v4.16b, v1.16b, v1.16b, #8
+; CHECK-NEXT:    zip1 v5.8b, v1.8b, v0.8b
+; CHECK-NEXT:    zip2 v1.8b, v1.8b, v0.8b
+; CHECK-NEXT:    smull v7.8h, v2.8b, v3.8b
+; CHECK-NEXT:    smull2 v2.8h, v2.16b, v3.16b
+; CHECK-NEXT:    zip2 v6.8b, v4.8b, v0.8b
+; CHECK-NEXT:    zip1 v4.8b, v4.8b, v0.8b
+; CHECK-NEXT:    ushll v5.4s, v5.4h, #0
+; CHECK-NEXT:    ushll v1.4s, v1.4h, #0
+; CHECK-NEXT:    sshll v3.4s, v7.4h, #0
+; CHECK-NEXT:    sshll2 v7.4s, v7.8h, #0
+; CHECK-NEXT:    shl v5.4s, v5.4s, #31
+; CHECK-NEXT:    ushll v6.4s, v6.4h, #0
+; CHECK-NEXT:    ushll v4.4s, v4.4h, #0
+; CHECK-NEXT:    shl v1.4s, v1.4s, #31
+; CHECK-NEXT:    cmlt v5.4s, v5.4s, #0
+; CHECK-NEXT:    shl v6.4s, v6.4s, #31
+; CHECK-NEXT:    shl v4.4s, v4.4s, #31
+; CHECK-NEXT:    cmlt v1.4s, v1.4s, #0
+; CHECK-NEXT:    and v3.16b, v5.16b, v3.16b
+; CHECK-NEXT:    sshll2 v5.4s, v2.8h, #0
+; CHECK-NEXT:    sshll v2.4s, v2.4h, #0
+; CHECK-NEXT:    cmlt v6.4s, v6.4s, #0
+; CHECK-NEXT:    cmlt v4.4s, v4.4s, #0
+; CHECK-NEXT:    and v1.16b, v1.16b, v7.16b
+; CHECK-NEXT:    add v0.4s, v0.4s, v3.4s
+; CHECK-NEXT:    and v5.16b, v6.16b, v5.16b
+; CHECK-NEXT:    and v2.16b, v4.16b, v2.16b
+; CHECK-NEXT:    add v0.4s, v0.4s, v1.4s
+; CHECK-NEXT:    add v1.4s, v2.4s, v5.4s
+; CHECK-NEXT:    add v0.4s, v0.4s, v1.4s
 ; CHECK-NEXT:    ret
  %ext.1 = sext <16 x i8> %a to <16 x i32>
  %ext.2 = sext <16 x i8> %b to <16 x i32>

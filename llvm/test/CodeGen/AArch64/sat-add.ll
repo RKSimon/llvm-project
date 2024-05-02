@@ -26,7 +26,8 @@ define i8 @unsigned_sat_constant_i8_using_cmp_sum(i8 %x) {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and w8, w0, #0xff
 ; CHECK-NEXT:    add w8, w8, #42
-; CHECK-NEXT:    tst w8, #0x100
+; CHECK-NEXT:    lsr w9, w8, #8
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csinv w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
   %a = add i8 %x, 42
@@ -69,7 +70,8 @@ define i16 @unsigned_sat_constant_i16_using_cmp_sum(i16 %x) {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and w8, w0, #0xffff
 ; CHECK-NEXT:    add w8, w8, #42
-; CHECK-NEXT:    tst w8, #0x10000
+; CHECK-NEXT:    lsr w9, w8, #16
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csinv w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
   %a = add i16 %x, 42
@@ -189,7 +191,8 @@ define i8 @unsigned_sat_variable_i8_using_cmp_sum(i8 %x, i8 %y) {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and w8, w0, #0xff
 ; CHECK-NEXT:    add w8, w8, w1, uxtb
-; CHECK-NEXT:    tst w8, #0x100
+; CHECK-NEXT:    lsr w9, w8, #8
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csinv w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
   %a = add i8 %x, %y
@@ -204,7 +207,8 @@ define i8 @unsigned_sat_variable_i8_using_cmp_notval(i8 %x, i8 %y) {
 ; CHECK-NEXT:    and w8, w1, #0xff
 ; CHECK-NEXT:    add w9, w0, w1
 ; CHECK-NEXT:    add w8, w8, w0, uxtb
-; CHECK-NEXT:    tst w8, #0x100
+; CHECK-NEXT:    lsr w8, w8, #8
+; CHECK-NEXT:    cmp w8, #0
 ; CHECK-NEXT:    csinv w0, w9, wzr, eq
 ; CHECK-NEXT:    ret
   %noty = xor i8 %y, -1
@@ -235,7 +239,8 @@ define i16 @unsigned_sat_variable_i16_using_cmp_sum(i16 %x, i16 %y) {
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    and w8, w0, #0xffff
 ; CHECK-NEXT:    add w8, w8, w1, uxth
-; CHECK-NEXT:    tst w8, #0x10000
+; CHECK-NEXT:    lsr w9, w8, #16
+; CHECK-NEXT:    cmp w9, #0
 ; CHECK-NEXT:    csinv w0, w8, wzr, eq
 ; CHECK-NEXT:    ret
   %a = add i16 %x, %y
@@ -250,7 +255,8 @@ define i16 @unsigned_sat_variable_i16_using_cmp_notval(i16 %x, i16 %y) {
 ; CHECK-NEXT:    and w8, w1, #0xffff
 ; CHECK-NEXT:    add w9, w0, w1
 ; CHECK-NEXT:    add w8, w8, w0, uxth
-; CHECK-NEXT:    tst w8, #0x10000
+; CHECK-NEXT:    lsr w8, w8, #16
+; CHECK-NEXT:    cmp w8, #0
 ; CHECK-NEXT:    csinv w0, w9, wzr, eq
 ; CHECK-NEXT:    ret
   %noty = xor i16 %y, -1

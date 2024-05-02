@@ -16,12 +16,12 @@ define i32 @int_va_arg(i32 %a, ...) local_unnamed_addr  {
 ; CHECK-NEXT:    add 3, 5, 3
 ; CHECK-NEXT:    lwz 4, 28(1)
 ; CHECK-NEXT:    slwi 4, 4, 1
-; CHECK-NEXT:    stw 6, 36(1)
-; CHECK-NEXT:    add 3, 3, 4
-; CHECK-NEXT:    stw 7, 40(1)
-; CHECK-NEXT:    stw 8, 44(1)
-; CHECK-NEXT:    stw 9, 48(1)
 ; CHECK-NEXT:    stw 10, 52(1)
+; CHECK-NEXT:    add 3, 3, 4
+; CHECK-NEXT:    stw 9, 48(1)
+; CHECK-NEXT:    stw 8, 44(1)
+; CHECK-NEXT:    stw 7, 40(1)
+; CHECK-NEXT:    stw 6, 36(1)
 ; CHECK-NEXT:    blr
 entry:
   %arg1 = alloca ptr, align 4
@@ -58,19 +58,15 @@ define i32 @int_stack_va_arg(i32 %one, i32 %two, i32 %three, i32 %four, i32 %fiv
 ; CHECK-LABEL: int_stack_va_arg:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    add 3, 4, 3
-; CHECK-NEXT:    lwz 4, 56(1)
-; CHECK-NEXT:    li 11, 4
+; CHECK-NEXT:    lwz 11, 56(1)
 ; CHECK-NEXT:    add 3, 3, 5
-; CHECK-NEXT:    addi 12, 1, 56
 ; CHECK-NEXT:    add 3, 3, 6
-; CHECK-NEXT:    rlwimi 12, 11, 0, 29, 29
-; CHECK-NEXT:    stw 12, -4(1)
 ; CHECK-NEXT:    add 3, 3, 7
 ; CHECK-NEXT:    add 3, 3, 8
 ; CHECK-NEXT:    add 3, 3, 9
 ; CHECK-NEXT:    add 3, 3, 10
-; CHECK-NEXT:    add 3, 3, 4
-; CHECK-NEXT:    slwi 4, 4, 1
+; CHECK-NEXT:    add 3, 3, 11
+; CHECK-NEXT:    slwi 4, 11, 1
 ; CHECK-NEXT:    add 3, 3, 4
 ; CHECK-NEXT:    blr
 entry:
@@ -108,18 +104,16 @@ entry:
 define double @double_va_arg(double %a, ...) local_unnamed_addr  {
 ; CHECK-LABEL: double_va_arg:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    stw 5, 32(1)
-; CHECK-NEXT:    addi 3, 1, 32
 ; CHECK-NEXT:    stw 6, 36(1)
+; CHECK-NEXT:    stw 5, 32(1)
 ; CHECK-NEXT:    lfd 0, 32(1)
 ; CHECK-NEXT:    fadd 1, 0, 1
 ; CHECK-NEXT:    fadd 0, 0, 0
-; CHECK-NEXT:    stw 7, 40(1)
-; CHECK-NEXT:    stw 8, 44(1)
-; CHECK-NEXT:    fadd 1, 1, 0
-; CHECK-NEXT:    stw 9, 48(1)
 ; CHECK-NEXT:    stw 10, 52(1)
-; CHECK-NEXT:    stw 3, -4(1)
+; CHECK-NEXT:    stw 9, 48(1)
+; CHECK-NEXT:    fadd 1, 1, 0
+; CHECK-NEXT:    stw 8, 44(1)
+; CHECK-NEXT:    stw 7, 40(1)
 ; CHECK-NEXT:    blr
 entry:
   %arg1 = alloca ptr, align 4
@@ -151,9 +145,7 @@ define double @double_stack_va_arg(double %one, double %two, double %three, doub
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    fadd 1, 1, 2
 ; CHECK-NEXT:    lfd 0, 128(1)
-; CHECK-NEXT:    addi 3, 1, 128
 ; CHECK-NEXT:    fadd 1, 1, 3
-; CHECK-NEXT:    stw 3, -4(1)
 ; CHECK-NEXT:    fadd 1, 1, 4
 ; CHECK-NEXT:    fadd 1, 1, 5
 ; CHECK-NEXT:    fadd 1, 1, 6

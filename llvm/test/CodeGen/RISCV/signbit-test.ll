@@ -5,7 +5,8 @@
 define i64 @test_clear_mask_i64_i32(i64 %x) nounwind {
 ; RV32-LABEL: test_clear_mask_i64_i32:
 ; RV32:       # %bb.0: # %entry
-; RV32-NEXT:    bltz a0, .LBB0_2
+; RV32-NEXT:    srli a2, a0, 31
+; RV32-NEXT:    bnez a2, .LBB0_2
 ; RV32-NEXT:  # %bb.1: # %t
 ; RV32-NEXT:    li a1, 0
 ; RV32-NEXT:    li a0, 42

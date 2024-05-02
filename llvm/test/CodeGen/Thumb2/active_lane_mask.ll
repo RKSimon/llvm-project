@@ -85,40 +85,25 @@ define <4 x i32> @v4i32(i32 %index, i32 %TC, <4 x i32> %V1, <4 x i32> %V2) {
 define <7 x i32> @v7i32(i32 %index, i32 %TC, <7 x i32> %V1, <7 x i32> %V2) {
 ; CHECK-LABEL: v7i32:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    ldr.w r12, [sp, #40]
-; CHECK-NEXT:    vdup.32 q3, r2
-; CHECK-NEXT:    ldr r3, [sp, #32]
-; CHECK-NEXT:    adr r2, .LCPI2_1
-; CHECK-NEXT:    vmov q0[2], q0[0], r3, r12
-; CHECK-NEXT:    ldr.w r12, [sp, #44]
-; CHECK-NEXT:    ldr r3, [sp, #36]
-; CHECK-NEXT:    vmov q0[3], q0[1], r3, r12
-; CHECK-NEXT:    ldr.w r12, [sp, #8]
-; CHECK-NEXT:    ldr r3, [sp]
-; CHECK-NEXT:    vmov q1[2], q1[0], r3, r12
-; CHECK-NEXT:    ldr.w r12, [sp, #12]
-; CHECK-NEXT:    ldr r3, [sp, #4]
-; CHECK-NEXT:    vmov q1[3], q1[1], r3, r12
+; CHECK-NEXT:    add r3, sp, #32
+; CHECK-NEXT:    vldmia sp, {s8, s9, s10, s11}
+; CHECK-NEXT:    vldmia r3, {s0, s1, s2, s3}
 ; CHECK-NEXT:    adr r3, .LCPI2_0
-; CHECK-NEXT:    vldrw.u32 q2, [r3]
-; CHECK-NEXT:    vqadd.u32 q2, q2, r1
-; CHECK-NEXT:    vcmp.u32 hi, q3, q2
-; CHECK-NEXT:    vpsel q0, q1, q0
+; CHECK-NEXT:    vldrw.u32 q1, [r3]
+; CHECK-NEXT:    vqadd.u32 q3, q1, r1
+; CHECK-NEXT:    vdup.32 q1, r2
+; CHECK-NEXT:    vcmp.u32 hi, q1, q3
+; CHECK-NEXT:    add r2, sp, #48
+; CHECK-NEXT:    vpsel q0, q2, q0
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vldrw.u32 q0, [r2]
-; CHECK-NEXT:    ldr r2, [sp, #48]
-; CHECK-NEXT:    vqadd.u32 q0, q0, r1
-; CHECK-NEXT:    ldr r1, [sp, #52]
-; CHECK-NEXT:    vcmp.u32 hi, q3, q0
-; CHECK-NEXT:    vmov.32 q0[1], r1
-; CHECK-NEXT:    ldr r1, [sp, #56]
-; CHECK-NEXT:    vmov q0[2], q0[0], r2, r1
-; CHECK-NEXT:    ldr r1, [sp, #20]
-; CHECK-NEXT:    ldr r2, [sp, #16]
-; CHECK-NEXT:    vmov.32 q1[1], r1
-; CHECK-NEXT:    ldr r1, [sp, #24]
-; CHECK-NEXT:    vmov q1[2], q1[0], r2, r1
-; CHECK-NEXT:    vpsel q0, q1, q0
+; CHECK-NEXT:    vldmia r2, {s0, s1, s2}
+; CHECK-NEXT:    add r2, sp, #16
+; CHECK-NEXT:    vldmia r2, {s8, s9, s10}
+; CHECK-NEXT:    adr r2, .LCPI2_1
+; CHECK-NEXT:    vldrw.u32 q3, [r2]
+; CHECK-NEXT:    vqadd.u32 q3, q3, r1
+; CHECK-NEXT:    vcmp.u32 hi, q1, q3
+; CHECK-NEXT:    vpsel q0, q2, q0
 ; CHECK-NEXT:    vmov r1, s2
 ; CHECK-NEXT:    vmov.f32 s2, s1
 ; CHECK-NEXT:    vmov r3, s0
@@ -216,14 +201,14 @@ define <16 x i8> @v16i8(i32 %index, i32 %TC, <16 x i8> %V1, <16 x i8> %V2) {
 ; CHECK-NEXT:    vpsel q3, q1, q0
 ; CHECK-NEXT:    vstrh.32 q3, [r5]
 ; CHECK-NEXT:    vldrw.u32 q3, [r1]
-; CHECK-NEXT:    mov r1, sp
+; CHECK-NEXT:    add r1, sp, #32
 ; CHECK-NEXT:    vqadd.u32 q3, q3, r0
 ; CHECK-NEXT:    vcmp.u32 hi, q2, q3
 ; CHECK-NEXT:    vpsel q3, q1, q0
 ; CHECK-NEXT:    vstrh.32 q3, [r1, #8]
 ; CHECK-NEXT:    vldrw.u32 q3, [r4]
 ; CHECK-NEXT:    vqadd.u32 q3, q3, r0
-; CHECK-NEXT:    add r0, sp, #32
+; CHECK-NEXT:    mov r0, sp
 ; CHECK-NEXT:    vcmp.u32 hi, q2, q3
 ; CHECK-NEXT:    vpsel q2, q1, q0
 ; CHECK-NEXT:    vstrh.32 q2, [r1]
@@ -276,7 +261,7 @@ define <16 x i8> @v16i8(i32 %index, i32 %TC, <16 x i8> %V1, <16 x i8> %V2) {
 define void @test_width2(ptr nocapture readnone %x, ptr nocapture %y, i8 zeroext %m) {
 ; CHECK-LABEL: test_width2:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    push {r7, lr}
+; CHECK-NEXT:    push {r4, lr}
 ; CHECK-NEXT:    sub sp, #4
 ; CHECK-NEXT:    cmp r2, #0
 ; CHECK-NEXT:    beq .LBB5_3
@@ -290,38 +275,35 @@ define void @test_width2(ptr nocapture readnone %x, ptr nocapture %y, i8 zeroext
 ; CHECK-NEXT:  .LBB5_2: @ %vector.body
 ; CHECK-NEXT:    @ =>This Inner Loop Header: Depth=1
 ; CHECK-NEXT:    vctp.64 r2
-; CHECK-NEXT:    @ implicit-def: $q0
-; CHECK-NEXT:    subs r2, #2
+; CHECK-NEXT:    movs r4, #0
 ; CHECK-NEXT:    vmrs r3, p0
-; CHECK-NEXT:    and r0, r3, #1
-; CHECK-NEXT:    ubfx r3, r3, #8, #1
-; CHECK-NEXT:    rsb.w r12, r0, #0
-; CHECK-NEXT:    movs r0, #0
-; CHECK-NEXT:    rsbs r3, r3, #0
-; CHECK-NEXT:    bfi r0, r12, #0, #1
+; CHECK-NEXT:    @ implicit-def: $q0
 ; CHECK-NEXT:    sub.w r12, r1, #8
-; CHECK-NEXT:    bfi r0, r3, #1, #1
-; CHECK-NEXT:    lsls r3, r0, #31
-; CHECK-NEXT:    itt ne
-; CHECK-NEXT:    ldrne.w r3, [r12]
-; CHECK-NEXT:    vmovne.32 q0[0], r3
-; CHECK-NEXT:    lsls r0, r0, #30
+; CHECK-NEXT:    subs r2, #2
+; CHECK-NEXT:    ands r0, r3, #1
+; CHECK-NEXT:    it ne
+; CHECK-NEXT:    vldrne s0, [r12]
+; CHECK-NEXT:    rsbs r0, r0, #0
+; CHECK-NEXT:    bfi r4, r0, #0, #1
+; CHECK-NEXT:    ubfx r0, r3, #8, #1
+; CHECK-NEXT:    rsbs r0, r0, #0
+; CHECK-NEXT:    bfi r4, r0, #1, #1
+; CHECK-NEXT:    lsls r0, r4, #30
 ; CHECK-NEXT:    itt mi
 ; CHECK-NEXT:    ldrmi.w r0, [r12, #4]
 ; CHECK-NEXT:    vmovmi.32 q0[2], r0
-; CHECK-NEXT:    vmrs r3, p0
-; CHECK-NEXT:    and r0, r3, #1
-; CHECK-NEXT:    ubfx r3, r3, #8, #1
-; CHECK-NEXT:    rsb.w r12, r0, #0
-; CHECK-NEXT:    movs r0, #0
-; CHECK-NEXT:    rsbs r3, r3, #0
-; CHECK-NEXT:    bfi r0, r12, #0, #1
-; CHECK-NEXT:    bfi r0, r3, #1, #1
-; CHECK-NEXT:    lsls r3, r0, #31
+; CHECK-NEXT:    vmrs r0, p0
+; CHECK-NEXT:    ands r3, r0, #1
 ; CHECK-NEXT:    itt ne
-; CHECK-NEXT:    vmovne r3, s0
-; CHECK-NEXT:    strne r3, [r1]
-; CHECK-NEXT:    lsls r0, r0, #30
+; CHECK-NEXT:    vmovne r4, s0
+; CHECK-NEXT:    strne r4, [r1]
+; CHECK-NEXT:    ubfx r0, r0, #8, #1
+; CHECK-NEXT:    rsbs r3, r3, #0
+; CHECK-NEXT:    movs r4, #0
+; CHECK-NEXT:    rsbs r0, r0, #0
+; CHECK-NEXT:    bfi r4, r3, #0, #1
+; CHECK-NEXT:    bfi r4, r0, #1, #1
+; CHECK-NEXT:    lsls r0, r4, #30
 ; CHECK-NEXT:    itt mi
 ; CHECK-NEXT:    vmovmi r0, s2
 ; CHECK-NEXT:    strmi r0, [r1, #4]
@@ -329,7 +311,7 @@ define void @test_width2(ptr nocapture readnone %x, ptr nocapture %y, i8 zeroext
 ; CHECK-NEXT:    le lr, .LBB5_2
 ; CHECK-NEXT:  .LBB5_3: @ %for.cond.cleanup
 ; CHECK-NEXT:    add sp, #4
-; CHECK-NEXT:    pop {r7, pc}
+; CHECK-NEXT:    pop {r4, pc}
 entry:
   %cmp9.not = icmp eq i8 %m, 0
   br i1 %cmp9.not, label %for.cond.cleanup, label %for.body.preheader

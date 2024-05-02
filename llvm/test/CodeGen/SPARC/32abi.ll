@@ -81,10 +81,9 @@ define void @call_intarg(i32 %i0, ptr %i1) {
 ; HARD-NEXT: fstod %f0, %f0
 ; HARD-NEXT: faddd %f0, %f2, %f0
 ; SOFT: save %sp, -96, %sp
-; SOFT: ld [%fp+104], %l0
-; SOFT-NEXT: ld [%fp+96], %l1
-; SOFT-NEXT: ld [%fp+100], %l2
-; SOFT-NEXT: ld [%fp+92], %l3
+; SOFT: ldd [%fp+96], %l2
+; SOFT-NEXT: ld [%fp+104], %l0
+; SOFT-NEXT: ld [%fp+92], %l1
 ; SOFT-NEXT:  mov  %i2, %o0
 ; SOFT-NEXT: call __extendsfdf2
 ; SOFT-NEXT: nop
@@ -103,13 +102,13 @@ define void @call_intarg(i32 %i0, ptr %i1) {
 ; SOFT-NEXT:  mov  %o0, %o2
 ; SOFT-NEXT:  mov  %o1, %o3
 ; SOFT-NEXT:  mov  %i5, %o0
-; SOFT-NEXT:  mov  %l3, %o1
+; SOFT-NEXT:  mov  %l1, %o1
 ; SOFT-NEXT:  call __adddf3
 ; SOFT-NEXT:  nop
 ; SOFT-NEXT:  mov  %o0, %o2
 ; SOFT-NEXT:  mov  %o1, %o3
-; SOFT-NEXT:  mov  %l1, %o0
-; SOFT-NEXT:  mov  %l2, %o1
+; SOFT-NEXT:  mov  %l2, %o0
+; SOFT-NEXT:  mov  %l3, %o1
 ; SOFT-NEXT:  call __adddf3
 ; SOFT-NEXT:  nop
 ; SOFT-NEXT:  mov  %o0, %i0
@@ -178,9 +177,8 @@ define void @call_floatarg(float %f1, double %d2, float %f5, ptr %p) {
 ;; endian, since the 64-bit math needs to be split
 ; CHECK-LABEL: i64arg:
 ; CHECK:  save %sp, -96, %sp
-; CHECK-BE: ld [%fp+104], %g2
-; CHECK-BE-NEXT: ld [%fp+100], %g3
-; CHECK-BE-NEXT: ld [%fp+96], %g4
+; CHECK-BE: ldd [%fp+96], %g2
+; CHECK-BE-NEXT: ld [%fp+104], %g4
 ; CHECK-BE-NEXT: ld [%fp+92], %l0
 ; CHECK-BE-NEXT: addcc %i1, %i2, %i1
 ; CHECK-BE-NEXT: addxcc %i0, 0, %i0
@@ -189,13 +187,12 @@ define void @call_floatarg(float %f1, double %d2, float %f5, ptr %p) {
 ; CHECK-BE-NEXT: addcc %l0, %i1, %i1
 ; CHECK-BE-NEXT: addxcc %i5, %i0, %i0
 ; CHECK-BE-NEXT: addcc %g3, %i1, %i1
-; CHECK-BE-NEXT: addxcc %g4, %i0, %i0
-; CHECK-BE-NEXT: addcc %g2, %i1, %i1
+; CHECK-BE-NEXT: addxcc %g2, %i0, %i0
+; CHECK-BE-NEXT: addcc %g4, %i1, %i1
 ; CHECK-BE-NEXT: addxcc %i0, 0, %i0
 ;
-; CHECK-LE: ld [%fp+104], %g2
-; CHECK-LE-NEXT: ld [%fp+96], %g3
-; CHECK-LE-NEXT: ld [%fp+100], %g4
+; CHECK-LE: ldd [%fp+96], %g2
+; CHECK-LE-NEXT: ld [%fp+104], %g4
 ; CHECK-LE-NEXT: ld [%fp+92], %l0
 ; CHECK-LE-NEXT: addcc %i0, %i2, %i0
 ; CHECK-LE-NEXT: addxcc %i1, 0, %i1
@@ -203,9 +200,9 @@ define void @call_floatarg(float %f1, double %d2, float %f5, ptr %p) {
 ; CHECK-LE-NEXT: addxcc %i4, %i1, %i1
 ; CHECK-LE-NEXT: addcc %i5, %i0, %i0
 ; CHECK-LE-NEXT: addxcc %l0, %i1, %i1
-; CHECK-LE-NEXT: addcc %g3, %i0, %i0
-; CHECK-LE-NEXT: addxcc %g4, %i1, %i1
 ; CHECK-LE-NEXT: addcc %g2, %i0, %i0
+; CHECK-LE-NEXT: addxcc %g3, %i1, %i1
+; CHECK-LE-NEXT: addcc %g4, %i0, %i0
 ; CHECK-LE-NEXT: addxcc %i1, 0, %i1
 ; CHECK-NEXT: restore
 

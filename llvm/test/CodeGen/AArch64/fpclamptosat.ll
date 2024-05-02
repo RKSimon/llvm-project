@@ -35,7 +35,12 @@ entry:
 define i32 @ustest_f64i32(double %x) {
 ; CHECK-LABEL: ustest_f64i32:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    fcvtzu w0, d0
+; CHECK-NEXT:    fcvtzs x8, d0
+; CHECK-NEXT:    mov w9, #-1 // =0xffffffff
+; CHECK-NEXT:    cmp x8, x9
+; CHECK-NEXT:    csel x8, x8, x9, lt
+; CHECK-NEXT:    asr x9, x8, #63
+; CHECK-NEXT:    bic w0, w8, w9
 ; CHECK-NEXT:    ret
 entry:
   %conv = fptosi double %x to i64
@@ -78,7 +83,12 @@ entry:
 define i32 @ustest_f32i32(float %x) {
 ; CHECK-LABEL: ustest_f32i32:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    fcvtzu w0, s0
+; CHECK-NEXT:    fcvtzs x8, s0
+; CHECK-NEXT:    mov w9, #-1 // =0xffffffff
+; CHECK-NEXT:    cmp x8, x9
+; CHECK-NEXT:    csel x8, x8, x9, lt
+; CHECK-NEXT:    asr x9, x8, #63
+; CHECK-NEXT:    bic w0, w8, w9
 ; CHECK-NEXT:    ret
 entry:
   %conv = fptosi float %x to i64
@@ -134,12 +144,22 @@ define i32 @ustest_f16i32(half %x) {
 ; CHECK-CVT-LABEL: ustest_f16i32:
 ; CHECK-CVT:       // %bb.0: // %entry
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    fcvtzu w0, s0
+; CHECK-CVT-NEXT:    mov w9, #-1 // =0xffffffff
+; CHECK-CVT-NEXT:    fcvtzs x8, s0
+; CHECK-CVT-NEXT:    cmp x8, x9
+; CHECK-CVT-NEXT:    csel x8, x8, x9, lt
+; CHECK-CVT-NEXT:    asr x9, x8, #63
+; CHECK-CVT-NEXT:    bic w0, w8, w9
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: ustest_f16i32:
 ; CHECK-FP16:       // %bb.0: // %entry
-; CHECK-FP16-NEXT:    fcvtzu w0, h0
+; CHECK-FP16-NEXT:    fcvtzs x8, h0
+; CHECK-FP16-NEXT:    mov w9, #-1 // =0xffffffff
+; CHECK-FP16-NEXT:    cmp x8, x9
+; CHECK-FP16-NEXT:    csel x8, x8, x9, lt
+; CHECK-FP16-NEXT:    asr x9, x8, #63
+; CHECK-FP16-NEXT:    bic w0, w8, w9
 ; CHECK-FP16-NEXT:    ret
 entry:
   %conv = fptosi half %x to i64
@@ -398,9 +418,7 @@ define i64 @ustest_f64i64(double %x) {
 ; CHECK-NEXT:    cmp x1, #1
 ; CHECK-NEXT:    csel x8, x0, xzr, lt
 ; CHECK-NEXT:    csinc x9, x1, xzr, lt
-; CHECK-NEXT:    cmp xzr, x8
-; CHECK-NEXT:    ngcs xzr, x9
-; CHECK-NEXT:    csel x0, x8, xzr, lt
+; CHECK-NEXT:    bic x0, x8, x9, asr #63
 ; CHECK-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload
 ; CHECK-NEXT:    ret
 entry:
@@ -457,9 +475,7 @@ define i64 @ustest_f32i64(float %x) {
 ; CHECK-NEXT:    cmp x1, #1
 ; CHECK-NEXT:    csel x8, x0, xzr, lt
 ; CHECK-NEXT:    csinc x9, x1, xzr, lt
-; CHECK-NEXT:    cmp xzr, x8
-; CHECK-NEXT:    ngcs xzr, x9
-; CHECK-NEXT:    csel x0, x8, xzr, lt
+; CHECK-NEXT:    bic x0, x8, x9, asr #63
 ; CHECK-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload
 ; CHECK-NEXT:    ret
 entry:
@@ -522,9 +538,7 @@ define i64 @ustest_f16i64(half %x) {
 ; CHECK-NEXT:    cmp x1, #1
 ; CHECK-NEXT:    csel x8, x0, xzr, lt
 ; CHECK-NEXT:    csinc x9, x1, xzr, lt
-; CHECK-NEXT:    cmp xzr, x8
-; CHECK-NEXT:    ngcs xzr, x9
-; CHECK-NEXT:    csel x0, x8, xzr, lt
+; CHECK-NEXT:    bic x0, x8, x9, asr #63
 ; CHECK-NEXT:    ldr x30, [sp], #16 // 8-byte Folded Reload
 ; CHECK-NEXT:    ret
 entry:

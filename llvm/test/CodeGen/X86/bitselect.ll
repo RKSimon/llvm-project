@@ -19,19 +19,20 @@ define i8 @bitselect_i8(i8 %a, i8 %b, i8 %m) nounwind {
 ;
 ; X64-NOBMI-LABEL: bitselect_i8:
 ; X64-NOBMI:       # %bb.0:
-; X64-NOBMI-NEXT:    movl %esi, %eax
-; X64-NOBMI-NEXT:    xorl %edi, %eax
-; X64-NOBMI-NEXT:    andl %edx, %eax
-; X64-NOBMI-NEXT:    xorl %edi, %eax
-; X64-NOBMI-NEXT:    # kill: def $al killed $al killed $eax
+; X64-NOBMI-NEXT:    andl %edx, %esi
+; X64-NOBMI-NEXT:    movl %edx, %eax
+; X64-NOBMI-NEXT:    notb %al
+; X64-NOBMI-NEXT:    andb %dil, %al
+; X64-NOBMI-NEXT:    orb %sil, %al
 ; X64-NOBMI-NEXT:    retq
 ;
 ; X64-BMI-LABEL: bitselect_i8:
 ; X64-BMI:       # %bb.0:
-; X64-BMI-NEXT:    andnl %edi, %edx, %eax
 ; X64-BMI-NEXT:    andl %edx, %esi
-; X64-BMI-NEXT:    orl %esi, %eax
-; X64-BMI-NEXT:    # kill: def $al killed $al killed $eax
+; X64-BMI-NEXT:    movl %edx, %eax
+; X64-BMI-NEXT:    notb %al
+; X64-BMI-NEXT:    andb %dil, %al
+; X64-BMI-NEXT:    orb %sil, %al
 ; X64-BMI-NEXT:    retq
   %not = xor i8 %m, -1
   %ma = and i8 %a, %not

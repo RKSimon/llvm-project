@@ -4,7 +4,9 @@
 define i32 @test(i32 %x) {
 ; CHECK-LABEL: test:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movl %edi, %eax
+; CHECK-NEXT:    # kill: def $edi killed $edi def $rdi
+; CHECK-NEXT:    leal 1(%rdi), %eax
+; CHECK-NEXT:    subl $1, %eax
 ; CHECK-NEXT:    retq
   %y = add i32 %x, 1
   %z = sub i32 %y, 1

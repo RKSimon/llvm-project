@@ -7,9 +7,9 @@ define void @multiple_store() {
 ; CHECK-NEXT:    movw r0, #16960
 ; CHECK-NEXT:    movs r1, #42
 ; CHECK-NEXT:    movt r0, #15
-; CHECK-NEXT:    str.w r1, [r0, #42]
 ; CHECK-NEXT:    str r1, [r0, #24]
 ; CHECK-NEXT:    str r1, [r0]
+; CHECK-NEXT:    str.w r1, [r0, #42]
 ; CHECK-NEXT:    movw r0, #20394
 ; CHECK-NEXT:    movt r0, #18
 ; CHECK-NEXT:    str r1, [r0]

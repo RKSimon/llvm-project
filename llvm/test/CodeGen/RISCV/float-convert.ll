@@ -47,20 +47,18 @@ define i32 @fcvt_w_s(float %a) nounwind {
 define i32 @fcvt_w_s_sat(float %a) nounwind {
 ; CHECKIF-LABEL: fcvt_w_s_sat:
 ; CHECKIF:       # %bb.0: # %start
-; CHECKIF-NEXT:    fcvt.w.s a0, fa0, rtz
-; CHECKIF-NEXT:    feq.s a1, fa0, fa0
-; CHECKIF-NEXT:    seqz a1, a1
-; CHECKIF-NEXT:    addi a1, a1, -1
-; CHECKIF-NEXT:    and a0, a1, a0
+; CHECKIF-NEXT:    feq.s a0, fa0, fa0
+; CHECKIF-NEXT:    neg a0, a0
+; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rtz
+; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
 ; CHECKIZFINX-LABEL: fcvt_w_s_sat:
 ; CHECKIZFINX:       # %bb.0: # %start
-; CHECKIZFINX-NEXT:    fcvt.w.s a1, a0, rtz
-; CHECKIZFINX-NEXT:    feq.s a0, a0, a0
-; CHECKIZFINX-NEXT:    seqz a0, a0
-; CHECKIZFINX-NEXT:    addi a0, a0, -1
-; CHECKIZFINX-NEXT:    and a0, a0, a1
+; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
+; CHECKIZFINX-NEXT:    neg a1, a1
+; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rtz
+; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
 ;
 ; RV32I-LABEL: fcvt_w_s_sat:
@@ -230,40 +228,36 @@ define i32 @fcvt_wu_s_multiple_use(float %x, ptr %y) nounwind {
 define i32 @fcvt_wu_s_sat(float %a) nounwind {
 ; RV32IF-LABEL: fcvt_wu_s_sat:
 ; RV32IF:       # %bb.0: # %start
-; RV32IF-NEXT:    fcvt.wu.s a0, fa0, rtz
-; RV32IF-NEXT:    feq.s a1, fa0, fa0
-; RV32IF-NEXT:    seqz a1, a1
-; RV32IF-NEXT:    addi a1, a1, -1
-; RV32IF-NEXT:    and a0, a1, a0
+; RV32IF-NEXT:    feq.s a0, fa0, fa0
+; RV32IF-NEXT:    neg a0, a0
+; RV32IF-NEXT:    fcvt.wu.s a1, fa0, rtz
+; RV32IF-NEXT:    and a0, a0, a1
 ; RV32IF-NEXT:    ret
 ;
 ; RV64IF-LABEL: fcvt_wu_s_sat:
 ; RV64IF:       # %bb.0: # %start
-; RV64IF-NEXT:    fcvt.wu.s a0, fa0, rtz
-; RV64IF-NEXT:    feq.s a1, fa0, fa0
-; RV64IF-NEXT:    seqz a1, a1
-; RV64IF-NEXT:    addi a1, a1, -1
-; RV64IF-NEXT:    and a0, a0, a1
+; RV64IF-NEXT:    feq.s a0, fa0, fa0
+; RV64IF-NEXT:    neg a0, a0
+; RV64IF-NEXT:    fcvt.wu.s a1, fa0, rtz
+; RV64IF-NEXT:    and a0, a1, a0
 ; RV64IF-NEXT:    slli a0, a0, 32
 ; RV64IF-NEXT:    srli a0, a0, 32
 ; RV64IF-NEXT:    ret
 ;
 ; RV32IZFINX-LABEL: fcvt_wu_s_sat:
 ; RV32IZFINX:       # %bb.0: # %start
-; RV32IZFINX-NEXT:    fcvt.wu.s a1, a0, rtz
-; RV32IZFINX-NEXT:    feq.s a0, a0, a0
-; RV32IZFINX-NEXT:    seqz a0, a0
-; RV32IZFINX-NEXT:    addi a0, a0, -1
-; RV32IZFINX-NEXT:    and a0, a0, a1
+; RV32IZFINX-NEXT:    feq.s a1, a0, a0
+; RV32IZFINX-NEXT:    neg a1, a1
+; RV32IZFINX-NEXT:    fcvt.wu.s a0, a0, rtz
+; RV32IZFINX-NEXT:    and a0, a1, a0
 ; RV32IZFINX-NEXT:    ret
 ;
 ; RV64IZFINX-LABEL: fcvt_wu_s_sat:
 ; RV64IZFINX:       # %bb.0: # %start
-; RV64IZFINX-NEXT:    fcvt.wu.s a1, a0, rtz
-; RV64IZFINX-NEXT:    feq.s a0, a0, a0
-; RV64IZFINX-NEXT:    seqz a0, a0
-; RV64IZFINX-NEXT:    addi a0, a0, -1
-; RV64IZFINX-NEXT:    and a0, a1, a0
+; RV64IZFINX-NEXT:    feq.s a1, a0, a0
+; RV64IZFINX-NEXT:    neg a1, a1
+; RV64IZFINX-NEXT:    fcvt.wu.s a0, a0, rtz
+; RV64IZFINX-NEXT:    and a0, a0, a1
 ; RV64IZFINX-NEXT:    slli a0, a0, 32
 ; RV64IZFINX-NEXT:    srli a0, a0, 32
 ; RV64IZFINX-NEXT:    ret
@@ -645,11 +639,10 @@ define i64 @fcvt_l_s_sat(float %a) nounwind {
 ;
 ; RV64IF-LABEL: fcvt_l_s_sat:
 ; RV64IF:       # %bb.0: # %start
-; RV64IF-NEXT:    fcvt.l.s a0, fa0, rtz
-; RV64IF-NEXT:    feq.s a1, fa0, fa0
-; RV64IF-NEXT:    seqz a1, a1
-; RV64IF-NEXT:    addi a1, a1, -1
-; RV64IF-NEXT:    and a0, a1, a0
+; RV64IF-NEXT:    feq.s a0, fa0, fa0
+; RV64IF-NEXT:    neg a0, a0
+; RV64IF-NEXT:    fcvt.l.s a1, fa0, rtz
+; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
 ; RV32IZFINX-LABEL: fcvt_l_s_sat:
@@ -692,11 +685,10 @@ define i64 @fcvt_l_s_sat(float %a) nounwind {
 ;
 ; RV64IZFINX-LABEL: fcvt_l_s_sat:
 ; RV64IZFINX:       # %bb.0: # %start
-; RV64IZFINX-NEXT:    fcvt.l.s a1, a0, rtz
-; RV64IZFINX-NEXT:    feq.s a0, a0, a0
-; RV64IZFINX-NEXT:    seqz a0, a0
-; RV64IZFINX-NEXT:    addi a0, a0, -1
-; RV64IZFINX-NEXT:    and a0, a0, a1
+; RV64IZFINX-NEXT:    feq.s a1, a0, a0
+; RV64IZFINX-NEXT:    neg a1, a1
+; RV64IZFINX-NEXT:    fcvt.l.s a0, a0, rtz
+; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
 ;
 ; RV32I-LABEL: fcvt_l_s_sat:
@@ -879,11 +871,10 @@ define i64 @fcvt_lu_s_sat(float %a) nounwind {
 ;
 ; RV64IF-LABEL: fcvt_lu_s_sat:
 ; RV64IF:       # %bb.0: # %start
-; RV64IF-NEXT:    fcvt.lu.s a0, fa0, rtz
-; RV64IF-NEXT:    feq.s a1, fa0, fa0
-; RV64IF-NEXT:    seqz a1, a1
-; RV64IF-NEXT:    addi a1, a1, -1
-; RV64IF-NEXT:    and a0, a1, a0
+; RV64IF-NEXT:    feq.s a0, fa0, fa0
+; RV64IF-NEXT:    neg a0, a0
+; RV64IF-NEXT:    fcvt.lu.s a1, fa0, rtz
+; RV64IF-NEXT:    and a0, a0, a1
 ; RV64IF-NEXT:    ret
 ;
 ; RV32IZFINX-LABEL: fcvt_lu_s_sat:
@@ -913,11 +904,10 @@ define i64 @fcvt_lu_s_sat(float %a) nounwind {
 ;
 ; RV64IZFINX-LABEL: fcvt_lu_s_sat:
 ; RV64IZFINX:       # %bb.0: # %start
-; RV64IZFINX-NEXT:    fcvt.lu.s a1, a0, rtz
-; RV64IZFINX-NEXT:    feq.s a0, a0, a0
-; RV64IZFINX-NEXT:    seqz a0, a0
-; RV64IZFINX-NEXT:    addi a0, a0, -1
-; RV64IZFINX-NEXT:    and a0, a0, a1
+; RV64IZFINX-NEXT:    feq.s a1, a0, a0
+; RV64IZFINX-NEXT:    neg a1, a1
+; RV64IZFINX-NEXT:    fcvt.lu.s a0, a0, rtz
+; RV64IZFINX-NEXT:    and a0, a1, a0
 ; RV64IZFINX-NEXT:    ret
 ;
 ; RV32I-LABEL: fcvt_lu_s_sat:
@@ -2038,40 +2028,36 @@ start:
 define zeroext i32 @fcvt_wu_s_sat_zext(float %a) nounwind {
 ; RV32IF-LABEL: fcvt_wu_s_sat_zext:
 ; RV32IF:       # %bb.0: # %start
-; RV32IF-NEXT:    fcvt.wu.s a0, fa0, rtz
-; RV32IF-NEXT:    feq.s a1, fa0, fa0
-; RV32IF-NEXT:    seqz a1, a1
-; RV32IF-NEXT:    addi a1, a1, -1
-; RV32IF-NEXT:    and a0, a1, a0
+; RV32IF-NEXT:    feq.s a0, fa0, fa0
+; RV32IF-NEXT:    neg a0, a0
+; RV32IF-NEXT:    fcvt.wu.s a1, fa0, rtz
+; RV32IF-NEXT:    and a0, a0, a1
 ; RV32IF-NEXT:    ret
 ;
 ; RV64IF-LABEL: fcvt_wu_s_sat_zext:
 ; RV64IF:       # %bb.0: # %start
-; RV64IF-NEXT:    fcvt.wu.s a0, fa0, rtz
-; RV64IF-NEXT:    feq.s a1, fa0, fa0
-; RV64IF-NEXT:    seqz a1, a1
-; RV64IF-NEXT:    addi a1, a1, -1
-; RV64IF-NEXT:    and a0, a0, a1
+; RV64IF-NEXT:    feq.s a0, fa0, fa0
+; RV64IF-NEXT:    neg a0, a0
+; RV64IF-NEXT:    fcvt.wu.s a1, fa0, rtz
+; RV64IF-NEXT:    and a0, a1, a0
 ; RV64IF-NEXT:    slli a0, a0, 32
 ; RV64IF-NEXT:    srli a0, a0, 32
 ; RV64IF-NEXT:    ret
 ;
 ; RV32IZFINX-LABEL: fcvt_wu_s_sat_zext:
 ; RV32IZFINX:       # %bb.0: # %start
-; RV32IZFINX-NEXT:    fcvt.wu.s a1, a0, rtz
-; RV32IZFINX-NEXT:    feq.s a0, a0, a0
-; RV32IZFINX-NEXT:    seqz a0, a0
-; RV32IZFINX-NEXT:    addi a0, a0, -1
-; RV32IZFINX-NEXT:    and a0, a0, a1
+; RV32IZFINX-NEXT:    feq.s a1, a0, a0
+; RV32IZFINX-NEXT:    neg a1, a1
+; RV32IZFINX-NEXT:    fcvt.wu.s a0, a0, rtz
+; RV32IZFINX-NEXT:    and a0, a1, a0
 ; RV32IZFINX-NEXT:    ret
 ;
 ; RV64IZFINX-LABEL: fcvt_wu_s_sat_zext:
 ; RV64IZFINX:       # %bb.0: # %start
-; RV64IZFINX-NEXT:    fcvt.wu.s a1, a0, rtz
-; RV64IZFINX-NEXT:    feq.s a0, a0, a0
-; RV64IZFINX-NEXT:    seqz a0, a0
-; RV64IZFINX-NEXT:    addi a0, a0, -1
-; RV64IZFINX-NEXT:    and a0, a1, a0
+; RV64IZFINX-NEXT:    feq.s a1, a0, a0
+; RV64IZFINX-NEXT:    neg a1, a1
+; RV64IZFINX-NEXT:    fcvt.wu.s a0, a0, rtz
+; RV64IZFINX-NEXT:    and a0, a0, a1
 ; RV64IZFINX-NEXT:    slli a0, a0, 32
 ; RV64IZFINX-NEXT:    srli a0, a0, 32
 ; RV64IZFINX-NEXT:    ret
@@ -2147,20 +2133,18 @@ start:
 define signext i32 @fcvt_w_s_sat_sext(float %a) nounwind {
 ; CHECKIF-LABEL: fcvt_w_s_sat_sext:
 ; CHECKIF:       # %bb.0: # %start
-; CHECKIF-NEXT:    fcvt.w.s a0, fa0, rtz
-; CHECKIF-NEXT:    feq.s a1, fa0, fa0
-; CHECKIF-NEXT:    seqz a1, a1
-; CHECKIF-NEXT:    addi a1, a1, -1
-; CHECKIF-NEXT:    and a0, a1, a0
+; CHECKIF-NEXT:    feq.s a0, fa0, fa0
+; CHECKIF-NEXT:    neg a0, a0
+; CHECKIF-NEXT:    fcvt.w.s a1, fa0, rtz
+; CHECKIF-NEXT:    and a0, a0, a1
 ; CHECKIF-NEXT:    ret
 ;
 ; CHECKIZFINX-LABEL: fcvt_w_s_sat_sext:
 ; CHECKIZFINX:       # %bb.0: # %start
-; CHECKIZFINX-NEXT:    fcvt.w.s a1, a0, rtz
-; CHECKIZFINX-NEXT:    feq.s a0, a0, a0
-; CHECKIZFINX-NEXT:    seqz a0, a0
-; CHECKIZFINX-NEXT:    addi a0, a0, -1
-; CHECKIZFINX-NEXT:    and a0, a0, a1
+; CHECKIZFINX-NEXT:    feq.s a1, a0, a0
+; CHECKIZFINX-NEXT:    neg a1, a1
+; CHECKIZFINX-NEXT:    fcvt.w.s a0, a0, rtz
+; CHECKIZFINX-NEXT:    and a0, a1, a0
 ; CHECKIZFINX-NEXT:    ret
 ;
 ; RV32I-LABEL: fcvt_w_s_sat_sext:

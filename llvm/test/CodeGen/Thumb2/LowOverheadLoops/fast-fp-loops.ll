@@ -283,16 +283,16 @@ define arm_aapcs_vfpcc float @fast_float_half_mac(ptr nocapture readonly %b, ptr
 ; CHECK-NEXT:    vpush {d8, d9, d10, d11, d12, d13}
 ; CHECK-NEXT:    sub sp, #8
 ; CHECK-NEXT:    adds r3, r2, #3
-; CHECK-NEXT:    vmov.i32 q5, #0x0
-; CHECK-NEXT:    bic r3, r3, #3
-; CHECK-NEXT:    sub.w r12, r3, #4
-; CHECK-NEXT:    movs r3, #1
-; CHECK-NEXT:    add.w lr, r3, r12, lsr #2
 ; CHECK-NEXT:    sub.w r12, r2, #1
+; CHECK-NEXT:    bic r3, r3, #3
 ; CHECK-NEXT:    adr r2, .LCPI2_1
-; CHECK-NEXT:    mov lr, lr
+; CHECK-NEXT:    subs r3, #4
+; CHECK-NEXT:    movs r4, #1
 ; CHECK-NEXT:    vldrw.u32 q0, [r2]
+; CHECK-NEXT:    vmov.i32 q5, #0x0
+; CHECK-NEXT:    add.w lr, r4, r3, lsr #2
 ; CHECK-NEXT:    movs r3, #0
+; CHECK-NEXT:    mov lr, lr
 ; CHECK-NEXT:    vdup.32 q1, r12
 ; CHECK-NEXT:    vdup.32 q2, r12
 ; CHECK-NEXT:    b .LBB2_3
@@ -317,7 +317,13 @@ define arm_aapcs_vfpcc float @fast_float_half_mac(ptr nocapture readonly %b, ptr
 ; CHECK-NEXT:    vcmp.u32 cs, q1, q4
 ; CHECK-NEXT:    @ implicit-def: $q5
 ; CHECK-NEXT:    vmrs r4, p0
-; CHECK-NEXT:    and r2, r4, #1
+; CHECK-NEXT:    ands r2, r4, #1
+; CHECK-NEXT:    beq .LBB2_5
+; CHECK-NEXT:  @ %bb.4: @ %cond.load
+; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
+; CHECK-NEXT:    vldr.16 s20, [r0]
+; CHECK-NEXT:  .LBB2_5: @ %else
+; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    rsbs r5, r2, #0
 ; CHECK-NEXT:    movs r2, #0
 ; CHECK-NEXT:    bfi r2, r5, #0, #1
@@ -330,30 +336,32 @@ define arm_aapcs_vfpcc float @fast_float_half_mac(ptr nocapture readonly %b, ptr
 ; CHECK-NEXT:    bfi r2, r5, #2, #1
 ; CHECK-NEXT:    rsbs r4, r4, #0
 ; CHECK-NEXT:    bfi r2, r4, #3, #1
-; CHECK-NEXT:    lsls r4, r2, #31
-; CHECK-NEXT:    bne .LBB2_12
-; CHECK-NEXT:  @ %bb.4: @ %else
-; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r4, r2, #30
-; CHECK-NEXT:    bmi .LBB2_13
-; CHECK-NEXT:  .LBB2_5: @ %else5
+; CHECK-NEXT:    bmi .LBB2_14
+; CHECK-NEXT:  @ %bb.6: @ %else5
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r4, r2, #29
-; CHECK-NEXT:    bmi .LBB2_14
-; CHECK-NEXT:  .LBB2_6: @ %else8
+; CHECK-NEXT:    bmi .LBB2_15
+; CHECK-NEXT:  .LBB2_7: @ %else8
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r2, r2, #28
-; CHECK-NEXT:    bpl .LBB2_8
-; CHECK-NEXT:  .LBB2_7: @ %cond.load10
+; CHECK-NEXT:    bpl .LBB2_9
+; CHECK-NEXT:  .LBB2_8: @ %cond.load10
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vldr.16 s22, [r0, #6]
 ; CHECK-NEXT:    vins.f16 s21, s22
-; CHECK-NEXT:  .LBB2_8: @ %else11
+; CHECK-NEXT:  .LBB2_9: @ %else11
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vcmp.u32 cs, q2, q4
 ; CHECK-NEXT:    @ implicit-def: $q6
 ; CHECK-NEXT:    vmrs r4, p0
-; CHECK-NEXT:    and r2, r4, #1
+; CHECK-NEXT:    ands r2, r4, #1
+; CHECK-NEXT:    beq .LBB2_11
+; CHECK-NEXT:  @ %bb.10: @ %cond.load14
+; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
+; CHECK-NEXT:    vldr.16 s24, [r1]
+; CHECK-NEXT:  .LBB2_11: @ %else15
+; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    rsbs r5, r2, #0
 ; CHECK-NEXT:    movs r2, #0
 ; CHECK-NEXT:    bfi r2, r5, #0, #1
@@ -366,51 +374,37 @@ define arm_aapcs_vfpcc float @fast_float_half_mac(ptr nocapture readonly %b, ptr
 ; CHECK-NEXT:    bfi r2, r5, #2, #1
 ; CHECK-NEXT:    rsbs r4, r4, #0
 ; CHECK-NEXT:    bfi r2, r4, #3, #1
-; CHECK-NEXT:    lsls r4, r2, #31
-; CHECK-NEXT:    bne .LBB2_15
-; CHECK-NEXT:  @ %bb.9: @ %else15
-; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r4, r2, #30
 ; CHECK-NEXT:    bmi .LBB2_16
-; CHECK-NEXT:  .LBB2_10: @ %else18
+; CHECK-NEXT:  @ %bb.12: @ %else18
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r4, r2, #29
 ; CHECK-NEXT:    bmi .LBB2_17
-; CHECK-NEXT:  .LBB2_11: @ %else21
+; CHECK-NEXT:  .LBB2_13: @ %else21
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    lsls r2, r2, #28
 ; CHECK-NEXT:    bpl .LBB2_2
 ; CHECK-NEXT:    b .LBB2_18
-; CHECK-NEXT:  .LBB2_12: @ %cond.load
-; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
-; CHECK-NEXT:    vldr.16 s20, [r0]
-; CHECK-NEXT:    lsls r4, r2, #30
-; CHECK-NEXT:    bpl .LBB2_5
-; CHECK-NEXT:  .LBB2_13: @ %cond.load4
+; CHECK-NEXT:  .LBB2_14: @ %cond.load4
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vldr.16 s22, [r0, #2]
 ; CHECK-NEXT:    vins.f16 s20, s22
 ; CHECK-NEXT:    lsls r4, r2, #29
-; CHECK-NEXT:    bpl .LBB2_6
-; CHECK-NEXT:  .LBB2_14: @ %cond.load7
+; CHECK-NEXT:    bpl .LBB2_7
+; CHECK-NEXT:  .LBB2_15: @ %cond.load7
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vldr.16 s21, [r0, #4]
 ; CHECK-NEXT:    vmovx.f16 s22, s0
 ; CHECK-NEXT:    vins.f16 s21, s22
 ; CHECK-NEXT:    lsls r2, r2, #28
-; CHECK-NEXT:    bmi .LBB2_7
-; CHECK-NEXT:    b .LBB2_8
-; CHECK-NEXT:  .LBB2_15: @ %cond.load14
-; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
-; CHECK-NEXT:    vldr.16 s24, [r1]
-; CHECK-NEXT:    lsls r4, r2, #30
-; CHECK-NEXT:    bpl .LBB2_10
+; CHECK-NEXT:    bmi .LBB2_8
+; CHECK-NEXT:    b .LBB2_9
 ; CHECK-NEXT:  .LBB2_16: @ %cond.load17
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vldr.16 s26, [r1, #2]
 ; CHECK-NEXT:    vins.f16 s24, s26
 ; CHECK-NEXT:    lsls r4, r2, #29
-; CHECK-NEXT:    bpl .LBB2_11
+; CHECK-NEXT:    bpl .LBB2_13
 ; CHECK-NEXT:  .LBB2_17: @ %cond.load20
 ; CHECK-NEXT:    @ in Loop: Header=BB2_3 Depth=1
 ; CHECK-NEXT:    vldr.16 s25, [r1, #4]

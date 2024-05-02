@@ -12,8 +12,8 @@ define void @test(ptr %p1, ptr %p2) nounwind {
 ; CHECK-NEXT:    li 27, 16
 ; CHECK-NEXT:    std 28, 192(1) # 8-byte Folded Spill
 ; CHECK-NEXT:    std 29, 200(1) # 8-byte Folded Spill
-; CHECK-NEXT:    li 29, 32
-; CHECK-NEXT:    li 28, 48
+; CHECK-NEXT:    li 29, 48
+; CHECK-NEXT:    li 28, 32
 ; CHECK-NEXT:    stxvd2x 56, 1, 5 # 16-byte Folded Spill
 ; CHECK-NEXT:    li 5, 64
 ; CHECK-NEXT:    std 30, 208(1) # 8-byte Folded Spill

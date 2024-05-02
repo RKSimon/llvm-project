@@ -37,8 +37,9 @@ define i64 @bic_shiftedreg_from_and(i64 %a, i64 %b) {
 define i64 @eon_shiftedreg_from_and(i64 %a, i64 %b) {
 ; CHECK-LABEL: eon_shiftedreg_from_and:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    lsr x8, x0, #17
-; CHECK-NEXT:    eon x0, x1, x8, lsl #53
+; CHECK-NEXT:    mov x8, #9007199254740991 // =0x1fffffffffffff
+; CHECK-NEXT:    orn x8, x8, x0, lsl #36
+; CHECK-NEXT:    eor x0, x1, x8
 ; CHECK-NEXT:    ret
   %shl = shl i64 %a, 36
   %and = and i64 %shl, -9007199254740992

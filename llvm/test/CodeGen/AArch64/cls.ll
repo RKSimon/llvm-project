@@ -75,7 +75,10 @@ define i64 @cls_i64_not_32(i64 %x) {
 ; CHECK-LABEL: cls_i64_not_32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    asr x8, x0, #16
-; CHECK-NEXT:    cls x8, x8
+; CHECK-NEXT:    mov w9, #1 // =0x1
+; CHECK-NEXT:    eor x8, x8, x0, asr #63
+; CHECK-NEXT:    orr x8, x9, x8, lsl #1
+; CHECK-NEXT:    clz x8, x8
 ; CHECK-NEXT:    orr x0, x8, #0x10
 ; CHECK-NEXT:    ret
   %val = ashr i64 %x, 16
@@ -128,7 +131,9 @@ define i32 @cls_i32_knownbits_no_overestimate(i32 signext %x) {
 ; CHECK-LABEL: cls_i32_knownbits_no_overestimate:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    asr w8, w0, #15
-; CHECK-NEXT:    cls w8, w8
+; CHECK-NEXT:    eor w8, w8, w0, asr #31
+; CHECK-NEXT:    clz w8, w8
+; CHECK-NEXT:    sub w8, w8, #1
 ; CHECK-NEXT:    orr w0, w8, #0x10
 ; CHECK-NEXT:    ret
   %ashr = ashr i32 %x, 15

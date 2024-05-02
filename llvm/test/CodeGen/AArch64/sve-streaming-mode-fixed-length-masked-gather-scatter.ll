@@ -17,12 +17,14 @@ define <2 x i64> @masked_gather_v2i64(ptr %a, ptr %b) vscale_range(2, 2) {
 ; CHECK-NEXT:    index z0.d, #1, #1
 ; CHECK-NEXT:    mov z1.d, p1/z, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    and z0.d, z1.d, z0.d
+; CHECK-NEXT:    uzp1 z2.s, z1.s, z1.s
 ; CHECK-NEXT:    ldr q1, [x1]
 ; CHECK-NEXT:    uaddv d0, p0, z0.d
+; CHECK-NEXT:    fmov w9, s2
 ; CHECK-NEXT:    ptrue p0.d
 ; CHECK-NEXT:    str b0, [sp, #12]
 ; CHECK-NEXT:    ldrb w8, [sp, #12]
-; CHECK-NEXT:    tbz w8, #0, .LBB0_2
+; CHECK-NEXT:    tbz w9, #0, .LBB0_2
 ; CHECK-NEXT:  // %bb.1: // %cond.load
 ; CHECK-NEXT:    fmov x9, d1
 ; CHECK-NEXT:    ld1rd { z0.d }, p0/z, [x9]
@@ -51,17 +53,17 @@ define <2 x i64> @masked_gather_v2i64(ptr %a, ptr %b) vscale_range(2, 2) {
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 144
 ; NONEON-NOSVE-NEXT:    ldr q0, [x0]
 ; NONEON-NOSVE-NEXT:    ldr q1, [x1]
-; NONEON-NOSVE-NEXT:    mov w8, #2 // =0x2
 ; NONEON-NOSVE-NEXT:    str q0, [sp, #112]
-; NONEON-NOSVE-NEXT:    ldp x10, x9, [sp, #112]
+; NONEON-NOSVE-NEXT:    ldp x8, x9, [sp, #112]
+; NONEON-NOSVE-NEXT:    cmp x8, #0
+; NONEON-NOSVE-NEXT:    csetm x10, eq
 ; NONEON-NOSVE-NEXT:    cmp x9, #0
-; NONEON-NOSVE-NEXT:    csel x8, x8, xzr, eq
-; NONEON-NOSVE-NEXT:    cmp x10, #0
-; NONEON-NOSVE-NEXT:    csetm x9, eq
-; NONEON-NOSVE-NEXT:    sub w8, w8, w9
+; NONEON-NOSVE-NEXT:    csetm x8, eq
+; NONEON-NOSVE-NEXT:    and w8, w8, #0x2
+; NONEON-NOSVE-NEXT:    sub w8, w8, w10
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #140]
 ; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
-; NONEON-NOSVE-NEXT:    tbz w8, #0, .LBB0_2
+; NONEON-NOSVE-NEXT:    tbz w10, #0, .LBB0_2
 ; NONEON-NOSVE-NEXT:  // %bb.1: // %cond.load
 ; NONEON-NOSVE-NEXT:    str q1, [sp, #96]
 ; NONEON-NOSVE-NEXT:    ldr x9, [sp, #96]
@@ -107,11 +109,13 @@ define void @masked_scatter_v2i64(ptr %a, ptr %b) vscale_range(2, 2) {
 ; CHECK-NEXT:    cmpeq p1.d, p0/z, z0.d, #0
 ; CHECK-NEXT:    mov z2.d, p1/z, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    and z1.d, z2.d, z1.d
-; CHECK-NEXT:    uaddv d2, p0, z1.d
+; CHECK-NEXT:    uzp1 z2.s, z2.s, z2.s
+; CHECK-NEXT:    uaddv d3, p0, z1.d
 ; CHECK-NEXT:    ldr q1, [x1]
-; CHECK-NEXT:    str b2, [sp, #12]
+; CHECK-NEXT:    fmov w9, s2
+; CHECK-NEXT:    str b3, [sp, #12]
 ; CHECK-NEXT:    ldrb w8, [sp, #12]
-; CHECK-NEXT:    tbnz w8, #0, .LBB1_3
+; CHECK-NEXT:    tbnz w9, #0, .LBB1_3
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB1_4
 ; CHECK-NEXT:  .LBB1_2: // %else2
@@ -133,32 +137,32 @@ define void @masked_scatter_v2i64(ptr %a, ptr %b) vscale_range(2, 2) {
 ; NONEON-NOSVE:       // %bb.0:
 ; NONEON-NOSVE-NEXT:    sub sp, sp, #96
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldr q1, [x0]
-; NONEON-NOSVE-NEXT:    ldr q0, [x1]
-; NONEON-NOSVE-NEXT:    mov w8, #2 // =0x2
-; NONEON-NOSVE-NEXT:    str q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp x10, x9, [sp, #64]
+; NONEON-NOSVE-NEXT:    ldr q0, [x0]
+; NONEON-NOSVE-NEXT:    ldr q1, [x1]
+; NONEON-NOSVE-NEXT:    str q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    ldp x8, x9, [sp, #64]
+; NONEON-NOSVE-NEXT:    cmp x8, #0
+; NONEON-NOSVE-NEXT:    csetm x10, eq
 ; NONEON-NOSVE-NEXT:    cmp x9, #0
-; NONEON-NOSVE-NEXT:    csel x8, x8, xzr, eq
-; NONEON-NOSVE-NEXT:    cmp x10, #0
-; NONEON-NOSVE-NEXT:    csetm x9, eq
-; NONEON-NOSVE-NEXT:    sub w8, w8, w9
+; NONEON-NOSVE-NEXT:    csetm x8, eq
+; NONEON-NOSVE-NEXT:    and w8, w8, #0x2
+; NONEON-NOSVE-NEXT:    sub w8, w8, w10
 ; NONEON-NOSVE-NEXT:    strb w8, [sp, #92]
 ; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
-; NONEON-NOSVE-NEXT:    tbnz w8, #0, .LBB1_3
+; NONEON-NOSVE-NEXT:    tbnz w10, #0, .LBB1_3
 ; NONEON-NOSVE-NEXT:  // %bb.1: // %else
 ; NONEON-NOSVE-NEXT:    tbnz w8, #1, .LBB1_4
 ; NONEON-NOSVE-NEXT:  .LBB1_2: // %else2
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
 ; NONEON-NOSVE-NEXT:  .LBB1_3: // %cond.store
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp q0, q1, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldr x9, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldr x10, [sp, #48]
 ; NONEON-NOSVE-NEXT:    str x9, [x10]
 ; NONEON-NOSVE-NEXT:    tbz w8, #1, .LBB1_2
 ; NONEON-NOSVE-NEXT:  .LBB1_4: // %cond.store1
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp]
+; NONEON-NOSVE-NEXT:    stp q0, q1, [sp]
 ; NONEON-NOSVE-NEXT:    ldr x8, [sp, #8]
 ; NONEON-NOSVE-NEXT:    ldr x9, [sp, #24]
 ; NONEON-NOSVE-NEXT:    str x8, [x9]

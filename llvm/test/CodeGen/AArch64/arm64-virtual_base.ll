@@ -40,10 +40,10 @@ define void @Precompute_Patch_Values(ptr %Shape) {
 ; CHECK-NEXT:    .cfi_def_cfa_offset 400
 ; CHECK-NEXT:    .cfi_offset w27, -8
 ; CHECK-NEXT:    .cfi_offset w28, -16
-; CHECK-NEXT:    ldr q0, [x0, #272]
 ; CHECK-NEXT:    ldr x8, [x0, #288]
-; CHECK-NEXT:    stur q0, [sp, #216]
+; CHECK-NEXT:    ldr q0, [x0, #272]
 ; CHECK-NEXT:    str x8, [sp, #232]
+; CHECK-NEXT:    stur q0, [sp, #216]
 ; CHECK-NEXT:    ldp x28, x27, [sp, #384] ; 16-byte Folded Reload
 ; CHECK-NEXT:    add sp, sp, #400
 ; CHECK-NEXT:    ret

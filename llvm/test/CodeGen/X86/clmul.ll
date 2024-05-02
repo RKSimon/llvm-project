@@ -128,7 +128,7 @@ define i16 @clmul_i16(i16 %a, i16 %b) nounwind {
 ; CHECK-NEXT:    andl $16384, %eax # imm = 0x4000
 ; CHECK-NEXT:    imull %edi, %eax
 ; CHECK-NEXT:    xorl %r8d, %eax
-; CHECK-NEXT:    andl $-32768, %esi # imm = 0x8000
+; CHECK-NEXT:    andl $32768, %esi # imm = 0x8000
 ; CHECK-NEXT:    imull %edi, %esi
 ; CHECK-NEXT:    xorl %esi, %eax
 ; CHECK-NEXT:    xorl %ecx, %eax
@@ -624,9 +624,9 @@ define i64 @clmul_i64(i64 %a, i64 %b) nounwind {
 define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ; CHECK-LABEL: clmulr_i8:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzbl %dil, %eax
 ; CHECK-NEXT:    movl %esi, %ecx
 ; CHECK-NEXT:    andl $2, %ecx
-; CHECK-NEXT:    movzbl %dil, %eax
 ; CHECK-NEXT:    imull %eax, %ecx
 ; CHECK-NEXT:    movl %esi, %edx
 ; CHECK-NEXT:    andl $1, %edx
@@ -661,9 +661,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 ;
 ; PCLMUL-LABEL: clmulr_i8:
 ; PCLMUL:       # %bb.0:
-; PCLMUL-NEXT:    movzbl %sil, %eax
-; PCLMUL-NEXT:    movd %eax, %xmm0
 ; PCLMUL-NEXT:    movzbl %dil, %eax
+; PCLMUL-NEXT:    movzbl %sil, %ecx
+; PCLMUL-NEXT:    movd %ecx, %xmm0
 ; PCLMUL-NEXT:    movd %eax, %xmm1
 ; PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; PCLMUL-NEXT:    movq %xmm1, %rax
@@ -681,9 +681,9 @@ define i8 @clmulr_i8(i8 %a, i8 %b) nounwind {
 define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ; CHECK-LABEL: clmulr_i16:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzwl %di, %eax
 ; CHECK-NEXT:    movl %esi, %ecx
 ; CHECK-NEXT:    andl $2, %ecx
-; CHECK-NEXT:    movzwl %di, %eax
 ; CHECK-NEXT:    imull %eax, %ecx
 ; CHECK-NEXT:    movl %esi, %edx
 ; CHECK-NEXT:    andl $1, %edx
@@ -750,9 +750,9 @@ define i16 @clmulr_i16(i16 %a, i16 %b) nounwind {
 ;
 ; PCLMUL-LABEL: clmulr_i16:
 ; PCLMUL:       # %bb.0:
-; PCLMUL-NEXT:    movzwl %si, %eax
-; PCLMUL-NEXT:    movd %eax, %xmm0
 ; PCLMUL-NEXT:    movzwl %di, %eax
+; PCLMUL-NEXT:    movzwl %si, %ecx
+; PCLMUL-NEXT:    movd %ecx, %xmm0
 ; PCLMUL-NEXT:    movd %eax, %xmm1
 ; PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; PCLMUL-NEXT:    movq %xmm1, %rax
@@ -1736,9 +1736,9 @@ define i64 @clmulr_i64(i64 %a, i64 %b) nounwind {
 define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ; CHECK-LABEL: clmulh_i8:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzbl %dil, %eax
 ; CHECK-NEXT:    movl %esi, %ecx
 ; CHECK-NEXT:    andl $2, %ecx
-; CHECK-NEXT:    movzbl %dil, %eax
 ; CHECK-NEXT:    imull %eax, %ecx
 ; CHECK-NEXT:    movl %esi, %edx
 ; CHECK-NEXT:    andl $1, %edx
@@ -1773,9 +1773,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 ;
 ; PCLMUL-LABEL: clmulh_i8:
 ; PCLMUL:       # %bb.0:
-; PCLMUL-NEXT:    movzbl %sil, %eax
-; PCLMUL-NEXT:    movd %eax, %xmm0
 ; PCLMUL-NEXT:    movzbl %dil, %eax
+; PCLMUL-NEXT:    movzbl %sil, %ecx
+; PCLMUL-NEXT:    movd %ecx, %xmm0
 ; PCLMUL-NEXT:    movd %eax, %xmm1
 ; PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; PCLMUL-NEXT:    movq %xmm1, %rax
@@ -1793,9 +1793,9 @@ define i8 @clmulh_i8(i8 %a, i8 %b) nounwind {
 define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ; CHECK-LABEL: clmulh_i16:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    movzwl %di, %eax
 ; CHECK-NEXT:    movl %esi, %ecx
 ; CHECK-NEXT:    andl $2, %ecx
-; CHECK-NEXT:    movzwl %di, %eax
 ; CHECK-NEXT:    imull %eax, %ecx
 ; CHECK-NEXT:    movl %esi, %edx
 ; CHECK-NEXT:    andl $1, %edx
@@ -1862,9 +1862,9 @@ define i16 @clmulh_i16(i16 %a, i16 %b) nounwind {
 ;
 ; PCLMUL-LABEL: clmulh_i16:
 ; PCLMUL:       # %bb.0:
-; PCLMUL-NEXT:    movzwl %si, %eax
-; PCLMUL-NEXT:    movd %eax, %xmm0
 ; PCLMUL-NEXT:    movzwl %di, %eax
+; PCLMUL-NEXT:    movzwl %si, %ecx
+; PCLMUL-NEXT:    movd %ecx, %xmm0
 ; PCLMUL-NEXT:    movd %eax, %xmm1
 ; PCLMUL-NEXT:    pclmulqdq $0, %xmm0, %xmm1
 ; PCLMUL-NEXT:    movq %xmm1, %rax

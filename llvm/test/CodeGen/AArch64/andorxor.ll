@@ -800,10 +800,9 @@ define void @and_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-NEXT:    ldr x8, [x0]
 ; CHECK-SD-NEXT:    ldr x9, [x1]
 ; CHECK-SD-NEXT:    and x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
+; CHECK-SD-NEXT:    lsr x9, x8, #32
 ; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    strh w9, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: and_v3i16:
@@ -831,10 +830,9 @@ define void @or_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-NEXT:    ldr x8, [x0]
 ; CHECK-SD-NEXT:    ldr x9, [x1]
 ; CHECK-SD-NEXT:    orr x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
+; CHECK-SD-NEXT:    lsr x9, x8, #32
 ; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    strh w9, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: or_v3i16:
@@ -862,10 +860,9 @@ define void @xor_v3i16(ptr %p1, ptr %p2) {
 ; CHECK-SD-NEXT:    ldr x8, [x0]
 ; CHECK-SD-NEXT:    ldr x9, [x1]
 ; CHECK-SD-NEXT:    eor x8, x8, x9
-; CHECK-SD-NEXT:    fmov d0, x8
+; CHECK-SD-NEXT:    lsr x9, x8, #32
 ; CHECK-SD-NEXT:    str w8, [x0]
-; CHECK-SD-NEXT:    mov h0, v0.h[2]
-; CHECK-SD-NEXT:    str h0, [x0, #4]
+; CHECK-SD-NEXT:    strh w9, [x0, #4]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: xor_v3i16:

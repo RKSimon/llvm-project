@@ -40,7 +40,10 @@ define i64 @pat1_swap(i64 %a, i64 %b) nounwind {
 define i64 @pat2(i64 %a, i64 %b) nounwind {
 ; CHECK-LABEL: pat2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.d $a0, $a1, 39, 16
+; CHECK-NEXT:    bstrins.d $a0, $zero, 39, 16
+; CHECK-NEXT:    bstrpick.d $a1, $a1, 23, 0
+; CHECK-NEXT:    slli.d $a1, $a1, 16
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and1 = and i64 %a, -1099511562241 ; 0xffffff000000ffff
   %and2 = and i64 %b, 16777215       ; 0x0000000000ffffff
@@ -52,7 +55,10 @@ define i64 @pat2(i64 %a, i64 %b) nounwind {
 define i64 @pat2_swap(i64 %a, i64 %b) nounwind {
 ; CHECK-LABEL: pat2_swap:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    bstrins.d $a0, $a1, 39, 16
+; CHECK-NEXT:    bstrins.d $a0, $zero, 39, 16
+; CHECK-NEXT:    bstrpick.d $a1, $a1, 23, 0
+; CHECK-NEXT:    slli.d $a1, $a1, 16
+; CHECK-NEXT:    or $a0, $a1, $a0
 ; CHECK-NEXT:    ret
   %and1 = and i64 %a, -1099511562241 ; 0xffffff000000ffff
   %and2 = and i64 %b, 16777215       ; 0x0000000000ffffff
@@ -140,12 +146,13 @@ define i64 @pat5(i64 %a) nounwind {
 define i64 @pat6(i64 %c) nounwind {
 ; CHECK-LABEL: pat6:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    bstrpick.d $a0, $a0, 23, 0
+; CHECK-NEXT:    slli.d $a0, $a0, 16
 ; CHECK-NEXT:    lu12i.w $a1, 7
 ; CHECK-NEXT:    ori $a1, $a1, 2202
 ; CHECK-NEXT:    lu32i.d $a1, 284160
 ; CHECK-NEXT:    lu52i.d $a1, $a1, 291
-; CHECK-NEXT:    bstrins.d $a1, $a0, 39, 16
-; CHECK-NEXT:    move $a0, $a1
+; CHECK-NEXT:    or $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %and = and i64 %c, 16777215            ; 0x0000000000ffffff
   %shl = shl i64 %and, 16

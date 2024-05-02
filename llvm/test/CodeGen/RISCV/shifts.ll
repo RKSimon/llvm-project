@@ -163,9 +163,9 @@ define i128 @lshr128(i128 %a, i128 %b) nounwind {
 ; RV32I-NEXT:    sw a4, 4(sp)
 ; RV32I-NEXT:    sw a5, 8(sp)
 ; RV32I-NEXT:    sw a1, 12(sp)
-; RV32I-NEXT:    srli a1, a2, 3
+; RV32I-NEXT:    andi a1, a2, 96
 ; RV32I-NEXT:    andi a3, a2, 31
-; RV32I-NEXT:    andi a1, a1, 12
+; RV32I-NEXT:    srli a1, a1, 3
 ; RV32I-NEXT:    xori a3, a3, 31
 ; RV32I-NEXT:    add a1, a6, a1
 ; RV32I-NEXT:    lw a4, 0(a1)
@@ -229,13 +229,13 @@ define i128 @ashr128(i128 %a, i128 %b) nounwind {
 ; RV32I-NEXT:    sw a5, 8(sp)
 ; RV32I-NEXT:    sw a1, 12(sp)
 ; RV32I-NEXT:    srai a1, a1, 31
-; RV32I-NEXT:    srli a3, a2, 3
+; RV32I-NEXT:    andi a3, a2, 96
 ; RV32I-NEXT:    andi a4, a2, 31
 ; RV32I-NEXT:    sw a1, 16(sp)
 ; RV32I-NEXT:    sw a1, 20(sp)
 ; RV32I-NEXT:    sw a1, 24(sp)
 ; RV32I-NEXT:    sw a1, 28(sp)
-; RV32I-NEXT:    andi a3, a3, 12
+; RV32I-NEXT:    srli a3, a3, 3
 ; RV32I-NEXT:    xori a1, a4, 31
 ; RV32I-NEXT:    add a3, a6, a3
 ; RV32I-NEXT:    lw a4, 0(a3)
@@ -302,9 +302,9 @@ define i128 @shl128(i128 %a, i128 %b) nounwind {
 ; RV32I-NEXT:    sw a4, 20(sp)
 ; RV32I-NEXT:    sw a5, 24(sp)
 ; RV32I-NEXT:    sw a1, 28(sp)
-; RV32I-NEXT:    srli a1, a2, 3
+; RV32I-NEXT:    andi a1, a2, 96
 ; RV32I-NEXT:    andi a3, a2, 31
-; RV32I-NEXT:    andi a1, a1, 12
+; RV32I-NEXT:    srli a1, a1, 3
 ; RV32I-NEXT:    sub a1, a6, a1
 ; RV32I-NEXT:    lw a4, 0(a1)
 ; RV32I-NEXT:    lw a5, 4(a1)
@@ -581,10 +581,10 @@ define i128 @lshr128_shamt32(i128 %a, i32 signext %b) nounwind {
 ; RV32I-NEXT:    sw zero, 20(sp)
 ; RV32I-NEXT:    sw zero, 24(sp)
 ; RV32I-NEXT:    sw zero, 28(sp)
-; RV32I-NEXT:    srli a6, a2, 3
+; RV32I-NEXT:    andi a6, a2, 96
 ; RV32I-NEXT:    mv a7, sp
 ; RV32I-NEXT:    andi t0, a2, 31
-; RV32I-NEXT:    andi a6, a6, 12
+; RV32I-NEXT:    srli a6, a6, 3
 ; RV32I-NEXT:    xori t0, t0, 31
 ; RV32I-NEXT:    add a6, a7, a6
 ; RV32I-NEXT:    sw a3, 0(sp)
@@ -646,10 +646,10 @@ define i128 @ashr128_shamt32(i128 %a, i32 signext %b) nounwind {
 ; RV32I-NEXT:    lw a4, 4(a1)
 ; RV32I-NEXT:    lw a5, 8(a1)
 ; RV32I-NEXT:    lw a1, 12(a1)
-; RV32I-NEXT:    srli a6, a2, 3
+; RV32I-NEXT:    andi a6, a2, 96
 ; RV32I-NEXT:    mv a7, sp
 ; RV32I-NEXT:    andi t0, a2, 31
-; RV32I-NEXT:    andi a6, a6, 12
+; RV32I-NEXT:    srli a6, a6, 3
 ; RV32I-NEXT:    xori t0, t0, 31
 ; RV32I-NEXT:    add a6, a7, a6
 ; RV32I-NEXT:    sw a3, 0(sp)
@@ -720,10 +720,10 @@ define i128 @shl128_shamt32(i128 %a, i32 signext %b) nounwind {
 ; RV32I-NEXT:    sw zero, 4(sp)
 ; RV32I-NEXT:    sw zero, 8(sp)
 ; RV32I-NEXT:    sw zero, 12(sp)
-; RV32I-NEXT:    srli a6, a2, 3
+; RV32I-NEXT:    andi a6, a2, 96
 ; RV32I-NEXT:    addi a7, sp, 16
 ; RV32I-NEXT:    andi t0, a2, 31
-; RV32I-NEXT:    andi a6, a6, 12
+; RV32I-NEXT:    srli a6, a6, 3
 ; RV32I-NEXT:    sub a6, a7, a6
 ; RV32I-NEXT:    sw a3, 16(sp)
 ; RV32I-NEXT:    sw a4, 20(sp)
@@ -794,9 +794,9 @@ define i128 @shl128_shamt32_arith(i128 %a, i32 signext %b) nounwind {
 ; RV32I-NEXT:    sw zero, 8(sp)
 ; RV32I-NEXT:    sw zero, 12(sp)
 ; RV32I-NEXT:    addi a6, sp, 16
-; RV32I-NEXT:    srli a7, a2, 3
+; RV32I-NEXT:    andi a7, a2, 96
 ; RV32I-NEXT:    andi t0, a2, 31
-; RV32I-NEXT:    andi a7, a7, 12
+; RV32I-NEXT:    srli a7, a7, 3
 ; RV32I-NEXT:    sub a6, a6, a7
 ; RV32I-NEXT:    sw a3, 16(sp)
 ; RV32I-NEXT:    sw a4, 20(sp)

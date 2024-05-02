@@ -125,59 +125,53 @@ define fp128 @test_v2f128(<2 x fp128> %a) nounwind {
 ; CHECK-NEXT:    push {r4, r5, r6, r7, r8, r9, r10, r11, lr}
 ; CHECK-NEXT:    .pad #28
 ; CHECK-NEXT:    sub sp, sp, #28
-; CHECK-NEXT:    ldr r5, [sp, #76]
+; CHECK-NEXT:    add r7, sp, #64
+; CHECK-NEXT:    ldr r4, [sp, #76]
 ; CHECK-NEXT:    mov r8, r3
-; CHECK-NEXT:    ldr r6, [sp, #72]
 ; CHECK-NEXT:    mov r9, r2
-; CHECK-NEXT:    ldr r4, [sp, #68]
+; CHECK-NEXT:    ldm r7, {r5, r6, r7}
 ; CHECK-NEXT:    mov r10, r1
-; CHECK-NEXT:    ldr r7, [sp, #64]
 ; CHECK-NEXT:    mov r11, r0
-; CHECK-NEXT:    str r5, [sp, #12]
-; CHECK-NEXT:    str r6, [sp, #8]
-; CHECK-NEXT:    str r4, [sp, #4]
-; CHECK-NEXT:    str r7, [sp]
+; CHECK-NEXT:    str r4, [sp, #12]
+; CHECK-NEXT:    stm sp, {r5, r6, r7}
 ; CHECK-NEXT:    bl __gttf2
 ; CHECK-NEXT:    str r0, [sp, #24] @ 4-byte Spill
 ; CHECK-NEXT:    mov r0, r11
 ; CHECK-NEXT:    mov r1, r10
 ; CHECK-NEXT:    mov r2, r9
 ; CHECK-NEXT:    mov r3, r8
-; CHECK-NEXT:    str r7, [sp]
-; CHECK-NEXT:    stmib sp, {r4, r6}
-; CHECK-NEXT:    str r5, [sp, #12]
+; CHECK-NEXT:    stm sp, {r5, r6, r7}
+; CHECK-NEXT:    str r4, [sp, #12]
 ; CHECK-NEXT:    bl __gttf2
 ; CHECK-NEXT:    str r0, [sp, #20] @ 4-byte Spill
 ; CHECK-NEXT:    mov r0, r11
 ; CHECK-NEXT:    mov r1, r10
 ; CHECK-NEXT:    mov r2, r9
 ; CHECK-NEXT:    mov r3, r8
-; CHECK-NEXT:    str r7, [sp]
-; CHECK-NEXT:    stmib sp, {r4, r6}
-; CHECK-NEXT:    str r5, [sp, #12]
+; CHECK-NEXT:    stm sp, {r5, r6, r7}
+; CHECK-NEXT:    str r4, [sp, #12]
 ; CHECK-NEXT:    bl __gttf2
 ; CHECK-NEXT:    cmp r0, #0
 ; CHECK-NEXT:    ldr r0, [sp, #20] @ 4-byte Reload
-; CHECK-NEXT:    str r7, [sp]
-; CHECK-NEXT:    movgt r7, r11
+; CHECK-NEXT:    stm sp, {r5, r6, r7}
+; CHECK-NEXT:    movgt r5, r11
 ; CHECK-NEXT:    cmp r0, #0
 ; CHECK-NEXT:    ldr r0, [sp, #24] @ 4-byte Reload
-; CHECK-NEXT:    stmib sp, {r4, r6}
-; CHECK-NEXT:    movgt r4, r10
-; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    mov r0, r11
+; CHECK-NEXT:    movgt r6, r10
 ; CHECK-NEXT:    mov r1, r10
 ; CHECK-NEXT:    mov r2, r9
+; CHECK-NEXT:    cmp r0, #0
+; CHECK-NEXT:    mov r0, r11
 ; CHECK-NEXT:    mov r3, r8
-; CHECK-NEXT:    str r5, [sp, #12]
-; CHECK-NEXT:    movgt r6, r9
+; CHECK-NEXT:    str r4, [sp, #12]
+; CHECK-NEXT:    movgt r7, r9
 ; CHECK-NEXT:    bl __gttf2
 ; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    mov r0, r7
-; CHECK-NEXT:    movgt r5, r8
-; CHECK-NEXT:    mov r1, r4
-; CHECK-NEXT:    mov r2, r6
-; CHECK-NEXT:    mov r3, r5
+; CHECK-NEXT:    mov r0, r5
+; CHECK-NEXT:    movgt r4, r8
+; CHECK-NEXT:    mov r1, r6
+; CHECK-NEXT:    mov r2, r7
+; CHECK-NEXT:    mov r3, r4
 ; CHECK-NEXT:    add sp, sp, #28
 ; CHECK-NEXT:    pop {r4, r5, r6, r7, r8, r9, r10, r11, lr}
 ; CHECK-NEXT:    mov pc, lr

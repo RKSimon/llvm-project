@@ -975,13 +975,29 @@ define void @masked_gather_32b_scaled_sext_f16(ptr %a, ptr %b, ptr %base) vscale
 ; CHECK-LABEL: masked_gather_32b_scaled_sext_f16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ptrue p2.d, vl16
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
-; CHECK-NEXT:    ld1w { z0.s }, p1/z, [x1]
-; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x2, z0.s, sxtw #1]
-; CHECK-NEXT:    st1h { z0.s }, p1, [x0]
+; CHECK-NEXT:    ld1sw { z1.d }, p2/z, [x1]
+; CHECK-NEXT:    fcmeq p1.h, p0/z, z0.h, #0.0
+; CHECK-NEXT:    mov z0.h, p1/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    ext z0.b, z0.b, z0.b, #32
+; CHECK-NEXT:    and p1.b, p1/z, p1.b, p2.b
+; CHECK-NEXT:    sunpklo z0.s, z0.h
+; CHECK-NEXT:    ld1h { z1.d }, p1/z, [x2, z1.d, lsl #1]
+; CHECK-NEXT:    sunpklo z0.d, z0.s
+; CHECK-NEXT:    cmpne p1.d, p2/z, z0.d, #0
+; CHECK-NEXT:    ld1sw { z0.d }, p2/z, [x1, x8, lsl #2]
+; CHECK-NEXT:    uzp1 z1.s, z1.s, z1.s
+; CHECK-NEXT:    uzp1 z1.h, z1.h, z1.h
+; CHECK-NEXT:    ld1h { z0.d }, p1/z, [x2, z0.d, lsl #1]
+; CHECK-NEXT:    ptrue p1.h, vl16
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z0.s
+; CHECK-NEXT:    uzp1 z0.h, z0.h, z0.h
+; CHECK-NEXT:    splice z1.h, p1, z1.h, z0.h
+; CHECK-NEXT:    st1h { z1.h }, p0, [x0]
 ; CHECK-NEXT:    ret
   %cvals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -997,11 +1013,25 @@ define void @masked_gather_32b_scaled_sext_f32(ptr %a, ptr %b, ptr %base) vscale
 ; CHECK-LABEL: masked_gather_32b_scaled_sext_f32:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.s, vl32
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ptrue p2.d, vl16
 ; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x0]
+; CHECK-NEXT:    ld1sw { z1.d }, p2/z, [x1]
 ; CHECK-NEXT:    fcmeq p1.s, p0/z, z0.s, #0.0
-; CHECK-NEXT:    ld1w { z0.s }, p0/z, [x1]
-; CHECK-NEXT:    ld1w { z0.s }, p1/z, [x2, z0.s, sxtw #2]
-; CHECK-NEXT:    st1w { z0.s }, p0, [x0]
+; CHECK-NEXT:    mov z0.s, p1/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    and p1.b, p1/z, p1.b, p2.b
+; CHECK-NEXT:    ext z0.b, z0.b, z0.b, #64
+; CHECK-NEXT:    ld1w { z1.d }, p1/z, [x2, z1.d, lsl #2]
+; CHECK-NEXT:    sunpklo z0.d, z0.s
+; CHECK-NEXT:    cmpne p1.d, p2/z, z0.d, #0
+; CHECK-NEXT:    ld1sw { z0.d }, p2/z, [x1, x8, lsl #2]
+; CHECK-NEXT:    uzp1 z1.s, z1.s, z1.s
+; CHECK-NEXT:    ld1w { z0.d }, p1/z, [x2, z0.d, lsl #2]
+; CHECK-NEXT:    ptrue p1.s, vl16
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z0.s
+; CHECK-NEXT:    splice z1.s, p1, z1.s, z0.s
+; CHECK-NEXT:    st1w { z1.s }, p0, [x0]
 ; CHECK-NEXT:    ret
   %cvals = load <32 x float>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -1037,13 +1067,29 @@ define void @masked_gather_32b_scaled_zext(ptr %a, ptr %b, ptr %base) vscale_ran
 ; CHECK-LABEL: masked_gather_32b_scaled_zext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ptrue p2.d, vl16
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
-; CHECK-NEXT:    ld1w { z0.s }, p1/z, [x1]
-; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x2, z0.s, uxtw #1]
-; CHECK-NEXT:    st1h { z0.s }, p1, [x0]
+; CHECK-NEXT:    ld1w { z1.d }, p2/z, [x1]
+; CHECK-NEXT:    fcmeq p1.h, p0/z, z0.h, #0.0
+; CHECK-NEXT:    mov z0.h, p1/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    ext z0.b, z0.b, z0.b, #32
+; CHECK-NEXT:    and p1.b, p1/z, p1.b, p2.b
+; CHECK-NEXT:    sunpklo z0.s, z0.h
+; CHECK-NEXT:    ld1h { z1.d }, p1/z, [x2, z1.d, lsl #1]
+; CHECK-NEXT:    sunpklo z0.d, z0.s
+; CHECK-NEXT:    cmpne p1.d, p2/z, z0.d, #0
+; CHECK-NEXT:    ld1w { z0.d }, p2/z, [x1, x8, lsl #2]
+; CHECK-NEXT:    uzp1 z1.s, z1.s, z1.s
+; CHECK-NEXT:    uzp1 z1.h, z1.h, z1.h
+; CHECK-NEXT:    ld1h { z0.d }, p1/z, [x2, z0.d, lsl #1]
+; CHECK-NEXT:    ptrue p1.h, vl16
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z0.s
+; CHECK-NEXT:    uzp1 z0.h, z0.h, z0.h
+; CHECK-NEXT:    splice z1.h, p1, z1.h, z0.h
+; CHECK-NEXT:    st1h { z1.h }, p0, [x0]
 ; CHECK-NEXT:    ret
   %cvals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -1059,13 +1105,29 @@ define void @masked_gather_32b_unscaled_sext(ptr %a, ptr %b, ptr %base) vscale_r
 ; CHECK-LABEL: masked_gather_32b_unscaled_sext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ptrue p2.d, vl16
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
-; CHECK-NEXT:    ld1w { z0.s }, p1/z, [x1]
-; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x2, z0.s, sxtw]
-; CHECK-NEXT:    st1h { z0.s }, p1, [x0]
+; CHECK-NEXT:    ld1sw { z1.d }, p2/z, [x1]
+; CHECK-NEXT:    fcmeq p1.h, p0/z, z0.h, #0.0
+; CHECK-NEXT:    mov z0.h, p1/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    ext z0.b, z0.b, z0.b, #32
+; CHECK-NEXT:    and p1.b, p1/z, p1.b, p2.b
+; CHECK-NEXT:    sunpklo z0.s, z0.h
+; CHECK-NEXT:    ld1h { z1.d }, p1/z, [x2, z1.d]
+; CHECK-NEXT:    sunpklo z0.d, z0.s
+; CHECK-NEXT:    cmpne p1.d, p2/z, z0.d, #0
+; CHECK-NEXT:    ld1sw { z0.d }, p2/z, [x1, x8, lsl #2]
+; CHECK-NEXT:    uzp1 z1.s, z1.s, z1.s
+; CHECK-NEXT:    uzp1 z1.h, z1.h, z1.h
+; CHECK-NEXT:    ld1h { z0.d }, p1/z, [x2, z0.d]
+; CHECK-NEXT:    ptrue p1.h, vl16
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z0.s
+; CHECK-NEXT:    uzp1 z0.h, z0.h, z0.h
+; CHECK-NEXT:    splice z1.h, p1, z1.h, z0.h
+; CHECK-NEXT:    st1h { z1.h }, p0, [x0]
 ; CHECK-NEXT:    ret
   %cvals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b
@@ -1082,13 +1144,29 @@ define void @masked_gather_32b_unscaled_zext(ptr %a, ptr %b, ptr %base) vscale_r
 ; CHECK-LABEL: masked_gather_32b_unscaled_zext:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl32
-; CHECK-NEXT:    ptrue p1.s, vl32
+; CHECK-NEXT:    mov x8, #16 // =0x10
+; CHECK-NEXT:    ptrue p2.d, vl16
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0]
-; CHECK-NEXT:    fcmeq p0.h, p0/z, z0.h, #0.0
-; CHECK-NEXT:    ld1w { z0.s }, p1/z, [x1]
-; CHECK-NEXT:    punpklo p0.h, p0.b
-; CHECK-NEXT:    ld1h { z0.s }, p0/z, [x2, z0.s, uxtw]
-; CHECK-NEXT:    st1h { z0.s }, p1, [x0]
+; CHECK-NEXT:    ld1w { z1.d }, p2/z, [x1]
+; CHECK-NEXT:    fcmeq p1.h, p0/z, z0.h, #0.0
+; CHECK-NEXT:    mov z0.h, p1/z, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    punpklo p1.h, p1.b
+; CHECK-NEXT:    ext z0.b, z0.b, z0.b, #32
+; CHECK-NEXT:    and p1.b, p1/z, p1.b, p2.b
+; CHECK-NEXT:    sunpklo z0.s, z0.h
+; CHECK-NEXT:    ld1h { z1.d }, p1/z, [x2, z1.d]
+; CHECK-NEXT:    sunpklo z0.d, z0.s
+; CHECK-NEXT:    cmpne p1.d, p2/z, z0.d, #0
+; CHECK-NEXT:    ld1w { z0.d }, p2/z, [x1, x8, lsl #2]
+; CHECK-NEXT:    uzp1 z1.s, z1.s, z1.s
+; CHECK-NEXT:    uzp1 z1.h, z1.h, z1.h
+; CHECK-NEXT:    ld1h { z0.d }, p1/z, [x2, z0.d]
+; CHECK-NEXT:    ptrue p1.h, vl16
+; CHECK-NEXT:    uzp1 z0.s, z0.s, z0.s
+; CHECK-NEXT:    uzp1 z0.h, z0.h, z0.h
+; CHECK-NEXT:    splice z1.h, p1, z1.h, z0.h
+; CHECK-NEXT:    st1h { z1.h }, p0, [x0]
 ; CHECK-NEXT:    ret
   %cvals = load <32 x half>, ptr %a
   %idxs = load <32 x i32>, ptr %b

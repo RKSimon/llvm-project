@@ -12,57 +12,57 @@ define void @test_shl_i512(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    movi.2d v0, #0000000000000000
 ; SDAG-NEXT:    ldp q1, q2, [x1]
-; SDAG-NEXT:    mvn w14, w2
+; SDAG-NEXT:    mov x10, sp
 ; SDAG-NEXT:    ldr q3, [x1, #32]
+; SDAG-NEXT:    mvn w13, w2
 ; SDAG-NEXT:    stp x9, x8, [sp, #112]
 ; SDAG-NEXT:    mov w8, w2
-; SDAG-NEXT:    mov x9, sp
-; SDAG-NEXT:    lsr x10, x8, #3
-; SDAG-NEXT:    add x9, x9, #64
+; SDAG-NEXT:    add x9, x10, #64
+; SDAG-NEXT:    and x10, x8, #0x1c0
 ; SDAG-NEXT:    stp q0, q0, [sp]
+; SDAG-NEXT:    sub x11, x9, x10, lsr #3
 ; SDAG-NEXT:    stp q0, q0, [sp, #32]
-; SDAG-NEXT:    and x3, x8, #0x3f
-; SDAG-NEXT:    and x10, x10, #0x38
+; SDAG-NEXT:    and x10, x8, #0x3f
 ; SDAG-NEXT:    stp q2, q3, [sp, #80]
-; SDAG-NEXT:    eor x3, x3, #0x3f
-; SDAG-NEXT:    sub x10, x9, x10
+; SDAG-NEXT:    eor x10, x10, #0x3f
 ; SDAG-NEXT:    str q1, [sp, #64]
-; SDAG-NEXT:    ldp x9, x11, [x10]
-; SDAG-NEXT:    ldp x13, x12, [x10, #16]
-; SDAG-NEXT:    ldp x17, x16, [x10, #32]
-; SDAG-NEXT:    ldp x10, x2, [x10, #48]
-; SDAG-NEXT:    lsr x15, x11, #1
-; SDAG-NEXT:    lsr x1, x12, #1
-; SDAG-NEXT:    lsl x11, x11, x8
-; SDAG-NEXT:    lsl x12, x12, x8
+; SDAG-NEXT:    ldp x2, x16, [x11, #40]
+; SDAG-NEXT:    ldr x17, [x11, #16]
+; SDAG-NEXT:    ldp x9, x12, [x11]
+; SDAG-NEXT:    ldp x1, x15, [x11, #24]
+; SDAG-NEXT:    ldr x11, [x11, #56]
 ; SDAG-NEXT:    lsr x4, x16, #1
-; SDAG-NEXT:    lsr x15, x15, x14
-; SDAG-NEXT:    lsl x5, x17, x8
-; SDAG-NEXT:    lsr x6, x10, #1
-; SDAG-NEXT:    lsr x1, x1, x14
-; SDAG-NEXT:    lsl x10, x10, x8
-; SDAG-NEXT:    lsr x14, x4, x14
-; SDAG-NEXT:    lsl x2, x2, x8
+; SDAG-NEXT:    lsl x6, x2, x8
+; SDAG-NEXT:    lsr x2, x2, #1
+; SDAG-NEXT:    lsl x11, x11, x8
 ; SDAG-NEXT:    lsl x16, x16, x8
-; SDAG-NEXT:    lsr x4, x6, x3
-; SDAG-NEXT:    orr x1, x5, x1
-; SDAG-NEXT:    orr x10, x10, x14
-; SDAG-NEXT:    lsr x14, x17, #1
-; SDAG-NEXT:    orr x17, x2, x4
-; SDAG-NEXT:    lsr x2, x9, #1
-; SDAG-NEXT:    stp x10, x17, [x0, #48]
-; SDAG-NEXT:    lsr x10, x13, #1
-; SDAG-NEXT:    lsr x14, x14, x3
-; SDAG-NEXT:    lsl x13, x13, x8
+; SDAG-NEXT:    lsr x14, x12, #1
+; SDAG-NEXT:    lsr x4, x4, x10
+; SDAG-NEXT:    lsr x2, x2, x13
+; SDAG-NEXT:    lsr x3, x15, #1
+; SDAG-NEXT:    lsr x5, x1, #1
+; SDAG-NEXT:    lsr x14, x14, x13
+; SDAG-NEXT:    lsl x15, x15, x8
+; SDAG-NEXT:    orr x11, x11, x4
+; SDAG-NEXT:    orr x16, x16, x2
+; SDAG-NEXT:    lsr x3, x3, x10
+; SDAG-NEXT:    stp x16, x11, [x0, #48]
+; SDAG-NEXT:    lsr x11, x17, #1
+; SDAG-NEXT:    lsr x16, x9, #1
+; SDAG-NEXT:    lsr x13, x5, x13
+; SDAG-NEXT:    lsl x12, x12, x8
+; SDAG-NEXT:    lsl x1, x1, x8
+; SDAG-NEXT:    lsr x11, x11, x10
+; SDAG-NEXT:    lsl x17, x17, x8
+; SDAG-NEXT:    lsr x10, x16, x10
+; SDAG-NEXT:    orr x3, x6, x3
+; SDAG-NEXT:    orr x13, x15, x13
 ; SDAG-NEXT:    lsl x8, x9, x8
-; SDAG-NEXT:    lsr x10, x10, x3
-; SDAG-NEXT:    orr x14, x16, x14
-; SDAG-NEXT:    lsr x16, x2, x3
-; SDAG-NEXT:    orr x13, x13, x15
-; SDAG-NEXT:    stp x1, x14, [x0, #32]
-; SDAG-NEXT:    orr x10, x12, x10
-; SDAG-NEXT:    orr x9, x11, x16
-; SDAG-NEXT:    stp x13, x10, [x0, #16]
+; SDAG-NEXT:    stp x13, x3, [x0, #32]
+; SDAG-NEXT:    orr x11, x1, x11
+; SDAG-NEXT:    orr x13, x17, x14
+; SDAG-NEXT:    orr x9, x12, x10
+; SDAG-NEXT:    stp x13, x11, [x0, #16]
 ; SDAG-NEXT:    stp x8, x9, [x0]
 ; SDAG-NEXT:    add sp, sp, #128
 ; SDAG-NEXT:    ret
@@ -365,56 +365,55 @@ define void @test_lshr_i512(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    movi.2d v0, #0000000000000000
 ; SDAG-NEXT:    ldp q1, q2, [x1]
-; SDAG-NEXT:    mvn w11, w2
+; SDAG-NEXT:    mov x10, sp
 ; SDAG-NEXT:    ldr q3, [x1, #32]
+; SDAG-NEXT:    mvn w14, w2
 ; SDAG-NEXT:    stp x9, x8, [sp, #48]
 ; SDAG-NEXT:    mov w8, w2
-; SDAG-NEXT:    lsr x10, x8, #3
+; SDAG-NEXT:    and x9, x8, #0x1c0
 ; SDAG-NEXT:    stp q2, q3, [sp, #16]
-; SDAG-NEXT:    and x3, x8, #0x3f
+; SDAG-NEXT:    add x9, x10, x9, lsr #3
 ; SDAG-NEXT:    stp q0, q0, [sp, #64]
-; SDAG-NEXT:    eor x3, x3, #0x3f
-; SDAG-NEXT:    and x9, x10, #0x38
-; SDAG-NEXT:    mov x10, sp
+; SDAG-NEXT:    and x10, x8, #0x3f
 ; SDAG-NEXT:    stp q0, q0, [sp, #96]
-; SDAG-NEXT:    add x10, x10, x9
+; SDAG-NEXT:    eor x10, x10, #0x3f
 ; SDAG-NEXT:    str q1, [sp]
-; SDAG-NEXT:    ldp x13, x16, [x10, #48]
-; SDAG-NEXT:    ldp x9, x14, [x10, #16]
-; SDAG-NEXT:    ldp x12, x17, [x10, #32]
-; SDAG-NEXT:    lsl x4, x16, #1
-; SDAG-NEXT:    lsl x2, x13, #1
-; SDAG-NEXT:    lsr x13, x13, x8
-; SDAG-NEXT:    lsl x15, x9, #1
-; SDAG-NEXT:    lsr x16, x16, x8
-; SDAG-NEXT:    lsr x9, x9, x8
+; SDAG-NEXT:    ldp x12, x11, [x9, #32]
+; SDAG-NEXT:    ldp x13, x15, [x9, #16]
+; SDAG-NEXT:    ldp x2, x3, [x9, #48]
+; SDAG-NEXT:    lsl x16, x11, #1
 ; SDAG-NEXT:    lsl x1, x12, #1
-; SDAG-NEXT:    lsl x4, x4, x3
 ; SDAG-NEXT:    lsr x12, x12, x8
-; SDAG-NEXT:    lsl x15, x15, x11
-; SDAG-NEXT:    lsl x1, x1, x11
-; SDAG-NEXT:    lsl x11, x2, x11
-; SDAG-NEXT:    lsl x2, x17, #1
-; SDAG-NEXT:    orr x13, x4, x13
-; SDAG-NEXT:    ldp x10, x4, [x10]
-; SDAG-NEXT:    lsr x17, x17, x8
-; SDAG-NEXT:    lsl x2, x2, x3
-; SDAG-NEXT:    stp x13, x16, [x0, #48]
-; SDAG-NEXT:    lsl x16, x14, #1
-; SDAG-NEXT:    lsr x14, x14, x8
-; SDAG-NEXT:    lsl x13, x4, #1
-; SDAG-NEXT:    orr x11, x17, x11
-; SDAG-NEXT:    orr x12, x2, x12
-; SDAG-NEXT:    lsl x16, x16, x3
-; SDAG-NEXT:    lsr x10, x10, x8
+; SDAG-NEXT:    lsl x17, x13, #1
+; SDAG-NEXT:    lsr x11, x11, x8
+; SDAG-NEXT:    lsr x13, x13, x8
+; SDAG-NEXT:    lsl x16, x16, x10
+; SDAG-NEXT:    lsl x4, x2, #1
+; SDAG-NEXT:    lsl x1, x1, x14
+; SDAG-NEXT:    lsl x17, x17, x14
+; SDAG-NEXT:    lsr x2, x2, x8
+; SDAG-NEXT:    orr x12, x16, x12
+; SDAG-NEXT:    lsl x16, x3, #1
+; SDAG-NEXT:    lsl x14, x4, x14
+; SDAG-NEXT:    ldp x4, x9, [x9]
+; SDAG-NEXT:    lsr x3, x3, x8
+; SDAG-NEXT:    lsl x16, x16, x10
+; SDAG-NEXT:    orr x11, x11, x14
 ; SDAG-NEXT:    stp x12, x11, [x0, #32]
-; SDAG-NEXT:    lsl x12, x13, x3
-; SDAG-NEXT:    lsr x8, x4, x8
-; SDAG-NEXT:    orr x11, x14, x1
-; SDAG-NEXT:    orr x9, x16, x9
-; SDAG-NEXT:    stp x9, x11, [x0, #16]
-; SDAG-NEXT:    orr x9, x12, x10
-; SDAG-NEXT:    orr x8, x8, x15
+; SDAG-NEXT:    orr x16, x16, x2
+; SDAG-NEXT:    lsl x2, x15, #1
+; SDAG-NEXT:    lsr x15, x15, x8
+; SDAG-NEXT:    stp x16, x3, [x0, #48]
+; SDAG-NEXT:    lsl x16, x9, #1
+; SDAG-NEXT:    lsr x14, x4, x8
+; SDAG-NEXT:    lsl x2, x2, x10
+; SDAG-NEXT:    lsr x8, x9, x8
+; SDAG-NEXT:    orr x9, x15, x1
+; SDAG-NEXT:    lsl x10, x16, x10
+; SDAG-NEXT:    orr x11, x2, x13
+; SDAG-NEXT:    orr x8, x8, x17
+; SDAG-NEXT:    stp x11, x9, [x0, #16]
+; SDAG-NEXT:    orr x9, x10, x14
 ; SDAG-NEXT:    stp x9, x8, [x0]
 ; SDAG-NEXT:    add sp, sp, #128
 ; SDAG-NEXT:    ret
@@ -711,58 +710,57 @@ define void @test_ashr_i512(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    mov x11, sp
 ; SDAG-NEXT:    ldp q0, q1, [x1]
+; SDAG-NEXT:    mvn w14, w2
 ; SDAG-NEXT:    ldr q2, [x1, #32]
 ; SDAG-NEXT:    stp x9, x8, [sp, #48]
-; SDAG-NEXT:    asr x9, x8, #63
+; SDAG-NEXT:    asr x10, x8, #63
 ; SDAG-NEXT:    mov w8, w2
-; SDAG-NEXT:    lsr x10, x8, #3
+; SDAG-NEXT:    and x9, x8, #0x1c0
 ; SDAG-NEXT:    stp q1, q2, [sp, #16]
-; SDAG-NEXT:    and x3, x8, #0x3f
+; SDAG-NEXT:    add x9, x11, x9, lsr #3
 ; SDAG-NEXT:    str q0, [sp]
-; SDAG-NEXT:    eor x3, x3, #0x3f
-; SDAG-NEXT:    and x10, x10, #0x38
-; SDAG-NEXT:    stp x9, x9, [sp, #112]
-; SDAG-NEXT:    stp x9, x9, [sp, #96]
-; SDAG-NEXT:    add x10, x11, x10
-; SDAG-NEXT:    mvn w11, w2
-; SDAG-NEXT:    stp x9, x9, [sp, #80]
-; SDAG-NEXT:    stp x9, x9, [sp, #64]
-; SDAG-NEXT:    ldp x13, x16, [x10, #48]
-; SDAG-NEXT:    ldp x9, x14, [x10, #16]
-; SDAG-NEXT:    ldp x12, x17, [x10, #32]
-; SDAG-NEXT:    lsl x4, x16, #1
-; SDAG-NEXT:    lsl x2, x13, #1
-; SDAG-NEXT:    lsr x13, x13, x8
-; SDAG-NEXT:    lsl x15, x9, #1
-; SDAG-NEXT:    asr x16, x16, x8
-; SDAG-NEXT:    lsr x9, x9, x8
+; SDAG-NEXT:    stp x10, x10, [sp, #112]
+; SDAG-NEXT:    stp x10, x10, [sp, #96]
+; SDAG-NEXT:    stp x10, x10, [sp, #80]
+; SDAG-NEXT:    stp x10, x10, [sp, #64]
+; SDAG-NEXT:    and x10, x8, #0x3f
+; SDAG-NEXT:    ldp x12, x11, [x9, #32]
+; SDAG-NEXT:    eor x10, x10, #0x3f
+; SDAG-NEXT:    ldp x13, x15, [x9, #16]
+; SDAG-NEXT:    ldp x2, x3, [x9, #48]
+; SDAG-NEXT:    lsl x16, x11, #1
 ; SDAG-NEXT:    lsl x1, x12, #1
-; SDAG-NEXT:    lsl x4, x4, x3
 ; SDAG-NEXT:    lsr x12, x12, x8
-; SDAG-NEXT:    lsl x15, x15, x11
-; SDAG-NEXT:    lsl x1, x1, x11
-; SDAG-NEXT:    lsl x11, x2, x11
-; SDAG-NEXT:    lsl x2, x17, #1
-; SDAG-NEXT:    orr x13, x4, x13
-; SDAG-NEXT:    ldp x10, x4, [x10]
-; SDAG-NEXT:    lsr x17, x17, x8
-; SDAG-NEXT:    lsl x2, x2, x3
-; SDAG-NEXT:    stp x13, x16, [x0, #48]
-; SDAG-NEXT:    lsl x16, x14, #1
-; SDAG-NEXT:    lsr x14, x14, x8
-; SDAG-NEXT:    lsl x13, x4, #1
-; SDAG-NEXT:    orr x11, x17, x11
-; SDAG-NEXT:    orr x12, x2, x12
-; SDAG-NEXT:    lsl x16, x16, x3
-; SDAG-NEXT:    lsr x10, x10, x8
+; SDAG-NEXT:    lsl x17, x13, #1
+; SDAG-NEXT:    lsr x11, x11, x8
+; SDAG-NEXT:    lsr x13, x13, x8
+; SDAG-NEXT:    lsl x16, x16, x10
+; SDAG-NEXT:    lsl x4, x2, #1
+; SDAG-NEXT:    lsl x1, x1, x14
+; SDAG-NEXT:    lsl x17, x17, x14
+; SDAG-NEXT:    lsr x2, x2, x8
+; SDAG-NEXT:    orr x12, x16, x12
+; SDAG-NEXT:    lsl x16, x3, #1
+; SDAG-NEXT:    lsl x14, x4, x14
+; SDAG-NEXT:    ldp x4, x9, [x9]
+; SDAG-NEXT:    asr x3, x3, x8
+; SDAG-NEXT:    lsl x16, x16, x10
+; SDAG-NEXT:    orr x11, x11, x14
 ; SDAG-NEXT:    stp x12, x11, [x0, #32]
-; SDAG-NEXT:    lsl x12, x13, x3
-; SDAG-NEXT:    lsr x8, x4, x8
-; SDAG-NEXT:    orr x11, x14, x1
-; SDAG-NEXT:    orr x9, x16, x9
-; SDAG-NEXT:    stp x9, x11, [x0, #16]
-; SDAG-NEXT:    orr x9, x12, x10
-; SDAG-NEXT:    orr x8, x8, x15
+; SDAG-NEXT:    orr x16, x16, x2
+; SDAG-NEXT:    lsl x2, x15, #1
+; SDAG-NEXT:    lsr x15, x15, x8
+; SDAG-NEXT:    stp x16, x3, [x0, #48]
+; SDAG-NEXT:    lsl x16, x9, #1
+; SDAG-NEXT:    lsr x14, x4, x8
+; SDAG-NEXT:    lsl x2, x2, x10
+; SDAG-NEXT:    lsr x8, x9, x8
+; SDAG-NEXT:    orr x9, x15, x1
+; SDAG-NEXT:    lsl x10, x16, x10
+; SDAG-NEXT:    orr x11, x2, x13
+; SDAG-NEXT:    orr x8, x8, x17
+; SDAG-NEXT:    stp x11, x9, [x0, #16]
+; SDAG-NEXT:    orr x9, x10, x14
 ; SDAG-NEXT:    stp x9, x8, [x0]
 ; SDAG-NEXT:    add sp, sp, #128
 ; SDAG-NEXT:    ret
@@ -1109,25 +1107,24 @@ define void @test_shl_i1024(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    ldp x8, x9, [x1, #112]
 ; SDAG-NEXT:    movi.2d v0, #0000000000000000
 ; SDAG-NEXT:    ldp q1, q2, [x1]
-; SDAG-NEXT:    mov x10, sp
-; SDAG-NEXT:    ldp q3, q4, [x1, #32]
-; SDAG-NEXT:    add x10, x10, #128
-; SDAG-NEXT:    ldp q5, q6, [x1, #64]
 ; SDAG-NEXT:    mvn w4, w2
+; SDAG-NEXT:    ldp q3, q4, [x1, #32]
 ; SDAG-NEXT:    ldr q7, [x1, #96]
+; SDAG-NEXT:    ldp q5, q6, [x1, #64]
 ; SDAG-NEXT:    stp x8, x9, [sp, #240]
+; SDAG-NEXT:    mov x9, sp
 ; SDAG-NEXT:    mov w8, w2
-; SDAG-NEXT:    lsr x9, x8, #3
 ; SDAG-NEXT:    stp q0, q0, [sp]
+; SDAG-NEXT:    add x9, x9, #128
+; SDAG-NEXT:    and x10, x8, #0x3c0
 ; SDAG-NEXT:    stp q0, q0, [sp, #32]
-; SDAG-NEXT:    ldp x29, x30, [sp, #336] ; 16-byte Folded Reload
-; SDAG-NEXT:    and x9, x9, #0x78
+; SDAG-NEXT:    sub x1, x9, x10, lsr #3
 ; SDAG-NEXT:    stp q0, q0, [sp, #64]
-; SDAG-NEXT:    stp q0, q0, [sp, #96]
-; SDAG-NEXT:    sub x1, x10, x9
 ; SDAG-NEXT:    and x10, x8, #0x3f
-; SDAG-NEXT:    stp q2, q3, [sp, #144]
+; SDAG-NEXT:    stp q0, q0, [sp, #96]
 ; SDAG-NEXT:    eor x10, x10, #0x3f
+; SDAG-NEXT:    stp q2, q3, [sp, #144]
+; SDAG-NEXT:    ldp x29, x30, [sp, #336] ; 16-byte Folded Reload
 ; SDAG-NEXT:    stp q4, q5, [sp, #176]
 ; SDAG-NEXT:    stp q6, q7, [sp, #208]
 ; SDAG-NEXT:    str q1, [sp, #128]
@@ -2381,15 +2378,14 @@ define void @test_lshr_i1024(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    mvn w1, w2
 ; SDAG-NEXT:    stp x8, x9, [sp, #112]
 ; SDAG-NEXT:    mov w8, w2
-; SDAG-NEXT:    lsr x9, x8, #3
+; SDAG-NEXT:    and x9, x8, #0x3c0
 ; SDAG-NEXT:    stp q2, q3, [sp, #16]
 ; SDAG-NEXT:    and x14, x8, #0x3f
+; SDAG-NEXT:    add x10, x10, x9, lsr #3
 ; SDAG-NEXT:    stp q4, q5, [sp, #48]
 ; SDAG-NEXT:    eor x15, x14, #0x3f
-; SDAG-NEXT:    and x9, x9, #0x78
 ; SDAG-NEXT:    stp q6, q7, [sp, #80]
 ; SDAG-NEXT:    stp q0, q0, [sp, #128]
-; SDAG-NEXT:    add x10, x10, x9
 ; SDAG-NEXT:    stp q0, q0, [sp, #160]
 ; SDAG-NEXT:    stp q0, q0, [sp, #192]
 ; SDAG-NEXT:    stp q0, q0, [sp, #224]
@@ -3601,15 +3597,14 @@ define void @test_ashr_i1024(ptr %result, ptr %input, i32 %shift) {
 ; SDAG-NEXT:    stp x8, x9, [sp, #112]
 ; SDAG-NEXT:    mov w8, w2
 ; SDAG-NEXT:    asr x9, x9, #63
-; SDAG-NEXT:    lsr x10, x8, #3
+; SDAG-NEXT:    and x10, x8, #0x3c0
 ; SDAG-NEXT:    stp q1, q2, [sp, #16]
 ; SDAG-NEXT:    and x14, x8, #0x3f
+; SDAG-NEXT:    add x10, x11, x10, lsr #3
 ; SDAG-NEXT:    stp q3, q4, [sp, #48]
 ; SDAG-NEXT:    eor x15, x14, #0x3f
-; SDAG-NEXT:    and x10, x10, #0x78
 ; SDAG-NEXT:    stp q5, q6, [sp, #80]
 ; SDAG-NEXT:    str q0, [sp]
-; SDAG-NEXT:    add x10, x11, x10
 ; SDAG-NEXT:    stp x9, x9, [sp, #240]
 ; SDAG-NEXT:    stp x9, x9, [sp, #224]
 ; SDAG-NEXT:    stp x9, x9, [sp, #208]
@@ -4879,14 +4874,14 @@ entry:
 define void @test_shl_i512_const_zero(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_zero:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x8, x9, [x1, #48]
 ; SDAG-NEXT:    ldr q0, [x1]
-; SDAG-NEXT:    ldp x11, x10, [x1, #16]
-; SDAG-NEXT:    ldp x13, x12, [x1, #32]
+; SDAG-NEXT:    ldp x10, x11, [x1, #16]
+; SDAG-NEXT:    ldp x12, x13, [x1, #32]
 ; SDAG-NEXT:    str q0, [x0]
-; SDAG-NEXT:    stp x9, x8, [x0, #48]
-; SDAG-NEXT:    stp x11, x10, [x0, #16]
-; SDAG-NEXT:    stp x13, x12, [x0, #32]
+; SDAG-NEXT:    stp x8, x9, [x0, #48]
+; SDAG-NEXT:    stp x10, x11, [x0, #16]
+; SDAG-NEXT:    stp x12, x13, [x0, #32]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_zero:
@@ -4910,14 +4905,14 @@ entry:
 define void @test_lshr_i512_const_zero(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_zero:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x8, x9, [x1, #48]
 ; SDAG-NEXT:    ldr q0, [x1]
-; SDAG-NEXT:    ldp x11, x10, [x1, #16]
-; SDAG-NEXT:    ldp x13, x12, [x1, #32]
+; SDAG-NEXT:    ldp x10, x11, [x1, #16]
+; SDAG-NEXT:    ldp x12, x13, [x1, #32]
 ; SDAG-NEXT:    str q0, [x0]
-; SDAG-NEXT:    stp x9, x8, [x0, #48]
-; SDAG-NEXT:    stp x11, x10, [x0, #16]
-; SDAG-NEXT:    stp x13, x12, [x0, #32]
+; SDAG-NEXT:    stp x8, x9, [x0, #48]
+; SDAG-NEXT:    stp x10, x11, [x0, #16]
+; SDAG-NEXT:    stp x12, x13, [x0, #32]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_zero:
@@ -4941,14 +4936,14 @@ entry:
 define void @test_ashr_i512_const_zero(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_zero:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x8, x9, [x1, #48]
 ; SDAG-NEXT:    ldr q0, [x1]
-; SDAG-NEXT:    ldp x11, x10, [x1, #16]
-; SDAG-NEXT:    ldp x13, x12, [x1, #32]
+; SDAG-NEXT:    ldp x10, x11, [x1, #16]
+; SDAG-NEXT:    ldp x12, x13, [x1, #32]
 ; SDAG-NEXT:    str q0, [x0]
-; SDAG-NEXT:    stp x9, x8, [x0, #48]
-; SDAG-NEXT:    stp x11, x10, [x0, #16]
-; SDAG-NEXT:    stp x13, x12, [x0, #32]
+; SDAG-NEXT:    stp x8, x9, [x0, #48]
+; SDAG-NEXT:    stp x10, x11, [x0, #16]
+; SDAG-NEXT:    stp x12, x13, [x0, #32]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_zero:
@@ -4973,20 +4968,23 @@ entry:
 define void @test_shl_i512_const_32(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_32:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x12, x13, [x1, #16]
-; SDAG-NEXT:    ldur x8, [x1, #36]
-; SDAG-NEXT:    ldp x14, x15, [x1]
-; SDAG-NEXT:    ldur x9, [x1, #28]
-; SDAG-NEXT:    ldur x10, [x1, #44]
-; SDAG-NEXT:    ldur x11, [x1, #52]
+; SDAG-NEXT:    mov x10, x1
+; SDAG-NEXT:    ldp x12, x9, [x1, #24]
+; SDAG-NEXT:    ldr x11, [x10, #40]!
+; SDAG-NEXT:    ldur x8, [x1, #52]
+; SDAG-NEXT:    ldur x10, [x10, #4]
+; SDAG-NEXT:    ldp x15, x13, [x1, #8]
+; SDAG-NEXT:    ldr x14, [x1]
+; SDAG-NEXT:    stp x10, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x9, #32
+; SDAG-NEXT:    extr x9, x9, x12, #32
+; SDAG-NEXT:    extr x10, x12, x13, #32
 ; SDAG-NEXT:    stp x9, x8, [x0, #32]
-; SDAG-NEXT:    extr x9, x13, x12, #32
-; SDAG-NEXT:    stp x10, x11, [x0, #48]
-; SDAG-NEXT:    extr x10, x12, x15, #32
-; SDAG-NEXT:    lsl x8, x14, #32
-; SDAG-NEXT:    stp x10, x9, [x0, #16]
-; SDAG-NEXT:    extr x10, x15, x14, #32
-; SDAG-NEXT:    stp x8, x10, [x0]
+; SDAG-NEXT:    extr x8, x13, x15, #32
+; SDAG-NEXT:    extr x9, x15, x14, #32
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    lsl x10, x14, #32
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_32:
@@ -5018,21 +5016,23 @@ entry:
 define void @test_lshr_i512_const_32(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_32:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x11, x10, [x1, #48]
-; SDAG-NEXT:    ldur x8, [x1, #12]
-; SDAG-NEXT:    ldp x15, x14, [x1, #32]
-; SDAG-NEXT:    ldur x9, [x1, #4]
-; SDAG-NEXT:    ldp x12, x13, [x1, #16]
-; SDAG-NEXT:    extr x16, x10, x11, #32
-; SDAG-NEXT:    stp x9, x8, [x0]
-; SDAG-NEXT:    lsr x9, x10, #32
-; SDAG-NEXT:    extr x8, x14, x15, #32
-; SDAG-NEXT:    extr x10, x11, x14, #32
-; SDAG-NEXT:    stp x16, x9, [x0, #48]
-; SDAG-NEXT:    extr x9, x13, x12, #32
-; SDAG-NEXT:    stp x8, x10, [x0, #32]
-; SDAG-NEXT:    extr x8, x15, x13, #32
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldr x15, [x1, #8]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldr w16, [x1, #4]
+; SDAG-NEXT:    ldp x14, x12, [x1, #16]
+; SDAG-NEXT:    lsr x13, x8, #32
+; SDAG-NEXT:    extr x8, x8, x9, #32
+; SDAG-NEXT:    extr x9, x9, x10, #32
+; SDAG-NEXT:    extr x10, x10, x11, #32
+; SDAG-NEXT:    stp x8, x13, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #32
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x12, x14, #32
+; SDAG-NEXT:    extr x10, x14, x15, #32
 ; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    orr x8, x16, x15, lsl #32
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_32:
@@ -5064,21 +5064,23 @@ entry:
 define void @test_ashr_i512_const_32(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_32:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x11, x10, [x1, #48]
-; SDAG-NEXT:    ldur x8, [x1, #12]
-; SDAG-NEXT:    ldp x15, x14, [x1, #32]
-; SDAG-NEXT:    ldur x9, [x1, #4]
-; SDAG-NEXT:    ldp x12, x13, [x1, #16]
-; SDAG-NEXT:    extr x16, x10, x11, #32
-; SDAG-NEXT:    stp x9, x8, [x0]
-; SDAG-NEXT:    asr x9, x10, #32
-; SDAG-NEXT:    extr x8, x14, x15, #32
-; SDAG-NEXT:    extr x10, x11, x14, #32
-; SDAG-NEXT:    stp x16, x9, [x0, #48]
-; SDAG-NEXT:    extr x9, x13, x12, #32
-; SDAG-NEXT:    stp x8, x10, [x0, #32]
-; SDAG-NEXT:    extr x8, x15, x13, #32
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldr x15, [x1, #8]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldr w16, [x1, #4]
+; SDAG-NEXT:    ldp x14, x12, [x1, #16]
+; SDAG-NEXT:    asr x13, x8, #32
+; SDAG-NEXT:    extr x8, x8, x9, #32
+; SDAG-NEXT:    extr x9, x9, x10, #32
+; SDAG-NEXT:    extr x10, x10, x11, #32
+; SDAG-NEXT:    stp x8, x13, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #32
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x12, x14, #32
+; SDAG-NEXT:    extr x10, x14, x15, #32
 ; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    orr x8, x16, x15, lsl #32
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_32:
@@ -5116,11 +5118,11 @@ define void @test_shl_i512_const_64(ptr %result, ptr %input) {
 ; SDAG-NEXT:    ldr q0, [x1]
 ; SDAG-NEXT:    ldp x12, x9, [x1, #24]
 ; SDAG-NEXT:    ldr x11, [x1, #16]
-; SDAG-NEXT:    str xzr, [x0]
+; SDAG-NEXT:    stur q0, [x0, #8]
 ; SDAG-NEXT:    stp x10, x8, [x0, #48]
 ; SDAG-NEXT:    stp x12, x9, [x0, #32]
 ; SDAG-NEXT:    str x11, [x0, #24]
-; SDAG-NEXT:    stur q0, [x0, #8]
+; SDAG-NEXT:    str xzr, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_64:
@@ -5144,14 +5146,14 @@ entry:
 define void @test_lshr_i512_const_64(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_64:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x11, x8, [x1, #48]
+; SDAG-NEXT:    ldp x8, x9, [x1, #24]
 ; SDAG-NEXT:    ldur q0, [x1, #8]
-; SDAG-NEXT:    ldp x10, x9, [x1, #24]
-; SDAG-NEXT:    ldr x12, [x1, #40]
+; SDAG-NEXT:    ldp x12, x10, [x1, #48]
+; SDAG-NEXT:    ldr x11, [x1, #40]
 ; SDAG-NEXT:    str q0, [x0]
-; SDAG-NEXT:    stp x8, xzr, [x0, #48]
-; SDAG-NEXT:    stp x12, x11, [x0, #32]
-; SDAG-NEXT:    stp x10, x9, [x0, #16]
+; SDAG-NEXT:    stp x8, x9, [x0, #16]
+; SDAG-NEXT:    stp x10, xzr, [x0, #48]
+; SDAG-NEXT:    stp x11, x12, [x0, #32]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_64:
@@ -5175,13 +5177,13 @@ entry:
 define void @test_ashr_i512_const_64(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_64:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x8, x9, [x1, #40]
+; SDAG-NEXT:    ldp x9, x8, [x1, #40]
 ; SDAG-NEXT:    ldr x12, [x1, #56]
-; SDAG-NEXT:    ldp x11, x10, [x1, #24]
+; SDAG-NEXT:    ldp x10, x11, [x1, #24]
 ; SDAG-NEXT:    ldur q0, [x1, #8]
-; SDAG-NEXT:    stp x8, x9, [x0, #32]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
 ; SDAG-NEXT:    asr x8, x12, #63
-; SDAG-NEXT:    stp x11, x10, [x0, #16]
+; SDAG-NEXT:    stp x10, x11, [x0, #16]
 ; SDAG-NEXT:    str q0, [x0]
 ; SDAG-NEXT:    stp x12, x8, [x0, #48]
 ; SDAG-NEXT:    ret
@@ -5208,19 +5210,22 @@ entry:
 define void @test_shl_i512_const_96(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_96:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x12, x11, [x1, #16]
-; SDAG-NEXT:    ldur x9, [x1, #36]
-; SDAG-NEXT:    ldur x10, [x1, #44]
-; SDAG-NEXT:    ldur x8, [x1, #28]
-; SDAG-NEXT:    ldp x13, x14, [x1]
-; SDAG-NEXT:    stp x9, x10, [x0, #48]
-; SDAG-NEXT:    extr x9, x11, x12, #32
-; SDAG-NEXT:    extr x10, x14, x13, #32
-; SDAG-NEXT:    stp x9, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x12, x14, #32
-; SDAG-NEXT:    lsl x9, x13, #32
-; SDAG-NEXT:    stp x10, x8, [x0, #16]
-; SDAG-NEXT:    stp xzr, x9, [x0]
+; SDAG-NEXT:    mov x12, x1
+; SDAG-NEXT:    ldp x10, x9, [x1, #16]
+; SDAG-NEXT:    ldr x13, [x12, #32]!
+; SDAG-NEXT:    ldur x8, [x1, #44]
+; SDAG-NEXT:    ldur x12, [x12, #4]
+; SDAG-NEXT:    ldp x14, x11, [x1]
+; SDAG-NEXT:    str xzr, [x0]
+; SDAG-NEXT:    stp x12, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x13, x9, #32
+; SDAG-NEXT:    extr x9, x9, x10, #32
+; SDAG-NEXT:    extr x15, x10, x11, #32
+; SDAG-NEXT:    extr x11, x11, x14, #32
+; SDAG-NEXT:    str x8, [x0, #40]
+; SDAG-NEXT:    lsl x8, x14, #32
+; SDAG-NEXT:    stp x15, x9, [x0, #24]
+; SDAG-NEXT:    stp x8, x11, [x0, #8]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_96:
@@ -5251,19 +5256,21 @@ entry:
 define void @test_lshr_i512_const_96(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_96:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x10, [x1, #48]
-; SDAG-NEXT:    ldur x8, [x1, #20]
-; SDAG-NEXT:    ldp x13, x14, [x1, #32]
-; SDAG-NEXT:    ldur x11, [x1, #12]
-; SDAG-NEXT:    ldur x12, [x1, #28]
-; SDAG-NEXT:    lsr x15, x10, #32
-; SDAG-NEXT:    stp x11, x8, [x0]
-; SDAG-NEXT:    extr x8, x10, x9, #32
-; SDAG-NEXT:    extr x11, x9, x14, #32
-; SDAG-NEXT:    extr x9, x14, x13, #32
-; SDAG-NEXT:    stp x15, xzr, [x0, #48]
-; SDAG-NEXT:    stp x11, x8, [x0, #32]
-; SDAG-NEXT:    stp x12, x9, [x0, #16]
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldr w15, [x1, #12]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x13, x12, [x1, #16]
+; SDAG-NEXT:    lsr x14, x8, #32
+; SDAG-NEXT:    extr x8, x8, x9, #32
+; SDAG-NEXT:    extr x9, x9, x10, #32
+; SDAG-NEXT:    extr x10, x10, x11, #32
+; SDAG-NEXT:    stp x14, xzr, [x0, #48]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x11, x12, #32
+; SDAG-NEXT:    extr x9, x12, x13, #32
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    orr x10, x15, x13, lsl #32
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_96:
@@ -5294,20 +5301,22 @@ entry:
 define void @test_ashr_i512_const_96(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_96:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x10, [x1, #48]
-; SDAG-NEXT:    ldur x8, [x1, #12]
-; SDAG-NEXT:    ldur x11, [x1, #20]
-; SDAG-NEXT:    ldur x12, [x1, #28]
-; SDAG-NEXT:    ldp x13, x14, [x1, #32]
-; SDAG-NEXT:    asr x15, x10, #32
-; SDAG-NEXT:    stp x8, x11, [x0]
-; SDAG-NEXT:    asr x8, x10, #63
-; SDAG-NEXT:    extr x11, x9, x14, #32
-; SDAG-NEXT:    stp x15, x8, [x0, #48]
-; SDAG-NEXT:    extr x9, x10, x9, #32
-; SDAG-NEXT:    extr x8, x14, x13, #32
-; SDAG-NEXT:    stp x11, x9, [x0, #32]
-; SDAG-NEXT:    stp x12, x8, [x0, #16]
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldr w16, [x1, #12]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    asr x12, x8, #63
+; SDAG-NEXT:    asr x15, x8, #32
+; SDAG-NEXT:    extr x8, x8, x9, #32
+; SDAG-NEXT:    extr x9, x9, x10, #32
+; SDAG-NEXT:    extr x10, x10, x11, #32
+; SDAG-NEXT:    stp x15, x12, [x0, #48]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x11, x13, #32
+; SDAG-NEXT:    extr x9, x13, x14, #32
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    orr x10, x16, x14, lsl #32
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_96:
@@ -5341,23 +5350,22 @@ entry:
 define void @test_shl_i512_const_1(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_1:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x8, x9, [x1, #40]
-; SDAG-NEXT:    ldr x10, [x1, #56]
-; SDAG-NEXT:    ldp x13, x11, [x1, #24]
-; SDAG-NEXT:    ldp x15, x14, [x1, #8]
-; SDAG-NEXT:    extr x12, x9, x8, #63
-; SDAG-NEXT:    extr x9, x10, x9, #63
-; SDAG-NEXT:    ldr x10, [x1]
-; SDAG-NEXT:    extr x16, x11, x13, #63
-; SDAG-NEXT:    extr x8, x8, x11, #63
-; SDAG-NEXT:    stp x12, x9, [x0, #48]
-; SDAG-NEXT:    extr x9, x14, x15, #63
-; SDAG-NEXT:    extr x11, x13, x14, #63
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    lsl x8, x10, #1
-; SDAG-NEXT:    stp x9, x11, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x10, #63
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x13, x12, [x1, #16]
+; SDAG-NEXT:    extr x8, x8, x9, #63
+; SDAG-NEXT:    ldp x14, x15, [x1]
+; SDAG-NEXT:    extr x9, x9, x10, #63
+; SDAG-NEXT:    extr x10, x10, x11, #63
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #63
+; SDAG-NEXT:    extr x9, x12, x13, #63
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x13, x15, #63
+; SDAG-NEXT:    extr x8, x15, x14, #63
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
+; SDAG-NEXT:    lsl x9, x14, #1
+; SDAG-NEXT:    stp x9, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_1:
@@ -5391,20 +5399,20 @@ define void @test_lshr_i512_const_1(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #1
-; SDAG-NEXT:    lsr x8, x8, #1
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    lsr x12, x8, #1
+; SDAG-NEXT:    extr x8, x8, x9, #1
 ; SDAG-NEXT:    extr x9, x9, x10, #1
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #1
-; SDAG-NEXT:    extr x8, x15, x16, #1
-; SDAG-NEXT:    extr x10, x11, x15, #1
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #1
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #1
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #1
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #1
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #1
+; SDAG-NEXT:    extr x10, x14, x16, #1
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #1
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_1:
@@ -5438,20 +5446,20 @@ define void @test_ashr_i512_const_1(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #1
-; SDAG-NEXT:    asr x8, x8, #1
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    asr x12, x8, #1
+; SDAG-NEXT:    extr x8, x8, x9, #1
 ; SDAG-NEXT:    extr x9, x9, x10, #1
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #1
-; SDAG-NEXT:    extr x8, x15, x16, #1
-; SDAG-NEXT:    extr x10, x11, x15, #1
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #1
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #1
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #1
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #1
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #1
+; SDAG-NEXT:    extr x10, x14, x16, #1
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #1
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_1:
@@ -5485,23 +5493,22 @@ entry:
 define void @test_shl_i512_const_15(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_15:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x8, x9, [x1, #40]
-; SDAG-NEXT:    ldr x10, [x1, #56]
-; SDAG-NEXT:    ldp x13, x11, [x1, #24]
-; SDAG-NEXT:    ldp x15, x14, [x1, #8]
-; SDAG-NEXT:    extr x12, x9, x8, #49
-; SDAG-NEXT:    extr x9, x10, x9, #49
-; SDAG-NEXT:    ldr x10, [x1]
-; SDAG-NEXT:    extr x16, x11, x13, #49
-; SDAG-NEXT:    extr x8, x8, x11, #49
-; SDAG-NEXT:    stp x12, x9, [x0, #48]
-; SDAG-NEXT:    extr x9, x14, x15, #49
-; SDAG-NEXT:    extr x11, x13, x14, #49
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    lsl x8, x10, #15
-; SDAG-NEXT:    stp x9, x11, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x10, #49
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x13, x12, [x1, #16]
+; SDAG-NEXT:    extr x8, x8, x9, #49
+; SDAG-NEXT:    ldp x14, x15, [x1]
+; SDAG-NEXT:    extr x9, x9, x10, #49
+; SDAG-NEXT:    extr x10, x10, x11, #49
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #49
+; SDAG-NEXT:    extr x9, x12, x13, #49
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x13, x15, #49
+; SDAG-NEXT:    extr x8, x15, x14, #49
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
+; SDAG-NEXT:    lsl x9, x14, #15
+; SDAG-NEXT:    stp x9, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_15:
@@ -5535,20 +5542,20 @@ define void @test_lshr_i512_const_15(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #15
-; SDAG-NEXT:    lsr x8, x8, #15
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    lsr x12, x8, #15
+; SDAG-NEXT:    extr x8, x8, x9, #15
 ; SDAG-NEXT:    extr x9, x9, x10, #15
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #15
-; SDAG-NEXT:    extr x8, x15, x16, #15
-; SDAG-NEXT:    extr x10, x11, x15, #15
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #15
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #15
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #15
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #15
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #15
+; SDAG-NEXT:    extr x10, x14, x16, #15
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #15
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_15:
@@ -5582,20 +5589,20 @@ define void @test_ashr_i512_const_15(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #15
-; SDAG-NEXT:    asr x8, x8, #15
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    asr x12, x8, #15
+; SDAG-NEXT:    extr x8, x8, x9, #15
 ; SDAG-NEXT:    extr x9, x9, x10, #15
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #15
-; SDAG-NEXT:    extr x8, x15, x16, #15
-; SDAG-NEXT:    extr x10, x11, x15, #15
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #15
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #15
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #15
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #15
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #15
+; SDAG-NEXT:    extr x10, x14, x16, #15
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #15
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_15:
@@ -5629,23 +5636,22 @@ entry:
 define void @test_shl_i512_const_63(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_63:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x8, x9, [x1, #40]
-; SDAG-NEXT:    ldr x10, [x1, #56]
-; SDAG-NEXT:    ldp x13, x11, [x1, #24]
-; SDAG-NEXT:    ldp x15, x14, [x1, #8]
-; SDAG-NEXT:    extr x12, x9, x8, #1
-; SDAG-NEXT:    extr x9, x10, x9, #1
-; SDAG-NEXT:    ldr x10, [x1]
-; SDAG-NEXT:    extr x16, x11, x13, #1
-; SDAG-NEXT:    extr x8, x8, x11, #1
-; SDAG-NEXT:    stp x12, x9, [x0, #48]
-; SDAG-NEXT:    extr x9, x14, x15, #1
-; SDAG-NEXT:    extr x11, x13, x14, #1
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    lsl x8, x10, #63
-; SDAG-NEXT:    stp x9, x11, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x10, #1
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    ldp x9, x8, [x1, #48]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x13, x12, [x1, #16]
+; SDAG-NEXT:    extr x8, x8, x9, #1
+; SDAG-NEXT:    ldp x14, x15, [x1]
+; SDAG-NEXT:    extr x9, x9, x10, #1
+; SDAG-NEXT:    extr x10, x10, x11, #1
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #1
+; SDAG-NEXT:    extr x9, x12, x13, #1
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x13, x15, #1
+; SDAG-NEXT:    extr x8, x15, x14, #1
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
+; SDAG-NEXT:    lsl x9, x14, #63
+; SDAG-NEXT:    stp x9, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_shl_i512_const_63:
@@ -5679,20 +5685,20 @@ define void @test_lshr_i512_const_63(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #63
-; SDAG-NEXT:    lsr x8, x8, #63
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    lsr x12, x8, #63
+; SDAG-NEXT:    extr x8, x8, x9, #63
 ; SDAG-NEXT:    extr x9, x9, x10, #63
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #63
-; SDAG-NEXT:    extr x8, x15, x16, #63
-; SDAG-NEXT:    extr x10, x11, x15, #63
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #63
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #63
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #63
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #63
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #63
+; SDAG-NEXT:    extr x10, x14, x16, #63
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #63
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_63:
@@ -5726,20 +5732,20 @@ define void @test_ashr_i512_const_63(ptr %result, ptr %input) {
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
 ; SDAG-NEXT:    ldp x11, x10, [x1, #32]
-; SDAG-NEXT:    ldp x16, x15, [x1, #16]
-; SDAG-NEXT:    extr x12, x8, x9, #63
-; SDAG-NEXT:    asr x8, x8, #63
-; SDAG-NEXT:    ldp x13, x14, [x1]
+; SDAG-NEXT:    ldp x14, x13, [x1, #16]
+; SDAG-NEXT:    asr x12, x8, #63
+; SDAG-NEXT:    extr x8, x8, x9, #63
 ; SDAG-NEXT:    extr x9, x9, x10, #63
-; SDAG-NEXT:    stp x12, x8, [x0, #48]
-; SDAG-NEXT:    extr x12, x10, x11, #63
-; SDAG-NEXT:    extr x8, x15, x16, #63
-; SDAG-NEXT:    extr x10, x11, x15, #63
-; SDAG-NEXT:    stp x12, x9, [x0, #32]
-; SDAG-NEXT:    extr x9, x14, x13, #63
-; SDAG-NEXT:    stp x8, x10, [x0, #16]
-; SDAG-NEXT:    extr x8, x16, x14, #63
-; SDAG-NEXT:    stp x9, x8, [x0]
+; SDAG-NEXT:    extr x10, x10, x11, #63
+; SDAG-NEXT:    ldp x15, x16, [x1]
+; SDAG-NEXT:    stp x8, x12, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x13, #63
+; SDAG-NEXT:    stp x10, x9, [x0, #32]
+; SDAG-NEXT:    extr x9, x13, x14, #63
+; SDAG-NEXT:    extr x10, x14, x16, #63
+; SDAG-NEXT:    stp x9, x8, [x0, #16]
+; SDAG-NEXT:    extr x8, x16, x15, #63
+; SDAG-NEXT:    stp x8, x10, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_63:
@@ -5773,20 +5779,20 @@ entry:
 define void @test_shl_i512_const_65(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_65:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #32]
-; SDAG-NEXT:    ldr x10, [x1, #48]
-; SDAG-NEXT:    ldp x12, x11, [x1, #16]
-; SDAG-NEXT:    extr x13, x8, x9, #63
-; SDAG-NEXT:    extr x8, x10, x8, #63
-; SDAG-NEXT:    ldp x10, x14, [x1]
-; SDAG-NEXT:    extr x15, x11, x12, #63
-; SDAG-NEXT:    stp x13, x8, [x0, #48]
-; SDAG-NEXT:    extr x9, x9, x11, #63
-; SDAG-NEXT:    extr x8, x14, x10, #63
-; SDAG-NEXT:    extr x11, x12, x14, #63
-; SDAG-NEXT:    stp x15, x9, [x0, #32]
-; SDAG-NEXT:    stp x8, x11, [x0, #16]
-; SDAG-NEXT:    lsl x8, x10, #1
+; SDAG-NEXT:    ldp x9, x8, [x1, #40]
+; SDAG-NEXT:    ldr x13, [x1]
+; SDAG-NEXT:    ldp x11, x10, [x1, #24]
+; SDAG-NEXT:    ldp x14, x12, [x1, #8]
+; SDAG-NEXT:    extr x8, x8, x9, #63
+; SDAG-NEXT:    extr x9, x9, x10, #63
+; SDAG-NEXT:    extr x10, x10, x11, #63
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #63
+; SDAG-NEXT:    extr x9, x12, x14, #63
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x14, x13, #63
+; SDAG-NEXT:    lsl x8, x13, #1
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
 ; SDAG-NEXT:    stp xzr, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
@@ -5819,20 +5825,20 @@ define void @test_lshr_i512_const_65(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_65:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x15, [x1, #24]
-; SDAG-NEXT:    ldp x14, x10, [x1, #32]
-; SDAG-NEXT:    ldp x11, x12, [x1, #8]
+; SDAG-NEXT:    ldr x14, [x1, #8]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x15, x12, [x1, #16]
 ; SDAG-NEXT:    lsr x13, x8, #1
 ; SDAG-NEXT:    extr x8, x8, x9, #1
-; SDAG-NEXT:    extr x16, x9, x10, #1
-; SDAG-NEXT:    extr x9, x14, x15, #1
-; SDAG-NEXT:    extr x10, x10, x14, #1
+; SDAG-NEXT:    extr x9, x9, x10, #1
+; SDAG-NEXT:    extr x10, x10, x11, #1
 ; SDAG-NEXT:    stp x13, xzr, [x0, #48]
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x12, x11, #1
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x12, #1
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x11, x12, #1
+; SDAG-NEXT:    extr x9, x12, x15, #1
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x15, x14, #1
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_65:
@@ -5864,21 +5870,21 @@ define void @test_ashr_i512_const_65(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_65:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x16, [x1, #24]
-; SDAG-NEXT:    ldp x15, x10, [x1, #32]
-; SDAG-NEXT:    ldp x12, x13, [x1, #8]
-; SDAG-NEXT:    asr x11, x8, #1
-; SDAG-NEXT:    asr x14, x8, #63
+; SDAG-NEXT:    ldr x15, [x1, #8]
+; SDAG-NEXT:    ldp x12, x10, [x1, #32]
+; SDAG-NEXT:    ldp x16, x13, [x1, #16]
+; SDAG-NEXT:    asr x11, x8, #63
+; SDAG-NEXT:    asr x14, x8, #1
 ; SDAG-NEXT:    extr x8, x8, x9, #1
-; SDAG-NEXT:    stp x11, x14, [x0, #48]
-; SDAG-NEXT:    extr x11, x9, x10, #1
-; SDAG-NEXT:    extr x9, x15, x16, #1
-; SDAG-NEXT:    extr x10, x10, x15, #1
-; SDAG-NEXT:    stp x11, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x13, x12, #1
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x16, x13, #1
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    extr x9, x9, x10, #1
+; SDAG-NEXT:    extr x10, x10, x12, #1
+; SDAG-NEXT:    stp x14, x11, [x0, #48]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x12, x13, #1
+; SDAG-NEXT:    extr x9, x13, x16, #1
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x16, x15, #1
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_65:
@@ -5911,20 +5917,20 @@ entry:
 define void @test_shl_i512_const_100(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_100:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #32]
-; SDAG-NEXT:    ldr x10, [x1, #48]
-; SDAG-NEXT:    ldp x12, x11, [x1, #16]
-; SDAG-NEXT:    extr x13, x8, x9, #28
-; SDAG-NEXT:    extr x8, x10, x8, #28
-; SDAG-NEXT:    ldp x10, x14, [x1]
-; SDAG-NEXT:    extr x15, x11, x12, #28
-; SDAG-NEXT:    stp x13, x8, [x0, #48]
-; SDAG-NEXT:    extr x9, x9, x11, #28
-; SDAG-NEXT:    extr x8, x14, x10, #28
-; SDAG-NEXT:    extr x11, x12, x14, #28
-; SDAG-NEXT:    stp x15, x9, [x0, #32]
-; SDAG-NEXT:    stp x8, x11, [x0, #16]
-; SDAG-NEXT:    lsl x8, x10, #36
+; SDAG-NEXT:    ldp x9, x8, [x1, #40]
+; SDAG-NEXT:    ldr x13, [x1]
+; SDAG-NEXT:    ldp x11, x10, [x1, #24]
+; SDAG-NEXT:    ldp x14, x12, [x1, #8]
+; SDAG-NEXT:    extr x8, x8, x9, #28
+; SDAG-NEXT:    extr x9, x9, x10, #28
+; SDAG-NEXT:    extr x10, x10, x11, #28
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #28
+; SDAG-NEXT:    extr x9, x12, x14, #28
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x14, x13, #28
+; SDAG-NEXT:    lsl x8, x13, #36
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
 ; SDAG-NEXT:    stp xzr, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
@@ -5957,20 +5963,20 @@ define void @test_lshr_i512_const_100(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_100:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x15, [x1, #24]
-; SDAG-NEXT:    ldp x14, x10, [x1, #32]
-; SDAG-NEXT:    ldp x11, x12, [x1, #8]
+; SDAG-NEXT:    ldr x14, [x1, #8]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x15, x12, [x1, #16]
 ; SDAG-NEXT:    lsr x13, x8, #36
 ; SDAG-NEXT:    extr x8, x8, x9, #36
-; SDAG-NEXT:    extr x16, x9, x10, #36
-; SDAG-NEXT:    extr x9, x14, x15, #36
-; SDAG-NEXT:    extr x10, x10, x14, #36
+; SDAG-NEXT:    extr x9, x9, x10, #36
+; SDAG-NEXT:    extr x10, x10, x11, #36
 ; SDAG-NEXT:    stp x13, xzr, [x0, #48]
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x12, x11, #36
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x12, #36
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x11, x12, #36
+; SDAG-NEXT:    extr x9, x12, x15, #36
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x15, x14, #36
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_100:
@@ -6002,21 +6008,21 @@ define void @test_ashr_i512_const_100(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_100:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x16, [x1, #24]
-; SDAG-NEXT:    ldp x15, x10, [x1, #32]
-; SDAG-NEXT:    ldp x12, x13, [x1, #8]
-; SDAG-NEXT:    asr x11, x8, #36
-; SDAG-NEXT:    asr x14, x8, #63
+; SDAG-NEXT:    ldr x15, [x1, #8]
+; SDAG-NEXT:    ldp x12, x10, [x1, #32]
+; SDAG-NEXT:    ldp x16, x13, [x1, #16]
+; SDAG-NEXT:    asr x11, x8, #63
+; SDAG-NEXT:    asr x14, x8, #36
 ; SDAG-NEXT:    extr x8, x8, x9, #36
-; SDAG-NEXT:    stp x11, x14, [x0, #48]
-; SDAG-NEXT:    extr x11, x9, x10, #36
-; SDAG-NEXT:    extr x9, x15, x16, #36
-; SDAG-NEXT:    extr x10, x10, x15, #36
-; SDAG-NEXT:    stp x11, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x13, x12, #36
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x16, x13, #36
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    extr x9, x9, x10, #36
+; SDAG-NEXT:    extr x10, x10, x12, #36
+; SDAG-NEXT:    stp x14, x11, [x0, #48]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x12, x13, #36
+; SDAG-NEXT:    extr x9, x13, x16, #36
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x16, x15, #36
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_100:
@@ -6050,20 +6056,20 @@ entry:
 define void @test_shl_i512_const_127(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_shl_i512_const_127:
 ; SDAG:       ; %bb.0: ; %entry
-; SDAG-NEXT:    ldp x9, x8, [x1, #32]
-; SDAG-NEXT:    ldr x10, [x1, #48]
-; SDAG-NEXT:    ldp x12, x11, [x1, #16]
-; SDAG-NEXT:    extr x13, x8, x9, #1
-; SDAG-NEXT:    extr x8, x10, x8, #1
-; SDAG-NEXT:    ldp x10, x14, [x1]
-; SDAG-NEXT:    extr x15, x11, x12, #1
-; SDAG-NEXT:    stp x13, x8, [x0, #48]
-; SDAG-NEXT:    extr x9, x9, x11, #1
-; SDAG-NEXT:    extr x8, x14, x10, #1
-; SDAG-NEXT:    extr x11, x12, x14, #1
-; SDAG-NEXT:    stp x15, x9, [x0, #32]
-; SDAG-NEXT:    stp x8, x11, [x0, #16]
-; SDAG-NEXT:    lsl x8, x10, #63
+; SDAG-NEXT:    ldp x9, x8, [x1, #40]
+; SDAG-NEXT:    ldr x13, [x1]
+; SDAG-NEXT:    ldp x11, x10, [x1, #24]
+; SDAG-NEXT:    ldp x14, x12, [x1, #8]
+; SDAG-NEXT:    extr x8, x8, x9, #1
+; SDAG-NEXT:    extr x9, x9, x10, #1
+; SDAG-NEXT:    extr x10, x10, x11, #1
+; SDAG-NEXT:    stp x9, x8, [x0, #48]
+; SDAG-NEXT:    extr x8, x11, x12, #1
+; SDAG-NEXT:    extr x9, x12, x14, #1
+; SDAG-NEXT:    stp x8, x10, [x0, #32]
+; SDAG-NEXT:    extr x10, x14, x13, #1
+; SDAG-NEXT:    lsl x8, x13, #63
+; SDAG-NEXT:    stp x10, x9, [x0, #16]
 ; SDAG-NEXT:    stp xzr, x8, [x0]
 ; SDAG-NEXT:    ret
 ;
@@ -6096,20 +6102,20 @@ define void @test_lshr_i512_const_127(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_lshr_i512_const_127:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x15, [x1, #24]
-; SDAG-NEXT:    ldp x14, x10, [x1, #32]
-; SDAG-NEXT:    ldp x11, x12, [x1, #8]
+; SDAG-NEXT:    ldr x14, [x1, #8]
+; SDAG-NEXT:    ldp x11, x10, [x1, #32]
+; SDAG-NEXT:    ldp x15, x12, [x1, #16]
 ; SDAG-NEXT:    lsr x13, x8, #63
 ; SDAG-NEXT:    extr x8, x8, x9, #63
-; SDAG-NEXT:    extr x16, x9, x10, #63
-; SDAG-NEXT:    extr x9, x14, x15, #63
-; SDAG-NEXT:    extr x10, x10, x14, #63
+; SDAG-NEXT:    extr x9, x9, x10, #63
+; SDAG-NEXT:    extr x10, x10, x11, #63
 ; SDAG-NEXT:    stp x13, xzr, [x0, #48]
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x12, x11, #63
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x12, #63
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x11, x12, #63
+; SDAG-NEXT:    extr x9, x12, x15, #63
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x15, x14, #63
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_lshr_i512_const_127:
@@ -6141,20 +6147,20 @@ define void @test_ashr_i512_const_127(ptr %result, ptr %input) {
 ; SDAG-LABEL: test_ashr_i512_const_127:
 ; SDAG:       ; %bb.0: ; %entry
 ; SDAG-NEXT:    ldp x9, x8, [x1, #48]
-; SDAG-NEXT:    ldr x15, [x1, #24]
-; SDAG-NEXT:    ldp x14, x10, [x1, #32]
-; SDAG-NEXT:    ldp x12, x13, [x1, #8]
+; SDAG-NEXT:    ldr x14, [x1, #8]
+; SDAG-NEXT:    ldp x12, x10, [x1, #32]
+; SDAG-NEXT:    ldp x15, x13, [x1, #16]
 ; SDAG-NEXT:    asr x11, x8, #63
 ; SDAG-NEXT:    extr x8, x8, x9, #63
-; SDAG-NEXT:    extr x16, x9, x10, #63
-; SDAG-NEXT:    extr x9, x14, x15, #63
-; SDAG-NEXT:    extr x10, x10, x14, #63
+; SDAG-NEXT:    extr x9, x9, x10, #63
+; SDAG-NEXT:    extr x10, x10, x12, #63
 ; SDAG-NEXT:    stp x11, x11, [x0, #48]
-; SDAG-NEXT:    stp x16, x8, [x0, #32]
-; SDAG-NEXT:    extr x8, x13, x12, #63
-; SDAG-NEXT:    stp x9, x10, [x0, #16]
-; SDAG-NEXT:    extr x9, x15, x13, #63
-; SDAG-NEXT:    stp x8, x9, [x0]
+; SDAG-NEXT:    stp x9, x8, [x0, #32]
+; SDAG-NEXT:    extr x8, x12, x13, #63
+; SDAG-NEXT:    extr x9, x13, x15, #63
+; SDAG-NEXT:    stp x8, x10, [x0, #16]
+; SDAG-NEXT:    extr x10, x15, x14, #63
+; SDAG-NEXT:    stp x10, x9, [x0]
 ; SDAG-NEXT:    ret
 ;
 ; GISEL-LABEL: test_ashr_i512_const_127:

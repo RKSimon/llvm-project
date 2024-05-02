@@ -157,7 +157,7 @@ define { <3 x float>, <3 x float> } @test_sincospi_v3f32(<3 x float> %a) #0 {
 ; CHECK-LABEL: test_sincospi_v3f32:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    push {r4, r5, r6, r7, lr}
-; CHECK-NEXT:    sub sp, #16
+; CHECK-NEXT:    sub sp, #24
 ; CHECK-NEXT:    mov r6, r2
 ; CHECK-NEXT:    mov r7, r1
 ; CHECK-NEXT:    add r1, sp, #12
@@ -170,20 +170,24 @@ define { <3 x float>, <3 x float> } @test_sincospi_v3f32(<3 x float> %a) #0 {
 ; CHECK-NEXT:    mov r2, sp
 ; CHECK-NEXT:    mov r0, r7
 ; CHECK-NEXT:    bl ___sincospif
-; CHECK-NEXT:    ldr r0, [sp, #36]
+; CHECK-NEXT:    ldr r0, [sp, #44]
 ; CHECK-NEXT:    vmov d0, r7, r6
-; CHECK-NEXT:    mov r1, r4
-; CHECK-NEXT:    add.w r2, r4, #16
+; CHECK-NEXT:    add r1, sp, #20
+; CHECK-NEXT:    add r2, sp, #16
 ; CHECK-NEXT:    vmov d1, r5, r0
 ; CHECK-NEXT:    vmov r0, s2
-; CHECK-NEXT:    vldr s1, [sp, #8]
-; CHECK-NEXT:    vldr s3, [sp, #12]
-; CHECK-NEXT:    vldr s2, [sp, #4]
-; CHECK-NEXT:    vldr s0, [sp]
-; CHECK-NEXT:    vst1.32 {d1}, [r1:64]!
-; CHECK-NEXT:    vst1.32 {d0}, [r2:64]!
 ; CHECK-NEXT:    bl ___sincospif
-; CHECK-NEXT:    add sp, #16
+; CHECK-NEXT:    vldr s3, [sp, #8]
+; CHECK-NEXT:    add.w r2, r4, #16
+; CHECK-NEXT:    vldr s2, [sp]
+; CHECK-NEXT:    vldr s1, [sp, #12]
+; CHECK-NEXT:    vldr s0, [sp, #4]
+; CHECK-NEXT:    ldrd r1, r0, [sp, #16]
+; CHECK-NEXT:    vst1.32 {d1}, [r2:64]!
+; CHECK-NEXT:    str r1, [r2]
+; CHECK-NEXT:    vst1.32 {d0}, [r4:64]!
+; CHECK-NEXT:    str r0, [r4]
+; CHECK-NEXT:    add sp, #24
 ; CHECK-NEXT:    pop {r4, r5, r6, r7, pc}
   %result = call { <3 x float>, <3 x float> } @llvm.sincospi.v3f32(<3 x float> %a)
   ret { <3 x float>, <3 x float> } %result

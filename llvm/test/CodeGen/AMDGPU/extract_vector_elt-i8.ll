@@ -218,7 +218,7 @@ define amdgpu_kernel void @extract_vector_elt_v8i8(<8 x i8> %foo) #0 {
 ;
 ; VI-LABEL: extract_vector_elt_v8i8:
 ; VI:       ; %bb.0:
-; VI-NEXT:    s_load_dword s0, s[8:9], 0x0
+; VI-NEXT:    s_load_dwordx2 s[0:1], s[8:9], 0x0
 ; VI-NEXT:    s_add_i32 s12, s12, s17
 ; VI-NEXT:    v_mov_b32_e32 v0, 0
 ; VI-NEXT:    s_mov_b32 flat_scratch_lo, s13
@@ -600,7 +600,7 @@ define amdgpu_kernel void @reduce_load_vector_v8i8_extract_0123() #0 {
 ; VI-LABEL: reduce_load_vector_v8i8_extract_0123:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_mov_b64 s[0:1], 0
-; VI-NEXT:    s_load_dword s0, s[0:1], 0x0
+; VI-NEXT:    s_load_dwordx2 s[0:1], s[0:1], 0x0
 ; VI-NEXT:    s_add_i32 s12, s12, s17
 ; VI-NEXT:    s_mov_b32 flat_scratch_lo, s13
 ; VI-NEXT:    s_lshr_b32 flat_scratch_hi, s12, 8

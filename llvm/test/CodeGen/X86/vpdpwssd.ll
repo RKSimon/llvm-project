@@ -30,22 +30,30 @@ define <16 x i32> @vpdpwssd_v16i32_accumulate(<32 x i16> %a0, <32 x i16> %a1, <1
 }
 
 define <8 x i32> @vpdpwssd_v8i32_accumulate(<16 x i16> %a0, <16 x i16> %a1, <8 x i32> %a2) {
-; AVX512VL-VNNI-LABEL: vpdpwssd_v8i32_accumulate:
-; AVX512VL-VNNI:       # %bb.0:
-; AVX512VL-VNNI-NEXT:    vpdpwssd %ymm1, %ymm0, %ymm2
-; AVX512VL-VNNI-NEXT:    vmovdqa %ymm2, %ymm0
-; AVX512VL-VNNI-NEXT:    retq
-;
 ; AVX-VNNI-LABEL: vpdpwssd_v8i32_accumulate:
 ; AVX-VNNI:       # %bb.0:
-; AVX-VNNI-NEXT:    {vex} vpdpwssd %ymm1, %ymm0, %ymm2
-; AVX-VNNI-NEXT:    vmovdqa %ymm2, %ymm0
+; AVX-VNNI-NEXT:    vpmovsxwd %ymm0, %zmm0
+; AVX-VNNI-NEXT:    vpmovsxwd %ymm1, %zmm1
+; AVX-VNNI-NEXT:    vpmulld %zmm1, %zmm0, %zmm0
+; AVX-VNNI-NEXT:    vpmovqd %zmm0, %ymm1
+; AVX-VNNI-NEXT:    vextracti64x4 $1, %zmm0, %ymm3
+; AVX-VNNI-NEXT:    vshufps {{.*#+}} ymm0 = ymm0[1,3],ymm3[1,3],ymm0[5,7],ymm3[5,7]
+; AVX-VNNI-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,2,1,3]
+; AVX-VNNI-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
+; AVX-VNNI-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX-VNNI-NEXT:    retq
 ;
 ; AVX512-VNNI-LABEL: vpdpwssd_v8i32_accumulate:
 ; AVX512-VNNI:       # %bb.0:
-; AVX512-VNNI-NEXT:    vpmaddwd %ymm1, %ymm0, %ymm0
-; AVX512-VNNI-NEXT:    vpaddd %ymm2, %ymm0, %ymm0
+; AVX512-VNNI-NEXT:    vpmovsxwd %ymm0, %zmm0
+; AVX512-VNNI-NEXT:    vpmovsxwd %ymm1, %zmm1
+; AVX512-VNNI-NEXT:    vpmulld %zmm1, %zmm0, %zmm0
+; AVX512-VNNI-NEXT:    vpmovqd %zmm0, %ymm1
+; AVX512-VNNI-NEXT:    vextracti64x4 $1, %zmm0, %ymm3
+; AVX512-VNNI-NEXT:    vshufps {{.*#+}} ymm0 = ymm0[1,3],ymm3[1,3],ymm0[5,7],ymm3[5,7]
+; AVX512-VNNI-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,2,1,3]
+; AVX512-VNNI-NEXT:    vpaddd %ymm2, %ymm1, %ymm1
+; AVX512-VNNI-NEXT:    vpaddd %ymm0, %ymm1, %ymm0
 ; AVX512-VNNI-NEXT:    retq
   %x0 = sext <16 x i16> %a0 to <16 x i32>
   %x1 = sext <16 x i16> %a1 to <16 x i32>
@@ -60,20 +68,41 @@ define <8 x i32> @vpdpwssd_v8i32_accumulate(<16 x i16> %a0, <16 x i16> %a1, <8 x
 define <4 x i32> @vpdpwssd_v4i32_accumulate(<8 x i16> %a0, <8 x i16> %a1, <4 x i32> %a2) {
 ; AVX512VL-VNNI-LABEL: vpdpwssd_v4i32_accumulate:
 ; AVX512VL-VNNI:       # %bb.0:
-; AVX512VL-VNNI-NEXT:    vpdpwssd %xmm1, %xmm0, %xmm2
-; AVX512VL-VNNI-NEXT:    vmovdqa %xmm2, %xmm0
+; AVX512VL-VNNI-NEXT:    vpmovsxwd %xmm0, %ymm0
+; AVX512VL-VNNI-NEXT:    vpmovsxwd %xmm1, %ymm1
+; AVX512VL-VNNI-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX512VL-VNNI-NEXT:    vpmovqd %ymm0, %xmm1
+; AVX512VL-VNNI-NEXT:    vextracti128 $1, %ymm0, %xmm3
+; AVX512VL-VNNI-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[1,3],xmm3[1,3]
+; AVX512VL-VNNI-NEXT:    vpaddd %xmm2, %xmm1, %xmm1
+; AVX512VL-VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512VL-VNNI-NEXT:    vzeroupper
 ; AVX512VL-VNNI-NEXT:    retq
 ;
 ; AVX-VNNI-LABEL: vpdpwssd_v4i32_accumulate:
 ; AVX-VNNI:       # %bb.0:
-; AVX-VNNI-NEXT:    {vex} vpdpwssd %xmm1, %xmm0, %xmm2
-; AVX-VNNI-NEXT:    vmovdqa %xmm2, %xmm0
+; AVX-VNNI-NEXT:    vpmovsxwd %xmm0, %ymm0
+; AVX-VNNI-NEXT:    vpmovsxwd %xmm1, %ymm1
+; AVX-VNNI-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX-VNNI-NEXT:    vpmovqd %ymm0, %xmm1
+; AVX-VNNI-NEXT:    vextracti128 $1, %ymm0, %xmm3
+; AVX-VNNI-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[1,3],xmm3[1,3]
+; AVX-VNNI-NEXT:    vpaddd %xmm2, %xmm1, %xmm1
+; AVX-VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX-VNNI-NEXT:    vzeroupper
 ; AVX-VNNI-NEXT:    retq
 ;
 ; AVX512-VNNI-LABEL: vpdpwssd_v4i32_accumulate:
 ; AVX512-VNNI:       # %bb.0:
-; AVX512-VNNI-NEXT:    vpmaddwd %xmm1, %xmm0, %xmm0
-; AVX512-VNNI-NEXT:    vpaddd %xmm2, %xmm0, %xmm0
+; AVX512-VNNI-NEXT:    vpmovsxwd %xmm0, %ymm0
+; AVX512-VNNI-NEXT:    vpmovsxwd %xmm1, %ymm1
+; AVX512-VNNI-NEXT:    vpmulld %ymm1, %ymm0, %ymm0
+; AVX512-VNNI-NEXT:    vextracti128 $1, %ymm0, %xmm1
+; AVX512-VNNI-NEXT:    vshufps {{.*#+}} xmm3 = xmm0[0,2],xmm1[0,2]
+; AVX512-VNNI-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[1,3],xmm1[1,3]
+; AVX512-VNNI-NEXT:    vpaddd %xmm2, %xmm3, %xmm1
+; AVX512-VNNI-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; AVX512-VNNI-NEXT:    vzeroupper
 ; AVX512-VNNI-NEXT:    retq
   %x0 = sext <8 x i16> %a0 to <8 x i32>
   %x1 = sext <8 x i16> %a1 to <8 x i32>

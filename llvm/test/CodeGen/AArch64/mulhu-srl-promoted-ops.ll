@@ -4,7 +4,10 @@
 define <8 x i16> @mulhu_v8i16_by_256(<8 x i16> %x) {
 ; CHECK-LABEL: mulhu_v8i16_by_256:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ushr v0.8h, v0.8h, #8
+; CHECK-NEXT:    ushll v1.4s, v0.4h, #0
+; CHECK-NEXT:    ushll2 v2.4s, v0.8h, #0
+; CHECK-NEXT:    shrn v0.4h, v1.4s, #8
+; CHECK-NEXT:    shrn2 v0.8h, v2.4s, #8
 ; CHECK-NEXT:    ret
   %x32 = zext <8 x i16> %x to <8 x i32>
   %mul = mul <8 x i32> %x32, splat (i32 256)
@@ -16,8 +19,14 @@ define <8 x i16> @mulhu_v8i16_by_256(<8 x i16> %x) {
 define <16 x i16> @mulhu_v16i16_by_256(<16 x i16> %x) {
 ; CHECK-LABEL: mulhu_v16i16_by_256:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ushr v0.8h, v0.8h, #8
-; CHECK-NEXT:    ushr v1.8h, v1.8h, #8
+; CHECK-NEXT:    ushll v2.4s, v1.4h, #0
+; CHECK-NEXT:    ushll v3.4s, v0.4h, #0
+; CHECK-NEXT:    ushll2 v4.4s, v1.8h, #0
+; CHECK-NEXT:    ushll2 v5.4s, v0.8h, #0
+; CHECK-NEXT:    shrn v0.4h, v3.4s, #8
+; CHECK-NEXT:    shrn v1.4h, v2.4s, #8
+; CHECK-NEXT:    shrn2 v0.8h, v5.4s, #8
+; CHECK-NEXT:    shrn2 v1.8h, v4.4s, #8
 ; CHECK-NEXT:    ret
   %x32 = zext <16 x i16> %x to <16 x i32>
   %mul = mul <16 x i32> %x32, splat (i32 256)

@@ -206,10 +206,11 @@ define %Ty1 @ret1() {
 ; VECTOR-NEXT:    la %r2, 160(%r15)
 ; VECTOR-NEXT:    brasl %r14, Fnptr@PLT
 ; VECTOR-NEXT:    vgbm %v0, 0
-; VECTOR-NEXT:    vleb %v0, 168(%r15), 15
-; VECTOR-NEXT:    vlrepg %v1, 160(%r15)
-; VECTOR-NEXT:    vsteg %v1, 0(%r13), 1
-; VECTOR-NEXT:    vsteb %v0, 8(%r13), 15
+; VECTOR-NEXT:    vgbm %v1, 0
+; VECTOR-NEXT:    vleb %v1, 168(%r15), 15
+; VECTOR-NEXT:    vleg %v0, 160(%r15), 1
+; VECTOR-NEXT:    vsteg %v0, 0(%r13), 1
+; VECTOR-NEXT:    vsteb %v1, 8(%r13), 15
 ; VECTOR-NEXT:    lmg %r13, %r15, 280(%r15)
 ; VECTOR-NEXT:    br %r14
   %C = call %Ty1 @Fnptr()
@@ -300,14 +301,14 @@ define %Ty2 @ret2() {
 ; CHECK-NEXT:    lgr %r13, %r2
 ; CHECK-NEXT:    la %r2, 160(%r15)
 ; CHECK-NEXT:    brasl %r14, Fnptr@PLT
-; CHECK-NEXT:    lg %r0, 176(%r15)
-; CHECK-NEXT:    lg %r1, 184(%r15)
-; CHECK-NEXT:    lg %r2, 160(%r15)
-; CHECK-NEXT:    lg %r3, 168(%r15)
-; CHECK-NEXT:    stg %r0, 16(%r13)
-; CHECK-NEXT:    stg %r1, 24(%r13)
-; CHECK-NEXT:    stg %r2, 0(%r13)
-; CHECK-NEXT:    stg %r3, 8(%r13)
+; CHECK-NEXT:    lg %r0, 184(%r15)
+; CHECK-NEXT:    lg %r1, 176(%r15)
+; CHECK-NEXT:    lg %r2, 168(%r15)
+; CHECK-NEXT:    lg %r3, 160(%r15)
+; CHECK-NEXT:    stg %r0, 24(%r13)
+; CHECK-NEXT:    stg %r1, 16(%r13)
+; CHECK-NEXT:    stg %r2, 8(%r13)
+; CHECK-NEXT:    stg %r3, 0(%r13)
 ; CHECK-NEXT:    lmg %r13, %r15, 296(%r15)
 ; CHECK-NEXT:    br %r14
 ;
@@ -428,12 +429,12 @@ define %Ty3 @ret3() {
 ; CHECK-NEXT:    lgr %r13, %r2
 ; CHECK-NEXT:    la %r2, 160(%r15)
 ; CHECK-NEXT:    brasl %r14, Fnptr@PLT
-; CHECK-NEXT:    lg %r0, 176(%r15)
-; CHECK-NEXT:    lg %r1, 184(%r15)
+; CHECK-NEXT:    lg %r0, 184(%r15)
+; CHECK-NEXT:    lg %r1, 176(%r15)
 ; CHECK-NEXT:    lg %r2, 160(%r15)
 ; CHECK-NEXT:    llgc %r3, 168(%r15)
-; CHECK-NEXT:    stg %r0, 16(%r13)
-; CHECK-NEXT:    stg %r1, 24(%r13)
+; CHECK-NEXT:    stg %r0, 24(%r13)
+; CHECK-NEXT:    stg %r1, 16(%r13)
 ; CHECK-NEXT:    stg %r2, 0(%r13)
 ; CHECK-NEXT:    stc %r3, 8(%r13)
 ; CHECK-NEXT:    lmg %r13, %r15, 296(%r15)
@@ -451,12 +452,13 @@ define %Ty3 @ret3() {
 ; VECTOR-NEXT:    la %r2, 160(%r15)
 ; VECTOR-NEXT:    brasl %r14, Fnptr@PLT
 ; VECTOR-NEXT:    vgbm %v0, 0
-; VECTOR-NEXT:    vleb %v0, 168(%r15), 15
-; VECTOR-NEXT:    vlrepg %v1, 160(%r15)
+; VECTOR-NEXT:    vgbm %v1, 0
+; VECTOR-NEXT:    vleb %v1, 168(%r15), 15
+; VECTOR-NEXT:    vleg %v0, 160(%r15), 1
 ; VECTOR-NEXT:    vl %v2, 176(%r15), 3
+; VECTOR-NEXT:    vsteg %v0, 0(%r13), 1
+; VECTOR-NEXT:    vsteb %v1, 8(%r13), 15
 ; VECTOR-NEXT:    vst %v2, 16(%r13), 3
-; VECTOR-NEXT:    vsteg %v1, 0(%r13), 1
-; VECTOR-NEXT:    vsteb %v0, 8(%r13), 15
 ; VECTOR-NEXT:    lmg %r13, %r15, 296(%r15)
 ; VECTOR-NEXT:    br %r14
   %C = call %Ty3 @Fnptr()
@@ -471,7 +473,7 @@ define void @arg4(%Ty4 %A) {
 ; CHECK-NEXT:    .cfi_offset %r13, -56
 ; CHECK-NEXT:    .cfi_offset %r14, -48
 ; CHECK-NEXT:    .cfi_offset %r15, -40
-; CHECK-NEXT:    l %r0, 164(%r15)
+; CHECK-NEXT:    lb %r0, 167(%r15)
 ; CHECK-NEXT:    lgrl %r1, Dst@GOT
 ; CHECK-NEXT:    lg %r14, 0(%r6)
 ; CHECK-NEXT:    lg %r13, 8(%r6)
@@ -488,8 +490,8 @@ define void @arg4(%Ty4 %A) {
 ;
 ; VECTOR-LABEL: arg4:
 ; VECTOR:       # %bb.0:
+; VECTOR-NEXT:    lb %r0, 167(%r15)
 ; VECTOR-NEXT:    vl %v1, 0(%r6), 3
-; VECTOR-NEXT:    l %r0, 164(%r15)
 ; VECTOR-NEXT:    lgrl %r1, Dst@GOT
 ; VECTOR-NEXT:    stc %r0, 40(%r1)
 ; VECTOR-NEXT:    stg %r5, 16(%r1)
@@ -569,22 +571,22 @@ define %Ty4 @ret4() {
 ; CHECK-NEXT:    lgr %r13, %r2
 ; CHECK-NEXT:    la %r2, 160(%r15)
 ; CHECK-NEXT:    brasl %r14, Fnptr@PLT
+; CHECK-NEXT:    le %f0, 160(%r15)
 ; CHECK-NEXT:    lb %r0, 164(%r15)
 ; CHECK-NEXT:    lh %r1, 166(%r15)
-; CHECK-NEXT:    lg %r2, 192(%r15)
-; CHECK-NEXT:    lg %r3, 184(%r15)
-; CHECK-NEXT:    le %f0, 160(%r15)
-; CHECK-NEXT:    l %r4, 168(%r15)
-; CHECK-NEXT:    lg %r5, 176(%r15)
-; CHECK-NEXT:    lb %r14, 200(%r15)
-; CHECK-NEXT:    ste %f0, 0(%r13)
-; CHECK-NEXT:    st %r4, 8(%r13)
-; CHECK-NEXT:    stg %r5, 16(%r13)
-; CHECK-NEXT:    stc %r14, 40(%r13)
-; CHECK-NEXT:    stg %r3, 24(%r13)
-; CHECK-NEXT:    stg %r2, 32(%r13)
+; CHECK-NEXT:    l %r2, 168(%r15)
+; CHECK-NEXT:    lb %r3, 200(%r15)
+; CHECK-NEXT:    lg %r4, 192(%r15)
+; CHECK-NEXT:    lg %r5, 184(%r15)
+; CHECK-NEXT:    lg %r14, 176(%r15)
+; CHECK-NEXT:    stc %r3, 40(%r13)
+; CHECK-NEXT:    stg %r4, 32(%r13)
+; CHECK-NEXT:    stg %r5, 24(%r13)
+; CHECK-NEXT:    stg %r14, 16(%r13)
+; CHECK-NEXT:    st %r2, 8(%r13)
 ; CHECK-NEXT:    sth %r1, 6(%r13)
 ; CHECK-NEXT:    stc %r0, 4(%r13)
+; CHECK-NEXT:    ste %f0, 0(%r13)
 ; CHECK-NEXT:    lmg %r13, %r15, 312(%r15)
 ; CHECK-NEXT:    br %r14
 ;
@@ -739,22 +741,22 @@ define %Ty5 @ret5() {
 ; CHECK-NEXT:    lgr %r13, %r2
 ; CHECK-NEXT:    la %r2, 160(%r15)
 ; CHECK-NEXT:    brasl %r14, Fnptr@PLT
-; CHECK-NEXT:    lg %r0, 168(%r15)
-; CHECK-NEXT:    lg %r1, 160(%r15)
-; CHECK-NEXT:    lg %r2, 184(%r15)
-; CHECK-NEXT:    lg %r3, 176(%r15)
-; CHECK-NEXT:    lg %r4, 208(%r15)
-; CHECK-NEXT:    lg %r5, 216(%r15)
-; CHECK-NEXT:    lg %r14, 192(%r15)
-; CHECK-NEXT:    lg %r12, 200(%r15)
-; CHECK-NEXT:    stg %r4, 48(%r13)
-; CHECK-NEXT:    stg %r5, 56(%r13)
-; CHECK-NEXT:    stg %r14, 32(%r13)
-; CHECK-NEXT:    stg %r12, 40(%r13)
-; CHECK-NEXT:    stg %r3, 16(%r13)
-; CHECK-NEXT:    stg %r2, 24(%r13)
-; CHECK-NEXT:    stg %r1, 0(%r13)
-; CHECK-NEXT:    stg %r0, 8(%r13)
+; CHECK-NEXT:    lg %r0, 160(%r15)
+; CHECK-NEXT:    lg %r1, 168(%r15)
+; CHECK-NEXT:    lg %r2, 176(%r15)
+; CHECK-NEXT:    lg %r3, 184(%r15)
+; CHECK-NEXT:    lg %r4, 216(%r15)
+; CHECK-NEXT:    lg %r5, 208(%r15)
+; CHECK-NEXT:    lg %r14, 200(%r15)
+; CHECK-NEXT:    lg %r12, 192(%r15)
+; CHECK-NEXT:    stg %r4, 56(%r13)
+; CHECK-NEXT:    stg %r5, 48(%r13)
+; CHECK-NEXT:    stg %r14, 40(%r13)
+; CHECK-NEXT:    stg %r12, 32(%r13)
+; CHECK-NEXT:    stg %r3, 24(%r13)
+; CHECK-NEXT:    stg %r2, 16(%r13)
+; CHECK-NEXT:    stg %r1, 8(%r13)
+; CHECK-NEXT:    stg %r0, 0(%r13)
 ; CHECK-NEXT:    lmg %r12, %r15, 320(%r15)
 ; CHECK-NEXT:    br %r14
 ;
@@ -914,11 +916,13 @@ define %Ty6 @ret6() {
 ; VECTOR-NEXT:    vgbm %v0, 0
 ; VECTOR-NEXT:    vgbm %v1, 0
 ; VECTOR-NEXT:    vleb %v1, 168(%r15), 15
-; VECTOR-NEXT:    vleb %v0, 184(%r15), 15
-; VECTOR-NEXT:    vlrepg %v2, 160(%r15)
-; VECTOR-NEXT:    vlrepg %v3, 176(%r15)
-; VECTOR-NEXT:    vsteg %v3, 16(%r13), 1
-; VECTOR-NEXT:    vsteb %v0, 24(%r13), 15
+; VECTOR-NEXT:    vgbm %v2, 0
+; VECTOR-NEXT:    vleg %v2, 160(%r15), 1
+; VECTOR-NEXT:    vgbm %v3, 0
+; VECTOR-NEXT:    vleb %v3, 184(%r15), 15
+; VECTOR-NEXT:    vleg %v0, 176(%r15), 1
+; VECTOR-NEXT:    vsteg %v0, 16(%r13), 1
+; VECTOR-NEXT:    vsteb %v3, 24(%r13), 15
 ; VECTOR-NEXT:    vsteg %v2, 0(%r13), 1
 ; VECTOR-NEXT:    vsteb %v1, 8(%r13), 15
 ; VECTOR-NEXT:    lmg %r13, %r15, 296(%r15)

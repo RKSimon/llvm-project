@@ -487,7 +487,10 @@ entry:
 define <1 x i1> @whilewr_8_scalarize(ptr %a, ptr %b) {
 ; CHECK-LABEL: whilewr_8_scalarize:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w0, #1 // =0x1
+; CHECK-NEXT:    sub x8, x1, x0
+; CHECK-NEXT:    cmp x8, #1
+; CHECK-NEXT:    ccmp x8, #0, #0, ge
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
 entry:
   %0 = call <1 x i1> @llvm.loop.dependence.war.mask.v1i1(ptr %a, ptr %b, i64 1)
@@ -497,7 +500,12 @@ entry:
 define <1 x i1> @whilewr_16_scalarize(ptr %a, ptr %b) {
 ; CHECK-LABEL: whilewr_16_scalarize:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w0, #1 // =0x1
+; CHECK-NEXT:    sub x8, x1, x0
+; CHECK-NEXT:    add x8, x8, x8, lsr #63
+; CHECK-NEXT:    asr x8, x8, #1
+; CHECK-NEXT:    cmp x8, #1
+; CHECK-NEXT:    ccmp x8, #0, #0, ge
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
 entry:
   %0 = call <1 x i1> @llvm.loop.dependence.war.mask.v1i1(ptr %a, ptr %b, i64 2)
@@ -507,7 +515,13 @@ entry:
 define <1 x i1> @whilewr_32_scalarize(ptr %a, ptr %b) {
 ; CHECK-LABEL: whilewr_32_scalarize:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w0, #1 // =0x1
+; CHECK-NEXT:    subs x8, x1, x0
+; CHECK-NEXT:    add x9, x8, #3
+; CHECK-NEXT:    csel x8, x9, x8, mi
+; CHECK-NEXT:    asr x8, x8, #2
+; CHECK-NEXT:    cmp x8, #1
+; CHECK-NEXT:    ccmp x8, #0, #0, ge
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
 entry:
   %0 = call <1 x i1> @llvm.loop.dependence.war.mask.v1i1(ptr %a, ptr %b, i64 4)
@@ -517,7 +531,13 @@ entry:
 define <1 x i1> @whilewr_64_scalarize(ptr %a, ptr %b) {
 ; CHECK-LABEL: whilewr_64_scalarize:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    mov w0, #1 // =0x1
+; CHECK-NEXT:    subs x8, x1, x0
+; CHECK-NEXT:    add x9, x8, #7
+; CHECK-NEXT:    csel x8, x9, x8, mi
+; CHECK-NEXT:    asr x8, x8, #3
+; CHECK-NEXT:    cmp x8, #1
+; CHECK-NEXT:    ccmp x8, #0, #0, ge
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
 entry:
   %0 = call <1 x i1> @llvm.loop.dependence.war.mask.v1i1(ptr %a, ptr %b, i64 8)

@@ -221,7 +221,7 @@ define <16 x i8> @uniform_masked_load_ptr1_mask_v16i8(ptr addrspace(1) inreg noc
 ; GFX942-NEXT:    v_mov_b32_e32 v16, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v2, 0
-; GFX942-NEXT:    v_mov_b32_e32 v3, 0
+; GFX942-NEXT:    v_mov_b32_e32 v4, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v17, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v5, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v6, 0
@@ -229,7 +229,7 @@ define <16 x i8> @uniform_masked_load_ptr1_mask_v16i8(ptr addrspace(1) inreg noc
 ; GFX942-NEXT:    v_mov_b32_e32 v18, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v9, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v10, 0
-; GFX942-NEXT:    v_mov_b32_e32 v11, 0
+; GFX942-NEXT:    v_mov_b32_e32 v12, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v19, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v13, 0
 ; GFX942-NEXT:    v_mov_b32_e32 v14, 0
@@ -239,23 +239,25 @@ define <16 x i8> @uniform_masked_load_ptr1_mask_v16i8(ptr addrspace(1) inreg noc
 ; GFX942-NEXT:  ; %bb.1: ; %cond.load
 ; GFX942-NEXT:    global_load_dwordx4 v[16:19], v0, s[0:1]
 ; GFX942-NEXT:    s_waitcnt vmcnt(0)
+; GFX942-NEXT:    v_lshrrev_b64 v[12:13], 24, v[18:19]
+; GFX942-NEXT:    v_lshrrev_b64 v[4:5], 24, v[16:17]
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v15, 24, v19
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v14, 16, v19
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v13, 8, v19
-; GFX942-NEXT:    v_lshrrev_b32_e32 v11, 24, v18
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v10, 16, v18
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v9, 8, v18
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v7, 24, v17
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v6, 16, v17
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v5, 8, v17
-; GFX942-NEXT:    v_lshrrev_b32_e32 v3, 24, v16
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v2, 16, v16
 ; GFX942-NEXT:    v_lshrrev_b32_e32 v1, 8, v16
 ; GFX942-NEXT:  .LBB8_2:
 ; GFX942-NEXT:    s_or_b64 exec, exec, s[2:3]
 ; GFX942-NEXT:    v_mov_b32_e32 v0, v16
+; GFX942-NEXT:    v_mov_b32_e32 v3, v4
 ; GFX942-NEXT:    v_mov_b32_e32 v4, v17
 ; GFX942-NEXT:    v_mov_b32_e32 v8, v18
+; GFX942-NEXT:    v_mov_b32_e32 v11, v12
 ; GFX942-NEXT:    v_mov_b32_e32 v12, v19
 ; GFX942-NEXT:    s_setpc_b64 s[30:31]
 entry:

@@ -9,11 +9,12 @@ define i32 @test_urem_odd(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    mov w8, #52429 // =0xcccd
-; CHECK-NEXT:    mov w9, #858993459 // =0x33333333
 ; CHECK-NEXT:    movk w8, #52428, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, w9
-; CHECK-NEXT:    cset w0, ls
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #34
+; CHECK-NEXT:    add w8, w8, w8, lsl #2
+; CHECK-NEXT:    cmp w0, w8
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 5
   %cmp = icmp eq i32 %urem, 0
@@ -24,13 +25,14 @@ define i32 @test_urem_odd(i32 %X) nounwind {
 define i32 @test_urem_odd_25(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_25:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #23593 // =0x5c29
-; CHECK-NEXT:    mov w9, #28836 // =0x70a4
-; CHECK-NEXT:    movk w8, #49807, lsl #16
-; CHECK-NEXT:    movk w9, #2621, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, w9
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    mov w8, #34079 // =0x851f
+; CHECK-NEXT:    mov w9, #25 // =0x19
+; CHECK-NEXT:    movk w8, #20971, lsl #16
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #35
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 25
   %cmp = icmp eq i32 %urem, 0
@@ -42,11 +44,14 @@ define i32 @test_urem_odd_25(i32 %X) nounwind {
 define i32 @test_urem_odd_bit30(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_bit30:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #43691 // =0xaaab
-; CHECK-NEXT:    movk w8, #27306, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, #4
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    mov w8, #-11 // =0xfffffff5
+; CHECK-NEXT:    mov w9, #3 // =0x3
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    movk w9, #16384, lsl #16
+; CHECK-NEXT:    lsr x8, x8, #62
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 1073741827
   %cmp = icmp eq i32 %urem, 0
@@ -58,11 +63,15 @@ define i32 @test_urem_odd_bit30(i32 %X) nounwind {
 define i32 @test_urem_odd_bit31(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_bit31:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #43691 // =0xaaab
-; CHECK-NEXT:    movk w8, #10922, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, #2
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    ubfiz x8, x0, #30, #32
+; CHECK-NEXT:    mov w9, w0
+; CHECK-NEXT:    sub x8, x8, x9
+; CHECK-NEXT:    mov w9, #-2147483645 // =0x80000003
+; CHECK-NEXT:    lsr x8, x8, #61
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 2147483651
   %cmp = icmp eq i32 %urem, 0
@@ -77,14 +86,14 @@ define i32 @test_urem_odd_bit31(i32 %X) nounwind {
 define i16 @test_urem_even(i16 %X) nounwind {
 ; CHECK-LABEL: test_urem_even:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #28087 // =0x6db7
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    and w9, w8, #0xfffc
-; CHECK-NEXT:    lsr w9, w9, #1
-; CHECK-NEXT:    orr w8, w9, w8, lsl #15
-; CHECK-NEXT:    ubfx w8, w8, #1, #15
-; CHECK-NEXT:    cmp w8, #2340
-; CHECK-NEXT:    cset w0, hi
+; CHECK-NEXT:    ubfx w8, w0, #1, #15
+; CHECK-NEXT:    mov w9, #18725 // =0x4925
+; CHECK-NEXT:    mul w8, w8, w9
+; CHECK-NEXT:    mov w9, #14 // =0xe
+; CHECK-NEXT:    lsr w8, w8, #17
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    tst w8, #0xffff
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %urem = urem i16 %X, 14
   %cmp = icmp ne i16 %urem, 0
@@ -95,14 +104,14 @@ define i16 @test_urem_even(i16 %X) nounwind {
 define i32 @test_urem_even_100(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_even_100:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #23593 // =0x5c29
-; CHECK-NEXT:    mov w9, #23593 // =0x5c29
-; CHECK-NEXT:    movk w8, #49807, lsl #16
-; CHECK-NEXT:    movk w9, #655, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    ror w8, w8, #2
-; CHECK-NEXT:    cmp w8, w9
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    mov w8, #34079 // =0x851f
+; CHECK-NEXT:    mov w9, #100 // =0x64
+; CHECK-NEXT:    movk w8, #20971, lsl #16
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #37
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 100
   %cmp = icmp eq i32 %urem, 0
@@ -114,12 +123,14 @@ define i32 @test_urem_even_100(i32 %X) nounwind {
 define i32 @test_urem_even_bit30(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_even_bit30:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #20165 // =0x4ec5
-; CHECK-NEXT:    movk w8, #64748, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    ror w8, w8, #3
-; CHECK-NEXT:    cmp w8, #4
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    mov w8, #-415 // =0xfffffe61
+; CHECK-NEXT:    mov w9, #104 // =0x68
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    movk w9, #16384, lsl #16
+; CHECK-NEXT:    lsr x8, x8, #62
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 1073741928
   %cmp = icmp eq i32 %urem, 0
@@ -131,12 +142,15 @@ define i32 @test_urem_even_bit30(i32 %X) nounwind {
 define i32 @test_urem_even_bit31(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_even_bit31:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #64251 // =0xfafb
-; CHECK-NEXT:    movk w8, #47866, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    ror w8, w8, #1
-; CHECK-NEXT:    cmp w8, #2
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    mov w8, #65435 // =0xff9b
+; CHECK-NEXT:    mov w9, #102 // =0x66
+; CHECK-NEXT:    movk w8, #32767, lsl #16
+; CHECK-NEXT:    movk w9, #32768, lsl #16
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #62
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 2147483750
   %cmp = icmp eq i32 %urem, 0
@@ -153,11 +167,12 @@ define i32 @test_urem_odd_setne(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_odd_setne:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    mov w8, #52429 // =0xcccd
-; CHECK-NEXT:    mov w9, #858993459 // =0x33333333
 ; CHECK-NEXT:    movk w8, #52428, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, w9
-; CHECK-NEXT:    cset w0, hi
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #34
+; CHECK-NEXT:    add w8, w8, w8, lsl #2
+; CHECK-NEXT:    cmp w0, w8
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 5
   %cmp = icmp ne i32 %urem, 0
@@ -169,10 +184,12 @@ define i32 @test_urem_odd_setne(i32 %X) nounwind {
 define i32 @test_urem_negative_odd(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_negative_odd:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #858993459 // =0x33333333
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    cmp w8, #1
-; CHECK-NEXT:    cset w0, hi
+; CHECK-NEXT:    mov w8, #-2147483645 // =0x80000003
+; CHECK-NEXT:    umull x8, w0, w8
+; CHECK-NEXT:    lsr x8, x8, #63
+; CHECK-NEXT:    orr w8, w8, w8, lsl #2
+; CHECK-NEXT:    cmn w0, w8
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, -5
   %cmp = icmp ne i32 %urem, 0
@@ -182,12 +199,13 @@ define i32 @test_urem_negative_odd(i32 %X) nounwind {
 define i32 @test_urem_negative_even(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_negative_even:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w8, #37449 // =0x9249
-; CHECK-NEXT:    movk w8, #51492, lsl #16
-; CHECK-NEXT:    mul w8, w0, w8
-; CHECK-NEXT:    ror w8, w8, #1
-; CHECK-NEXT:    cmp w8, #1
-; CHECK-NEXT:    cset w0, hi
+; CHECK-NEXT:    lsr w8, w0, #1
+; CHECK-NEXT:    mov w9, #-14 // =0xfffffff2
+; CHECK-NEXT:    add x8, x8, x8, lsl #28
+; CHECK-NEXT:    lsr x8, x8, #59
+; CHECK-NEXT:    msub w8, w8, w9, w0
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, -14
   %cmp = icmp ne i32 %urem, 0
@@ -241,9 +259,10 @@ define i32 @test_urem_int_min(i32 %X) nounwind {
 define i32 @test_urem_allones(i32 %X) nounwind {
 ; CHECK-LABEL: test_urem_allones:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    neg w8, w0
-; CHECK-NEXT:    cmp w8, #2
-; CHECK-NEXT:    cset w0, lo
+; CHECK-NEXT:    cmn w0, #1
+; CHECK-NEXT:    csel w8, wzr, w0, eq
+; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %urem = urem i32 %X, 4294967295
   %cmp = icmp eq i32 %urem, 0

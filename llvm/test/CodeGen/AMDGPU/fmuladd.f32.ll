@@ -1250,7 +1250,7 @@ define amdgpu_kernel void @fmuladd_neg_2.0_neg_a_b_f32(ptr addrspace(1) %out, pt
 ; SI-DENORM-SLOWFMA-NEXT:    buffer_load_dword v3, v[0:1], s[0:3], 0 addr64 offset:4 glc
 ; SI-DENORM-SLOWFMA-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v2, v2
-; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v3, v2
+; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v2, v3
 ; SI-DENORM-SLOWFMA-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-SLOWFMA-NEXT:    s_endpgm
 ;
@@ -1346,8 +1346,9 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f32(ptr addrspace(1) %out, ptr ad
 ; SI-FLUSH-NEXT:    s_waitcnt vmcnt(0)
 ; SI-FLUSH-NEXT:    buffer_load_dword v3, v[0:1], s[0:3], 0 addr64 offset:4 glc
 ; SI-FLUSH-NEXT:    s_waitcnt vmcnt(0)
-; SI-FLUSH-NEXT:    v_mac_f32_e32 v3, -2.0, v2
-; SI-FLUSH-NEXT:    buffer_store_dword v3, v[0:1], s[0:3], 0 addr64
+; SI-FLUSH-NEXT:    v_sub_f32_e64 v2, -v2, v2
+; SI-FLUSH-NEXT:    v_add_f32_e32 v2, v2, v3
+; SI-FLUSH-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-FLUSH-NEXT:    s_endpgm
 ;
 ; SI-DENORM-FASTFMA-LABEL: fmuladd_2.0_neg_a_b_f32:
@@ -1378,8 +1379,8 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f32(ptr addrspace(1) %out, ptr ad
 ; SI-DENORM-SLOWFMA-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-SLOWFMA-NEXT:    buffer_load_dword v3, v[0:1], s[0:3], 0 addr64 offset:4 glc
 ; SI-DENORM-SLOWFMA-NEXT:    s_waitcnt vmcnt(0)
-; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v2, v2
-; SI-DENORM-SLOWFMA-NEXT:    v_sub_f32_e32 v2, v3, v2
+; SI-DENORM-SLOWFMA-NEXT:    v_sub_f32_e64 v2, -v2, v2
+; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v2, v3
 ; SI-DENORM-SLOWFMA-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-SLOWFMA-NEXT:    s_endpgm
 ;
@@ -1392,8 +1393,9 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f32(ptr addrspace(1) %out, ptr ad
 ; GFX9-FLUSH-MAD-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-FLUSH-MAD-NEXT:    global_load_dword v2, v0, s[0:1] offset:4 glc
 ; GFX9-FLUSH-MAD-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-FLUSH-MAD-NEXT:    v_mac_f32_e32 v2, -2.0, v1
-; GFX9-FLUSH-MAD-NEXT:    global_store_dword v0, v2, s[0:1]
+; GFX9-FLUSH-MAD-NEXT:    v_sub_f32_e64 v1, -v1, v1
+; GFX9-FLUSH-MAD-NEXT:    v_add_f32_e32 v1, v1, v2
+; GFX9-FLUSH-MAD-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GFX9-FLUSH-MAD-NEXT:    s_endpgm
 ;
 ; GFX9-DENORM-FASTFMA-MAD-LABEL: fmuladd_2.0_neg_a_b_f32:
@@ -2262,7 +2264,7 @@ define amdgpu_kernel void @neg_neg_mad_f32(ptr addrspace(1) noalias nocapture %o
 ; SI-DENORM-FASTFMA-STRICT-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-FASTFMA-STRICT-NEXT:    s_mov_b64 s[2:3], s[6:7]
 ; SI-DENORM-FASTFMA-STRICT-NEXT:    v_mul_f32_e32 v2, v2, v3
-; SI-DENORM-FASTFMA-STRICT-NEXT:    v_add_f32_e32 v2, v4, v2
+; SI-DENORM-FASTFMA-STRICT-NEXT:    v_add_f32_e32 v2, v2, v4
 ; SI-DENORM-FASTFMA-STRICT-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-FASTFMA-STRICT-NEXT:    s_endpgm
 ;
@@ -2283,7 +2285,7 @@ define amdgpu_kernel void @neg_neg_mad_f32(ptr addrspace(1) noalias nocapture %o
 ; SI-DENORM-SLOWFMA-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-SLOWFMA-NEXT:    s_mov_b64 s[2:3], s[6:7]
 ; SI-DENORM-SLOWFMA-NEXT:    v_mul_f32_e32 v2, v2, v3
-; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v4, v2
+; SI-DENORM-SLOWFMA-NEXT:    v_add_f32_e32 v2, v2, v4
 ; SI-DENORM-SLOWFMA-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-SLOWFMA-NEXT:    s_endpgm
 ;
@@ -2334,7 +2336,7 @@ define amdgpu_kernel void @neg_neg_mad_f32(ptr addrspace(1) noalias nocapture %o
 ; GFX9-DENORM-NEXT:    global_load_dword v3, v0, s[2:3] offset:8 glc
 ; GFX9-DENORM-NEXT:    s_waitcnt vmcnt(0)
 ; GFX9-DENORM-NEXT:    v_mul_f32_e32 v1, v1, v2
-; GFX9-DENORM-NEXT:    v_add_f32_e32 v1, v3, v1
+; GFX9-DENORM-NEXT:    v_add_f32_e32 v1, v1, v3
 ; GFX9-DENORM-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GFX9-DENORM-NEXT:    s_endpgm
 ;
@@ -2365,7 +2367,7 @@ define amdgpu_kernel void @neg_neg_mad_f32(ptr addrspace(1) noalias nocapture %o
 ; GFX10-DENORM-NEXT:    global_load_dword v3, v0, s[2:3] offset:8 glc dlc
 ; GFX10-DENORM-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-DENORM-NEXT:    v_mul_f32_e32 v1, v1, v2
-; GFX10-DENORM-NEXT:    v_add_f32_e32 v1, v3, v1
+; GFX10-DENORM-NEXT:    v_add_f32_e32 v1, v1, v3
 ; GFX10-DENORM-NEXT:    global_store_dword v0, v1, s[0:1]
 ; GFX10-DENORM-NEXT:    s_endpgm
   %tid = tail call i32 @llvm.amdgcn.workitem.id.x() #0
