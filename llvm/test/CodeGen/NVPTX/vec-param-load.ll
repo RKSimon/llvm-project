@@ -10,14 +10,14 @@ define <16 x float> @test_v16f32(<16 x float> %a) {
 ; CHECK-NEXT:    .reg .b64 %rd<9>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.v2.b64 {%rd1, %rd2}, [test_v16f32_param_0];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd3, %rd4}, [test_v16f32_param_0+16];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd5, %rd6}, [test_v16f32_param_0+32];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd7, %rd8}, [test_v16f32_param_0+48];
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd7, %rd8};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd5, %rd6};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd3, %rd4};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0], {%rd1, %rd2};
+; CHECK-NEXT:    ld.param.v2.b64 {%rd1, %rd2}, [test_v16f32_param_0+48];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd3, %rd4}, [test_v16f32_param_0+32];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd5, %rd6}, [test_v16f32_param_0];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd7, %rd8}, [test_v16f32_param_0+16];
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd7, %rd8};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0], {%rd5, %rd6};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd3, %rd4};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd1, %rd2};
 ; CHECK-NEXT:    ret;
   ret <16 x float> %a
 }
@@ -82,14 +82,14 @@ define <8 x i64> @test_v8i64(<8 x i64> %a) {
 ; CHECK-NEXT:    .reg .b64 %rd<9>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.v2.b64 {%rd1, %rd2}, [test_v8i64_param_0];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd3, %rd4}, [test_v8i64_param_0+16];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd5, %rd6}, [test_v8i64_param_0+32];
-; CHECK-NEXT:    ld.param.v2.b64 {%rd7, %rd8}, [test_v8i64_param_0+48];
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd7, %rd8};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd5, %rd6};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd3, %rd4};
-; CHECK-NEXT:    st.param.v2.b64 [func_retval0], {%rd1, %rd2};
+; CHECK-NEXT:    ld.param.v2.b64 {%rd1, %rd2}, [test_v8i64_param_0+48];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd3, %rd4}, [test_v8i64_param_0+32];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd5, %rd6}, [test_v8i64_param_0];
+; CHECK-NEXT:    ld.param.v2.b64 {%rd7, %rd8}, [test_v8i64_param_0+16];
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+16], {%rd7, %rd8};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0], {%rd5, %rd6};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+32], {%rd3, %rd4};
+; CHECK-NEXT:    st.param.v2.b64 [func_retval0+48], {%rd1, %rd2};
 ; CHECK-NEXT:    ret;
   ret <8 x i64> %a
 }

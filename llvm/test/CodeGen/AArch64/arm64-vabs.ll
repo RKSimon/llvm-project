@@ -269,9 +269,20 @@ define i16 @uabd16b_rdx(ptr %a, ptr %b) {
 define i32 @uabd16b_rdx_i32(<16 x i8> %a, <16 x i8> %b) {
 ; CHECK-SD-LABEL: uabd16b_rdx_i32:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    uabdl.8h v2, v0, v1
-; CHECK-SD-NEXT:    uabal2.8h v2, v0, v1
-; CHECK-SD-NEXT:    uaddlv.8h s0, v2
+; CHECK-SD-NEXT:    usubl2.8h v2, v0, v1
+; CHECK-SD-NEXT:    usubl.8h v0, v0, v1
+; CHECK-SD-NEXT:    sshll.4s v1, v2, #0
+; CHECK-SD-NEXT:    sshll2.4s v3, v0, #0
+; CHECK-SD-NEXT:    sshll2.4s v2, v2, #0
+; CHECK-SD-NEXT:    sshll.4s v0, v0, #0
+; CHECK-SD-NEXT:    abs.4s v1, v1
+; CHECK-SD-NEXT:    abs.4s v2, v2
+; CHECK-SD-NEXT:    abs.4s v3, v3
+; CHECK-SD-NEXT:    abs.4s v0, v0
+; CHECK-SD-NEXT:    add.4s v2, v3, v2
+; CHECK-SD-NEXT:    add.4s v0, v0, v1
+; CHECK-SD-NEXT:    add.4s v0, v0, v2
+; CHECK-SD-NEXT:    addv.4s s0, v0
 ; CHECK-SD-NEXT:    fmov w0, s0
 ; CHECK-SD-NEXT:    ret
 ;
@@ -317,9 +328,20 @@ define i32 @uabd16b_rdx_i32(<16 x i8> %a, <16 x i8> %b) {
 define i32 @sabd16b_rdx_i32(<16 x i8> %a, <16 x i8> %b) {
 ; CHECK-SD-LABEL: sabd16b_rdx_i32:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    sabdl.8h v2, v0, v1
-; CHECK-SD-NEXT:    sabal2.8h v2, v0, v1
-; CHECK-SD-NEXT:    uaddlv.8h s0, v2
+; CHECK-SD-NEXT:    ssubl2.8h v2, v0, v1
+; CHECK-SD-NEXT:    ssubl.8h v0, v0, v1
+; CHECK-SD-NEXT:    sshll.4s v1, v2, #0
+; CHECK-SD-NEXT:    sshll2.4s v3, v0, #0
+; CHECK-SD-NEXT:    sshll2.4s v2, v2, #0
+; CHECK-SD-NEXT:    sshll.4s v0, v0, #0
+; CHECK-SD-NEXT:    abs.4s v1, v1
+; CHECK-SD-NEXT:    abs.4s v2, v2
+; CHECK-SD-NEXT:    abs.4s v3, v3
+; CHECK-SD-NEXT:    abs.4s v0, v0
+; CHECK-SD-NEXT:    add.4s v2, v3, v2
+; CHECK-SD-NEXT:    add.4s v0, v0, v1
+; CHECK-SD-NEXT:    add.4s v0, v0, v2
+; CHECK-SD-NEXT:    addv.4s s0, v0
 ; CHECK-SD-NEXT:    fmov w0, s0
 ; CHECK-SD-NEXT:    ret
 ;

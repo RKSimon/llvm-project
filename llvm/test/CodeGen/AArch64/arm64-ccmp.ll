@@ -632,8 +632,7 @@ define i64 @select_noccmp2(i64 %v1, i64 %v2, i64 %v3, i64 %r) {
 ; CHECK-SD-NEXT:    cmp x0, #0
 ; CHECK-SD-NEXT:    ccmp x0, #13, #0, ge
 ; CHECK-SD-NEXT:    cset w8, gt
-; CHECK-SD-NEXT:    cmp w8, #0
-; CHECK-SD-NEXT:    csel x0, xzr, x3, ne
+; CHECK-SD-NEXT:    csel x0, xzr, x3, gt
 ; CHECK-SD-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-SD-NEXT:    adrp x9, _g@PAGE
 ; CHECK-SD-NEXT:    str w8, [x9, _g@PAGEOFF]

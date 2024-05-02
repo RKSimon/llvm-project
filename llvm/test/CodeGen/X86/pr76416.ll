@@ -39,8 +39,7 @@ define dso_local void @pr76416() {
 ; CHECK-NEXT:    movslq -{{[0-9]+}}(%rsp), %rsi
 ; CHECK-NEXT:    movzbl (%rdx,%rsi), %edx
 ; CHECK-NEXT:    movb %dl, (%rcx)
-; CHECK-NEXT:    leal 1(%rsi), %edx
-; CHECK-NEXT:    movl %edx, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    incl -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    jmp .LBB0_4
 entry:
   %alloca = alloca i32, align 4

@@ -139,83 +139,26 @@ define <8 x half> @fmaxnm_v8f16(<8 x half> %op1, <8 x half> %op2) {
 define void @fmaxnm_v16f16(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmaxnm_v16f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmaxnm z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmaxnm z1.h, p0/m, z1.h, z3.h
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmaxnm_v16f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
 ; NONEON-NOSVE-NEXT:    ldr h1, [sp, #12]
 ; NONEON-NOSVE-NEXT:    fcvt s1, h1
@@ -266,10 +209,66 @@ define void @fmaxnm_v16f16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
 ; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fcvt h0, s0
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
@@ -343,36 +342,23 @@ define <4 x float> @fmaxnm_v4f32(<4 x float> %op1, <4 x float> %op2) {
 define void @fmaxnm_v8f32(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmaxnm_v8f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmaxnm z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmaxnm z1.s, p0/m, z1.s, z3.s
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmaxnm_v8f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #28]
 ; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #24]
@@ -383,9 +369,21 @@ define void @fmaxnm_v8f32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
 ; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fmaxnm s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmaxnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
@@ -444,37 +442,36 @@ define <2 x double> @fmaxnm_v2f64(<2 x double> %op1, <2 x double> %op2) {
 define void @fmaxnm_v4f64(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmaxnm_v4f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmaxnm z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmaxnm z1.d, p0/m, z1.d, z3.d
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmaxnm_v4f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmaxnm d3, d2, d0
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmaxnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp]
-; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #24]
 ; NONEON-NOSVE-NEXT:    fmaxnm d3, d2, d0
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmaxnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
 ; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmaxnm d3, d2, d0
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmaxnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
@@ -618,83 +615,26 @@ define <8 x half> @fminnm_v8f16(<8 x half> %op1, <8 x half> %op2) {
 define void @fminnm_v16f16(ptr %a, ptr %b) {
 ; CHECK-LABEL: fminnm_v16f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fminnm z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fminnm z1.h, p0/m, z1.h, z3.h
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fminnm_v16f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
 ; NONEON-NOSVE-NEXT:    ldr h1, [sp, #12]
 ; NONEON-NOSVE-NEXT:    fcvt s1, h1
@@ -745,10 +685,66 @@ define void @fminnm_v16f16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
 ; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fcvt h0, s0
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
@@ -822,36 +818,23 @@ define <4 x float> @fminnm_v4f32(<4 x float> %op1, <4 x float> %op2) {
 define void @fminnm_v8f32(ptr %a, ptr %b) {
 ; CHECK-LABEL: fminnm_v8f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fminnm z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fminnm z1.s, p0/m, z1.s, z3.s
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fminnm_v8f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #28]
 ; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #24]
@@ -862,9 +845,21 @@ define void @fminnm_v8f32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
 ; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fminnm s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fminnm s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
@@ -923,37 +918,36 @@ define <2 x double> @fminnm_v2f64(<2 x double> %op1, <2 x double> %op2) {
 define void @fminnm_v4f64(ptr %a, ptr %b) {
 ; CHECK-LABEL: fminnm_v4f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fminnm z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fminnm z1.d, p0/m, z1.d, z3.d
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fminnm_v4f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fminnm d3, d2, d0
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fminnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp]
-; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #24]
 ; NONEON-NOSVE-NEXT:    fminnm d3, d2, d0
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fminnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
 ; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fminnm d3, d2, d0
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fminnm d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
@@ -1097,83 +1091,26 @@ define <8 x half> @fmax_v8f16(<8 x half> %op1, <8 x half> %op2) {
 define void @fmax_v16f16(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmax_v16f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmax z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmax z1.h, p0/m, z1.h, z3.h
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmax_v16f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
 ; NONEON-NOSVE-NEXT:    ldr h1, [sp, #12]
 ; NONEON-NOSVE-NEXT:    fcvt s1, h1
@@ -1224,10 +1161,66 @@ define void @fmax_v16f16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
 ; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fcvt h0, s0
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
@@ -1301,36 +1294,23 @@ define <4 x float> @fmax_v4f32(<4 x float> %op1, <4 x float> %op2) {
 define void @fmax_v8f32(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmax_v8f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmax z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmax z1.s, p0/m, z1.s, z3.s
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmax_v8f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #28]
 ; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #24]
@@ -1341,9 +1321,21 @@ define void @fmax_v8f32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
 ; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fmax s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmax s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
@@ -1402,37 +1394,36 @@ define <2 x double> @fmax_v2f64(<2 x double> %op1, <2 x double> %op2) {
 define void @fmax_v4f64(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmax_v4f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmax z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmax z1.d, p0/m, z1.d, z3.d
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmax_v4f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmax d3, d2, d0
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmax d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp]
-; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #24]
 ; NONEON-NOSVE-NEXT:    fmax d3, d2, d0
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmax d0, d1, d0
+; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
 ; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmax d3, d2, d0
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmax d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a
@@ -1576,83 +1567,26 @@ define <8 x half> @fmin_v8f16(<8 x half> %op1, <8 x half> %op2) {
 define void @fmin_v16f16(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmin_v16f16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmin z0.h, p0/m, z0.h, z1.h
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmin z1.h, p0/m, z1.h, z3.h
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmin_v16f16:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
-; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fcvt s0, h0
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
-; NONEON-NOSVE-NEXT:    fcvt s1, h1
-; NONEON-NOSVE-NEXT:    fcvt h0, s0
-; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #30]
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #14]
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
 ; NONEON-NOSVE-NEXT:    ldr h1, [sp, #12]
 ; NONEON-NOSVE-NEXT:    fcvt s1, h1
@@ -1703,10 +1637,66 @@ define void @fmin_v16f16(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    ldr h0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fcvt s0, h0
 ; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #46]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
 ; NONEON-NOSVE-NEXT:    fcvt h0, s0
 ; NONEON-NOSVE-NEXT:    str h0, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #62]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #44]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #94]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #42]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #92]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #58]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #40]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #90]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #38]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #54]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #36]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #86]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #34]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #84]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #50]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldr h1, [sp, #32]
+; NONEON-NOSVE-NEXT:    fcvt s1, h1
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #82]
+; NONEON-NOSVE-NEXT:    ldr h0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fcvt s0, h0
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    fcvt h0, s0
+; NONEON-NOSVE-NEXT:    str h0, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <16 x half>, ptr %a
@@ -1780,36 +1770,23 @@ define <4 x float> @fmin_v4f32(<4 x float> %op1, <4 x float> %op2) {
 define void @fmin_v8f32(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmin_v8f32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmin z0.s, p0/m, z0.s, z1.s
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmin z1.s, p0/m, z1.s, z3.s
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmin_v8f32:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
-; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
-; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
-; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
-; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #8]
-; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #28]
 ; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #24]
@@ -1820,9 +1797,21 @@ define void @fmin_v8f32(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
 ; NONEON-NOSVE-NEXT:    ldr s0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #40]
 ; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #60]
+; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    ldp s1, s2, [sp, #32]
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #88]
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #52]
+; NONEON-NOSVE-NEXT:    fmin s3, s2, s0
+; NONEON-NOSVE-NEXT:    ldr s0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmin s0, s1, s0
+; NONEON-NOSVE-NEXT:    stp s0, s3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <8 x float>, ptr %a
@@ -1881,37 +1870,36 @@ define <2 x double> @fmin_v2f64(<2 x double> %op1, <2 x double> %op2) {
 define void @fmin_v4f64(ptr %a, ptr %b) {
 ; CHECK-LABEL: fmin_v4f64:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q3, q0, [x1]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q1, q2, [x0]
+; CHECK-NEXT:    ldp q2, q1, [x0]
 ; CHECK-NEXT:    fmin z0.d, p0/m, z0.d, z1.d
 ; CHECK-NEXT:    movprfx z1, z2
 ; CHECK-NEXT:    fmin z1.d, p0/m, z1.d, z3.d
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: fmin_v4f64:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #96
+; NONEON-NOSVE-NEXT:    ldp q0, q3, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q2, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #-96]!
 ; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 96
-; NONEON-NOSVE-NEXT:    ldp q3, q0, [x1]
-; NONEON-NOSVE-NEXT:    ldp q2, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q2, q3, [sp]
-; NONEON-NOSVE-NEXT:    stp q1, q0, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
-; NONEON-NOSVE-NEXT:    fmin d3, d2, d0
-; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
-; NONEON-NOSVE-NEXT:    fmin d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp q2, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp]
-; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #24]
 ; NONEON-NOSVE-NEXT:    fmin d3, d2, d0
 ; NONEON-NOSVE-NEXT:    ldr d0, [sp, #16]
 ; NONEON-NOSVE-NEXT:    fmin d0, d1, d0
+; NONEON-NOSVE-NEXT:    ldp d1, d2, [sp, #32]
 ; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #64]
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [sp, #64]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x0]
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #56]
+; NONEON-NOSVE-NEXT:    fmin d3, d2, d0
+; NONEON-NOSVE-NEXT:    ldr d0, [sp, #48]
+; NONEON-NOSVE-NEXT:    fmin d0, d1, d0
+; NONEON-NOSVE-NEXT:    stp d0, d3, [sp, #80]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [sp, #64]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x0]
 ; NONEON-NOSVE-NEXT:    add sp, sp, #96
 ; NONEON-NOSVE-NEXT:    ret
   %op1 = load <4 x double>, ptr %a

@@ -366,19 +366,19 @@ define void @canonicalize_ptr_v4f32(ptr %out) {
 define void @canonicalize_ptr_v4f64(ptr %out) {
 ; Z16-LABEL: canonicalize_ptr_v4f64:
 ; Z16:       # %bb.0:
-; Z16-NEXT:    vl %v1, 16(%r2), 4
+; Z16-NEXT:    vl %v1, 0(%r2), 4
 ; Z16-NEXT:    vgmg %v2, 2, 11
 ; Z16-NEXT:    wfmdb %f3, %f1, %f2
 ; Z16-NEXT:    vrepg %v1, %v1, 1
 ; Z16-NEXT:    mdbr %f1, %f2
-; Z16-NEXT:    vl %v0, 0(%r2), 4
+; Z16-NEXT:    vl %v0, 16(%r2), 4
 ; Z16-NEXT:    vmrhg %v1, %v3, %v1
 ; Z16-NEXT:    wfmdb %f3, %f0, %f2
 ; Z16-NEXT:    vrepg %v0, %v0, 1
 ; Z16-NEXT:    mdbr %f0, %f2
 ; Z16-NEXT:    vmrhg %v0, %v3, %v0
-; Z16-NEXT:    vst %v0, 0(%r2), 4
-; Z16-NEXT:    vst %v1, 16(%r2), 4
+; Z16-NEXT:    vst %v0, 16(%r2), 4
+; Z16-NEXT:    vst %v1, 0(%r2), 4
 ; Z16-NEXT:    br %r14
   %val = load <4 x double>, ptr %out
   %canonicalized = call <4 x double> @llvm.canonicalize.v4f64(<4 x double> %val)

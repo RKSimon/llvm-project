@@ -432,10 +432,11 @@ define i1 @bcmp89(ptr %a, ptr %b) {
 define i1 @bcmp_zext(i32 %0, i32 %1, i8 %2, i8 %3) {
 ; CHECK-LABEL: bcmp_zext:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w2, #0xff
-; CHECK-NEXT:    and w9, w3, #0xff
-; CHECK-NEXT:    cmp w1, w0
-; CHECK-NEXT:    ccmp w9, w8, #0, eq
+; CHECK-NEXT:    eor w8, w3, w2
+; CHECK-NEXT:    eor w9, w1, w0
+; CHECK-NEXT:    and w8, w8, #0xff
+; CHECK-NEXT:    orr w8, w9, w8
+; CHECK-NEXT:    cmp w8, #0
 ; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %5 = xor i32 %1, %0
@@ -449,14 +450,12 @@ define i1 @bcmp_zext(i32 %0, i32 %1, i8 %2, i8 %3) {
 define i1 @bcmp_i8(i8 %a0, i8 %b0, i8 %a1, i8 %b1, i8 %a2, i8 %b2) {
 ; CHECK-LABEL: bcmp_i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w1, #0xff
-; CHECK-NEXT:    and w9, w2, #0xff
-; CHECK-NEXT:    and w10, w3, #0xff
-; CHECK-NEXT:    cmp w8, w0, uxtb
-; CHECK-NEXT:    and w8, w4, #0xff
-; CHECK-NEXT:    and w11, w5, #0xff
-; CHECK-NEXT:    ccmp w10, w9, #0, eq
-; CHECK-NEXT:    ccmp w11, w8, #0, eq
+; CHECK-NEXT:    eor w8, w1, w0
+; CHECK-NEXT:    eor w9, w3, w2
+; CHECK-NEXT:    eor w10, w5, w4
+; CHECK-NEXT:    orr w8, w8, w9
+; CHECK-NEXT:    orr w8, w8, w10
+; CHECK-NEXT:    tst w8, #0xff
 ; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %xor0 = xor i8 %b0, %a0
@@ -471,14 +470,12 @@ define i1 @bcmp_i8(i8 %a0, i8 %b0, i8 %a1, i8 %b1, i8 %a2, i8 %b2) {
 define i1 @bcmp_i16(i16 %a0, i16 %b0, i16 %a1, i16 %b1, i16 %a2, i16 %b2) {
 ; CHECK-LABEL: bcmp_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and w8, w1, #0xffff
-; CHECK-NEXT:    and w9, w2, #0xffff
-; CHECK-NEXT:    and w10, w3, #0xffff
-; CHECK-NEXT:    cmp w8, w0, uxth
-; CHECK-NEXT:    and w8, w4, #0xffff
-; CHECK-NEXT:    and w11, w5, #0xffff
-; CHECK-NEXT:    ccmp w10, w9, #0, eq
-; CHECK-NEXT:    ccmp w11, w8, #0, eq
+; CHECK-NEXT:    eor w8, w1, w0
+; CHECK-NEXT:    eor w9, w3, w2
+; CHECK-NEXT:    eor w10, w5, w4
+; CHECK-NEXT:    orr w8, w8, w9
+; CHECK-NEXT:    orr w8, w8, w10
+; CHECK-NEXT:    tst w8, #0xffff
 ; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %xor0 = xor i16 %b0, %a0
@@ -494,16 +491,17 @@ define i1 @bcmp_i128(i128 %a0, i128 %b0, i128 %a1, i128 %b1, i128 %a2, i128 %b2)
 ; CHECK-LABEL: bcmp_i128:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    cmp x2, x0
-; CHECK-NEXT:    ldp x10, x8, [sp, #8]
+; CHECK-NEXT:    ldp x11, x8, [sp, #8]
 ; CHECK-NEXT:    ccmp x3, x1, #0, eq
-; CHECK-NEXT:    ldr x9, [sp]
-; CHECK-NEXT:    ldr x11, [sp, #24]
-; CHECK-NEXT:    ccmp x6, x4, #0, eq
+; CHECK-NEXT:    ldr x10, [sp]
+; CHECK-NEXT:    ldr x12, [sp, #24]
+; CHECK-NEXT:    cset w9, ne
+; CHECK-NEXT:    cmp x6, x4
 ; CHECK-NEXT:    ccmp x7, x5, #0, eq
-; CHECK-NEXT:    cset w12, ne
-; CHECK-NEXT:    cmp x8, x9
-; CHECK-NEXT:    ccmp x11, x10, #0, eq
-; CHECK-NEXT:    csinc w0, w12, wzr, eq
+; CHECK-NEXT:    csinc w9, w9, wzr, eq
+; CHECK-NEXT:    cmp x8, x10
+; CHECK-NEXT:    ccmp x12, x11, #0, eq
+; CHECK-NEXT:    csinc w0, w9, wzr, eq
 ; CHECK-NEXT:    ret
   %xor0 = xor i128 %b0, %a0
   %xor1 = xor i128 %b1, %a1
@@ -517,15 +515,12 @@ define i1 @bcmp_i128(i128 %a0, i128 %b0, i128 %a1, i128 %b1, i128 %a2, i128 %b2)
 define i1 @bcmp_i42(i42 %a0, i42 %b0, i42 %a1, i42 %b1, i42 %a2, i42 %b2) {
 ; CHECK-LABEL: bcmp_i42:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    and x8, x0, #0x3ffffffffff
-; CHECK-NEXT:    and x9, x1, #0x3ffffffffff
-; CHECK-NEXT:    and x10, x2, #0x3ffffffffff
-; CHECK-NEXT:    and x11, x3, #0x3ffffffffff
-; CHECK-NEXT:    cmp x9, x8
-; CHECK-NEXT:    and x8, x4, #0x3ffffffffff
-; CHECK-NEXT:    and x9, x5, #0x3ffffffffff
-; CHECK-NEXT:    ccmp x11, x10, #0, eq
-; CHECK-NEXT:    ccmp x9, x8, #0, eq
+; CHECK-NEXT:    eor x8, x1, x0
+; CHECK-NEXT:    eor x9, x3, x2
+; CHECK-NEXT:    eor x10, x5, x4
+; CHECK-NEXT:    orr x8, x8, x9
+; CHECK-NEXT:    orr x8, x8, x10
+; CHECK-NEXT:    tst x8, #0x3ffffffffff
 ; CHECK-NEXT:    cset w0, ne
 ; CHECK-NEXT:    ret
   %xor0 = xor i42 %b0, %a0

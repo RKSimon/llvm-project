@@ -1239,7 +1239,7 @@ define i1 @pr134525() nounwind {
 ; RV32I-NEXT:    addi a2, a2, 1
 ; RV32I-NEXT:    sltu a2, a1, a2
 ; RV32I-NEXT:    sltu a0, a1, a0
-; RV32I-NEXT:    not a0, a0
+; RV32I-NEXT:    addi a0, a0, -1
 ; RV32I-NEXT:    and a0, a0, a2
 ; RV32I-NEXT:    ret
 ;
@@ -1254,7 +1254,7 @@ define i1 @pr134525() nounwind {
 ; RV32I-MEDIUM-NEXT:    add a1, a0, a1
 ; RV32I-MEDIUM-NEXT:    sltu a2, a1, a2
 ; RV32I-MEDIUM-NEXT:    sltu a0, a1, a0
-; RV32I-MEDIUM-NEXT:    not a0, a0
+; RV32I-MEDIUM-NEXT:    addi a0, a0, -1
 ; RV32I-MEDIUM-NEXT:    and a0, a0, a2
 ; RV32I-MEDIUM-NEXT:    ret
 ;

@@ -756,10 +756,10 @@ define signext i32 @mixed_4(ptr byval(%struct.foo) align 16 %foo, i32 %sec) #0 {
 ; 32BIT-NEXT:    lfd 0, 44(1)
 ; 32BIT-NEXT:    addi 3, 1, -4
 ; 32BIT-NEXT:    xscvdpsxws 0, 0
-; 32BIT-NEXT:    stw 5, 32(1)
-; 32BIT-NEXT:    stw 6, 36(1)
-; 32BIT-NEXT:    stw 7, 40(1)
 ; 32BIT-NEXT:    stw 10, 52(1)
+; 32BIT-NEXT:    stw 7, 40(1)
+; 32BIT-NEXT:    stw 6, 36(1)
+; 32BIT-NEXT:    stw 5, 32(1)
 ; 32BIT-NEXT:    stfiwx 0, 0, 3
 ; 32BIT-NEXT:    lwz 3, -4(1)
 ; 32BIT-NEXT:    lwz 4, 76(1)
@@ -774,10 +774,10 @@ define signext i32 @mixed_4(ptr byval(%struct.foo) align 16 %foo, i32 %sec) #0 {
 ; 64BIT-NEXT:    lfd 0, 60(1)
 ; 64BIT-NEXT:    addi 4, 1, -4
 ; 64BIT-NEXT:    xscvdpsxws 0, 0
-; 64BIT-NEXT:    std 3, 48(1)
-; 64BIT-NEXT:    std 6, 72(1)
-; 64BIT-NEXT:    std 7, 80(1)
 ; 64BIT-NEXT:    std 8, 88(1)
+; 64BIT-NEXT:    std 7, 80(1)
+; 64BIT-NEXT:    std 6, 72(1)
+; 64BIT-NEXT:    std 3, 48(1)
 ; 64BIT-NEXT:    std 9, 96(1)
 ; 64BIT-NEXT:    rldicl 3, 3, 32, 32
 ; 64BIT-NEXT:    stfiwx 0, 0, 4
@@ -806,13 +806,13 @@ define void @mixed_5(ptr byref(%struct.bar) align 16 %r, ptr byval(%struct.bar) 
 ; 32BIT-NEXT:    mflr 0
 ; 32BIT-NEXT:    stwu 1, -64(1)
 ; 32BIT-NEXT:    stw 0, 72(1)
-; 32BIT-NEXT:    stw 5, 96(1)
-; 32BIT-NEXT:    lfd 1, 172(1)
-; 32BIT-NEXT:    stw 6, 100(1)
-; 32BIT-NEXT:    stw 7, 104(1)
-; 32BIT-NEXT:    stw 8, 108(1)
-; 32BIT-NEXT:    stw 9, 112(1)
 ; 32BIT-NEXT:    stw 10, 116(1)
+; 32BIT-NEXT:    lfd 1, 172(1)
+; 32BIT-NEXT:    stw 9, 112(1)
+; 32BIT-NEXT:    stw 8, 108(1)
+; 32BIT-NEXT:    stw 7, 104(1)
+; 32BIT-NEXT:    stw 6, 100(1)
+; 32BIT-NEXT:    stw 5, 96(1)
 ; 32BIT-NEXT:    stw 3, 88(1)
 ; 32BIT-NEXT:    bl .consume_f64[PR]
 ; 32BIT-NEXT:    nop
@@ -829,13 +829,13 @@ define void @mixed_5(ptr byref(%struct.bar) align 16 %r, ptr byval(%struct.bar) 
 ; 64BIT-NEXT:    mflr 0
 ; 64BIT-NEXT:    stdu 1, -112(1)
 ; 64BIT-NEXT:    std 0, 128(1)
-; 64BIT-NEXT:    std 5, 176(1)
-; 64BIT-NEXT:    lfd 1, 252(1)
-; 64BIT-NEXT:    std 6, 184(1)
-; 64BIT-NEXT:    std 7, 192(1)
-; 64BIT-NEXT:    std 8, 200(1)
-; 64BIT-NEXT:    std 9, 208(1)
 ; 64BIT-NEXT:    std 10, 216(1)
+; 64BIT-NEXT:    lfd 1, 252(1)
+; 64BIT-NEXT:    std 9, 208(1)
+; 64BIT-NEXT:    std 8, 200(1)
+; 64BIT-NEXT:    std 7, 192(1)
+; 64BIT-NEXT:    std 6, 184(1)
+; 64BIT-NEXT:    std 5, 176(1)
 ; 64BIT-NEXT:    std 3, 160(1)
 ; 64BIT-NEXT:    bl .consume_f64[PR]
 ; 64BIT-NEXT:    nop

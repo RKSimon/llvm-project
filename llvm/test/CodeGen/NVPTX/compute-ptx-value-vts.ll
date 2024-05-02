@@ -21,9 +21,9 @@ define <10 x half> @half10() {
 ; CHECK-EMPTY:
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], 0;
 ; CHECK-NEXT:    st.param.v2.b32 [func_retval0+8], {0, 0};
 ; CHECK-NEXT:    st.param.v2.b32 [func_retval0], {0, 0};
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], 0;
 ; CHECK-NEXT:    ret;
   ret <10 x half> zeroinitializer
 }
@@ -34,8 +34,8 @@ define <12 x i8> @byte12() {
 ; CHECK-EMPTY:
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    st.param.b32 [func_retval0+8], 0;
 ; CHECK-NEXT:    st.param.b64 [func_retval0], 0;
+; CHECK-NEXT:    st.param.b32 [func_retval0+8], 0;
 ; CHECK-NEXT:    ret;
   ret <12 x i8> zeroinitializer
 }
@@ -46,9 +46,9 @@ define <20 x i8> @byte20() {
 ; CHECK-EMPTY:
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    st.param.b32 [func_retval0+16], 0;
-; CHECK-NEXT:    st.param.b64 [func_retval0+8], 0;
 ; CHECK-NEXT:    st.param.b64 [func_retval0], 0;
+; CHECK-NEXT:    st.param.b64 [func_retval0+8], 0;
+; CHECK-NEXT:    st.param.b32 [func_retval0+16], 0;
 ; CHECK-NEXT:    ret;
   ret <20 x i8> zeroinitializer
 }

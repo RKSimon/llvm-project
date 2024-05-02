@@ -68,12 +68,12 @@ define void @test() {
 ; CHECK-NEXT:    movq 8(%rax), %rax
 ; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
-; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
+; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rax, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    movq %rcx, {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    leaq {{[0-9]+}}(%rsp), %rax

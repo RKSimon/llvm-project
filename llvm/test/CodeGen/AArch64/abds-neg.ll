@@ -76,9 +76,12 @@ define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i16_i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sxth w8, w0
-; CHECK-NEXT:    subs w8, w1, w8
-; CHECK-NEXT:    cneg w0, w8, ge
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    sxth x8, w0
+; CHECK-NEXT:    sub x8, x8, w1, sxtw
+; CHECK-NEXT:    cmp x8, #0
+; CHECK-NEXT:    cneg x8, x8, mi
+; CHECK-NEXT:    neg w0, w8
 ; CHECK-NEXT:    ret
   %aext = sext i16 %a to i64
   %bext = sext i32 %b to i64
@@ -124,9 +127,12 @@ define i32 @abd_ext_i32(i32 %a, i32 %b) nounwind {
 define i32 @abd_ext_i32_i16(i32 %a, i16 %b) nounwind {
 ; CHECK-LABEL: abd_ext_i32_i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    sxth w8, w1
-; CHECK-NEXT:    subs w8, w8, w0
-; CHECK-NEXT:    cneg w0, w8, ge
+; CHECK-NEXT:    // kill: def $w0 killed $w0 def $x0
+; CHECK-NEXT:    sxtw x8, w0
+; CHECK-NEXT:    sub x8, x8, w1, sxth
+; CHECK-NEXT:    cmp x8, #0
+; CHECK-NEXT:    cneg x8, x8, mi
+; CHECK-NEXT:    neg w0, w8
 ; CHECK-NEXT:    ret
   %aext = sext i32 %a to i64
   %bext = sext i16 %b to i64

@@ -4,12 +4,13 @@
 define void @PR41160(ptr %p) nounwind {
 ; CHECK-LABEL: PR41160:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vld1.8 {d16, d17}, [r0]
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    vld1.8 {d16, d17}, [r1]!
 ; CHECK-NEXT:    vabs.s32 q8, q8
-; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]!
-; CHECK-NEXT:    vld1.8 {d16, d17}, [r0]
-; CHECK-NEXT:    vabs.s32 q8, q8
+; CHECK-NEXT:    vld1.8 {d18, d19}, [r1]
+; CHECK-NEXT:    vabs.s32 q9, q9
 ; CHECK-NEXT:    vst1.8 {d16, d17}, [r0]
+; CHECK-NEXT:    vst1.8 {d18, d19}, [r1]
 ; CHECK-NEXT:    bx lr
   %tmp1 = load <8 x i32>, ptr %p, align 1
   %tmp2 = icmp slt <8 x i32> %tmp1, zeroinitializer

@@ -171,8 +171,8 @@ define %struct.S16 @i32_to_2xi16_shr(i32 noundef %i){
 ; CHECK-NEXT:    st.param.b32 [param0], %r1;
 ; CHECK-NEXT:    call.uni escape_int, (param0);
 ; CHECK-NEXT:    } // callseq 0
-; CHECK-NEXT:    shr.s32 %r2, %r1, 16;
-; CHECK-NEXT:    shr.u32 %r3, %r2, 16;
+; CHECK-NEXT:    shr.u32 %r2, %r1, 16;
+; CHECK-NEXT:    shr.s32 %r3, %r1, 31;
 ; CHECK-NEXT:    st.param.b16 [func_retval0+2], %r3;
 ; CHECK-NEXT:    st.param.b16 [func_retval0], %r2;
 ; CHECK-NEXT:    ret;

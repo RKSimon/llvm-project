@@ -189,11 +189,11 @@ entry:
 ; CHECK-ATPCS-DAG:  str r2, [r7, #12]
 ; CHECK-ATPCS-DAG:  str r1, [r7, #8]
 ; CHECK-AAPCS-DAG:  mov r5, r11
-; CHECK-AAPCS-DAG:  str r1, [r5, #8]
-; CHECK-AAPCS-DAG:  mov r1, r11
-; CHECK-AAPCS-DAG:  str r3, [r1, #16]
-; CHECK-AAPCS-DAG:  mov r1, r11
-; CHECK-AAPCS-DAG:  str r2, [r1, #12]
+; CHECK-AAPCS-DAG:  str r3, [r5, #16]
+; CHECK-AAPCS-DAG:  mov r3, r11
+; CHECK-AAPCS-DAG:  str r2, [r3, #12]
+; CHECK-AAPCS-DAG:  mov r2, r11
+; CHECK-AAPCS-DAG:  str r1, [r2, #8]
 
 ; Moving SP, access via SP
 ; int test_args_moving_sp(int a, int b, int c, int d, int e) {
@@ -343,9 +343,9 @@ entry:
 ; CHECK-NEXT:  add r2, sp, #12
 ; CHECK-NEXT:  bl  h
 ; Load `x`, `y`, and `z` via SP
-; CHECK:       ldr r1, [sp, #20]
+; CHECK:       ldr r3, [sp, #12]
 ; CHECK-NEXT:  ldr r2, [sp, #16]
-; CHECK-NEXT:  ldr r3, [sp, #12]
+; CHECK-NEXT:  ldr r1, [sp, #20]
 ; CHECK:       bl  g
 
 ; Re-aligned stack, access via SP.
@@ -383,9 +383,9 @@ entry:
 ; CHECK-NEXT:  add r2, sp, #20
 ; CHECK-NEXT:  bl  h
 ; Load `x`, `y`, and `z` via SP for passing to `g`
-; CHECK:       ldr r1, [sp, #28]
+; CHECK:       ldr r3, [sp, #20]
 ; CHECK-NEXT:  ldr r2, [sp, #24]
-; CHECK-NEXT:  ldr r3, [sp, #20]
+; CHECK-NEXT:  ldr r1, [sp, #28]
 ; CHECK:       bl  g
 
 ; VLAs, access via BP.
