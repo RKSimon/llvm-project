@@ -326,8 +326,12 @@ define i64 @f25(i64 %foo) {
 define i32 @f26(i32 %foo) {
 ; CHECK-LABEL: f26:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    nill %r2, 65487
-; CHECK-NEXT:    rll %r2, %r2, 5
+; CHECK-NEXT:    # kill: def $r2l killed $r2l def $r2d
+; CHECK-NEXT:    lr %r0, %r2
+; CHECK-NEXT:    nilf %r0, 134217679
+; CHECK-NEXT:    sll %r0, 5
+; CHECK-NEXT:    rosbg %r0, %r2, 59, 63, 37
+; CHECK-NEXT:    lr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %and = and i32 %foo, -49
   %parta = shl i32 %and, 5
@@ -340,7 +344,12 @@ define i32 @f26(i32 %foo) {
 define i64 @f27(i64 %foo) {
 ; CHECK-LABEL: f27:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    risbg %r2, %r2, 55, 180, 5
+; CHECK-NEXT:    llihf %r0, 134217727
+; CHECK-NEXT:    oilf %r0, 4294967247
+; CHECK-NEXT:    ngr %r0, %r2
+; CHECK-NEXT:    sllg %r0, %r0, 5
+; CHECK-NEXT:    rosbg %r0, %r2, 59, 63, 5
+; CHECK-NEXT:    lgr %r2, %r0
 ; CHECK-NEXT:    br %r14
   %and = and i64 %foo, -49
   %parta = shl i64 %and, 5
@@ -556,9 +565,9 @@ define signext i32 @f43(i64 %x) {
 define signext i32 @f44(i64 %x) {
 ; CHECK-LABEL: f44:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    srlg %r2, %r2, 12
-; CHECK-NEXT:    lghi %r0, 10
-; CHECK-NEXT:    ngr %r2, %r0
+; CHECK-NEXT:    srl %r2, 12
+; CHECK-NEXT:    nilf %r2, 10
+; CHECK-NEXT:    llgfr %r2, %r2
 ; CHECK-NEXT:    br %r14
   %shr4 = lshr i64 %x, 12
   %conv = trunc i64 %shr4 to i32

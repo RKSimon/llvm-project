@@ -335,7 +335,6 @@ define <4 x i32> @knownbits_uabd_mask_and_shuffle_lshr(<4 x i32> %a0, <4 x i32> 
 ; CHECK-SD-LABEL: knownbits_uabd_mask_and_shuffle_lshr:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    movi v0.2d, #0000000000000000
-; CHECK-SD-NEXT:    ushr v0.4s, v0.4s, #17
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: knownbits_uabd_mask_and_shuffle_lshr:

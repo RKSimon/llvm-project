@@ -289,16 +289,16 @@ define i32 @test_fshl_with_mask_special_case(i32 %x) {
 ; SI-LABEL: test_fshl_with_mask_special_case:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_or_b32_e32 v1, 1, v0
-; SI-NEXT:    v_alignbit_b32 v0, v1, v0, 27
+; SI-NEXT:    v_alignbit_b32 v0, v0, v0, 27
+; SI-NEXT:    v_or_b32_e32 v0, 32, v0
 ; SI-NEXT:    v_and_b32_e32 v0, 0xffffffe1, v0
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: test_fshl_with_mask_special_case:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    v_or_b32_e32 v1, 1, v0
-; VI-NEXT:    v_alignbit_b32 v0, v1, v0, 27
+; VI-NEXT:    v_alignbit_b32 v0, v0, v0, 27
+; VI-NEXT:    v_or_b32_e32 v0, 32, v0
 ; VI-NEXT:    v_and_b32_e32 v0, 0xffffffe1, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]
   %or1 = or i32 %x, 1

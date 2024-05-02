@@ -1095,7 +1095,8 @@ define void @bit_24_nz_branch_i32(i32 signext %0) {
 define void @bit_31_z_branch_i32(i32 signext %0) {
 ; LA32-LABEL: bit_31_z_branch_i32:
 ; LA32:       # %bb.0:
-; LA32-NEXT:    bltz $a0, .LBB43_2
+; LA32-NEXT:    srli.w $a0, $a0, 31
+; LA32-NEXT:    bne $a0, $zero, .LBB43_2
 ; LA32-NEXT:  # %bb.1:
 ; LA32-NEXT:    b bar
 ; LA32-NEXT:  .LBB43_2:
@@ -1341,7 +1342,8 @@ define void @bit_24_nz_branch_i64(i64 %0) {
 define void @bit_31_z_branch_i64(i64 %0) {
 ; LA32-LABEL: bit_31_z_branch_i64:
 ; LA32:       # %bb.0:
-; LA32-NEXT:    bltz $a0, .LBB51_2
+; LA32-NEXT:    srli.w $a0, $a0, 31
+; LA32-NEXT:    bne $a0, $zero, .LBB51_2
 ; LA32-NEXT:  # %bb.1:
 ; LA32-NEXT:    b bar
 ; LA32-NEXT:  .LBB51_2:
@@ -1525,7 +1527,8 @@ define void @bit_62_nz_branch_i64(i64 %0) {
 define void @bit_63_z_branch_i64(i64 %0) {
 ; LA32-LABEL: bit_63_z_branch_i64:
 ; LA32:       # %bb.0:
-; LA32-NEXT:    bltz $a1, .LBB57_2
+; LA32-NEXT:    srli.w $a0, $a1, 31
+; LA32-NEXT:    bne $a0, $zero, .LBB57_2
 ; LA32-NEXT:  # %bb.1:
 ; LA32-NEXT:    b bar
 ; LA32-NEXT:  .LBB57_2:
@@ -1533,7 +1536,8 @@ define void @bit_63_z_branch_i64(i64 %0) {
 ;
 ; LA64-LABEL: bit_63_z_branch_i64:
 ; LA64:       # %bb.0:
-; LA64-NEXT:    bltz $a0, .LBB57_2
+; LA64-NEXT:    srli.d $a0, $a0, 63
+; LA64-NEXT:    bnez $a0, .LBB57_2
 ; LA64-NEXT:  # %bb.1:
 ; LA64-NEXT:    pcaddu18i $t8, %call36(bar)
 ; LA64-NEXT:    jr $t8

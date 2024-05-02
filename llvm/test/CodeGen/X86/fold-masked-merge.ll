@@ -39,8 +39,8 @@ define i16 @masked_merge1(i16 %a0, i16 %a1, i16 %a2) {
 ;
 ; BMI-LABEL: masked_merge1:
 ; BMI:       # %bb.0:
-; BMI-NEXT:    andnl %edx, %edi, %eax
 ; BMI-NEXT:    andl %edi, %esi
+; BMI-NEXT:    andnl %edx, %edi, %eax
 ; BMI-NEXT:    orl %esi, %eax
 ; BMI-NEXT:    # kill: def $ax killed $ax killed $eax
 ; BMI-NEXT:    retq

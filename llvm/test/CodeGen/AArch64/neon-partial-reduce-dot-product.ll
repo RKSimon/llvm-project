@@ -4,25 +4,15 @@
 ; RUN: llc -mtriple aarch64 -mattr=+neon,+dotprod,+i8mm < %s | FileCheck %s --check-prefixes=CHECK-COMMON,CHECK-DOT-I8MM
 
 define <4 x i32> @udot(<4 x i32> %acc, <16 x i8> %u, <16 x i8> %s) {
-; CHECK-NODOT-LABEL: udot:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    umull v3.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    umull2 v1.8h, v2.16b, v1.16b
-; CHECK-NODOT-NEXT:    uaddw v0.4s, v0.4s, v3.4h
-; CHECK-NODOT-NEXT:    uaddw2 v0.4s, v0.4s, v3.8h
-; CHECK-NODOT-NEXT:    uaddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    uaddw2 v0.4s, v0.4s, v1.8h
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: udot:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    udot v0.4s, v2.16b, v1.16b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: udot:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    udot v0.4s, v2.16b, v1.16b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: udot:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    umull v3.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    umull2 v1.8h, v2.16b, v1.16b
+; CHECK-COMMON-NEXT:    uaddw v0.4s, v0.4s, v3.4h
+; CHECK-COMMON-NEXT:    uaddw2 v0.4s, v0.4s, v3.8h
+; CHECK-COMMON-NEXT:    uaddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    uaddw2 v0.4s, v0.4s, v1.8h
+; CHECK-COMMON-NEXT:    ret
   %u.wide = zext <16 x i8> %u to <16 x i32>
   %s.wide = zext <16 x i8> %s to <16 x i32>
   %mult = mul nuw nsw <16 x i32> %s.wide, %u.wide
@@ -31,58 +21,26 @@ define <4 x i32> @udot(<4 x i32> %acc, <16 x i8> %u, <16 x i8> %s) {
 }
 
 define <4 x i32> @udot_in_loop(ptr %p1, ptr %p2){
-; CHECK-NODOT-LABEL: udot_in_loop:
-; CHECK-NODOT:       // %bb.0: // %entry
-; CHECK-NODOT-NEXT:    movi v1.2d, #0000000000000000
-; CHECK-NODOT-NEXT:    mov x8, xzr
-; CHECK-NODOT-NEXT:  .LBB1_1: // %vector.body
-; CHECK-NODOT-NEXT:    // =>This Inner Loop Header: Depth=1
-; CHECK-NODOT-NEXT:    ldr q2, [x0, x8]
-; CHECK-NODOT-NEXT:    ldr q3, [x1, x8]
-; CHECK-NODOT-NEXT:    mov v0.16b, v1.16b
-; CHECK-NODOT-NEXT:    add x8, x8, #16
-; CHECK-NODOT-NEXT:    umull v4.8h, v2.8b, v3.8b
-; CHECK-NODOT-NEXT:    umull2 v2.8h, v2.16b, v3.16b
-; CHECK-NODOT-NEXT:    cmp x8, #16
-; CHECK-NODOT-NEXT:    uaddw v1.4s, v1.4s, v4.4h
-; CHECK-NODOT-NEXT:    uaddw2 v1.4s, v1.4s, v4.8h
-; CHECK-NODOT-NEXT:    uaddw v1.4s, v1.4s, v2.4h
-; CHECK-NODOT-NEXT:    uaddw2 v1.4s, v1.4s, v2.8h
-; CHECK-NODOT-NEXT:    b.ne .LBB1_1
-; CHECK-NODOT-NEXT:  // %bb.2: // %end
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: udot_in_loop:
-; CHECK-DOT:       // %bb.0: // %entry
-; CHECK-DOT-NEXT:    movi v1.2d, #0000000000000000
-; CHECK-DOT-NEXT:    mov x8, xzr
-; CHECK-DOT-NEXT:  .LBB1_1: // %vector.body
-; CHECK-DOT-NEXT:    // =>This Inner Loop Header: Depth=1
-; CHECK-DOT-NEXT:    ldr q2, [x0, x8]
-; CHECK-DOT-NEXT:    ldr q3, [x1, x8]
-; CHECK-DOT-NEXT:    mov v0.16b, v1.16b
-; CHECK-DOT-NEXT:    add x8, x8, #16
-; CHECK-DOT-NEXT:    udot v1.4s, v2.16b, v3.16b
-; CHECK-DOT-NEXT:    cmp x8, #16
-; CHECK-DOT-NEXT:    b.ne .LBB1_1
-; CHECK-DOT-NEXT:  // %bb.2: // %end
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: udot_in_loop:
-; CHECK-DOT-I8MM:       // %bb.0: // %entry
-; CHECK-DOT-I8MM-NEXT:    movi v1.2d, #0000000000000000
-; CHECK-DOT-I8MM-NEXT:    mov x8, xzr
-; CHECK-DOT-I8MM-NEXT:  .LBB1_1: // %vector.body
-; CHECK-DOT-I8MM-NEXT:    // =>This Inner Loop Header: Depth=1
-; CHECK-DOT-I8MM-NEXT:    ldr q2, [x0, x8]
-; CHECK-DOT-I8MM-NEXT:    ldr q3, [x1, x8]
-; CHECK-DOT-I8MM-NEXT:    mov v0.16b, v1.16b
-; CHECK-DOT-I8MM-NEXT:    add x8, x8, #16
-; CHECK-DOT-I8MM-NEXT:    udot v1.4s, v2.16b, v3.16b
-; CHECK-DOT-I8MM-NEXT:    cmp x8, #16
-; CHECK-DOT-I8MM-NEXT:    b.ne .LBB1_1
-; CHECK-DOT-I8MM-NEXT:  // %bb.2: // %end
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: udot_in_loop:
+; CHECK-COMMON:       // %bb.0: // %entry
+; CHECK-COMMON-NEXT:    movi v1.2d, #0000000000000000
+; CHECK-COMMON-NEXT:    mov x8, xzr
+; CHECK-COMMON-NEXT:  .LBB1_1: // %vector.body
+; CHECK-COMMON-NEXT:    // =>This Inner Loop Header: Depth=1
+; CHECK-COMMON-NEXT:    ldr q2, [x0, x8]
+; CHECK-COMMON-NEXT:    ldr q3, [x1, x8]
+; CHECK-COMMON-NEXT:    mov v0.16b, v1.16b
+; CHECK-COMMON-NEXT:    add x8, x8, #16
+; CHECK-COMMON-NEXT:    umull v4.8h, v2.8b, v3.8b
+; CHECK-COMMON-NEXT:    umull2 v2.8h, v2.16b, v3.16b
+; CHECK-COMMON-NEXT:    cmp x8, #16
+; CHECK-COMMON-NEXT:    uaddw v1.4s, v1.4s, v4.4h
+; CHECK-COMMON-NEXT:    uaddw2 v1.4s, v1.4s, v4.8h
+; CHECK-COMMON-NEXT:    uaddw v1.4s, v1.4s, v2.4h
+; CHECK-COMMON-NEXT:    uaddw2 v1.4s, v1.4s, v2.8h
+; CHECK-COMMON-NEXT:    b.ne .LBB1_1
+; CHECK-COMMON-NEXT:  // %bb.2: // %end
+; CHECK-COMMON-NEXT:    ret
 entry:
   br label %vector.body
 
@@ -106,30 +64,20 @@ end:
 }
 
 define <2 x i32> @udot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) {
-; CHECK-NODOT-LABEL: udot_narrow:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    umull v1.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NODOT-NEXT:    ushll v2.4s, v1.4h, #0
-; CHECK-NODOT-NEXT:    uaddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    ushll2 v3.4s, v1.8h, #0
-; CHECK-NODOT-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
-; CHECK-NODOT-NEXT:    ext v2.16b, v2.16b, v2.16b, #8
-; CHECK-NODOT-NEXT:    add v0.2s, v2.2s, v0.2s
-; CHECK-NODOT-NEXT:    ext v2.16b, v3.16b, v3.16b, #8
-; CHECK-NODOT-NEXT:    uaddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    add v0.2s, v2.2s, v0.2s
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: udot_narrow:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    udot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: udot_narrow:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    udot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: udot_narrow:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    umull v1.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-COMMON-NEXT:    ushll v2.4s, v1.4h, #0
+; CHECK-COMMON-NEXT:    uaddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    ushll2 v3.4s, v1.8h, #0
+; CHECK-COMMON-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
+; CHECK-COMMON-NEXT:    ext v2.16b, v2.16b, v2.16b, #8
+; CHECK-COMMON-NEXT:    add v0.2s, v2.2s, v0.2s
+; CHECK-COMMON-NEXT:    ext v2.16b, v3.16b, v3.16b, #8
+; CHECK-COMMON-NEXT:    uaddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    add v0.2s, v2.2s, v0.2s
+; CHECK-COMMON-NEXT:    ret
   %u.wide = zext <8 x i8> %u to <8 x i32>
   %s.wide = zext <8 x i8> %s to <8 x i32>
   %mult = mul nuw nsw <8 x i32> %s.wide, %u.wide
@@ -138,25 +86,15 @@ define <2 x i32> @udot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) {
 }
 
 define <4 x i32> @sdot(<4 x i32> %acc, <16 x i8> %u, <16 x i8> %s) {
-; CHECK-NODOT-LABEL: sdot:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    smull v3.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    smull2 v1.8h, v2.16b, v1.16b
-; CHECK-NODOT-NEXT:    saddw v0.4s, v0.4s, v3.4h
-; CHECK-NODOT-NEXT:    saddw2 v0.4s, v0.4s, v3.8h
-; CHECK-NODOT-NEXT:    saddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    saddw2 v0.4s, v0.4s, v1.8h
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: sdot:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    sdot v0.4s, v2.16b, v1.16b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: sdot:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    sdot v0.4s, v2.16b, v1.16b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: sdot:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    smull v3.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    smull2 v1.8h, v2.16b, v1.16b
+; CHECK-COMMON-NEXT:    saddw v0.4s, v0.4s, v3.4h
+; CHECK-COMMON-NEXT:    saddw2 v0.4s, v0.4s, v3.8h
+; CHECK-COMMON-NEXT:    saddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    saddw2 v0.4s, v0.4s, v1.8h
+; CHECK-COMMON-NEXT:    ret
   %u.wide = sext <16 x i8> %u to <16 x i32>
   %s.wide = sext <16 x i8> %s to <16 x i32>
   %mult = mul nuw nsw <16 x i32> %s.wide, %u.wide
@@ -165,30 +103,20 @@ define <4 x i32> @sdot(<4 x i32> %acc, <16 x i8> %u, <16 x i8> %s) {
 }
 
 define <2 x i32> @sdot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) {
-; CHECK-NODOT-LABEL: sdot_narrow:
-; CHECK-NODOT:       // %bb.0:
-; CHECK-NODOT-NEXT:    smull v1.8h, v2.8b, v1.8b
-; CHECK-NODOT-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NODOT-NEXT:    sshll v2.4s, v1.4h, #0
-; CHECK-NODOT-NEXT:    saddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    sshll2 v3.4s, v1.8h, #0
-; CHECK-NODOT-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
-; CHECK-NODOT-NEXT:    ext v2.16b, v2.16b, v2.16b, #8
-; CHECK-NODOT-NEXT:    add v0.2s, v2.2s, v0.2s
-; CHECK-NODOT-NEXT:    ext v2.16b, v3.16b, v3.16b, #8
-; CHECK-NODOT-NEXT:    saddw v0.4s, v0.4s, v1.4h
-; CHECK-NODOT-NEXT:    add v0.2s, v2.2s, v0.2s
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: sdot_narrow:
-; CHECK-DOT:       // %bb.0:
-; CHECK-DOT-NEXT:    sdot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: sdot_narrow:
-; CHECK-DOT-I8MM:       // %bb.0:
-; CHECK-DOT-I8MM-NEXT:    sdot v0.2s, v2.8b, v1.8b
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: sdot_narrow:
+; CHECK-COMMON:       // %bb.0:
+; CHECK-COMMON-NEXT:    smull v1.8h, v2.8b, v1.8b
+; CHECK-COMMON-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-COMMON-NEXT:    sshll v2.4s, v1.4h, #0
+; CHECK-COMMON-NEXT:    saddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    sshll2 v3.4s, v1.8h, #0
+; CHECK-COMMON-NEXT:    ext v1.16b, v1.16b, v1.16b, #8
+; CHECK-COMMON-NEXT:    ext v2.16b, v2.16b, v2.16b, #8
+; CHECK-COMMON-NEXT:    add v0.2s, v2.2s, v0.2s
+; CHECK-COMMON-NEXT:    ext v2.16b, v3.16b, v3.16b, #8
+; CHECK-COMMON-NEXT:    saddw v0.4s, v0.4s, v1.4h
+; CHECK-COMMON-NEXT:    add v0.2s, v2.2s, v0.2s
+; CHECK-COMMON-NEXT:    ret
   %u.wide = sext <8 x i8> %u to <8 x i32>
   %s.wide = sext <8 x i8> %s to <8 x i32>
   %mult = mul nuw nsw <8 x i32> %s.wide, %u.wide
@@ -529,39 +457,23 @@ define <2 x i32> @sudot_narrow(<2 x i32> %acc, <8 x i8> %u, <8 x i8> %s) #0{
 }
 
 define <4 x i64> @udot_8to64(<4 x i64> %acc, <16 x i8> %a, <16 x i8> %b) {
-; CHECK-NODOT-LABEL: udot_8to64:
-; CHECK-NODOT:       // %bb.0: // %entry
-; CHECK-NODOT-NEXT:    umull v4.8h, v2.8b, v3.8b
-; CHECK-NODOT-NEXT:    umull2 v2.8h, v2.16b, v3.16b
-; CHECK-NODOT-NEXT:    ushll v3.4s, v4.4h, #0
-; CHECK-NODOT-NEXT:    ushll v5.4s, v2.4h, #0
-; CHECK-NODOT-NEXT:    ushll2 v4.4s, v4.8h, #0
-; CHECK-NODOT-NEXT:    ushll2 v2.4s, v2.8h, #0
-; CHECK-NODOT-NEXT:    uaddw v1.2d, v1.2d, v5.2s
-; CHECK-NODOT-NEXT:    uaddw v0.2d, v0.2d, v3.2s
-; CHECK-NODOT-NEXT:    uaddw2 v1.2d, v1.2d, v5.4s
-; CHECK-NODOT-NEXT:    uaddw2 v0.2d, v0.2d, v3.4s
-; CHECK-NODOT-NEXT:    uaddw v1.2d, v1.2d, v2.2s
-; CHECK-NODOT-NEXT:    uaddw v0.2d, v0.2d, v4.2s
-; CHECK-NODOT-NEXT:    uaddw2 v1.2d, v1.2d, v2.4s
-; CHECK-NODOT-NEXT:    uaddw2 v0.2d, v0.2d, v4.4s
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: udot_8to64:
-; CHECK-DOT:       // %bb.0: // %entry
-; CHECK-DOT-NEXT:    movi v4.2d, #0000000000000000
-; CHECK-DOT-NEXT:    udot v4.4s, v2.16b, v3.16b
-; CHECK-DOT-NEXT:    uaddw v0.2d, v0.2d, v4.2s
-; CHECK-DOT-NEXT:    uaddw2 v0.2d, v0.2d, v4.4s
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: udot_8to64:
-; CHECK-DOT-I8MM:       // %bb.0: // %entry
-; CHECK-DOT-I8MM-NEXT:    movi v4.2d, #0000000000000000
-; CHECK-DOT-I8MM-NEXT:    udot v4.4s, v2.16b, v3.16b
-; CHECK-DOT-I8MM-NEXT:    uaddw v0.2d, v0.2d, v4.2s
-; CHECK-DOT-I8MM-NEXT:    uaddw2 v0.2d, v0.2d, v4.4s
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: udot_8to64:
+; CHECK-COMMON:       // %bb.0: // %entry
+; CHECK-COMMON-NEXT:    umull v4.8h, v2.8b, v3.8b
+; CHECK-COMMON-NEXT:    umull2 v2.8h, v2.16b, v3.16b
+; CHECK-COMMON-NEXT:    ushll v3.4s, v4.4h, #0
+; CHECK-COMMON-NEXT:    ushll v5.4s, v2.4h, #0
+; CHECK-COMMON-NEXT:    ushll2 v4.4s, v4.8h, #0
+; CHECK-COMMON-NEXT:    ushll2 v2.4s, v2.8h, #0
+; CHECK-COMMON-NEXT:    uaddw v1.2d, v1.2d, v5.2s
+; CHECK-COMMON-NEXT:    uaddw v0.2d, v0.2d, v3.2s
+; CHECK-COMMON-NEXT:    uaddw2 v1.2d, v1.2d, v5.4s
+; CHECK-COMMON-NEXT:    uaddw2 v0.2d, v0.2d, v3.4s
+; CHECK-COMMON-NEXT:    uaddw v1.2d, v1.2d, v2.2s
+; CHECK-COMMON-NEXT:    uaddw v0.2d, v0.2d, v4.2s
+; CHECK-COMMON-NEXT:    uaddw2 v1.2d, v1.2d, v2.4s
+; CHECK-COMMON-NEXT:    uaddw2 v0.2d, v0.2d, v4.4s
+; CHECK-COMMON-NEXT:    ret
 entry:
   %a.wide = zext <16 x i8> %a to <16 x i64>
   %b.wide = zext <16 x i8> %b to <16 x i64>
@@ -572,39 +484,23 @@ entry:
 }
 
 define <4 x i64> @sdot_8to64(<4 x i64> %acc, <16 x i8> %a, <16 x i8> %b){
-; CHECK-NODOT-LABEL: sdot_8to64:
-; CHECK-NODOT:       // %bb.0: // %entry
-; CHECK-NODOT-NEXT:    smull v4.8h, v2.8b, v3.8b
-; CHECK-NODOT-NEXT:    smull2 v2.8h, v2.16b, v3.16b
-; CHECK-NODOT-NEXT:    sshll v3.4s, v4.4h, #0
-; CHECK-NODOT-NEXT:    sshll v5.4s, v2.4h, #0
-; CHECK-NODOT-NEXT:    sshll2 v4.4s, v4.8h, #0
-; CHECK-NODOT-NEXT:    sshll2 v2.4s, v2.8h, #0
-; CHECK-NODOT-NEXT:    saddw v1.2d, v1.2d, v5.2s
-; CHECK-NODOT-NEXT:    saddw v0.2d, v0.2d, v3.2s
-; CHECK-NODOT-NEXT:    saddw2 v1.2d, v1.2d, v5.4s
-; CHECK-NODOT-NEXT:    saddw2 v0.2d, v0.2d, v3.4s
-; CHECK-NODOT-NEXT:    saddw v1.2d, v1.2d, v2.2s
-; CHECK-NODOT-NEXT:    saddw v0.2d, v0.2d, v4.2s
-; CHECK-NODOT-NEXT:    saddw2 v1.2d, v1.2d, v2.4s
-; CHECK-NODOT-NEXT:    saddw2 v0.2d, v0.2d, v4.4s
-; CHECK-NODOT-NEXT:    ret
-;
-; CHECK-DOT-LABEL: sdot_8to64:
-; CHECK-DOT:       // %bb.0: // %entry
-; CHECK-DOT-NEXT:    movi v4.2d, #0000000000000000
-; CHECK-DOT-NEXT:    sdot v4.4s, v2.16b, v3.16b
-; CHECK-DOT-NEXT:    saddw v0.2d, v0.2d, v4.2s
-; CHECK-DOT-NEXT:    saddw2 v0.2d, v0.2d, v4.4s
-; CHECK-DOT-NEXT:    ret
-;
-; CHECK-DOT-I8MM-LABEL: sdot_8to64:
-; CHECK-DOT-I8MM:       // %bb.0: // %entry
-; CHECK-DOT-I8MM-NEXT:    movi v4.2d, #0000000000000000
-; CHECK-DOT-I8MM-NEXT:    sdot v4.4s, v2.16b, v3.16b
-; CHECK-DOT-I8MM-NEXT:    saddw v0.2d, v0.2d, v4.2s
-; CHECK-DOT-I8MM-NEXT:    saddw2 v0.2d, v0.2d, v4.4s
-; CHECK-DOT-I8MM-NEXT:    ret
+; CHECK-COMMON-LABEL: sdot_8to64:
+; CHECK-COMMON:       // %bb.0: // %entry
+; CHECK-COMMON-NEXT:    smull v4.8h, v2.8b, v3.8b
+; CHECK-COMMON-NEXT:    smull2 v2.8h, v2.16b, v3.16b
+; CHECK-COMMON-NEXT:    sshll v3.4s, v4.4h, #0
+; CHECK-COMMON-NEXT:    sshll v5.4s, v2.4h, #0
+; CHECK-COMMON-NEXT:    sshll2 v4.4s, v4.8h, #0
+; CHECK-COMMON-NEXT:    sshll2 v2.4s, v2.8h, #0
+; CHECK-COMMON-NEXT:    saddw v1.2d, v1.2d, v5.2s
+; CHECK-COMMON-NEXT:    saddw v0.2d, v0.2d, v3.2s
+; CHECK-COMMON-NEXT:    saddw2 v1.2d, v1.2d, v5.4s
+; CHECK-COMMON-NEXT:    saddw2 v0.2d, v0.2d, v3.4s
+; CHECK-COMMON-NEXT:    saddw v1.2d, v1.2d, v2.2s
+; CHECK-COMMON-NEXT:    saddw v0.2d, v0.2d, v4.2s
+; CHECK-COMMON-NEXT:    saddw2 v1.2d, v1.2d, v2.4s
+; CHECK-COMMON-NEXT:    saddw2 v0.2d, v0.2d, v4.4s
+; CHECK-COMMON-NEXT:    ret
 entry:
   %a.wide = sext <16 x i8> %a to <16 x i64>
   %b.wide = sext <16 x i8> %b to <16 x i64>

@@ -129,6 +129,9 @@ define void @single_cmp(i32 %a, i32 %b, ptr %c, ptr %d) {
 ; CHECK-LABEL: single_cmp:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpl %esi, %edi
+; CHECK-NEXT:    movl $255, %eax
+; CHECK-NEXT:    cfcmovnel %eax, %eax
+; CHECK-NEXT:    testb $1, %al
 ; CHECK-NEXT:    cfcmovnew (%rdx), %ax
 ; CHECK-NEXT:    cfcmovnew %ax, (%rcx)
 ; CHECK-NEXT:    retq
@@ -144,6 +147,9 @@ define void @load_add_store(i32 %a, i32 %b, ptr %p) {
 ; CHECK-LABEL: load_add_store:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    cmpl %esi, %edi
+; CHECK-NEXT:    movl $255, %eax
+; CHECK-NEXT:    cfcmovnel %eax, %eax
+; CHECK-NEXT:    testb $1, %al
 ; CHECK-NEXT:    cfcmovnew (%rdx), %ax
 ; CHECK-NEXT:    {nf} incl %eax
 ; CHECK-NEXT:    cfcmovnew %ax, (%rdx)
@@ -219,9 +225,10 @@ next:
 define void @xor_cond(ptr %p, i1 %cond) {
 ; CHECK-LABEL: xor_cond:
 ; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    incb %sil
 ; CHECK-NEXT:    xorl %eax, %eax
 ; CHECK-NEXT:    testb $1, %sil
-; CHECK-NEXT:    cfcmovel %eax, (%rdi)
+; CHECK-NEXT:    cfcmovnel %eax, (%rdi)
 ; CHECK-NEXT:    retq
 entry:
   %0 = xor i1 %cond, true
