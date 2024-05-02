@@ -380,10 +380,10 @@ define i128 @i128_mul(i128 %x, i128 %y) {
 define { i128, i8 } @i128_checked_mul(i128 %x, i128 %y) {
 ; CHECK-LABEL: i128_checked_mul:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    eor x8, x3, x2, asr #63
-; CHECK-NEXT:    eor x9, x1, x0, asr #63
-; CHECK-NEXT:    orr x8, x9, x8
-; CHECK-NEXT:    cbz x8, .LBB21_2
+; CHECK-NEXT:    asr x8, x0, #63
+; CHECK-NEXT:    cmp x3, x2, asr #63
+; CHECK-NEXT:    ccmp x1, x8, #0, eq
+; CHECK-NEXT:    b.eq .LBB21_2
 ; CHECK-NEXT:  // %bb.1: // %overflow
 ; CHECK-NEXT:    asr x9, x1, #63
 ; CHECK-NEXT:    umulh x10, x0, x2
@@ -417,7 +417,7 @@ define { i128, i8 } @i128_checked_mul(i128 %x, i128 %y) {
 ; CHECK-NEXT:  .LBB21_2: // %overflow.no
 ; CHECK-NEXT:    smulh x1, x0, x2
 ; CHECK-NEXT:    mul x0, x0, x2
-; CHECK-NEXT:    eor w2, w8, #0x1
+; CHECK-NEXT:    eor w2, wzr, #0x1
 ; CHECK-NEXT:    ret
   %1 = tail call { i128, i1 } @llvm.smul.with.overflow.i128(i128 %x, i128 %y)
   %2 = extractvalue { i128, i1 } %1, 0
@@ -432,10 +432,10 @@ define { i128, i8 } @i128_checked_mul(i128 %x, i128 %y) {
 define { i128, i8 } @i128_overflowing_mul(i128 %x, i128 %y) {
 ; CHECK-LABEL: i128_overflowing_mul:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    eor x8, x3, x2, asr #63
-; CHECK-NEXT:    eor x9, x1, x0, asr #63
-; CHECK-NEXT:    orr x8, x9, x8
-; CHECK-NEXT:    cbz x8, .LBB22_2
+; CHECK-NEXT:    asr x8, x0, #63
+; CHECK-NEXT:    cmp x3, x2, asr #63
+; CHECK-NEXT:    ccmp x1, x8, #0, eq
+; CHECK-NEXT:    b.eq .LBB22_2
 ; CHECK-NEXT:  // %bb.1: // %overflow
 ; CHECK-NEXT:    asr x9, x1, #63
 ; CHECK-NEXT:    umulh x10, x0, x2
@@ -482,10 +482,10 @@ define { i128, i8 } @i128_overflowing_mul(i128 %x, i128 %y) {
 define i128 @i128_saturating_mul(i128 %x, i128 %y) {
 ; CHECK-LABEL: i128_saturating_mul:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    eor x8, x3, x2, asr #63
-; CHECK-NEXT:    eor x9, x1, x0, asr #63
-; CHECK-NEXT:    orr x8, x9, x8
-; CHECK-NEXT:    cbz x8, .LBB23_2
+; CHECK-NEXT:    asr x8, x0, #63
+; CHECK-NEXT:    cmp x3, x2, asr #63
+; CHECK-NEXT:    ccmp x1, x8, #0, eq
+; CHECK-NEXT:    b.eq .LBB23_2
 ; CHECK-NEXT:  // %bb.1: // %overflow
 ; CHECK-NEXT:    asr x9, x1, #63
 ; CHECK-NEXT:    umulh x10, x0, x2

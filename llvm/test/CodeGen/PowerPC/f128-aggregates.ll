@@ -119,42 +119,42 @@ define fp128 @testStruct_03(ptr byval(%struct.With9fp128params) nocapture readon
 ; CHECK-LABEL: testStruct_03:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    lxv v2, 128(r1)
-; CHECK-NEXT:    std r3, 32(r1)
-; CHECK-NEXT:    std r4, 40(r1)
-; CHECK-NEXT:    std r5, 48(r1)
-; CHECK-NEXT:    std r6, 56(r1)
-; CHECK-NEXT:    std r7, 64(r1)
-; CHECK-NEXT:    std r8, 72(r1)
-; CHECK-NEXT:    std r9, 80(r1)
 ; CHECK-NEXT:    std r10, 88(r1)
+; CHECK-NEXT:    std r9, 80(r1)
+; CHECK-NEXT:    std r8, 72(r1)
+; CHECK-NEXT:    std r7, 64(r1)
+; CHECK-NEXT:    std r6, 56(r1)
+; CHECK-NEXT:    std r5, 48(r1)
+; CHECK-NEXT:    std r4, 40(r1)
+; CHECK-NEXT:    std r3, 32(r1)
 ; CHECK-NEXT:    blr
 ;
 ; CHECK-BE-LABEL: testStruct_03:
 ; CHECK-BE:       # %bb.0: # %entry
 ; CHECK-BE-NEXT:    lxv v2, 144(r1)
-; CHECK-BE-NEXT:    std r3, 48(r1)
-; CHECK-BE-NEXT:    std r4, 56(r1)
-; CHECK-BE-NEXT:    std r5, 64(r1)
-; CHECK-BE-NEXT:    std r6, 72(r1)
-; CHECK-BE-NEXT:    std r7, 80(r1)
-; CHECK-BE-NEXT:    std r8, 88(r1)
-; CHECK-BE-NEXT:    std r9, 96(r1)
 ; CHECK-BE-NEXT:    std r10, 104(r1)
+; CHECK-BE-NEXT:    std r9, 96(r1)
+; CHECK-BE-NEXT:    std r8, 88(r1)
+; CHECK-BE-NEXT:    std r7, 80(r1)
+; CHECK-BE-NEXT:    std r6, 72(r1)
+; CHECK-BE-NEXT:    std r5, 64(r1)
+; CHECK-BE-NEXT:    std r4, 56(r1)
+; CHECK-BE-NEXT:    std r3, 48(r1)
 ; CHECK-BE-NEXT:    blr
 ;
 ; CHECK-P8-LABEL: testStruct_03:
 ; CHECK-P8:       # %bb.0: # %entry
 ; CHECK-P8-NEXT:    li r11, 96
 ; CHECK-P8-NEXT:    addi r12, r1, 32
-; CHECK-P8-NEXT:    std r3, 32(r1)
-; CHECK-P8-NEXT:    std r4, 40(r1)
-; CHECK-P8-NEXT:    std r5, 48(r1)
-; CHECK-P8-NEXT:    std r6, 56(r1)
-; CHECK-P8-NEXT:    lxvd2x vs0, r12, r11
-; CHECK-P8-NEXT:    std r7, 64(r1)
-; CHECK-P8-NEXT:    std r8, 72(r1)
-; CHECK-P8-NEXT:    std r9, 80(r1)
 ; CHECK-P8-NEXT:    std r10, 88(r1)
+; CHECK-P8-NEXT:    std r9, 80(r1)
+; CHECK-P8-NEXT:    std r8, 72(r1)
+; CHECK-P8-NEXT:    std r7, 64(r1)
+; CHECK-P8-NEXT:    lxvd2x vs0, r12, r11
+; CHECK-P8-NEXT:    std r6, 56(r1)
+; CHECK-P8-NEXT:    std r5, 48(r1)
+; CHECK-P8-NEXT:    std r4, 40(r1)
+; CHECK-P8-NEXT:    std r3, 32(r1)
 ; CHECK-P8-NEXT:    xxswapd v2, vs0
 ; CHECK-P8-NEXT:    blr
 
@@ -415,12 +415,12 @@ define fp128 @testNestedAggregate(ptr byval(%struct.MixedC) nocapture readonly a
 ; CHECK-NEXT:    std r8, 72(r1)
 ; CHECK-NEXT:    std r7, 64(r1)
 ; CHECK-NEXT:    lxv v2, 64(r1)
-; CHECK-NEXT:    std r3, 32(r1)
-; CHECK-NEXT:    std r4, 40(r1)
-; CHECK-NEXT:    std r5, 48(r1)
-; CHECK-NEXT:    std r6, 56(r1)
-; CHECK-NEXT:    std r9, 80(r1)
 ; CHECK-NEXT:    std r10, 88(r1)
+; CHECK-NEXT:    std r9, 80(r1)
+; CHECK-NEXT:    std r6, 56(r1)
+; CHECK-NEXT:    std r5, 48(r1)
+; CHECK-NEXT:    std r4, 40(r1)
+; CHECK-NEXT:    std r3, 32(r1)
 ; CHECK-NEXT:    blr
 ;
 ; CHECK-BE-LABEL: testNestedAggregate:
@@ -428,12 +428,12 @@ define fp128 @testNestedAggregate(ptr byval(%struct.MixedC) nocapture readonly a
 ; CHECK-BE-NEXT:    std r8, 88(r1)
 ; CHECK-BE-NEXT:    std r7, 80(r1)
 ; CHECK-BE-NEXT:    lxv v2, 80(r1)
-; CHECK-BE-NEXT:    std r3, 48(r1)
-; CHECK-BE-NEXT:    std r4, 56(r1)
-; CHECK-BE-NEXT:    std r5, 64(r1)
-; CHECK-BE-NEXT:    std r6, 72(r1)
-; CHECK-BE-NEXT:    std r9, 96(r1)
 ; CHECK-BE-NEXT:    std r10, 104(r1)
+; CHECK-BE-NEXT:    std r9, 96(r1)
+; CHECK-BE-NEXT:    std r6, 72(r1)
+; CHECK-BE-NEXT:    std r5, 64(r1)
+; CHECK-BE-NEXT:    std r4, 56(r1)
+; CHECK-BE-NEXT:    std r3, 48(r1)
 ; CHECK-BE-NEXT:    blr
 ;
 ; CHECK-P8-LABEL: testNestedAggregate:
@@ -442,13 +442,13 @@ define fp128 @testNestedAggregate(ptr byval(%struct.MixedC) nocapture readonly a
 ; CHECK-P8-NEXT:    std r7, 64(r1)
 ; CHECK-P8-NEXT:    li r7, 32
 ; CHECK-P8-NEXT:    addi r8, r1, 32
-; CHECK-P8-NEXT:    std r9, 80(r1)
 ; CHECK-P8-NEXT:    std r10, 88(r1)
+; CHECK-P8-NEXT:    std r9, 80(r1)
 ; CHECK-P8-NEXT:    lxvd2x vs0, r8, r7
-; CHECK-P8-NEXT:    std r3, 32(r1)
-; CHECK-P8-NEXT:    std r4, 40(r1)
-; CHECK-P8-NEXT:    std r5, 48(r1)
 ; CHECK-P8-NEXT:    std r6, 56(r1)
+; CHECK-P8-NEXT:    std r5, 48(r1)
+; CHECK-P8-NEXT:    std r4, 40(r1)
+; CHECK-P8-NEXT:    std r3, 32(r1)
 ; CHECK-P8-NEXT:    xxswapd v2, vs0
 ; CHECK-P8-NEXT:    blr
 
@@ -543,17 +543,17 @@ entry:
 define fp128 @sum_float128(i32 signext %count, ...) {
 ; CHECK-LABEL: sum_float128:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    std r4, 40(r1)
-; CHECK-NEXT:    addis r4, r2, .LCPI17_0@toc@ha
-; CHECK-NEXT:    cmpwi r3, 0
 ; CHECK-NEXT:    std r5, 48(r1)
-; CHECK-NEXT:    addi r4, r4, .LCPI17_0@toc@l
-; CHECK-NEXT:    std r6, 56(r1)
-; CHECK-NEXT:    std r7, 64(r1)
-; CHECK-NEXT:    std r8, 72(r1)
-; CHECK-NEXT:    lxv v2, 0(r4)
-; CHECK-NEXT:    std r9, 80(r1)
+; CHECK-NEXT:    addis r5, r2, .LCPI17_0@toc@ha
+; CHECK-NEXT:    cmpwi r3, 0
 ; CHECK-NEXT:    std r10, 88(r1)
+; CHECK-NEXT:    addi r5, r5, .LCPI17_0@toc@l
+; CHECK-NEXT:    std r9, 80(r1)
+; CHECK-NEXT:    std r8, 72(r1)
+; CHECK-NEXT:    std r7, 64(r1)
+; CHECK-NEXT:    lxv v2, 0(r5)
+; CHECK-NEXT:    std r6, 56(r1)
+; CHECK-NEXT:    std r4, 40(r1)
 ; CHECK-NEXT:    blelr cr0
 ; CHECK-NEXT:  # %bb.1: # %if.end
 ; CHECK-NEXT:    addi r3, r1, 40
@@ -567,17 +567,17 @@ define fp128 @sum_float128(i32 signext %count, ...) {
 ;
 ; CHECK-BE-LABEL: sum_float128:
 ; CHECK-BE:       # %bb.0: # %entry
-; CHECK-BE-NEXT:    std r4, 56(r1)
-; CHECK-BE-NEXT:    addis r4, r2, .LCPI17_0@toc@ha
-; CHECK-BE-NEXT:    cmpwi r3, 0
 ; CHECK-BE-NEXT:    std r5, 64(r1)
-; CHECK-BE-NEXT:    addi r4, r4, .LCPI17_0@toc@l
-; CHECK-BE-NEXT:    std r6, 72(r1)
-; CHECK-BE-NEXT:    std r7, 80(r1)
-; CHECK-BE-NEXT:    std r8, 88(r1)
-; CHECK-BE-NEXT:    lxv v2, 0(r4)
-; CHECK-BE-NEXT:    std r9, 96(r1)
+; CHECK-BE-NEXT:    addis r5, r2, .LCPI17_0@toc@ha
+; CHECK-BE-NEXT:    cmpwi r3, 0
 ; CHECK-BE-NEXT:    std r10, 104(r1)
+; CHECK-BE-NEXT:    addi r5, r5, .LCPI17_0@toc@l
+; CHECK-BE-NEXT:    std r9, 96(r1)
+; CHECK-BE-NEXT:    std r8, 88(r1)
+; CHECK-BE-NEXT:    std r7, 80(r1)
+; CHECK-BE-NEXT:    lxv v2, 0(r5)
+; CHECK-BE-NEXT:    std r6, 72(r1)
+; CHECK-BE-NEXT:    std r4, 56(r1)
 ; CHECK-BE-NEXT:    blelr cr0
 ; CHECK-BE-NEXT:  # %bb.1: # %if.end
 ; CHECK-BE-NEXT:    addi r3, r1, 56
@@ -598,17 +598,17 @@ define fp128 @sum_float128(i32 signext %count, ...) {
 ; CHECK-P8-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
 ; CHECK-P8-NEXT:    stdu r1, -64(r1)
 ; CHECK-P8-NEXT:    std r0, 80(r1)
-; CHECK-P8-NEXT:    std r4, 104(r1)
-; CHECK-P8-NEXT:    addis r4, r2, .LCPI17_0@toc@ha
-; CHECK-P8-NEXT:    cmpwi r3, 0
-; CHECK-P8-NEXT:    std r5, 112(r1)
-; CHECK-P8-NEXT:    std r6, 120(r1)
-; CHECK-P8-NEXT:    addi r4, r4, .LCPI17_0@toc@l
 ; CHECK-P8-NEXT:    std r7, 128(r1)
-; CHECK-P8-NEXT:    std r8, 136(r1)
-; CHECK-P8-NEXT:    lxvd2x vs0, 0, r4
-; CHECK-P8-NEXT:    std r9, 144(r1)
+; CHECK-P8-NEXT:    addis r7, r2, .LCPI17_0@toc@ha
+; CHECK-P8-NEXT:    cmpwi r3, 0
 ; CHECK-P8-NEXT:    std r10, 152(r1)
+; CHECK-P8-NEXT:    std r9, 144(r1)
+; CHECK-P8-NEXT:    addi r7, r7, .LCPI17_0@toc@l
+; CHECK-P8-NEXT:    std r8, 136(r1)
+; CHECK-P8-NEXT:    std r6, 120(r1)
+; CHECK-P8-NEXT:    lxvd2x vs0, 0, r7
+; CHECK-P8-NEXT:    std r5, 112(r1)
+; CHECK-P8-NEXT:    std r4, 104(r1)
 ; CHECK-P8-NEXT:    xxswapd v3, vs0
 ; CHECK-P8-NEXT:    ble cr0, .LBB17_2
 ; CHECK-P8-NEXT:  # %bb.1: # %if.end

@@ -5,21 +5,22 @@
 ; RUN: llc -verify-machineinstrs -mtriple=powerpc64-unknown-linux-gnu \
 ; RUN:     -mcpu=pwr9 -ppc-asm-full-reg-names -ppc-vsr-nums-as-vr < %s | \
 ; RUN: FileCheck %s --check-prefix=CHECK-P9-BE
+
 define void @test() local_unnamed_addr #0 align 2 {
 ; CHECK-BE-LABEL: test:
 ; CHECK-BE:       # %bb.0: # %bb
 ; CHECK-BE-NEXT:    lhz r3, 0(r3)
-; CHECK-BE-NEXT:    vspltisw v2, -16
 ; CHECK-BE-NEXT:    addi r3, r3, 1
-; CHECK-BE-NEXT:    xxlxor vs1, vs1, vs1
-; CHECK-BE-NEXT:    vsrw v2, v2, v2
 ; CHECK-BE-NEXT:    sldi r3, r3, 48
 ; CHECK-BE-NEXT:    std r3, -32(r1)
 ; CHECK-BE-NEXT:    std r3, -24(r1)
 ; CHECK-BE-NEXT:    addi r3, r1, -32
 ; CHECK-BE-NEXT:    lxvw4x vs0, 0, r3
+; CHECK-BE-NEXT:    addis r3, r2, .LCPI0_0@toc@ha
+; CHECK-BE-NEXT:    addi r3, r3, .LCPI0_0@toc@l
+; CHECK-BE-NEXT:    lxvw4x vs1, 0, r3
 ; CHECK-BE-NEXT:    addi r3, r1, -16
-; CHECK-BE-NEXT:    xxsel vs0, vs0, vs1, v2
+; CHECK-BE-NEXT:    xxland vs0, vs0, vs1
 ; CHECK-BE-NEXT:    stxvw4x vs0, 0, r3
 ; CHECK-BE-NEXT:    lwz r3, -16(r1)
 ; CHECK-BE-NEXT:    stw r3, 0(r3)
@@ -31,14 +32,14 @@ define void @test() local_unnamed_addr #0 align 2 {
 ; CHECK-P9-BE-LABEL: test:
 ; CHECK-P9-BE:       # %bb.0: # %bb
 ; CHECK-P9-BE-NEXT:    lhz r3, 0(r3)
-; CHECK-P9-BE-NEXT:    vspltisw v2, -16
-; CHECK-P9-BE-NEXT:    xxlxor vs0, vs0, vs0
 ; CHECK-P9-BE-NEXT:    addi r3, r3, 1
-; CHECK-P9-BE-NEXT:    vsrw v2, v2, v2
 ; CHECK-P9-BE-NEXT:    sldi r3, r3, 48
-; CHECK-P9-BE-NEXT:    mtfprd f1, r3
-; CHECK-P9-BE-NEXT:    xxsel v2, vs1, vs0, v2
-; CHECK-P9-BE-NEXT:    xxsldwi vs0, v2, v2, 3
+; CHECK-P9-BE-NEXT:    mtfprd f0, r3
+; CHECK-P9-BE-NEXT:    addis r3, r2, .LCPI0_0@toc@ha
+; CHECK-P9-BE-NEXT:    addi r3, r3, .LCPI0_0@toc@l
+; CHECK-P9-BE-NEXT:    lxv vs1, 0(r3)
+; CHECK-P9-BE-NEXT:    xxland vs0, vs0, vs1
+; CHECK-P9-BE-NEXT:    xxsldwi vs0, vs0, vs0, 3
 ; CHECK-P9-BE-NEXT:    stfiwx f0, 0, r3
 ; CHECK-P9-BE-NEXT:    .p2align 4
 ; CHECK-P9-BE-NEXT:  .LBB0_1: # %bb9

@@ -1312,7 +1312,28 @@ define <2 x i64> @unzip2a_dual_v2i64(<2 x i64> %a, <2 x i64> %b) {
 ;
 ; ZVE32F-LABEL: unzip2a_dual_v2i64:
 ; ZVE32F:       # %bb.0: # %entry
-; ZVE32F-NEXT:    mv a1, a2
+; ZVE32F-NEXT:    srli a1, a2, 32
+; ZVE32F-NEXT:    srli a3, a0, 32
+; ZVE32F-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; ZVE32F-NEXT:    vmv.v.x v8, a0
+; ZVE32F-NEXT:    vslide1down.vx v8, v8, a3
+; ZVE32F-NEXT:    vslide1down.vx v8, v8, a2
+; ZVE32F-NEXT:    vslide1down.vx v8, v8, a1
+; ZVE32F-NEXT:    vslidedown.vi v9, v8, 1
+; ZVE32F-NEXT:    vmv.x.s a0, v8
+; ZVE32F-NEXT:    vmv.x.s a1, v9
+; ZVE32F-NEXT:    vslidedown.vi v9, v8, 3
+; ZVE32F-NEXT:    vslidedown.vi v8, v8, 2
+; ZVE32F-NEXT:    slli a0, a0, 32
+; ZVE32F-NEXT:    vmv.x.s a2, v9
+; ZVE32F-NEXT:    vmv.x.s a3, v8
+; ZVE32F-NEXT:    slli a1, a1, 32
+; ZVE32F-NEXT:    srli a0, a0, 32
+; ZVE32F-NEXT:    slli a2, a2, 32
+; ZVE32F-NEXT:    slli a3, a3, 32
+; ZVE32F-NEXT:    or a0, a0, a1
+; ZVE32F-NEXT:    srli a1, a3, 32
+; ZVE32F-NEXT:    or a1, a1, a2
 ; ZVE32F-NEXT:    ret
 ;
 ; ZIP-LABEL: unzip2a_dual_v2i64:

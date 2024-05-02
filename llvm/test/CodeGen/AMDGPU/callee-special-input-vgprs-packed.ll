@@ -1319,58 +1319,111 @@ define void @too_many_args_use_workitem_id_x_byval(
 ; sp[1] = byval
 ; Local stack object initialize. Offset 0 is the emergency spill slot.
 define amdgpu_kernel void @kern_call_too_many_args_use_workitem_id_x_byval() #1 {
-; GCN-LABEL: kern_call_too_many_args_use_workitem_id_x_byval:
-; GCN:       ; %bb.0:
-; GCN-NEXT:    s_add_u32 s0, s0, s5
-; GCN-NEXT:    s_addc_u32 s1, s1, 0
-; GCN-NEXT:    v_mov_b32_e32 v31, v0
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x3e7
-; GCN-NEXT:    s_movk_i32 s32, 0x400
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], 0
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x140
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32
-; GCN-NEXT:    buffer_load_dword v0, off, s[0:3], 0
-; GCN-NEXT:    s_getpc_b64 s[4:5]
-; GCN-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
-; GCN-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
-; GCN-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
-; GCN-NEXT:    v_mov_b32_e32 v1, 20
-; GCN-NEXT:    v_mov_b32_e32 v2, 30
-; GCN-NEXT:    v_mov_b32_e32 v3, 40
-; GCN-NEXT:    v_mov_b32_e32 v4, 50
-; GCN-NEXT:    v_mov_b32_e32 v5, 60
-; GCN-NEXT:    v_mov_b32_e32 v6, 0x46
-; GCN-NEXT:    v_mov_b32_e32 v7, 0x50
-; GCN-NEXT:    v_mov_b32_e32 v8, 0x5a
-; GCN-NEXT:    v_mov_b32_e32 v9, 0x64
-; GCN-NEXT:    v_mov_b32_e32 v10, 0x6e
-; GCN-NEXT:    v_mov_b32_e32 v11, 0x78
-; GCN-NEXT:    v_mov_b32_e32 v12, 0x82
-; GCN-NEXT:    v_mov_b32_e32 v13, 0x8c
-; GCN-NEXT:    v_mov_b32_e32 v14, 0x96
-; GCN-NEXT:    v_mov_b32_e32 v15, 0xa0
-; GCN-NEXT:    v_mov_b32_e32 v16, 0xaa
-; GCN-NEXT:    v_mov_b32_e32 v17, 0xb4
-; GCN-NEXT:    v_mov_b32_e32 v18, 0xbe
-; GCN-NEXT:    v_mov_b32_e32 v19, 0xc8
-; GCN-NEXT:    v_mov_b32_e32 v20, 0xd2
-; GCN-NEXT:    v_mov_b32_e32 v21, 0xdc
-; GCN-NEXT:    v_mov_b32_e32 v22, 0xe6
-; GCN-NEXT:    v_mov_b32_e32 v23, 0xf0
-; GCN-NEXT:    v_mov_b32_e32 v24, 0xfa
-; GCN-NEXT:    v_mov_b32_e32 v25, 0x104
-; GCN-NEXT:    v_mov_b32_e32 v26, 0x10e
-; GCN-NEXT:    v_mov_b32_e32 v27, 0x118
-; GCN-NEXT:    v_mov_b32_e32 v28, 0x122
-; GCN-NEXT:    v_mov_b32_e32 v29, 0x12c
-; GCN-NEXT:    v_mov_b32_e32 v30, 0x136
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
-; GCN-NEXT:    v_mov_b32_e32 v0, 10
-; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_swappc_b64 s[30:31], s[4:5]
-; GCN-NEXT:    s_endpgm
+; GFX7-LABEL: kern_call_too_many_args_use_workitem_id_x_byval:
+; GFX7:       ; %bb.0:
+; GFX7-NEXT:    s_add_u32 s0, s0, s5
+; GFX7-NEXT:    s_addc_u32 s1, s1, 0
+; GFX7-NEXT:    v_mov_b32_e32 v31, v0
+; GFX7-NEXT:    v_mov_b32_e32 v0, 0x3e7
+; GFX7-NEXT:    buffer_store_dword v0, off, s[0:3], 0
+; GFX7-NEXT:    s_waitcnt vmcnt(0)
+; GFX7-NEXT:    buffer_load_dword v0, off, s[0:3], 0
+; GFX7-NEXT:    s_getpc_b64 s[4:5]
+; GFX7-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
+; GFX7-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
+; GFX7-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GFX7-NEXT:    s_movk_i32 s32, 0x400
+; GFX7-NEXT:    v_mov_b32_e32 v1, 0x140
+; GFX7-NEXT:    buffer_store_dword v1, off, s[0:3], s32
+; GFX7-NEXT:    v_mov_b32_e32 v1, 20
+; GFX7-NEXT:    v_mov_b32_e32 v2, 30
+; GFX7-NEXT:    v_mov_b32_e32 v3, 40
+; GFX7-NEXT:    v_mov_b32_e32 v4, 50
+; GFX7-NEXT:    v_mov_b32_e32 v5, 60
+; GFX7-NEXT:    v_mov_b32_e32 v6, 0x46
+; GFX7-NEXT:    v_mov_b32_e32 v7, 0x50
+; GFX7-NEXT:    v_mov_b32_e32 v8, 0x5a
+; GFX7-NEXT:    v_mov_b32_e32 v9, 0x64
+; GFX7-NEXT:    v_mov_b32_e32 v10, 0x6e
+; GFX7-NEXT:    v_mov_b32_e32 v11, 0x78
+; GFX7-NEXT:    v_mov_b32_e32 v12, 0x82
+; GFX7-NEXT:    v_mov_b32_e32 v13, 0x8c
+; GFX7-NEXT:    v_mov_b32_e32 v14, 0x96
+; GFX7-NEXT:    v_mov_b32_e32 v15, 0xa0
+; GFX7-NEXT:    v_mov_b32_e32 v16, 0xaa
+; GFX7-NEXT:    v_mov_b32_e32 v17, 0xb4
+; GFX7-NEXT:    v_mov_b32_e32 v18, 0xbe
+; GFX7-NEXT:    v_mov_b32_e32 v19, 0xc8
+; GFX7-NEXT:    v_mov_b32_e32 v20, 0xd2
+; GFX7-NEXT:    v_mov_b32_e32 v21, 0xdc
+; GFX7-NEXT:    v_mov_b32_e32 v22, 0xe6
+; GFX7-NEXT:    v_mov_b32_e32 v23, 0xf0
+; GFX7-NEXT:    v_mov_b32_e32 v24, 0xfa
+; GFX7-NEXT:    v_mov_b32_e32 v25, 0x104
+; GFX7-NEXT:    v_mov_b32_e32 v26, 0x10e
+; GFX7-NEXT:    v_mov_b32_e32 v27, 0x118
+; GFX7-NEXT:    v_mov_b32_e32 v28, 0x122
+; GFX7-NEXT:    v_mov_b32_e32 v29, 0x12c
+; GFX7-NEXT:    v_mov_b32_e32 v30, 0x136
+; GFX7-NEXT:    s_waitcnt vmcnt(1)
+; GFX7-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
+; GFX7-NEXT:    v_mov_b32_e32 v0, 10
+; GFX7-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX7-NEXT:    s_swappc_b64 s[30:31], s[4:5]
+; GFX7-NEXT:    s_endpgm
+;
+; GFX90A-LABEL: kern_call_too_many_args_use_workitem_id_x_byval:
+; GFX90A:       ; %bb.0:
+; GFX90A-NEXT:    s_add_u32 s0, s0, s5
+; GFX90A-NEXT:    s_addc_u32 s1, s1, 0
+; GFX90A-NEXT:    v_mov_b32_e32 v31, v0
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 0x3e7
+; GFX90A-NEXT:    buffer_store_dword v0, off, s[0:3], 0
+; GFX90A-NEXT:    s_waitcnt vmcnt(0)
+; GFX90A-NEXT:    buffer_load_dword v1, off, s[0:3], 0
+; GFX90A-NEXT:    s_getpc_b64 s[4:5]
+; GFX90A-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
+; GFX90A-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
+; GFX90A-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GFX90A-NEXT:    s_movk_i32 s32, 0x400
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 0x140
+; GFX90A-NEXT:    buffer_store_dword v0, off, s[0:3], s32
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 10
+; GFX90A-NEXT:    v_mov_b32_e32 v2, 30
+; GFX90A-NEXT:    v_mov_b32_e32 v3, 40
+; GFX90A-NEXT:    v_mov_b32_e32 v4, 50
+; GFX90A-NEXT:    v_mov_b32_e32 v5, 60
+; GFX90A-NEXT:    v_mov_b32_e32 v6, 0x46
+; GFX90A-NEXT:    v_mov_b32_e32 v7, 0x50
+; GFX90A-NEXT:    v_mov_b32_e32 v8, 0x5a
+; GFX90A-NEXT:    v_mov_b32_e32 v9, 0x64
+; GFX90A-NEXT:    v_mov_b32_e32 v10, 0x6e
+; GFX90A-NEXT:    v_mov_b32_e32 v11, 0x78
+; GFX90A-NEXT:    v_mov_b32_e32 v12, 0x82
+; GFX90A-NEXT:    v_mov_b32_e32 v13, 0x8c
+; GFX90A-NEXT:    v_mov_b32_e32 v14, 0x96
+; GFX90A-NEXT:    v_mov_b32_e32 v15, 0xa0
+; GFX90A-NEXT:    v_mov_b32_e32 v16, 0xaa
+; GFX90A-NEXT:    v_mov_b32_e32 v17, 0xb4
+; GFX90A-NEXT:    v_mov_b32_e32 v18, 0xbe
+; GFX90A-NEXT:    v_mov_b32_e32 v19, 0xc8
+; GFX90A-NEXT:    v_mov_b32_e32 v20, 0xd2
+; GFX90A-NEXT:    v_mov_b32_e32 v21, 0xdc
+; GFX90A-NEXT:    v_mov_b32_e32 v22, 0xe6
+; GFX90A-NEXT:    v_mov_b32_e32 v23, 0xf0
+; GFX90A-NEXT:    v_mov_b32_e32 v24, 0xfa
+; GFX90A-NEXT:    v_mov_b32_e32 v25, 0x104
+; GFX90A-NEXT:    v_mov_b32_e32 v26, 0x10e
+; GFX90A-NEXT:    v_mov_b32_e32 v27, 0x118
+; GFX90A-NEXT:    v_mov_b32_e32 v28, 0x122
+; GFX90A-NEXT:    v_mov_b32_e32 v29, 0x12c
+; GFX90A-NEXT:    v_mov_b32_e32 v30, 0x136
+; GFX90A-NEXT:    s_waitcnt vmcnt(1)
+; GFX90A-NEXT:    buffer_store_dword v1, off, s[0:3], s32 offset:4
+; GFX90A-NEXT:    v_mov_b32_e32 v1, 20
+; GFX90A-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX90A-NEXT:    s_swappc_b64 s[30:31], s[4:5]
+; GFX90A-NEXT:    s_endpgm
   %alloca = alloca i32, align 4, addrspace(5)
   store volatile i32 999, ptr addrspace(5) %alloca
   call void @too_many_args_use_workitem_id_x_byval(
@@ -1388,73 +1441,141 @@ define amdgpu_kernel void @kern_call_too_many_args_use_workitem_id_x_byval() #1 
 ; GCN: .amdhsa_system_vgpr_workitem_id 0
 
 define void @func_call_too_many_args_use_workitem_id_x_byval() #1 {
-; GCN-LABEL: func_call_too_many_args_use_workitem_id_x_byval:
-; GCN:       ; %bb.0:
-; GCN-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GCN-NEXT:    s_mov_b32 s4, s33
-; GCN-NEXT:    s_mov_b32 s33, s32
-; GCN-NEXT:    s_or_saveexec_b64 s[6:7], -1
-; GCN-NEXT:    buffer_store_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Spill
-; GCN-NEXT:    s_mov_b64 exec, s[6:7]
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x3e7
-; GCN-NEXT:    s_addk_i32 s32, 0x400
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s33
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    v_mov_b32_e32 v0, 0x140
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32
-; GCN-NEXT:    buffer_load_dword v0, off, s[0:3], s33
-; GCN-NEXT:    v_writelane_b32 v40, s4, 2
-; GCN-NEXT:    s_getpc_b64 s[4:5]
-; GCN-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
-; GCN-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
-; GCN-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
-; GCN-NEXT:    v_writelane_b32 v40, s30, 0
-; GCN-NEXT:    v_mov_b32_e32 v1, 20
-; GCN-NEXT:    v_mov_b32_e32 v2, 30
-; GCN-NEXT:    v_mov_b32_e32 v3, 40
-; GCN-NEXT:    v_mov_b32_e32 v4, 50
-; GCN-NEXT:    v_mov_b32_e32 v5, 60
-; GCN-NEXT:    v_mov_b32_e32 v6, 0x46
-; GCN-NEXT:    v_mov_b32_e32 v7, 0x50
-; GCN-NEXT:    v_mov_b32_e32 v8, 0x5a
-; GCN-NEXT:    v_mov_b32_e32 v9, 0x64
-; GCN-NEXT:    v_mov_b32_e32 v10, 0x6e
-; GCN-NEXT:    v_mov_b32_e32 v11, 0x78
-; GCN-NEXT:    v_mov_b32_e32 v12, 0x82
-; GCN-NEXT:    v_mov_b32_e32 v13, 0x8c
-; GCN-NEXT:    v_mov_b32_e32 v14, 0x96
-; GCN-NEXT:    v_mov_b32_e32 v15, 0xa0
-; GCN-NEXT:    v_mov_b32_e32 v16, 0xaa
-; GCN-NEXT:    v_mov_b32_e32 v17, 0xb4
-; GCN-NEXT:    v_mov_b32_e32 v18, 0xbe
-; GCN-NEXT:    v_mov_b32_e32 v19, 0xc8
-; GCN-NEXT:    v_mov_b32_e32 v20, 0xd2
-; GCN-NEXT:    v_mov_b32_e32 v21, 0xdc
-; GCN-NEXT:    v_mov_b32_e32 v22, 0xe6
-; GCN-NEXT:    v_mov_b32_e32 v23, 0xf0
-; GCN-NEXT:    v_mov_b32_e32 v24, 0xfa
-; GCN-NEXT:    v_mov_b32_e32 v25, 0x104
-; GCN-NEXT:    v_mov_b32_e32 v26, 0x10e
-; GCN-NEXT:    v_mov_b32_e32 v27, 0x118
-; GCN-NEXT:    v_mov_b32_e32 v28, 0x122
-; GCN-NEXT:    v_mov_b32_e32 v29, 0x12c
-; GCN-NEXT:    v_mov_b32_e32 v30, 0x136
-; GCN-NEXT:    v_writelane_b32 v40, s31, 1
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
-; GCN-NEXT:    v_mov_b32_e32 v0, 10
-; GCN-NEXT:    s_waitcnt lgkmcnt(0)
-; GCN-NEXT:    s_swappc_b64 s[30:31], s[4:5]
-; GCN-NEXT:    v_readlane_b32 s31, v40, 1
-; GCN-NEXT:    v_readlane_b32 s30, v40, 0
-; GCN-NEXT:    s_mov_b32 s32, s33
-; GCN-NEXT:    v_readlane_b32 s4, v40, 2
-; GCN-NEXT:    s_or_saveexec_b64 s[6:7], -1
-; GCN-NEXT:    buffer_load_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Reload
-; GCN-NEXT:    s_mov_b64 exec, s[6:7]
-; GCN-NEXT:    s_mov_b32 s33, s4
-; GCN-NEXT:    s_waitcnt vmcnt(0)
-; GCN-NEXT:    s_setpc_b64 s[30:31]
+; GFX7-LABEL: func_call_too_many_args_use_workitem_id_x_byval:
+; GFX7:       ; %bb.0:
+; GFX7-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX7-NEXT:    s_mov_b32 s4, s33
+; GFX7-NEXT:    s_mov_b32 s33, s32
+; GFX7-NEXT:    s_or_saveexec_b64 s[6:7], -1
+; GFX7-NEXT:    buffer_store_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Spill
+; GFX7-NEXT:    s_mov_b64 exec, s[6:7]
+; GFX7-NEXT:    v_mov_b32_e32 v0, 0x3e7
+; GFX7-NEXT:    buffer_store_dword v0, off, s[0:3], s33
+; GFX7-NEXT:    s_waitcnt vmcnt(0)
+; GFX7-NEXT:    buffer_load_dword v0, off, s[0:3], s33
+; GFX7-NEXT:    s_addk_i32 s32, 0x400
+; GFX7-NEXT:    v_writelane_b32 v40, s4, 2
+; GFX7-NEXT:    s_getpc_b64 s[4:5]
+; GFX7-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
+; GFX7-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
+; GFX7-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GFX7-NEXT:    v_mov_b32_e32 v1, 0x140
+; GFX7-NEXT:    v_writelane_b32 v40, s30, 0
+; GFX7-NEXT:    buffer_store_dword v1, off, s[0:3], s32
+; GFX7-NEXT:    v_mov_b32_e32 v1, 20
+; GFX7-NEXT:    v_mov_b32_e32 v2, 30
+; GFX7-NEXT:    v_mov_b32_e32 v3, 40
+; GFX7-NEXT:    v_mov_b32_e32 v4, 50
+; GFX7-NEXT:    v_mov_b32_e32 v5, 60
+; GFX7-NEXT:    v_mov_b32_e32 v6, 0x46
+; GFX7-NEXT:    v_mov_b32_e32 v7, 0x50
+; GFX7-NEXT:    v_mov_b32_e32 v8, 0x5a
+; GFX7-NEXT:    v_mov_b32_e32 v9, 0x64
+; GFX7-NEXT:    v_mov_b32_e32 v10, 0x6e
+; GFX7-NEXT:    v_mov_b32_e32 v11, 0x78
+; GFX7-NEXT:    v_mov_b32_e32 v12, 0x82
+; GFX7-NEXT:    v_mov_b32_e32 v13, 0x8c
+; GFX7-NEXT:    v_mov_b32_e32 v14, 0x96
+; GFX7-NEXT:    v_mov_b32_e32 v15, 0xa0
+; GFX7-NEXT:    v_mov_b32_e32 v16, 0xaa
+; GFX7-NEXT:    v_mov_b32_e32 v17, 0xb4
+; GFX7-NEXT:    v_mov_b32_e32 v18, 0xbe
+; GFX7-NEXT:    v_mov_b32_e32 v19, 0xc8
+; GFX7-NEXT:    v_mov_b32_e32 v20, 0xd2
+; GFX7-NEXT:    v_mov_b32_e32 v21, 0xdc
+; GFX7-NEXT:    v_mov_b32_e32 v22, 0xe6
+; GFX7-NEXT:    v_mov_b32_e32 v23, 0xf0
+; GFX7-NEXT:    v_mov_b32_e32 v24, 0xfa
+; GFX7-NEXT:    v_mov_b32_e32 v25, 0x104
+; GFX7-NEXT:    v_mov_b32_e32 v26, 0x10e
+; GFX7-NEXT:    v_mov_b32_e32 v27, 0x118
+; GFX7-NEXT:    v_mov_b32_e32 v28, 0x122
+; GFX7-NEXT:    v_mov_b32_e32 v29, 0x12c
+; GFX7-NEXT:    v_mov_b32_e32 v30, 0x136
+; GFX7-NEXT:    v_writelane_b32 v40, s31, 1
+; GFX7-NEXT:    s_waitcnt vmcnt(1)
+; GFX7-NEXT:    buffer_store_dword v0, off, s[0:3], s32 offset:4
+; GFX7-NEXT:    v_mov_b32_e32 v0, 10
+; GFX7-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX7-NEXT:    s_swappc_b64 s[30:31], s[4:5]
+; GFX7-NEXT:    v_readlane_b32 s31, v40, 1
+; GFX7-NEXT:    v_readlane_b32 s30, v40, 0
+; GFX7-NEXT:    s_mov_b32 s32, s33
+; GFX7-NEXT:    v_readlane_b32 s4, v40, 2
+; GFX7-NEXT:    s_or_saveexec_b64 s[6:7], -1
+; GFX7-NEXT:    buffer_load_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Reload
+; GFX7-NEXT:    s_mov_b64 exec, s[6:7]
+; GFX7-NEXT:    s_mov_b32 s33, s4
+; GFX7-NEXT:    s_waitcnt vmcnt(0)
+; GFX7-NEXT:    s_setpc_b64 s[30:31]
+;
+; GFX90A-LABEL: func_call_too_many_args_use_workitem_id_x_byval:
+; GFX90A:       ; %bb.0:
+; GFX90A-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX90A-NEXT:    s_mov_b32 s4, s33
+; GFX90A-NEXT:    s_mov_b32 s33, s32
+; GFX90A-NEXT:    s_or_saveexec_b64 s[6:7], -1
+; GFX90A-NEXT:    buffer_store_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Spill
+; GFX90A-NEXT:    s_mov_b64 exec, s[6:7]
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 0x3e7
+; GFX90A-NEXT:    buffer_store_dword v0, off, s[0:3], s33
+; GFX90A-NEXT:    s_waitcnt vmcnt(0)
+; GFX90A-NEXT:    buffer_load_dword v1, off, s[0:3], s33
+; GFX90A-NEXT:    s_addk_i32 s32, 0x400
+; GFX90A-NEXT:    v_writelane_b32 v40, s4, 2
+; GFX90A-NEXT:    s_getpc_b64 s[4:5]
+; GFX90A-NEXT:    s_add_u32 s4, s4, too_many_args_use_workitem_id_x_byval@gotpcrel32@lo+4
+; GFX90A-NEXT:    s_addc_u32 s5, s5, too_many_args_use_workitem_id_x_byval@gotpcrel32@hi+12
+; GFX90A-NEXT:    s_load_dwordx2 s[4:5], s[4:5], 0x0
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 0x140
+; GFX90A-NEXT:    v_writelane_b32 v40, s30, 0
+; GFX90A-NEXT:    buffer_store_dword v0, off, s[0:3], s32
+; GFX90A-NEXT:    v_mov_b32_e32 v0, 10
+; GFX90A-NEXT:    v_mov_b32_e32 v2, 30
+; GFX90A-NEXT:    v_mov_b32_e32 v3, 40
+; GFX90A-NEXT:    v_mov_b32_e32 v4, 50
+; GFX90A-NEXT:    v_mov_b32_e32 v5, 60
+; GFX90A-NEXT:    v_mov_b32_e32 v6, 0x46
+; GFX90A-NEXT:    v_mov_b32_e32 v7, 0x50
+; GFX90A-NEXT:    v_mov_b32_e32 v8, 0x5a
+; GFX90A-NEXT:    v_mov_b32_e32 v9, 0x64
+; GFX90A-NEXT:    v_mov_b32_e32 v10, 0x6e
+; GFX90A-NEXT:    v_mov_b32_e32 v11, 0x78
+; GFX90A-NEXT:    v_mov_b32_e32 v12, 0x82
+; GFX90A-NEXT:    v_mov_b32_e32 v13, 0x8c
+; GFX90A-NEXT:    v_mov_b32_e32 v14, 0x96
+; GFX90A-NEXT:    v_mov_b32_e32 v15, 0xa0
+; GFX90A-NEXT:    v_mov_b32_e32 v16, 0xaa
+; GFX90A-NEXT:    v_mov_b32_e32 v17, 0xb4
+; GFX90A-NEXT:    v_mov_b32_e32 v18, 0xbe
+; GFX90A-NEXT:    v_mov_b32_e32 v19, 0xc8
+; GFX90A-NEXT:    v_mov_b32_e32 v20, 0xd2
+; GFX90A-NEXT:    v_mov_b32_e32 v21, 0xdc
+; GFX90A-NEXT:    v_mov_b32_e32 v22, 0xe6
+; GFX90A-NEXT:    v_mov_b32_e32 v23, 0xf0
+; GFX90A-NEXT:    v_mov_b32_e32 v24, 0xfa
+; GFX90A-NEXT:    v_mov_b32_e32 v25, 0x104
+; GFX90A-NEXT:    v_mov_b32_e32 v26, 0x10e
+; GFX90A-NEXT:    v_mov_b32_e32 v27, 0x118
+; GFX90A-NEXT:    v_mov_b32_e32 v28, 0x122
+; GFX90A-NEXT:    v_mov_b32_e32 v29, 0x12c
+; GFX90A-NEXT:    v_mov_b32_e32 v30, 0x136
+; GFX90A-NEXT:    v_writelane_b32 v40, s31, 1
+; GFX90A-NEXT:    s_waitcnt vmcnt(1)
+; GFX90A-NEXT:    buffer_store_dword v1, off, s[0:3], s32 offset:4
+; GFX90A-NEXT:    v_mov_b32_e32 v1, 20
+; GFX90A-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX90A-NEXT:    s_swappc_b64 s[30:31], s[4:5]
+; GFX90A-NEXT:    v_readlane_b32 s31, v40, 1
+; GFX90A-NEXT:    v_readlane_b32 s30, v40, 0
+; GFX90A-NEXT:    s_mov_b32 s32, s33
+; GFX90A-NEXT:    v_readlane_b32 s4, v40, 2
+; GFX90A-NEXT:    s_or_saveexec_b64 s[6:7], -1
+; GFX90A-NEXT:    buffer_load_dword v40, off, s[0:3], s33 offset:4 ; 4-byte Folded Reload
+; GFX90A-NEXT:    s_mov_b64 exec, s[6:7]
+; GFX90A-NEXT:    s_mov_b32 s33, s4
+; GFX90A-NEXT:    s_waitcnt vmcnt(0)
+; GFX90A-NEXT:    s_setpc_b64 s[30:31]
   %alloca = alloca i32, align 4, addrspace(5)
   store volatile i32 999, ptr addrspace(5) %alloca
   call void @too_many_args_use_workitem_id_x_byval(

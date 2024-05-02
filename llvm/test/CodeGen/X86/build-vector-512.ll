@@ -589,14 +589,15 @@ define <16 x float> @test_buildvector_16f32_2_var(float %a0, float %a1) {
 ; AVX-64-LABEL: test_buildvector_16f32_2_var:
 ; AVX-64:       # %bb.0:
 ; AVX-64-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
-; AVX-64-NEXT:    vpmovsxbd {{.*#+}} xmm2 = [0,16,0,0]
+; AVX-64-NEXT:    vpmovsxbd {{.*#+}} xmm2 = [0,17,0,0]
 ; AVX-64-NEXT:    vbroadcastss %xmm0, %xmm0
-; AVX-64-NEXT:    vpermi2ps %zmm1, %zmm0, %zmm2
-; AVX-64-NEXT:    vinsertps {{.*#+}} xmm3 = xmm0[0,1,2],xmm1[0]
+; AVX-64-NEXT:    vpermi2ps %zmm0, %zmm1, %zmm2
+; AVX-64-NEXT:    vmovss {{.*#+}} xmm3 = xmm1[0],xmm0[1,2,3]
 ; AVX-64-NEXT:    vinsertf128 $1, %xmm3, %ymm2, %ymm2
-; AVX-64-NEXT:    vpmovsxbd {{.*#+}} ymm3 = [0,16,0,0,0,17,18,19]
-; AVX-64-NEXT:    vpermi2ps %zmm0, %zmm1, %zmm3
-; AVX-64-NEXT:    vinsertf64x4 $1, %ymm3, %zmm2, %zmm0
+; AVX-64-NEXT:    vinsertps {{.*#+}} xmm3 = xmm0[0,1,2],xmm1[0]
+; AVX-64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm1[0],xmm0[2,3]
+; AVX-64-NEXT:    vinsertf128 $1, %xmm3, %ymm0, %ymm0
+; AVX-64-NEXT:    vinsertf64x4 $1, %ymm2, %zmm0, %zmm0
 ; AVX-64-NEXT:    retq
   %v0 = insertelement <16 x float> poison, float %a0, i32 0
   %v1 = insertelement <16 x float> %v0, float %a1, i32 1

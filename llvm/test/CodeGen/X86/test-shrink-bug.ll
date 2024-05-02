@@ -64,9 +64,11 @@ define dso_local void @fail(i16 %a, <2 x i8> %b) {
 ;
 ; CHECK-X64-LABEL: fail:
 ; CHECK-X64:       # %bb.0:
-; CHECK-X64-NEXT:    pslld $8, %xmm0
+; CHECK-X64-NEXT:    punpcklbw {{.*#+}} xmm0 = xmm0[0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]
+; CHECK-X64-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,0,1,1,4,5,6,7]
+; CHECK-X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,1,1]
 ; CHECK-X64-NEXT:    pcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; CHECK-X64-NEXT:    pextrw $1, %xmm0, %eax
+; CHECK-X64-NEXT:    pextrw $4, %xmm0, %eax
 ; CHECK-X64-NEXT:    xorb $1, %al
 ; CHECK-X64-NEXT:    testl $263, %edi # imm = 0x107
 ; CHECK-X64-NEXT:    setne %cl

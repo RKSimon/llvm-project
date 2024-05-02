@@ -62,7 +62,9 @@ define i32 @func_alloca(i32 signext %0) {
 ; CHECK-NEXT:    monc
 ; CHECK-NEXT:    or %s0, 0, %s62
 ; CHECK-NEXT:  .LBB2_2:
+; CHECK-NEXT:    and %s1, %s0, (32)0
 ; CHECK-NEXT:    stl %s0, 12(, %s11)
+; CHECK-NEXT:    or %s0, 0, %s1
 ; CHECK-NEXT:    adds.l %s11, 16, %s11
 ; CHECK-NEXT:    b.l.t (, %s10)
 ;
@@ -80,7 +82,9 @@ define i32 @func_alloca(i32 signext %0) {
 ; PIC-NEXT:    monc
 ; PIC-NEXT:    or %s0, 0, %s62
 ; PIC-NEXT:  .LBB2_2:
+; PIC-NEXT:    and %s1, %s0, (32)0
 ; PIC-NEXT:    stl %s0, 12(, %s11)
+; PIC-NEXT:    or %s0, 0, %s1
 ; PIC-NEXT:    adds.l %s11, 16, %s11
 ; PIC-NEXT:    b.l.t (, %s10)
   %2 = alloca i32, align 4

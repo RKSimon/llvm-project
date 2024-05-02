@@ -357,8 +357,8 @@ define <16 x i8> @zext_sub_absd8(<16 x i4>, <16 x i4>) local_unnamed_addr {
 ; CHECK-PWR9-LABEL: zext_sub_absd8:
 ; CHECK-PWR9:       # %bb.0:
 ; CHECK-PWR9-NEXT:    xxspltib vs0, 15
-; CHECK-PWR9-NEXT:    xxland v3, v3, vs0
 ; CHECK-PWR9-NEXT:    xxland v2, v2, vs0
+; CHECK-PWR9-NEXT:    xxland v3, v3, vs0
 ; CHECK-PWR9-NEXT:    vabsdub v2, v2, v3
 ; CHECK-PWR9-NEXT:    blr
 ;

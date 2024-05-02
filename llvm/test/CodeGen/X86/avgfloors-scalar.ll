@@ -125,9 +125,9 @@ define i16 @test_lsb_i16(i16 %a0, i16 %a1) nounwind {
 ; X86-NEXT:    movswl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movswl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl %eax, %edx
-; X86-NEXT:    sarl %edx
+; X86-NEXT:    shrl %edx
 ; X86-NEXT:    andl %ecx, %eax
-; X86-NEXT:    sarl %ecx
+; X86-NEXT:    shrl %ecx
 ; X86-NEXT:    addl %edx, %ecx
 ; X86-NEXT:    andl $1, %eax
 ; X86-NEXT:    addl %ecx, %eax
@@ -138,8 +138,8 @@ define i16 @test_lsb_i16(i16 %a0, i16 %a1) nounwind {
 ; X64:       # %bb.0:
 ; X64-NEXT:    movswl %si, %eax
 ; X64-NEXT:    movswl %di, %ecx
-; X64-NEXT:    sarl %ecx
-; X64-NEXT:    sarl %eax
+; X64-NEXT:    shrl %ecx
+; X64-NEXT:    shrl %eax
 ; X64-NEXT:    addl %ecx, %eax
 ; X64-NEXT:    andl %esi, %edi
 ; X64-NEXT:    andl $1, %edi

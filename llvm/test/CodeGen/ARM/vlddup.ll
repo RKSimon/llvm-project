@@ -17,10 +17,10 @@ define <8 x i8> @vld1dupi8(ptr %A) nounwind {
 define <8 x i8> @vld1dupi8_preinc(ptr noalias nocapture %a, i32 %b) nounwind {
 ; CHECK-LABEL: vld1dupi8_preinc:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    ldr r2, [r0]
-; CHECK-NEXT:    add r3, r2, r1
+; CHECK-NEXT:    ldr r3, [r0]
+; CHECK-NEXT:    ldrb r1, [r3, r1]!
 ; CHECK-NEXT:    str r3, [r0]
-; CHECK-NEXT:    vld1.8 {d16[]}, [r3]
+; CHECK-NEXT:    vdup.8 d16, r1
 ; CHECK-NEXT:    vmov r2, r1, d16
 ; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    mov pc, lr
@@ -38,8 +38,9 @@ define <8 x i8> @vld1dupi8_postinc_fixed(ptr noalias nocapture %a) nounwind {
 ; CHECK-LABEL: vld1dupi8_postinc_fixed:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    ldr r3, [r0]
-; CHECK-NEXT:    vld1.8 {d16[]}, [r3]!
+; CHECK-NEXT:    ldrb r1, [r3], #1
 ; CHECK-NEXT:    str r3, [r0]
+; CHECK-NEXT:    vdup.8 d16, r1
 ; CHECK-NEXT:    vmov r2, r1, d16
 ; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    mov pc, lr
@@ -57,8 +58,9 @@ define <8 x i8> @vld1dupi8_postinc_register(ptr noalias nocapture %a, i32 %n) no
 ; CHECK-LABEL: vld1dupi8_postinc_register:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    ldr r3, [r0]
-; CHECK-NEXT:    vld1.8 {d16[]}, [r3], r1
+; CHECK-NEXT:    ldrb r1, [r3], r1
 ; CHECK-NEXT:    str r3, [r0]
+; CHECK-NEXT:    vdup.8 d16, r1
 ; CHECK-NEXT:    vmov r2, r1, d16
 ; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    mov pc, lr
@@ -77,10 +79,10 @@ define <16 x i8> @vld1dupqi8_preinc(ptr noalias nocapture %a, i32 %b) nounwind {
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .save {r11, lr}
 ; CHECK-NEXT:    push {r11, lr}
-; CHECK-NEXT:    ldr r2, [r0]
-; CHECK-NEXT:    add lr, r2, r1
+; CHECK-NEXT:    ldr lr, [r0]
+; CHECK-NEXT:    ldrb r1, [lr, r1]!
 ; CHECK-NEXT:    str lr, [r0]
-; CHECK-NEXT:    vld1.8 {d16[], d17[]}, [lr]
+; CHECK-NEXT:    vdup.8 q8, r1
 ; CHECK-NEXT:    vmov r12, r1, d16
 ; CHECK-NEXT:    vmov r2, r3, d17
 ; CHECK-NEXT:    mov r0, r12
@@ -102,8 +104,9 @@ define <16 x i8> @vld1dupqi8_postinc_fixed(ptr noalias nocapture %a) nounwind {
 ; CHECK-NEXT:    .save {r11, lr}
 ; CHECK-NEXT:    push {r11, lr}
 ; CHECK-NEXT:    ldr lr, [r0]
-; CHECK-NEXT:    vld1.8 {d16[], d17[]}, [lr]!
+; CHECK-NEXT:    ldrb r1, [lr], #1
 ; CHECK-NEXT:    str lr, [r0]
+; CHECK-NEXT:    vdup.8 q8, r1
 ; CHECK-NEXT:    vmov r12, r1, d16
 ; CHECK-NEXT:    vmov r2, r3, d17
 ; CHECK-NEXT:    mov r0, r12
@@ -125,8 +128,9 @@ define <16 x i8> @vld1dupqi8_postinc_register(ptr noalias nocapture %a, i32 %n) 
 ; CHECK-NEXT:    .save {r11, lr}
 ; CHECK-NEXT:    push {r11, lr}
 ; CHECK-NEXT:    ldr lr, [r0]
-; CHECK-NEXT:    vld1.8 {d16[], d17[]}, [lr], r1
+; CHECK-NEXT:    ldrb r1, [lr], r1
 ; CHECK-NEXT:    str lr, [r0]
+; CHECK-NEXT:    vdup.8 q8, r1
 ; CHECK-NEXT:    vmov r12, r1, d16
 ; CHECK-NEXT:    vmov r2, r3, d17
 ; CHECK-NEXT:    mov r0, r12
@@ -231,9 +235,9 @@ define <4 x i32> @load_i32_dup_zext(ptr %A) nounwind {
 ; CHECK-LABEL: load_i32_dup_zext:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    ldrb r0, [r0]
-; CHECK-NEXT:    vdup.32 q8, r0
-; CHECK-NEXT:    vmov r0, r1, d16
-; CHECK-NEXT:    vmov r2, r3, d17
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    mov r2, r0
+; CHECK-NEXT:    mov r3, r0
 ; CHECK-NEXT:    mov pc, lr
         %tmp1 = load i8, ptr %A, align 1
         %tmp2 = zext i8 %tmp1 to i32
@@ -247,9 +251,9 @@ define <4 x i32> @load_i32_dup_sext(ptr %A) nounwind {
 ; CHECK-LABEL: load_i32_dup_sext:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    ldrsb r0, [r0]
-; CHECK-NEXT:    vdup.32 q8, r0
-; CHECK-NEXT:    vmov r0, r1, d16
-; CHECK-NEXT:    vmov r2, r3, d17
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    mov r2, r0
+; CHECK-NEXT:    mov r3, r0
 ; CHECK-NEXT:    mov pc, lr
         %tmp1 = load i8, ptr %A, align 1
         %tmp2 = sext i8 %tmp1 to i32
@@ -348,10 +352,12 @@ define void @vld2dupi8_postinc_fixed(ptr noalias nocapture sret(%struct.__neon_i
 ; CHECK-LABEL: vld2dupi8_postinc_fixed:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    ldr r2, [r1]
-; CHECK-NEXT:    vld2.8 {d16[], d17[]}, [r2]!
+; CHECK-NEXT:    vld2.8 {d16[0], d17[0]}, [r2]!
+; CHECK-NEXT:    vdup.8 d16, d16[0]
 ; CHECK-NEXT:    str r2, [r1]
+; CHECK-NEXT:    vdup.8 d18, d17[0]
 ; CHECK-NEXT:    vst1.8 {d16}, [r0:64]!
-; CHECK-NEXT:    vstr d17, [r0]
+; CHECK-NEXT:    vstr d18, [r0]
 ; CHECK-NEXT:    mov pc, lr
 entry:
   %0 = load ptr, ptr %a, align 4
@@ -372,10 +378,12 @@ define void @vld2dupi8_postinc_variable(ptr noalias nocapture sret(%struct.__neo
 ; CHECK-LABEL: vld2dupi8_postinc_variable:
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    ldr r3, [r1]
-; CHECK-NEXT:    vld2.8 {d16[], d17[]}, [r3], r2
+; CHECK-NEXT:    vld2.8 {d16[0], d17[0]}, [r3], r2
+; CHECK-NEXT:    vdup.8 d16, d16[0]
 ; CHECK-NEXT:    str r3, [r1]
+; CHECK-NEXT:    vdup.8 d18, d17[0]
 ; CHECK-NEXT:    vst1.8 {d16}, [r0:64]!
-; CHECK-NEXT:    vstr d17, [r0]
+; CHECK-NEXT:    vstr d18, [r0]
 ; CHECK-NEXT:    mov pc, lr
 entry:
   %0 = load ptr, ptr %a, align 4

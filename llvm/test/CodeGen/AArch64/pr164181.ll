@@ -33,7 +33,8 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:  // %bb.1: // %for.body41.lr.ph
 ; CHECK-NEXT:    ldr x4, [sp, #312]
 ; CHECK-NEXT:    ldr x14, [sp, #280]
-; CHECK-NEXT:    tbz w0, #0, .LBB0_42
+; CHECK-NEXT:    mvn w8, w0
+; CHECK-NEXT:    tbnz w8, #0, .LBB0_42
 ; CHECK-NEXT:  // %bb.2: // %for.body41.us.preheader
 ; CHECK-NEXT:    ldrb w8, [sp, #368]
 ; CHECK-NEXT:    ldrb w12, [sp, #256]
@@ -292,7 +293,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:  // %bb.29: // %if.then222.us
 ; CHECK-NEXT:    // in Loop: Header=BB0_28 Depth=5
 ; CHECK-NEXT:    adrp x27, :got:var_32
-; CHECK-NEXT:    ldur w8, [x19, #-12]
+; CHECK-NEXT:    ldurh w8, [x19, #-12]
 ; CHECK-NEXT:    ldr x27, [x27, :got_lo12:var_32]
 ; CHECK-NEXT:    strh w8, [x27]
 ; CHECK-NEXT:    sxtb w8, w25
@@ -359,8 +360,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    add x22, x22, #1
 ; CHECK-NEXT:    add x27, x27, #1
 ; CHECK-NEXT:    mov w28, wzr
-; CHECK-NEXT:    cmp x27, #0
-; CHECK-NEXT:    b.hs .LBB0_9
+; CHECK-NEXT:    cbz wzr, .LBB0_9
 ; CHECK-NEXT:  .LBB0_39: // %for.body380.us
 ; CHECK-NEXT:    // Parent Loop BB0_4 Depth=1
 ; CHECK-NEXT:    // Parent Loop BB0_6 Depth=2

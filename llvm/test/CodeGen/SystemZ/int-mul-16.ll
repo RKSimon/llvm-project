@@ -42,9 +42,15 @@ define i128 @f3(i128 %a, i128 %b, i128 %add) {
 ; CHECK-LABEL: f3:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vl %v0, 0(%r5), 3
-; CHECK-NEXT:    vl %v1, 0(%r4), 3
-; CHECK-NEXT:    vl %v2, 0(%r3), 3
-; CHECK-NEXT:    vmahq %v0, %v2, %v1, %v0
+; CHECK-NEXT:    vrepib %v1, 127
+; CHECK-NEXT:    vsrab %v2, %v0, %v1
+; CHECK-NEXT:    vsra %v1, %v2, %v1
+; CHECK-NEXT:    vl %v2, 0(%r4), 3
+; CHECK-NEXT:    vl %v3, 0(%r3), 3
+; CHECK-NEXT:    vmhq %v4, %v3, %v2
+; CHECK-NEXT:    vmlq %v2, %v3, %v2
+; CHECK-NEXT:    vaccq %v0, %v2, %v0
+; CHECK-NEXT:    vacq %v0, %v4, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = sext i128 %a to i256
@@ -61,10 +67,14 @@ define i128 @f3(i128 %a, i128 %b, i128 %add) {
 define i128 @f4(i128 %a, i128 %b, i128 %add) {
 ; CHECK-LABEL: f4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vl %v0, 0(%r5), 3
 ; CHECK-NEXT:    vl %v1, 0(%r4), 3
 ; CHECK-NEXT:    vl %v2, 0(%r3), 3
-; CHECK-NEXT:    vmalhq %v0, %v2, %v1, %v0
+; CHECK-NEXT:    vl %v0, 0(%r5), 3
+; CHECK-NEXT:    vmlhq %v3, %v2, %v1
+; CHECK-NEXT:    vmlq %v1, %v2, %v1
+; CHECK-NEXT:    vaccq %v0, %v1, %v0
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vacq %v0, %v3, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = zext i128 %a to i256
@@ -81,11 +91,17 @@ define i128 @f4(i128 %a, i128 %b, i128 %add) {
 define i128 @f5(i128 %a, i128 %add) {
 ; CHECK-LABEL: f5:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    larl %r1, .LCPI4_0
 ; CHECK-NEXT:    vl %v0, 0(%r4), 3
-; CHECK-NEXT:    vl %v1, 0(%r3), 3
-; CHECK-NEXT:    vl %v2, 0(%r1), 3
-; CHECK-NEXT:    vmahq %v0, %v1, %v2, %v0
+; CHECK-NEXT:    vrepib %v1, 127
+; CHECK-NEXT:    vsrab %v2, %v0, %v1
+; CHECK-NEXT:    larl %r1, .LCPI4_0
+; CHECK-NEXT:    vsra %v1, %v2, %v1
+; CHECK-NEXT:    vl %v2, 0(%r3), 3
+; CHECK-NEXT:    vl %v3, 0(%r1), 3
+; CHECK-NEXT:    vmhq %v4, %v2, %v3
+; CHECK-NEXT:    vmlq %v2, %v2, %v3
+; CHECK-NEXT:    vaccq %v0, %v2, %v0
+; CHECK-NEXT:    vacq %v0, %v4, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = sext i128 %a to i256
@@ -102,10 +118,14 @@ define i128 @f6(i128 %a, i128 %add) {
 ; CHECK-LABEL: f6:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    larl %r1, .LCPI5_0
-; CHECK-NEXT:    vl %v0, 0(%r4), 3
 ; CHECK-NEXT:    vl %v1, 0(%r3), 3
 ; CHECK-NEXT:    vl %v2, 0(%r1), 3
-; CHECK-NEXT:    vmalhq %v0, %v1, %v2, %v0
+; CHECK-NEXT:    vl %v0, 0(%r4), 3
+; CHECK-NEXT:    vmlhq %v3, %v1, %v2
+; CHECK-NEXT:    vmlq %v1, %v1, %v2
+; CHECK-NEXT:    vaccq %v0, %v1, %v0
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vacq %v0, %v3, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = zext i128 %a to i256
@@ -121,11 +141,15 @@ define i128 @f6(i128 %a, i128 %add) {
 define i128 @f7(i128 %a, i128 %b) {
 ; CHECK-LABEL: f7:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    larl %r1, .LCPI6_0
 ; CHECK-NEXT:    vl %v0, 0(%r4), 3
 ; CHECK-NEXT:    vl %v1, 0(%r3), 3
-; CHECK-NEXT:    vl %v2, 0(%r1), 3
-; CHECK-NEXT:    vmahq %v0, %v1, %v0, %v2
+; CHECK-NEXT:    larl %r1, .LCPI6_0
+; CHECK-NEXT:    vmhq %v2, %v1, %v0
+; CHECK-NEXT:    vmlq %v0, %v1, %v0
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vaccq %v0, %v0, %v1
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vacq %v0, %v2, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = sext i128 %a to i256
@@ -141,11 +165,15 @@ define i128 @f7(i128 %a, i128 %b) {
 define i128 @f8(i128 %a, i128 %b) {
 ; CHECK-LABEL: f8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    larl %r1, .LCPI7_0
 ; CHECK-NEXT:    vl %v0, 0(%r4), 3
 ; CHECK-NEXT:    vl %v1, 0(%r3), 3
-; CHECK-NEXT:    vl %v2, 0(%r1), 3
-; CHECK-NEXT:    vmalhq %v0, %v1, %v0, %v2
+; CHECK-NEXT:    larl %r1, .LCPI7_0
+; CHECK-NEXT:    vmlhq %v2, %v1, %v0
+; CHECK-NEXT:    vmlq %v0, %v1, %v0
+; CHECK-NEXT:    vl %v1, 0(%r1), 3
+; CHECK-NEXT:    vaccq %v0, %v0, %v1
+; CHECK-NEXT:    vgbm %v1, 0
+; CHECK-NEXT:    vacq %v0, %v2, %v1, %v0
 ; CHECK-NEXT:    vst %v0, 0(%r2), 3
 ; CHECK-NEXT:    br %r14
   %exta = zext i128 %a to i256

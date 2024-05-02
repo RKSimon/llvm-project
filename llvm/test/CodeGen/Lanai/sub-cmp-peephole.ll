@@ -110,12 +110,9 @@ define i32 @cmp_ult0(i32 inreg %a, i32 inreg %b, i32 inreg %x, i32 inreg %y) {
 ; CHECK:       ! %bb.0: ! %entry
 ; CHECK-NEXT:    st %fp, [--%sp]
 ; CHECK-NEXT:    add %sp, 0x8, %fp
-; CHECK-NEXT:    mov hi(t), %r3
-; CHECK-NEXT:    or %r3, lo(t), %r3
-; CHECK-NEXT:    ld 0[%r3], %r3
-; CHECK-NEXT:    sub %r3, 0x11, %r3
+; CHECK-NEXT:    mov 0x1, %r3
 ; CHECK-NEXT:    sub.f %r3, 0x0, %r0
-; CHECK-NEXT:    buge .LBB5_2
+; CHECK-NEXT:    bne .LBB5_2
 ; CHECK-NEXT:    sub %sp, 0x10, %sp
 ; CHECK-NEXT:  .LBB5_1: ! %if.then
 ; CHECK-NEXT:    add %pc, 0x10, %rca

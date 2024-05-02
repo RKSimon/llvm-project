@@ -21,8 +21,8 @@ define void @fmul_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmul_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmul_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    ldp q2, q3, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    ldp q3, q2, [x1]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    shll v4.4s, v2.4h, #16
@@ -41,7 +41,7 @@ define void @fmul_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-NEXT:    bfcvtn v3.4h, v5.4s
 ; CHECK-NEXT:    bfcvtn2 v2.8h, v0.4s
 ; CHECK-NEXT:    bfcvtn2 v3.8h, v1.4s
-; CHECK-NEXT:    stp q2, q3, [x2]
+; CHECK-NEXT:    stp q3, q2, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b
@@ -123,8 +123,8 @@ define void @fmla_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmla_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmla_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    ldp q2, q3, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    ldp q3, q2, [x1]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    shll v4.4s, v2.4h, #16
@@ -143,7 +143,7 @@ define void @fmla_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-NEXT:    bfcvtn v3.4h, v5.4s
 ; CHECK-NEXT:    bfcvtn2 v2.8h, v0.4s
 ; CHECK-NEXT:    bfcvtn2 v3.8h, v1.4s
-; CHECK-NEXT:    ldp q0, q1, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x2]
 ; CHECK-NEXT:    shll v4.4s, v0.4h, #16
 ; CHECK-NEXT:    shll v5.4s, v2.4h, #16
 ; CHECK-NEXT:    shll v6.4s, v1.4h, #16
@@ -160,7 +160,7 @@ define void @fmla_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-NEXT:    bfcvtn v3.4h, v5.4s
 ; CHECK-NEXT:    bfcvtn2 v2.8h, v0.4s
 ; CHECK-NEXT:    bfcvtn2 v3.8h, v1.4s
-; CHECK-NEXT:    stp q2, q3, [x2]
+; CHECK-NEXT:    stp q3, q2, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b
@@ -250,8 +250,8 @@ define void @fmls_indexed_f16_256b(ptr %a, ptr %b, ptr %c) #0 {
 define void @fmls_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-LABEL: fmls_indexed_bf16_256b:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    ldp q2, q3, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    ldp q3, q2, [x1]
 ; CHECK-NEXT:    dup v0.8h, v0.h[2]
 ; CHECK-NEXT:    dup v1.8h, v1.h[2]
 ; CHECK-NEXT:    shll v4.4s, v2.4h, #16
@@ -270,7 +270,7 @@ define void @fmls_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-NEXT:    bfcvtn v3.4h, v5.4s
 ; CHECK-NEXT:    bfcvtn2 v2.8h, v0.4s
 ; CHECK-NEXT:    bfcvtn2 v3.8h, v1.4s
-; CHECK-NEXT:    ldp q0, q1, [x2]
+; CHECK-NEXT:    ldp q1, q0, [x2]
 ; CHECK-NEXT:    shll v4.4s, v0.4h, #16
 ; CHECK-NEXT:    shll v5.4s, v2.4h, #16
 ; CHECK-NEXT:    shll v6.4s, v1.4h, #16
@@ -287,7 +287,7 @@ define void @fmls_indexed_bf16_256b(ptr %a, ptr %b, ptr %c) #0 {
 ; CHECK-NEXT:    bfcvtn v3.4h, v5.4s
 ; CHECK-NEXT:    bfcvtn2 v2.8h, v0.4s
 ; CHECK-NEXT:    bfcvtn2 v3.8h, v1.4s
-; CHECK-NEXT:    stp q2, q3, [x2]
+; CHECK-NEXT:    stp q3, q2, [x2]
 ; CHECK-NEXT:    ret
   %ld.a = load <16 x bfloat>, ptr %a
   %ld.b = load <16 x bfloat>, ptr %b

@@ -254,11 +254,14 @@ define dso_local void @g2(ptr %a) {
 ; N32-NEXT:    sd $16, 0($1) # 8-byte Folded Spill
 ; N32-NEXT:    .cfi_offset 31, -8
 ; N32-NEXT:    .cfi_offset 16, -16
-; N32-NEXT:    move $5, $4
 ; N32-NEXT:    lui $1, 1
 ; N32-NEXT:    addu $1, $sp, $1
 ; N32-NEXT:    sw $4, -4($1)
 ; N32-NEXT:    addiu $16, $sp, 8
+; N32-NEXT:    daddiu $1, $zero, 1
+; N32-NEXT:    dsll $1, $1, 32
+; N32-NEXT:    daddiu $1, $1, -1
+; N32-NEXT:    and $5, $4, $1
 ; N32-NEXT:    ori $6, $zero, 65520
 ; N32-NEXT:    jal memcpy
 ; N32-NEXT:    move $4, $16
@@ -388,6 +391,11 @@ define dso_local i32 @g3(ptr %a, ptr %b) #0 {
 ; N32-NEXT:    .cfi_offset 31, -8
 ; N32-NEXT:    sw $5, 0($sp)
 ; N32-NEXT:    sw $4, 4($sp)
+; N32-NEXT:    daddiu $1, $zero, 1
+; N32-NEXT:    dsll $1, $1, 32
+; N32-NEXT:    daddiu $1, $1, -1
+; N32-NEXT:    and $4, $4, $1
+; N32-NEXT:    and $5, $5, $1
 ; N32-NEXT:    jal memcpy
 ; N32-NEXT:    ori $6, $zero, 65520
 ; N32-NEXT:    addiu $2, $zero, 4

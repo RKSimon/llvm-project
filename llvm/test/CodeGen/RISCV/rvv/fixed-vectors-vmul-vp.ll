@@ -1110,10 +1110,9 @@ declare <8 x i64> @llvm.vp.shl.v8i64(<8 x i64>, <8 x i64>, <8 x i1>, i32)
 define <8 x i64> @vmul_vshl_vx_v8i64(<8 x i64> %va, <8 x i1> %m, i32 zeroext %evl) {
 ; CHECK-LABEL: vmul_vshl_vx_v8i64:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vsetvli zero, a0, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 3, v0.t
-; CHECK-NEXT:    li a0, 7
-; CHECK-NEXT:    vmul.vx v8, v8, a0, v0.t
+; CHECK-NEXT:    li a0, 56
+; CHECK-NEXT:    vsetivli zero, 8, e64, m4, ta, ma
+; CHECK-NEXT:    vmul.vx v8, v8, a0
 ; CHECK-NEXT:    ret
   %elt.head1 = insertelement <8 x i64> poison, i64 3, i32 0
   %vb = shufflevector <8 x i64> %elt.head1, <8 x i64> poison, <8 x i32> zeroinitializer
@@ -1146,8 +1145,8 @@ define <8 x i64> @vmul_vshl_vv_v8i64(<8 x i64> %va, <8 x i64> %vb, <8 x i1> %m, 
 ; CHECK-LABEL: vmul_vshl_vv_v8i64:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vsetvli zero, a0, e64, m4, ta, ma
-; CHECK-NEXT:    vsll.vi v8, v8, 7, v0.t
 ; CHECK-NEXT:    vmul.vv v8, v8, v12, v0.t
+; CHECK-NEXT:    vsll.vi v8, v8, 7, v0.t
 ; CHECK-NEXT:    ret
   %elt.head = insertelement <8 x i64> poison, i64 7, i32 0
   %vc = shufflevector <8 x i64> %elt.head, <8 x i64> poison, <8 x i32> zeroinitializer
@@ -1177,10 +1176,11 @@ declare <8 x i64> @llvm.vp.add.v8i64(<8 x i64>, <8 x i64>, <8 x i1>, i32)
 define <8 x i64> @vmul_vadd_vx_v8i64(<8 x i64> %va, <8 x i1> %m, i32 zeroext %evl) {
 ; CHECK-LABEL: vmul_vadd_vx_v8i64:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    li a1, 7
 ; CHECK-NEXT:    vsetvli zero, a0, e64, m4, ta, ma
-; CHECK-NEXT:    vadd.vi v8, v8, 3, v0.t
-; CHECK-NEXT:    li a0, 7
-; CHECK-NEXT:    vmul.vx v8, v8, a0, v0.t
+; CHECK-NEXT:    vmul.vx v8, v8, a1, v0.t
+; CHECK-NEXT:    li a0, 21
+; CHECK-NEXT:    vadd.vx v8, v8, a0, v0.t
 ; CHECK-NEXT:    ret
   %elt.head1 = insertelement <8 x i64> poison, i64 3, i32 0
   %vb = shufflevector <8 x i64> %elt.head1, <8 x i64> poison, <8 x i32> zeroinitializer

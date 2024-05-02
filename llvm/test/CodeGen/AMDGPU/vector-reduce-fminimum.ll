@@ -1428,9 +1428,9 @@ define float @test_vector_reduce_fminimum_v4float(<4 x float> %v) {
 ; GFX12-SDAG-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
-; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v1
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v1, v2
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v2, v3
+; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v3
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-GISEL-LABEL: test_vector_reduce_fminimum_v4float:
@@ -1605,12 +1605,12 @@ define float @test_vector_reduce_fminimum_v8float(<8 x float> %v) {
 ; GFX12-SDAG-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
-; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v1
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v1, v2
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v2, v3
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v4, v5
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v3, v4
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v5, v6
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v6, v7
+; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v7
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-GISEL-LABEL: test_vector_reduce_fminimum_v8float:
@@ -1926,18 +1926,18 @@ define float @test_vector_reduce_fminimum_v16float(<16 x float> %v) {
 ; GFX12-SDAG-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
-; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v1
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v1, v2
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v2, v3
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v4, v5
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v3, v4
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v5, v6
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v6, v7
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v8, v9
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v7, v8
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v9, v10
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v10, v11
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v12, v13
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v11, v12
+; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v13, v14
 ; GFX12-SDAG-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-SDAG-NEXT:    v_minimum3_f32 v0, v0, v14, v15
+; GFX12-SDAG-NEXT:    v_minimum_f32 v0, v0, v15
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-GISEL-LABEL: test_vector_reduce_fminimum_v16float:

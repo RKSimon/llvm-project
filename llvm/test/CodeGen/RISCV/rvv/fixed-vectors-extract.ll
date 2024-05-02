@@ -1303,89 +1303,63 @@ define i32 @extractelt_mul_v4i32(<4 x i32> %x) {
 }
 
 define i32 @extractelt_sdiv_v4i32(<4 x i32> %x) {
-; RV32NOM-LABEL: extractelt_sdiv_v4i32:
-; RV32NOM:       # %bb.0:
-; RV32NOM-NEXT:    lui a0, %hi(.LCPI46_0)
-; RV32NOM-NEXT:    addi a0, a0, %lo(.LCPI46_0)
-; RV32NOM-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; RV32NOM-NEXT:    vle32.v v9, (a0)
-; RV32NOM-NEXT:    lui a0, 1044480
-; RV32NOM-NEXT:    vmv.s.x v10, a0
-; RV32NOM-NEXT:    lui a0, 12320
-; RV32NOM-NEXT:    addi a0, a0, 257
-; RV32NOM-NEXT:    vsext.vf4 v11, v10
-; RV32NOM-NEXT:    vand.vv v10, v8, v11
-; RV32NOM-NEXT:    vmulh.vv v8, v8, v9
-; RV32NOM-NEXT:    vmv.s.x v9, a0
-; RV32NOM-NEXT:    vsext.vf4 v11, v9
-; RV32NOM-NEXT:    vadd.vv v8, v8, v10
-; RV32NOM-NEXT:    vsra.vv v9, v8, v11
-; RV32NOM-NEXT:    vsrl.vi v8, v8, 31
-; RV32NOM-NEXT:    vadd.vv v8, v9, v8
-; RV32NOM-NEXT:    vslidedown.vi v8, v8, 2
-; RV32NOM-NEXT:    vmv.x.s a0, v8
-; RV32NOM-NEXT:    ret
+; RV32-LABEL: extractelt_sdiv_v4i32:
+; RV32:       # %bb.0:
+; RV32-NEXT:    lui a0, %hi(.LCPI46_0)
+; RV32-NEXT:    addi a0, a0, %lo(.LCPI46_0)
+; RV32-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; RV32-NEXT:    vle32.v v9, (a0)
+; RV32-NEXT:    vmulh.vv v8, v8, v9
+; RV32-NEXT:    vsrl.vi v9, v8, 31
+; RV32-NEXT:    vsra.vi v8, v8, 2
+; RV32-NEXT:    vadd.vv v8, v8, v9
+; RV32-NEXT:    vslidedown.vi v8, v8, 2
+; RV32-NEXT:    vmv.x.s a0, v8
+; RV32-NEXT:    ret
 ;
-; RV32M-LABEL: extractelt_sdiv_v4i32:
-; RV32M:       # %bb.0:
-; RV32M-NEXT:    vsetivli zero, 1, e32, m1, ta, ma
-; RV32M-NEXT:    vslidedown.vi v8, v8, 2
-; RV32M-NEXT:    lui a0, 322639
-; RV32M-NEXT:    vmv.x.s a1, v8
-; RV32M-NEXT:    addi a0, a0, -945
-; RV32M-NEXT:    mulh a0, a1, a0
-; RV32M-NEXT:    srli a1, a0, 31
-; RV32M-NEXT:    srai a0, a0, 2
-; RV32M-NEXT:    add a0, a0, a1
-; RV32M-NEXT:    ret
-;
-; RV64NOM-LABEL: extractelt_sdiv_v4i32:
-; RV64NOM:       # %bb.0:
-; RV64NOM-NEXT:    lui a0, %hi(.LCPI46_0)
-; RV64NOM-NEXT:    addi a0, a0, %lo(.LCPI46_0)
-; RV64NOM-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; RV64NOM-NEXT:    vle32.v v9, (a0)
-; RV64NOM-NEXT:    lui a0, 1044480
-; RV64NOM-NEXT:    vmv.s.x v10, a0
-; RV64NOM-NEXT:    lui a0, 12320
-; RV64NOM-NEXT:    addi a0, a0, 257
-; RV64NOM-NEXT:    vsext.vf4 v11, v10
-; RV64NOM-NEXT:    vand.vv v10, v8, v11
-; RV64NOM-NEXT:    vmulh.vv v8, v8, v9
-; RV64NOM-NEXT:    vmv.s.x v9, a0
-; RV64NOM-NEXT:    vadd.vv v8, v8, v10
-; RV64NOM-NEXT:    vsext.vf4 v10, v9
-; RV64NOM-NEXT:    vsra.vv v8, v8, v10
-; RV64NOM-NEXT:    vsrl.vi v9, v8, 31
-; RV64NOM-NEXT:    vadd.vv v8, v8, v9
-; RV64NOM-NEXT:    vslidedown.vi v8, v8, 2
-; RV64NOM-NEXT:    vmv.x.s a0, v8
-; RV64NOM-NEXT:    ret
-;
-; RV64M-LABEL: extractelt_sdiv_v4i32:
-; RV64M:       # %bb.0:
-; RV64M-NEXT:    vsetivli zero, 1, e32, m1, ta, ma
-; RV64M-NEXT:    vslidedown.vi v8, v8, 2
-; RV64M-NEXT:    lui a0, 322639
-; RV64M-NEXT:    vmv.x.s a1, v8
-; RV64M-NEXT:    addi a0, a0, -945
-; RV64M-NEXT:    mul a0, a1, a0
-; RV64M-NEXT:    srli a1, a0, 63
-; RV64M-NEXT:    srai a0, a0, 34
-; RV64M-NEXT:    add a0, a0, a1
-; RV64M-NEXT:    ret
+; RV64-LABEL: extractelt_sdiv_v4i32:
+; RV64:       # %bb.0:
+; RV64-NEXT:    lui a0, %hi(.LCPI46_0)
+; RV64-NEXT:    addi a0, a0, %lo(.LCPI46_0)
+; RV64-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; RV64-NEXT:    vle32.v v9, (a0)
+; RV64-NEXT:    lui a0, 1044480
+; RV64-NEXT:    vmv.s.x v10, a0
+; RV64-NEXT:    lui a0, 12320
+; RV64-NEXT:    addi a0, a0, 257
+; RV64-NEXT:    vsext.vf4 v11, v10
+; RV64-NEXT:    vand.vv v10, v8, v11
+; RV64-NEXT:    vmulh.vv v8, v8, v9
+; RV64-NEXT:    vmv.s.x v9, a0
+; RV64-NEXT:    vadd.vv v8, v8, v10
+; RV64-NEXT:    vsext.vf4 v10, v9
+; RV64-NEXT:    vsra.vv v8, v8, v10
+; RV64-NEXT:    vsrl.vi v9, v8, 31
+; RV64-NEXT:    vadd.vv v8, v8, v9
+; RV64-NEXT:    vslidedown.vi v8, v8, 2
+; RV64-NEXT:    vmv.x.s a0, v8
+; RV64-NEXT:    ret
 ;
 ; VISNI-LABEL: extractelt_sdiv_v4i32:
 ; VISNI:       # %bb.0:
-; VISNI-NEXT:    vsetivli zero, 1, e32, m1, ta, ma
+; VISNI-NEXT:    lui a0, %hi(.LCPI46_0)
+; VISNI-NEXT:    addi a0, a0, %lo(.LCPI46_0)
+; VISNI-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; VISNI-NEXT:    vle32.v v9, (a0)
+; VISNI-NEXT:    lui a0, 1044480
+; VISNI-NEXT:    vmv.s.x v10, a0
+; VISNI-NEXT:    lui a0, 12320
+; VISNI-NEXT:    addi a0, a0, 257
+; VISNI-NEXT:    vsext.vf4 v11, v10
+; VISNI-NEXT:    vand.vv v10, v8, v11
+; VISNI-NEXT:    vmulh.vv v8, v8, v9
+; VISNI-NEXT:    vmv.s.x v9, a0
+; VISNI-NEXT:    vadd.vv v8, v8, v10
+; VISNI-NEXT:    vsext.vf4 v10, v9
+; VISNI-NEXT:    vsra.vv v8, v8, v10
+; VISNI-NEXT:    vsrl.vi v9, v8, 31
+; VISNI-NEXT:    vadd.vv v8, v8, v9
 ; VISNI-NEXT:    ri.vextract.x.v a0, v8, 2
-; VISNI-NEXT:    lui a1, 322639
-; VISNI-NEXT:    sext.w a0, a0
-; VISNI-NEXT:    addi a1, a1, -945
-; VISNI-NEXT:    mul a0, a0, a1
-; VISNI-NEXT:    srli a1, a0, 63
-; VISNI-NEXT:    srai a0, a0, 34
-; VISNI-NEXT:    add a0, a0, a1
 ; VISNI-NEXT:    ret
   %bo = sdiv <4 x i32> %x, <i32 11, i32 12, i32 13, i32 14>
   %ext = extractelement <4 x i32> %bo, i32 2
@@ -1416,42 +1390,29 @@ define i32 @extractelt_udiv_v4i32(<4 x i32> %x) {
 ; RV32M-NEXT:    srli a0, a0, 2
 ; RV32M-NEXT:    ret
 ;
-; RV64NOM-LABEL: extractelt_udiv_v4i32:
-; RV64NOM:       # %bb.0:
-; RV64NOM-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
-; RV64NOM-NEXT:    vsrl.vi v8, v8, 0
-; RV64NOM-NEXT:    lui a0, 322639
-; RV64NOM-NEXT:    addi a0, a0, -945
-; RV64NOM-NEXT:    vmulhu.vx v8, v8, a0
-; RV64NOM-NEXT:    vslidedown.vi v8, v8, 2
-; RV64NOM-NEXT:    vmv.x.s a0, v8
-; RV64NOM-NEXT:    slli a0, a0, 33
-; RV64NOM-NEXT:    srli a0, a0, 35
-; RV64NOM-NEXT:    ret
-;
-; RV64M-LABEL: extractelt_udiv_v4i32:
-; RV64M:       # %bb.0:
-; RV64M-NEXT:    lui a0, 322639
-; RV64M-NEXT:    vsetivli zero, 1, e32, m1, ta, ma
-; RV64M-NEXT:    vslidedown.vi v8, v8, 2
-; RV64M-NEXT:    addi a0, a0, -945
-; RV64M-NEXT:    vmv.x.s a1, v8
-; RV64M-NEXT:    slli a0, a0, 32
-; RV64M-NEXT:    slli a1, a1, 32
-; RV64M-NEXT:    mulhu a0, a1, a0
-; RV64M-NEXT:    srli a0, a0, 34
-; RV64M-NEXT:    ret
+; RV64-LABEL: extractelt_udiv_v4i32:
+; RV64:       # %bb.0:
+; RV64-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; RV64-NEXT:    vsrl.vi v8, v8, 0
+; RV64-NEXT:    lui a0, 322639
+; RV64-NEXT:    addi a0, a0, -945
+; RV64-NEXT:    vmulhu.vx v8, v8, a0
+; RV64-NEXT:    vslidedown.vi v8, v8, 2
+; RV64-NEXT:    vmv.x.s a0, v8
+; RV64-NEXT:    slli a0, a0, 33
+; RV64-NEXT:    srli a0, a0, 35
+; RV64-NEXT:    ret
 ;
 ; VISNI-LABEL: extractelt_udiv_v4i32:
 ; VISNI:       # %bb.0:
+; VISNI-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
+; VISNI-NEXT:    vsrl.vi v8, v8, 0
 ; VISNI-NEXT:    lui a0, 322639
-; VISNI-NEXT:    vsetivli zero, 1, e32, m1, ta, ma
-; VISNI-NEXT:    ri.vextract.x.v a1, v8, 2
 ; VISNI-NEXT:    addi a0, a0, -945
-; VISNI-NEXT:    slli a0, a0, 32
-; VISNI-NEXT:    slli a1, a1, 32
-; VISNI-NEXT:    mulhu a0, a1, a0
-; VISNI-NEXT:    srli a0, a0, 34
+; VISNI-NEXT:    vmulhu.vx v8, v8, a0
+; VISNI-NEXT:    ri.vextract.x.v a0, v8, 2
+; VISNI-NEXT:    slli a0, a0, 33
+; VISNI-NEXT:    srli a0, a0, 35
 ; VISNI-NEXT:    ret
   %bo = udiv <4 x i32> %x, <i32 11, i32 12, i32 13, i32 14>
   %ext = extractelement <4 x i32> %bo, i32 2

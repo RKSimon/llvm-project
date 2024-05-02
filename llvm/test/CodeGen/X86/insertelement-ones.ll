@@ -179,16 +179,55 @@ define <8 x i16> @insert_v8i16_x12345x7(<8 x i16> %a) {
 }
 
 define <16 x i16> @insert_v16i16_x12345x789ABCDEx(<16 x i16> %a) {
-; SSE-LABEL: insert_v16i16_x12345x789ABCDEx:
-; SSE:       # %bb.0:
-; SSE-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
-; SSE-NEXT:    retq
+; SSE2-LABEL: insert_v16i16_x12345x789ABCDEx:
+; SSE2:       # %bb.0:
+; SSE2-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE2-NEXT:    movl $65535, %eax # imm = 0xFFFF
+; SSE2-NEXT:    pinsrw $7, %eax, %xmm1
+; SSE2-NEXT:    retq
 ;
-; AVX-LABEL: insert_v16i16_x12345x789ABCDEx:
-; AVX:       # %bb.0:
-; AVX-NEXT:    vorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
-; AVX-NEXT:    retq
+; SSE3-LABEL: insert_v16i16_x12345x789ABCDEx:
+; SSE3:       # %bb.0:
+; SSE3-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE3-NEXT:    movl $65535, %eax # imm = 0xFFFF
+; SSE3-NEXT:    pinsrw $7, %eax, %xmm1
+; SSE3-NEXT:    retq
+;
+; SSSE3-LABEL: insert_v16i16_x12345x789ABCDEx:
+; SSSE3:       # %bb.0:
+; SSSE3-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSSE3-NEXT:    movl $65535, %eax # imm = 0xFFFF
+; SSSE3-NEXT:    pinsrw $7, %eax, %xmm1
+; SSSE3-NEXT:    retq
+;
+; SSE41-LABEL: insert_v16i16_x12345x789ABCDEx:
+; SSE41:       # %bb.0:
+; SSE41-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; SSE41-NEXT:    pcmpeqd %xmm2, %xmm2
+; SSE41-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0,1,2,3,4,5,6],xmm2[7]
+; SSE41-NEXT:    retq
+;
+; AVX1-LABEL: insert_v16i16_x12345x789ABCDEx:
+; AVX1:       # %bb.0:
+; AVX1-NEXT:    vorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; AVX1-NEXT:    vorps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; AVX1-NEXT:    retq
+;
+; AVX2-LABEL: insert_v16i16_x12345x789ABCDEx:
+; AVX2:       # %bb.0:
+; AVX2-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; AVX2-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
+; AVX2-NEXT:    vpblendw {{.*#+}} ymm1 = ymm0[0,1,2,3,4,5,6],ymm1[7],ymm0[8,9,10,11,12,13,14],ymm1[15]
+; AVX2-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1,2,3],ymm1[4,5,6,7]
+; AVX2-NEXT:    retq
+;
+; AVX512-LABEL: insert_v16i16_x12345x789ABCDEx:
+; AVX512:       # %bb.0:
+; AVX512-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm0
+; AVX512-NEXT:    vpcmpeqd %ymm1, %ymm1, %ymm1
+; AVX512-NEXT:    vpblendw {{.*#+}} ymm1 = ymm0[0,1,2,3,4,5,6],ymm1[7],ymm0[8,9,10,11,12,13,14],ymm1[15]
+; AVX512-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1,2,3],ymm1[4,5,6,7]
+; AVX512-NEXT:    retq
   %1 = insertelement <16 x i16> %a, i16 -1, i32 0
   %2 = insertelement <16 x i16> %1, i16 -1, i32 6
   %3 = insertelement <16 x i16> %2, i16 -1, i32 15

@@ -51,7 +51,6 @@ define amdgpu_kernel void @sextload_i1_to_i32_trunc_cmp_eq_0(ptr addrspace(1) %o
   ret void
 }
 
-; FIXME: The negate should be inverting the compare.
 define amdgpu_kernel void @zextload_i1_to_i32_trunc_cmp_eq_0(ptr addrspace(1) %out, ptr addrspace(1) %in) nounwind {
 ; SI-LABEL: zextload_i1_to_i32_trunc_cmp_eq_0:
 ; SI:       ; %bb.0:
@@ -67,10 +66,8 @@ define amdgpu_kernel void @zextload_i1_to_i32_trunc_cmp_eq_0(ptr addrspace(1) %o
 ; SI-NEXT:    s_mov_b32 s4, s0
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(0)
-; SI-NEXT:    v_and_b32_e32 v0, 1, v0
-; SI-NEXT:    v_cmp_eq_u32_e32 vcc, 1, v0
-; SI-NEXT:    s_xor_b64 s[0:1], vcc, -1
-; SI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, s[0:1]
+; SI-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
+; SI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; SI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; SI-NEXT:    s_endpgm
 ;
@@ -88,10 +85,8 @@ define amdgpu_kernel void @zextload_i1_to_i32_trunc_cmp_eq_0(ptr addrspace(1) %o
 ; VI-NEXT:    s_mov_b32 s4, s0
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(0)
-; VI-NEXT:    v_and_b32_e32 v0, 1, v0
-; VI-NEXT:    v_cmp_eq_u32_e32 vcc, 1, v0
-; VI-NEXT:    s_xor_b64 s[0:1], vcc, -1
-; VI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, s[0:1]
+; VI-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
+; VI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; VI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; VI-NEXT:    s_endpgm
   %load = load i1, ptr addrspace(1) %in
@@ -370,10 +365,8 @@ define amdgpu_kernel void @zextload_i1_to_i32_trunc_cmp_ne_1(ptr addrspace(1) %o
 ; SI-NEXT:    s_mov_b32 s4, s0
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(0)
-; SI-NEXT:    v_and_b32_e32 v0, 1, v0
-; SI-NEXT:    v_cmp_eq_u32_e32 vcc, 1, v0
-; SI-NEXT:    s_xor_b64 s[0:1], vcc, -1
-; SI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, s[0:1]
+; SI-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
+; SI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; SI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; SI-NEXT:    s_endpgm
 ;
@@ -391,10 +384,8 @@ define amdgpu_kernel void @zextload_i1_to_i32_trunc_cmp_ne_1(ptr addrspace(1) %o
 ; VI-NEXT:    s_mov_b32 s4, s0
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(0)
-; VI-NEXT:    v_and_b32_e32 v0, 1, v0
-; VI-NEXT:    v_cmp_eq_u32_e32 vcc, 1, v0
-; VI-NEXT:    s_xor_b64 s[0:1], vcc, -1
-; VI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, s[0:1]
+; VI-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
+; VI-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; VI-NEXT:    buffer_store_byte v0, off, s[4:7], 0
 ; VI-NEXT:    s_endpgm
   %load = load i1, ptr addrspace(1) %in
