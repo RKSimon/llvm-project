@@ -381,7 +381,8 @@ define { i128, i8 } @i128_checked_mul(i128 %x, i128 %y) {
 ; CHECK-NEXT:    adc x10, x10, x12
 ; CHECK-NEXT:    cmp x9, x11
 ; CHECK-NEXT:    ccmp x10, x11, #0, eq
-; CHECK-NEXT:    cset w2, eq
+; CHECK-NEXT:    cset w9, ne
+; CHECK-NEXT:    eor w2, w9, #0x1
 ; CHECK-NEXT:    ret
   %1 = tail call { i128, i1 } @llvm.smul.with.overflow.i128(i128 %x, i128 %y)
   %2 = extractvalue { i128, i1 } %1, 0
@@ -439,6 +440,7 @@ define i128 @i128_saturating_mul(i128 %x, i128 %y) {
 ; CHECK-NEXT:    asr x9, x1, #63
 ; CHECK-NEXT:    umulh x10, x0, x2
 ; CHECK-NEXT:    asr x13, x3, #63
+; CHECK-NEXT:    eor x16, x3, x1
 ; CHECK-NEXT:    mul x11, x1, x2
 ; CHECK-NEXT:    umulh x8, x1, x2
 ; CHECK-NEXT:    mul x9, x9, x2
@@ -448,26 +450,23 @@ define i128 @i128_saturating_mul(i128 %x, i128 %y) {
 ; CHECK-NEXT:    adc x8, x8, x9
 ; CHECK-NEXT:    mul x13, x0, x13
 ; CHECK-NEXT:    adds x9, x14, x10
-; CHECK-NEXT:    mul x11, x1, x3
-; CHECK-NEXT:    adc x10, x12, x13
-; CHECK-NEXT:    smulh x12, x1, x3
-; CHECK-NEXT:    asr x13, x8, #63
-; CHECK-NEXT:    asr x14, x10, #63
-; CHECK-NEXT:    adds x8, x8, x10
-; CHECK-NEXT:    adc x10, x13, x14
-; CHECK-NEXT:    adds x8, x11, x8
-; CHECK-NEXT:    asr x11, x9, #63
+; CHECK-NEXT:    mul x15, x1, x3
+; CHECK-NEXT:    smulh x10, x1, x3
+; CHECK-NEXT:    adc x11, x12, x13
+; CHECK-NEXT:    asr x12, x8, #63
 ; CHECK-NEXT:    mul x13, x0, x2
-; CHECK-NEXT:    adc x10, x12, x10
-; CHECK-NEXT:    eor x12, x3, x1
-; CHECK-NEXT:    eor x8, x8, x11
-; CHECK-NEXT:    eor x10, x10, x11
-; CHECK-NEXT:    asr x11, x12, #63
-; CHECK-NEXT:    orr x8, x8, x10
-; CHECK-NEXT:    eor x10, x11, #0x7fffffffffffffff
-; CHECK-NEXT:    cmp x8, #0
-; CHECK-NEXT:    csinv x0, x13, x11, eq
-; CHECK-NEXT:    csel x1, x10, x9, ne
+; CHECK-NEXT:    asr x14, x11, #63
+; CHECK-NEXT:    adds x8, x8, x11
+; CHECK-NEXT:    asr x11, x9, #63
+; CHECK-NEXT:    adc x12, x12, x14
+; CHECK-NEXT:    adds x8, x15, x8
+; CHECK-NEXT:    asr x14, x16, #63
+; CHECK-NEXT:    adc x10, x10, x12
+; CHECK-NEXT:    cmp x8, x11
+; CHECK-NEXT:    ccmp x10, x11, #0, eq
+; CHECK-NEXT:    eor x8, x14, #0x7fffffffffffffff
+; CHECK-NEXT:    csinv x0, x13, x14, eq
+; CHECK-NEXT:    csel x1, x8, x9, ne
 ; CHECK-NEXT:    ret
   %1 = tail call { i128, i1 } @llvm.smul.with.overflow.i128(i128 %x, i128 %y)
   %2 = extractvalue { i128, i1 } %1, 0

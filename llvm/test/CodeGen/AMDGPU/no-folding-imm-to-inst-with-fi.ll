@@ -80,21 +80,21 @@ define protected amdgpu_kernel void @no_folding_imm_to_inst_with_fi(<4 x i64> %v
 ; CHECK-NEXT:    s_wait_storecnt 0x0
 ; CHECK-NEXT:    flat_store_b128 v[34:35], v[16:19] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_storecnt 0x0
-; CHECK-NEXT:    flat_load_b128 v[0:3], v[22:23] scope:SCOPE_SYS
-; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; CHECK-NEXT:    flat_load_b128 v[0:3], v[20:21] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
-; CHECK-NEXT:    flat_load_b128 v[0:3], v[26:27] scope:SCOPE_SYS
+; CHECK-NEXT:    flat_load_b128 v[0:3], v[22:23] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; CHECK-NEXT:    flat_load_b128 v[0:3], v[24:25] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
-; CHECK-NEXT:    flat_load_b128 v[0:3], v[30:31] scope:SCOPE_SYS
+; CHECK-NEXT:    flat_load_b128 v[0:3], v[26:27] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; CHECK-NEXT:    flat_load_b128 v[0:3], v[28:29] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
-; CHECK-NEXT:    flat_load_b128 v[0:3], v[34:35] scope:SCOPE_SYS
+; CHECK-NEXT:    flat_load_b128 v[0:3], v[30:31] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; CHECK-NEXT:    flat_load_b128 v[0:3], v[32:33] scope:SCOPE_SYS
+; CHECK-NEXT:    s_wait_loadcnt_dscnt 0x0
+; CHECK-NEXT:    flat_load_b128 v[0:3], v[34:35] scope:SCOPE_SYS
 ; CHECK-NEXT:    s_wait_loadcnt 0x0
 ; CHECK-NEXT:    s_endpgm
 bb:

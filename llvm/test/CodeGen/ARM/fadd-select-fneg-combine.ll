@@ -4,12 +4,14 @@
 define float @fadd_select_fneg_fneg_f32(i32 %arg0, float %x, float %y, float %z) {
 ; CHECK-LABEL: fadd_select_fneg_fneg_f32:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov s0, r2
+; CHECK-NEXT:    eor r1, r1, #-2147483648
+; CHECK-NEXT:    eor r2, r2, #-2147483648
+; CHECK-NEXT:    vmov s0, r3
 ; CHECK-NEXT:    cmp r0, #0
+; CHECK-NEXT:    vmov s2, r2
 ; CHECK-NEXT:    vmov s4, r1
-; CHECK-NEXT:    vmov s2, r3
-; CHECK-NEXT:    vseleq.f32 s0, s4, s0
-; CHECK-NEXT:    vsub.f32 s0, s2, s0
+; CHECK-NEXT:    vseleq.f32 s2, s4, s2
+; CHECK-NEXT:    vadd.f32 s0, s2, s0
 ; CHECK-NEXT:    vmov r0, s0
 ; CHECK-NEXT:    bx lr
   %cmp = icmp eq i32 %arg0, 0
@@ -26,9 +28,11 @@ define half @fadd_select_fneg_fneg_f16(i32 %arg0, half %x, half %y, half %z) {
 ; CHECK-NEXT:    vmov.f16 s0, r2
 ; CHECK-NEXT:    cmp r0, #0
 ; CHECK-NEXT:    vmov.f16 s2, r1
+; CHECK-NEXT:    vneg.f16 s0, s0
+; CHECK-NEXT:    vneg.f16 s2, s2
 ; CHECK-NEXT:    vseleq.f16 s0, s2, s0
 ; CHECK-NEXT:    vmov.f16 s2, r3
-; CHECK-NEXT:    vsub.f16 s0, s2, s0
+; CHECK-NEXT:    vadd.f16 s0, s0, s2
 ; CHECK-NEXT:    vmov r0, s0
 ; CHECK-NEXT:    bx lr
   %cmp = icmp eq i32 %arg0, 0
@@ -248,12 +252,13 @@ define half @fadd_select_fsub_select_f16(i32 %arg0, half %x, half %y, half %z) {
 define half @fadd_select_fneg_negk_f16(i32 %arg0, half %x, half %y) {
 ; CHECK-LABEL: fadd_select_fneg_negk_f16:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov.f16 s0, #4.000000e+00
-; CHECK-NEXT:    vmov.f16 s2, r1
+; CHECK-NEXT:    vmov.f16 s0, r1
+; CHECK-NEXT:    vmov.f16 s2, #-4.000000e+00
+; CHECK-NEXT:    vneg.f16 s0, s0
 ; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    vseleq.f16 s0, s2, s0
+; CHECK-NEXT:    vseleq.f16 s0, s0, s2
 ; CHECK-NEXT:    vmov.f16 s2, r2
-; CHECK-NEXT:    vsub.f16 s0, s2, s0
+; CHECK-NEXT:    vadd.f16 s0, s0, s2
 ; CHECK-NEXT:    vmov r0, s0
 ; CHECK-NEXT:    bx lr
   %cmp = icmp eq i32 %arg0, 0
@@ -266,12 +271,13 @@ define half @fadd_select_fneg_negk_f16(i32 %arg0, half %x, half %y) {
 define half @fadd_select_fneg_posk_f16(i32 %arg0, half %x, half %y) {
 ; CHECK-LABEL: fadd_select_fneg_posk_f16:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vmov.f16 s0, #-4.000000e+00
-; CHECK-NEXT:    vmov.f16 s2, r1
+; CHECK-NEXT:    vmov.f16 s0, r1
+; CHECK-NEXT:    vmov.f16 s2, #4.000000e+00
+; CHECK-NEXT:    vneg.f16 s0, s0
 ; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    vseleq.f16 s0, s2, s0
+; CHECK-NEXT:    vseleq.f16 s0, s0, s2
 ; CHECK-NEXT:    vmov.f16 s2, r2
-; CHECK-NEXT:    vsub.f16 s0, s2, s0
+; CHECK-NEXT:    vadd.f16 s0, s0, s2
 ; CHECK-NEXT:    vmov r0, s0
 ; CHECK-NEXT:    bx lr
   %cmp = icmp eq i32 %arg0, 0

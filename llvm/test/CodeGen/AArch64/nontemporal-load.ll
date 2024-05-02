@@ -490,20 +490,18 @@ define <4 x i65> @test_ldnp_v4i65(ptr %A) {
 ; CHECK-BE-NEXT:    ldp x9, x8, [x0]
 ; CHECK-BE-NEXT:    ldrb w12, [x0, #32]
 ; CHECK-BE-NEXT:    ldp x10, x11, [x0, #16]
-; CHECK-BE-NEXT:    extr x13, x9, x8, #56
 ; CHECK-BE-NEXT:    lsr x14, x9, #56
-; CHECK-BE-NEXT:    lsr x16, x8, #56
-; CHECK-BE-NEXT:    extr x15, x8, x10, #56
-; CHECK-BE-NEXT:    orr x7, x12, x11, lsl #8
-; CHECK-BE-NEXT:    extr x11, x10, x11, #56
-; CHECK-BE-NEXT:    lsr x12, x10, #56
-; CHECK-BE-NEXT:    extr x1, x14, x13, #3
 ; CHECK-BE-NEXT:    lsr x0, x9, #59
-; CHECK-BE-NEXT:    ubfx x2, x8, #58, #1
-; CHECK-BE-NEXT:    ubfx x4, x10, #57, #1
-; CHECK-BE-NEXT:    extr x3, x16, x15, #2
-; CHECK-BE-NEXT:    extr x5, x12, x11, #1
-; CHECK-BE-NEXT:    and x6, x11, #0x1
+; CHECK-BE-NEXT:    extr x13, x8, x10, #56
+; CHECK-BE-NEXT:    extr x8, x9, x8, #56
+; CHECK-BE-NEXT:    extr x10, x10, x11, #56
+; CHECK-BE-NEXT:    orr x7, x12, x11, lsl #8
+; CHECK-BE-NEXT:    extr x3, x8, x13, #2
+; CHECK-BE-NEXT:    extr x5, x13, x10, #1
+; CHECK-BE-NEXT:    extr x1, x14, x8, #3
+; CHECK-BE-NEXT:    ubfx x2, x8, #2, #1
+; CHECK-BE-NEXT:    ubfx x4, x13, #1, #1
+; CHECK-BE-NEXT:    and x6, x10, #0x1
 ; CHECK-BE-NEXT:    ret
   %lv = load <4 x i65>, ptr %A, align 8, !nontemporal !0
   ret <4 x i65> %lv

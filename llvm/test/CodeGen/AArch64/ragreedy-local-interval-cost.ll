@@ -35,8 +35,8 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    mov x8, xzr
 ; CHECK-NEXT:    adrp x9, B+48
 ; CHECK-NEXT:    add x9, x9, :lo12:B+48
-; CHECK-NEXT:    adrp x10, A
-; CHECK-NEXT:    add x10, x10, :lo12:A
+; CHECK-NEXT:    adrp x10, A+128
+; CHECK-NEXT:    add x10, x10, :lo12:A+128
 ; CHECK-NEXT:    mov x11, xzr
 ; CHECK-NEXT:    // kill: killed $q1
 ; CHECK-NEXT:    // implicit-def: $q1
@@ -76,42 +76,41 @@ define dso_local void @run_test() local_unnamed_addr uwtable {
 ; CHECK-NEXT:    ldr q15, [x8]
 ; CHECK-NEXT:    ldr x15, [x8]
 ; CHECK-NEXT:    str q14, [sp, #32] // 16-byte Folded Spill
-; CHECK-NEXT:    add x20, x10, x11
 ; CHECK-NEXT:    mov v8.16b, v28.16b
+; CHECK-NEXT:    mov v28.16b, v24.16b
 ; CHECK-NEXT:    fmov x2, d15
 ; CHECK-NEXT:    mov x17, v15.d[1]
 ; CHECK-NEXT:    ldr q14, [x8]
-; CHECK-NEXT:    mov v28.16b, v24.16b
 ; CHECK-NEXT:    mov v24.16b, v20.16b
 ; CHECK-NEXT:    mov v20.16b, v17.16b
+; CHECK-NEXT:    mov v17.16b, v5.16b
 ; CHECK-NEXT:    fmov x13, d14
 ; CHECK-NEXT:    mov x16, v14.d[1]
-; CHECK-NEXT:    mov v17.16b, v5.16b
+; CHECK-NEXT:    ldr q5, [sp, #64] // 16-byte Folded Reload
 ; CHECK-NEXT:    mul x3, x2, x15
 ; CHECK-NEXT:    ldr q14, [x9], #64
-; CHECK-NEXT:    ldr q5, [sp, #64] // 16-byte Folded Reload
 ; CHECK-NEXT:    ldr x6, [x8]
-; CHECK-NEXT:    ldr x20, [x20, #128]
+; CHECK-NEXT:    ldr x20, [x10, x11]
+; CHECK-NEXT:    mov v29.16b, v21.16b
 ; CHECK-NEXT:    mul x1, x17, x15
 ; CHECK-NEXT:    mov x14, v14.d[1]
 ; CHECK-NEXT:    fmov x5, d14
-; CHECK-NEXT:    mov v29.16b, v21.16b
 ; CHECK-NEXT:    mov v21.16b, v0.16b
 ; CHECK-NEXT:    mov v25.16b, v6.16b
-; CHECK-NEXT:    mul x18, x13, x15
 ; CHECK-NEXT:    mov v6.16b, v2.16b
+; CHECK-NEXT:    mul x18, x13, x15
 ; CHECK-NEXT:    mov v26.16b, v22.16b
-; CHECK-NEXT:    fmov d15, x3
 ; CHECK-NEXT:    mov v22.16b, v18.16b
+; CHECK-NEXT:    fmov d15, x3
 ; CHECK-NEXT:    mov v18.16b, v7.16b
-; CHECK-NEXT:    mul x0, x16, x15
 ; CHECK-NEXT:    mov v7.16b, v3.16b
+; CHECK-NEXT:    mul x0, x16, x15
 ; CHECK-NEXT:    mov v16.16b, v4.16b
 ; CHECK-NEXT:    add x11, x11, #8
+; CHECK-NEXT:    cmp x11, #64
 ; CHECK-NEXT:    add x12, x12, #1
 ; CHECK-NEXT:    mov v15.d[1], x1
 ; CHECK-NEXT:    mul x4, x14, x15
-; CHECK-NEXT:    cmp x11, #64
 ; CHECK-NEXT:    fmov d14, x18
 ; CHECK-NEXT:    mul x15, x5, x15
 ; CHECK-NEXT:    add v5.2d, v5.2d, v15.2d

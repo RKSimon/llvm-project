@@ -1,6 +1,6 @@
 ; RUN: opt -O2 %s | llvm-dis > %t1
-; RUN: llc -mcpu=v1 -filetype=asm -o - %t1 | FileCheck -check-prefixes=CHECK,CHECK-EL,CHECK64 %s
-; RUN: llc -mcpu=v1 -mattr=+alu32 -filetype=asm -o - %t1 | FileCheck -check-prefixes=CHECK,CHECK-EL,CHECK32 %s
+; RUN: llc -mcpu=v1 -filetype=asm -o - %t1 | FileCheck -check-prefixes=CHECK,CHECK-EL %s
+; RUN: llc -mcpu=v1 -mattr=+alu32 -filetype=asm -o - %t1 | FileCheck -check-prefixes=CHECK,CHECK-EL %s
 ; Source code:
 ;   struct s {
 ;     int a;
@@ -109,10 +109,8 @@ sw.epilog:                                        ; preds = %entry, %sw.bb9, %sw
 ; CHECK:             r{{[0-9]+}} = 4
 ; CHECK:             r{{[0-9]+}} = 4
 ; CHECK-EL:          r{{[0-9]+}} <<= 51
-; CHECK64:           r{{[0-9]+}} s>>= 60
-; CHECK64:           r{{[0-9]+}} >>= 60
-; CHECK32:           r{{[0-9]+}} >>= 60
-; CHECK32:           r{{[0-9]+}} s>>= 60
+; CHECK:             r{{[0-9]+}} s>>= 60
+; CHECK:             r{{[0-9]+}} >>= 60
 ; CHECK:             r{{[0-9]+}} = 1
 
 ; CHECK:             .long   1                       # BTF_KIND_STRUCT(id = 2)

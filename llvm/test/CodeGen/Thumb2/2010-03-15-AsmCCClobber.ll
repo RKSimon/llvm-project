@@ -15,10 +15,10 @@ target datalayout = "e-p:32:32:32-i1:8:32-i8:8:32-i16:16:32-i32:32:32-i64:32:32-
 
 ; Make sure the cmp is not scheduled before the InlineAsm that clobbers cc.
 ; CHECK: bl _f2
-; CHECK: clz {{r[0-9]+}}
-; CHECK-DAG: lsrs    {{r[0-9]+}}
-; CHECK-DAG: lsls    {{r[0-9]+}}
-; CHECK-NEXT: orr.w   {{r[0-9]+}}
+; CHECK: cmp {{r[0-9]+}}, #0
+; CHECK-NEXT: it eq
+; CHECK-NEXT: addeq   {{r[0-9]+}}, #1
+; CHECK-NEXT: lsls    {{r[0-9]+}}, {{r[0-9]+}}, #16
 ; CHECK-NEXT: InlineAsm Start
 define void @test(ptr %this, i32 %format, i32 %w, i32 %h, i32 %levels, ptr %s, ptr %data, ptr nocapture %rowbytes, ptr %release, ptr %info) nounwind {
 entry:

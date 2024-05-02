@@ -9,9 +9,9 @@ declare i32 @callee3(i32, i32, i32)
 define void @t1(i32 %a, i32 %b, i32 %c) {
 ; CHECK-LABEL: t1:
 ; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    sh2add a1, a0, a1
 ; CHECK-NEXT:    sh2add a2, a0, a2
-; CHECK-NEXT:    sh2add a0, a0, a1
-; CHECK-NEXT:    addi a0, a0, 42
+; CHECK-NEXT:    addi a0, a1, 42
 ; CHECK-NEXT:    addi a1, a2, 42
 ; CHECK-NEXT:    tail callee2
 entry:

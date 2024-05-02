@@ -820,8 +820,8 @@ define i64 @test_minsigned_i64(i64 %a0, i64 %a1) nounwind {
 ;
 ; X86-LABEL: test_minsigned_i64:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    leal -2147483648(%edx), %ecx
 ; X86-NEXT:    orl %eax, %ecx
 ; X86-NEXT:    jne .LBB20_1

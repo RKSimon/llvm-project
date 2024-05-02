@@ -16,7 +16,9 @@ define void @combine_zero_stores_2xi8(ptr %p) {
 define void @combine_zero_stores_4xi8(ptr %p) {
 ; CHECK-LABEL: combine_zero_stores_4xi8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    sw zero, 0(a0)
+; CHECK-NEXT:    sh zero, 0(a0)
+; CHECK-NEXT:    sb zero, 2(a0)
+; CHECK-NEXT:    sb zero, 3(a0)
 ; CHECK-NEXT:    ret
   store i8 zeroinitializer, ptr %p, align 4
   %gep1 = getelementptr i8, ptr %p, i64 1
@@ -29,16 +31,15 @@ define void @combine_zero_stores_4xi8(ptr %p) {
 }
 
 define void @combine_zero_stores_8xi8(ptr %p) {
-; RV32-LABEL: combine_zero_stores_8xi8:
-; RV32:       # %bb.0:
-; RV32-NEXT:    sw zero, 0(a0)
-; RV32-NEXT:    sw zero, 4(a0)
-; RV32-NEXT:    ret
-;
-; RV64-LABEL: combine_zero_stores_8xi8:
-; RV64:       # %bb.0:
-; RV64-NEXT:    sd zero, 0(a0)
-; RV64-NEXT:    ret
+; CHECK-LABEL: combine_zero_stores_8xi8:
+; CHECK:       # %bb.0:
+; CHECK-NEXT:    sh zero, 0(a0)
+; CHECK-NEXT:    sb zero, 2(a0)
+; CHECK-NEXT:    sb zero, 3(a0)
+; CHECK-NEXT:    sh zero, 4(a0)
+; CHECK-NEXT:    sb zero, 6(a0)
+; CHECK-NEXT:    sb zero, 7(a0)
+; CHECK-NEXT:    ret
   store i8 zeroinitializer, ptr %p, align 8
   %gep1 = getelementptr i8, ptr %p, i64 1
   store i8 zeroinitializer, ptr %gep1
@@ -90,21 +91,15 @@ define void @combine_zero_stores_4xi16(ptr %p) {
 }
 
 define void @combine_zero_stores_8xi16(ptr %p) {
-; RV32-LABEL: combine_zero_stores_8xi16:
-; RV32:       # %bb.0:
-; RV32-NEXT:    sw zero, 0(a0)
-; RV32-NEXT:    sh zero, 4(a0)
-; RV32-NEXT:    sh zero, 6(a0)
-; RV32-NEXT:    sw zero, 8(a0)
-; RV32-NEXT:    sh zero, 12(a0)
-; RV32-NEXT:    sh zero, 14(a0)
-; RV32-NEXT:    ret
-;
-; RV64-LABEL: combine_zero_stores_8xi16:
-; RV64:       # %bb.0:
-; RV64-NEXT:    sd zero, 0(a0)
-; RV64-NEXT:    sd zero, 8(a0)
-; RV64-NEXT:    ret
+; CHECK-LABEL: combine_zero_stores_8xi16:
+; CHECK:       # %bb.0:
+; CHECK-NEXT:    sw zero, 0(a0)
+; CHECK-NEXT:    sh zero, 4(a0)
+; CHECK-NEXT:    sh zero, 6(a0)
+; CHECK-NEXT:    sw zero, 8(a0)
+; CHECK-NEXT:    sh zero, 12(a0)
+; CHECK-NEXT:    sh zero, 14(a0)
+; CHECK-NEXT:    ret
   store i16 zeroinitializer, ptr %p, align 16
   %gep1 = getelementptr i16, ptr %p, i64 1
   store i16 zeroinitializer, ptr %gep1
@@ -166,8 +161,10 @@ define void @combine_zero_stores_4xi32(ptr %p) {
 define void @combine_zero_stores_8xi32(ptr %p) {
 ; RV32-LABEL: combine_zero_stores_8xi32:
 ; RV32:       # %bb.0:
-; RV32-NEXT:    vsetivli zero, 8, e32, m2, ta, ma
+; RV32-NEXT:    vsetivli zero, 4, e32, m1, ta, ma
 ; RV32-NEXT:    vmv.v.i v8, 0
+; RV32-NEXT:    vse32.v v8, (a0)
+; RV32-NEXT:    addi a0, a0, 16
 ; RV32-NEXT:    vse32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;

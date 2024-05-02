@@ -77,8 +77,13 @@ define i32 @oversized_ADDV_256(ptr noalias nocapture readonly %arg1, ptr noalias
 ; CHECK-SD:       // %bb.0: // %entry
 ; CHECK-SD-NEXT:    ldr d0, [x0]
 ; CHECK-SD-NEXT:    ldr d1, [x1]
-; CHECK-SD-NEXT:    uabdl v0.8h, v0.8b, v1.8b
-; CHECK-SD-NEXT:    uaddlv s0, v0.8h
+; CHECK-SD-NEXT:    usubl v0.8h, v0.8b, v1.8b
+; CHECK-SD-NEXT:    sshll v1.4s, v0.4h, #0
+; CHECK-SD-NEXT:    sshll2 v0.4s, v0.8h, #0
+; CHECK-SD-NEXT:    abs v0.4s, v0.4s
+; CHECK-SD-NEXT:    abs v1.4s, v1.4s
+; CHECK-SD-NEXT:    add v0.4s, v1.4s, v0.4s
+; CHECK-SD-NEXT:    addv s0, v0.4s
 ; CHECK-SD-NEXT:    fmov w0, s0
 ; CHECK-SD-NEXT:    ret
 ;

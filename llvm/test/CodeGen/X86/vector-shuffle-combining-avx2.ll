@@ -134,7 +134,7 @@ define <8 x i32> @combine_as_vpermd(<8 x i32> %a0) {
 define <8 x float> @combine_as_vpermps(<8 x float> %a0) {
 ; AVX2-LABEL: combine_as_vpermps:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovaps {{.*#+}} ymm1 = [6,4,7,5,1,u,4,7]
+; AVX2-NEXT:    vmovaps {{.*#+}} ymm1 = [6,4,7,5,1,0,4,7]
 ; AVX2-NEXT:    vpermps %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
@@ -959,11 +959,12 @@ define internal fastcc <8 x float> @PR34577(<8 x float> %inp0, <8 x float> %inp1
 ; AVX512-LABEL: PR34577:
 ; AVX512:       # %bb.0: # %entry
 ; AVX512-NEXT:    # kill: def $ymm1 killed $ymm1 def $zmm1
-; AVX512-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[1,1,1,1]
-; AVX512-NEXT:    vxorps %xmm2, %xmm2, %xmm2
-; AVX512-NEXT:    vblendps {{.*#+}} ymm2 = ymm2[0,1,2,3],ymm0[4,5],ymm2[6,7]
-; AVX512-NEXT:    vpmovsxbd {{.*#+}} ymm0 = [23,18,7,2,20,0,3,2]
-; AVX512-NEXT:    vpermi2ps %zmm2, %zmm1, %zmm0
+; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
+; AVX512-NEXT:    vpmovsxbq {{.*#+}} ymm2 = [8,0,1,0]
+; AVX512-NEXT:    vxorpd %xmm3, %xmm3, %xmm3
+; AVX512-NEXT:    vpermt2pd %zmm3, %zmm2, %zmm0
+; AVX512-NEXT:    vpmovsxbd {{.*#+}} ymm2 = [0,1,23,18,4,5,19,18]
+; AVX512-NEXT:    vpermt2ps %zmm1, %zmm2, %zmm0
 ; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 killed $zmm0
 ; AVX512-NEXT:    ret{{[l|q]}}
 entry:

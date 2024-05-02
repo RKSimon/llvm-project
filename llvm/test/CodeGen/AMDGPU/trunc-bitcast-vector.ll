@@ -199,7 +199,7 @@ define amdgpu_kernel void @trunc_i16_bitcast_v4i16(ptr addrspace(1) %out, ptr ad
 ; VI-NEXT:    s_waitcnt lgkmcnt(0)
 ; VI-NEXT:    s_mov_b32 s8, s2
 ; VI-NEXT:    s_mov_b32 s9, s3
-; VI-NEXT:    buffer_load_dword v0, off, s[8:11], 0
+; VI-NEXT:    buffer_load_dwordx2 v[0:1], off, s[8:11], 0
 ; VI-NEXT:    s_mov_b32 s4, s0
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(0)
@@ -241,7 +241,7 @@ define amdgpu_kernel void @trunc_i8_bitcast_v2i8(ptr addrspace(1) %out, ptr addr
 ; VI-NEXT:    s_waitcnt lgkmcnt(0)
 ; VI-NEXT:    s_mov_b32 s8, s2
 ; VI-NEXT:    s_mov_b32 s9, s3
-; VI-NEXT:    buffer_load_ushort v0, off, s[8:11], 0
+; VI-NEXT:    buffer_load_ubyte v0, off, s[8:11], 0
 ; VI-NEXT:    s_mov_b32 s4, s0
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(0)
@@ -306,7 +306,7 @@ define amdgpu_kernel void @trunc_i24_bitcast_v3i8(ptr addrspace(1) %out, ptr add
 ; SI-NEXT:    s_waitcnt lgkmcnt(0)
 ; SI-NEXT:    s_mov_b32 s8, s2
 ; SI-NEXT:    s_mov_b32 s9, s3
-; SI-NEXT:    buffer_load_dword v0, off, s[8:11], 0
+; SI-NEXT:    buffer_load_ubyte v0, off, s[8:11], 0
 ; SI-NEXT:    s_mov_b32 s4, s0
 ; SI-NEXT:    s_mov_b32 s5, s1
 ; SI-NEXT:    s_waitcnt vmcnt(0)
@@ -323,7 +323,7 @@ define amdgpu_kernel void @trunc_i24_bitcast_v3i8(ptr addrspace(1) %out, ptr add
 ; VI-NEXT:    s_waitcnt lgkmcnt(0)
 ; VI-NEXT:    s_mov_b32 s8, s2
 ; VI-NEXT:    s_mov_b32 s9, s3
-; VI-NEXT:    buffer_load_dword v0, off, s[8:11], 0
+; VI-NEXT:    buffer_load_ubyte v0, off, s[8:11], 0
 ; VI-NEXT:    s_mov_b32 s4, s0
 ; VI-NEXT:    s_mov_b32 s5, s1
 ; VI-NEXT:    s_waitcnt vmcnt(0)

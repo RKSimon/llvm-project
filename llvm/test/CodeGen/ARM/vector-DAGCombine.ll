@@ -84,12 +84,13 @@ bb2:
 define void @lshrIllegalType(ptr %A) nounwind {
 ; CHECK-LABEL: lshrIllegalType:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    vld1.64 {d16, d17}, [r0:128]
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    vld1.32 {d16, d17}, [r1:128]!
+; CHECK-NEXT:    vld1.64 {d18, d19}, [r1:128]
 ; CHECK-NEXT:    vshr.u32 q8, q8, #3
-; CHECK-NEXT:    vst1.32 {d16, d17}, [r0:128]!
-; CHECK-NEXT:    vld1.64 {d16, d17}, [r0:128]
-; CHECK-NEXT:    vshr.u32 q8, q8, #3
+; CHECK-NEXT:    vshr.u32 q9, q9, #3
 ; CHECK-NEXT:    vst1.64 {d16, d17}, [r0:128]
+; CHECK-NEXT:    vst1.64 {d18, d19}, [r1:128]
 ; CHECK-NEXT:    bx lr
        %tmp1 = load <8 x i32>, ptr %A
        %tmp2 = lshr <8 x i32> %tmp1, < i32 3, i32 3, i32 3, i32 3, i32 3, i32 3, i32 3, i32 3>
@@ -134,8 +135,8 @@ define void @i64_buildvector(ptr %ptr, ptr %vp) nounwind {
 define void @i64_insertelement(ptr %ptr, ptr %vp) nounwind {
 ; CHECK-LABEL: i64_insertelement:
 ; CHECK:       @ %bb.0:
-; CHECK-NEXT:    ldm r0, {r0, r3}
-; CHECK-NEXT:    stm r1, {r0, r3}
+; CHECK-NEXT:    vldr d16, [r0]
+; CHECK-NEXT:    vstr d16, [r1]
 ; CHECK-NEXT:    bx lr
   %t0 = load i64, ptr %ptr, align 4
   %vec = load <2 x i64>, ptr %vp
@@ -344,10 +345,9 @@ entry:
 define <2 x i8> @test_truncate(<2 x i128> %in) {
 ; CHECK-LABEL: test_truncate:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    vmov.32 d16[0], r0
-; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    vld1.32 {d16[1]}, [r0:32]
-; CHECK-NEXT:    vmov r0, r1, d16
+; CHECK-NEXT:    vldr s1, [sp]
+; CHECK-NEXT:    vmov s0, r0
+; CHECK-NEXT:    vmov r0, r1, d0
 ; CHECK-NEXT:    bx lr
 entry:
   %res = trunc <2 x i128> %in to <2 x i8>

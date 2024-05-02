@@ -515,7 +515,7 @@ define <2 x bfloat> @v_exp2_fabs_v2bf16(<2 x bfloat> %in) {
 ; GFX1200-SDAG-TRUE16-NEXT:    s_wait_samplecnt 0x0
 ; GFX1200-SDAG-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX1200-SDAG-TRUE16-NEXT:    s_wait_kmcnt 0x0
-; GFX1200-SDAG-TRUE16-NEXT:    v_and_b32_e32 v1, 0x7fff, v0
+; GFX1200-SDAG-TRUE16-NEXT:    v_and_b32_e32 v1, 0x7fff7fff, v0
 ; GFX1200-SDAG-TRUE16-NEXT:    v_and_b32_e32 v0, 0x7fff0000, v0
 ; GFX1200-SDAG-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
 ; GFX1200-SDAG-TRUE16-NEXT:    v_cmp_gt_f32_e64 s0, 0xc2fc0000, v0
@@ -561,7 +561,7 @@ define <2 x bfloat> @v_exp2_fabs_v2bf16(<2 x bfloat> %in) {
 ; GFX1200-SDAG-FAKE16-NEXT:    s_wait_samplecnt 0x0
 ; GFX1200-SDAG-FAKE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX1200-SDAG-FAKE16-NEXT:    s_wait_kmcnt 0x0
-; GFX1200-SDAG-FAKE16-NEXT:    v_and_b32_e32 v1, 0x7fff, v0
+; GFX1200-SDAG-FAKE16-NEXT:    v_and_b32_e32 v1, 0x7fff7fff, v0
 ; GFX1200-SDAG-FAKE16-NEXT:    v_and_b32_e32 v0, 0x7fff0000, v0
 ; GFX1200-SDAG-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_1)
 ; GFX1200-SDAG-FAKE16-NEXT:    v_cmp_gt_f32_e32 vcc_lo, 0xc2fc0000, v0

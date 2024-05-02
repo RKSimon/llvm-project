@@ -124,23 +124,6 @@ define <16 x i8> @shuffle4_v8i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 x i8> 
 }
 
 ; CHECK: .LCPI3_0:
-; CHECK: 	.byte	0                               // 0x0
-; CHECK: 	.byte	3                               // 0x3
-; CHECK: 	.byte	2                               // 0x2
-; CHECK: 	.byte	1                               // 0x1
-; CHECK: 	.byte	12                              // 0xc
-; CHECK: 	.byte	15                              // 0xf
-; CHECK: 	.byte	14                              // 0xe
-; CHECK: 	.byte	12                              // 0xc
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: .LCPI3_1:
 ; CHECK: 	.byte	4                               // 0x4
 ; CHECK: 	.byte	7                               // 0x7
 ; CHECK: 	.byte	6                               // 0x6
@@ -157,23 +140,40 @@ define <16 x i8> @shuffle4_v8i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 x i8> 
 ; CHECK: 	.byte	255                             // 0xff
 ; CHECK: 	.byte	255                             // 0xff
 ; CHECK: 	.byte	255                             // 0xff
+; CHECK: .LCPI3_1:
+; CHECK: 	.byte	0                               // 0x0
+; CHECK: 	.byte	3                               // 0x3
+; CHECK: 	.byte	2                               // 0x2
+; CHECK: 	.byte	1                               // 0x1
+; CHECK: 	.byte	12                              // 0xc
+; CHECK: 	.byte	15                              // 0xf
+; CHECK: 	.byte	14                              // 0xe
+; CHECK: 	.byte	12                              // 0xc
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	255                             // 0xff
 ; CHECK: .LCPI3_2:
-; CHECK: 	.byte	16                              // 0x10
-; CHECK: 	.byte	20                              // 0x14
 ; CHECK: 	.byte	0                               // 0x0
 ; CHECK: 	.byte	4                               // 0x4
-; CHECK: 	.byte	17                              // 0x11
-; CHECK: 	.byte	21                              // 0x15
+; CHECK: 	.byte	16                              // 0x10
+; CHECK: 	.byte	20                              // 0x14
 ; CHECK: 	.byte	1                               // 0x1
 ; CHECK: 	.byte	5                               // 0x5
-; CHECK: 	.byte	18                              // 0x12
-; CHECK: 	.byte	22                              // 0x16
+; CHECK: 	.byte	17                              // 0x11
+; CHECK: 	.byte	21                              // 0x15
 ; CHECK: 	.byte	2                               // 0x2
 ; CHECK: 	.byte	6                               // 0x6
-; CHECK: 	.byte	19                              // 0x13
-; CHECK: 	.byte	23                              // 0x17
+; CHECK: 	.byte	18                              // 0x12
+; CHECK: 	.byte	22                              // 0x16
 ; CHECK: 	.byte	3                               // 0x3
 ; CHECK: 	.byte	7                               // 0x7
+; CHECK: 	.byte	19                              // 0x13
+; CHECK: 	.byte	23                              // 0x17
 define <16 x i8> @shuffle4_v16i8(<16 x i8> %a, <16 x i8> %b, <16 x i8> %c, <16 x i8> %d) {
 ; CHECK-LABEL: shuffle4_v16i8:
 ; CHECK:       // %bb.0:
@@ -182,10 +182,10 @@ define <16 x i8> @shuffle4_v16i8(<16 x i8> %a, <16 x i8> %b, <16 x i8> %c, <16 x
 ; CHECK-NEXT:    adrp x8, .LCPI3_1
 ; CHECK-NEXT:    ldr q3, [x8, :lo12:.LCPI3_1]
 ; CHECK-NEXT:    adrp x8, .LCPI3_2
-; CHECK-NEXT:    tbl v1.16b, { v0.16b }, v1.16b
-; CHECK-NEXT:    tbl v0.16b, { v2.16b }, v3.16b
-; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI3_2]
-; CHECK-NEXT:    tbl v0.16b, { v0.16b, v1.16b }, v2.16b
+; CHECK-NEXT:    tbl v2.16b, { v2.16b }, v1.16b
+; CHECK-NEXT:    tbl v1.16b, { v0.16b }, v3.16b
+; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI3_2]
+; CHECK-NEXT:    tbl v0.16b, { v1.16b, v2.16b }, v0.16b
 ; CHECK-NEXT:    ret
   %x = shufflevector <16 x i8> %a, <16 x i8> %b, <8 x i32> <i32 0, i32 3, i32 2, i32 1, i32 12, i32 15, i32 14, i32 12>
   %y = shufflevector <16 x i8> %c, <16 x i8> %d, <8 x i32> <i32 4, i32 7, i32 6, i32 7, i32 8, i32 10, i32 9, i32 11>
@@ -247,7 +247,7 @@ define <4 x i32> @shuffle4_v4i32(<4 x i32> %a, <4 x i32> %b, <4 x i32> %c, <4 x 
 ; CHECK: .LCPI6_0:
 ; CHECK: 	.byte	0                               // 0x0
 ; CHECK: 	.byte	7                               // 0x7
-; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	5                               // 0x5
 ; CHECK: 	.byte	1                               // 0x1
 ; CHECK: 	.byte	255                             // 0xff
 ; CHECK: 	.byte	255                             // 0xff
@@ -296,7 +296,7 @@ define <16 x i8> @shuffle4_v8i8_v16i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 
 ; CHECK: .LCPI7_0:
 ; CHECK: 	.byte	0                               // 0x0
 ; CHECK: 	.byte	7                               // 0x7
-; CHECK: 	.byte	255                             // 0xff
+; CHECK: 	.byte	5                               // 0x5
 ; CHECK: 	.byte	1                               // 0x1
 ; CHECK: 	.byte	255                             // 0xff
 ; CHECK: 	.byte	255                             // 0xff
@@ -413,32 +413,32 @@ define <16 x i8> @shuffle4_v4i16_trunc(<4 x i16> %ae, <4 x i16> %be, <4 x i16> %
 
 ; CHECK: .LCPI10_0:
 ; CHECK: 	.byte	0                               // 0x0
-; CHECK: 	.byte	16                              // 0x10
-; CHECK: 	.byte	32                              // 0x20
-; CHECK: 	.byte	48                              // 0x30
-; CHECK: 	.byte	2                               // 0x2
-; CHECK: 	.byte	18                              // 0x12
-; CHECK: 	.byte	34                              // 0x22
-; CHECK: 	.byte	50                              // 0x32
 ; CHECK: 	.byte	4                               // 0x4
+; CHECK: 	.byte	16                              // 0x10
 ; CHECK: 	.byte	20                              // 0x14
-; CHECK: 	.byte	36                              // 0x24
-; CHECK: 	.byte	52                              // 0x34
+; CHECK: 	.byte	1                               // 0x1
+; CHECK: 	.byte	5                               // 0x5
+; CHECK: 	.byte	17                              // 0x11
+; CHECK: 	.byte	21                              // 0x15
+; CHECK: 	.byte	2                               // 0x2
 ; CHECK: 	.byte	6                               // 0x6
+; CHECK: 	.byte	18                              // 0x12
 ; CHECK: 	.byte	22                              // 0x16
-; CHECK: 	.byte	38                              // 0x26
-; CHECK: 	.byte	54                              // 0x36
+; CHECK: 	.byte	3                               // 0x3
+; CHECK: 	.byte	7                               // 0x7
+; CHECK: 	.byte	19                              // 0x13
+; CHECK: 	.byte	23                              // 0x17
 ; CHECK: 	.text
 define <16 x i8> @shuffle4_v4i32_trunc(<4 x i32> %ae, <4 x i32> %be, <4 x i32> %ce, <4 x i32> %de) {
 ; CHECK-LABEL: shuffle4_v4i32_trunc:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    xtn v4.4h, v0.4s
+; CHECK-NEXT:    uzp1 v0.8h, v0.8h, v1.8h
+; CHECK-NEXT:    uzp1 v1.8h, v2.8h, v3.8h
 ; CHECK-NEXT:    adrp x8, .LCPI10_0
-; CHECK-NEXT:    xtn v5.4h, v1.4s
+; CHECK-NEXT:    xtn v2.8b, v0.8h
 ; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI10_0]
-; CHECK-NEXT:    xtn v6.4h, v2.4s
-; CHECK-NEXT:    xtn v7.4h, v3.4s
-; CHECK-NEXT:    tbl v0.16b, { v4.16b, v5.16b, v6.16b, v7.16b }, v0.16b
+; CHECK-NEXT:    xtn v3.8b, v1.8h
+; CHECK-NEXT:    tbl v0.16b, { v2.16b, v3.16b }, v0.16b
 ; CHECK-NEXT:    ret
   %a = trunc <4 x i32> %ae to <4 x i8>
   %b = trunc <4 x i32> %be to <4 x i8>
@@ -531,50 +531,20 @@ define <4 x i32> @shuffle3_v4i32(<4 x i32> %a, <4 x i32> %b, <4 x i32> %c) {
   ret <4 x i32> %z
 }
 
-; CHECK: .LCPI14_0:
-; CHECK: 	.byte	4                               // 0x4
-; CHECK: 	.byte	8                               // 0x8
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	14                              // 0xe
-; CHECK: 	.byte	3                               // 0x3
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.section	.rodata.cst16,"aM",@progbits,16
-; CHECK: 	.p2align	4
-; CHECK: .LCPI14_1:
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	15                              // 0xf
-; CHECK: 	.byte	27                              // 0x1b
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	24                              // 0x18
-; CHECK: 	.byte	12                              // 0xc
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
-; CHECK: 	.byte	255                             // 0xff
 define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> %d) {
 ; CHECK-LABEL: insert4_v8i8:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-NEXT:    mov v4.16b, v3.16b
+; CHECK-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-NEXT:    adrp x8, .LCPI14_0
-; CHECK-NEXT:    adrp x9, .LCPI14_1
-; CHECK-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-NEXT:    mov v3.16b, v1.16b
-; CHECK-NEXT:    ldr d1, [x8, :lo12:.LCPI14_0]
-; CHECK-NEXT:    ldr q2, [x9, :lo12:.LCPI14_1]
-; CHECK-NEXT:    tbl v0.8b, { v0.16b }, v1.8b
-; CHECK-NEXT:    tbl v1.16b, { v3.16b, v4.16b }, v2.16b
-; CHECK-NEXT:    trn1 v0.4h, v1.4h, v0.4h
-; CHECK-NEXT:    trn2 v0.4h, v0.4h, v1.4h
+; CHECK-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-NEXT:    fmov d0, d4
 ; CHECK-NEXT:    ret
   %e1 = extractelement <8 x i8> %a, i32 4
   %e2 = extractelement <8 x i8> %c, i32 0
@@ -595,54 +565,28 @@ define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> 
   ret <8 x i8> %i8
 }
 
-; CHECK: .LCPI15_0:
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 15                              // 0xf
-; CHECK: .byte 27                              // 0x1b
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 24                              // 0x18
-; CHECK: .byte 12                              // 0xc
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 15                              // 0xf
-; CHECK: .byte 27                              // 0x1b
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 255                             // 0xff
-; CHECK: .byte 24                              // 0x18
-; CHECK: .byte 12                              // 0xc
-; CHECK: .LCPI15_1:
-; CHECK: .byte 20                              // 0x14
-; CHECK: .byte 24                              // 0x18
-; CHECK: .byte 2                               // 0x2
-; CHECK: .byte 3                               // 0x3
-; CHECK: .byte 30                              // 0x1e
-; CHECK: .byte 19                              // 0x13
-; CHECK: .byte 6                               // 0x6
-; CHECK: .byte 7                               // 0x7
-; CHECK: .byte 20                              // 0x14
-; CHECK: .byte 24                              // 0x18
-; CHECK: .byte 10                              // 0xa
-; CHECK: .byte 11                              // 0xb
-; CHECK: .byte 30                              // 0x1e
-; CHECK: .byte 19                              // 0x13
-; CHECK: .byte 14                              // 0xe
-; CHECK: .byte 15                              // 0xf
 define <16 x i8> @insert4_v16i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> %d) {
 ; CHECK-LABEL: insert4_v16i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov v4.16b, v3.16b
-; CHECK-NEXT:    adrp x8, .LCPI15_0
-; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q31_q0
+; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-NEXT:    mov v3.16b, v1.16b
-; CHECK-NEXT:    ldr q5, [x8, :lo12:.LCPI15_0]
-; CHECK-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-NEXT:    adrp x8, .LCPI15_1
-; CHECK-NEXT:    ldr q1, [x8, :lo12:.LCPI15_1]
-; CHECK-NEXT:    tbl v31.16b, { v3.16b, v4.16b }, v5.16b
-; CHECK-NEXT:    tbl v0.16b, { v31.16b, v0.16b }, v1.16b
+; CHECK-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-NEXT:    mov v4.b[8], v0.b[4]
+; CHECK-NEXT:    mov v4.b[9], v2.b[0]
+; CHECK-NEXT:    mov v4.b[10], v1.b[15]
+; CHECK-NEXT:    mov v4.b[11], v3.b[11]
+; CHECK-NEXT:    mov v4.b[12], v2.b[6]
+; CHECK-NEXT:    mov v4.b[13], v0.b[3]
+; CHECK-NEXT:    mov v4.b[14], v3.b[8]
+; CHECK-NEXT:    mov v4.b[15], v1.b[12]
+; CHECK-NEXT:    mov v0.16b, v4.16b
 ; CHECK-NEXT:    ret
   %e1 = extractelement <8 x i8> %a, i32 4
   %e2 = extractelement <8 x i8> %c, i32 0
@@ -679,57 +623,56 @@ define <16 x i8> @insert4_v16i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8
   ret <16 x i8> %i16
 }
 
-
-; CHECK: .LCPI16_0:
-; CHECK: 	.byte	0
-; CHECK: 	.byte	1
-; CHECK: 	.byte	4
-; CHECK: 	.byte	5
-; CHECK: 	.byte	16
-; CHECK: 	.byte	17
-; CHECK: 	.byte	20
-; CHECK: 	.byte	21
-; CHECK: 	.byte	32
-; CHECK: 	.byte	33
-; CHECK: 	.byte	36
-; CHECK: 	.byte	37
-; CHECK: 	.byte	48
-; CHECK: 	.byte	49
-; CHECK: 	.byte	52
-; CHECK: 	.byte	53
 define <16 x i16> @test(<2 x double> %l213, <2 x double> %l231, <2 x double> %l249, <2 x double> %l267, <2 x double> %l285, <2 x double> %l303, <2 x double> %l321, <2 x double> %l339) {
 ; CHECK-LABEL: test:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    frintm v0.2d, v0.2d
-; CHECK-NEXT:    frintm v4.2d, v4.2d
-; CHECK-NEXT:    adrp x8, .LCPI16_0
 ; CHECK-NEXT:    frintm v1.2d, v1.2d
-; CHECK-NEXT:    frintm v5.2d, v5.2d
-; CHECK-NEXT:    frintm v2.2d, v2.2d
-; CHECK-NEXT:    frintm v6.2d, v6.2d
+; CHECK-NEXT:    frintm v16.2d, v2.2d
 ; CHECK-NEXT:    frintm v3.2d, v3.2d
+; CHECK-NEXT:    frintm v17.2d, v4.2d
+; CHECK-NEXT:    frintm v5.2d, v5.2d
+; CHECK-NEXT:    frintm v6.2d, v6.2d
 ; CHECK-NEXT:    frintm v7.2d, v7.2d
 ; CHECK-NEXT:    fcvtzs v0.2d, v0.2d
-; CHECK-NEXT:    fcvtzs v4.2d, v4.2d
 ; CHECK-NEXT:    fcvtzs v1.2d, v1.2d
 ; CHECK-NEXT:    fcvtzs v5.2d, v5.2d
-; CHECK-NEXT:    fcvtzs v2.2d, v2.2d
 ; CHECK-NEXT:    fcvtzs v6.2d, v6.2d
-; CHECK-NEXT:    fcvtzs v3.2d, v3.2d
 ; CHECK-NEXT:    fcvtzs v7.2d, v7.2d
-; CHECK-NEXT:    xtn v16.2s, v0.2d
-; CHECK-NEXT:    xtn v20.2s, v4.2d
-; CHECK-NEXT:    ldr q0, [x8, :lo12:.LCPI16_0]
-; CHECK-NEXT:    xtn v17.2s, v1.2d
-; CHECK-NEXT:    xtn v21.2s, v5.2d
-; CHECK-NEXT:    xtn v18.2s, v2.2d
-; CHECK-NEXT:    xtn v22.2s, v6.2d
-; CHECK-NEXT:    xtn v19.2s, v3.2d
-; CHECK-NEXT:    xtn v23.2s, v7.2d
-; CHECK-NEXT:    tbl v1.16b, { v16.16b, v17.16b, v18.16b, v19.16b }, v0.16b
-; CHECK-NEXT:    tbl v2.16b, { v20.16b, v21.16b, v22.16b, v23.16b }, v0.16b
-; CHECK-NEXT:    uzp1 v0.8h, v1.8h, v2.8h
-; CHECK-NEXT:    uzp2 v1.8h, v1.8h, v2.8h
+; CHECK-NEXT:    xtn v0.2s, v0.2d
+; CHECK-NEXT:    xtn v2.2s, v1.2d
+; CHECK-NEXT:    fcvtzs v1.2d, v16.2d
+; CHECK-NEXT:    fcvtzs v16.2d, v3.2d
+; CHECK-NEXT:    xtn v5.2s, v5.2d
+; CHECK-NEXT:    xtn v6.2s, v6.2d
+; CHECK-NEXT:    xtn v7.2s, v7.2d
+; CHECK-NEXT:    mov w8, v0.s[1]
+; CHECK-NEXT:    xtn v3.2s, v1.2d
+; CHECK-NEXT:    mov w9, v2.s[1]
+; CHECK-NEXT:    xtn v4.2s, v16.2d
+; CHECK-NEXT:    fcvtzs v16.2d, v17.2d
+; CHECK-NEXT:    mov v0.h[1], v2.h[0]
+; CHECK-NEXT:    fmov s1, w8
+; CHECK-NEXT:    mov w8, v3.s[1]
+; CHECK-NEXT:    xtn v16.2s, v16.2d
+; CHECK-NEXT:    mov v0.h[2], v3.h[0]
+; CHECK-NEXT:    mov v1.h[1], w9
+; CHECK-NEXT:    mov w9, v4.s[1]
+; CHECK-NEXT:    mov v0.h[3], v4.h[0]
+; CHECK-NEXT:    mov v1.h[2], w8
+; CHECK-NEXT:    mov w8, v16.s[1]
+; CHECK-NEXT:    mov v0.h[4], v16.h[0]
+; CHECK-NEXT:    mov v1.h[3], w9
+; CHECK-NEXT:    mov w9, v5.s[1]
+; CHECK-NEXT:    mov v0.h[5], v5.h[0]
+; CHECK-NEXT:    mov v1.h[4], w8
+; CHECK-NEXT:    mov w8, v6.s[1]
+; CHECK-NEXT:    mov v0.h[6], v6.h[0]
+; CHECK-NEXT:    mov v1.h[5], w9
+; CHECK-NEXT:    mov w9, v7.s[1]
+; CHECK-NEXT:    mov v0.h[7], v7.h[0]
+; CHECK-NEXT:    mov v1.h[6], w8
+; CHECK-NEXT:    mov v1.h[7], w9
 ; CHECK-NEXT:    ret
   %l214 = call fast <2 x double> @llvm.floor.v2f64(<2 x double> %l213)
   %l215 = fptosi <2 x double> %l214 to <2 x i16>
