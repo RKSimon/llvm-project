@@ -83,8 +83,8 @@ define arm_aapcs_vfpcc <8 x i32> @sext_i32_02468101214_swapped(<16 x i16> %src) 
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
-; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    add r0, sp, #16
+; CHECK-NEXT:    mov r1, sp
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
 ; CHECK-NEXT:    vstrw.32 q1, [r1]
 ; CHECK-NEXT:    vldrh.s32 q0, [r0]
@@ -122,8 +122,8 @@ define arm_aapcs_vfpcc <8 x i32> @sext_i32_13579111315_swapped(<16 x i16> %src) 
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
-; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    add r0, sp, #16
+; CHECK-NEXT:    mov r1, sp
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
 ; CHECK-NEXT:    vstrw.32 q1, [r1]
 ; CHECK-NEXT:    vldrh.s32 q0, [r0]
@@ -226,8 +226,8 @@ define arm_aapcs_vfpcc <8 x i32> @zext_i32_02468101214_swapped(<16 x i16> %src) 
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
-; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    add r0, sp, #16
+; CHECK-NEXT:    mov r1, sp
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
 ; CHECK-NEXT:    vstrw.32 q1, [r1]
 ; CHECK-NEXT:    vldrh.u32 q0, [r0]
@@ -265,8 +265,8 @@ define arm_aapcs_vfpcc <8 x i32> @zext_i32_13579111315_swapped(<16 x i16> %src) 
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
-; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    add r0, sp, #16
+; CHECK-NEXT:    mov r1, sp
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
 ; CHECK-NEXT:    vstrw.32 q1, [r1]
 ; CHECK-NEXT:    vldrh.u32 q0, [r0]

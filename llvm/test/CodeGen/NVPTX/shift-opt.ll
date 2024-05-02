@@ -6,14 +6,15 @@
 define i64 @test_or(i64 %x, i32 %y) {
 ; CHECK-LABEL: test_or(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b64 %rd<5>;
+; CHECK-NEXT:    .reg .b64 %rd<6>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_or_param_0];
 ; CHECK-NEXT:    ld.param.b32 %rd2, [test_or_param_1];
-; CHECK-NEXT:    shr.u64 %rd3, %rd1, 5;
-; CHECK-NEXT:    or.b64 %rd4, %rd3, %rd2;
-; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
+; CHECK-NEXT:    shl.b64 %rd3, %rd2, 5;
+; CHECK-NEXT:    or.b64 %rd4, %rd1, %rd3;
+; CHECK-NEXT:    shr.u64 %rd5, %rd4, 5;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; CHECK-NEXT:    ret;
   %ext = zext i32 %y to i64
   %shl = shl i64 %ext, 5
@@ -27,14 +28,15 @@ define i64 @test_or(i64 %x, i32 %y) {
 define i64 @test_xor(i64 %x, i32 %y) {
 ; CHECK-LABEL: test_xor(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b64 %rd<5>;
+; CHECK-NEXT:    .reg .b64 %rd<6>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_xor_param_0];
 ; CHECK-NEXT:    ld.param.b32 %rd2, [test_xor_param_1];
-; CHECK-NEXT:    shr.u64 %rd3, %rd1, 5;
-; CHECK-NEXT:    xor.b64 %rd4, %rd3, %rd2;
-; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
+; CHECK-NEXT:    shl.b64 %rd3, %rd2, 5;
+; CHECK-NEXT:    xor.b64 %rd4, %rd1, %rd3;
+; CHECK-NEXT:    shr.u64 %rd5, %rd4, 5;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; CHECK-NEXT:    ret;
   %ext = zext i32 %y to i64
   %shl = shl i64 %ext, 5
@@ -48,14 +50,15 @@ define i64 @test_xor(i64 %x, i32 %y) {
 define i64 @test_and(i64 %x, i32 %y) {
 ; CHECK-LABEL: test_and(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b64 %rd<5>;
+; CHECK-NEXT:    .reg .b64 %rd<6>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_and_param_0];
 ; CHECK-NEXT:    ld.param.b32 %rd2, [test_and_param_1];
-; CHECK-NEXT:    shr.u64 %rd3, %rd1, 5;
-; CHECK-NEXT:    and.b64 %rd4, %rd3, %rd2;
-; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
+; CHECK-NEXT:    shl.b64 %rd3, %rd2, 5;
+; CHECK-NEXT:    and.b64 %rd4, %rd1, %rd3;
+; CHECK-NEXT:    shr.u64 %rd5, %rd4, 5;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; CHECK-NEXT:    ret;
   %ext = zext i32 %y to i64
   %shl = shl i64 %ext, 5
@@ -119,21 +122,20 @@ declare void @use(i64)
 define i64 @test_negative_use_lop(i64 %x, i32 %y) {
 ; CHECK-LABEL: test_negative_use_lop(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<2>;
-; CHECK-NEXT:    .reg .b64 %rd<5>;
+; CHECK-NEXT:    .reg .b64 %rd<6>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_negative_use_lop_param_0];
-; CHECK-NEXT:    ld.param.b32 %r1, [test_negative_use_lop_param_1];
-; CHECK-NEXT:    mul.wide.u32 %rd2, %r1, 32;
-; CHECK-NEXT:    or.b64 %rd3, %rd1, %rd2;
-; CHECK-NEXT:    shr.u64 %rd4, %rd3, 5;
+; CHECK-NEXT:    ld.param.b32 %rd2, [test_negative_use_lop_param_1];
+; CHECK-NEXT:    shl.b64 %rd3, %rd2, 5;
+; CHECK-NEXT:    or.b64 %rd4, %rd1, %rd3;
+; CHECK-NEXT:    shr.u64 %rd5, %rd4, 5;
 ; CHECK-NEXT:    { // callseq 0, 0
 ; CHECK-NEXT:    .param .b64 param0;
-; CHECK-NEXT:    st.param.b64 [param0], %rd3;
+; CHECK-NEXT:    st.param.b64 [param0], %rd4;
 ; CHECK-NEXT:    call.uni use, (param0);
 ; CHECK-NEXT:    } // callseq 0
-; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; CHECK-NEXT:    ret;
   %ext = zext i32 %y to i64
   %shl = shl i64 %ext, 5
@@ -148,21 +150,20 @@ define i64 @test_negative_use_lop(i64 %x, i32 %y) {
 define i64 @test_negative_use_shl(i64 %x, i32 %y) {
 ; CHECK-LABEL: test_negative_use_shl(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<2>;
-; CHECK-NEXT:    .reg .b64 %rd<5>;
+; CHECK-NEXT:    .reg .b64 %rd<6>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b64 %rd1, [test_negative_use_shl_param_0];
-; CHECK-NEXT:    ld.param.b32 %r1, [test_negative_use_shl_param_1];
-; CHECK-NEXT:    mul.wide.u32 %rd2, %r1, 32;
-; CHECK-NEXT:    or.b64 %rd3, %rd1, %rd2;
-; CHECK-NEXT:    shr.u64 %rd4, %rd3, 5;
+; CHECK-NEXT:    ld.param.b32 %rd2, [test_negative_use_shl_param_1];
+; CHECK-NEXT:    shl.b64 %rd3, %rd2, 5;
+; CHECK-NEXT:    or.b64 %rd4, %rd1, %rd3;
+; CHECK-NEXT:    shr.u64 %rd5, %rd4, 5;
 ; CHECK-NEXT:    { // callseq 1, 0
 ; CHECK-NEXT:    .param .b64 param0;
-; CHECK-NEXT:    st.param.b64 [param0], %rd2;
+; CHECK-NEXT:    st.param.b64 [param0], %rd3;
 ; CHECK-NEXT:    call.uni use, (param0);
 ; CHECK-NEXT:    } // callseq 1
-; CHECK-NEXT:    st.param.b64 [func_retval0], %rd4;
+; CHECK-NEXT:    st.param.b64 [func_retval0], %rd5;
 ; CHECK-NEXT:    ret;
   %ext = zext i32 %y to i64
   %shl = shl i64 %ext, 5

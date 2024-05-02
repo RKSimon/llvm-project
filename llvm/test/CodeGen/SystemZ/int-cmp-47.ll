@@ -267,7 +267,8 @@ exit:
 define void @f12(i64 %a) {
 ; CHECK-LABEL: f12:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    tmhh %r2, 256
+; CHECK-NEXT:    srlg %r0, %r2, 56
+; CHECK-NEXT:    tmll %r0, 1
 ; CHECK-NEXT:    bner %r14
 ; CHECK-NEXT:  .LBB11_1: # %store
 ; CHECK-NEXT:    lgrl %r1, g@GOT

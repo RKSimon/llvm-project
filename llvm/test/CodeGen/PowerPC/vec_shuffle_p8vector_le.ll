@@ -4,9 +4,23 @@
 define void @VPKUDUM_unary(ptr %A) {
 ; CHECK-LABEL: VPKUDUM_unary:
 ; CHECK:       # %bb.0: # %entry
+; CHECK-NEXT:    addis 4, 2, .LCPI0_0@toc@ha
 ; CHECK-NEXT:    lxvd2x 0, 0, 3
+; CHECK-NEXT:    addi 4, 4, .LCPI0_0@toc@l
+; CHECK-NEXT:    lxvd2x 1, 0, 4
+; CHECK-NEXT:    addis 4, 2, .LCPI0_1@toc@ha
+; CHECK-NEXT:    addi 4, 4, .LCPI0_1@toc@l
 ; CHECK-NEXT:    xxswapd 34, 0
-; CHECK-NEXT:    vpkudum 2, 2, 2
+; CHECK-NEXT:    lxvd2x 0, 0, 4
+; CHECK-NEXT:    addis 4, 2, .LCPI0_2@toc@ha
+; CHECK-NEXT:    addi 4, 4, .LCPI0_2@toc@l
+; CHECK-NEXT:    xxswapd 35, 1
+; CHECK-NEXT:    vperm 3, 2, 2, 3
+; CHECK-NEXT:    xxswapd 36, 0
+; CHECK-NEXT:    lxvd2x 0, 0, 4
+; CHECK-NEXT:    vperm 3, 2, 3, 4
+; CHECK-NEXT:    xxswapd 36, 0
+; CHECK-NEXT:    vperm 2, 2, 3, 4
 ; CHECK-NEXT:    xxswapd 0, 34
 ; CHECK-NEXT:    stxvd2x 0, 0, 3
 ; CHECK-NEXT:    blr
@@ -27,11 +41,25 @@ entry:
 define void @VPKUDUM(ptr %A, ptr %B) {
 ; CHECK-LABEL: VPKUDUM:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    lxvd2x 0, 0, 3
-; CHECK-NEXT:    xxswapd 34, 0
-; CHECK-NEXT:    lxvd2x 0, 0, 4
+; CHECK-NEXT:    addis 5, 2, .LCPI1_0@toc@ha
+; CHECK-NEXT:    lxvd2x 1, 0, 3
+; CHECK-NEXT:    addi 5, 5, .LCPI1_0@toc@l
+; CHECK-NEXT:    lxvd2x 0, 0, 5
+; CHECK-NEXT:    xxswapd 34, 1
 ; CHECK-NEXT:    xxswapd 35, 0
-; CHECK-NEXT:    vpkudum 2, 3, 2
+; CHECK-NEXT:    lxvd2x 0, 0, 4
+; CHECK-NEXT:    addis 4, 2, .LCPI1_1@toc@ha
+; CHECK-NEXT:    addi 4, 4, .LCPI1_1@toc@l
+; CHECK-NEXT:    lxvd2x 1, 0, 4
+; CHECK-NEXT:    addis 4, 2, .LCPI1_2@toc@ha
+; CHECK-NEXT:    addi 4, 4, .LCPI1_2@toc@l
+; CHECK-NEXT:    vperm 2, 2, 2, 3
+; CHECK-NEXT:    xxswapd 35, 0
+; CHECK-NEXT:    lxvd2x 0, 0, 4
+; CHECK-NEXT:    xxswapd 36, 1
+; CHECK-NEXT:    vperm 2, 3, 2, 4
+; CHECK-NEXT:    xxswapd 36, 0
+; CHECK-NEXT:    vperm 2, 3, 2, 4
 ; CHECK-NEXT:    xxswapd 0, 34
 ; CHECK-NEXT:    stxvd2x 0, 0, 3
 ; CHECK-NEXT:    blr

@@ -56,11 +56,11 @@ define <2 x i8> @test_bitcast_i16_2xi8(i16 %a) {
 ;
 ; O3-LABEL: test_bitcast_i16_2xi8(
 ; O3:       {
-; O3-NEXT:    .reg .b16 %rs<2>;
+; O3-NEXT:    .reg .b16 %rs<3>;
 ; O3-EMPTY:
 ; O3-NEXT:  // %bb.0:
-; O3-NEXT:    ld.param.b16 %rs1, [test_bitcast_i16_2xi8_param_0];
-; O3-NEXT:    st.param.b16 [func_retval0], %rs1;
+; O3-NEXT:    ld.param.v2.b8 {%rs1, %rs2}, [test_bitcast_i16_2xi8_param_0];
+; O3-NEXT:    st.param.v2.b8 [func_retval0], {%rs1, %rs2};
 ; O3-NEXT:    ret;
   %res = bitcast i16 %a to <2 x i8>
   ret <2 x i8> %res

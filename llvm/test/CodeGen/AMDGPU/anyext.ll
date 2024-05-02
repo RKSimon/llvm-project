@@ -170,12 +170,10 @@ define amdgpu_kernel void @anyext_v2i16_to_v2i32() #0 {
 ; GFX9-LABEL: anyext_v2i16_to_v2i32:
 ; GFX9:       ; %bb.0: ; %bb
 ; GFX9-NEXT:    global_load_short_d16_hi v0, v[0:1], off
-; GFX9-NEXT:    v_mov_b32_e32 v1, 0xffff
 ; GFX9-NEXT:    s_mov_b32 s3, 0xf000
 ; GFX9-NEXT:    s_mov_b32 s2, -1
 ; GFX9-NEXT:    s_waitcnt vmcnt(0)
-; GFX9-NEXT:    v_and_b32_e32 v0, 0x80018001, v0
-; GFX9-NEXT:    v_bfi_b32 v0, v1, 0, v0
+; GFX9-NEXT:    v_and_b32_e32 v0, 0x80010000, v0
 ; GFX9-NEXT:    v_cmp_eq_f32_e32 vcc, 0, v0
 ; GFX9-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc
 ; GFX9-NEXT:    buffer_store_byte v0, off, s[0:3], 0

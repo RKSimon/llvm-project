@@ -39,39 +39,40 @@ define i1 @ptest_v16i1(ptr %a, ptr %b) {
 ;
 ; NONEON-NOSVE-LABEL: ptest_v16i1:
 ; NONEON-NOSVE:       // %bb.0:
-; NONEON-NOSVE-NEXT:    sub sp, sp, #64
-; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 64
-; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
 ; NONEON-NOSVE-NEXT:    mov w8, #255 // =0xff
 ; NONEON-NOSVE-NEXT:    ldp q3, q2, [x0, #32]
-; NONEON-NOSVE-NEXT:    stp q1, q2, [sp]
-; NONEON-NOSVE-NEXT:    stp q0, q3, [sp, #32]
-; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp, #40]
-; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
-; NONEON-NOSVE-NEXT:    csel w9, w8, wzr, ne
-; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
-; NONEON-NOSVE-NEXT:    ldp s1, s0, [sp]
-; NONEON-NOSVE-NEXT:    csetm w10, ne
-; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
-; NONEON-NOSVE-NEXT:    csetm w11, ne
-; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
+; NONEON-NOSVE-NEXT:    stp q0, q2, [sp, #-64]!
+; NONEON-NOSVE-NEXT:    .cfi_def_cfa_offset 64
+; NONEON-NOSVE-NEXT:    stp q1, q3, [sp, #32]
 ; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #8]
-; NONEON-NOSVE-NEXT:    csinv w11, w11, wzr, eq
 ; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
-; NONEON-NOSVE-NEXT:    csinv w11, w11, wzr, eq
+; NONEON-NOSVE-NEXT:    ldp s2, s0, [sp]
+; NONEON-NOSVE-NEXT:    csetm w9, ne
+; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
+; NONEON-NOSVE-NEXT:    csetm w10, ne
+; NONEON-NOSVE-NEXT:    fcmp s2, #0.0
+; NONEON-NOSVE-NEXT:    csinv w10, w10, wzr, eq
 ; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
 ; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #32]
-; NONEON-NOSVE-NEXT:    csinv w11, w11, wzr, eq
+; NONEON-NOSVE-NEXT:    orr w9, w10, w9
+; NONEON-NOSVE-NEXT:    csinv w9, w9, wzr, eq
 ; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
-; NONEON-NOSVE-NEXT:    csinv w11, w11, wzr, eq
+; NONEON-NOSVE-NEXT:    csetm w10, ne
+; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
+; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #40]
+; NONEON-NOSVE-NEXT:    orr w9, w9, w10
+; NONEON-NOSVE-NEXT:    csinv w9, w9, wzr, eq
+; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
+; NONEON-NOSVE-NEXT:    csetm w10, ne
+; NONEON-NOSVE-NEXT:    cmp w9, w10
+; NONEON-NOSVE-NEXT:    csel w9, w9, w10, hi
 ; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
 ; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #48]
-; NONEON-NOSVE-NEXT:    csinv w11, w11, wzr, eq
-; NONEON-NOSVE-NEXT:    cmp w11, w10
-; NONEON-NOSVE-NEXT:    csel w10, w11, w10, hi
-; NONEON-NOSVE-NEXT:    and w10, w10, #0xff
-; NONEON-NOSVE-NEXT:    cmp w10, w9
-; NONEON-NOSVE-NEXT:    csel w9, w10, w9, hi
+; NONEON-NOSVE-NEXT:    and w9, w9, #0xff
+; NONEON-NOSVE-NEXT:    csel w10, w8, wzr, ne
+; NONEON-NOSVE-NEXT:    cmp w9, w10
+; NONEON-NOSVE-NEXT:    csel w9, w9, w10, hi
 ; NONEON-NOSVE-NEXT:    fcmp s0, #0.0
 ; NONEON-NOSVE-NEXT:    csel w10, w8, wzr, ne
 ; NONEON-NOSVE-NEXT:    cmp w9, w10
@@ -96,6 +97,7 @@ define i1 @ptest_v16i1(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    csel w9, w9, w10, hi
 ; NONEON-NOSVE-NEXT:    fcmp s1, #0.0
 ; NONEON-NOSVE-NEXT:    ldp s0, s1, [sp, #24]
+; NONEON-NOSVE-NEXT:    and w9, w9, #0xff
 ; NONEON-NOSVE-NEXT:    csel w10, w8, wzr, ne
 ; NONEON-NOSVE-NEXT:    cmp w9, w10
 ; NONEON-NOSVE-NEXT:    csel w9, w9, w10, hi
@@ -297,6 +299,7 @@ define i1 @ptest_or_v16i1(ptr %a, ptr %b) {
 ; NONEON-NOSVE-NEXT:    cmp w8, w11
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w11, hi
 ; NONEON-NOSVE-NEXT:    and w11, w2, #0xff
+; NONEON-NOSVE-NEXT:    and w8, w8, #0xff
 ; NONEON-NOSVE-NEXT:    cmp w8, w9
 ; NONEON-NOSVE-NEXT:    csel w8, w8, w9, hi
 ; NONEON-NOSVE-NEXT:    and w9, w3, #0xff
