@@ -197,18 +197,18 @@ define { float, float } @modf_modf(float %x) {
 ; CHECK-LABEL: modf_modf:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    s_mov_b32 s4, 0x7f800000
+; CHECK-NEXT:    s_movk_i32 s6, 0x204
 ; CHECK-NEXT:    v_trunc_f32_e32 v1, v0
 ; CHECK-NEXT:    v_sub_f32_e32 v1, v0, v1
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v1, 0, v1, vcc
-; CHECK-NEXT:    s_brev_b32 s5, -2
-; CHECK-NEXT:    v_bfi_b32 v0, s5, v1, v0
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v1, v1, 0, s[4:5]
+; CHECK-NEXT:    s_brev_b32 s7, -2
+; CHECK-NEXT:    v_bfi_b32 v0, s7, v1, v0
 ; CHECK-NEXT:    v_trunc_f32_e32 v1, v0
 ; CHECK-NEXT:    v_sub_f32_e32 v2, v0, v1
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; CHECK-NEXT:    v_bfi_b32 v0, s5, v2, v0
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; CHECK-NEXT:    v_bfi_b32 v0, s7, v2, v0
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %modf0 = call { float, float } @llvm.modf.f32(float %x)
   %modf0.0 = extractvalue { float, float } %modf0, 0
@@ -220,28 +220,28 @@ define { <2 x float>, <2 x float> } @modf_modf_vector(<2 x float> %x) {
 ; CHECK-LABEL: modf_modf_vector:
 ; CHECK:       ; %bb.0:
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    s_mov_b32 s4, 0x7f800000
+; CHECK-NEXT:    s_movk_i32 s6, 0x204
 ; CHECK-NEXT:    v_trunc_f32_e32 v2, v1
 ; CHECK-NEXT:    v_sub_f32_e32 v2, v1, v2
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v1|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; CHECK-NEXT:    s_brev_b32 s5, -2
-; CHECK-NEXT:    v_bfi_b32 v1, s5, v2, v1
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v1, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; CHECK-NEXT:    s_brev_b32 s7, -2
+; CHECK-NEXT:    v_bfi_b32 v1, s7, v2, v1
 ; CHECK-NEXT:    v_trunc_f32_e32 v2, v0
 ; CHECK-NEXT:    v_sub_f32_e32 v2, v0, v2
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v2, 0, v2, vcc
-; CHECK-NEXT:    v_bfi_b32 v0, s5, v2, v0
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v2, v2, 0, s[4:5]
+; CHECK-NEXT:    v_bfi_b32 v0, s7, v2, v0
 ; CHECK-NEXT:    v_trunc_f32_e32 v2, v0
 ; CHECK-NEXT:    v_sub_f32_e32 v3, v0, v2
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v0|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v3, 0, v3, vcc
-; CHECK-NEXT:    v_bfi_b32 v0, s5, v3, v0
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v0, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v3, v3, 0, s[4:5]
+; CHECK-NEXT:    v_bfi_b32 v0, s7, v3, v0
 ; CHECK-NEXT:    v_trunc_f32_e32 v3, v1
 ; CHECK-NEXT:    v_sub_f32_e32 v4, v1, v3
-; CHECK-NEXT:    v_cmp_neq_f32_e64 vcc, |v1|, s4
-; CHECK-NEXT:    v_cndmask_b32_e32 v4, 0, v4, vcc
-; CHECK-NEXT:    v_bfi_b32 v1, s5, v4, v1
+; CHECK-NEXT:    v_cmp_class_f32_e64 s[4:5], v1, s6
+; CHECK-NEXT:    v_cndmask_b32_e64 v4, v4, 0, s[4:5]
+; CHECK-NEXT:    v_bfi_b32 v1, s7, v4, v1
 ; CHECK-NEXT:    s_setpc_b64 s[30:31]
   %modf0 = call { <2 x float>, <2 x float> } @llvm.modf.v2f32(<2 x float> %x)
   %modf0.0 = extractvalue { <2 x float>, <2 x float> } %modf0, 0

@@ -97,6 +97,11 @@ define i16 @catch_int() personality ptr @__gxx_personality_v0 {
 ; O0-NEXT:    clr r14
 ; O0-NEXT:    mov r12, 0(r1) ; 2-byte Folded Spill
 ; O0-NEXT:    cmp #1, r13
+; O0-NEXT:    mov r2, r12
+; O0-NEXT:    rra r12
+; O0-NEXT:    and #1, r12
+; O0-NEXT:    ; kill: def $r12b killed $r12b killed $r12
+; O0-NEXT:    cmp.b #1, r12
 ; O0-NEXT:    jne .LBB1_4
 ; O0-NEXT:    jmp .LBB1_3
 ; O0-NEXT:  .LBB1_3: ; %caught

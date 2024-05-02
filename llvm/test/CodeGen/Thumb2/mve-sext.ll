@@ -157,21 +157,15 @@ entry:
 define arm_aapcs_vfpcc <16 x i32> @sext_v16i8_v16i32(<16 x i8> %src) {
 ; CHECK-LABEL: sext_v16i8_v16i32:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    .pad #48
-; CHECK-NEXT:    sub sp, #48
+; CHECK-NEXT:    .pad #16
+; CHECK-NEXT:    sub sp, #16
 ; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #32
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vldrb.s16 q0, [r0]
-; CHECK-NEXT:    vstrw.32 q0, [r1]
-; CHECK-NEXT:    vldrb.s16 q0, [r0, #8]
-; CHECK-NEXT:    add r0, sp, #16
-; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vldrh.s32 q0, [r1]
-; CHECK-NEXT:    vldrh.s32 q1, [r1, #8]
-; CHECK-NEXT:    vldrh.s32 q2, [r0]
-; CHECK-NEXT:    vldrh.s32 q3, [r0, #8]
-; CHECK-NEXT:    add sp, #48
+; CHECK-NEXT:    vldrb.s32 q0, [r0]
+; CHECK-NEXT:    vldrb.s32 q1, [r0, #4]
+; CHECK-NEXT:    vldrb.s32 q2, [r0, #8]
+; CHECK-NEXT:    vldrb.s32 q3, [r0, #12]
+; CHECK-NEXT:    add sp, #16
 ; CHECK-NEXT:    bx lr
 entry:
   %0 = sext <16 x i8> %src to <16 x i32>
@@ -260,21 +254,15 @@ entry:
 define arm_aapcs_vfpcc <16 x i32> @zext_v16i8_v16i32(<16 x i8> %src) {
 ; CHECK-LABEL: zext_v16i8_v16i32:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    .pad #48
-; CHECK-NEXT:    sub sp, #48
+; CHECK-NEXT:    .pad #16
+; CHECK-NEXT:    sub sp, #16
 ; CHECK-NEXT:    mov r0, sp
-; CHECK-NEXT:    add r1, sp, #32
 ; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vldrb.u16 q0, [r0]
-; CHECK-NEXT:    vstrw.32 q0, [r1]
-; CHECK-NEXT:    vldrb.u16 q0, [r0, #8]
-; CHECK-NEXT:    add r0, sp, #16
-; CHECK-NEXT:    vstrw.32 q0, [r0]
-; CHECK-NEXT:    vldrh.u32 q0, [r1]
-; CHECK-NEXT:    vldrh.u32 q1, [r1, #8]
-; CHECK-NEXT:    vldrh.u32 q2, [r0]
-; CHECK-NEXT:    vldrh.u32 q3, [r0, #8]
-; CHECK-NEXT:    add sp, #48
+; CHECK-NEXT:    vldrb.u32 q0, [r0]
+; CHECK-NEXT:    vldrb.u32 q1, [r0, #4]
+; CHECK-NEXT:    vldrb.u32 q2, [r0, #8]
+; CHECK-NEXT:    vldrb.u32 q3, [r0, #12]
+; CHECK-NEXT:    add sp, #16
 ; CHECK-NEXT:    bx lr
 entry:
   %0 = zext <16 x i8> %src to <16 x i32>

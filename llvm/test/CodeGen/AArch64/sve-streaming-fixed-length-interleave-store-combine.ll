@@ -97,20 +97,20 @@ define void @interleave_wide_v8i64_factor2(ptr %output, ptr %input0, ptr %input1
 define void @interleave_wide_v64i8_factor3(ptr %output, ptr %input0, ptr %input1, ptr %input2) {
 ; CHECK-LABEL: interleave_wide_v64i8_factor3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.b, vl16
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    mov w8, #48 // =0x30
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    mov w8, #144 // =0x90
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q18, q21, [x3]
 ; CHECK-NEXT:    st3b { z3.b - z5.b }, p0, [x0, x8]
 ; CHECK-NEXT:    mov w8, #96 // =0x60
+; CHECK-NEXT:    st3b { z0.b - z2.b }, p0, [x0, x8]
+; CHECK-NEXT:    mov w8, #48 // =0x30
 ; CHECK-NEXT:    st3b { z19.b - z21.b }, p0, [x0, x8]
-; CHECK-NEXT:    mov w8, #144 // =0x90
-; CHECK-NEXT:    st3b { z16.b - z18.b }, p0, [x0, x8]
-; CHECK-NEXT:    st3b { z0.b - z2.b }, p0, [x0]
+; CHECK-NEXT:    st3b { z16.b - z18.b }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <64 x i8>, ptr %input0, align 1
   %v1 = load <64 x i8>, ptr %input1, align 1
@@ -123,20 +123,20 @@ define void @interleave_wide_v64i8_factor3(ptr %output, ptr %input0, ptr %input1
 define void @interleave_wide_v32i16_factor3(ptr %output, ptr %input0, ptr %input1, ptr %input2) {
 ; CHECK-LABEL: interleave_wide_v32i16_factor3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.h, vl8
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    mov x8, #24 // =0x18
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    mov x8, #72 // =0x48
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q18, q21, [x3]
 ; CHECK-NEXT:    st3h { z3.h - z5.h }, p0, [x0, x8, lsl #1]
 ; CHECK-NEXT:    mov x8, #48 // =0x30
+; CHECK-NEXT:    st3h { z0.h - z2.h }, p0, [x0, x8, lsl #1]
+; CHECK-NEXT:    mov x8, #24 // =0x18
 ; CHECK-NEXT:    st3h { z19.h - z21.h }, p0, [x0, x8, lsl #1]
-; CHECK-NEXT:    mov x8, #72 // =0x48
-; CHECK-NEXT:    st3h { z16.h - z18.h }, p0, [x0, x8, lsl #1]
-; CHECK-NEXT:    st3h { z0.h - z2.h }, p0, [x0]
+; CHECK-NEXT:    st3h { z16.h - z18.h }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <32 x i16>, ptr %input0, align 2
   %v1 = load <32 x i16>, ptr %input1, align 2
@@ -149,20 +149,20 @@ define void @interleave_wide_v32i16_factor3(ptr %output, ptr %input0, ptr %input
 define void @interleave_wide_v16i32_factor3(ptr %output, ptr %input0, ptr %input1, ptr %input2) {
 ; CHECK-LABEL: interleave_wide_v16i32_factor3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    mov x8, #12 // =0xc
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    mov x8, #36 // =0x24
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q18, q21, [x3]
 ; CHECK-NEXT:    st3w { z3.s - z5.s }, p0, [x0, x8, lsl #2]
 ; CHECK-NEXT:    mov x8, #24 // =0x18
+; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0, x8, lsl #2]
+; CHECK-NEXT:    mov x8, #12 // =0xc
 ; CHECK-NEXT:    st3w { z19.s - z21.s }, p0, [x0, x8, lsl #2]
-; CHECK-NEXT:    mov x8, #36 // =0x24
-; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0, x8, lsl #2]
-; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0]
+; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <16 x i32>, ptr %input0, align 4
   %v1 = load <16 x i32>, ptr %input1, align 4
@@ -175,20 +175,20 @@ define void @interleave_wide_v16i32_factor3(ptr %output, ptr %input0, ptr %input
 define void @interleave_wide_v8i64_factor3(ptr %output, ptr %input0, ptr %input1, ptr %input2) {
 ; CHECK-LABEL: interleave_wide_v8i64_factor3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.d, vl2
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    mov x8, #6 // =0x6
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    mov x8, #18 // =0x12
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q18, q21, [x3]
 ; CHECK-NEXT:    st3d { z3.d - z5.d }, p0, [x0, x8, lsl #3]
 ; CHECK-NEXT:    mov x8, #12 // =0xc
+; CHECK-NEXT:    st3d { z0.d - z2.d }, p0, [x0, x8, lsl #3]
+; CHECK-NEXT:    mov x8, #6 // =0x6
 ; CHECK-NEXT:    st3d { z19.d - z21.d }, p0, [x0, x8, lsl #3]
-; CHECK-NEXT:    mov x8, #18 // =0x12
-; CHECK-NEXT:    st3d { z16.d - z18.d }, p0, [x0, x8, lsl #3]
-; CHECK-NEXT:    st3d { z0.d - z2.d }, p0, [x0]
+; CHECK-NEXT:    st3d { z16.d - z18.d }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <8 x i64>, ptr %input0, align 8
   %v1 = load <8 x i64>, ptr %input1, align 8
@@ -317,20 +317,20 @@ define void @interleave_wide_v8i64_factor4(ptr %output, ptr %input0, ptr %input1
 define void @interleave_wide_v16f32_factor3(ptr %output, ptr %input0, ptr %input1, ptr %input2) {
 ; CHECK-LABEL: interleave_wide_v16f32_factor3:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.s, vl4
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    mov x8, #12 // =0xc
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    mov x8, #36 // =0x24
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q18, q21, [x3]
 ; CHECK-NEXT:    st3w { z3.s - z5.s }, p0, [x0, x8, lsl #2]
 ; CHECK-NEXT:    mov x8, #24 // =0x18
+; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0, x8, lsl #2]
+; CHECK-NEXT:    mov x8, #12 // =0xc
 ; CHECK-NEXT:    st3w { z19.s - z21.s }, p0, [x0, x8, lsl #2]
-; CHECK-NEXT:    mov x8, #36 // =0x24
-; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0, x8, lsl #2]
-; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0]
+; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <16 x float>, ptr %input0, align 4
   %v1 = load <16 x float>, ptr %input1, align 4
@@ -394,17 +394,17 @@ define void @interleave_wide_v16i32_factor2_vscale1(ptr %output, ptr %input0, pt
 define void @interleave_wide_v16i32_factor3_vscale1(ptr %output, ptr %input0, ptr %input1, ptr %input2) vscale_range(1,1) {
 ; CHECK-LABEL: interleave_wide_v16i32_factor3_vscale1:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ldp q0, q3, [x1]
+; CHECK-NEXT:    ldp q0, q3, [x1, #32]
 ; CHECK-NEXT:    ptrue p0.s
-; CHECK-NEXT:    ldp q19, q16, [x1, #32]
-; CHECK-NEXT:    ldp q1, q4, [x2]
-; CHECK-NEXT:    ldp q20, q17, [x2, #32]
-; CHECK-NEXT:    ldp q2, q5, [x3]
-; CHECK-NEXT:    ldp q21, q18, [x3, #32]
-; CHECK-NEXT:    st3w { z3.s - z5.s }, p0, [x0, #3, mul vl]
-; CHECK-NEXT:    st3w { z19.s - z21.s }, p0, [x0, #6, mul vl]
-; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0, #9, mul vl]
-; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0]
+; CHECK-NEXT:    ldp q16, q19, [x1]
+; CHECK-NEXT:    ldp q1, q4, [x2, #32]
+; CHECK-NEXT:    ldp q17, q20, [x2]
+; CHECK-NEXT:    ldp q2, q5, [x3, #32]
+; CHECK-NEXT:    ldp q18, q21, [x3]
+; CHECK-NEXT:    st3w { z3.s - z5.s }, p0, [x0, #9, mul vl]
+; CHECK-NEXT:    st3w { z0.s - z2.s }, p0, [x0, #6, mul vl]
+; CHECK-NEXT:    st3w { z19.s - z21.s }, p0, [x0, #3, mul vl]
+; CHECK-NEXT:    st3w { z16.s - z18.s }, p0, [x0]
 ; CHECK-NEXT:    ret
   %v0 = load <16 x i32>, ptr %input0, align 4
   %v1 = load <16 x i32>, ptr %input1, align 4

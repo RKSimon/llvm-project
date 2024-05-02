@@ -71,11 +71,13 @@ define i16 @test_cttz_i16(i16 %a) nounwind {
 ; RV32I-NEXT:    and a1, a2, a1
 ; RV32I-NEXT:    add a0, a0, a1
 ; RV32I-NEXT:    srli a1, a0, 4
+; RV32I-NEXT:    lui a2, 1
 ; RV32I-NEXT:    add a0, a0, a1
-; RV32I-NEXT:    slli a1, a0, 20
-; RV32I-NEXT:    andi a0, a0, 15
-; RV32I-NEXT:    srli a1, a1, 28
+; RV32I-NEXT:    addi a1, a2, -241
+; RV32I-NEXT:    and a0, a0, a1
+; RV32I-NEXT:    srli a1, a0, 8
 ; RV32I-NEXT:    add a0, a0, a1
+; RV32I-NEXT:    andi a0, a0, 31
 ; RV32I-NEXT:    ret
 ; RV32I-NEXT:  .LBB1_2:
 ; RV32I-NEXT:    li a0, 16
@@ -276,11 +278,13 @@ define i16 @test_cttz_i16_zero_poison(i16 %a) nounwind {
 ; RV32I-NEXT:    and a1, a2, a1
 ; RV32I-NEXT:    add a0, a0, a1
 ; RV32I-NEXT:    srli a1, a0, 4
+; RV32I-NEXT:    lui a2, 1
 ; RV32I-NEXT:    add a0, a0, a1
-; RV32I-NEXT:    slli a1, a0, 20
-; RV32I-NEXT:    andi a0, a0, 15
-; RV32I-NEXT:    srli a1, a1, 28
+; RV32I-NEXT:    addi a1, a2, -241
+; RV32I-NEXT:    and a0, a0, a1
+; RV32I-NEXT:    srli a1, a0, 8
 ; RV32I-NEXT:    add a0, a0, a1
+; RV32I-NEXT:    andi a0, a0, 31
 ; RV32I-NEXT:    ret
 ;
 ; RV32ZBB-LABEL: test_cttz_i16_zero_poison:
@@ -493,11 +497,13 @@ define i16 @test_ctlz_i16(i16 %a) nounwind {
 ; RV32I-NEXT:    and a1, a2, a1
 ; RV32I-NEXT:    add a0, a0, a1
 ; RV32I-NEXT:    srli a1, a0, 4
+; RV32I-NEXT:    lui a2, 1
 ; RV32I-NEXT:    add a0, a0, a1
-; RV32I-NEXT:    slli a1, a0, 20
-; RV32I-NEXT:    andi a0, a0, 15
-; RV32I-NEXT:    srli a1, a1, 28
+; RV32I-NEXT:    addi a1, a2, -241
+; RV32I-NEXT:    and a0, a0, a1
+; RV32I-NEXT:    srli a1, a0, 8
 ; RV32I-NEXT:    add a0, a0, a1
+; RV32I-NEXT:    andi a0, a0, 31
 ; RV32I-NEXT:    ret
 ; RV32I-NEXT:  .LBB9_2:
 ; RV32I-NEXT:    li a0, 16
@@ -763,11 +769,13 @@ define i16 @test_ctlz_i16_zero_poison(i16 %a) nounwind {
 ; RV32I-NEXT:    and a1, a2, a1
 ; RV32I-NEXT:    add a0, a0, a1
 ; RV32I-NEXT:    srli a1, a0, 4
+; RV32I-NEXT:    lui a2, 1
 ; RV32I-NEXT:    add a0, a0, a1
-; RV32I-NEXT:    slli a1, a0, 20
-; RV32I-NEXT:    andi a0, a0, 15
-; RV32I-NEXT:    srli a1, a1, 28
+; RV32I-NEXT:    addi a1, a2, -241
+; RV32I-NEXT:    and a0, a0, a1
+; RV32I-NEXT:    srli a1, a0, 8
 ; RV32I-NEXT:    add a0, a0, a1
+; RV32I-NEXT:    andi a0, a0, 31
 ; RV32I-NEXT:    ret
 ;
 ; RV32ZBB-LABEL: test_ctlz_i16_zero_poison:

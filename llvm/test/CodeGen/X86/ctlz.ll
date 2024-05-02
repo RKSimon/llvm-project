@@ -404,14 +404,14 @@ define i64 @ctlz_i64_zero_test(i64 %n) nounwind {
 ; X86-NOCMOV:       # %bb.0:
 ; X86-NOCMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NOCMOV-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NOCMOV-NEXT:    movl %ecx, %edx
-; X86-NOCMOV-NEXT:    orl %eax, %edx
+; X86-NOCMOV-NEXT:    movl %eax, %edx
+; X86-NOCMOV-NEXT:    orl %ecx, %edx
 ; X86-NOCMOV-NEXT:    je .LBB7_1
 ; X86-NOCMOV-NEXT:  # %bb.2: # %cond.false
-; X86-NOCMOV-NEXT:    testl %eax, %eax
+; X86-NOCMOV-NEXT:    testl %ecx, %ecx
 ; X86-NOCMOV-NEXT:    jne .LBB7_3
 ; X86-NOCMOV-NEXT:  # %bb.4: # %cond.false
-; X86-NOCMOV-NEXT:    bsrl %ecx, %eax
+; X86-NOCMOV-NEXT:    bsrl %eax, %eax
 ; X86-NOCMOV-NEXT:    xorl $31, %eax
 ; X86-NOCMOV-NEXT:    orl $32, %eax
 ; X86-NOCMOV-NEXT:    xorl %edx, %edx
@@ -421,7 +421,7 @@ define i64 @ctlz_i64_zero_test(i64 %n) nounwind {
 ; X86-NOCMOV-NEXT:    xorl %edx, %edx
 ; X86-NOCMOV-NEXT:    retl
 ; X86-NOCMOV-NEXT:  .LBB7_3:
-; X86-NOCMOV-NEXT:    bsrl %eax, %eax
+; X86-NOCMOV-NEXT:    bsrl %ecx, %eax
 ; X86-NOCMOV-NEXT:    xorl $31, %eax
 ; X86-NOCMOV-NEXT:    xorl %edx, %edx
 ; X86-NOCMOV-NEXT:    retl
@@ -819,15 +819,13 @@ define i8 @PR47603_trunc(i32 %0) {
 ;
 ; X86-CLZ-LABEL: PR47603_trunc:
 ; X86-CLZ:       # %bb.0:
-; X86-CLZ-NEXT:    lzcntl {{[0-9]+}}(%esp), %eax
-; X86-CLZ-NEXT:    xorb $31, %al
+; X86-CLZ-NEXT:    bsrl {{[0-9]+}}(%esp), %eax
 ; X86-CLZ-NEXT:    # kill: def $al killed $al killed $eax
 ; X86-CLZ-NEXT:    retl
 ;
 ; X64-CLZ-LABEL: PR47603_trunc:
 ; X64-CLZ:       # %bb.0:
-; X64-CLZ-NEXT:    lzcntl %edi, %eax
-; X64-CLZ-NEXT:    xorb $31, %al
+; X64-CLZ-NEXT:    bsrl %edi, %eax
 ; X64-CLZ-NEXT:    # kill: def $al killed $al killed $eax
 ; X64-CLZ-NEXT:    retq
 ;

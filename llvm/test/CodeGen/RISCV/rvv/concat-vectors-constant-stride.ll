@@ -8,9 +8,13 @@ define void @constant_forward_stride(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_forward_stride:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 16
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
 ; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a0, a0, 32
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 16
   %2 = getelementptr inbounds i8, ptr %s, i64 32
@@ -30,10 +34,14 @@ define void @constant_forward_stride2(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_forward_stride2:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 16
-; CHECK-NEXT:    addi a0, a0, -48
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a3, a0, -48
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
+; CHECK-NEXT:    vlse16.v v8, (a3), a2
+; CHECK-NEXT:    addi a0, a0, -16
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 -16
   %2 = getelementptr inbounds i8, ptr %s, i64 -32
@@ -53,9 +61,13 @@ define void @constant_forward_stride3(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_forward_stride3:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, 16
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
 ; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a0, a0, 32
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 16
   %2 = getelementptr inbounds i8, ptr %s, i64 32
@@ -78,9 +90,13 @@ define void @constant_back_stride(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_back_stride:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, -16
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
 ; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a0, a0, -32
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 -16
   %2 = getelementptr inbounds i8, ptr %s, i64 -32
@@ -100,10 +116,14 @@ define void @constant_back_stride2(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_back_stride2:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, -16
-; CHECK-NEXT:    addi a0, a0, 48
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a3, a0, 48
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
+; CHECK-NEXT:    vlse16.v v8, (a3), a2
+; CHECK-NEXT:    addi a0, a0, 16
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 16
   %2 = getelementptr inbounds i8, ptr %s, i64 32
@@ -123,9 +143,13 @@ define void @constant_back_stride3(ptr %s, ptr %d) {
 ; CHECK-LABEL: constant_back_stride3:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    li a2, -16
-; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
+; CHECK-NEXT:    vsetivli zero, 2, e16, mf4, ta, ma
 ; CHECK-NEXT:    vlse16.v v8, (a0), a2
-; CHECK-NEXT:    vse16.v v8, (a1)
+; CHECK-NEXT:    addi a0, a0, -32
+; CHECK-NEXT:    vlse16.v v9, (a0), a2
+; CHECK-NEXT:    vsetivli zero, 8, e8, mf2, ta, ma
+; CHECK-NEXT:    vslideup.vi v8, v9, 4
+; CHECK-NEXT:    vse8.v v8, (a1)
 ; CHECK-NEXT:    ret
   %1 = getelementptr inbounds i8, ptr %s, i64 -16
   %2 = getelementptr inbounds i8, ptr %s, i64 -32

@@ -1215,7 +1215,7 @@ define amdgpu_kernel void @fmuladd_neg_2.0_neg_a_b_f16(ptr addrspace(1) %out, pt
 ; GFX10-FLUSH-NEXT:    global_load_ushort v2, v0, s[0:1] offset:2 glc dlc
 ; GFX10-FLUSH-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v1, v1
-; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v2, v1
+; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v1, v2
 ; GFX10-FLUSH-NEXT:    global_store_short v0, v1, s[0:1]
 ; GFX10-FLUSH-NEXT:    s_endpgm
 ;
@@ -1245,7 +1245,7 @@ define amdgpu_kernel void @fmuladd_neg_2.0_neg_a_b_f16(ptr addrspace(1) %out, pt
 ; GFX11-FLUSH-TRUE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v0.l
 ; GFX11-FLUSH-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.h, v0.l
+; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v0.h
 ; GFX11-FLUSH-TRUE16-NEXT:    global_store_b16 v1, v0, s[0:1]
 ; GFX11-FLUSH-TRUE16-NEXT:    s_endpgm
 ;
@@ -1262,7 +1262,7 @@ define amdgpu_kernel void @fmuladd_neg_2.0_neg_a_b_f16(ptr addrspace(1) %out, pt
 ; GFX11-FLUSH-FAKE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v1
 ; GFX11-FLUSH-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v2, v1
+; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v2
 ; GFX11-FLUSH-FAKE16-NEXT:    global_store_b16 v0, v1, s[0:1]
 ; GFX11-FLUSH-FAKE16-NEXT:    s_endpgm
 ;
@@ -1325,7 +1325,8 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f16(ptr addrspace(1) %out, ptr ad
 ; VI-FLUSH-NEXT:    s_waitcnt vmcnt(0)
 ; VI-FLUSH-NEXT:    flat_load_ushort v2, v[2:3] glc
 ; VI-FLUSH-NEXT:    s_waitcnt vmcnt(0)
-; VI-FLUSH-NEXT:    v_mac_f16_e32 v2, -2.0, v4
+; VI-FLUSH-NEXT:    v_sub_f16_e64 v3, -v4, v4
+; VI-FLUSH-NEXT:    v_add_f16_e32 v2, v3, v2
 ; VI-FLUSH-NEXT:    flat_store_short v[0:1], v2
 ; VI-FLUSH-NEXT:    s_endpgm
 ;
@@ -1356,8 +1357,8 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f16(ptr addrspace(1) %out, ptr ad
 ; GFX10-FLUSH-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-FLUSH-NEXT:    global_load_ushort v2, v0, s[0:1] offset:2 glc dlc
 ; GFX10-FLUSH-NEXT:    s_waitcnt vmcnt(0)
-; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v1, v1
-; GFX10-FLUSH-NEXT:    v_sub_f16_e32 v1, v2, v1
+; GFX10-FLUSH-NEXT:    v_sub_f16_e64 v1, -v1, v1
+; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v1, v2
 ; GFX10-FLUSH-NEXT:    global_store_short v0, v1, s[0:1]
 ; GFX10-FLUSH-NEXT:    s_endpgm
 ;
@@ -1385,9 +1386,9 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f16(ptr addrspace(1) %out, ptr ad
 ; GFX11-FLUSH-TRUE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-TRUE16-NEXT:    global_load_d16_hi_b16 v0, v1, s[0:1] offset:2 glc dlc
 ; GFX11-FLUSH-TRUE16-NEXT:    s_waitcnt vmcnt(0)
-; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v0.l
+; GFX11-FLUSH-TRUE16-NEXT:    v_sub_f16_e64 v0.l, -v0.l, v0.l
 ; GFX11-FLUSH-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-TRUE16-NEXT:    v_sub_f16_e32 v0.l, v0.h, v0.l
+; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v0.h
 ; GFX11-FLUSH-TRUE16-NEXT:    global_store_b16 v1, v0, s[0:1]
 ; GFX11-FLUSH-TRUE16-NEXT:    s_endpgm
 ;
@@ -1402,9 +1403,9 @@ define amdgpu_kernel void @fmuladd_2.0_neg_a_b_f16(ptr addrspace(1) %out, ptr ad
 ; GFX11-FLUSH-FAKE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-FAKE16-NEXT:    global_load_u16 v2, v0, s[0:1] offset:2 glc dlc
 ; GFX11-FLUSH-FAKE16-NEXT:    s_waitcnt vmcnt(0)
-; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v1
+; GFX11-FLUSH-FAKE16-NEXT:    v_sub_f16_e64 v1, -v1, v1
 ; GFX11-FLUSH-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-FAKE16-NEXT:    v_sub_f16_e32 v1, v2, v1
+; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v2
 ; GFX11-FLUSH-FAKE16-NEXT:    global_store_b16 v0, v1, s[0:1]
 ; GFX11-FLUSH-FAKE16-NEXT:    s_endpgm
 ;
@@ -2348,7 +2349,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; VI-DENORM-NEXT:    v_add_u32_e32 v0, vcc, s0, v6
 ; VI-DENORM-NEXT:    v_addc_u32_e32 v1, vcc, 0, v1, vcc
 ; VI-DENORM-NEXT:    v_mul_f16_e32 v2, v7, v2
-; VI-DENORM-NEXT:    v_add_f16_e32 v2, v3, v2
+; VI-DENORM-NEXT:    v_add_f16_e32 v2, v2, v3
 ; VI-DENORM-NEXT:    flat_store_short v[0:1], v2
 ; VI-DENORM-NEXT:    s_endpgm
 ;
@@ -2364,7 +2365,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX10-FLUSH-NEXT:    global_load_ushort v3, v0, s[2:3] offset:4 glc dlc
 ; GFX10-FLUSH-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-FLUSH-NEXT:    v_mul_f16_e32 v1, v1, v2
-; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v3, v1
+; GFX10-FLUSH-NEXT:    v_add_f16_e32 v1, v1, v3
 ; GFX10-FLUSH-NEXT:    global_store_short v0, v1, s[0:1]
 ; GFX10-FLUSH-NEXT:    s_endpgm
 ;
@@ -2380,7 +2381,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX10-DENORM-NEXT:    global_load_ushort v3, v0, s[2:3] offset:4 glc dlc
 ; GFX10-DENORM-NEXT:    s_waitcnt vmcnt(0)
 ; GFX10-DENORM-NEXT:    v_mul_f16_e32 v1, v1, v2
-; GFX10-DENORM-NEXT:    v_add_f16_e32 v1, v3, v1
+; GFX10-DENORM-NEXT:    v_add_f16_e32 v1, v1, v3
 ; GFX10-DENORM-NEXT:    global_store_short v0, v1, s[0:1]
 ; GFX10-DENORM-NEXT:    s_endpgm
 ;
@@ -2399,7 +2400,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX11-FLUSH-TRUE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-TRUE16-NEXT:    v_mul_f16_e32 v0.l, v0.l, v0.h
 ; GFX11-FLUSH-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v1.l, v0.l
+; GFX11-FLUSH-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v1.l
 ; GFX11-FLUSH-TRUE16-NEXT:    global_store_b16 v2, v0, s[0:1]
 ; GFX11-FLUSH-TRUE16-NEXT:    s_endpgm
 ;
@@ -2418,7 +2419,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX11-FLUSH-FAKE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FLUSH-FAKE16-NEXT:    v_mul_f16_e32 v1, v1, v2
 ; GFX11-FLUSH-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v3, v1
+; GFX11-FLUSH-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v3
 ; GFX11-FLUSH-FAKE16-NEXT:    global_store_b16 v0, v1, s[0:1]
 ; GFX11-FLUSH-FAKE16-NEXT:    s_endpgm
 ;
@@ -2437,7 +2438,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX11-DENORM-TRUE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-DENORM-TRUE16-NEXT:    v_mul_f16_e32 v0.l, v0.l, v0.h
 ; GFX11-DENORM-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-DENORM-TRUE16-NEXT:    v_add_f16_e32 v0.l, v1.l, v0.l
+; GFX11-DENORM-TRUE16-NEXT:    v_add_f16_e32 v0.l, v0.l, v1.l
 ; GFX11-DENORM-TRUE16-NEXT:    global_store_b16 v2, v0, s[0:1]
 ; GFX11-DENORM-TRUE16-NEXT:    s_endpgm
 ;
@@ -2456,7 +2457,7 @@ define amdgpu_kernel void @neg_neg_mad_f16(ptr addrspace(1) noalias nocapture %o
 ; GFX11-DENORM-FAKE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-DENORM-FAKE16-NEXT:    v_mul_f16_e32 v1, v1, v2
 ; GFX11-DENORM-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-DENORM-FAKE16-NEXT:    v_add_f16_e32 v1, v3, v1
+; GFX11-DENORM-FAKE16-NEXT:    v_add_f16_e32 v1, v1, v3
 ; GFX11-DENORM-FAKE16-NEXT:    global_store_b16 v0, v1, s[0:1]
 ; GFX11-DENORM-FAKE16-NEXT:    s_endpgm
   %tid = tail call i32 @llvm.amdgcn.workitem.id.x() #0

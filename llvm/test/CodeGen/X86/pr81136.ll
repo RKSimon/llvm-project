@@ -6,16 +6,17 @@ define i64 @PR81136(i32 %a0, i32 %a1, ptr %a2) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vmovd %edi, %xmm0
 ; CHECK-NEXT:    vmovd %esi, %xmm1
-; CHECK-NEXT:    vmovdqa (%rdx), %ymm2
-; CHECK-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm3
-; CHECK-NEXT:    vextractf128 $1, %ymm2, %xmm2
-; CHECK-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm2
+; CHECK-NEXT:    vmovapd {{.*#+}} xmm2 = [128,1]
+; CHECK-NEXT:    vmovdqa (%rdx), %ymm3
 ; CHECK-NEXT:    vpcmpgtw %xmm0, %xmm1, %xmm0
 ; CHECK-NEXT:    vpcmpeqd %xmm1, %xmm1, %xmm1
 ; CHECK-NEXT:    vpxor %xmm1, %xmm0, %xmm0
 ; CHECK-NEXT:    vpmovsxwq %xmm0, %xmm0
-; CHECK-NEXT:    vpalignr {{.*#+}} xmm0 = mem[8,9,10,11,12,13,14,15],xmm0[0,1,2,3,4,5,6,7]
-; CHECK-NEXT:    vinsertf128 $1, %xmm2, %ymm3, %ymm2
+; CHECK-NEXT:    vshufpd {{.*#+}} xmm0 = xmm2[1],xmm0[0]
+; CHECK-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3, %xmm2
+; CHECK-NEXT:    vextractf128 $1, %ymm3, %xmm3
+; CHECK-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3, %xmm3
+; CHECK-NEXT:    vinsertf128 $1, %xmm3, %ymm2, %ymm2
 ; CHECK-NEXT:    vpxor %xmm3, %xmm3, %xmm3
 ; CHECK-NEXT:    vpcmpeqq %xmm3, %xmm0, %xmm0
 ; CHECK-NEXT:    vpxor %xmm1, %xmm0, %xmm0

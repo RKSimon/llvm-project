@@ -12,12 +12,12 @@ define void @f(ptr %out, <4 x i64> %v0, <4 x i64> %v1, <4 x i64> %v2, <4 x i64> 
 ; CHECK-LE:       // %bb.0: // %entry
 ; CHECK-LE-NEXT:    ldrh w8, [sp, #6]
 ; CHECK-LE-NEXT:    ldrh w9, [sp]
-; CHECK-LE-NEXT:    ldrh w10, [sp, #4]
-; CHECK-LE-NEXT:    ldrh w11, [sp, #2]
+; CHECK-LE-NEXT:    ldrh w10, [sp, #2]
+; CHECK-LE-NEXT:    ldrh w11, [sp, #4]
 ; CHECK-LE-NEXT:    ubfiz x8, x8, #3, #1
 ; CHECK-LE-NEXT:    and x9, x9, #0x1
-; CHECK-LE-NEXT:    bfi x9, x11, #1, #1
-; CHECK-LE-NEXT:    bfi x8, x10, #2, #1
+; CHECK-LE-NEXT:    bfi x9, x10, #1, #1
+; CHECK-LE-NEXT:    bfi x8, x11, #2, #1
 ; CHECK-LE-NEXT:    orr x8, x9, x8
 ; CHECK-LE-NEXT:    str x8, [x0]
 ; CHECK-LE-NEXT:    ret
@@ -80,9 +80,10 @@ define void @f16(ptr %out, <4 x i64> %v0, <4 x i64> %v1, <4 x i64> %v2, <4 x i64
 ; CHECK-LE-NEXT:    ldrb w8, [sp]
 ; CHECK-LE-NEXT:    ldrb w9, [sp, #8]
 ; CHECK-LE-NEXT:    ldrb w10, [sp, #15]
-; CHECK-LE-NEXT:    and x8, x8, #0x1
-; CHECK-LE-NEXT:    bfi x8, x9, #8, #1
-; CHECK-LE-NEXT:    bfi x8, x10, #15, #1
+; CHECK-LE-NEXT:    orr x8, x8, x9, lsl #8
+; CHECK-LE-NEXT:    ubfiz x9, x10, #15, #1
+; CHECK-LE-NEXT:    and x8, x8, #0x101010101010101
+; CHECK-LE-NEXT:    orr x8, x8, x9
 ; CHECK-LE-NEXT:    str x8, [x0]
 ; CHECK-LE-NEXT:    ret
 ;
@@ -130,12 +131,12 @@ entry:
 define void @v6i8(ptr %out, <4 x i64> %v0, <4 x i64> %v1, <4 x i64> %v2, <4 x i64> %v3, <6 x i8> %m) {
 ; CHECK-LE-LABEL: v6i8:
 ; CHECK-LE:       // %bb.0: // %entry
-; CHECK-LE-NEXT:    ldrb w8, [sp, #3]
-; CHECK-LE-NEXT:    ldrb w9, [sp]
+; CHECK-LE-NEXT:    ldrb w8, [sp]
+; CHECK-LE-NEXT:    ldrb w9, [sp, #3]
 ; CHECK-LE-NEXT:    ldrb w10, [sp, #5]
-; CHECK-LE-NEXT:    bfi x9, x8, #8, #8
-; CHECK-LE-NEXT:    bfi x9, x10, #16, #8
-; CHECK-LE-NEXT:    str x9, [x0]
+; CHECK-LE-NEXT:    orr x8, x8, x9, lsl #8
+; CHECK-LE-NEXT:    orr x8, x8, x10, lsl #16
+; CHECK-LE-NEXT:    str x8, [x0]
 ; CHECK-LE-NEXT:    ret
 ;
 ; CHECK-BE-LABEL: v6i8:

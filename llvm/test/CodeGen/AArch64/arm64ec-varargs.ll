@@ -6,8 +6,8 @@ define void @varargs_callee(double %x, ...) nounwind {
 ; CHECK-LABEL: varargs_callee:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    sub sp, sp, #48
-; CHECK-NEXT:    stp x1, x2, [x4, #-24]!
-; CHECK-NEXT:    str x3, [x4, #16]
+; CHECK-NEXT:    str x1, [x4, #-24]!
+; CHECK-NEXT:    stp x2, x3, [x4, #8]
 ; CHECK-NEXT:    str x4, [sp, #8]
 ; CHECK-NEXT:    add sp, sp, #48
 ; CHECK-NEXT:    ret

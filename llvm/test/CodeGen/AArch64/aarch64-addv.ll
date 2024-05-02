@@ -75,10 +75,15 @@ define i64 @add_D(ptr %arr)  {
 define i32 @oversized_ADDV_256(ptr noalias nocapture readonly %arg1, ptr noalias nocapture readonly %arg2) {
 ; CHECK-SD-LABEL: oversized_ADDV_256:
 ; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    ldr d0, [x0]
-; CHECK-SD-NEXT:    ldr d1, [x1]
-; CHECK-SD-NEXT:    uabdl v0.8h, v0.8b, v1.8b
-; CHECK-SD-NEXT:    uaddlv s0, v0.8h
+; CHECK-SD-NEXT:    ldr d1, [x0]
+; CHECK-SD-NEXT:    ldr d2, [x1]
+; CHECK-SD-NEXT:    movi v0.2d, #0000000000000000
+; CHECK-SD-NEXT:    usubl v1.8h, v1.8b, v2.8b
+; CHECK-SD-NEXT:    sshll v2.4s, v1.4h, #0
+; CHECK-SD-NEXT:    sshll2 v1.4s, v1.8h, #0
+; CHECK-SD-NEXT:    abs v2.4s, v2.4s
+; CHECK-SD-NEXT:    saba v2.4s, v1.4s, v0.4s
+; CHECK-SD-NEXT:    addv s0, v2.4s
 ; CHECK-SD-NEXT:    fmov w0, s0
 ; CHECK-SD-NEXT:    ret
 ;

@@ -484,16 +484,16 @@ define <2 x i64> @vector_i128_i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ; ARM6-LABEL: vector_i128_i64:
 ; ARM6:       @ %bb.0:
 ; ARM6-NEXT:    push {r11, lr}
-; ARM6-NEXT:    ldr lr, [sp, #8]
-; ARM6-NEXT:    ldr r12, [sp, #12]
-; ARM6-NEXT:    adds r0, lr, r0
-; ARM6-NEXT:    ldr lr, [sp, #16]
-; ARM6-NEXT:    adc r1, r12, r1
+; ARM6-NEXT:    ldr r12, [sp, #8]
+; ARM6-NEXT:    ldr lr, [sp, #12]
+; ARM6-NEXT:    adds r0, r12, r0
+; ARM6-NEXT:    ldr r12, [sp, #16]
+; ARM6-NEXT:    adc r1, lr, r1
 ; ARM6-NEXT:    adds r0, r0, #1
-; ARM6-NEXT:    ldr r12, [sp, #20]
+; ARM6-NEXT:    ldr lr, [sp, #20]
 ; ARM6-NEXT:    adc r1, r1, #0
-; ARM6-NEXT:    adds r2, lr, r2
-; ARM6-NEXT:    adc r3, r12, r3
+; ARM6-NEXT:    adds r2, r12, r2
+; ARM6-NEXT:    adc r3, lr, r3
 ; ARM6-NEXT:    adds r2, r2, #1
 ; ARM6-NEXT:    adc r3, r3, #0
 ; ARM6-NEXT:    pop {r11, pc}
@@ -514,14 +514,16 @@ define <2 x i64> @vector_i128_i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ; THUMB6:       @ %bb.0:
 ; THUMB6-NEXT:    push {r4, r5, r7, lr}
 ; THUMB6-NEXT:    mvns r4, r1
+; THUMB6-NEXT:    add r1, sp, #16
+; THUMB6-NEXT:    ldr r1, [r1, #4]
 ; THUMB6-NEXT:    mvns r0, r0
-; THUMB6-NEXT:    ldr r1, [sp, #20]
 ; THUMB6-NEXT:    ldr r5, [sp, #16]
 ; THUMB6-NEXT:    subs r0, r5, r0
 ; THUMB6-NEXT:    sbcs r1, r4
 ; THUMB6-NEXT:    mvns r4, r3
+; THUMB6-NEXT:    add r3, sp, #24
+; THUMB6-NEXT:    ldr r3, [r3, #4]
 ; THUMB6-NEXT:    mvns r2, r2
-; THUMB6-NEXT:    ldr r3, [sp, #28]
 ; THUMB6-NEXT:    ldr r5, [sp, #24]
 ; THUMB6-NEXT:    subs r2, r5, r2
 ; THUMB6-NEXT:    sbcs r3, r4

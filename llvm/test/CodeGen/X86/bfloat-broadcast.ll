@@ -232,6 +232,7 @@ define void @splat_v16bf16_broadcast_load(ptr %p, <8 x bfloat> %other, ptr %dst1
 ; SSE-NEXT:    movq %rax, %rcx
 ; SSE-NEXT:    movq %rax, %r8
 ; SSE-NEXT:    movzwl (%rdi), %edi
+; SSE-NEXT:    movw %di, 30(%rsi)
 ; SSE-NEXT:    movw %di, 28(%rsi)
 ; SSE-NEXT:    movw %di, 26(%rsi)
 ; SSE-NEXT:    movw %di, 24(%rsi)
@@ -239,7 +240,6 @@ define void @splat_v16bf16_broadcast_load(ptr %p, <8 x bfloat> %other, ptr %dst1
 ; SSE-NEXT:    movw %di, 20(%rsi)
 ; SSE-NEXT:    movw %di, 18(%rsi)
 ; SSE-NEXT:    movw %di, 16(%rsi)
-; SSE-NEXT:    movw %di, 30(%rsi)
 ; SSE-NEXT:    movw %ax, 8(%rdx)
 ; SSE-NEXT:    movw %ax, (%rdx)
 ; SSE-NEXT:    # kill: def $eax killed $eax killed $rax

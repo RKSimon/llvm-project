@@ -79,14 +79,7 @@ define i8 @test_vector_reduce_xor_v2i8(<2 x i8> %v) {
 ; GFX11-SDAG-TRUE16-LABEL: test_vector_reduce_xor_v2i8:
 ; GFX11-SDAG-TRUE16:       ; %bb.0: ; %entry
 ; GFX11-SDAG-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-SDAG-TRUE16-NEXT:    v_lshrrev_b16 v0.h, 8, v1.l
 ; GFX11-SDAG-TRUE16-NEXT:    v_xor_b16 v0.l, v0.l, v1.l
-; GFX11-SDAG-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX11-SDAG-TRUE16-NEXT:    v_xor_b16 v0.h, v1.l, v0.h
-; GFX11-SDAG-TRUE16-NEXT:    v_and_b16 v0.l, v0.l, 0xff
-; GFX11-SDAG-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-SDAG-TRUE16-NEXT:    v_lshlrev_b16 v0.h, 8, v0.h
-; GFX11-SDAG-TRUE16-NEXT:    v_or_b16 v0.l, v0.l, v0.h
 ; GFX11-SDAG-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-SDAG-FAKE16-LABEL: test_vector_reduce_xor_v2i8:
@@ -110,14 +103,7 @@ define i8 @test_vector_reduce_xor_v2i8(<2 x i8> %v) {
 ; GFX12-SDAG-TRUE16-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-SDAG-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-TRUE16-NEXT:    s_wait_kmcnt 0x0
-; GFX12-SDAG-TRUE16-NEXT:    v_lshrrev_b16 v0.h, 8, v1.l
 ; GFX12-SDAG-TRUE16-NEXT:    v_xor_b16 v0.l, v0.l, v1.l
-; GFX12-SDAG-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX12-SDAG-TRUE16-NEXT:    v_xor_b16 v0.h, v1.l, v0.h
-; GFX12-SDAG-TRUE16-NEXT:    v_and_b16 v0.l, v0.l, 0xff
-; GFX12-SDAG-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-SDAG-TRUE16-NEXT:    v_lshlrev_b16 v0.h, 8, v0.h
-; GFX12-SDAG-TRUE16-NEXT:    v_or_b16 v0.l, v0.l, v0.h
 ; GFX12-SDAG-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-SDAG-FAKE16-LABEL: test_vector_reduce_xor_v2i8:
@@ -1329,17 +1315,15 @@ define i16 @test_vector_reduce_xor_v16i16(<16 x i16> %v) {
 ; GFX7-SDAG-LABEL: test_vector_reduce_xor_v16i16:
 ; GFX7-SDAG:       ; %bb.0: ; %entry
 ; GFX7-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v3, v3, v7
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v1, v1, v5
 ; GFX7-SDAG-NEXT:    v_xor_b32_e32 v2, v2, v6
 ; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v0, v4
+; GFX7-SDAG-NEXT:    v_xor_b32_e32 v3, v3, v7
+; GFX7-SDAG-NEXT:    v_xor_b32_e32 v1, v1, v5
 ; GFX7-SDAG-NEXT:    v_xor_b32_e32 v1, v1, v3
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v3, v0, v2
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v1, v0
 ; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v0, v2
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v3, v3, v1
-; GFX7-SDAG-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
-; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v3, v0
+; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v0, v1
+; GFX7-SDAG-NEXT:    v_lshrrev_b32_e32 v1, 16, v0
+; GFX7-SDAG-NEXT:    v_xor_b32_e32 v0, v0, v1
 ; GFX7-SDAG-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX7-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;

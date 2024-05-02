@@ -160,7 +160,6 @@ define void @f_undef_15_intrinsic(<8 x i64> %a, ptr %dst) {
 ; CHECK:       // %bb.0: // %BB
 ; CHECK-NEXT:    // kill: def $q0 killed $q0 def $q0_q1
 ; CHECK-NEXT:    st2 { v0.2d, v1.2d }, [x0], #32
-; CHECK-NEXT:    st2 { v0.2d, v1.2d }, [x0]
 ; CHECK-NEXT:    ret
 BB:
   %a.0 = extractelement <8 x i64> %a, i64 0

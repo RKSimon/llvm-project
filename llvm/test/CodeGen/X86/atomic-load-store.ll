@@ -239,9 +239,11 @@ define void @store_atomic_vec1_bfloat(ptr %x, <1 x bfloat> %v) nounwind {
 ; CHECK-SSE-O0:       # %bb.0:
 ; CHECK-SSE-O0-NEXT:    pslld $16, %xmm0
 ; CHECK-SSE-O0-NEXT:    movd %xmm0, %ecx
+; CHECK-SSE-O0-NEXT:    xorl %edx, %edx
 ; CHECK-SSE-O0-NEXT:    btl $16, %ecx
+; CHECK-SSE-O0-NEXT:    adcl $32767, %edx # imm = 0x7FFF
 ; CHECK-SSE-O0-NEXT:    movl %ecx, %eax
-; CHECK-SSE-O0-NEXT:    adcl $32767, %eax # imm = 0x7FFF
+; CHECK-SSE-O0-NEXT:    addl %edx, %eax
 ; CHECK-SSE-O0-NEXT:    orl $4194304, %ecx # imm = 0x400000
 ; CHECK-SSE-O0-NEXT:    ucomiss %xmm0, %xmm0
 ; CHECK-SSE-O0-NEXT:    cmovpl %ecx, %eax
@@ -254,9 +256,11 @@ define void @store_atomic_vec1_bfloat(ptr %x, <1 x bfloat> %v) nounwind {
 ; CHECK-AVX-O0:       # %bb.0:
 ; CHECK-AVX-O0-NEXT:    vpslld $16, %xmm0, %xmm0
 ; CHECK-AVX-O0-NEXT:    vmovd %xmm0, %ecx
+; CHECK-AVX-O0-NEXT:    xorl %edx, %edx
 ; CHECK-AVX-O0-NEXT:    btl $16, %ecx
+; CHECK-AVX-O0-NEXT:    adcl $32767, %edx # imm = 0x7FFF
 ; CHECK-AVX-O0-NEXT:    movl %ecx, %eax
-; CHECK-AVX-O0-NEXT:    adcl $32767, %eax # imm = 0x7FFF
+; CHECK-AVX-O0-NEXT:    addl %edx, %eax
 ; CHECK-AVX-O0-NEXT:    orl $4194304, %ecx # imm = 0x400000
 ; CHECK-AVX-O0-NEXT:    vucomiss %xmm0, %xmm0
 ; CHECK-AVX-O0-NEXT:    cmovpl %ecx, %eax

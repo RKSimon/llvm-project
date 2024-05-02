@@ -789,21 +789,20 @@ define ptr @i64_m4096(ptr %p, i64 %v) {
 define ptr @i128_0(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_0:
 ; CHECK-T1:       @ %bb.0:
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
-; CHECK-T1-NEXT:    str r1, [r0, #12]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #8]
 ; CHECK-T1-NEXT:    stm r0!, {r2, r3}
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
+; CHECK-T1-NEXT:    str r1, [r0, #4]
 ; CHECK-T1-NEXT:    subs r0, #8
 ; CHECK-T1-NEXT:    bx lr
 ;
 ; CHECK-T2-LABEL: i128_0:
 ; CHECK-T2:       @ %bb.0:
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
-; CHECK-T2-NEXT:    str r1, [r0, #8]
+; CHECK-T2-NEXT:    ldrd r1, r12, [sp]
 ; CHECK-T2-NEXT:    strd r2, r3, [r0]
+; CHECK-T2-NEXT:    strd r1, r12, [r0, #8]
 ; CHECK-T2-NEXT:    bx lr
 ;
 ; CHECK-ARM-LABEL: i128_0:
@@ -823,7 +822,8 @@ define ptr @i128_3(ptr %p, i128 %v) {
 ; CHECK-T1-NEXT:    movs r1, #3
 ; CHECK-T1-NEXT:    str r2, [r0, r1]
 ; CHECK-T1-NEXT:    adds r0, r0, #3
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
 ; CHECK-T1-NEXT:    str r1, [r0, #12]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #8]
@@ -833,9 +833,8 @@ define ptr @i128_3(ptr %p, i128 %v) {
 ; CHECK-T2-LABEL: i128_3:
 ; CHECK-T2:       @ %bb.0:
 ; CHECK-T2-NEXT:    str r2, [r0, #3]!
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r2, [sp]
+; CHECK-T2-NEXT:    str r2, [r0, #12]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0, #4]
 ; CHECK-T2-NEXT:    bx lr
 ;
@@ -855,21 +854,21 @@ define ptr @i128_3(ptr %p, i128 %v) {
 define ptr @i128_4(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_4:
 ; CHECK-T1:       @ %bb.0:
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
-; CHECK-T1-NEXT:    str r1, [r0, #16]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #12]
 ; CHECK-T1-NEXT:    str r3, [r0, #8]
 ; CHECK-T1-NEXT:    str r2, [r0, #4]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
+; CHECK-T1-NEXT:    str r1, [r0, #16]
 ; CHECK-T1-NEXT:    adds r0, r0, #4
 ; CHECK-T1-NEXT:    bx lr
 ;
 ; CHECK-T2-LABEL: i128_4:
 ; CHECK-T2:       @ %bb.0:
 ; CHECK-T2-NEXT:    str r2, [r0, #4]!
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r2, [sp]
+; CHECK-T2-NEXT:    str r2, [r0, #12]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0, #4]
 ; CHECK-T2-NEXT:    bx lr
 ;
@@ -889,21 +888,21 @@ define ptr @i128_4(ptr %p, i128 %v) {
 define ptr @i128_8(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_8:
 ; CHECK-T1:       @ %bb.0:
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
-; CHECK-T1-NEXT:    str r1, [r0, #20]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #16]
 ; CHECK-T1-NEXT:    str r3, [r0, #12]
 ; CHECK-T1-NEXT:    str r2, [r0, #8]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
+; CHECK-T1-NEXT:    str r1, [r0, #20]
 ; CHECK-T1-NEXT:    adds r0, #8
 ; CHECK-T1-NEXT:    bx lr
 ;
 ; CHECK-T2-LABEL: i128_8:
 ; CHECK-T2:       @ %bb.0:
 ; CHECK-T2-NEXT:    str r2, [r0, #8]!
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r2, [sp]
+; CHECK-T2-NEXT:    str r2, [r0, #12]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0, #4]
 ; CHECK-T2-NEXT:    bx lr
 ;
@@ -923,21 +922,21 @@ define ptr @i128_8(ptr %p, i128 %v) {
 define ptr @i128_16(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_16:
 ; CHECK-T1:       @ %bb.0:
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
-; CHECK-T1-NEXT:    str r1, [r0, #28]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #24]
 ; CHECK-T1-NEXT:    str r3, [r0, #20]
 ; CHECK-T1-NEXT:    str r2, [r0, #16]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
+; CHECK-T1-NEXT:    str r1, [r0, #28]
 ; CHECK-T1-NEXT:    adds r0, #16
 ; CHECK-T1-NEXT:    bx lr
 ;
 ; CHECK-T2-LABEL: i128_16:
 ; CHECK-T2:       @ %bb.0:
 ; CHECK-T2-NEXT:    str r2, [r0, #16]!
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r2, [sp]
+; CHECK-T2-NEXT:    str r2, [r0, #12]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0, #4]
 ; CHECK-T2-NEXT:    bx lr
 ;
@@ -958,7 +957,8 @@ define ptr @i128_m1(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_m1:
 ; CHECK-T1:       @ %bb.0:
 ; CHECK-T1-NEXT:    subs r0, r0, #1
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
 ; CHECK-T1-NEXT:    str r1, [r0, #12]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #8]
@@ -969,9 +969,8 @@ define ptr @i128_m1(ptr %p, i128 %v) {
 ; CHECK-T2-LABEL: i128_m1:
 ; CHECK-T2:       @ %bb.0:
 ; CHECK-T2-NEXT:    str r2, [r0, #-1]!
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #12]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r2, [sp]
+; CHECK-T2-NEXT:    str r2, [r0, #12]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0, #4]
 ; CHECK-T2-NEXT:    bx lr
 ;
@@ -991,20 +990,20 @@ define ptr @i128_m1(ptr %p, i128 %v) {
 define ptr @i128_m4(ptr %p, i128 %v) {
 ; CHECK-T1-LABEL: i128_m4:
 ; CHECK-T1:       @ %bb.0:
-; CHECK-T1-NEXT:    ldr r1, [sp, #4]
-; CHECK-T1-NEXT:    str r1, [r0, #8]
 ; CHECK-T1-NEXT:    ldr r1, [sp]
 ; CHECK-T1-NEXT:    str r1, [r0, #4]
 ; CHECK-T1-NEXT:    str r3, [r0]
+; CHECK-T1-NEXT:    mov r1, sp
+; CHECK-T1-NEXT:    ldr r1, [r1, #4]
+; CHECK-T1-NEXT:    str r1, [r0, #8]
 ; CHECK-T1-NEXT:    subs r0, r0, #4
 ; CHECK-T1-NEXT:    str r2, [r0]
 ; CHECK-T1-NEXT:    bx lr
 ;
 ; CHECK-T2-LABEL: i128_m4:
 ; CHECK-T2:       @ %bb.0:
-; CHECK-T2-NEXT:    ldr r1, [sp, #4]
-; CHECK-T2-NEXT:    str r1, [r0, #8]
-; CHECK-T2-NEXT:    ldr r1, [sp]
+; CHECK-T2-NEXT:    ldrd r1, r12, [sp]
+; CHECK-T2-NEXT:    str.w r12, [r0, #8]
 ; CHECK-T2-NEXT:    strd r3, r1, [r0]
 ; CHECK-T2-NEXT:    str r2, [r0, #-4]!
 ; CHECK-T2-NEXT:    bx lr

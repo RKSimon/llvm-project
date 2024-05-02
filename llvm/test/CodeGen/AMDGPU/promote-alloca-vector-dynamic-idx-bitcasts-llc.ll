@@ -62,10 +62,10 @@ define amdgpu_kernel void @test_bitcast_llc_v128i8_v16i8(ptr addrspace(1) %out, 
 ; GFX11-NEXT:    s_load_b64 s[0:1], s[4:5], 0x0
 ; GFX11-NEXT:    s_load_b32 s2, s[4:5], 0x8
 ; GFX11-NEXT:    v_mov_b32_e32 v35, 0
-; GFX11-NEXT:    v_and_b32_e32 v1, 0xffff, v0
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
+; GFX11-NEXT:    v_lshlrev_b32_e32 v1, 16, v0
+; GFX11-NEXT:    v_and_b32_e32 v0, 0xffff, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_or_b32_e32 v0, v1, v0
+; GFX11-NEXT:    v_or_b32_e32 v0, v0, v1
 ; GFX11-NEXT:    v_mov_b32_e32 v1, v0
 ; GFX11-NEXT:    v_mov_b32_e32 v2, v0
 ; GFX11-NEXT:    v_mov_b32_e32 v3, v0
@@ -112,9 +112,9 @@ define amdgpu_kernel void @test_bitcast_llc_v128i8_v16i8(ptr addrspace(1) %out, 
 ; GFX12-NEXT:    s_load_b96 s[0:2], s[4:5], 0x0
 ; GFX12-NEXT:    v_mov_b32_e32 v35, 0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_and_b32_e32 v1, 0xffff, v0
-; GFX12-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
-; GFX12-NEXT:    v_or_b32_e32 v0, v1, v0
+; GFX12-NEXT:    v_lshlrev_b32_e32 v1, 16, v0
+; GFX12-NEXT:    v_and_b32_e32 v0, 0xffff, v0
+; GFX12-NEXT:    v_or_b32_e32 v0, v0, v1
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX12-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v4, v0
 ; GFX12-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0

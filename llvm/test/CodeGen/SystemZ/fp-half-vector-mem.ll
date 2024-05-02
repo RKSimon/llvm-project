@@ -103,22 +103,121 @@ define void @fun1(ptr %Src, ptr %Dst) {
 define void @fun2(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun2:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    lg %r0, 24(%r2)
-; CHECK-NEXT:    lg %r1, 16(%r2)
-; CHECK-NEXT:    lg %r4, 8(%r2)
-; CHECK-NEXT:    lg %r2, 0(%r2)
-; CHECK-NEXT:    stg %r0, 24(%r3)
-; CHECK-NEXT:    stg %r1, 16(%r3)
-; CHECK-NEXT:    stg %r4, 8(%r3)
-; CHECK-NEXT:    stg %r2, 0(%r3)
+; CHECK-NEXT:    aghi %r15, -48
+; CHECK-NEXT:    .cfi_def_cfa_offset 208
+; CHECK-NEXT:    std %f8, 40(%r15) # 8-byte Spill
+; CHECK-NEXT:    std %f9, 32(%r15) # 8-byte Spill
+; CHECK-NEXT:    std %f10, 24(%r15) # 8-byte Spill
+; CHECK-NEXT:    std %f11, 16(%r15) # 8-byte Spill
+; CHECK-NEXT:    std %f12, 8(%r15) # 8-byte Spill
+; CHECK-NEXT:    std %f13, 0(%r15) # 8-byte Spill
+; CHECK-NEXT:    .cfi_offset %f8, -168
+; CHECK-NEXT:    .cfi_offset %f9, -176
+; CHECK-NEXT:    .cfi_offset %f10, -184
+; CHECK-NEXT:    .cfi_offset %f11, -192
+; CHECK-NEXT:    .cfi_offset %f12, -200
+; CHECK-NEXT:    .cfi_offset %f13, -208
+; CHECK-NEXT:    lgh %r0, 4(%r2)
+; CHECK-NEXT:    lgh %r1, 6(%r2)
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f0, %r0
+; CHECK-NEXT:    lgh %r0, 8(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    ldgr %f1, %r1
+; CHECK-NEXT:    lgh %r1, 10(%r2)
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f2, %r0
+; CHECK-NEXT:    lgh %r0, 12(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    ldgr %f3, %r1
+; CHECK-NEXT:    lgh %r1, 14(%r2)
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f4, %r0
+; CHECK-NEXT:    lgh %r0, 16(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    ldgr %f5, %r1
+; CHECK-NEXT:    lgh %r1, 18(%r2)
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f6, %r0
+; CHECK-NEXT:    lgh %r0, 20(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    ldgr %f7, %r1
+; CHECK-NEXT:    lgh %r1, 22(%r2)
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f8, %r0
+; CHECK-NEXT:    lgh %r0, 24(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    lgh %r4, 26(%r2)
+; CHECK-NEXT:    ldgr %f9, %r1
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f10, %r0
+; CHECK-NEXT:    sllg %r0, %r4, 48
+; CHECK-NEXT:    lgh %r1, 28(%r2)
+; CHECK-NEXT:    ldgr %f11, %r0
+; CHECK-NEXT:    lgh %r0, 30(%r2)
+; CHECK-NEXT:    l %r2, 0(%r2)
+; CHECK-NEXT:    sllg %r1, %r1, 48
+; CHECK-NEXT:    ldgr %f12, %r1
+; CHECK-NEXT:    sllg %r0, %r0, 48
+; CHECK-NEXT:    ldgr %f13, %r0
+; CHECK-NEXT:    st %r2, 0(%r3)
+; CHECK-NEXT:    lgdr %r0, %f13
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 30(%r3)
+; CHECK-NEXT:    lgdr %r0, %f12
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 28(%r3)
+; CHECK-NEXT:    lgdr %r0, %f11
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 26(%r3)
+; CHECK-NEXT:    lgdr %r0, %f10
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 24(%r3)
+; CHECK-NEXT:    lgdr %r0, %f9
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 22(%r3)
+; CHECK-NEXT:    lgdr %r0, %f8
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 20(%r3)
+; CHECK-NEXT:    lgdr %r0, %f7
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 18(%r3)
+; CHECK-NEXT:    lgdr %r0, %f6
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 16(%r3)
+; CHECK-NEXT:    lgdr %r0, %f5
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 14(%r3)
+; CHECK-NEXT:    lgdr %r0, %f4
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 12(%r3)
+; CHECK-NEXT:    lgdr %r0, %f3
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 10(%r3)
+; CHECK-NEXT:    lgdr %r0, %f2
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 8(%r3)
+; CHECK-NEXT:    lgdr %r0, %f1
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 6(%r3)
+; CHECK-NEXT:    lgdr %r0, %f0
+; CHECK-NEXT:    srlg %r0, %r0, 48
+; CHECK-NEXT:    sth %r0, 4(%r3)
+; CHECK-NEXT:    ld %f8, 40(%r15) # 8-byte Reload
+; CHECK-NEXT:    ld %f9, 32(%r15) # 8-byte Reload
+; CHECK-NEXT:    ld %f10, 24(%r15) # 8-byte Reload
+; CHECK-NEXT:    ld %f11, 16(%r15) # 8-byte Reload
+; CHECK-NEXT:    ld %f12, 8(%r15) # 8-byte Reload
+; CHECK-NEXT:    ld %f13, 0(%r15) # 8-byte Reload
+; CHECK-NEXT:    aghi %r15, 48
 ; CHECK-NEXT:    br %r14
 ;
 ; VECTOR-LABEL: fun2:
 ; VECTOR:       # %bb.0:
-; VECTOR-NEXT:    vl %v0, 16(%r2), 4
-; VECTOR-NEXT:    vl %v1, 0(%r2), 4
-; VECTOR-NEXT:    vst %v1, 0(%r3), 4
-; VECTOR-NEXT:    vst %v0, 16(%r3), 4
+; VECTOR-NEXT:    vl %v0, 0(%r2), 4
+; VECTOR-NEXT:    vl %v1, 16(%r2), 4
+; VECTOR-NEXT:    vst %v1, 16(%r3), 4
+; VECTOR-NEXT:    vst %v0, 0(%r3), 4
 ; VECTOR-NEXT:    br %r14
   %L = load <16 x half>, ptr %Src
   store <16 x half> %L, ptr %Dst

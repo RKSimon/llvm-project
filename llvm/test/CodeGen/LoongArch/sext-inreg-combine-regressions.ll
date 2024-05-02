@@ -12,7 +12,10 @@
 define i64 @xor_sext_not(i64 %a) {
 ; CHECK-LABEL: xor_sext_not:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    addi.w $a0, $zero, -1
+; CHECK-NEXT:    sltu $a1, $zero, $a0
+; CHECK-NEXT:    sltui $a0, $a0, 1
+; CHECK-NEXT:    xor $a0, $a0, $a1
+; CHECK-NEXT:    sub.d $a0, $zero, $a0
 ; CHECK-NEXT:    ret
   %c = icmp eq i64 %a, 0
   %z = zext i1 %c to i64
@@ -159,8 +162,9 @@ define i64 @neg_zext_sub_c_bool(i64 %a, i64 %b) {
 ; CHECK-LABEL: neg_zext_sub_c_bool:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    addi.d $a0, $a0, 1
-; CHECK-NEXT:    sltu $a0, $zero, $a0
-; CHECK-NEXT:    addi.d $a0, $a0, -2048
+; CHECK-NEXT:    sltui $a0, $a0, 1
+; CHECK-NEXT:    addi.w $a2, $zero, -2047
+; CHECK-NEXT:    xor $a1, $a1, $a2
 ; CHECK-NEXT:    xor $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %c = icmp ne i64 %a, -1
@@ -264,13 +268,16 @@ define i64 @sext_not_xor_zext_not(i64 %a) {
 define i64 @fuzz_b296_f4(i64 %a, i64 %b, i64 %c, double %fa, double %fb) nounwind {
 ; CHECK-LABEL: fuzz_b296_f4:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    slli.d $a0, $a1, 32
-; CHECK-NEXT:    addi.w $a1, $zero, -1
-; CHECK-NEXT:    slt $a0, $a1, $a0
-; CHECK-NEXT:    nor $a0, $a0, $zero
-; CHECK-NEXT:    slli.d $a0, $a0, 31
+; CHECK-NEXT:    lu12i.w $a0, -524288
+; CHECK-NEXT:    lu32i.d $a0, 0
+; CHECK-NEXT:    and $a0, $a1, $a0
+; CHECK-NEXT:    addi.w $a3, $a1, 0
+; CHECK-NEXT:    srli.d $a3, $a3, 31
+; CHECK-NEXT:    bstrpick.d $a1, $a1, 31, 31
+; CHECK-NEXT:    add.d $a1, $a3, $a1
+; CHECK-NEXT:    addi.d $a1, $a1, 1
 ; CHECK-NEXT:    xor $a0, $a2, $a0
-; CHECK-NEXT:    xori $a0, $a0, 1
+; CHECK-NEXT:    xor $a0, $a1, $a0
 ; CHECK-NEXT:    addi.w $a0, $a0, 0
 ; CHECK-NEXT:    ret
   %a32 = trunc i64 %a to i32
@@ -300,18 +307,20 @@ define i64 @fuzz_b296_f4(i64 %a, i64 %b, i64 %c, double %fa, double %fb) nounwin
 define i64 @fuzz_b369_f17(i64 %a, i64 %b, i64 %c, double %fa, double %fb) nounwind {
 ; CHECK-LABEL: fuzz_b369_f17:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    sltui $a0, $a1, 1
-; CHECK-NEXT:    xor $a1, $a0, $a2
-; CHECK-NEXT:    lu12i.w $a3, 24
-; CHECK-NEXT:    ori $a3, $a3, 1696
-; CHECK-NEXT:    maskeqz $a3, $a3, $a0
-; CHECK-NEXT:    masknez $a1, $a1, $a0
-; CHECK-NEXT:    or $a1, $a3, $a1
-; CHECK-NEXT:    maskeqz $a1, $a1, $a0
-; CHECK-NEXT:    masknez $a0, $a2, $a0
-; CHECK-NEXT:    or $a0, $a1, $a0
-; CHECK-NEXT:    ori $a1, $zero, 1
-; CHECK-NEXT:    andn $a0, $a1, $a0
+; CHECK-NEXT:    sltu $a0, $zero, $a1
+; CHECK-NEXT:    sltui $a1, $a1, 1
+; CHECK-NEXT:    xor $a3, $a1, $a2
+; CHECK-NEXT:    lu12i.w $a4, 24
+; CHECK-NEXT:    ori $a4, $a4, 1696
+; CHECK-NEXT:    maskeqz $a4, $a4, $a1
+; CHECK-NEXT:    masknez $a3, $a3, $a1
+; CHECK-NEXT:    or $a3, $a4, $a3
+; CHECK-NEXT:    maskeqz $a3, $a3, $a1
+; CHECK-NEXT:    masknez $a2, $a2, $a1
+; CHECK-NEXT:    or $a2, $a3, $a2
+; CHECK-NEXT:    xor $a0, $a1, $a0
+; CHECK-NEXT:    xor $a0, $a0, $a2
+; CHECK-NEXT:    andi $a0, $a0, 1
 ; CHECK-NEXT:    sub.d $a0, $zero, $a0
 ; CHECK-NEXT:    ret
   %a32 = trunc i64 %a to i32

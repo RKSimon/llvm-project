@@ -45,17 +45,41 @@ define <vscale x 1 x i64> @vdot4a_i64(<vscale x 1 x i64> %acc, <vscale x 8 x i8>
 ; NODOT64-NEXT:    vadd.vv v8, v9, v8
 ; NODOT64-NEXT:    ret
 ;
-; DOT-LABEL: vdot4a_i64:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4a.vv v12, v9, v10
-; DOT-NEXT:    vsetvli zero, zero, e64, m2, ta, ma
-; DOT-NEXT:    vsext.vf2 v10, v12
-; DOT-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
-; DOT-NEXT:    vadd.vv v9, v10, v11
-; DOT-NEXT:    vadd.vv v8, v8, v9
-; DOT-NEXT:    ret
+; DOT32-LABEL: vdot4a_i64:
+; DOT32:       # %bb.0: # %entry
+; DOT32-NEXT:    li a0, 1
+; DOT32-NEXT:    vsetvli a1, zero, e8, m1, ta, ma
+; DOT32-NEXT:    vwmul.vv v16, v9, v10
+; DOT32-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; DOT32-NEXT:    vsext.vf2 v12, v16
+; DOT32-NEXT:    vwmul.vx v16, v12, a0
+; DOT32-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT32-NEXT:    vadd.vv v9, v19, v20
+; DOT32-NEXT:    vadd.vv v8, v8, v16
+; DOT32-NEXT:    vadd.vv v10, v17, v18
+; DOT32-NEXT:    vadd.vv v8, v23, v8
+; DOT32-NEXT:    vadd.vv v11, v21, v22
+; DOT32-NEXT:    vadd.vv v9, v10, v9
+; DOT32-NEXT:    vadd.vv v8, v11, v8
+; DOT32-NEXT:    vadd.vv v8, v9, v8
+; DOT32-NEXT:    ret
+;
+; DOT64-LABEL: vdot4a_i64:
+; DOT64:       # %bb.0: # %entry
+; DOT64-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
+; DOT64-NEXT:    vwmul.vv v12, v9, v10
+; DOT64-NEXT:    vsetvli zero, zero, e64, m8, ta, ma
+; DOT64-NEXT:    vsext.vf4 v16, v12
+; DOT64-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT64-NEXT:    vadd.vv v9, v19, v20
+; DOT64-NEXT:    vadd.vv v8, v8, v16
+; DOT64-NEXT:    vadd.vv v10, v17, v18
+; DOT64-NEXT:    vadd.vv v8, v23, v8
+; DOT64-NEXT:    vadd.vv v11, v21, v22
+; DOT64-NEXT:    vadd.vv v9, v10, v9
+; DOT64-NEXT:    vadd.vv v8, v11, v8
+; DOT64-NEXT:    vadd.vv v8, v9, v8
+; DOT64-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 8 x i8> %a to <vscale x 8 x i64>
   %b.sext = sext <vscale x 8 x i8> %b to <vscale x 8 x i64>
@@ -101,17 +125,41 @@ define <vscale x 1 x i64> @vdot4au_i64(<vscale x 1 x i64> %acc, <vscale x 8 x i8
 ; NODOT64-NEXT:    vadd.vv v8, v9, v8
 ; NODOT64-NEXT:    ret
 ;
-; DOT-LABEL: vdot4au_i64:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4au.vv v12, v9, v10
-; DOT-NEXT:    vsetvli zero, zero, e64, m2, ta, ma
-; DOT-NEXT:    vzext.vf2 v10, v12
-; DOT-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
-; DOT-NEXT:    vadd.vv v9, v10, v11
-; DOT-NEXT:    vadd.vv v8, v8, v9
-; DOT-NEXT:    ret
+; DOT32-LABEL: vdot4au_i64:
+; DOT32:       # %bb.0: # %entry
+; DOT32-NEXT:    li a0, 1
+; DOT32-NEXT:    vsetvli a1, zero, e8, m1, ta, ma
+; DOT32-NEXT:    vwmulu.vv v16, v9, v10
+; DOT32-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; DOT32-NEXT:    vzext.vf2 v12, v16
+; DOT32-NEXT:    vwmulu.vx v16, v12, a0
+; DOT32-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT32-NEXT:    vadd.vv v9, v19, v20
+; DOT32-NEXT:    vadd.vv v8, v8, v16
+; DOT32-NEXT:    vadd.vv v10, v17, v18
+; DOT32-NEXT:    vadd.vv v8, v23, v8
+; DOT32-NEXT:    vadd.vv v11, v21, v22
+; DOT32-NEXT:    vadd.vv v9, v10, v9
+; DOT32-NEXT:    vadd.vv v8, v11, v8
+; DOT32-NEXT:    vadd.vv v8, v9, v8
+; DOT32-NEXT:    ret
+;
+; DOT64-LABEL: vdot4au_i64:
+; DOT64:       # %bb.0: # %entry
+; DOT64-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
+; DOT64-NEXT:    vwmulu.vv v12, v9, v10
+; DOT64-NEXT:    vsetvli zero, zero, e64, m8, ta, ma
+; DOT64-NEXT:    vzext.vf4 v16, v12
+; DOT64-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT64-NEXT:    vadd.vv v9, v19, v20
+; DOT64-NEXT:    vadd.vv v8, v8, v16
+; DOT64-NEXT:    vadd.vv v10, v17, v18
+; DOT64-NEXT:    vadd.vv v8, v23, v8
+; DOT64-NEXT:    vadd.vv v11, v21, v22
+; DOT64-NEXT:    vadd.vv v9, v10, v9
+; DOT64-NEXT:    vadd.vv v8, v11, v8
+; DOT64-NEXT:    vadd.vv v8, v9, v8
+; DOT64-NEXT:    ret
 entry:
   %a.zext = zext <vscale x 8 x i8> %a to <vscale x 8 x i64>
   %b.zext = zext <vscale x 8 x i8> %b to <vscale x 8 x i64>
@@ -157,17 +205,41 @@ define <vscale x 1 x i64> @vdot4asu_i64(<vscale x 1 x i64> %acc, <vscale x 8 x i
 ; NODOT64-NEXT:    vadd.vv v8, v9, v8
 ; NODOT64-NEXT:    ret
 ;
-; DOT-LABEL: vdot4asu_i64:
-; DOT:       # %bb.0: # %entry
-; DOT-NEXT:    vsetvli a0, zero, e32, m1, ta, ma
-; DOT-NEXT:    vmv.v.i v12, 0
-; DOT-NEXT:    vdot4asu.vv v12, v9, v10
-; DOT-NEXT:    vsetvli zero, zero, e64, m2, ta, ma
-; DOT-NEXT:    vsext.vf2 v10, v12
-; DOT-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
-; DOT-NEXT:    vadd.vv v9, v10, v11
-; DOT-NEXT:    vadd.vv v8, v8, v9
-; DOT-NEXT:    ret
+; DOT32-LABEL: vdot4asu_i64:
+; DOT32:       # %bb.0: # %entry
+; DOT32-NEXT:    li a0, 1
+; DOT32-NEXT:    vsetvli a1, zero, e8, m1, ta, ma
+; DOT32-NEXT:    vwmulsu.vv v16, v9, v10
+; DOT32-NEXT:    vsetvli zero, zero, e32, m4, ta, ma
+; DOT32-NEXT:    vsext.vf2 v12, v16
+; DOT32-NEXT:    vwmul.vx v16, v12, a0
+; DOT32-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT32-NEXT:    vadd.vv v9, v19, v20
+; DOT32-NEXT:    vadd.vv v8, v8, v16
+; DOT32-NEXT:    vadd.vv v10, v17, v18
+; DOT32-NEXT:    vadd.vv v8, v23, v8
+; DOT32-NEXT:    vadd.vv v11, v21, v22
+; DOT32-NEXT:    vadd.vv v9, v10, v9
+; DOT32-NEXT:    vadd.vv v8, v11, v8
+; DOT32-NEXT:    vadd.vv v8, v9, v8
+; DOT32-NEXT:    ret
+;
+; DOT64-LABEL: vdot4asu_i64:
+; DOT64:       # %bb.0: # %entry
+; DOT64-NEXT:    vsetvli a0, zero, e8, m1, ta, ma
+; DOT64-NEXT:    vwmulsu.vv v12, v9, v10
+; DOT64-NEXT:    vsetvli zero, zero, e64, m8, ta, ma
+; DOT64-NEXT:    vsext.vf4 v16, v12
+; DOT64-NEXT:    vsetvli a0, zero, e64, m1, ta, ma
+; DOT64-NEXT:    vadd.vv v9, v19, v20
+; DOT64-NEXT:    vadd.vv v8, v8, v16
+; DOT64-NEXT:    vadd.vv v10, v17, v18
+; DOT64-NEXT:    vadd.vv v8, v23, v8
+; DOT64-NEXT:    vadd.vv v11, v21, v22
+; DOT64-NEXT:    vadd.vv v9, v10, v9
+; DOT64-NEXT:    vadd.vv v8, v11, v8
+; DOT64-NEXT:    vadd.vv v8, v9, v8
+; DOT64-NEXT:    ret
 entry:
   %a.sext = sext <vscale x 8 x i8> %a to <vscale x 8 x i64>
   %b.zext = zext <vscale x 8 x i8> %b to <vscale x 8 x i64>
@@ -452,6 +524,4 @@ entry:
 }
 ;; NOTE: These prefixes are unused and the list is autogenerated. Do not add tests below this line:
 ; CHECK: {{.*}}
-; DOT32: {{.*}}
-; DOT64: {{.*}}
 ; NODOT: {{.*}}

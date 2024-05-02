@@ -1022,9 +1022,8 @@ define bfloat @test_copysign(bfloat %a, bfloat %b) #0 {
 ; CHECK-NOFP16-NEXT:    ldrb r1, [sp, #5]
 ; CHECK-NOFP16-NEXT:    strh r0, [sp]
 ; CHECK-NOFP16-NEXT:    ldrb r0, [sp, #1]
-; CHECK-NOFP16-NEXT:    and r1, r1, #128
-; CHECK-NOFP16-NEXT:    and r0, r0, #127
-; CHECK-NOFP16-NEXT:    orr r0, r0, r1
+; CHECK-NOFP16-NEXT:    lsr r1, r1, #7
+; CHECK-NOFP16-NEXT:    bfi r0, r1, #7, #1
 ; CHECK-NOFP16-NEXT:    strb r0, [sp, #1]
 ; CHECK-NOFP16-NEXT:    ldrh r0, [sp]
 ; CHECK-NOFP16-NEXT:    vmov s0, r0
@@ -1039,10 +1038,9 @@ define bfloat @test_copysign(bfloat %a, bfloat %b) #0 {
 ; CHECK-FP16-NEXT:    vstr.16 s0, [sp]
 ; CHECK-FP16-NEXT:    ldrb r0, [sp, #5]
 ; CHECK-FP16-NEXT:    ldrb r1, [sp, #1]
-; CHECK-FP16-NEXT:    and r0, r0, #128
-; CHECK-FP16-NEXT:    and r1, r1, #127
-; CHECK-FP16-NEXT:    orr r0, r1, r0
-; CHECK-FP16-NEXT:    strb r0, [sp, #1]
+; CHECK-FP16-NEXT:    lsr r0, r0, #7
+; CHECK-FP16-NEXT:    bfi r1, r0, #7, #1
+; CHECK-FP16-NEXT:    strb r1, [sp, #1]
 ; CHECK-FP16-NEXT:    vldr.16 s0, [sp]
 ; CHECK-FP16-NEXT:    add sp, sp, #8
 ; CHECK-FP16-NEXT:    bx lr
@@ -1116,12 +1114,11 @@ define bfloat @test_copysign_f64(bfloat %a, double %b) #0 {
 ; CHECK-NOFP16-NEXT:    vmov r0, s0
 ; CHECK-NOFP16-NEXT:    vstr d1, [sp, #8]
 ; CHECK-NOFP16-NEXT:    ldrb r1, [sp, #15]
-; CHECK-NOFP16-NEXT:    and r1, r1, #128
+; CHECK-NOFP16-NEXT:    lsr r1, r1, #7
 ; CHECK-NOFP16-NEXT:    uxth r0, r0
 ; CHECK-NOFP16-NEXT:    strh r0, [sp, #4]
 ; CHECK-NOFP16-NEXT:    ldrb r0, [sp, #5]
-; CHECK-NOFP16-NEXT:    and r0, r0, #127
-; CHECK-NOFP16-NEXT:    orr r0, r0, r1
+; CHECK-NOFP16-NEXT:    bfi r0, r1, #7, #1
 ; CHECK-NOFP16-NEXT:    strb r0, [sp, #5]
 ; CHECK-NOFP16-NEXT:    ldrh r0, [sp, #4]
 ; CHECK-NOFP16-NEXT:    vmov s0, r0
@@ -1136,10 +1133,9 @@ define bfloat @test_copysign_f64(bfloat %a, double %b) #0 {
 ; CHECK-FP16-NEXT:    vstr d1, [sp, #8]
 ; CHECK-FP16-NEXT:    ldrb r0, [sp, #15]
 ; CHECK-FP16-NEXT:    ldrb r1, [sp, #5]
-; CHECK-FP16-NEXT:    and r0, r0, #128
-; CHECK-FP16-NEXT:    and r1, r1, #127
-; CHECK-FP16-NEXT:    orr r0, r1, r0
-; CHECK-FP16-NEXT:    strb r0, [sp, #5]
+; CHECK-FP16-NEXT:    lsr r0, r0, #7
+; CHECK-FP16-NEXT:    bfi r1, r0, #7, #1
+; CHECK-FP16-NEXT:    strb r1, [sp, #5]
 ; CHECK-FP16-NEXT:    vldr.16 s0, [sp, #4]
 ; CHECK-FP16-NEXT:    add sp, sp, #16
 ; CHECK-FP16-NEXT:    bx lr
@@ -1151,12 +1147,11 @@ define bfloat @test_copysign_f64(bfloat %a, double %b) #0 {
 define float @test_copysign_extended(bfloat %a, bfloat %b) #0 {
 ; CHECK-CVT-LABEL: test_copysign_extended:
 ; CHECK-CVT:       @ %bb.0:
-; CHECK-CVT-NEXT:    vmov r0, s0
-; CHECK-CVT-NEXT:    vmov r1, s1
-; CHECK-CVT-NEXT:    and r1, r1, #32768
-; CHECK-CVT-NEXT:    bfc r0, #15, #17
-; CHECK-CVT-NEXT:    orr r0, r0, r1
-; CHECK-CVT-NEXT:    lsl r0, r0, #16
+; CHECK-CVT-NEXT:    vmov r0, s1
+; CHECK-CVT-NEXT:    vmov r1, s0
+; CHECK-CVT-NEXT:    lsr r0, r0, #15
+; CHECK-CVT-NEXT:    bfi r1, r0, #15, #17
+; CHECK-CVT-NEXT:    lsl r0, r1, #16
 ; CHECK-CVT-NEXT:    vmov s0, r0
 ; CHECK-CVT-NEXT:    bx lr
 ;
@@ -1172,9 +1167,8 @@ define float @test_copysign_extended(bfloat %a, bfloat %b) #0 {
 ; CHECK-NOFP16-NEXT:    ldrb r1, [sp, #5]
 ; CHECK-NOFP16-NEXT:    strh r0, [sp]
 ; CHECK-NOFP16-NEXT:    ldrb r0, [sp, #1]
-; CHECK-NOFP16-NEXT:    and r1, r1, #128
-; CHECK-NOFP16-NEXT:    and r0, r0, #127
-; CHECK-NOFP16-NEXT:    orr r0, r0, r1
+; CHECK-NOFP16-NEXT:    lsr r1, r1, #7
+; CHECK-NOFP16-NEXT:    bfi r0, r1, #7, #1
 ; CHECK-NOFP16-NEXT:    strb r0, [sp, #1]
 ; CHECK-NOFP16-NEXT:    ldrh r0, [sp]
 ; CHECK-NOFP16-NEXT:    lsl r0, r0, #16
@@ -1190,10 +1184,9 @@ define float @test_copysign_extended(bfloat %a, bfloat %b) #0 {
 ; CHECK-FP16-NEXT:    vstr.16 s0, [sp]
 ; CHECK-FP16-NEXT:    ldrb r0, [sp, #5]
 ; CHECK-FP16-NEXT:    ldrb r1, [sp, #1]
-; CHECK-FP16-NEXT:    and r0, r0, #128
-; CHECK-FP16-NEXT:    and r1, r1, #127
-; CHECK-FP16-NEXT:    orr r0, r1, r0
-; CHECK-FP16-NEXT:    strb r0, [sp, #1]
+; CHECK-FP16-NEXT:    lsr r0, r0, #7
+; CHECK-FP16-NEXT:    bfi r1, r0, #7, #1
+; CHECK-FP16-NEXT:    strb r1, [sp, #1]
 ; CHECK-FP16-NEXT:    vldr.16 s0, [sp]
 ; CHECK-FP16-NEXT:    vmov r0, s0
 ; CHECK-FP16-NEXT:    lsl r0, r0, #16

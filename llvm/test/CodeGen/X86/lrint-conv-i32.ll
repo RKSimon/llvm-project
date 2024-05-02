@@ -59,7 +59,7 @@ define i32 @test_lrint_i32_f16(half %x) nounwind {
 ;
 ; X86-AVX512-LABEL: test_lrint_i32_f16:
 ; X86-AVX512:       # %bb.0:
-; X86-AVX512-NEXT:    vpinsrw $0, {{[0-9]+}}(%esp), %xmm0, %xmm0
+; X86-AVX512-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; X86-AVX512-NEXT:    vcvtph2ps %xmm0, %xmm0
 ; X86-AVX512-NEXT:    vroundss $4, %xmm0, %xmm0, %xmm0
 ; X86-AVX512-NEXT:    vcvtps2ph $4, %xmm0, %xmm0

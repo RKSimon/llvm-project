@@ -3412,9 +3412,9 @@ define <2 x i48> @smulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32I-NEXT:    sw s10, 16(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    sw s11, 12(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    lw s9, 0(a1)
-; RV32I-NEXT:    lw s10, 4(a1)
+; RV32I-NEXT:    lh s10, 4(a1)
 ; RV32I-NEXT:    lw s11, 8(a1)
-; RV32I-NEXT:    lw a1, 12(a1)
+; RV32I-NEXT:    lh a1, 12(a1)
 ; RV32I-NEXT:    sw a1, 8(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    lw s4, 0(a2)
 ; RV32I-NEXT:    lh s3, 4(a2)
@@ -3437,8 +3437,8 @@ define <2 x i48> @smulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32I-NEXT:    call __muldi3
 ; RV32I-NEXT:    mv s5, a1
 ; RV32I-NEXT:    srli a0, s9, 16
-; RV32I-NEXT:    slli s10, s10, 16
-; RV32I-NEXT:    or s9, s10, a0
+; RV32I-NEXT:    slli a1, s10, 16
+; RV32I-NEXT:    or s9, a1, a0
 ; RV32I-NEXT:    srai s10, s10, 31
 ; RV32I-NEXT:    mv a0, s9
 ; RV32I-NEXT:    mv a1, s10
@@ -3482,10 +3482,10 @@ define <2 x i48> @smulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32I-NEXT:    call __muldi3
 ; RV32I-NEXT:    mv s3, a1
 ; RV32I-NEXT:    srli a0, s11, 16
-; RV32I-NEXT:    lw a1, 8(sp) # 4-byte Folded Reload
-; RV32I-NEXT:    slli a1, a1, 16
+; RV32I-NEXT:    lw a2, 8(sp) # 4-byte Folded Reload
+; RV32I-NEXT:    slli a1, a2, 16
 ; RV32I-NEXT:    or s7, a1, a0
-; RV32I-NEXT:    srai s8, a1, 31
+; RV32I-NEXT:    srai s8, a2, 31
 ; RV32I-NEXT:    mv a0, s7
 ; RV32I-NEXT:    mv a1, s8
 ; RV32I-NEXT:    mv a2, s2
@@ -3569,13 +3569,13 @@ define <2 x i48> @smulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32IM-LABEL: smulh_v2i48:
 ; RV32IM:       # %bb.0:
 ; RV32IM-NEXT:    lw a5, 0(a1)
-; RV32IM-NEXT:    lw a6, 4(a1)
+; RV32IM-NEXT:    lh a6, 4(a1)
 ; RV32IM-NEXT:    lw a7, 0(a2)
 ; RV32IM-NEXT:    lh a4, 4(a2)
 ; RV32IM-NEXT:    lw a3, 8(a2)
 ; RV32IM-NEXT:    lh a2, 12(a2)
 ; RV32IM-NEXT:    lw t0, 8(a1)
-; RV32IM-NEXT:    lw a1, 12(a1)
+; RV32IM-NEXT:    lh a1, 12(a1)
 ; RV32IM-NEXT:    srli t1, a5, 16
 ; RV32IM-NEXT:    slli a6, a6, 16
 ; RV32IM-NEXT:    slli a5, a5, 16

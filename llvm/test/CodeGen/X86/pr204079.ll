@@ -25,8 +25,8 @@ define void @f12(i64 %a1, ptr %p) {
 ; LIST:       # %bb.0: # %entry
 ; LIST-NEXT:    movzbl (%rsi), %eax
 ; LIST-NEXT:    movw %ax, s0(%rip)
-; LIST-NEXT:    movzwl s2(%rip), %eax
-; LIST-NEXT:    movzwl s3(%rip), %ecx
+; LIST-NEXT:    movswl s2(%rip), %eax
+; LIST-NEXT:    movswl s3(%rip), %ecx
 ; LIST-NEXT:    addl %eax, %ecx
 ; LIST-NEXT:    movw %cx, s1(%rip)
 ; LIST-NEXT:    movb $0, c1(%rip)
@@ -37,40 +37,38 @@ define void @f12(i64 %a1, ptr %p) {
 ; LIST-NEXT:    movw $0, s4(%rip)
 ; LIST-NEXT:    movb $0, -{{[0-9]+}}(%rsp)
 ; LIST-NEXT:    movl val(%rip), %eax
-; LIST-NEXT:    cmpl $0, val(%rip)
-; LIST-NEXT:    setne %cl
 ; LIST-NEXT:    testq %rdi, %rdi
 ; LIST-NEXT:    setne cond(%rip)
-; LIST-NEXT:    movl -{{[0-9]+}}(%rsp), %edx
-; LIST-NEXT:    movl %edx, val(%rip)
-; LIST-NEXT:    movb %cl, cond(%rip)
+; LIST-NEXT:    cmpl $0, val(%rip)
+; LIST-NEXT:    movl -{{[0-9]+}}(%rsp), %ecx
+; LIST-NEXT:    movl %ecx, val(%rip)
+; LIST-NEXT:    setne cond(%rip)
 ; LIST-NEXT:    movl %eax, -{{[0-9]+}}(%rsp)
 ; LIST-NEXT:    retq
 ;
 ; FAST-LABEL: f12:
 ; FAST:       # %bb.0: # %entry
 ; FAST-NEXT:    movzbl (%rsi), %eax
-; FAST-NEXT:    movb $0, -{{[0-9]+}}(%rsp)
-; FAST-NEXT:    movzwl s4(%rip), %ecx
-; FAST-NEXT:    movw $0, s4(%rip)
-; FAST-NEXT:    movzwl s3(%rip), %edx
-; FAST-NEXT:    movzwl s2(%rip), %esi
-; FAST-NEXT:    addl %edx, %esi
-; FAST-NEXT:    movw %si, s1(%rip)
-; FAST-NEXT:    movw %cx, s3(%rip)
-; FAST-NEXT:    movw $0, s2(%rip)
-; FAST-NEXT:    movb $0, c1(%rip)
-; FAST-NEXT:    movw %ax, s0(%rip)
-; FAST-NEXT:    movb $0, c0(%rip)
-; FAST-NEXT:    movl val(%rip), %eax
-; FAST-NEXT:    cmpl $0, val(%rip)
-; FAST-NEXT:    setne %cl
 ; FAST-NEXT:    testq %rdi, %rdi
 ; FAST-NEXT:    setne cond(%rip)
-; FAST-NEXT:    movl -{{[0-9]+}}(%rsp), %edx
-; FAST-NEXT:    movl %eax, -{{[0-9]+}}(%rsp)
-; FAST-NEXT:    movb %cl, cond(%rip)
-; FAST-NEXT:    movl %edx, val(%rip)
+; FAST-NEXT:    movswl s3(%rip), %ecx
+; FAST-NEXT:    movswl s2(%rip), %edx
+; FAST-NEXT:    addl %ecx, %edx
+; FAST-NEXT:    cmpl $0, val(%rip)
+; FAST-NEXT:    movl val(%rip), %ecx
+; FAST-NEXT:    movb $0, -{{[0-9]+}}(%rsp)
+; FAST-NEXT:    movw $0, s2(%rip)
+; FAST-NEXT:    movzwl s4(%rip), %esi
+; FAST-NEXT:    movw $0, s4(%rip)
+; FAST-NEXT:    movb $0, c0(%rip)
+; FAST-NEXT:    movw %si, s3(%rip)
+; FAST-NEXT:    movb $0, c1(%rip)
+; FAST-NEXT:    movw %dx, s1(%rip)
+; FAST-NEXT:    movw %ax, s0(%rip)
+; FAST-NEXT:    movl -{{[0-9]+}}(%rsp), %eax
+; FAST-NEXT:    movl %eax, val(%rip)
+; FAST-NEXT:    setne cond(%rip)
+; FAST-NEXT:    movl %ecx, -{{[0-9]+}}(%rsp)
 ; FAST-NEXT:    retq
 entry:
   %local = alloca i32, align 4

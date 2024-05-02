@@ -36,7 +36,9 @@ define i64 @vscale_and_mask(i64 %x) vscale_range(1, 4) {
 define i1 @vscale_shl_known_bits(i64 %x) vscale_range(1, 4) {
 ; CHECK-LABEL: vscale_shl_known_bits:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mov w0, #1 // =0x1
+; CHECK-NEXT:    cntw x8
+; CHECK-NEXT:    tst x8, #0x3
+; CHECK-NEXT:    cset w0, eq
 ; CHECK-NEXT:    ret
   %vscale = call i64 @llvm.vscale.i64()
   %shl = shl i64 %vscale, 2

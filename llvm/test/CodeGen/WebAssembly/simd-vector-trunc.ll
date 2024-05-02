@@ -10,9 +10,10 @@ define <8 x i16> @trunc_extended_avgr(<8 x i8> %x, <8 x i8> %y) {
 ; CHECK:         .functype trunc_extended_avgr (v128, v128) -> (v128)
 ; CHECK-NEXT:  # %bb.0: # %entry
 ; CHECK-NEXT:    local.get 0
-; CHECK-NEXT:    local.get 1
-; CHECK-NEXT:    i8x16.avgr_u
 ; CHECK-NEXT:    i16x8.extend_low_i8x16_u
+; CHECK-NEXT:    local.get 1
+; CHECK-NEXT:    i16x8.extend_low_i8x16_u
+; CHECK-NEXT:    i16x8.avgr_u
 ; CHECK-NEXT:    # fallthrough-return
 entry:
   %x.ext = zext <8 x i8> %x to <8 x i32>

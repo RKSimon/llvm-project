@@ -57,7 +57,7 @@ define i64 @test_llrint_i64_f16(half %x) nounwind {
 ; X86-AVX512-LABEL: test_llrint_i64_f16:
 ; X86-AVX512:       # %bb.0: # %entry
 ; X86-AVX512-NEXT:    pushl %eax
-; X86-AVX512-NEXT:    vpinsrw $0, {{[0-9]+}}(%esp), %xmm0, %xmm0
+; X86-AVX512-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; X86-AVX512-NEXT:    vcvtph2ps %xmm0, %xmm0
 ; X86-AVX512-NEXT:    vmovss %xmm0, (%esp)
 ; X86-AVX512-NEXT:    calll llrintf

@@ -74,29 +74,20 @@ define void @dupq_f16_256b(ptr %addr) #0 {
 define void @dupq_bf16_256b(ptr %addr) #0 {
 ; SVE-LABEL: dupq_bf16_256b:
 ; SVE:       // %bb.0:
-; SVE-NEXT:    ldp q0, q1, [x0]
+; SVE-NEXT:    ldp q1, q0, [x0]
 ; SVE-NEXT:    dup v0.8h, v0.h[2]
 ; SVE-NEXT:    dup v1.8h, v1.h[2]
-; SVE-NEXT:    stp q0, q1, [x0]
+; SVE-NEXT:    stp q1, q0, [x0]
 ; SVE-NEXT:    ret
 ;
 ; SME-LABEL: dupq_bf16_256b:
 ; SME:       // %bb.0:
-; SME-NEXT:    ldp q1, q0, [x0]
-; SME-NEXT:    str q0, [sp, #-64]!
+; SME-NEXT:    sub sp, sp, #64
 ; SME-NEXT:    .cfi_def_cfa_offset 64
-; SME-NEXT:    ldr h0, [sp, #4]
-; SME-NEXT:    str q1, [sp, #32]
-; SME-NEXT:    str h0, [sp, #30]
-; SME-NEXT:    str h0, [sp, #28]
-; SME-NEXT:    str h0, [sp, #26]
-; SME-NEXT:    str h0, [sp, #24]
-; SME-NEXT:    str h0, [sp, #22]
-; SME-NEXT:    str h0, [sp, #20]
-; SME-NEXT:    str h0, [sp, #18]
-; SME-NEXT:    str h0, [sp, #16]
+; SME-NEXT:    ldp q0, q1, [x0]
+; SME-NEXT:    str q0, [sp, #32]
 ; SME-NEXT:    ldr h0, [sp, #36]
-; SME-NEXT:    ldr q1, [sp, #16]
+; SME-NEXT:    str q1, [sp]
 ; SME-NEXT:    str h0, [sp, #62]
 ; SME-NEXT:    str h0, [sp, #60]
 ; SME-NEXT:    str h0, [sp, #58]
@@ -105,8 +96,18 @@ define void @dupq_bf16_256b(ptr %addr) #0 {
 ; SME-NEXT:    str h0, [sp, #52]
 ; SME-NEXT:    str h0, [sp, #50]
 ; SME-NEXT:    str h0, [sp, #48]
-; SME-NEXT:    ldr q0, [sp, #48]
-; SME-NEXT:    stp q0, q1, [x0]
+; SME-NEXT:    ldr h0, [sp, #4]
+; SME-NEXT:    ldr q1, [sp, #48]
+; SME-NEXT:    str h0, [sp, #30]
+; SME-NEXT:    str h0, [sp, #28]
+; SME-NEXT:    str h0, [sp, #26]
+; SME-NEXT:    str h0, [sp, #24]
+; SME-NEXT:    str h0, [sp, #22]
+; SME-NEXT:    str h0, [sp, #20]
+; SME-NEXT:    str h0, [sp, #18]
+; SME-NEXT:    str h0, [sp, #16]
+; SME-NEXT:    ldr q0, [sp, #16]
+; SME-NEXT:    stp q1, q0, [x0]
 ; SME-NEXT:    add sp, sp, #64
 ; SME-NEXT:    ret
   %load = load <16 x bfloat>, ptr %addr

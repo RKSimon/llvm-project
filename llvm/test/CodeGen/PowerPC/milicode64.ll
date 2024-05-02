@@ -302,7 +302,6 @@ define ptr @test_memset(ptr noundef %dst, i32 noundef signext %value, i64 nounde
 ; CHECK-LE-P9-NEXT:    mflr r0
 ; CHECK-LE-P9-NEXT:    std r30, -16(r1) # 8-byte Folded Spill
 ; CHECK-LE-P9-NEXT:    stdu r1, -48(r1)
-; CHECK-LE-P9-NEXT:    extsb r4, r4
 ; CHECK-LE-P9-NEXT:    std r0, 64(r1)
 ; CHECK-LE-P9-NEXT:    mr r30, r3
 ; CHECK-LE-P9-NEXT:    bl memset
@@ -318,7 +317,6 @@ define ptr @test_memset(ptr noundef %dst, i32 noundef signext %value, i64 nounde
 ; CHECK-BE-P9:       # %bb.0: # %entry
 ; CHECK-BE-P9-NEXT:    mflr r0
 ; CHECK-BE-P9-NEXT:    stdu r1, -128(r1)
-; CHECK-BE-P9-NEXT:    extsb r4, r4
 ; CHECK-BE-P9-NEXT:    std r0, 144(r1)
 ; CHECK-BE-P9-NEXT:    std r30, 112(r1) # 8-byte Folded Spill
 ; CHECK-BE-P9-NEXT:    mr r30, r3
@@ -335,7 +333,6 @@ define ptr @test_memset(ptr noundef %dst, i32 noundef signext %value, i64 nounde
 ; CHECK-AIX-64-P9:       # %bb.0: # %entry
 ; CHECK-AIX-64-P9-NEXT:    mflr r0
 ; CHECK-AIX-64-P9-NEXT:    stdu r1, -128(r1)
-; CHECK-AIX-64-P9-NEXT:    extsb r4, r4
 ; CHECK-AIX-64-P9-NEXT:    std r0, 144(r1)
 ; CHECK-AIX-64-P9-NEXT:    std r31, 120(r1) # 8-byte Folded Spill
 ; CHECK-AIX-64-P9-NEXT:    mr r31, r3

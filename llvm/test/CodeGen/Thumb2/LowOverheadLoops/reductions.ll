@@ -632,39 +632,41 @@ define i32 @wrongop(ptr nocapture readonly %pd) {
 ; CHECK:       @ %bb.0: @ %entry
 ; CHECK-NEXT:    push {r4, lr}
 ; CHECK-NEXT:    mov r1, r0
-; CHECK-NEXT:    movw r12, #47184
-; CHECK-NEXT:    ldrd r2, lr, [r1, #4]
-; CHECK-NEXT:    movw r1, #23593
-; CHECK-NEXT:    movt r12, #1310
-; CHECK-NEXT:    movt r1, #49807
-; CHECK-NEXT:    mla r1, lr, r1, r12
-; CHECK-NEXT:    movw r3, #55051
-; CHECK-NEXT:    movw r4, #23593
-; CHECK-NEXT:    movt r3, #163
 ; CHECK-NEXT:    ldr r0, [r0]
-; CHECK-NEXT:    mov.w r12, #1
-; CHECK-NEXT:    movt r4, #655
-; CHECK-NEXT:    cmp.w r3, r1, ror #4
-; CHECK-NEXT:    cset r3, hi
-; CHECK-NEXT:    cmp.w r4, r1, ror #2
-; CHECK-NEXT:    csel r1, r3, r12, hi
-; CHECK-NEXT:    lsls.w r4, lr, #30
-; CHECK-NEXT:    csel r3, r3, r1, ne
+; CHECK-NEXT:    ldrd r2, r12, [r1, #4]
+; CHECK-NEXT:    movw r1, #34079
+; CHECK-NEXT:    movt r1, #20971
+; CHECK-NEXT:    movs r4, #1
+; CHECK-NEXT:    smmul r1, r12, r1
+; CHECK-NEXT:    asrs r3, r1, #7
+; CHECK-NEXT:    add.w lr, r3, r1, lsr #31
+; CHECK-NEXT:    mov.w r3, #400
+; CHECK-NEXT:    mls r3, lr, r3, r12
+; CHECK-NEXT:    cmp r3, #0
+; CHECK-NEXT:    asr.w r3, r1, #5
+; CHECK-NEXT:    add.w r1, r3, r1, lsr #31
+; CHECK-NEXT:    mov.w r3, #100
+; CHECK-NEXT:    cset lr, eq
+; CHECK-NEXT:    mls r3, r1, r3, r12
+; CHECK-NEXT:    cmp r3, #0
+; CHECK-NEXT:    csel r3, lr, r4, eq
+; CHECK-NEXT:    lsls.w r1, r12, #30
+; CHECK-NEXT:    csel r3, lr, r3, ne
 ; CHECK-NEXT:    cmp r2, #1
 ; CHECK-NEXT:    it lt
 ; CHECK-NEXT:    poplt {r4, pc}
 ; CHECK-NEXT:  .LBB8_1: @ %vector.ph
-; CHECK-NEXT:    movw r1, :lower16:days
-; CHECK-NEXT:    movs r4, #52
-; CHECK-NEXT:    movt r1, :upper16:days
-; CHECK-NEXT:    smlabb r3, r3, r4, r1
+; CHECK-NEXT:    movw r12, :lower16:days
+; CHECK-NEXT:    movs r1, #52
+; CHECK-NEXT:    movt r12, :upper16:days
+; CHECK-NEXT:    smlabb r3, r3, r1, r12
 ; CHECK-NEXT:    movs r1, #0
 ; CHECK-NEXT:    vdup.32 q0, r1
 ; CHECK-NEXT:    vmov.32 q0[0], r0
 ; CHECK-NEXT:    adds r0, r2, #3
 ; CHECK-NEXT:    bic r0, r0, #3
 ; CHECK-NEXT:    subs r0, #4
-; CHECK-NEXT:    add.w r0, r12, r0, lsr #2
+; CHECK-NEXT:    add.w r0, r4, r0, lsr #2
 ; CHECK-NEXT:    dls lr, r0
 ; CHECK-NEXT:  .LBB8_2: @ %vector.body
 ; CHECK-NEXT:    @ =>This Inner Loop Header: Depth=1

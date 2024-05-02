@@ -3442,8 +3442,8 @@ define <2 x half> @v_copysign_out_v2f16_mag_v2f16_sign_v2f64(<2 x half> %mag, <2
 ; VI-LABEL: v_copysign_out_v2f16_mag_v2f16_sign_v2f64:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0x3020706
-; VI-NEXT:    v_perm_b32 v1, v2, v4, s4
+; VI-NEXT:    v_and_b32_e32 v1, 0x80000000, v4
+; VI-NEXT:    v_or_b32_sdwa v1, v2, v1 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    s_mov_b32 s4, 0x7fff7fff
 ; VI-NEXT:    v_bfi_b32 v0, s4, v0, v1
 ; VI-NEXT:    s_setpc_b64 s[30:31]
@@ -4189,12 +4189,13 @@ define amdgpu_ps i32 @s_copysign_out_v2f16_mag_v2f16_sign_v2f64(<2 x half> inreg
 ;
 ; VI-LABEL: s_copysign_out_v2f16_mag_v2f16_sign_v2f64:
 ; VI:       ; %bb.0:
-; VI-NEXT:    s_lshr_b32 s3, s4, 16
-; VI-NEXT:    s_lshr_b64 s[2:3], s[2:3], 16
-; VI-NEXT:    s_mov_b32 s1, 0x7fff7fff
+; VI-NEXT:    s_and_b32 s1, s4, 0x80000000
+; VI-NEXT:    s_lshr_b32 s2, s2, 16
+; VI-NEXT:    s_or_b32 s1, s2, s1
+; VI-NEXT:    s_mov_b32 s2, 0x7fff7fff
 ; VI-NEXT:    v_mov_b32_e32 v0, s0
-; VI-NEXT:    v_mov_b32_e32 v1, s2
-; VI-NEXT:    v_bfi_b32 v0, s1, v0, v1
+; VI-NEXT:    v_mov_b32_e32 v1, s1
+; VI-NEXT:    v_bfi_b32 v0, s2, v0, v1
 ; VI-NEXT:    v_readfirstlane_b32 s0, v0
 ; VI-NEXT:    ; return to shader part epilog
 ;
@@ -5451,17 +5452,17 @@ define <4 x double> @v_copysign_out_v4f64_mag_v4f64_sign_v4f16(<4 x double> %mag
 ; SI-LABEL: v_copysign_out_v4f64_mag_v4f64_sign_v4f16:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_lshrrev_b32_e32 v10, 16, v9
-; SI-NEXT:    v_lshrrev_b32_e32 v11, 16, v8
+; SI-NEXT:    v_cvt_f32_f16_e32 v10, v8
+; SI-NEXT:    v_cvt_f32_f16_e32 v11, v9
+; SI-NEXT:    v_lshrrev_b32_e32 v8, 16, v8
+; SI-NEXT:    v_lshrrev_b32_e32 v9, 16, v9
 ; SI-NEXT:    v_cvt_f32_f16_e32 v8, v8
 ; SI-NEXT:    v_cvt_f32_f16_e32 v9, v9
-; SI-NEXT:    v_cvt_f32_f16_e32 v11, v11
-; SI-NEXT:    v_cvt_f32_f16_e32 v10, v10
 ; SI-NEXT:    s_brev_b32 s4, -2
-; SI-NEXT:    v_bfi_b32 v1, s4, v1, v8
-; SI-NEXT:    v_bfi_b32 v5, s4, v5, v9
-; SI-NEXT:    v_bfi_b32 v3, s4, v3, v11
-; SI-NEXT:    v_bfi_b32 v7, s4, v7, v10
+; SI-NEXT:    v_bfi_b32 v1, s4, v1, v10
+; SI-NEXT:    v_bfi_b32 v5, s4, v5, v11
+; SI-NEXT:    v_bfi_b32 v3, s4, v3, v8
+; SI-NEXT:    v_bfi_b32 v7, s4, v7, v9
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: v_copysign_out_v4f64_mag_v4f64_sign_v4f16:
@@ -6544,12 +6545,13 @@ define <4 x half> @v_copysign_out_v4f16_mag_v4f16_sign_v4f64(<4 x half> %mag, <4
 ; VI-LABEL: v_copysign_out_v4f16_mag_v4f16_sign_v4f64:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0x3020706
-; VI-NEXT:    v_perm_b32 v2, v3, v5, s4
-; VI-NEXT:    s_mov_b32 s5, 0x7fff7fff
-; VI-NEXT:    v_bfi_b32 v0, s5, v0, v2
-; VI-NEXT:    v_perm_b32 v2, v7, v9, s4
-; VI-NEXT:    v_bfi_b32 v1, s5, v1, v2
+; VI-NEXT:    v_and_b32_e32 v2, 0x80000000, v5
+; VI-NEXT:    v_or_b32_sdwa v2, v3, v2 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
+; VI-NEXT:    s_mov_b32 s4, 0x7fff7fff
+; VI-NEXT:    v_bfi_b32 v0, s4, v0, v2
+; VI-NEXT:    v_and_b32_e32 v2, 0x80000000, v9
+; VI-NEXT:    v_or_b32_sdwa v2, v7, v2 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
+; VI-NEXT:    v_bfi_b32 v1, s4, v1, v2
 ; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX9-LABEL: v_copysign_out_v4f16_mag_v4f16_sign_v4f64:
@@ -6962,17 +6964,17 @@ define <2 x half> @v_copysign_v2f16_0_v2bf32(<2 x float> %sign) {
 define amdgpu_ps i32 @s_copysign_v2f16_0_v2f64(<2 x double> inreg %sign) {
 ; SI-LABEL: s_copysign_v2f16_0_v2f64:
 ; SI:       ; %bb.0:
-; SI-NEXT:    s_and_b32 s0, s1, 0x80000000
-; SI-NEXT:    s_and_b32 s1, s3, 0x80000000
+; SI-NEXT:    s_and_b32 s1, s1, 0x80000000
+; SI-NEXT:    s_and_b32 s0, s3, 0x80000000
 ; SI-NEXT:    s_lshr_b32 s1, s1, 16
-; SI-NEXT:    s_lshr_b64 s[0:1], s[0:1], 16
+; SI-NEXT:    s_or_b32 s0, s1, s0
 ; SI-NEXT:    ; return to shader part epilog
 ;
 ; VI-LABEL: s_copysign_v2f16_0_v2f64:
 ; VI:       ; %bb.0:
-; VI-NEXT:    s_mov_b32 s0, s1
-; VI-NEXT:    s_lshr_b32 s1, s3, 16
-; VI-NEXT:    s_lshr_b64 s[0:1], s[0:1], 16
+; VI-NEXT:    s_and_b32 s0, s3, 0x80000000
+; VI-NEXT:    s_lshr_b32 s1, s1, 16
+; VI-NEXT:    s_or_b32 s0, s1, s0
 ; VI-NEXT:    s_mov_b32 s1, 0x7fff7fff
 ; VI-NEXT:    v_mov_b32_e32 v0, s0
 ; VI-NEXT:    v_bfi_b32 v0, s1, 0, v0
@@ -7005,17 +7007,17 @@ define <2 x half> @v_copysign_v2f16_0_v2bf64(<2 x double> %sign) {
 ; SI-LABEL: v_copysign_v2f16_0_v2bf64:
 ; SI:       ; %bb.0:
 ; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SI-NEXT:    v_and_b32_e32 v0, 0x80000000, v1
-; SI-NEXT:    v_and_b32_e32 v1, 0x80000000, v3
+; SI-NEXT:    v_and_b32_e32 v1, 0x80000000, v1
+; SI-NEXT:    v_and_b32_e32 v0, 0x80000000, v3
 ; SI-NEXT:    v_lshrrev_b32_e32 v1, 16, v1
-; SI-NEXT:    v_alignbit_b32 v0, v1, v0, 16
+; SI-NEXT:    v_or_b32_e32 v0, v1, v0
 ; SI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: v_copysign_v2f16_0_v2bf64:
 ; VI:       ; %bb.0:
 ; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; VI-NEXT:    s_mov_b32 s4, 0x3020706
-; VI-NEXT:    v_perm_b32 v0, v1, v3, s4
+; VI-NEXT:    v_and_b32_e32 v0, 0x80000000, v3
+; VI-NEXT:    v_or_b32_sdwa v0, v1, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; VI-NEXT:    s_mov_b32 s4, 0x7fff7fff
 ; VI-NEXT:    v_bfi_b32 v0, s4, 0, v0
 ; VI-NEXT:    s_setpc_b64 s[30:31]

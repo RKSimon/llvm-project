@@ -738,8 +738,8 @@ define arm_aapcs_vfpcc void @gather_inc_v8i16_complex(ptr noalias nocapture read
 ; CHECK-NEXT:    str r1, [sp, #4] @ 4-byte Spill
 ; CHECK-NEXT:    subs r1, #8
 ; CHECK-NEXT:    vstrw.32 q0, [sp, #40] @ 16-byte Spill
-; CHECK-NEXT:    add r3, sp, #104
-; CHECK-NEXT:    add r7, sp, #72
+; CHECK-NEXT:    add r3, sp, #72
+; CHECK-NEXT:    add r7, sp, #104
 ; CHECK-NEXT:    add.w r1, r2, r1, lsr #3
 ; CHECK-NEXT:    str r1, [sp, #56] @ 4-byte Spill
 ; CHECK-NEXT:    adr r1, .LCPI15_0

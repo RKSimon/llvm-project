@@ -26,23 +26,23 @@ define void @sext_v4i24_mask(ptr %src, ptr %dst) {
 ; CHECK-NEXT:    vinsgr2vr.w $vr0, $a0, 3
 ; CHECK-NEXT:    vrepli.b $vr1, 0
 ; CHECK-NEXT:    vslt.w $vr0, $vr1, $vr0
-; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 0
+; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 2
 ; CHECK-NEXT:    vinsgr2vr.d $vr2, $a0, 0
-; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 1
+; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 3
 ; CHECK-NEXT:    vinsgr2vr.d $vr2, $a0, 1
 ; CHECK-NEXT:    vslli.d $vr2, $vr2, 40
 ; CHECK-NEXT:    vsrai.d $vr2, $vr2, 40
-; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 2
+; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 0
 ; CHECK-NEXT:    vinsgr2vr.d $vr3, $a0, 0
-; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 3
+; CHECK-NEXT:    vpickve2gr.w $a0, $vr0, 1
 ; CHECK-NEXT:    vinsgr2vr.d $vr3, $a0, 1
 ; CHECK-NEXT:    vslli.d $vr0, $vr3, 40
 ; CHECK-NEXT:    vsrai.d $vr0, $vr0, 40
 ; CHECK-NEXT:    vrepli.d $vr3, 5
 ; CHECK-NEXT:    vbitsel.v $vr0, $vr1, $vr3, $vr0
 ; CHECK-NEXT:    vbitsel.v $vr1, $vr1, $vr3, $vr2
-; CHECK-NEXT:    vst $vr1, $a1, 0
-; CHECK-NEXT:    vst $vr0, $a1, 16
+; CHECK-NEXT:    vst $vr1, $a1, 16
+; CHECK-NEXT:    vst $vr0, $a1, 0
 ; CHECK-NEXT:    ret
 entry:
   %1 = load <4 x i24>, ptr %src

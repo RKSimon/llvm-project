@@ -555,8 +555,8 @@ define <4 x float> @fp4_to_f32_vec(<4 x i4> %x) {
 ; CHECK-NEXT:    v_cmp_eq_u32_e64 s[4:5], 1, v4
 ; CHECK-NEXT:    v_add_u32_e32 v5, 0.5, v5
 ; CHECK-NEXT:    v_or3_b32 v7, v6, v7, v8
-; CHECK-NEXT:    s_and_b64 vcc, s[4:5], vcc
-; CHECK-NEXT:    v_or_b32_e32 v0, v4, v0
+; CHECK-NEXT:    s_and_b64 vcc, vcc, s[4:5]
+; CHECK-NEXT:    v_or_b32_e32 v0, v0, v4
 ; CHECK-NEXT:    v_cndmask_b32_e32 v5, v5, v7, vcc
 ; CHECK-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v0
 ; CHECK-NEXT:    v_cndmask_b32_e32 v0, v5, v6, vcc
@@ -579,8 +579,8 @@ define <4 x float> @fp4_to_f32_vec(<4 x i4> %x) {
 ; CHECK-NEXT:    v_cmp_eq_u32_e64 s[4:5], 1, v4
 ; CHECK-NEXT:    v_add_u32_e32 v5, 0.5, v5
 ; CHECK-NEXT:    v_or3_b32 v7, v6, v7, v8
-; CHECK-NEXT:    s_and_b64 vcc, s[4:5], vcc
-; CHECK-NEXT:    v_or_b32_e32 v1, v4, v1
+; CHECK-NEXT:    s_and_b64 vcc, vcc, s[4:5]
+; CHECK-NEXT:    v_or_b32_e32 v1, v1, v4
 ; CHECK-NEXT:    v_cndmask_b32_e32 v5, v5, v7, vcc
 ; CHECK-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v1
 ; CHECK-NEXT:    v_cndmask_b32_e32 v1, v5, v6, vcc
@@ -603,8 +603,8 @@ define <4 x float> @fp4_to_f32_vec(<4 x i4> %x) {
 ; CHECK-NEXT:    v_cmp_eq_u32_e64 s[4:5], 1, v4
 ; CHECK-NEXT:    v_add_u32_e32 v5, 0.5, v5
 ; CHECK-NEXT:    v_or3_b32 v7, v6, v7, v8
-; CHECK-NEXT:    s_and_b64 vcc, s[4:5], vcc
-; CHECK-NEXT:    v_or_b32_e32 v2, v4, v2
+; CHECK-NEXT:    s_and_b64 vcc, vcc, s[4:5]
+; CHECK-NEXT:    v_or_b32_e32 v2, v2, v4
 ; CHECK-NEXT:    v_cndmask_b32_e32 v5, v5, v7, vcc
 ; CHECK-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v2
 ; CHECK-NEXT:    v_cndmask_b32_e32 v2, v5, v6, vcc
@@ -627,8 +627,8 @@ define <4 x float> @fp4_to_f32_vec(<4 x i4> %x) {
 ; CHECK-NEXT:    v_cmp_eq_u32_e64 s[4:5], 1, v4
 ; CHECK-NEXT:    v_add_u32_e32 v5, 0.5, v5
 ; CHECK-NEXT:    v_or3_b32 v7, v6, v7, v8
-; CHECK-NEXT:    s_and_b64 vcc, s[4:5], vcc
-; CHECK-NEXT:    v_or_b32_e32 v3, v4, v3
+; CHECK-NEXT:    s_and_b64 vcc, vcc, s[4:5]
+; CHECK-NEXT:    v_or_b32_e32 v3, v3, v4
 ; CHECK-NEXT:    v_cndmask_b32_e32 v5, v5, v7, vcc
 ; CHECK-NEXT:    v_cmp_eq_u32_e32 vcc, 0, v3
 ; CHECK-NEXT:    v_cndmask_b32_e32 v3, v5, v6, vcc

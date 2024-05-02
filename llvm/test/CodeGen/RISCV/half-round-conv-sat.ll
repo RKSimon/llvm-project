@@ -21,8 +21,7 @@ define signext i32 @test_floor_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0, rdn
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -40,8 +39,7 @@ define signext i32 @test_floor_si32(half %x) {
 ; CHECKIZHINX-NEXT:  .LBB0_2:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -62,8 +60,7 @@ define signext i32 @test_floor_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -83,8 +80,7 @@ define signext i32 @test_floor_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.floor.f16(half %x)
@@ -148,8 +144,7 @@ define i64 @test_floor_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0, rdn
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -215,8 +210,7 @@ define i64 @test_floor_si64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB1_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -289,8 +283,7 @@ define i64 @test_floor_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -359,8 +352,7 @@ define i64 @test_floor_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.floor.f16(half %x)
@@ -373,8 +365,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV32IZFH:       # %bb.0:
 ; RV32IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV32IZFH-NEXT:    fcvt.wu.h a1, fa0, rtz
-; RV32IZFH-NEXT:    seqz a0, a0
-; RV32IZFH-NEXT:    addi a0, a0, -1
+; RV32IZFH-NEXT:    neg a0, a0
 ; RV32IZFH-NEXT:    and a0, a0, a1
 ; RV32IZFH-NEXT:    ret
 ;
@@ -382,8 +373,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.wu.h a1, fa0, rtz
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addiw a0, a0, -1
+; RV64IZFH-NEXT:    negw a0, a0
 ; RV64IZFH-NEXT:    and a0, a1, a0
 ; RV64IZFH-NEXT:    ret
 ;
@@ -391,8 +381,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV32IZHINX:       # %bb.0:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -400,8 +389,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV64IZHINX:       # %bb.0:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -410,8 +398,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -420,8 +407,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -430,8 +416,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -440,8 +425,7 @@ define signext i32 @test_floor_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.floor.f16(half %x)
@@ -481,8 +465,7 @@ define i64 @test_floor_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0, rtz
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -515,8 +498,7 @@ define i64 @test_floor_ui64(half %x) nounwind {
 ; RV64IZHINX:       # %bb.0:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -552,8 +534,7 @@ define i64 @test_floor_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -587,8 +568,7 @@ define i64 @test_floor_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.floor.f16(half %x)
@@ -601,8 +581,7 @@ define signext i32 @test_ceil_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0, rup
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -620,8 +599,7 @@ define signext i32 @test_ceil_si32(half %x) {
 ; CHECKIZHINX-NEXT:  .LBB4_2:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -642,8 +620,7 @@ define signext i32 @test_ceil_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -663,8 +640,7 @@ define signext i32 @test_ceil_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.ceil.f16(half %x)
@@ -728,8 +704,7 @@ define i64 @test_ceil_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0, rup
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -795,8 +770,7 @@ define i64 @test_ceil_si64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB5_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -869,8 +843,7 @@ define i64 @test_ceil_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -939,8 +912,7 @@ define i64 @test_ceil_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.ceil.f16(half %x)
@@ -953,8 +925,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.wu.h a1, fa0, rup
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -972,8 +943,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV32IZHINX-NEXT:  .LBB6_2:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -991,8 +961,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV64IZHINX-NEXT:  .LBB6_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -1013,8 +982,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -1035,8 +1003,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -1056,8 +1023,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -1077,8 +1043,7 @@ define signext i32 @test_ceil_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.ceil.f16(half %x)
@@ -1129,8 +1094,7 @@ define i64 @test_ceil_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0, rup
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -1183,8 +1147,7 @@ define i64 @test_ceil_ui64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB7_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -1244,8 +1207,7 @@ define i64 @test_ceil_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -1301,8 +1263,7 @@ define i64 @test_ceil_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.ceil.f16(half %x)
@@ -1315,8 +1276,7 @@ define signext i32 @test_trunc_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0, rtz
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -1324,8 +1284,7 @@ define signext i32 @test_trunc_si32(half %x) {
 ; CHECKIZHINX:       # %bb.0:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -1334,8 +1293,7 @@ define signext i32 @test_trunc_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -1344,8 +1302,7 @@ define signext i32 @test_trunc_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.trunc.f16(half %x)
@@ -1398,8 +1355,7 @@ define i64 @test_trunc_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0, rtz
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -1445,8 +1401,7 @@ define i64 @test_trunc_si64(half %x) nounwind {
 ; RV64IZHINX:       # %bb.0:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -1495,8 +1450,7 @@ define i64 @test_trunc_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -1543,8 +1497,7 @@ define i64 @test_trunc_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.trunc.f16(half %x)
@@ -1557,8 +1510,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV32IZFH:       # %bb.0:
 ; RV32IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV32IZFH-NEXT:    fcvt.wu.h a1, fa0, rtz
-; RV32IZFH-NEXT:    seqz a0, a0
-; RV32IZFH-NEXT:    addi a0, a0, -1
+; RV32IZFH-NEXT:    neg a0, a0
 ; RV32IZFH-NEXT:    and a0, a0, a1
 ; RV32IZFH-NEXT:    ret
 ;
@@ -1566,8 +1518,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.wu.h a1, fa0, rtz
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addiw a0, a0, -1
+; RV64IZFH-NEXT:    negw a0, a0
 ; RV64IZFH-NEXT:    and a0, a1, a0
 ; RV64IZFH-NEXT:    ret
 ;
@@ -1575,8 +1526,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV32IZHINX:       # %bb.0:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -1584,8 +1534,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV64IZHINX:       # %bb.0:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -1594,8 +1543,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -1604,8 +1552,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -1614,8 +1561,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -1624,8 +1570,7 @@ define signext i32 @test_trunc_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.trunc.f16(half %x)
@@ -1665,8 +1610,7 @@ define i64 @test_trunc_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0, rtz
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -1699,8 +1643,7 @@ define i64 @test_trunc_ui64(half %x) nounwind {
 ; RV64IZHINX:       # %bb.0:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -1736,8 +1679,7 @@ define i64 @test_trunc_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa0
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -1771,8 +1713,7 @@ define i64 @test_trunc_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.trunc.f16(half %x)
@@ -1785,8 +1726,7 @@ define signext i32 @test_round_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0, rmm
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -1804,8 +1744,7 @@ define signext i32 @test_round_si32(half %x) {
 ; CHECKIZHINX-NEXT:  .LBB12_2:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -1826,8 +1765,7 @@ define signext i32 @test_round_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -1847,8 +1785,7 @@ define signext i32 @test_round_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.round.f16(half %x)
@@ -1912,8 +1849,7 @@ define i64 @test_round_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0, rmm
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -1979,8 +1915,7 @@ define i64 @test_round_si64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB13_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -2053,8 +1988,7 @@ define i64 @test_round_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -2123,8 +2057,7 @@ define i64 @test_round_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.round.f16(half %x)
@@ -2137,8 +2070,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.wu.h a1, fa0, rmm
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -2156,8 +2088,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV32IZHINX-NEXT:  .LBB14_2:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -2175,8 +2106,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV64IZHINX-NEXT:  .LBB14_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -2197,8 +2127,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -2219,8 +2148,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -2240,8 +2168,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -2261,8 +2188,7 @@ define signext i32 @test_round_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.round.f16(half %x)
@@ -2313,8 +2239,7 @@ define i64 @test_round_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0, rmm
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -2367,8 +2292,7 @@ define i64 @test_round_ui64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB15_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -2428,8 +2352,7 @@ define i64 @test_round_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -2485,8 +2408,7 @@ define i64 @test_round_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.round.f16(half %x)
@@ -2499,8 +2421,7 @@ define signext i32 @test_roundeven_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0, rne
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -2518,8 +2439,7 @@ define signext i32 @test_roundeven_si32(half %x) {
 ; CHECKIZHINX-NEXT:  .LBB16_2:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -2540,8 +2460,7 @@ define signext i32 @test_roundeven_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -2561,8 +2480,7 @@ define signext i32 @test_roundeven_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.roundeven.f16(half %x)
@@ -2626,8 +2544,7 @@ define i64 @test_roundeven_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0, rne
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -2693,8 +2610,7 @@ define i64 @test_roundeven_si64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB17_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -2767,8 +2683,7 @@ define i64 @test_roundeven_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -2837,8 +2752,7 @@ define i64 @test_roundeven_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.roundeven.f16(half %x)
@@ -2851,8 +2765,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.wu.h a1, fa0, rne
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -2870,8 +2783,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV32IZHINX-NEXT:  .LBB18_2:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -2889,8 +2801,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV64IZHINX-NEXT:  .LBB18_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -2911,8 +2822,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -2933,8 +2843,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -2954,8 +2863,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -2975,8 +2883,7 @@ define signext i32 @test_roundeven_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.roundeven.f16(half %x)
@@ -3027,8 +2934,7 @@ define i64 @test_roundeven_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0, rne
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -3081,8 +2987,7 @@ define i64 @test_roundeven_ui64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB19_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -3142,8 +3047,7 @@ define i64 @test_roundeven_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -3199,8 +3103,7 @@ define i64 @test_roundeven_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.roundeven.f16(half %x)
@@ -3213,8 +3116,7 @@ define signext i32 @test_rint_si32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.w.h a1, fa0
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -3232,8 +3134,7 @@ define signext i32 @test_rint_si32(half %x) {
 ; CHECKIZHINX-NEXT:  .LBB20_2:
 ; CHECKIZHINX-NEXT:    feq.h a1, a0, a0
 ; CHECKIZHINX-NEXT:    fcvt.w.h a0, a0, rtz
-; CHECKIZHINX-NEXT:    seqz a1, a1
-; CHECKIZHINX-NEXT:    addi a1, a1, -1
+; CHECKIZHINX-NEXT:    neg a1, a1
 ; CHECKIZHINX-NEXT:    and a0, a1, a0
 ; CHECKIZHINX-NEXT:    ret
 ;
@@ -3254,8 +3155,7 @@ define signext i32 @test_rint_si32(half %x) {
 ; CHECKIZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; CHECKIZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; CHECKIZFHMIN-NEXT:    fcvt.w.s a1, fa5, rtz
-; CHECKIZFHMIN-NEXT:    seqz a0, a0
-; CHECKIZFHMIN-NEXT:    addi a0, a0, -1
+; CHECKIZFHMIN-NEXT:    neg a0, a0
 ; CHECKIZFHMIN-NEXT:    and a0, a0, a1
 ; CHECKIZFHMIN-NEXT:    ret
 ;
@@ -3275,8 +3175,7 @@ define signext i32 @test_rint_si32(half %x) {
 ; CHECKIZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; CHECKIZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; CHECKIZHINXMIN-NEXT:    fcvt.w.s a0, a0, rtz
-; CHECKIZHINXMIN-NEXT:    seqz a1, a1
-; CHECKIZHINXMIN-NEXT:    addi a1, a1, -1
+; CHECKIZHINXMIN-NEXT:    neg a1, a1
 ; CHECKIZHINXMIN-NEXT:    and a0, a1, a0
 ; CHECKIZHINXMIN-NEXT:    ret
   %a = call half @llvm.rint.f16(half %x)
@@ -3340,8 +3239,7 @@ define i64 @test_rint_si64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.l.h a1, fa0
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -3407,8 +3305,7 @@ define i64 @test_rint_si64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB21_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.l.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -3481,8 +3378,7 @@ define i64 @test_rint_si64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.l.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -3551,8 +3447,7 @@ define i64 @test_rint_si64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.l.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.rint.f16(half %x)
@@ -3565,8 +3460,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; CHECKIZFH:       # %bb.0:
 ; CHECKIZFH-NEXT:    feq.h a0, fa0, fa0
 ; CHECKIZFH-NEXT:    fcvt.wu.h a1, fa0
-; CHECKIZFH-NEXT:    seqz a0, a0
-; CHECKIZFH-NEXT:    addi a0, a0, -1
+; CHECKIZFH-NEXT:    neg a0, a0
 ; CHECKIZFH-NEXT:    and a0, a0, a1
 ; CHECKIZFH-NEXT:    ret
 ;
@@ -3584,8 +3478,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV32IZHINX-NEXT:  .LBB22_2:
 ; RV32IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV32IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV32IZHINX-NEXT:    seqz a1, a1
-; RV32IZHINX-NEXT:    addi a1, a1, -1
+; RV32IZHINX-NEXT:    neg a1, a1
 ; RV32IZHINX-NEXT:    and a0, a1, a0
 ; RV32IZHINX-NEXT:    ret
 ;
@@ -3603,8 +3496,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV64IZHINX-NEXT:  .LBB22_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.wu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addiw a1, a1, -1
+; RV64IZHINX-NEXT:    negw a1, a1
 ; RV64IZHINX-NEXT:    and a0, a0, a1
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -3625,8 +3517,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV32IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV32IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV32IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV32IZFHMIN-NEXT:    seqz a0, a0
-; RV32IZFHMIN-NEXT:    addi a0, a0, -1
+; RV32IZFHMIN-NEXT:    neg a0, a0
 ; RV32IZFHMIN-NEXT:    and a0, a0, a1
 ; RV32IZFHMIN-NEXT:    ret
 ;
@@ -3647,8 +3538,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.wu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addiw a0, a0, -1
+; RV64IZFHMIN-NEXT:    negw a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a1, a0
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -3668,8 +3558,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV32IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV32IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV32IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV32IZHINXMIN-NEXT:    seqz a1, a1
-; RV32IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV32IZHINXMIN-NEXT:    neg a1, a1
 ; RV32IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV32IZHINXMIN-NEXT:    ret
 ;
@@ -3689,8 +3578,7 @@ define signext i32 @test_rint_ui32(half %x) {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.wu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addiw a1, a1, -1
+; RV64IZHINXMIN-NEXT:    negw a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a0, a1
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.rint.f16(half %x)
@@ -3741,8 +3629,7 @@ define i64 @test_rint_ui64(half %x) nounwind {
 ; RV64IZFH:       # %bb.0:
 ; RV64IZFH-NEXT:    feq.h a0, fa0, fa0
 ; RV64IZFH-NEXT:    fcvt.lu.h a1, fa0
-; RV64IZFH-NEXT:    seqz a0, a0
-; RV64IZFH-NEXT:    addi a0, a0, -1
+; RV64IZFH-NEXT:    neg a0, a0
 ; RV64IZFH-NEXT:    and a0, a0, a1
 ; RV64IZFH-NEXT:    ret
 ;
@@ -3795,8 +3682,7 @@ define i64 @test_rint_ui64(half %x) nounwind {
 ; RV64IZHINX-NEXT:  .LBB23_2:
 ; RV64IZHINX-NEXT:    feq.h a1, a0, a0
 ; RV64IZHINX-NEXT:    fcvt.lu.h a0, a0, rtz
-; RV64IZHINX-NEXT:    seqz a1, a1
-; RV64IZHINX-NEXT:    addi a1, a1, -1
+; RV64IZHINX-NEXT:    neg a1, a1
 ; RV64IZHINX-NEXT:    and a0, a1, a0
 ; RV64IZHINX-NEXT:    ret
 ;
@@ -3856,8 +3742,7 @@ define i64 @test_rint_ui64(half %x) nounwind {
 ; RV64IZFHMIN-NEXT:    fcvt.s.h fa5, fa5
 ; RV64IZFHMIN-NEXT:    feq.s a0, fa5, fa5
 ; RV64IZFHMIN-NEXT:    fcvt.lu.s a1, fa5, rtz
-; RV64IZFHMIN-NEXT:    seqz a0, a0
-; RV64IZFHMIN-NEXT:    addi a0, a0, -1
+; RV64IZFHMIN-NEXT:    neg a0, a0
 ; RV64IZFHMIN-NEXT:    and a0, a0, a1
 ; RV64IZFHMIN-NEXT:    ret
 ;
@@ -3913,8 +3798,7 @@ define i64 @test_rint_ui64(half %x) nounwind {
 ; RV64IZHINXMIN-NEXT:    fcvt.s.h a0, a0
 ; RV64IZHINXMIN-NEXT:    feq.s a1, a0, a0
 ; RV64IZHINXMIN-NEXT:    fcvt.lu.s a0, a0, rtz
-; RV64IZHINXMIN-NEXT:    seqz a1, a1
-; RV64IZHINXMIN-NEXT:    addi a1, a1, -1
+; RV64IZHINXMIN-NEXT:    neg a1, a1
 ; RV64IZHINXMIN-NEXT:    and a0, a1, a0
 ; RV64IZHINXMIN-NEXT:    ret
   %a = call half @llvm.rint.f16(half %x)

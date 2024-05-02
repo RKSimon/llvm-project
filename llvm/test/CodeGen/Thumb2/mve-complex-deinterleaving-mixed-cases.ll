@@ -266,34 +266,37 @@ entry:
 define arm_aapcs_vfpcc <4 x float> @mul_triangle_addmul(<4 x float> %a, <4 x float> %b, <4 x float> %c) {
 ; CHECK-LABEL: mul_triangle_addmul:
 ; CHECK:       @ %bb.0: @ %entry
-; CHECK-NEXT:    .vsave {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECK-NEXT:    vpush {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECK-NEXT:    vmov.f32 s12, s0
-; CHECK-NEXT:    vmov.f32 s16, s5
-; CHECK-NEXT:    vmov.f32 s13, s2
-; CHECK-NEXT:    vmov.f32 s17, s7
-; CHECK-NEXT:    vmov.f32 s5, s6
-; CHECK-NEXT:    vmul.f32 q5, q4, q3
-; CHECK-NEXT:    vmul.f32 q3, q1, q3
+; CHECK-NEXT:    .vsave {d12, d13}
+; CHECK-NEXT:    vpush {d12, d13}
+; CHECK-NEXT:    .vsave {d8, d9, d10}
+; CHECK-NEXT:    vpush {d8, d9, d10}
+; CHECK-NEXT:    vmul.f32 q3, q2, q0
+; CHECK-NEXT:    vmov.f32 s16, s0
+; CHECK-NEXT:    vmov.f32 s20, s4
+; CHECK-NEXT:    vmov.f32 s17, s2
+; CHECK-NEXT:    vmov.f32 s21, s6
+; CHECK-NEXT:    vmov.f32 s12, s13
+; CHECK-NEXT:    vmul.f32 q6, q5, q4
+; CHECK-NEXT:    vmov.f32 s13, s15
 ; CHECK-NEXT:    vmov.f32 s0, s1
+; CHECK-NEXT:    vsub.f32 q3, q6, q3
+; CHECK-NEXT:    vmov.f32 s4, s5
 ; CHECK-NEXT:    vmov.f32 s1, s3
-; CHECK-NEXT:    vmov q6, q3
-; CHECK-NEXT:    vfms.f32 q6, q4, q0
-; CHECK-NEXT:    vmov q7, q5
-; CHECK-NEXT:    vfma.f32 q5, q1, q0
-; CHECK-NEXT:    vmov.f32 s16, s8
-; CHECK-NEXT:    vmov.f32 s17, s10
-; CHECK-NEXT:    vmov.f32 s4, s9
-; CHECK-NEXT:    vfma.f32 q7, q4, q0
-; CHECK-NEXT:    vmov.f32 s5, s11
-; CHECK-NEXT:    vadd.f32 q4, q7, q6
-; CHECK-NEXT:    vfms.f32 q3, q1, q0
-; CHECK-NEXT:    vmov.f32 s1, s16
-; CHECK-NEXT:    vsub.f32 q1, q3, q5
-; CHECK-NEXT:    vmov.f32 s3, s17
+; CHECK-NEXT:    vmov.f32 s5, s7
+; CHECK-NEXT:    vfms.f32 q6, q1, q0
+; CHECK-NEXT:    vmul.f32 q1, q1, q4
+; CHECK-NEXT:    vmov q4, q1
+; CHECK-NEXT:    vmov.f32 s9, s10
+; CHECK-NEXT:    vfma.f32 q4, q2, q0
+; CHECK-NEXT:    vfma.f32 q1, q5, q0
+; CHECK-NEXT:    vadd.f32 q2, q4, q6
+; CHECK-NEXT:    vsub.f32 q1, q3, q1
 ; CHECK-NEXT:    vmov.f32 s0, s4
+; CHECK-NEXT:    vmov.f32 s1, s8
 ; CHECK-NEXT:    vmov.f32 s2, s5
-; CHECK-NEXT:    vpop {d8, d9, d10, d11, d12, d13, d14, d15}
+; CHECK-NEXT:    vmov.f32 s3, s9
+; CHECK-NEXT:    vpop {d8, d9, d10}
+; CHECK-NEXT:    vpop {d12, d13}
 ; CHECK-NEXT:    bx lr
 entry:
   %ar = shufflevector <4 x float> %a, <4 x float> poison, <2 x i32> <i32 0, i32 2>

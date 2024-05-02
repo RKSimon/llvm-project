@@ -144,8 +144,8 @@ define void @t5ptr(i64 %t, ptr %ptr) nounwind {
 ; X86-NEXT:    movl %esi, %edx
 ; X86-NEXT:    xorl %esi, %esi
 ; X86-NEXT:  .LBB5_2:
-; X86-NEXT:    movl %edx, (%eax)
 ; X86-NEXT:    movl %esi, 4(%eax)
+; X86-NEXT:    movl %edx, (%eax)
 ; X86-NEXT:    popl %esi
 ; X86-NEXT:    popl %edi
 ; X86-NEXT:    retl

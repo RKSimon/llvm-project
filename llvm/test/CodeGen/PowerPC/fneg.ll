@@ -168,6 +168,7 @@ define i1 @fneg_bit63(ppc_fp128 nofpclass(nan ninf nsub nnorm nzero) %x) {
 ; LE-LABEL: fneg_bit63:
 ; LE:       # %bb.0: # %entry
 ; LE-NEXT:    mffprd 3, 1
+; LE-NEXT:    not 3, 3
 ; LE-NEXT:    rldicl 3, 3, 1, 63
 ; LE-NEXT:    blr
 ;

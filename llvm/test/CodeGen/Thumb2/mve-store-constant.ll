@@ -101,18 +101,19 @@ define void @long(ptr %p) {
 ; CHECK-LABEL: long:
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    push {r4, r5, r6, lr}
-; CHECK-NEXT:    mov.w r12, #4
-; CHECK-NEXT:    movs r2, #3
-; CHECK-NEXT:    movs r3, #2
-; CHECK-NEXT:    movs r1, #1
-; CHECK-NEXT:    mov.w lr, #8
-; CHECK-NEXT:    movs r4, #7
-; CHECK-NEXT:    movs r5, #6
-; CHECK-NEXT:    movs r6, #5
-; CHECK-NEXT:    strd r1, r3, [r0]
-; CHECK-NEXT:    strd r2, r12, [r0, #8]
-; CHECK-NEXT:    strd r6, r5, [r0, #16]
-; CHECK-NEXT:    strd r4, lr, [r0, #24]
+; CHECK-NEXT:    movs r2, #4
+; CHECK-NEXT:    movs r4, #3
+; CHECK-NEXT:    mov.w r12, #8
+; CHECK-NEXT:    strd r4, r2, [r0, #8]
+; CHECK-NEXT:    movs r1, #5
+; CHECK-NEXT:    movs r5, #2
+; CHECK-NEXT:    movs r6, #1
+; CHECK-NEXT:    add.w r2, r0, #16
+; CHECK-NEXT:    mov.w lr, #7
+; CHECK-NEXT:    movs r3, #6
+; CHECK-NEXT:    strd r6, r5, [r0]
+; CHECK-NEXT:    stm.w r2, {r1, r3, lr}
+; CHECK-NEXT:    str.w r12, [r0, #28]
 ; CHECK-NEXT:    pop {r4, r5, r6, pc}
   store <8 x i32> <i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8>, ptr %p, align 4
   ret void

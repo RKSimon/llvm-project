@@ -277,12 +277,12 @@ define <7 x i64> @load_v7i64(ptr addrspace(13) inreg %p) {
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v5, v5
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v6, v6
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v7, v7
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v12, v12
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v13, v13
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v8, v8
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v9, v9
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v10, v10
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v11, v11
-; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v12, v12
-; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v13, v13
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-GISEL-LABEL: load_v7i64:
@@ -317,6 +317,12 @@ define <7 x i64> @load_v7i64(ptr addrspace(13) inreg %p) {
 ; GFX942-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX942-SDAG-NEXT:    s_lshr_b32 s0, s0, 2
 ; GFX942-SDAG-NEXT:    s_set_gpr_idx_on s0, gpr_idx(SRC0)
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v12, v12
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v13, v13
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v8, v8
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v9, v9
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v10, v10
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v11, v11
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v0, v0
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v1, v1
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v2, v2
@@ -325,12 +331,6 @@ define <7 x i64> @load_v7i64(ptr addrspace(13) inreg %p) {
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v5, v5
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v6, v6
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v7, v7
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v8, v8
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v9, v9
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v10, v10
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v11, v11
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v12, v12
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v13, v13
 ; GFX942-SDAG-NEXT:    s_set_gpr_idx_off
 ; GFX942-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -1125,7 +1125,6 @@ define i416 @load_i416_range(ptr addrspace(13) inreg %p) {
 ; GFX12-SDAG-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-SDAG-NEXT:    s_lshr_b32 m0, s0, 2
-; GFX12-SDAG-NEXT:    v_dual_mov_b32 v8, 0 :: v_dual_mov_b32 v9, 0
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v0, v0
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v1, v1
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v2, v2
@@ -1134,8 +1133,11 @@ define i416 @load_i416_range(ptr addrspace(13) inreg %p) {
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v5, v5
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v6, v6
 ; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v7, v7
-; GFX12-SDAG-NEXT:    v_dual_mov_b32 v10, 0 :: v_dual_mov_b32 v11, 0
-; GFX12-SDAG-NEXT:    v_mov_b32_e32 v12, 0
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v12, v12
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v8, v8
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v9, v9
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v10, v10
+; GFX12-SDAG-NEXT:    v_movrels_b32_e32 v11, v11
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-GISEL-LABEL: load_i416_range:
@@ -1168,12 +1170,8 @@ define i416 @load_i416_range(ptr addrspace(13) inreg %p) {
 ; GFX942-SDAG:       ; %bb.0:
 ; GFX942-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX942-SDAG-NEXT:    s_lshr_b32 s0, s0, 2
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v8, 0
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v9, 0
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v10, 0
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v11, 0
-; GFX942-SDAG-NEXT:    v_mov_b32_e32 v12, 0
 ; GFX942-SDAG-NEXT:    s_set_gpr_idx_on s0, gpr_idx(SRC0)
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v12, v12
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v0, v0
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v1, v1
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v2, v2
@@ -1182,6 +1180,10 @@ define i416 @load_i416_range(ptr addrspace(13) inreg %p) {
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v5, v5
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v6, v6
 ; GFX942-SDAG-NEXT:    v_mov_b32_e32 v7, v7
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v8, v8
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v9, v9
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v10, v10
+; GFX942-SDAG-NEXT:    v_mov_b32_e32 v11, v11
 ; GFX942-SDAG-NEXT:    s_set_gpr_idx_off
 ; GFX942-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;

@@ -114,7 +114,7 @@ define float @frem(float %a, float %c, float %d, float %y, ptr %p) {
 ; CHECK-NEXT:    vmovaps %xmm2, %xmm1
 ; CHECK-NEXT:    callq fmodf@PLT
 ; CHECK-NEXT:    vmovaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm1 # 16-byte Reload
-; CHECK-NEXT:    vinsertps {{.*#+}} xmm0 = xmm1[0],xmm0[0],zero,zero
+; CHECK-NEXT:    vinsertps {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[2,3]
 ; CHECK-NEXT:    vmovlps %xmm0, (%rbx)
 ; CHECK-NEXT:    vmovss {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 4-byte Reload
 ; CHECK-NEXT:    # xmm0 = mem[0],zero,zero,zero

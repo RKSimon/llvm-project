@@ -15,7 +15,7 @@ define void @dyn_alloca(i64 %n) "probe-stack"="__chkstk" {
   ; X86-NEXT:   $ebp = frame-setup MOV32rr $esp
   ; X86-NEXT:   frame-setup CFI_INSTRUCTION def_cfa_register $ebp
   ; X86-NEXT:   renamable $eax = MOV32rm $ebp, 1, $noreg, 8, $noreg :: (load (s32) from %fixed-stack.2)
-  ; X86-NEXT:   renamable $eax = ADD32ri killed renamable $eax, 3, implicit-def dead $eflags
+  ; X86-NEXT:   renamable $eax = nuw ADD32ri killed renamable $eax, 3, implicit-def dead $eflags
   ; X86-NEXT:   renamable $eax = AND32ri killed renamable $eax, -4, implicit-def dead $eflags
   ; X86-NEXT:   CALLpcrel32 &__chkstk, implicit $esp, implicit $ssp, implicit $eax, implicit $esp, implicit-def dead $eax, implicit-def $esp, implicit-def dead $eflags
   ; X86-NEXT:   renamable $eax = COPY $esp
@@ -41,10 +41,10 @@ define void @dyn_alloca(i64 %n) "probe-stack"="__chkstk" {
   ; X64-NEXT:   renamable $rcx = COPY $rsp
   ; X64-NEXT:   $rsp = SUB64ri32 $rsp, 32, implicit-def dead $eflags
   ; X64-NEXT:   CALL64pcrel32 @use, csr_win64, implicit $rsp, implicit $ssp, implicit $rcx, implicit-def $rsp, implicit-def $ssp
-  ; X64-NEXT:   SEH_BeginEpilogue
+  ; X64-NEXT:   frame-destroy SEH_BeginEpilogue
   ; X64-NEXT:   $rsp = MOV64rr $rbp
   ; X64-NEXT:   $rbp = frame-destroy POP64r implicit-def $rsp, implicit $rsp
-  ; X64-NEXT:   SEH_EndEpilogue
+  ; X64-NEXT:   frame-destroy SEH_EndEpilogue
   ; X64-NEXT:   RET 0
   ;
   ; LINUX-LABEL: name: dyn_alloca
@@ -94,9 +94,9 @@ define void @large_frame() "probe-stack"="__chkstk" {
   ; X64-NEXT:   frame-setup SEH_EndPrologue
   ; X64-NEXT:   renamable $rcx = LEA64r $rsp, 1, $noreg, 40, $noreg
   ; X64-NEXT:   CALL64pcrel32 @use, csr_win64, implicit $rsp, implicit $ssp, implicit $rcx, implicit-def $rsp, implicit-def $ssp
-  ; X64-NEXT:   SEH_BeginEpilogue
+  ; X64-NEXT:   frame-destroy SEH_BeginEpilogue
   ; X64-NEXT:   $rsp = frame-destroy ADD64ri32 $rsp, 40040, implicit-def dead $eflags
-  ; X64-NEXT:   SEH_EndEpilogue
+  ; X64-NEXT:   frame-destroy SEH_EndEpilogue
   ; X64-NEXT:   RET 0
   ;
   ; LINUX-LABEL: name: large_frame

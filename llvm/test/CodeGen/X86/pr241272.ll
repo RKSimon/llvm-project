@@ -7,54 +7,30 @@
 define void @PR241272(ptr %p0, ptr %p1, ptr %p2) {
 ; SSE2-LABEL: PR241272:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    movss {{.*#+}} xmm0 = [3,130,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; SSE2-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE2-NEXT:    orps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE2-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
-; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %eax
-; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %ecx
-; SSE2-NEXT:    movl %eax, (%rdi)
+; SSE2-NEXT:    movl $3, (%rdi)
 ; SSE2-NEXT:    movl $3, (%rdx)
-; SSE2-NEXT:    movl %ecx, (%rsi)
+; SSE2-NEXT:    movl $255, (%rsi)
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: PR241272:
 ; SSE42:       # %bb.0:
-; SSE42-NEXT:    movd {{.*#+}} xmm0 = [3,130,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; SSE42-NEXT:    movl $255, %eax
-; SSE42-NEXT:    pinsrb $11, %eax, %xmm0
-; SSE42-NEXT:    por {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE42-NEXT:    pextrb $0, %xmm0, %eax
-; SSE42-NEXT:    pextrb $11, %xmm0, %ecx
-; SSE42-NEXT:    movl %eax, (%rdi)
+; SSE42-NEXT:    movl $3, (%rdi)
 ; SSE42-NEXT:    movl $3, (%rdx)
-; SSE42-NEXT:    movl %ecx, (%rsi)
+; SSE42-NEXT:    movl $255, (%rsi)
 ; SSE42-NEXT:    retq
 ;
 ; AVX2-LABEL: PR241272:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovd {{.*#+}} xmm0 = [3,130,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX2-NEXT:    movl $255, %eax
-; AVX2-NEXT:    vpinsrb $11, %eax, %xmm0, %xmm0
-; AVX2-NEXT:    vpor {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
-; AVX2-NEXT:    vpextrb $0, %xmm0, %eax
-; AVX2-NEXT:    vpextrb $11, %xmm0, %ecx
-; AVX2-NEXT:    movl %eax, (%rdi)
+; AVX2-NEXT:    movl $3, (%rdi)
 ; AVX2-NEXT:    movl $3, (%rdx)
-; AVX2-NEXT:    movl %ecx, (%rsi)
+; AVX2-NEXT:    movl $255, (%rsi)
 ; AVX2-NEXT:    retq
 ;
 ; AVX512-LABEL: PR241272:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    vmovd {{.*#+}} xmm0 = [3,130,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; AVX512-NEXT:    movl $255, %eax
-; AVX512-NEXT:    vpinsrb $11, %eax, %xmm0, %xmm0
-; AVX512-NEXT:    vpord {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to4}, %xmm0, %xmm0
-; AVX512-NEXT:    vpextrb $0, %xmm0, %eax
-; AVX512-NEXT:    vpextrb $11, %xmm0, %ecx
-; AVX512-NEXT:    movl %eax, (%rdi)
+; AVX512-NEXT:    movl $3, (%rdi)
 ; AVX512-NEXT:    movl $3, (%rdx)
-; AVX512-NEXT:    movl %ecx, (%rsi)
+; AVX512-NEXT:    movl $255, (%rsi)
 ; AVX512-NEXT:    retq
   %splat.splatinsert = insertelement <16 x i8> zeroinitializer, i8 1, i64 0
   %add = add <16 x i8> %splat.splatinsert, <i8 2, i8 -126, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison, i8 poison>

@@ -1026,12 +1026,12 @@ define i3 @bitcast_and_v3i64(<3 x i64> %a, <3 x i64> %b, <3 x i64> %d) {
 ; SSE2-SSSE3-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; SSE2-SSSE3-NEXT:    movzbl -{{[0-9]+}}(%rsp), %eax
 ; SSE2-SSSE3-NEXT:    movzbl -{{[0-9]+}}(%rsp), %ecx
-; SSE2-SSSE3-NEXT:    andb $1, %cl
 ; SSE2-SSSE3-NEXT:    shlb $2, %cl
 ; SSE2-SSSE3-NEXT:    andb $1, %al
 ; SSE2-SSSE3-NEXT:    addb %al, %al
 ; SSE2-SSSE3-NEXT:    subb -{{[0-9]+}}(%rsp), %al
 ; SSE2-SSSE3-NEXT:    orb %cl, %al
+; SSE2-SSSE3-NEXT:    andb $7, %al
 ; SSE2-SSSE3-NEXT:    retq
 ;
 ; AVX1-LABEL: bitcast_and_v3i64:

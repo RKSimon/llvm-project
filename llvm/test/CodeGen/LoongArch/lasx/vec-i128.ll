@@ -166,13 +166,13 @@ define void @sub_v3i128(ptr %res, ptr %a0, ptr %a1) nounwind {
 ; CHECK-LABEL: sub_v3i128:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    xvld $xr0, $a1, 0
-; CHECK-NEXT:    vld $vr1, $a2, 32
-; CHECK-NEXT:    vld $vr2, $a1, 32
-; CHECK-NEXT:    xvld $xr3, $a2, 0
-; CHECK-NEXT:    vsub.q $vr1, $vr2, $vr1
-; CHECK-NEXT:    xvsub.q $xr0, $xr0, $xr3
-; CHECK-NEXT:    xvst $xr0, $a0, 0
+; CHECK-NEXT:    xvld $xr1, $a2, 0
+; CHECK-NEXT:    vld $vr2, $a2, 32
+; CHECK-NEXT:    vld $vr3, $a1, 32
+; CHECK-NEXT:    xvsub.q $xr0, $xr0, $xr1
+; CHECK-NEXT:    vsub.q $vr1, $vr3, $vr2
 ; CHECK-NEXT:    vst $vr1, $a0, 32
+; CHECK-NEXT:    xvst $xr0, $a0, 0
 ; CHECK-NEXT:    ret
 entry:
   %v0 = load <3 x i128>, ptr %a0
@@ -185,14 +185,14 @@ entry:
 define void @sub_v4i128(ptr %res, ptr %a0, ptr %a1) nounwind {
 ; CHECK-LABEL: sub_v4i128:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    xvld $xr0, $a1, 0
-; CHECK-NEXT:    xvld $xr1, $a1, 32
-; CHECK-NEXT:    xvld $xr2, $a2, 32
-; CHECK-NEXT:    xvld $xr3, $a2, 0
+; CHECK-NEXT:    xvld $xr0, $a1, 32
+; CHECK-NEXT:    xvld $xr1, $a1, 0
+; CHECK-NEXT:    xvld $xr2, $a2, 0
+; CHECK-NEXT:    xvld $xr3, $a2, 32
 ; CHECK-NEXT:    xvsub.q $xr1, $xr1, $xr2
 ; CHECK-NEXT:    xvsub.q $xr0, $xr0, $xr3
-; CHECK-NEXT:    xvst $xr0, $a0, 0
-; CHECK-NEXT:    xvst $xr1, $a0, 32
+; CHECK-NEXT:    xvst $xr0, $a0, 32
+; CHECK-NEXT:    xvst $xr1, $a0, 0
 ; CHECK-NEXT:    ret
 entry:
   %v0 = load <4 x i128>, ptr %a0
@@ -221,17 +221,17 @@ entry:
 define void @sub_v5i128(ptr %res, ptr %a0, ptr %a1) nounwind {
 ; CHECK-LABEL: sub_v5i128:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    xvld $xr0, $a1, 0
-; CHECK-NEXT:    xvld $xr1, $a1, 32
+; CHECK-NEXT:    xvld $xr0, $a1, 32
+; CHECK-NEXT:    xvld $xr1, $a1, 0
 ; CHECK-NEXT:    vld $vr2, $a2, 64
 ; CHECK-NEXT:    vld $vr3, $a1, 64
-; CHECK-NEXT:    xvld $xr4, $a2, 32
-; CHECK-NEXT:    xvld $xr5, $a2, 0
+; CHECK-NEXT:    xvld $xr4, $a2, 0
+; CHECK-NEXT:    xvld $xr5, $a2, 32
 ; CHECK-NEXT:    vsub.q $vr2, $vr3, $vr2
 ; CHECK-NEXT:    xvsub.q $xr1, $xr1, $xr4
 ; CHECK-NEXT:    xvsub.q $xr0, $xr0, $xr5
-; CHECK-NEXT:    xvst $xr0, $a0, 0
-; CHECK-NEXT:    xvst $xr1, $a0, 32
+; CHECK-NEXT:    xvst $xr0, $a0, 32
+; CHECK-NEXT:    xvst $xr1, $a0, 0
 ; CHECK-NEXT:    vst $vr2, $a0, 64
 ; CHECK-NEXT:    ret
 entry:

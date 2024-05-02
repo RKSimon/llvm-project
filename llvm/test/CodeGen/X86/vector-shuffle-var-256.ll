@@ -628,10 +628,10 @@ define <16 x bfloat> @shuffle_v16bf16(<16 x bfloat> %v, <16 x i16> %mask) nounwi
 ; AVX2-NEXT:    vpextrw $5, %xmm2, %edx
 ; AVX2-NEXT:    vpextrw $6, %xmm2, %ecx
 ; AVX2-NEXT:    vpextrw $7, %xmm2, %eax
-; AVX2-NEXT:    vpmullw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1 # [514,514,514,514,514,514,514,514,514,514,514,514,514,514,514,514]
-; AVX2-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1 # [256,256,256,256,256,256,256,256,256,256,256,256,256,256,256,256]
 ; AVX2-NEXT:    vmovdqa %ymm0, (%rsp)
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; AVX2-NEXT:    vpmullw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1 # [514,514,514,514,514,514,514,514]
+; AVX2-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1 # [256,256,256,256,256,256,256,256]
 ; AVX2-NEXT:    vpshufb %xmm1, %xmm2, %xmm2
 ; AVX2-NEXT:    vpshufb %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpcmpgtb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1
@@ -727,10 +727,10 @@ define <16 x bfloat> @shuffle_v16bf16(<16 x bfloat> %v, <16 x i16> %mask) nounwi
 ; AVX512F-NEXT:    vpextrw $5, %xmm2, %edx
 ; AVX512F-NEXT:    vpextrw $6, %xmm2, %ecx
 ; AVX512F-NEXT:    vpextrw $7, %xmm2, %eax
-; AVX512F-NEXT:    vpmullw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1 # [514,514,514,514,514,514,514,514,514,514,514,514,514,514,514,514]
-; AVX512F-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %ymm1 # [256,256,256,256,256,256,256,256,256,256,256,256,256,256,256,256]
 ; AVX512F-NEXT:    vmovdqa %ymm0, (%rsp)
 ; AVX512F-NEXT:    vextracti128 $1, %ymm0, %xmm2
+; AVX512F-NEXT:    vpmullw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1 # [514,514,514,514,514,514,514,514]
+; AVX512F-NEXT:    vpaddw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1 # [256,256,256,256,256,256,256,256]
 ; AVX512F-NEXT:    vpshufb %xmm1, %xmm2, %xmm2
 ; AVX512F-NEXT:    vpshufb %xmm1, %xmm0, %xmm0
 ; AVX512F-NEXT:    vpcmpgtb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm1

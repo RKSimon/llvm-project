@@ -856,15 +856,26 @@ define <vscale x 2 x i64> @dupq_i64_range(<vscale x 2 x i64> %a) {
 define dso_local <vscale x 4 x float> @dupq_f32_repeat_complex(float %x, float %y) {
 ; STREAMING-LABEL: dupq_f32_repeat_complex:
 ; STREAMING:       // %bb.0:
-; STREAMING-NEXT:    zip1 z0.s, z0.s, z1.s
+; STREAMING-NEXT:    mov w8, #1 // =0x1
+; STREAMING-NEXT:    index z2.s, #0, #1
+; STREAMING-NEXT:    ptrue p0.s
+; STREAMING-NEXT:    mov z3.s, w8
+; STREAMING-NEXT:    mov z0.s, s0
+; STREAMING-NEXT:    cmpeq p1.s, p0/z, z2.s, z3.s
+; STREAMING-NEXT:    mov z0.s, p1/m, s1
 ; STREAMING-NEXT:    mov z0.d, d0
 ; STREAMING-NEXT:    ret
 ;
 ; COMPATIBLE-LABEL: dupq_f32_repeat_complex:
 ; COMPATIBLE:       // %bb.0:
+; COMPATIBLE-NEXT:    mov w8, #1 // =0x1
+; COMPATIBLE-NEXT:    index z2.s, #0, #1
+; COMPATIBLE-NEXT:    ptrue p0.s
+; COMPATIBLE-NEXT:    mov z3.s, w8
 ; COMPATIBLE-NEXT:    // kill: def $s0 killed $s0 def $z0
-; COMPATIBLE-NEXT:    // kill: def $s1 killed $s1 def $z1
-; COMPATIBLE-NEXT:    zip1 z0.s, z0.s, z1.s
+; COMPATIBLE-NEXT:    mov z0.s, s0
+; COMPATIBLE-NEXT:    cmpeq p1.s, p0/z, z2.s, z3.s
+; COMPATIBLE-NEXT:    mov z0.s, p1/m, s1
 ; COMPATIBLE-NEXT:    mov z0.d, d0
 ; COMPATIBLE-NEXT:    ret
 ;
@@ -895,15 +906,26 @@ define dso_local <vscale x 4 x float> @dupq_f32_repeat_complex(float %x, float %
 define dso_local <vscale x 8 x half> @dupq_f16_repeat_complex(half %x, half %y) {
 ; STREAMING-LABEL: dupq_f16_repeat_complex:
 ; STREAMING:       // %bb.0:
-; STREAMING-NEXT:    zip1 z0.h, z0.h, z1.h
+; STREAMING-NEXT:    mov w8, #1 // =0x1
+; STREAMING-NEXT:    index z2.h, #0, #1
+; STREAMING-NEXT:    ptrue p0.h
+; STREAMING-NEXT:    mov z3.h, w8
+; STREAMING-NEXT:    mov z0.h, h0
+; STREAMING-NEXT:    cmpeq p1.h, p0/z, z2.h, z3.h
+; STREAMING-NEXT:    mov z0.h, p1/m, h1
 ; STREAMING-NEXT:    mov z0.s, s0
 ; STREAMING-NEXT:    ret
 ;
 ; COMPATIBLE-LABEL: dupq_f16_repeat_complex:
 ; COMPATIBLE:       // %bb.0:
+; COMPATIBLE-NEXT:    mov w8, #1 // =0x1
+; COMPATIBLE-NEXT:    index z2.h, #0, #1
+; COMPATIBLE-NEXT:    ptrue p0.h
+; COMPATIBLE-NEXT:    mov z3.h, w8
 ; COMPATIBLE-NEXT:    // kill: def $h0 killed $h0 def $z0
-; COMPATIBLE-NEXT:    // kill: def $h1 killed $h1 def $z1
-; COMPATIBLE-NEXT:    zip1 z0.h, z0.h, z1.h
+; COMPATIBLE-NEXT:    mov z0.h, h0
+; COMPATIBLE-NEXT:    cmpeq p1.h, p0/z, z2.h, z3.h
+; COMPATIBLE-NEXT:    mov z0.h, p1/m, h1
 ; COMPATIBLE-NEXT:    mov z0.s, s0
 ; COMPATIBLE-NEXT:    ret
 ;

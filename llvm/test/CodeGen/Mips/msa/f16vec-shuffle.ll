@@ -233,10 +233,10 @@ define void @reverse_v4f16(ptr %dst, ptr %src) {
 ; MIPS32BE-NEXT:    ld.h $w0, 0($sp)
 ; MIPS32BE-NEXT:    shf.h $w0, $w0, 27
 ; MIPS32BE-NEXT:    shf.h $w0, $w0, 177
-; MIPS32BE-NEXT:    copy_s.w $1, $w0[1]
-; MIPS32BE-NEXT:    copy_s.w $2, $w0[0]
-; MIPS32BE-NEXT:    sw $2, 0($4)
-; MIPS32BE-NEXT:    sw $1, 4($4)
+; MIPS32BE-NEXT:    copy_s.w $1, $w0[0]
+; MIPS32BE-NEXT:    copy_s.w $2, $w0[1]
+; MIPS32BE-NEXT:    sw $2, 4($4)
+; MIPS32BE-NEXT:    sw $1, 0($4)
 ; MIPS32BE-NEXT:    move $sp, $fp
 ; MIPS32BE-NEXT:    lw $fp, 24($sp) # 4-byte Folded Reload
 ; MIPS32BE-NEXT:    lw $ra, 28($sp) # 4-byte Folded Reload
@@ -261,10 +261,10 @@ define void @reverse_v4f16(ptr %dst, ptr %src) {
 ; MIPS32LE-NEXT:    sw $1, 0($sp)
 ; MIPS32LE-NEXT:    ld.h $w0, 0($sp)
 ; MIPS32LE-NEXT:    shf.h $w0, $w0, 27
-; MIPS32LE-NEXT:    copy_s.w $1, $w0[1]
-; MIPS32LE-NEXT:    copy_s.w $2, $w0[0]
-; MIPS32LE-NEXT:    sw $2, 0($4)
-; MIPS32LE-NEXT:    sw $1, 4($4)
+; MIPS32LE-NEXT:    copy_s.w $1, $w0[0]
+; MIPS32LE-NEXT:    copy_s.w $2, $w0[1]
+; MIPS32LE-NEXT:    sw $2, 4($4)
+; MIPS32LE-NEXT:    sw $1, 0($4)
 ; MIPS32LE-NEXT:    move $sp, $fp
 ; MIPS32LE-NEXT:    lw $fp, 24($sp) # 4-byte Folded Reload
 ; MIPS32LE-NEXT:    lw $ra, 28($sp) # 4-byte Folded Reload

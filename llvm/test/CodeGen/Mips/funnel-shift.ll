@@ -82,7 +82,8 @@ define i37 @fshl_i37(i37 %x, i37 %y, i37 %z) {
 ; CHECK-BE-NEXT:    and $2, $2, $6
 ; CHECK-BE-NEXT:    addu $2, $2, $8
 ; CHECK-BE-NEXT:    subu $1, $1, $2
-; CHECK-BE-NEXT:    srl $6, $1, 5
+; CHECK-BE-NEXT:    andi $2, $1, 32
+; CHECK-BE-NEXT:    srl $6, $2, 5
 ; CHECK-BE-NEXT:    movn $4, $5, $6
 ; CHECK-BE-NEXT:    sllv $2, $4, $1
 ; CHECK-BE-NEXT:    not $4, $1
@@ -133,7 +134,8 @@ define i37 @fshl_i37(i37 %x, i37 %y, i37 %z) {
 ; CHECK-LE-NEXT:    and $2, $2, $7
 ; CHECK-LE-NEXT:    addu $2, $2, $8
 ; CHECK-LE-NEXT:    subu $1, $1, $2
-; CHECK-LE-NEXT:    srl $7, $1, 5
+; CHECK-LE-NEXT:    andi $2, $1, 32
+; CHECK-LE-NEXT:    srl $7, $2, 5
 ; CHECK-LE-NEXT:    move $8, $4
 ; CHECK-LE-NEXT:    movn $8, $3, $7
 ; CHECK-LE-NEXT:    sllv $2, $8, $1

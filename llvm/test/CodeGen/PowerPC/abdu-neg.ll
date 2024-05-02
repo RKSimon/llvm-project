@@ -11,8 +11,9 @@ define i8 @abd_ext_i8(i8 %a, i8 %b) nounwind {
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 3, 3, 24
 ; PPC32-NEXT:    clrlwi 4, 4, 24
-; PPC32-NEXT:    sub 3, 3, 4
-; PPC32-NEXT:    srawi 4, 3, 31
+; PPC32-NEXT:    li 5, 0
+; PPC32-NEXT:    subc 3, 3, 4
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -38,10 +39,11 @@ define i8 @abd_ext_i8(i8 %a, i8 %b) nounwind {
 define i8 @abd_ext_i8_i16(i8 %a, i16 %b) nounwind {
 ; PPC32-LABEL: abd_ext_i8_i16:
 ; PPC32:       # %bb.0:
-; PPC32-NEXT:    clrlwi 4, 4, 16
 ; PPC32-NEXT:    clrlwi 3, 3, 24
-; PPC32-NEXT:    sub 3, 3, 4
-; PPC32-NEXT:    srawi 4, 3, 31
+; PPC32-NEXT:    clrlwi 4, 4, 16
+; PPC32-NEXT:    li 5, 0
+; PPC32-NEXT:    subc 3, 3, 4
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -69,8 +71,9 @@ define i8 @abd_ext_i8_undef(i8 %a, i8 %b) nounwind {
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 3, 3, 24
 ; PPC32-NEXT:    clrlwi 4, 4, 24
-; PPC32-NEXT:    sub 3, 3, 4
-; PPC32-NEXT:    srawi 4, 3, 31
+; PPC32-NEXT:    li 5, 0
+; PPC32-NEXT:    subc 3, 3, 4
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -98,8 +101,9 @@ define i16 @abd_ext_i16(i16 %a, i16 %b) nounwind {
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 3, 3, 16
 ; PPC32-NEXT:    clrlwi 4, 4, 16
-; PPC32-NEXT:    sub 3, 3, 4
-; PPC32-NEXT:    srawi 4, 3, 31
+; PPC32-NEXT:    li 5, 0
+; PPC32-NEXT:    subc 3, 3, 4
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -126,8 +130,9 @@ define i16 @abd_ext_i16_i32(i16 %a, i32 %b) nounwind {
 ; PPC32-LABEL: abd_ext_i16_i32:
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 3, 3, 16
+; PPC32-NEXT:    li 5, 0
 ; PPC32-NEXT:    subc 3, 3, 4
-; PPC32-NEXT:    subfe 4, 3, 3
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -155,8 +160,9 @@ define i16 @abd_ext_i16_undef(i16 %a, i16 %b) nounwind {
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 3, 3, 16
 ; PPC32-NEXT:    clrlwi 4, 4, 16
-; PPC32-NEXT:    sub 3, 3, 4
-; PPC32-NEXT:    srawi 4, 3, 31
+; PPC32-NEXT:    li 5, 0
+; PPC32-NEXT:    subc 3, 3, 4
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr
@@ -210,8 +216,9 @@ define i32 @abd_ext_i32_i16(i32 %a, i16 %b) nounwind {
 ; PPC32-LABEL: abd_ext_i32_i16:
 ; PPC32:       # %bb.0:
 ; PPC32-NEXT:    clrlwi 4, 4, 16
+; PPC32-NEXT:    li 5, 0
 ; PPC32-NEXT:    subc 3, 3, 4
-; PPC32-NEXT:    subfe 4, 3, 3
+; PPC32-NEXT:    subfze 4, 5
 ; PPC32-NEXT:    xor 3, 3, 4
 ; PPC32-NEXT:    sub 3, 4, 3
 ; PPC32-NEXT:    blr

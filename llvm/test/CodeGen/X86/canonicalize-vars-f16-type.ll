@@ -612,9 +612,9 @@ define void @v_test_canonicalize_v16half(<16 x half> addrspace(1)* %out) nounwin
 ; SSE-NEXT:    # xmm1 = xmm1[0],mem[0],xmm1[1],mem[1]
 ; SSE-NEXT:    punpcklqdq {{[-0-9]+}}(%r{{[sb]}}p), %xmm1 # 16-byte Folded Reload
 ; SSE-NEXT:    # xmm1 = xmm1[0],mem[0]
-; SSE-NEXT:    movdqa %xmm1, (%rbx)
+; SSE-NEXT:    movdqa %xmm1, 16(%rbx)
 ; SSE-NEXT:    movaps {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Reload
-; SSE-NEXT:    movaps %xmm0, 16(%rbx)
+; SSE-NEXT:    movaps %xmm0, (%rbx)
 ; SSE-NEXT:    addq $96, %rsp
 ; SSE-NEXT:    popq %rbx
 ; SSE-NEXT:    retq

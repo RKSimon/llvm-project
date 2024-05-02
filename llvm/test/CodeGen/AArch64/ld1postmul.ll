@@ -5,7 +5,8 @@
 define ptr @mul_v16i8(ptr %p, ptr %ps, <16 x i8> %t) {
 ; CHECK-LABEL: mul_v16i8:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ld1r { v1.16b }, [x0], #1
+; CHECK-NEXT:    ldrb w8, [x0], #1
+; CHECK-NEXT:    dup v1.16b, w8
 ; CHECK-NEXT:    mul v0.16b, v1.16b, v0.16b
 ; CHECK-NEXT:    str q0, [x1]
 ; CHECK-NEXT:    ret
@@ -21,7 +22,8 @@ define ptr @mul_v16i8(ptr %p, ptr %ps, <16 x i8> %t) {
 define ptr @mul_v8i16(ptr %p, ptr %ps, <8 x i16> %t) {
 ; CHECK-LABEL: mul_v8i16:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ld1r { v1.8h }, [x0], #2
+; CHECK-NEXT:    ldrh w8, [x0], #2
+; CHECK-NEXT:    dup v1.8h, w8
 ; CHECK-NEXT:    mul v0.8h, v1.8h, v0.8h
 ; CHECK-NEXT:    str q0, [x1]
 ; CHECK-NEXT:    ret
@@ -37,7 +39,8 @@ define ptr @mul_v8i16(ptr %p, ptr %ps, <8 x i16> %t) {
 define ptr @mul_v4i32(ptr %p, ptr %ps, <4 x i32> %t) {
 ; CHECK-LABEL: mul_v4i32:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    ld1r { v1.4s }, [x0], #4
+; CHECK-NEXT:    ldr w8, [x0], #4
+; CHECK-NEXT:    dup v1.4s, w8
 ; CHECK-NEXT:    mul v0.4s, v1.4s, v0.4s
 ; CHECK-NEXT:    str q0, [x1]
 ; CHECK-NEXT:    ret
@@ -53,8 +56,9 @@ define ptr @mul_v4i32(ptr %p, ptr %ps, <4 x i32> %t) {
 define ptr @fmul_v4f16(ptr %p, ptr %ps, <4 x half> %t) {
 ; CHECK-NOFP16-LABEL: fmul_v4f16:
 ; CHECK-NOFP16:       // %bb.0:
-; CHECK-NOFP16-NEXT:    ld1r { v1.4h }, [x0], #2
+; CHECK-NOFP16-NEXT:    ldr h1, [x0], #2
 ; CHECK-NOFP16-NEXT:    fcvtl v0.4s, v0.4h
+; CHECK-NOFP16-NEXT:    dup v1.4h, v1.h[0]
 ; CHECK-NOFP16-NEXT:    fcvtl v1.4s, v1.4h
 ; CHECK-NOFP16-NEXT:    fmul v0.4s, v1.4s, v0.4s
 ; CHECK-NOFP16-NEXT:    fcvtn v0.4h, v0.4s
@@ -79,9 +83,10 @@ define ptr @fmul_v4f16(ptr %p, ptr %ps, <4 x half> %t) {
 define ptr @fmla_v4f16(ptr %p, ptr %ps, <4 x half> %t, <4 x half> %u) {
 ; CHECK-NOFP16-LABEL: fmla_v4f16:
 ; CHECK-NOFP16:       // %bb.0:
-; CHECK-NOFP16-NEXT:    ld1r { v2.4h }, [x0], #2
+; CHECK-NOFP16-NEXT:    ldr h2, [x0], #2
 ; CHECK-NOFP16-NEXT:    fcvtl v0.4s, v0.4h
 ; CHECK-NOFP16-NEXT:    fcvtl v1.4s, v1.4h
+; CHECK-NOFP16-NEXT:    dup v2.4h, v2.h[0]
 ; CHECK-NOFP16-NEXT:    fcvtl v2.4s, v2.4h
 ; CHECK-NOFP16-NEXT:    fmul v0.4s, v2.4s, v0.4s
 ; CHECK-NOFP16-NEXT:    fcvtn v0.4h, v0.4s

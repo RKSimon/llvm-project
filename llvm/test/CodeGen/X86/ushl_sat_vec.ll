@@ -15,17 +15,19 @@ define <2 x i64> @vec_v2i64(<2 x i64> %x, <2 x i64> %y) nounwind {
 ; X64-SSE2:       # %bb.0:
 ; X64-SSE2-NEXT:    movdqa %xmm0, %xmm2
 ; X64-SSE2-NEXT:    psllq %xmm1, %xmm2
-; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm3 = xmm1[2,3,2,3]
+; X64-SSE2-NEXT:    movdqa %xmm2, %xmm3
+; X64-SSE2-NEXT:    psrlq %xmm1, %xmm3
+; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
 ; X64-SSE2-NEXT:    movdqa %xmm0, %xmm4
-; X64-SSE2-NEXT:    psllq %xmm3, %xmm4
+; X64-SSE2-NEXT:    psllq %xmm1, %xmm4
 ; X64-SSE2-NEXT:    movdqa %xmm4, %xmm5
 ; X64-SSE2-NEXT:    movsd {{.*#+}} xmm4 = xmm2[0],xmm4[1]
-; X64-SSE2-NEXT:    psrlq %xmm1, %xmm2
-; X64-SSE2-NEXT:    psrlq %xmm3, %xmm5
-; X64-SSE2-NEXT:    movsd {{.*#+}} xmm5 = xmm2[0],xmm5[1]
+; X64-SSE2-NEXT:    psrlq %xmm1, %xmm5
+; X64-SSE2-NEXT:    movsd {{.*#+}} xmm5 = xmm3[0],xmm5[1]
 ; X64-SSE2-NEXT:    pcmpeqd %xmm5, %xmm0
 ; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,0,3,2]
 ; X64-SSE2-NEXT:    pand %xmm1, %xmm0
+; X64-SSE2-NEXT:    andpd %xmm0, %xmm4
 ; X64-SSE2-NEXT:    pcmpeqd %xmm1, %xmm1
 ; X64-SSE2-NEXT:    pxor %xmm1, %xmm0
 ; X64-SSE2-NEXT:    por %xmm4, %xmm0

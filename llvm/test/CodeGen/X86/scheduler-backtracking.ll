@@ -22,8 +22,8 @@ define i256 @test1(i256 %a) nounwind {
 ; ILP-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; ILP-NEXT:    movq $1, -{{[0-9]+}}(%rsp)
 ; ILP-NEXT:    movl %ecx, %edx
+; ILP-NEXT:    andb $-64, %dl
 ; ILP-NEXT:    shrb $3, %dl
-; ILP-NEXT:    andb $24, %dl
 ; ILP-NEXT:    negb %dl
 ; ILP-NEXT:    movsbq %dl, %rdx
 ; ILP-NEXT:    movq -24(%rsp,%rdx), %rsi
@@ -59,8 +59,8 @@ define i256 @test1(i256 %a) nounwind {
 ; HYBRID-NEXT:    leal (%rsi,%rsi), %ecx
 ; HYBRID-NEXT:    addb $3, %cl
 ; HYBRID-NEXT:    movl %ecx, %edx
+; HYBRID-NEXT:    andb $-64, %dl
 ; HYBRID-NEXT:    shrb $3, %dl
-; HYBRID-NEXT:    andb $24, %dl
 ; HYBRID-NEXT:    negb %dl
 ; HYBRID-NEXT:    movsbq %dl, %rdx
 ; HYBRID-NEXT:    movq -24(%rsp,%rdx), %rsi
@@ -95,8 +95,8 @@ define i256 @test1(i256 %a) nounwind {
 ; BURR-NEXT:    leal (%rsi,%rsi), %ecx
 ; BURR-NEXT:    addb $3, %cl
 ; BURR-NEXT:    movl %ecx, %edx
+; BURR-NEXT:    andb $-64, %dl
 ; BURR-NEXT:    shrb $3, %dl
-; BURR-NEXT:    andb $24, %dl
 ; BURR-NEXT:    negb %dl
 ; BURR-NEXT:    movsbq %dl, %rdx
 ; BURR-NEXT:    movq -24(%rsp,%rdx), %rsi
@@ -131,8 +131,8 @@ define i256 @test1(i256 %a) nounwind {
 ; SRC-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
 ; SRC-NEXT:    movq $1, -{{[0-9]+}}(%rsp)
 ; SRC-NEXT:    movl %edx, %ecx
+; SRC-NEXT:    andb $-64, %cl
 ; SRC-NEXT:    shrb $3, %cl
-; SRC-NEXT:    andb $24, %cl
 ; SRC-NEXT:    negb %cl
 ; SRC-NEXT:    movsbq %cl, %rsi
 ; SRC-NEXT:    movq -24(%rsp,%rsi), %rdi
@@ -164,16 +164,16 @@ define i256 @test1(i256 %a) nounwind {
 ; LIN-NEXT:    leal (%rsi,%rsi), %edx
 ; LIN-NEXT:    addb $3, %dl
 ; LIN-NEXT:    movl %edx, %ecx
+; LIN-NEXT:    andb $-64, %cl
 ; LIN-NEXT:    shrb $3, %cl
-; LIN-NEXT:    andb $24, %cl
 ; LIN-NEXT:    negb %cl
 ; LIN-NEXT:    movsbq %cl, %rsi
 ; LIN-NEXT:    xorps %xmm0, %xmm0
 ; LIN-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; LIN-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
+; LIN-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; LIN-NEXT:    movq $1, -{{[0-9]+}}(%rsp)
 ; LIN-NEXT:    movq $0, -{{[0-9]+}}(%rsp)
-; LIN-NEXT:    movaps %xmm0, -{{[0-9]+}}(%rsp)
 ; LIN-NEXT:    movq -40(%rsp,%rsi), %rdi
 ; LIN-NEXT:    movq %rdi, %r8
 ; LIN-NEXT:    movl %edx, %ecx

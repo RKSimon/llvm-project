@@ -33,14 +33,15 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:  // %bb.1: // %for.body41.lr.ph
 ; CHECK-NEXT:    ldr x4, [sp, #312]
 ; CHECK-NEXT:    ldr x14, [sp, #280]
-; CHECK-NEXT:    tbz w0, #0, .LBB0_39
+; CHECK-NEXT:    mvn w8, w0
+; CHECK-NEXT:    tbnz w8, #0, .LBB0_39
 ; CHECK-NEXT:  // %bb.2: // %for.body41.us.preheader
 ; CHECK-NEXT:    ldrb w8, [sp, #368]
 ; CHECK-NEXT:    ldrb w12, [sp, #256]
 ; CHECK-NEXT:    ldr w3, [sp, #264]
 ; CHECK-NEXT:    adrp x23, :got:var_50
 ; CHECK-NEXT:    add x26, x14, #120
-; CHECK-NEXT:    mov x30, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov x28, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    ldr x11, [sp, #376]
 ; CHECK-NEXT:    ldrb w13, [sp, #360]
 ; CHECK-NEXT:    ldp x17, x16, [sp, #296]
@@ -53,7 +54,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    mov x10, xzr
 ; CHECK-NEXT:    mov w27, wzr
 ; CHECK-NEXT:    ldrb w19, [sp, #240]
-; CHECK-NEXT:    mov w28, wzr
+; CHECK-NEXT:    mov w30, wzr
 ; CHECK-NEXT:    mov w25, wzr
 ; CHECK-NEXT:    mov x24, xzr
 ; CHECK-NEXT:    str w8, [sp, #108] // 4-byte Spill
@@ -82,7 +83,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    ldr x24, [sp, #40] // 8-byte Reload
 ; CHECK-NEXT:    ldr x14, [sp, #152] // 8-byte Reload
 ; CHECK-NEXT:    mov w27, #1 // =0x1
-; CHECK-NEXT:    mov w28, #1 // =0x1
+; CHECK-NEXT:    mov w30, #1 // =0x1
 ; CHECK-NEXT:    mov w25, w19
 ; CHECK-NEXT:  .LBB0_4: // %for.body41.us
 ; CHECK-NEXT:    // =>This Loop Header: Depth=1
@@ -123,7 +124,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    add x19, x4, w8, sxtw #2
 ; CHECK-NEXT:    mov x9, xzr
 ; CHECK-NEXT:    csel x12, x24, x12, lo
-; CHECK-NEXT:    mov w4, w28
+; CHECK-NEXT:    mov w4, w30
 ; CHECK-NEXT:    str x12, [sp, #56] // 8-byte Spill
 ; CHECK-NEXT:    b .LBB0_8
 ; CHECK-NEXT:    .p2align 5, , 16
@@ -147,7 +148,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    mov w24, #1 // =0x1
 ; CHECK-NEXT:    mov w12, wzr
 ; CHECK-NEXT:    str wzr, [sp, #132] // 4-byte Spill
-; CHECK-NEXT:    mov w28, w4
+; CHECK-NEXT:    mov w30, w4
 ; CHECK-NEXT:    madd x8, x9, x14, x8
 ; CHECK-NEXT:    mov w14, #1 // =0x1
 ; CHECK-NEXT:    str x8, [sp, #120] // 8-byte Spill
@@ -164,7 +165,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    mov x21, x8
 ; CHECK-NEXT:    ldr x3, [sp, #96] // 8-byte Reload
 ; CHECK-NEXT:    ldr x22, [sp, #80] // 8-byte Reload
-; CHECK-NEXT:    mov x30, #-1 // =0xffffffffffffffff
+; CHECK-NEXT:    mov x28, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    mov x14, xzr
 ; CHECK-NEXT:    ldr w8, [sp, #76] // 4-byte Reload
 ; CHECK-NEXT:    tbz w8, #31, .LBB0_7
@@ -267,7 +268,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:  .LBB0_26: // %cond.end345.us
 ; CHECK-NEXT:    // in Loop: Header=BB0_28 Depth=5
 ; CHECK-NEXT:    strh w4, [x18]
-; CHECK-NEXT:    mul x4, x21, x30
+; CHECK-NEXT:    mul x4, x21, x28
 ; CHECK-NEXT:    adrp x21, :got:var_46
 ; CHECK-NEXT:    mov x8, xzr
 ; CHECK-NEXT:    ldr x21, [x21, :got_lo12:var_46]
@@ -289,7 +290,7 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    // Parent Loop BB0_10 Depth=4
 ; CHECK-NEXT:    // => This Inner Loop Header: Depth=5
 ; CHECK-NEXT:    adrp x27, :got:var_32
-; CHECK-NEXT:    ldur w8, [x19, #-12]
+; CHECK-NEXT:    ldurh w8, [x19, #-12]
 ; CHECK-NEXT:    ldr x27, [x27, :got_lo12:var_32]
 ; CHECK-NEXT:    strh w8, [x27]
 ; CHECK-NEXT:    sxtb w8, w25
@@ -333,23 +334,23 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    lsl x22, x14, #1
 ; CHECK-NEXT:    mov x27, #-1 // =0xffffffffffffffff
 ; CHECK-NEXT:    madd x14, x14, x3, x11
-; CHECK-NEXT:    mov w30, w28
+; CHECK-NEXT:    mov w28, w30
 ; CHECK-NEXT:    mov w3, #-7680 // =0xffffe200
 ; CHECK-NEXT:    b .LBB0_36
 ; CHECK-NEXT:    .p2align 5, , 16
 ; CHECK-NEXT:  .LBB0_34: // %if.then466.us
 ; CHECK-NEXT:    // in Loop: Header=BB0_36 Depth=5
-; CHECK-NEXT:    ldr x30, [sp, #152] // 8-byte Reload
+; CHECK-NEXT:    ldr x28, [sp, #152] // 8-byte Reload
 ; CHECK-NEXT:    ldr x3, [sp, #136] // 8-byte Reload
 ; CHECK-NEXT:    sxtb w4, w4
 ; CHECK-NEXT:    bic w4, w4, w4, asr #31
-; CHECK-NEXT:    str x3, [x30]
+; CHECK-NEXT:    str x3, [x28]
 ; CHECK-NEXT:    mov w3, #-7680 // =0xffffe200
 ; CHECK-NEXT:  .LBB0_35: // %for.inc505.us
 ; CHECK-NEXT:    // in Loop: Header=BB0_36 Depth=5
 ; CHECK-NEXT:    add x21, x21, #1
 ; CHECK-NEXT:    adds x27, x27, #1
-; CHECK-NEXT:    mov w30, wzr
+; CHECK-NEXT:    mov w28, wzr
 ; CHECK-NEXT:    b.ne .LBB0_9
 ; CHECK-NEXT:  .LBB0_36: // %for.body380.us
 ; CHECK-NEXT:    // Parent Loop BB0_4 Depth=1
@@ -357,17 +358,17 @@ define void @f(i1 %var_0, i16 %var_1, i64 %var_2, i8 %var_3, i16 %var_4, i1 %var
 ; CHECK-NEXT:    // Parent Loop BB0_8 Depth=3
 ; CHECK-NEXT:    // Parent Loop BB0_10 Depth=4
 ; CHECK-NEXT:    // => This Inner Loop Header: Depth=5
-; CHECK-NEXT:    mov w28, w30
-; CHECK-NEXT:    ldrh w30, [x22]
+; CHECK-NEXT:    mov w30, w28
+; CHECK-NEXT:    ldrh w28, [x22]
 ; CHECK-NEXT:    tst w0, #0x1
-; CHECK-NEXT:    strh w30, [x11]
-; CHECK-NEXT:    csel w30, w20, w3, ne
-; CHECK-NEXT:    str w30, [x23]
+; CHECK-NEXT:    strh w28, [x11]
+; CHECK-NEXT:    csel w28, w20, w3, ne
+; CHECK-NEXT:    str w28, [x23]
 ; CHECK-NEXT:    cbz x15, .LBB0_35
 ; CHECK-NEXT:  // %bb.37: // %if.then436.us
 ; CHECK-NEXT:    // in Loop: Header=BB0_36 Depth=5
-; CHECK-NEXT:    ldrh w30, [x14]
-; CHECK-NEXT:    cbnz w30, .LBB0_34
+; CHECK-NEXT:    ldrh w28, [x14]
+; CHECK-NEXT:    cbnz w28, .LBB0_34
 ; CHECK-NEXT:  // %bb.38: // in Loop: Header=BB0_36 Depth=5
 ; CHECK-NEXT:    mov w4, wzr
 ; CHECK-NEXT:    b .LBB0_35

@@ -300,10 +300,10 @@ define i16 @reduction_umin_v8i16_woslp(<8 x i16> %vec8) {
 ; GFX9-LABEL: reduction_umin_v8i16_woslp:
 ; GFX9:       ; %bb.0: ; %entry
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-NEXT:    v_min_u16_sdwa v0, v0, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
-; GFX9-NEXT:    v_min3_u16 v0, v1, v1, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_u16 v0, v2, v2, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_u16 v0, v3, v3, v0 op_sel:[1,0,0,0]
+; GFX9-NEXT:    v_min3_u16 v0, v1, v0, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_u16 v0, v2, v1, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_u16 v0, v3, v2, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min_u16_sdwa v0, v3, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: reduction_umin_v8i16_woslp:
@@ -402,14 +402,14 @@ define i16 @reduction_smin_v16i16_woslp(<16 x i16> %vec16) {
 ; GFX9-LABEL: reduction_smin_v16i16_woslp:
 ; GFX9:       ; %bb.0: ; %entry
 ; GFX9-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-NEXT:    v_min_i16_sdwa v0, v0, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
-; GFX9-NEXT:    v_min3_i16 v0, v1, v1, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v2, v2, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v3, v3, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v4, v4, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v5, v5, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v6, v6, v0 op_sel:[1,0,0,0]
-; GFX9-NEXT:    v_min3_i16 v0, v7, v7, v0 op_sel:[1,0,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v1, v0, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v2, v1, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v3, v2, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v4, v3, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v5, v4, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v6, v5, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min3_i16 v0, v7, v6, v0 op_sel:[0,1,0,0]
+; GFX9-NEXT:    v_min_i16_sdwa v0, v7, v0 dst_sel:DWORD dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:DWORD
 ; GFX9-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; VI-LABEL: reduction_smin_v16i16_woslp:

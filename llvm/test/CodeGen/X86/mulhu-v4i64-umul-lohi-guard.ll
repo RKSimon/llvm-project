@@ -51,21 +51,23 @@ define <4 x i64> @umul_lohi_both_halves(<4 x i64> %a, <4 x i64> %b, ptr %plo) no
 ; V4-LABEL: umul_lohi_both_halves:
 ; V4:       # %bb.0:
 ; V4-NEXT:    vpmullq %ymm1, %ymm0, %ymm2
-; V4-NEXT:    vpsrlq $32, %ymm0, %ymm3
-; V4-NEXT:    vpmuludq %ymm1, %ymm3, %ymm4
-; V4-NEXT:    vpmuludq %ymm1, %ymm0, %ymm5
-; V4-NEXT:    vpsrlq $32, %ymm5, %ymm5
-; V4-NEXT:    vpaddq %ymm5, %ymm4, %ymm4
-; V4-NEXT:    vpsrlq $32, %ymm4, %ymm5
-; V4-NEXT:    vpxor %xmm6, %xmm6, %xmm6
-; V4-NEXT:    vpblendd {{.*#+}} ymm4 = ymm4[0],ymm6[1],ymm4[2],ymm6[3],ymm4[4],ymm6[5],ymm4[6],ymm6[7]
-; V4-NEXT:    vpsrlq $32, %ymm1, %ymm1
-; V4-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
-; V4-NEXT:    vpaddq %ymm4, %ymm0, %ymm0
+; V4-NEXT:    vpxor %xmm3, %xmm3, %xmm3
+; V4-NEXT:    vpblendd {{.*#+}} ymm4 = ymm1[0],ymm3[1],ymm1[2],ymm3[3],ymm1[4],ymm3[5],ymm1[6],ymm3[7]
+; V4-NEXT:    vpblendd {{.*#+}} ymm5 = ymm0[0],ymm3[1],ymm0[2],ymm3[3],ymm0[4],ymm3[5],ymm0[6],ymm3[7]
+; V4-NEXT:    vpmuludq %ymm4, %ymm5, %ymm6
+; V4-NEXT:    vpsrlq $32, %ymm6, %ymm6
 ; V4-NEXT:    vpsrlq $32, %ymm0, %ymm0
-; V4-NEXT:    vpmuludq %ymm1, %ymm3, %ymm1
-; V4-NEXT:    vpaddq %ymm5, %ymm1, %ymm1
-; V4-NEXT:    vpaddq %ymm0, %ymm1, %ymm0
+; V4-NEXT:    vpmuludq %ymm4, %ymm0, %ymm4
+; V4-NEXT:    vpaddq %ymm6, %ymm4, %ymm4
+; V4-NEXT:    vpsrlq $32, %ymm4, %ymm6
+; V4-NEXT:    vpblendd {{.*#+}} ymm3 = ymm4[0],ymm3[1],ymm4[2],ymm3[3],ymm4[4],ymm3[5],ymm4[6],ymm3[7]
+; V4-NEXT:    vpsrlq $32, %ymm1, %ymm1
+; V4-NEXT:    vpmuludq %ymm1, %ymm5, %ymm4
+; V4-NEXT:    vpaddq %ymm3, %ymm4, %ymm3
+; V4-NEXT:    vpsrlq $32, %ymm3, %ymm3
+; V4-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
+; V4-NEXT:    vpaddq %ymm6, %ymm0, %ymm0
+; V4-NEXT:    vpaddq %ymm3, %ymm0, %ymm0
 ; V4-NEXT:    vmovdqa %ymm2, (%rdi)
 ; V4-NEXT:    retq
   %za = zext <4 x i64> %a to <4 x i128>
@@ -82,21 +84,23 @@ define <4 x i64> @umul_lohi_both_halves(<4 x i64> %a, <4 x i64> %b, ptr %plo) no
 define <4 x i64> @mulhu_high_only(<4 x i64> %a, <4 x i64> %b) nounwind {
 ; CHECK-LABEL: mulhu_high_only:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vpsrlq $32, %ymm0, %ymm2
-; CHECK-NEXT:    vpmuludq %ymm1, %ymm2, %ymm3
-; CHECK-NEXT:    vpmuludq %ymm1, %ymm0, %ymm4
-; CHECK-NEXT:    vpsrlq $32, %ymm4, %ymm4
-; CHECK-NEXT:    vpaddq %ymm4, %ymm3, %ymm3
-; CHECK-NEXT:    vpsrlq $32, %ymm3, %ymm4
-; CHECK-NEXT:    vpxor %xmm5, %xmm5, %xmm5
-; CHECK-NEXT:    vpblendd {{.*#+}} ymm3 = ymm3[0],ymm5[1],ymm3[2],ymm5[3],ymm3[4],ymm5[5],ymm3[6],ymm5[7]
-; CHECK-NEXT:    vpsrlq $32, %ymm1, %ymm1
-; CHECK-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
-; CHECK-NEXT:    vpaddq %ymm3, %ymm0, %ymm0
+; CHECK-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm3 = ymm1[0],ymm2[1],ymm1[2],ymm2[3],ymm1[4],ymm2[5],ymm1[6],ymm2[7]
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm4 = ymm0[0],ymm2[1],ymm0[2],ymm2[3],ymm0[4],ymm2[5],ymm0[6],ymm2[7]
+; CHECK-NEXT:    vpmuludq %ymm3, %ymm4, %ymm5
+; CHECK-NEXT:    vpsrlq $32, %ymm5, %ymm5
 ; CHECK-NEXT:    vpsrlq $32, %ymm0, %ymm0
-; CHECK-NEXT:    vpmuludq %ymm1, %ymm2, %ymm1
-; CHECK-NEXT:    vpaddq %ymm4, %ymm1, %ymm1
-; CHECK-NEXT:    vpaddq %ymm0, %ymm1, %ymm0
+; CHECK-NEXT:    vpmuludq %ymm3, %ymm0, %ymm3
+; CHECK-NEXT:    vpaddq %ymm5, %ymm3, %ymm3
+; CHECK-NEXT:    vpsrlq $32, %ymm3, %ymm5
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm2 = ymm3[0],ymm2[1],ymm3[2],ymm2[3],ymm3[4],ymm2[5],ymm3[6],ymm2[7]
+; CHECK-NEXT:    vpsrlq $32, %ymm1, %ymm1
+; CHECK-NEXT:    vpmuludq %ymm1, %ymm4, %ymm3
+; CHECK-NEXT:    vpaddq %ymm2, %ymm3, %ymm2
+; CHECK-NEXT:    vpsrlq $32, %ymm2, %ymm2
+; CHECK-NEXT:    vpmuludq %ymm1, %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq %ymm5, %ymm0, %ymm0
+; CHECK-NEXT:    vpaddq %ymm2, %ymm0, %ymm0
 ; CHECK-NEXT:    retq
   %za = zext <4 x i64> %a to <4 x i128>
   %zb = zext <4 x i64> %b to <4 x i128>

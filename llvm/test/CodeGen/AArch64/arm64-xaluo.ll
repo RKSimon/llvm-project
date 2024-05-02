@@ -1341,7 +1341,7 @@ define i8 @uaddo.selectboth.i8(i8 %a, i8 %b) {
 ; CHECK-SD-NEXT:    and w9, w0, #0xff
 ; CHECK-SD-NEXT:    mov w8, #10 // =0xa
 ; CHECK-SD-NEXT:    add w9, w9, w1, uxtb
-; CHECK-SD-NEXT:    tst w9, #0x100
+; CHECK-SD-NEXT:    cmp wzr, w9, lsr #8
 ; CHECK-SD-NEXT:    csel w0, w9, w8, ne
 ; CHECK-SD-NEXT:    ret
 ;
@@ -1359,7 +1359,7 @@ define i8 @uaddo.selectboth.i8(i8 %a, i8 %b) {
 ; CHECK-FI-NEXT:    and w9, w0, #0xff
 ; CHECK-FI-NEXT:    mov w8, #10 // =0xa
 ; CHECK-FI-NEXT:    add w9, w9, w1, uxtb
-; CHECK-FI-NEXT:    tst w9, #0x100
+; CHECK-FI-NEXT:    cmp wzr, w9, lsr #8
 ; CHECK-FI-NEXT:    csel w0, w9, w8, ne
 ; CHECK-FI-NEXT:    ret
 entry:
@@ -1411,7 +1411,7 @@ define i16 @uaddo.selectboth.i16(i16 %a, i16 %b) {
 ; CHECK-SD-NEXT:    and w9, w0, #0xffff
 ; CHECK-SD-NEXT:    mov w8, #10 // =0xa
 ; CHECK-SD-NEXT:    add w9, w9, w1, uxth
-; CHECK-SD-NEXT:    tst w9, #0x10000
+; CHECK-SD-NEXT:    cmp wzr, w9, lsr #16
 ; CHECK-SD-NEXT:    csel w0, w9, w8, ne
 ; CHECK-SD-NEXT:    ret
 ;
@@ -1429,7 +1429,7 @@ define i16 @uaddo.selectboth.i16(i16 %a, i16 %b) {
 ; CHECK-FI-NEXT:    and w9, w0, #0xffff
 ; CHECK-FI-NEXT:    mov w8, #10 // =0xa
 ; CHECK-FI-NEXT:    add w9, w9, w1, uxth
-; CHECK-FI-NEXT:    tst w9, #0x10000
+; CHECK-FI-NEXT:    cmp wzr, w9, lsr #16
 ; CHECK-FI-NEXT:    csel w0, w9, w8, ne
 ; CHECK-FI-NEXT:    ret
 entry:

@@ -93,9 +93,8 @@ define void @elts_from_consecutive_loads(ptr %arg, ptr %arg12, ptr %arg13, float
 ; ALL-NEXT:  .LBB3_2: # %bb17
 ; ALL-NEXT:    # Parent Loop BB3_1 Depth=1
 ; ALL-NEXT:    # => This Inner Loop Header: Depth=2
-; ALL-NEXT:    movl (%rdi), %eax
-; ALL-NEXT:    vbroadcastss (%rdi), %ymm2
-; ALL-NEXT:    movl %eax, (%rsi)
+; ALL-NEXT:    vbroadcastf128 {{.*#+}} ymm2 = mem[0,1,0,1]
+; ALL-NEXT:    vmovss %xmm2, (%rsi)
 ; ALL-NEXT:    vmovaps %ymm2, (%rdx)
 ; ALL-NEXT:    vucomiss %xmm1, %xmm0
 ; ALL-NEXT:    jne .LBB3_2

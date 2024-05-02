@@ -85,15 +85,15 @@ define <2 x i64> @splat(<2 x double> %x, <2 x i64> %vb, i1 %c) {
 define <2 x i64> @vec(<2 x double> %x, <2 x double> %y) {
 ; CHECK-SD-LABEL: vec:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    fcmeq v3.2d, v0.2d, v0.2d
-; CHECK-SD-NEXT:    fcmeq v4.2d, v1.2d, v1.2d
+; CHECK-SD-NEXT:    fcmeq v2.2d, v0.2d, v0.2d
+; CHECK-SD-NEXT:    fcmeq v3.2d, v1.2d, v1.2d
+; CHECK-SD-NEXT:    mov w8, #1 // =0x1
 ; CHECK-SD-NEXT:    cmeq v0.2d, v0.2d, v1.2d
-; CHECK-SD-NEXT:    movi v2.2s, #1
-; CHECK-SD-NEXT:    mvn v3.16b, v3.16b
-; CHECK-SD-NEXT:    bic v3.16b, v3.16b, v4.16b
-; CHECK-SD-NEXT:    addhn v0.2s, v3.2d, v0.2d
-; CHECK-SD-NEXT:    and v0.8b, v0.8b, v2.8b
-; CHECK-SD-NEXT:    ushll v0.2d, v0.2s, #0
+; CHECK-SD-NEXT:    dup v1.2d, x8
+; CHECK-SD-NEXT:    mvn v2.16b, v2.16b
+; CHECK-SD-NEXT:    bic v2.16b, v2.16b, v3.16b
+; CHECK-SD-NEXT:    orr v0.16b, v2.16b, v0.16b
+; CHECK-SD-NEXT:    and v0.16b, v0.16b, v1.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: vec:

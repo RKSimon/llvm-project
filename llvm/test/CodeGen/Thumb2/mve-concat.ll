@@ -111,14 +111,14 @@ define arm_aapcs_vfpcc <16 x i8> @concat_v48i1(<4 x i32> %a, <4 x i32> %b, <4 x 
 ; CHECK-NEXT:    vcmp.s32 lt, q1, zr
 ; CHECK-NEXT:    vpsel q1, q5, q4
 ; CHECK-NEXT:    vcmp.s32 lt, q0, zr
-; CHECK-NEXT:    mov r1, sp
+; CHECK-NEXT:    add r1, sp, #32
 ; CHECK-NEXT:    vpsel q0, q5, q4
 ; CHECK-NEXT:    vstrh.32 q3, [r0, #8]
 ; CHECK-NEXT:    vstrh.32 q2, [r0]
 ; CHECK-NEXT:    vstrh.32 q1, [r1, #8]
 ; CHECK-NEXT:    vstrh.32 q0, [r1]
 ; CHECK-NEXT:    vldrw.u32 q0, [r0]
-; CHECK-NEXT:    add r0, sp, #32
+; CHECK-NEXT:    mov r0, sp
 ; CHECK-NEXT:    vcmp.i16 ne, q0, zr
 ; CHECK-NEXT:    vpsel q0, q5, q4
 ; CHECK-NEXT:    vstrb.16 q0, [r0, #8]

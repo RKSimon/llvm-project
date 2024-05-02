@@ -4,7 +4,7 @@
 define <2 x i64> @v2i1(<2 x i64> %a0, <2 x i64> %a1) {
 ; CHECK-LABEL: v2i1:
 ; CHECK:         .functype v2i1 (v128, v128) -> (v128)
-; CHECK-NEXT:    .local v128, i64, i64, i32
+; CHECK-NEXT:    .local v128, i64, i64
 ; CHECK-NEXT:  # %bb.0:
 ; CHECK-NEXT:    local.get 0
 ; CHECK-NEXT:    local.get 1
@@ -27,15 +27,18 @@ define <2 x i64> @v2i1(<2 x i64> %a0, <2 x i64> %a1) {
 ; CHECK-NEXT:    i64.gt_u
 ; CHECK-NEXT:    i64.select
 ; CHECK-NEXT:    i64.sub
-; CHECK-NEXT:    i32.wrap_i64
-; CHECK-NEXT:    local.tee 5
+; CHECK-NEXT:    i64.const 4294967295
+; CHECK-NEXT:    i64.and
+; CHECK-NEXT:    local.tee 3
+; CHECK-NEXT:    i64.const 0
+; CHECK-NEXT:    i64.ne
 ; CHECK-NEXT:    i64.select
 ; CHECK-NEXT:    i64x2.splat
 ; CHECK-NEXT:    i64.const -1
 ; CHECK-NEXT:    i64.const 0
-; CHECK-NEXT:    local.get 5
-; CHECK-NEXT:    i32.const 1
-; CHECK-NEXT:    i32.gt_u
+; CHECK-NEXT:    local.get 3
+; CHECK-NEXT:    i64.const 1
+; CHECK-NEXT:    i64.gt_u
 ; CHECK-NEXT:    i64.select
 ; CHECK-NEXT:    i64x2.replace_lane 1
 ; CHECK-NEXT:    v128.bitselect

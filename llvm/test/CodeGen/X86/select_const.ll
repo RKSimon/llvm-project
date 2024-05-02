@@ -898,8 +898,6 @@ define i64 @opaque_constant(i1 %cond, i64 %x) {
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl %eax, %edx
 ; X86-NEXT:    andl $1, %edx
-; X86-NEXT:    negl %edx
-; X86-NEXT:    andl $1, %edx
 ; X86-NEXT:    decl %eax
 ; X86-NEXT:    andl $1, %eax
 ; X86-NEXT:    xorl $1, %esi

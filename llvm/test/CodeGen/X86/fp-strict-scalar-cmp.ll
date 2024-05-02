@@ -13,12 +13,10 @@ define i32 @test_f32_oeq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    sete %cl
-; SSE-32-NEXT:    testb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -34,12 +32,10 @@ define i32 @test_f32_oeq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    sete %cl
-; AVX-32-NEXT:    testb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -60,16 +56,13 @@ define i32 @test_f32_oeq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    sete %cl
-; X87-NEXT:    testb %al, %cl
-; X87-NEXT:    jne .LBB0_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB0_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB0_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB0_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB0_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -80,12 +73,10 @@ define i32 @test_f32_oeq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    sete %cl
-; X87-CMOV-NEXT:    testb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -100,11 +91,9 @@ define i32 @test_f32_ogt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -119,11 +108,9 @@ define i32 @test_f32_ogt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -143,9 +130,7 @@ define i32 @test_f32_ogt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB1_1
+; X87-NEXT:    ja .LBB1_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -162,11 +147,9 @@ define i32 @test_f32_ogt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -181,11 +164,9 @@ define i32 @test_f32_oge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -200,11 +181,9 @@ define i32 @test_f32_oge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -224,9 +203,7 @@ define i32 @test_f32_oge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB2_1
+; X87-NEXT:    jae .LBB2_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -243,11 +220,9 @@ define i32 @test_f32_oge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -262,11 +237,9 @@ define i32 @test_f32_olt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -281,11 +254,9 @@ define i32 @test_f32_olt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -305,9 +276,7 @@ define i32 @test_f32_olt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB3_1
+; X87-NEXT:    ja .LBB3_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -324,11 +293,9 @@ define i32 @test_f32_olt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -343,11 +310,9 @@ define i32 @test_f32_ole_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -362,11 +327,9 @@ define i32 @test_f32_ole_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -386,9 +349,7 @@ define i32 @test_f32_ole_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB4_1
+; X87-NEXT:    jae .LBB4_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -405,11 +366,9 @@ define i32 @test_f32_ole_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -424,8 +383,6 @@ define i32 @test_f32_one_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setne %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
@@ -443,8 +400,6 @@ define i32 @test_f32_one_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setne %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
@@ -467,8 +422,6 @@ define i32 @test_f32_one_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setne %al
-; X87-NEXT:    testb %al, %al
 ; X87-NEXT:    jne .LBB5_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
@@ -486,8 +439,6 @@ define i32 @test_f32_one_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setne %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
@@ -505,11 +456,9 @@ define i32 @test_f32_ord_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovnpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -524,11 +473,9 @@ define i32 @test_f32_ord_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovnpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -548,9 +495,7 @@ define i32 @test_f32_ord_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB6_1
+; X87-NEXT:    jnp .LBB6_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -567,11 +512,9 @@ define i32 @test_f32_ord_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovnpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -586,11 +529,9 @@ define i32 @test_f32_ueq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    sete %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -605,11 +546,9 @@ define i32 @test_f32_ueq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    sete %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -629,9 +568,7 @@ define i32 @test_f32_ueq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    sete %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB7_1
+; X87-NEXT:    je .LBB7_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -648,11 +585,9 @@ define i32 @test_f32_ueq_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    sete %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -667,11 +602,9 @@ define i32 @test_f32_ugt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -686,11 +619,9 @@ define i32 @test_f32_ugt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -710,9 +641,7 @@ define i32 @test_f32_ugt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB8_1
+; X87-NEXT:    jb .LBB8_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -729,11 +658,9 @@ define i32 @test_f32_ugt_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -748,11 +675,9 @@ define i32 @test_f32_uge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -767,11 +692,9 @@ define i32 @test_f32_uge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -791,9 +714,7 @@ define i32 @test_f32_uge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB9_1
+; X87-NEXT:    jbe .LBB9_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -810,11 +731,9 @@ define i32 @test_f32_uge_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -829,11 +748,9 @@ define i32 @test_f32_ult_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -848,11 +765,9 @@ define i32 @test_f32_ult_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -872,9 +787,7 @@ define i32 @test_f32_ult_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB10_1
+; X87-NEXT:    jb .LBB10_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -891,11 +804,9 @@ define i32 @test_f32_ult_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -910,11 +821,9 @@ define i32 @test_f32_ule_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -929,11 +838,9 @@ define i32 @test_f32_ule_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -953,9 +860,7 @@ define i32 @test_f32_ule_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB11_1
+; X87-NEXT:    jbe .LBB11_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -972,11 +877,9 @@ define i32 @test_f32_ule_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -991,12 +894,10 @@ define i32 @test_f32_une_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    setne %cl
-; SSE-32-NEXT:    orb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1012,12 +913,10 @@ define i32 @test_f32_une_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    setne %cl
-; AVX-32-NEXT:    orb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1038,16 +937,13 @@ define i32 @test_f32_une_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    setne %cl
-; X87-NEXT:    orb %al, %cl
-; X87-NEXT:    jne .LBB12_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB12_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB12_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB12_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB12_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -1058,12 +954,10 @@ define i32 @test_f32_une_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    setne %cl
-; X87-CMOV-NEXT:    orb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -1078,11 +972,9 @@ define i32 @test_f32_uno_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    ucomiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1097,11 +989,9 @@ define i32 @test_f32_uno_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vucomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1121,9 +1011,7 @@ define i32 @test_f32_uno_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB13_1
+; X87-NEXT:    jp .LBB13_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1140,11 +1028,9 @@ define i32 @test_f32_uno_q(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f32(
@@ -1159,12 +1045,10 @@ define i32 @test_f64_oeq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    sete %cl
-; SSE-32-NEXT:    testb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1180,12 +1064,10 @@ define i32 @test_f64_oeq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    sete %cl
-; AVX-32-NEXT:    testb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1206,16 +1088,13 @@ define i32 @test_f64_oeq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    sete %cl
-; X87-NEXT:    testb %al, %cl
-; X87-NEXT:    jne .LBB14_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB14_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB14_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB14_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB14_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -1226,12 +1105,10 @@ define i32 @test_f64_oeq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    sete %cl
-; X87-CMOV-NEXT:    testb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1246,11 +1123,9 @@ define i32 @test_f64_ogt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1265,11 +1140,9 @@ define i32 @test_f64_ogt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1289,9 +1162,7 @@ define i32 @test_f64_ogt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB15_1
+; X87-NEXT:    ja .LBB15_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1308,11 +1179,9 @@ define i32 @test_f64_ogt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1327,11 +1196,9 @@ define i32 @test_f64_oge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1346,11 +1213,9 @@ define i32 @test_f64_oge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1370,9 +1235,7 @@ define i32 @test_f64_oge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB16_1
+; X87-NEXT:    jae .LBB16_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1389,11 +1252,9 @@ define i32 @test_f64_oge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1408,11 +1269,9 @@ define i32 @test_f64_olt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1427,11 +1286,9 @@ define i32 @test_f64_olt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1451,9 +1308,7 @@ define i32 @test_f64_olt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB17_1
+; X87-NEXT:    ja .LBB17_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1470,11 +1325,9 @@ define i32 @test_f64_olt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1489,11 +1342,9 @@ define i32 @test_f64_ole_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1508,11 +1359,9 @@ define i32 @test_f64_ole_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1532,9 +1381,7 @@ define i32 @test_f64_ole_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB18_1
+; X87-NEXT:    jae .LBB18_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1551,11 +1398,9 @@ define i32 @test_f64_ole_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1570,8 +1415,6 @@ define i32 @test_f64_one_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setne %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
@@ -1589,8 +1432,6 @@ define i32 @test_f64_one_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setne %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
@@ -1613,8 +1454,6 @@ define i32 @test_f64_one_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setne %al
-; X87-NEXT:    testb %al, %al
 ; X87-NEXT:    jne .LBB19_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
@@ -1632,8 +1471,6 @@ define i32 @test_f64_one_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setne %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
@@ -1651,11 +1488,9 @@ define i32 @test_f64_ord_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovnpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1670,11 +1505,9 @@ define i32 @test_f64_ord_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovnpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1694,9 +1527,7 @@ define i32 @test_f64_ord_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB20_1
+; X87-NEXT:    jnp .LBB20_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1713,11 +1544,9 @@ define i32 @test_f64_ord_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovnpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1732,11 +1561,9 @@ define i32 @test_f64_ueq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    sete %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1751,11 +1578,9 @@ define i32 @test_f64_ueq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    sete %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1775,9 +1600,7 @@ define i32 @test_f64_ueq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    sete %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB21_1
+; X87-NEXT:    je .LBB21_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1794,11 +1617,9 @@ define i32 @test_f64_ueq_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    sete %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1813,11 +1634,9 @@ define i32 @test_f64_ugt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1832,11 +1651,9 @@ define i32 @test_f64_ugt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1856,9 +1673,7 @@ define i32 @test_f64_ugt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB22_1
+; X87-NEXT:    jb .LBB22_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1875,11 +1690,9 @@ define i32 @test_f64_ugt_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1894,11 +1707,9 @@ define i32 @test_f64_uge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1913,11 +1724,9 @@ define i32 @test_f64_uge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -1937,9 +1746,7 @@ define i32 @test_f64_uge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB23_1
+; X87-NEXT:    jbe .LBB23_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -1956,11 +1763,9 @@ define i32 @test_f64_uge_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -1975,11 +1780,9 @@ define i32 @test_f64_ult_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -1994,11 +1797,9 @@ define i32 @test_f64_ult_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2018,9 +1819,7 @@ define i32 @test_f64_ult_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB24_1
+; X87-NEXT:    jb .LBB24_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2037,11 +1836,9 @@ define i32 @test_f64_ult_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -2056,11 +1853,9 @@ define i32 @test_f64_ule_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2075,11 +1870,9 @@ define i32 @test_f64_ule_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2099,9 +1892,7 @@ define i32 @test_f64_ule_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB25_1
+; X87-NEXT:    jbe .LBB25_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2118,11 +1909,9 @@ define i32 @test_f64_ule_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -2137,12 +1926,10 @@ define i32 @test_f64_une_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    setne %cl
-; SSE-32-NEXT:    orb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2158,12 +1945,10 @@ define i32 @test_f64_une_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    setne %cl
-; AVX-32-NEXT:    orb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2184,16 +1969,13 @@ define i32 @test_f64_une_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    setne %cl
-; X87-NEXT:    orb %al, %cl
-; X87-NEXT:    jne .LBB26_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB26_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB26_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB26_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB26_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -2204,12 +1986,10 @@ define i32 @test_f64_une_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    setne %cl
-; X87-CMOV-NEXT:    orb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -2224,11 +2004,9 @@ define i32 @test_f64_uno_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    ucomisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2243,11 +2021,9 @@ define i32 @test_f64_uno_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vucomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2267,9 +2043,7 @@ define i32 @test_f64_uno_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB27_1
+; X87-NEXT:    jp .LBB27_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2286,11 +2060,9 @@ define i32 @test_f64_uno_q(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fucompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmp.f64(
@@ -2305,12 +2077,10 @@ define i32 @test_f32_oeq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    sete %cl
-; SSE-32-NEXT:    testb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2326,12 +2096,10 @@ define i32 @test_f32_oeq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    sete %cl
-; AVX-32-NEXT:    testb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2352,16 +2120,13 @@ define i32 @test_f32_oeq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    sete %cl
-; X87-NEXT:    testb %al, %cl
-; X87-NEXT:    jne .LBB28_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB28_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB28_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB28_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB28_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -2372,12 +2137,10 @@ define i32 @test_f32_oeq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    sete %cl
-; X87-CMOV-NEXT:    testb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2392,11 +2155,9 @@ define i32 @test_f32_ogt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2411,11 +2172,9 @@ define i32 @test_f32_ogt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2435,9 +2194,7 @@ define i32 @test_f32_ogt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB29_1
+; X87-NEXT:    ja .LBB29_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2454,11 +2211,9 @@ define i32 @test_f32_ogt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2473,11 +2228,9 @@ define i32 @test_f32_oge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2492,11 +2245,9 @@ define i32 @test_f32_oge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2516,9 +2267,7 @@ define i32 @test_f32_oge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB30_1
+; X87-NEXT:    jae .LBB30_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2535,11 +2284,9 @@ define i32 @test_f32_oge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2554,11 +2301,9 @@ define i32 @test_f32_olt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2573,11 +2318,9 @@ define i32 @test_f32_olt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2597,9 +2340,7 @@ define i32 @test_f32_olt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB31_1
+; X87-NEXT:    ja .LBB31_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2616,11 +2357,9 @@ define i32 @test_f32_olt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2635,11 +2374,9 @@ define i32 @test_f32_ole_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2654,11 +2391,9 @@ define i32 @test_f32_ole_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2678,9 +2413,7 @@ define i32 @test_f32_ole_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB32_1
+; X87-NEXT:    jae .LBB32_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2697,11 +2430,9 @@ define i32 @test_f32_ole_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2716,8 +2447,6 @@ define i32 @test_f32_one_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setne %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
@@ -2735,8 +2464,6 @@ define i32 @test_f32_one_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setne %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
@@ -2759,8 +2486,6 @@ define i32 @test_f32_one_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setne %al
-; X87-NEXT:    testb %al, %al
 ; X87-NEXT:    jne .LBB33_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
@@ -2778,8 +2503,6 @@ define i32 @test_f32_one_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setne %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
@@ -2797,11 +2520,9 @@ define i32 @test_f32_ord_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovnpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2816,11 +2537,9 @@ define i32 @test_f32_ord_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovnpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2840,9 +2559,7 @@ define i32 @test_f32_ord_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB34_1
+; X87-NEXT:    jnp .LBB34_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2859,11 +2576,9 @@ define i32 @test_f32_ord_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovnpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2878,11 +2593,9 @@ define i32 @test_f32_ueq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    sete %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2897,11 +2610,9 @@ define i32 @test_f32_ueq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    sete %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -2921,9 +2632,7 @@ define i32 @test_f32_ueq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    sete %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB35_1
+; X87-NEXT:    je .LBB35_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -2940,11 +2649,9 @@ define i32 @test_f32_ueq_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    sete %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -2959,11 +2666,9 @@ define i32 @test_f32_ugt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -2978,11 +2683,9 @@ define i32 @test_f32_ugt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3002,9 +2705,7 @@ define i32 @test_f32_ugt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB36_1
+; X87-NEXT:    jb .LBB36_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3021,11 +2722,9 @@ define i32 @test_f32_ugt_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3040,11 +2739,9 @@ define i32 @test_f32_uge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3059,11 +2756,9 @@ define i32 @test_f32_uge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3083,9 +2778,7 @@ define i32 @test_f32_uge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB37_1
+; X87-NEXT:    jbe .LBB37_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3102,11 +2795,9 @@ define i32 @test_f32_uge_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3121,11 +2812,9 @@ define i32 @test_f32_ult_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3140,11 +2829,9 @@ define i32 @test_f32_ult_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3164,9 +2851,7 @@ define i32 @test_f32_ult_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB38_1
+; X87-NEXT:    jb .LBB38_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3183,11 +2868,9 @@ define i32 @test_f32_ult_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3202,11 +2885,9 @@ define i32 @test_f32_ule_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3221,11 +2902,9 @@ define i32 @test_f32_ule_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3245,9 +2924,7 @@ define i32 @test_f32_ule_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB39_1
+; X87-NEXT:    jbe .LBB39_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3264,11 +2941,9 @@ define i32 @test_f32_ule_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3283,12 +2958,10 @@ define i32 @test_f32_une_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    setne %cl
-; SSE-32-NEXT:    orb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3304,12 +2977,10 @@ define i32 @test_f32_une_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    setne %cl
-; AVX-32-NEXT:    orb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3330,16 +3001,13 @@ define i32 @test_f32_une_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    setne %cl
-; X87-NEXT:    orb %al, %cl
-; X87-NEXT:    jne .LBB40_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB40_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB40_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB40_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB40_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -3350,12 +3018,10 @@ define i32 @test_f32_une_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    setne %cl
-; X87-CMOV-NEXT:    orb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3370,11 +3036,9 @@ define i32 @test_f32_uno_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; SSE-32-NEXT:    comiss {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3389,11 +3053,9 @@ define i32 @test_f32_uno_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovss {{.*#+}} xmm0 = mem[0],zero,zero,zero
 ; AVX-32-NEXT:    vcomiss {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3413,9 +3075,7 @@ define i32 @test_f32_uno_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB41_1
+; X87-NEXT:    jp .LBB41_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3432,11 +3092,9 @@ define i32 @test_f32_uno_s(i32 %a, i32 %b, float %f1, float %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f32(
@@ -3451,12 +3109,10 @@ define i32 @test_f64_oeq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    sete %cl
-; SSE-32-NEXT:    testb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3472,12 +3128,10 @@ define i32 @test_f64_oeq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    sete %cl
-; AVX-32-NEXT:    testb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3498,16 +3152,13 @@ define i32 @test_f64_oeq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    sete %cl
-; X87-NEXT:    testb %al, %cl
-; X87-NEXT:    jne .LBB42_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB42_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB42_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB42_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB42_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -3518,12 +3169,10 @@ define i32 @test_f64_oeq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    sete %cl
-; X87-CMOV-NEXT:    testb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -3538,11 +3187,9 @@ define i32 @test_f64_ogt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3557,11 +3204,9 @@ define i32 @test_f64_ogt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3581,9 +3226,7 @@ define i32 @test_f64_ogt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB43_1
+; X87-NEXT:    ja .LBB43_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3600,11 +3243,9 @@ define i32 @test_f64_ogt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -3619,11 +3260,9 @@ define i32 @test_f64_oge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3638,11 +3277,9 @@ define i32 @test_f64_oge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3662,9 +3299,7 @@ define i32 @test_f64_oge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB44_1
+; X87-NEXT:    jae .LBB44_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3681,11 +3316,9 @@ define i32 @test_f64_oge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -3700,11 +3333,9 @@ define i32 @test_f64_olt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    seta %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmoval %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3719,11 +3350,9 @@ define i32 @test_f64_olt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    seta %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmoval %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3743,9 +3372,7 @@ define i32 @test_f64_olt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    seta %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB45_1
+; X87-NEXT:    ja .LBB45_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3762,11 +3389,9 @@ define i32 @test_f64_olt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    seta %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmoval %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -3781,11 +3406,9 @@ define i32 @test_f64_ole_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setae %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovael %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3800,11 +3423,9 @@ define i32 @test_f64_ole_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setae %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovael %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3824,9 +3445,7 @@ define i32 @test_f64_ole_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setae %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB46_1
+; X87-NEXT:    jae .LBB46_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -3843,11 +3462,9 @@ define i32 @test_f64_ole_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setae %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovael %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -3862,8 +3479,6 @@ define i32 @test_f64_one_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setne %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
@@ -3881,8 +3496,6 @@ define i32 @test_f64_one_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setne %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
@@ -3905,8 +3518,6 @@ define i32 @test_f64_one_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setne %al
-; X87-NEXT:    testb %al, %al
 ; X87-NEXT:    jne .LBB47_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
@@ -3924,8 +3535,6 @@ define i32 @test_f64_one_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setne %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
@@ -3943,11 +3552,9 @@ define i32 @test_f64_ord_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setnp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovnpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -3962,11 +3569,9 @@ define i32 @test_f64_ord_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setnp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovnpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -3986,9 +3591,7 @@ define i32 @test_f64_ord_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setnp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB48_1
+; X87-NEXT:    jnp .LBB48_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4005,11 +3608,9 @@ define i32 @test_f64_ord_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setnp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovnpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4024,11 +3625,9 @@ define i32 @test_f64_ueq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    sete %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4043,11 +3642,9 @@ define i32 @test_f64_ueq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    sete %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4067,9 +3664,7 @@ define i32 @test_f64_ueq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    sete %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB49_1
+; X87-NEXT:    je .LBB49_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4086,11 +3681,9 @@ define i32 @test_f64_ueq_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    sete %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4105,11 +3698,9 @@ define i32 @test_f64_ugt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4124,11 +3715,9 @@ define i32 @test_f64_ugt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4148,9 +3737,7 @@ define i32 @test_f64_ugt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB50_1
+; X87-NEXT:    jb .LBB50_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4167,11 +3754,9 @@ define i32 @test_f64_ugt_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4186,11 +3771,9 @@ define i32 @test_f64_uge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4205,11 +3788,9 @@ define i32 @test_f64_uge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4229,9 +3810,7 @@ define i32 @test_f64_uge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB51_1
+; X87-NEXT:    jbe .LBB51_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4248,11 +3827,9 @@ define i32 @test_f64_uge_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4267,11 +3844,9 @@ define i32 @test_f64_ult_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setb %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4286,11 +3861,9 @@ define i32 @test_f64_ult_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setb %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4310,9 +3883,7 @@ define i32 @test_f64_ult_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setb %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB52_1
+; X87-NEXT:    jb .LBB52_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4329,11 +3900,9 @@ define i32 @test_f64_ult_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setb %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4348,11 +3917,9 @@ define i32 @test_f64_ule_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setbe %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovbel %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4367,11 +3934,9 @@ define i32 @test_f64_ule_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setbe %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovbel %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4391,9 +3956,7 @@ define i32 @test_f64_ule_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setbe %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB53_1
+; X87-NEXT:    jbe .LBB53_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4410,11 +3973,9 @@ define i32 @test_f64_ule_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setbe %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovbel %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4429,12 +3990,10 @@ define i32 @test_f64_une_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    setne %cl
-; SSE-32-NEXT:    orb %al, %cl
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4450,12 +4009,10 @@ define i32 @test_f64_une_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    setne %cl
-; AVX-32-NEXT:    orb %al, %cl
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4476,16 +4033,13 @@ define i32 @test_f64_une_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    setne %cl
-; X87-NEXT:    orb %al, %cl
-; X87-NEXT:    jne .LBB54_1
+; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:    jne .LBB54_3
+; X87-NEXT:  # %bb.1:
+; X87-NEXT:    jp .LBB54_3
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
-; X87-NEXT:    movl (%eax), %eax
-; X87-NEXT:    retl
-; X87-NEXT:  .LBB54_1:
-; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
+; X87-NEXT:  .LBB54_3:
 ; X87-NEXT:    movl (%eax), %eax
 ; X87-NEXT:    retl
 ;
@@ -4496,12 +4050,10 @@ define i32 @test_f64_une_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    setne %cl
-; X87-CMOV-NEXT:    orb %al, %cl
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
 ; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(
@@ -4516,11 +4068,9 @@ define i32 @test_f64_uno_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; SSE-32:       # %bb.0:
 ; SSE-32-NEXT:    movsd {{.*#+}} xmm0 = mem[0],zero
 ; SSE-32-NEXT:    comisd {{[0-9]+}}(%esp), %xmm0
-; SSE-32-NEXT:    setp %al
-; SSE-32-NEXT:    testb %al, %al
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; SSE-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; SSE-32-NEXT:    cmovnel %eax, %ecx
+; SSE-32-NEXT:    cmovpl %eax, %ecx
 ; SSE-32-NEXT:    movl (%ecx), %eax
 ; SSE-32-NEXT:    retl
 ;
@@ -4535,11 +4085,9 @@ define i32 @test_f64_uno_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; AVX-32:       # %bb.0:
 ; AVX-32-NEXT:    vmovsd {{.*#+}} xmm0 = mem[0],zero
 ; AVX-32-NEXT:    vcomisd {{[0-9]+}}(%esp), %xmm0
-; AVX-32-NEXT:    setp %al
-; AVX-32-NEXT:    testb %al, %al
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; AVX-32-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; AVX-32-NEXT:    cmovnel %eax, %ecx
+; AVX-32-NEXT:    cmovpl %eax, %ecx
 ; AVX-32-NEXT:    movl (%ecx), %eax
 ; AVX-32-NEXT:    retl
 ;
@@ -4559,9 +4107,7 @@ define i32 @test_f64_uno_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-NEXT:    fnstsw %ax
 ; X87-NEXT:    # kill: def $ah killed $ah killed $ax
 ; X87-NEXT:    sahf
-; X87-NEXT:    setp %al
-; X87-NEXT:    testb %al, %al
-; X87-NEXT:    jne .LBB55_1
+; X87-NEXT:    jp .LBB55_1
 ; X87-NEXT:  # %bb.2:
 ; X87-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-NEXT:    movl (%eax), %eax
@@ -4578,11 +4124,9 @@ define i32 @test_f64_uno_s(i32 %a, i32 %b, double %f1, double %f2) #0 {
 ; X87-CMOV-NEXT:    fcompi %st(1), %st
 ; X87-CMOV-NEXT:    fstp %st(0)
 ; X87-CMOV-NEXT:    wait
-; X87-CMOV-NEXT:    setp %al
-; X87-CMOV-NEXT:    testb %al, %al
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %eax
 ; X87-CMOV-NEXT:    leal {{[0-9]+}}(%esp), %ecx
-; X87-CMOV-NEXT:    cmovnel %eax, %ecx
+; X87-CMOV-NEXT:    cmovpl %eax, %ecx
 ; X87-CMOV-NEXT:    movl (%ecx), %eax
 ; X87-CMOV-NEXT:    retl
   %cond = call i1 @llvm.experimental.constrained.fcmps.f64(

@@ -630,20 +630,45 @@ declare <2 x double> @llvm.x86.sse2.div.sd(<2 x double>, <2 x double>) nounwind 
 
 
 define <2 x i64> @test_x86_sse2_pmulu_dq(<4 x i32> %a0, <4 x i32> %a1) {
-; SSE-LABEL: test_x86_sse2_pmulu_dq:
-; SSE:       ## %bb.0:
-; SSE-NEXT:    pmuludq %xmm1, %xmm0 ## encoding: [0x66,0x0f,0xf4,0xc1]
-; SSE-NEXT:    ret{{[l|q]}} ## encoding: [0xc3]
+; X86-SSE-LABEL: test_x86_sse2_pmulu_dq:
+; X86-SSE:       ## %bb.0:
+; X86-SSE-NEXT:    movdqa {{.*#+}} xmm2 = [4294967295,0,4294967295,0]
+; X86-SSE-NEXT:    ## encoding: [0x66,0x0f,0x6f,0x15,A,A,A,A]
+; X86-SSE-NEXT:    ## fixup A - offset: 4, value: {{\.?LCPI[0-9]+_[0-9]+}}, kind: FK_Data_4
+; X86-SSE-NEXT:    pand %xmm2, %xmm0 ## encoding: [0x66,0x0f,0xdb,0xc2]
+; X86-SSE-NEXT:    pand %xmm1, %xmm2 ## encoding: [0x66,0x0f,0xdb,0xd1]
+; X86-SSE-NEXT:    pmuludq %xmm2, %xmm0 ## encoding: [0x66,0x0f,0xf4,0xc2]
+; X86-SSE-NEXT:    retl ## encoding: [0xc3]
 ;
 ; AVX1-LABEL: test_x86_sse2_pmulu_dq:
 ; AVX1:       ## %bb.0:
+; AVX1-NEXT:    vpxor %xmm2, %xmm2, %xmm2 ## encoding: [0xc5,0xe9,0xef,0xd2]
+; AVX1-NEXT:    vpblendw $204, %xmm2, %xmm0, %xmm0 ## encoding: [0xc4,0xe3,0x79,0x0e,0xc2,0xcc]
+; AVX1-NEXT:    ## xmm0 = xmm0[0,1],xmm2[2,3],xmm0[4,5],xmm2[6,7]
+; AVX1-NEXT:    vpblendw $204, %xmm2, %xmm1, %xmm1 ## encoding: [0xc4,0xe3,0x71,0x0e,0xca,0xcc]
+; AVX1-NEXT:    ## xmm1 = xmm1[0,1],xmm2[2,3],xmm1[4,5],xmm2[6,7]
 ; AVX1-NEXT:    vpmuludq %xmm1, %xmm0, %xmm0 ## encoding: [0xc5,0xf9,0xf4,0xc1]
 ; AVX1-NEXT:    ret{{[l|q]}} ## encoding: [0xc3]
 ;
 ; AVX512-LABEL: test_x86_sse2_pmulu_dq:
 ; AVX512:       ## %bb.0:
+; AVX512-NEXT:    vpxor %xmm2, %xmm2, %xmm2 ## EVEX TO VEX Compression encoding: [0xc5,0xe9,0xef,0xd2]
+; AVX512-NEXT:    vpblendd $10, %xmm2, %xmm0, %xmm0 ## encoding: [0xc4,0xe3,0x79,0x02,0xc2,0x0a]
+; AVX512-NEXT:    ## xmm0 = xmm0[0],xmm2[1],xmm0[2],xmm2[3]
+; AVX512-NEXT:    vpblendd $10, %xmm2, %xmm1, %xmm1 ## encoding: [0xc4,0xe3,0x71,0x02,0xca,0x0a]
+; AVX512-NEXT:    ## xmm1 = xmm1[0],xmm2[1],xmm1[2],xmm2[3]
 ; AVX512-NEXT:    vpmuludq %xmm1, %xmm0, %xmm0 ## EVEX TO VEX Compression encoding: [0xc5,0xf9,0xf4,0xc1]
 ; AVX512-NEXT:    ret{{[l|q]}} ## encoding: [0xc3]
+;
+; X64-SSE-LABEL: test_x86_sse2_pmulu_dq:
+; X64-SSE:       ## %bb.0:
+; X64-SSE-NEXT:    movdqa {{.*#+}} xmm2 = [4294967295,0,4294967295,0]
+; X64-SSE-NEXT:    ## encoding: [0x66,0x0f,0x6f,0x15,A,A,A,A]
+; X64-SSE-NEXT:    ## fixup A - offset: 4, value: {{\.?LCPI[0-9]+_[0-9]+}}, kind: reloc_riprel_4byte
+; X64-SSE-NEXT:    pand %xmm2, %xmm0 ## encoding: [0x66,0x0f,0xdb,0xc2]
+; X64-SSE-NEXT:    pand %xmm1, %xmm2 ## encoding: [0x66,0x0f,0xdb,0xd1]
+; X64-SSE-NEXT:    pmuludq %xmm2, %xmm0 ## encoding: [0x66,0x0f,0xf4,0xc2]
+; X64-SSE-NEXT:    retq ## encoding: [0xc3]
   %res = call <2 x i64> @llvm.x86.sse2.pmulu.dq(<4 x i32> %a0, <4 x i32> %a1) ; <<2 x i64>> [#uses=1]
   ret <2 x i64> %res
 }

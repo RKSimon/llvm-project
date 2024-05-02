@@ -1353,8 +1353,8 @@ define void @abs_v64i16(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: abs_v64i16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
-; CHECK-NEXT:    mov x8, #32 // =0x20
-; CHECK-NEXT:    mov x9, #48 // =0x30
+; CHECK-NEXT:    mov x8, #48 // =0x30
+; CHECK-NEXT:    mov x9, #32 // =0x20
 ; CHECK-NEXT:    mov x10, #16 // =0x10
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0, x8, lsl #1]
 ; CHECK-NEXT:    ld1h { z1.h }, p0/z, [x0, x9, lsl #1]
@@ -1379,13 +1379,13 @@ define void @abs_v128i16(ptr %a) vscale_range(2,0) #0 {
 ; CHECK-LABEL: abs_v128i16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.h, vl16
-; CHECK-NEXT:    mov x8, #96 // =0x60
-; CHECK-NEXT:    mov x9, #112 // =0x70
-; CHECK-NEXT:    mov x10, #64 // =0x40
-; CHECK-NEXT:    mov x11, #80 // =0x50
-; CHECK-NEXT:    mov x12, #32 // =0x20
+; CHECK-NEXT:    mov x8, #112 // =0x70
+; CHECK-NEXT:    mov x9, #96 // =0x60
+; CHECK-NEXT:    mov x10, #80 // =0x50
+; CHECK-NEXT:    mov x11, #64 // =0x40
+; CHECK-NEXT:    mov x12, #48 // =0x30
 ; CHECK-NEXT:    ld1h { z0.h }, p0/z, [x0, x8, lsl #1]
-; CHECK-NEXT:    mov x13, #48 // =0x30
+; CHECK-NEXT:    mov x13, #32 // =0x20
 ; CHECK-NEXT:    mov x14, #16 // =0x10
 ; CHECK-NEXT:    ld1h { z1.h }, p0/z, [x0, x9, lsl #1]
 ; CHECK-NEXT:    ld1h { z2.h }, p0/z, [x0, x10, lsl #1]

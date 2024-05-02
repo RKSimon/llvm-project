@@ -625,10 +625,10 @@ define void @vec256_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; SCALAR:       # %bb.0:
 ; SCALAR-NEXT:    movq (%rdi), %rax
 ; SCALAR-NEXT:    movq 8(%rdi), %rcx
-; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    notq %rax
-; SCALAR-NEXT:    movq %rax, (%rsi)
+; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    movq %rcx, 8(%rsi)
+; SCALAR-NEXT:    movq %rax, (%rsi)
 ; SCALAR-NEXT:    movq %rcx, 24(%rsi)
 ; SCALAR-NEXT:    movq %rax, 16(%rsi)
 ; SCALAR-NEXT:    retq
@@ -1062,10 +1062,10 @@ define void @vec384_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; SCALAR:       # %bb.0:
 ; SCALAR-NEXT:    movq (%rdi), %rax
 ; SCALAR-NEXT:    movq 8(%rdi), %rcx
-; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    notq %rax
-; SCALAR-NEXT:    movq %rax, (%rsi)
+; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    movq %rcx, 8(%rsi)
+; SCALAR-NEXT:    movq %rax, (%rsi)
 ; SCALAR-NEXT:    movq %rcx, 24(%rsi)
 ; SCALAR-NEXT:    movq %rax, 16(%rsi)
 ; SCALAR-NEXT:    movq %rcx, 40(%rsi)
@@ -1085,8 +1085,8 @@ define void @vec384_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
 ; AVX-NEXT:    vpxor (%rdi), %xmm0, %xmm0
-; AVX-NEXT:    vmovdqa %xmm0, (%rsi)
 ; AVX-NEXT:    vmovdqa %xmm0, 16(%rsi)
+; AVX-NEXT:    vmovdqa %xmm0, (%rsi)
 ; AVX-NEXT:    vmovdqa %xmm0, 32(%rsi)
 ; AVX-NEXT:    retq
 ;
@@ -1094,8 +1094,8 @@ define void @vec384_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; AVX512:       # %bb.0:
 ; AVX512-NEXT:    vpcmpeqd %xmm0, %xmm0, %xmm0
 ; AVX512-NEXT:    vpxor (%rdi), %xmm0, %xmm0
-; AVX512-NEXT:    vmovdqa %xmm0, (%rsi)
 ; AVX512-NEXT:    vmovdqa %xmm0, 16(%rsi)
+; AVX512-NEXT:    vmovdqa %xmm0, (%rsi)
 ; AVX512-NEXT:    vmovdqa %xmm0, 32(%rsi)
 ; AVX512-NEXT:    retq
   %in.elt.not = load i128, ptr %in.elt.ptr, align 64
@@ -1614,10 +1614,10 @@ define void @vec512_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; SCALAR:       # %bb.0:
 ; SCALAR-NEXT:    movq (%rdi), %rax
 ; SCALAR-NEXT:    movq 8(%rdi), %rcx
-; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    notq %rax
-; SCALAR-NEXT:    movq %rax, (%rsi)
+; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    movq %rcx, 8(%rsi)
+; SCALAR-NEXT:    movq %rax, (%rsi)
 ; SCALAR-NEXT:    movq %rcx, 24(%rsi)
 ; SCALAR-NEXT:    movq %rax, 16(%rsi)
 ; SCALAR-NEXT:    movq %rcx, 40(%rsi)
@@ -1680,34 +1680,34 @@ define void @vec512_i128(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 define void @vec512_i256(ptr %in.elt.ptr, ptr %out.vec.ptr) nounwind {
 ; SCALAR-LABEL: vec512_i256:
 ; SCALAR:       # %bb.0:
-; SCALAR-NEXT:    movq 16(%rdi), %rax
-; SCALAR-NEXT:    movq 24(%rdi), %rcx
+; SCALAR-NEXT:    movq 24(%rdi), %rax
+; SCALAR-NEXT:    movq 16(%rdi), %rcx
 ; SCALAR-NEXT:    movq (%rdi), %rdx
 ; SCALAR-NEXT:    movq 8(%rdi), %rdi
-; SCALAR-NEXT:    notq %rdi
 ; SCALAR-NEXT:    notq %rdx
+; SCALAR-NEXT:    notq %rdi
 ; SCALAR-NEXT:    notq %rcx
 ; SCALAR-NEXT:    notq %rax
-; SCALAR-NEXT:    movq %rax, 16(%rsi)
-; SCALAR-NEXT:    movq %rcx, 24(%rsi)
-; SCALAR-NEXT:    movq %rdx, (%rsi)
+; SCALAR-NEXT:    movq %rax, 24(%rsi)
+; SCALAR-NEXT:    movq %rcx, 16(%rsi)
 ; SCALAR-NEXT:    movq %rdi, 8(%rsi)
-; SCALAR-NEXT:    movq %rax, 48(%rsi)
-; SCALAR-NEXT:    movq %rcx, 56(%rsi)
-; SCALAR-NEXT:    movq %rdx, 32(%rsi)
+; SCALAR-NEXT:    movq %rdx, (%rsi)
+; SCALAR-NEXT:    movq %rax, 56(%rsi)
+; SCALAR-NEXT:    movq %rcx, 48(%rsi)
 ; SCALAR-NEXT:    movq %rdi, 40(%rsi)
+; SCALAR-NEXT:    movq %rdx, 32(%rsi)
 ; SCALAR-NEXT:    retq
 ;
 ; SSE-LABEL: vec512_i256:
 ; SSE:       # %bb.0:
 ; SSE-NEXT:    pcmpeqd %xmm0, %xmm0
-; SSE-NEXT:    movdqa (%rdi), %xmm1
+; SSE-NEXT:    movdqa 16(%rdi), %xmm1
 ; SSE-NEXT:    pxor %xmm0, %xmm1
-; SSE-NEXT:    pxor 16(%rdi), %xmm0
-; SSE-NEXT:    movdqa %xmm0, 16(%rsi)
-; SSE-NEXT:    movdqa %xmm1, (%rsi)
-; SSE-NEXT:    movdqa %xmm1, 32(%rsi)
-; SSE-NEXT:    movdqa %xmm0, 48(%rsi)
+; SSE-NEXT:    pxor (%rdi), %xmm0
+; SSE-NEXT:    movdqa %xmm0, (%rsi)
+; SSE-NEXT:    movdqa %xmm1, 16(%rsi)
+; SSE-NEXT:    movdqa %xmm1, 48(%rsi)
+; SSE-NEXT:    movdqa %xmm0, 32(%rsi)
 ; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: vec512_i256:

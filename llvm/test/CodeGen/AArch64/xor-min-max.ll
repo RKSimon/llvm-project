@@ -30,8 +30,8 @@ define i64 @test_smin_constant(i64 %a) {
 define i64 @test_smax_neg_one(i64 %a) {
 ; CHECK-LABEL: test_smax_neg_one:
 ; CHECK:       // %bb.0:
-; CHECK-NEXT:    mvn x8, x0
-; CHECK-NEXT:    bic x0, x8, x0, asr #63
+; CHECK-NEXT:    orr x8, x0, x0, asr #63
+; CHECK-NEXT:    mvn x0, x8
 ; CHECK-NEXT:    ret
   %1 = tail call i64 @llvm.smax.i64(i64 %a, i64 -1)
   %retval.0 = xor i64 %1, -1

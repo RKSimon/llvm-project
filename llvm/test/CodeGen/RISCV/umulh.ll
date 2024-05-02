@@ -3118,9 +3118,9 @@ define <2 x i48> @umulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32I-NEXT:    sw s10, 16(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    sw s11, 12(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    lw s8, 0(a1)
-; RV32I-NEXT:    lw s11, 4(a1)
+; RV32I-NEXT:    lhu s11, 4(a1)
 ; RV32I-NEXT:    lw s10, 8(a1)
-; RV32I-NEXT:    lw s9, 12(a1)
+; RV32I-NEXT:    lhu s9, 12(a1)
 ; RV32I-NEXT:    lw s3, 0(a2)
 ; RV32I-NEXT:    lhu s4, 4(a2)
 ; RV32I-NEXT:    lw s2, 8(a2)
@@ -3259,13 +3259,13 @@ define <2 x i48> @umulh_v2i48(<2 x i48> %x, <2 x i48> %y) nounwind {
 ; RV32IM-LABEL: umulh_v2i48:
 ; RV32IM:       # %bb.0:
 ; RV32IM-NEXT:    lw a3, 0(a1)
-; RV32IM-NEXT:    lw a4, 4(a1)
+; RV32IM-NEXT:    lhu a4, 4(a1)
 ; RV32IM-NEXT:    lw a5, 0(a2)
 ; RV32IM-NEXT:    lhu a6, 4(a2)
 ; RV32IM-NEXT:    lw a7, 8(a2)
 ; RV32IM-NEXT:    lhu a2, 12(a2)
 ; RV32IM-NEXT:    lw t0, 8(a1)
-; RV32IM-NEXT:    lw a1, 12(a1)
+; RV32IM-NEXT:    lhu a1, 12(a1)
 ; RV32IM-NEXT:    srli t1, a3, 16
 ; RV32IM-NEXT:    slli a4, a4, 16
 ; RV32IM-NEXT:    slli a3, a3, 16

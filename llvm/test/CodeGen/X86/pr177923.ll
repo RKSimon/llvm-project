@@ -44,7 +44,7 @@ define double @PR177923_or() nounwind {
 ;
 ; X64-LABEL: PR177923_or:
 ; X64:       # %bb.0:
-; X64-NEXT:    movsd {{.*#+}} xmm0 = [NaN,0.0E+0]
+; X64-NEXT:    pcmpeqd %xmm0, %xmm0
 ; X64-NEXT:    retq
   %bc0 = bitcast <8 x i16> <i16 undef, i16 undef, i16 undef, i16 undef, i16 0, i16 0, i16 0, i16 0> to <2 x double>
   %elt = extractelement <2 x double> %bc0, i64 0

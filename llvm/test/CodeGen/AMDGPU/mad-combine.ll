@@ -795,7 +795,7 @@ define amdgpu_kernel void @combine_to_mad_fsub_2_f32(ptr addrspace(1) noalias %o
 ; SI-DENORM-FASTFMAF-NEXT:    buffer_load_dword v4, v[0:1], s[4:7], 0 addr64 offset:8 glc
 ; SI-DENORM-FASTFMAF-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-FASTFMAF-NEXT:    s_mov_b64 s[2:3], s[6:7]
-; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v2, -v2, v3, -v4
+; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v2, v2, -v3, -v4
 ; SI-DENORM-FASTFMAF-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-FASTFMAF-NEXT:    s_endpgm
 ;
@@ -883,8 +883,8 @@ define amdgpu_kernel void @combine_to_mad_fsub_2_f32_2uses_neg(ptr addrspace(1) 
 ; SI-DENORM-FASTFMAF-NEXT:    buffer_load_dword v5, v[0:1], s[4:7], 0 addr64 offset:12 glc
 ; SI-DENORM-FASTFMAF-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-FASTFMAF-NEXT:    s_mov_b64 s[2:3], s[6:7]
-; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v4, -v2, v3, -v4
-; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v2, -v2, v3, -v5
+; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v4, v2, -v3, -v4
+; SI-DENORM-FASTFMAF-NEXT:    v_fma_f32 v2, v2, -v3, -v5
 ; SI-DENORM-FASTFMAF-NEXT:    buffer_store_dword v4, v[0:1], s[0:3], 0 addr64
 ; SI-DENORM-FASTFMAF-NEXT:    s_waitcnt vmcnt(0)
 ; SI-DENORM-FASTFMAF-NEXT:    buffer_store_dword v2, v[0:1], s[0:3], 0 addr64 offset:4

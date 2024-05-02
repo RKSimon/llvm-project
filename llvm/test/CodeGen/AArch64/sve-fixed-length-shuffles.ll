@@ -54,8 +54,8 @@ define void @hang_when_merging_stores_after_legalisation_intrinsic(ptr %a, <2 x 
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d0 killed $d0 def $q0
 ; CHECK-NEXT:    dup v0.4s, v0.s[0]
-; CHECK-NEXT:    mov v1.16b, v0.16b
-; CHECK-NEXT:    st2 { v0.4s, v1.4s }, [x0]
+; CHECK-NEXT:    mov z0.q, q0
+; CHECK-NEXT:    str z0, [x0]
 ; CHECK-NEXT:    ret
   %splat = shufflevector <2 x i32> %b, <2 x i32> poison, <4 x i32> zeroinitializer
   %interleaved.vec = call <8 x i32> @llvm.vector.interleave2.v8i32(<4 x i32> %splat, <4 x i32> %splat)

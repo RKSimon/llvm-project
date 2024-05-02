@@ -14,10 +14,11 @@ define void @compressstore_v8f16_v8i16(ptr %base, <8 x half> %V, <8 x i16> %trig
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512F-NEXT:    vpcmpeqw %xmm2, %xmm1, %xmm1
+; AVX512F-NEXT:    vmovd %xmm1, %ecx
 ; AVX512F-NEXT:    vpmovsxwq %xmm1, %zmm1
 ; AVX512F-NEXT:    vptestmq %zmm1, %zmm1, %k0
 ; AVX512F-NEXT:    kmovw %k0, %eax
-; AVX512F-NEXT:    testb $1, %al
+; AVX512F-NEXT:    testb $1, %cl
 ; AVX512F-NEXT:    jne .LBB0_1
 ; AVX512F-NEXT:  # %bb.2: # %else
 ; AVX512F-NEXT:    testb $2, %al
@@ -94,8 +95,9 @@ define void @compressstore_v8f16_v8i16(ptr %base, <8 x half> %V, <8 x i16> %trig
 ; AVX512BW:       # %bb.0:
 ; AVX512BW-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
 ; AVX512BW-NEXT:    vptestnmw %zmm1, %zmm1, %k0
+; AVX512BW-NEXT:    kmovd %k0, %ecx
 ; AVX512BW-NEXT:    kmovd %k0, %eax
-; AVX512BW-NEXT:    testb $1, %al
+; AVX512BW-NEXT:    testb $1, %cl
 ; AVX512BW-NEXT:    jne .LBB0_1
 ; AVX512BW-NEXT:  # %bb.2: # %else
 ; AVX512BW-NEXT:    testb $2, %al
@@ -171,8 +173,9 @@ define void @compressstore_v8f16_v8i16(ptr %base, <8 x half> %V, <8 x i16> %trig
 ; AVX512VLBW-LABEL: compressstore_v8f16_v8i16:
 ; AVX512VLBW:       # %bb.0:
 ; AVX512VLBW-NEXT:    vptestnmw %xmm1, %xmm1, %k0
+; AVX512VLBW-NEXT:    kmovd %k0, %ecx
 ; AVX512VLBW-NEXT:    kmovd %k0, %eax
-; AVX512VLBW-NEXT:    testb $1, %al
+; AVX512VLBW-NEXT:    testb $1, %cl
 ; AVX512VLBW-NEXT:    jne .LBB0_1
 ; AVX512VLBW-NEXT:  # %bb.2: # %else
 ; AVX512VLBW-NEXT:    testb $2, %al
@@ -268,10 +271,11 @@ define void @compressstore_v16f16_v16i16(ptr %base, <16 x half> %V, <16 x i16> %
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512F-NEXT:    vpcmpeqw %ymm2, %ymm1, %ymm1
+; AVX512F-NEXT:    vmovd %xmm1, %ecx
 ; AVX512F-NEXT:    vpmovsxwd %ymm1, %zmm1
 ; AVX512F-NEXT:    vptestmd %zmm1, %zmm1, %k0
 ; AVX512F-NEXT:    kmovw %k0, %eax
-; AVX512F-NEXT:    testb $1, %al
+; AVX512F-NEXT:    testb $1, %cl
 ; AVX512F-NEXT:    jne .LBB1_1
 ; AVX512F-NEXT:  # %bb.2: # %else
 ; AVX512F-NEXT:    testb $2, %al
@@ -738,8 +742,8 @@ define void @compressstore_v32f16_v32i16(ptr %base, <32 x half> %V, <32 x i16> %
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX512F-NEXT:    vpcmpeqw %ymm2, %ymm1, %ymm3
-; AVX512F-NEXT:    vpmovsxwd %ymm3, %zmm3
-; AVX512F-NEXT:    vptestmd %zmm3, %zmm3, %k0
+; AVX512F-NEXT:    vpmovsxwd %ymm3, %zmm4
+; AVX512F-NEXT:    vptestmd %zmm4, %zmm4, %k0
 ; AVX512F-NEXT:    kmovw %k0, %ecx
 ; AVX512F-NEXT:    vextracti64x4 $1, %zmm1, %ymm1
 ; AVX512F-NEXT:    vpcmpeqw %ymm2, %ymm1, %ymm1
@@ -748,7 +752,8 @@ define void @compressstore_v32f16_v32i16(ptr %base, <32 x half> %V, <32 x i16> %
 ; AVX512F-NEXT:    kmovw %k0, %eax
 ; AVX512F-NEXT:    shll $16, %eax
 ; AVX512F-NEXT:    orl %ecx, %eax
-; AVX512F-NEXT:    testb $1, %al
+; AVX512F-NEXT:    vmovd %xmm3, %ecx
+; AVX512F-NEXT:    testb $1, %cl
 ; AVX512F-NEXT:    jne .LBB2_1
 ; AVX512F-NEXT:  # %bb.2: # %else
 ; AVX512F-NEXT:    testb $2, %al

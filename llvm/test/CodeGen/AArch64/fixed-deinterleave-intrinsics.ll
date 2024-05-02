@@ -313,12 +313,15 @@ define void @interleave_ptr_factor2(ptr %ptr, <2 x ptr> %l, <2 x ptr> %r) {
 define void @deinterleave_wide_i16_factor2(ptr %ptr) #0 {
 ; NEON-LABEL: deinterleave_wide_i16_factor2:
 ; NEON:       // %bb.0:
-; NEON-NEXT:    ld2 { v0.8h, v1.8h }, [x0], #32
-; NEON-NEXT:    ld2 { v2.8h, v3.8h }, [x0]
+; NEON-NEXT:    ldr q0, [x0, #48]
+; NEON-NEXT:    ld2 { v1.8h, v2.8h }, [x0], #32
+; NEON-NEXT:    ldr q3, [x0]
+; NEON-NEXT:    uzp2 v4.8h, v3.8h, v0.8h
+; NEON-NEXT:    uzp1 v0.8h, v3.8h, v0.8h
+; NEON-NEXT:    // fake_use: $q1
 ; NEON-NEXT:    // fake_use: $q0
-; NEON-NEXT:    // fake_use: $q2
-; NEON-NEXT:    // fake_use: $q1 $q0_q1
-; NEON-NEXT:    // fake_use: $q3 $q2_q3
+; NEON-NEXT:    // fake_use: $q2 $q1_q2
+; NEON-NEXT:    // fake_use: $q4
 ; NEON-NEXT:    ret
 ;
 ; SVE-FIXED-LABEL: deinterleave_wide_i16_factor2:
@@ -345,18 +348,21 @@ define void @interleave_wide_ptr_factor2(ptr %ptr, <8 x ptr> %l, <8 x ptr> %r) {
 ; NEON-LABEL: interleave_wide_ptr_factor2:
 ; NEON:       // %bb.0:
 ; NEON-NEXT:    // kill: def $q7 killed $q7 killed $q6_q7 def $q6_q7
+; NEON-NEXT:    // kill: def $q4 killed $q4 killed $q3_q4 def $q3_q4
 ; NEON-NEXT:    mov v17.16b, v6.16b
-; NEON-NEXT:    // kill: def $q5 killed $q5 killed $q4_q5 def $q4_q5
-; NEON-NEXT:    mov v19.16b, v4.16b
-; NEON-NEXT:    add x8, x0, #64
+; NEON-NEXT:    add x8, x0, #96
+; NEON-NEXT:    add x9, x0, #64
 ; NEON-NEXT:    mov v6.16b, v3.16b
+; NEON-NEXT:    mov v3.16b, v0.16b
+; NEON-NEXT:    zip2 v0.2d, v1.2d, v5.2d
+; NEON-NEXT:    zip1 v1.2d, v1.2d, v5.2d
 ; NEON-NEXT:    mov v16.16b, v2.16b
-; NEON-NEXT:    mov v4.16b, v1.16b
-; NEON-NEXT:    mov v18.16b, v0.16b
-; NEON-NEXT:    st2 { v16.2d, v17.2d }, [x8], #32
-; NEON-NEXT:    st2 { v18.2d, v19.2d }, [x0], #32
 ; NEON-NEXT:    st2 { v6.2d, v7.2d }, [x8]
-; NEON-NEXT:    st2 { v4.2d, v5.2d }, [x0]
+; NEON-NEXT:    mov x8, x0
+; NEON-NEXT:    st2 { v3.2d, v4.2d }, [x8], #32
+; NEON-NEXT:    str q0, [x0, #48]
+; NEON-NEXT:    str q1, [x8]
+; NEON-NEXT:    st2 { v16.2d, v17.2d }, [x9]
 ; NEON-NEXT:    ret
 ;
 ; SVE-FIXED-LABEL: interleave_wide_ptr_factor2:

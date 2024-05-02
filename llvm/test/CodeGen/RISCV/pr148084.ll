@@ -165,20 +165,14 @@ define fastcc i16 @search_tx_type() #0 {
 ; CHECK-NEXT:  .LBB0_52: # %bb
 ; CHECK-NEXT:    sgtz a1, a1
 ; CHECK-NEXT:    slli a1, a1, 15
-; CHECK-NEXT:    bset a3, zero, a2
-; CHECK-NEXT:    and a3, a3, a1
-; CHECK-NEXT:    bnez a3, .LBB0_54
-; CHECK-NEXT:  # %bb.53: # %bb
-; CHECK-NEXT:    lui a2, 16
-; CHECK-NEXT:    addi a2, a2, -1
-; CHECK-NEXT:    j .LBB0_55
-; CHECK-NEXT:  .LBB0_54:
-; CHECK-NEXT:    li a3, -2
-; CHECK-NEXT:    rol a2, a3, a2
-; CHECK-NEXT:  .LBB0_55: # %bb
-; CHECK-NEXT:    and a1, a1, a2
+; CHECK-NEXT:    bset a2, zero, a2
+; CHECK-NEXT:    and a3, a2, a1
+; CHECK-NEXT:    seqz a3, a3
+; CHECK-NEXT:    addi a3, a3, -1
+; CHECK-NEXT:    and a2, a2, a3
+; CHECK-NEXT:    andn a1, a1, a2
 ; CHECK-NEXT:    andn a0, a0, a1
-; CHECK-NEXT:  # %bb.56: # %get_tx_mask.exit
+; CHECK-NEXT:  # %bb.53: # %get_tx_mask.exit
 ; CHECK-NEXT:    seqz a1, a0
 ; CHECK-NEXT:    addi a1, a1, -1
 ; CHECK-NEXT:    and a0, a0, a1

@@ -1243,46 +1243,37 @@ define <16 x float> @PR218379(ptr %p0, ptr %p1) nounwind {
 define <8 x i64> @PR235659(<8 x i64> %a) {
 ; X86-LABEL: PR235659:
 ; X86:       # %bb.0:
-; X86-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; X86-NEXT:    vpmovsxbq {{.*#+}} zmm1 = [0,6,5,11,6,3,2,15]
-; X86-NEXT:    vpermi2q %zmm2, %zmm0, %zmm1
+; X86-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; X86-NEXT:    vpmovsxbq {{.*#+}} zmm3 = [0,6,5,11,6,3,2,15]
+; X86-NEXT:    vpermi2q %zmm1, %zmm0, %zmm3
 ; X86-NEXT:    vpmovsxdq {{.*#+}} zmm0 = [1431655765,0,1227133513,2147483647,1431655765,1717986918,18446744071562067968,1717986918]
-; X86-NEXT:    vpmuludq %zmm0, %zmm1, %zmm3
-; X86-NEXT:    vpmovsxbd {{.*#+}} zmm2 = [0,0,0,0,0,0,0,0,0,0,0,0,4294967295,0,0,0]
-; X86-NEXT:    vpmuludq %zmm2, %zmm1, %zmm4
+; X86-NEXT:    vpmuludq %zmm0, %zmm3, %zmm2
+; X86-NEXT:    vpmovsxbd {{.*#+}} zmm1 = [0,0,0,0,0,0,0,0,0,0,0,0,4294967295,0,0,0]
+; X86-NEXT:    vpmuludq %zmm1, %zmm3, %zmm4
 ; X86-NEXT:    vpsllq $32, %zmm4, %zmm4
-; X86-NEXT:    vpaddq %zmm4, %zmm3, %zmm4
-; X86-NEXT:    vpsraq $32, %zmm1, %zmm3
+; X86-NEXT:    vpaddq %zmm4, %zmm2, %zmm4
+; X86-NEXT:    vpsraq $32, %zmm3, %zmm2
 ; X86-NEXT:    vpmovzxdq {{.*#+}} zmm5 = [1431655766,0,613566757,4294967295,1431655766,1717986919,1,1717986919]
-; X86-NEXT:    vpmuludq %zmm5, %zmm3, %zmm6
-; X86-NEXT:    vpmuludq %zmm5, %zmm1, %zmm7
-; X86-NEXT:    vpsrlq $32, %zmm7, %zmm7
-; X86-NEXT:    vpaddq %zmm7, %zmm6, %zmm6
-; X86-NEXT:    vpsrlq $32, %zmm3, %zmm7
-; X86-NEXT:    vpmuludq %zmm5, %zmm7, %zmm5
+; X86-NEXT:    vpmuludq %zmm5, %zmm2, %zmm6
+; X86-NEXT:    vpmuludq %zmm5, %zmm3, %zmm3
+; X86-NEXT:    vpsrlq $32, %zmm3, %zmm3
+; X86-NEXT:    vpaddq %zmm3, %zmm6, %zmm3
+; X86-NEXT:    vpsrlq $32, %zmm2, %zmm6
+; X86-NEXT:    vpmuludq %zmm5, %zmm6, %zmm5
 ; X86-NEXT:    vpsllq $32, %zmm5, %zmm5
-; X86-NEXT:    vpaddq %zmm5, %zmm6, %zmm5
-; X86-NEXT:    vpandq {{\.?LCPI[0-9]+_[0-9]+}}{1to8}, %zmm5, %zmm6
-; X86-NEXT:    vpaddq %zmm6, %zmm4, %zmm4
+; X86-NEXT:    vpaddq %zmm5, %zmm3, %zmm3
+; X86-NEXT:    vpandq {{\.?LCPI[0-9]+_[0-9]+}}{1to8}, %zmm3, %zmm5
+; X86-NEXT:    vpaddq %zmm5, %zmm4, %zmm4
 ; X86-NEXT:    vpsraq $32, %zmm4, %zmm4
-; X86-NEXT:    vpsraq $32, %zmm5, %zmm5
-; X86-NEXT:    vpaddq %zmm4, %zmm5, %zmm4
-; X86-NEXT:    vpmuludq %zmm2, %zmm3, %zmm2
-; X86-NEXT:    vpmuludq %zmm0, %zmm7, %zmm5
-; X86-NEXT:    vpaddq %zmm5, %zmm2, %zmm2
-; X86-NEXT:    vpsllq $32, %zmm2, %zmm2
-; X86-NEXT:    vpmuludq %zmm0, %zmm3, %zmm0
-; X86-NEXT:    vpaddq %zmm2, %zmm0, %zmm0
-; X86-NEXT:    vpsrlq $32, %zmm1, %zmm2
-; X86-NEXT:    vpmovsxbq {{.*#+}} zmm3 = [0,1,0,18446744073709551615,0,0,1,0]
-; X86-NEXT:    vpmuludq %zmm3, %zmm2, %zmm2
-; X86-NEXT:    vpmuludq {{\.?LCPI[0-9]+_[0-9]+}}, %zmm1, %zmm5 # [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-; X86-NEXT:    vpaddq %zmm2, %zmm5, %zmm2
-; X86-NEXT:    vpmuludq %zmm3, %zmm1, %zmm1
-; X86-NEXT:    vpsllq $32, %zmm2, %zmm2
-; X86-NEXT:    vpaddq %zmm2, %zmm1, %zmm1
+; X86-NEXT:    vpsraq $32, %zmm3, %zmm3
+; X86-NEXT:    vpaddq %zmm4, %zmm3, %zmm3
+; X86-NEXT:    vpmuludq %zmm1, %zmm2, %zmm1
+; X86-NEXT:    vpmuludq %zmm0, %zmm6, %zmm4
+; X86-NEXT:    vpaddq %zmm4, %zmm1, %zmm1
+; X86-NEXT:    vpmuludq %zmm0, %zmm2, %zmm0
+; X86-NEXT:    vpsllq $32, %zmm1, %zmm1
 ; X86-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
-; X86-NEXT:    vpaddq %zmm4, %zmm0, %zmm0
+; X86-NEXT:    vpaddq %zmm3, %zmm0, %zmm0
 ; X86-NEXT:    vpsrlq $63, %zmm0, %zmm1
 ; X86-NEXT:    vpsraq $1, %zmm0, %zmm0
 ; X86-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
@@ -1307,29 +1298,20 @@ define <8 x i64> @PR235659(<8 x i64> %a) {
 ; X64-NEXT:    vpsrlq $32, %zmm4, %zmm7
 ; X64-NEXT:    vpmuludq %zmm5, %zmm7, %zmm8
 ; X64-NEXT:    vpsllq $32, %zmm8, %zmm8
-; X64-NEXT:    vpmuludq %zmm5, %zmm2, %zmm5
-; X64-NEXT:    vpsrlq $32, %zmm5, %zmm5
-; X64-NEXT:    vpaddq %zmm5, %zmm6, %zmm5
-; X64-NEXT:    vpaddq %zmm8, %zmm5, %zmm5
-; X64-NEXT:    vpandq {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %zmm5, %zmm6
-; X64-NEXT:    vpaddq %zmm6, %zmm1, %zmm1
+; X64-NEXT:    vpmuludq %zmm5, %zmm2, %zmm2
+; X64-NEXT:    vpsrlq $32, %zmm2, %zmm2
+; X64-NEXT:    vpaddq %zmm2, %zmm6, %zmm2
+; X64-NEXT:    vpaddq %zmm8, %zmm2, %zmm2
+; X64-NEXT:    vpandq {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to8}, %zmm2, %zmm5
+; X64-NEXT:    vpaddq %zmm5, %zmm1, %zmm1
 ; X64-NEXT:    vpsraq $32, %zmm1, %zmm1
-; X64-NEXT:    vpsraq $32, %zmm5, %zmm5
-; X64-NEXT:    vpaddq %zmm1, %zmm5, %zmm1
-; X64-NEXT:    vpmuludq %zmm3, %zmm4, %zmm3
-; X64-NEXT:    vpmuludq %zmm0, %zmm7, %zmm5
-; X64-NEXT:    vpaddq %zmm5, %zmm3, %zmm3
-; X64-NEXT:    vpsllq $32, %zmm3, %zmm3
-; X64-NEXT:    vpmuludq %zmm0, %zmm4, %zmm0
-; X64-NEXT:    vpaddq %zmm3, %zmm0, %zmm0
-; X64-NEXT:    vpsrlq $32, %zmm2, %zmm3
-; X64-NEXT:    vpmovsxbq {{.*#+}} zmm4 = [0,1,0,18446744073709551615,0,0,1,0]
-; X64-NEXT:    vpmuludq %zmm4, %zmm3, %zmm3
-; X64-NEXT:    vpmuludq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm2, %zmm5 # [0,0,0,4294967295,0,0,0,0]
-; X64-NEXT:    vpaddq %zmm3, %zmm5, %zmm3
-; X64-NEXT:    vpsllq $32, %zmm3, %zmm3
-; X64-NEXT:    vpmuludq %zmm4, %zmm2, %zmm2
+; X64-NEXT:    vpsraq $32, %zmm2, %zmm2
+; X64-NEXT:    vpaddq %zmm1, %zmm2, %zmm1
+; X64-NEXT:    vpmuludq %zmm3, %zmm4, %zmm2
+; X64-NEXT:    vpmuludq %zmm0, %zmm7, %zmm3
 ; X64-NEXT:    vpaddq %zmm3, %zmm2, %zmm2
+; X64-NEXT:    vpsllq $32, %zmm2, %zmm2
+; X64-NEXT:    vpmuludq %zmm0, %zmm4, %zmm0
 ; X64-NEXT:    vpaddq %zmm2, %zmm0, %zmm0
 ; X64-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; X64-NEXT:    vpsrlq $63, %zmm0, %zmm1
@@ -1351,7 +1333,7 @@ define double @max_splat1_v8f64(<8 x double> %v) nounwind #0 {
 ; X86-NEXT:    movl %esp, %ebp
 ; X86-NEXT:    andl $-8, %esp
 ; X86-NEXT:    subl $8, %esp
-; X86-NEXT:    vshufpd {{.*#+}} xmm1 = xmm0[1,0]
+; X86-NEXT:    vshufpd {{.*#+}} xmm1 = xmm0[1,1]
 ; X86-NEXT:    vmaxsd %xmm1, %xmm0, %xmm0
 ; X86-NEXT:    vmovsd %xmm0, (%esp)
 ; X86-NEXT:    fldl (%esp)
@@ -1362,7 +1344,7 @@ define double @max_splat1_v8f64(<8 x double> %v) nounwind #0 {
 ;
 ; X64-LABEL: max_splat1_v8f64:
 ; X64:       # %bb.0:
-; X64-NEXT:    vshufpd {{.*#+}} xmm1 = xmm0[1,0]
+; X64-NEXT:    vshufpd {{.*#+}} xmm1 = xmm0[1,1]
 ; X64-NEXT:    vmaxsd %xmm1, %xmm0, %xmm0
 ; X64-NEXT:    vzeroupper
 ; X64-NEXT:    retq

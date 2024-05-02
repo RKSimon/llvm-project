@@ -290,36 +290,36 @@ define float @fma_combine_no_ice_safe(ptr %ptmp, ptr %ptmp2, ptr %ptmp6, ptr %pt
 ; CHECK-FAST-NEXT:    vspltisw 2, 1
 ; CHECK-FAST-NEXT:    lfs 0, 0(3)
 ; CHECK-FAST-NEXT:    addis 3, 2, .LCPI8_0@toc@ha
-; CHECK-FAST-NEXT:    lfs 5, 0(6)
 ; CHECK-FAST-NEXT:    lfs 2, 0(4)
-; CHECK-FAST-NEXT:    xvcvsxwdp 3, 34
-; CHECK-FAST-NEXT:    lfs 1, .LCPI8_0@toc@l(3)
+; CHECK-FAST-NEXT:    lfs 6, 0(6)
+; CHECK-FAST-NEXT:    xvcvsxwdp 4, 34
+; CHECK-FAST-NEXT:    lfs 3, .LCPI8_0@toc@l(3)
 ; CHECK-FAST-NEXT:    addis 3, 2, .LCPI8_1@toc@ha
-; CHECK-FAST-NEXT:    fmr 4, 3
-; CHECK-FAST-NEXT:    xsnmaddasp 3, 5, 1
-; CHECK-FAST-NEXT:    xsmaddasp 4, 0, 1
 ; CHECK-FAST-NEXT:    lfs 1, .LCPI8_1@toc@l(3)
+; CHECK-FAST-NEXT:    fmr 5, 4
+; CHECK-FAST-NEXT:    xsnmaddasp 4, 6, 3
+; CHECK-FAST-NEXT:    xsmaddasp 5, 0, 3
 ; CHECK-FAST-NEXT:    lfs 0, 0(5)
-; CHECK-FAST-NEXT:    xsmaddasp 1, 2, 4
-; CHECK-FAST-NEXT:    xsmaddasp 1, 3, 0
+; CHECK-FAST-NEXT:    xsmaddasp 1, 2, 5
+; CHECK-FAST-NEXT:    xsmaddasp 1, 4, 0
 ; CHECK-FAST-NEXT:    blr
 ;
 ; CHECK-FAST-NOVSX-LABEL: fma_combine_no_ice_safe:
 ; CHECK-FAST-NOVSX:       # %bb.0:
 ; CHECK-FAST-NOVSX-NEXT:    lfs 0, 0(3)
 ; CHECK-FAST-NOVSX-NEXT:    addis 3, 2, .LCPI8_0@toc@ha
-; CHECK-FAST-NOVSX-NEXT:    lfs 5, 0(6)
 ; CHECK-FAST-NOVSX-NEXT:    lfs 1, 0(4)
+; CHECK-FAST-NOVSX-NEXT:    lfs 5, 0(6)
 ; CHECK-FAST-NOVSX-NEXT:    lfs 4, 0(5)
 ; CHECK-FAST-NOVSX-NEXT:    lfs 2, .LCPI8_0@toc@l(3)
 ; CHECK-FAST-NOVSX-NEXT:    addis 3, 2, .LCPI8_1@toc@ha
 ; CHECK-FAST-NOVSX-NEXT:    lfs 3, .LCPI8_1@toc@l(3)
 ; CHECK-FAST-NOVSX-NEXT:    addis 3, 2, .LCPI8_2@toc@ha
+; CHECK-FAST-NOVSX-NEXT:    lfs 6, .LCPI8_2@toc@l(3)
 ; CHECK-FAST-NOVSX-NEXT:    fmadds 0, 0, 3, 2
-; CHECK-FAST-NOVSX-NEXT:    fnmadds 2, 5, 3, 2
-; CHECK-FAST-NOVSX-NEXT:    lfs 3, .LCPI8_2@toc@l(3)
-; CHECK-FAST-NOVSX-NEXT:    fmadds 0, 1, 0, 3
-; CHECK-FAST-NOVSX-NEXT:    fmadds 1, 2, 4, 0
+; CHECK-FAST-NOVSX-NEXT:    fmadds 0, 1, 0, 6
+; CHECK-FAST-NOVSX-NEXT:    fnmadds 1, 5, 3, 2
+; CHECK-FAST-NOVSX-NEXT:    fmadds 1, 1, 4, 0
 ; CHECK-FAST-NOVSX-NEXT:    blr
 ;
 ; CHECK-LABEL: fma_combine_no_ice_safe:
@@ -327,18 +327,18 @@ define float @fma_combine_no_ice_safe(ptr %ptmp, ptr %ptmp2, ptr %ptmp6, ptr %pt
 ; CHECK-NEXT:    vspltisw 2, 1
 ; CHECK-NEXT:    lfs 0, 0(3)
 ; CHECK-NEXT:    addis 3, 2, .LCPI8_0@toc@ha
-; CHECK-NEXT:    lfs 5, 0(6)
 ; CHECK-NEXT:    lfs 2, 0(4)
-; CHECK-NEXT:    xvcvsxwdp 3, 34
-; CHECK-NEXT:    lfs 1, .LCPI8_0@toc@l(3)
+; CHECK-NEXT:    lfs 6, 0(6)
+; CHECK-NEXT:    xvcvsxwdp 4, 34
+; CHECK-NEXT:    lfs 3, .LCPI8_0@toc@l(3)
 ; CHECK-NEXT:    addis 3, 2, .LCPI8_1@toc@ha
-; CHECK-NEXT:    fmr 4, 3
-; CHECK-NEXT:    xsnmaddasp 3, 5, 1
-; CHECK-NEXT:    xsmaddasp 4, 0, 1
 ; CHECK-NEXT:    lfs 1, .LCPI8_1@toc@l(3)
+; CHECK-NEXT:    fmr 5, 4
+; CHECK-NEXT:    xsnmaddasp 4, 6, 3
+; CHECK-NEXT:    xsmaddasp 5, 0, 3
 ; CHECK-NEXT:    lfs 0, 0(5)
-; CHECK-NEXT:    xsmaddasp 1, 2, 4
-; CHECK-NEXT:    xsmaddasp 1, 3, 0
+; CHECK-NEXT:    xsmaddasp 1, 2, 5
+; CHECK-NEXT:    xsmaddasp 1, 4, 0
 ; CHECK-NEXT:    blr
   %tmp = load float, ptr %ptmp, align 4
   %tmp2 = load float, ptr %ptmp2, align 4
@@ -361,12 +361,13 @@ define dso_local double @getNegatedExpression_crash(double %x, double %y) {
 ; CHECK-FAST:       # %bb.0:
 ; CHECK-FAST-NEXT:    vspltisw 2, -1
 ; CHECK-FAST-NEXT:    addis 3, 2, .LCPI9_0@toc@ha
-; CHECK-FAST-NEXT:    xvcvsxwdp 4, 34
+; CHECK-FAST-NEXT:    vspltisw 3, 1
+; CHECK-FAST-NEXT:    xvcvsxwdp 0, 34
 ; CHECK-FAST-NEXT:    lfs 3, .LCPI9_0@toc@l(3)
-; CHECK-FAST-NEXT:    xssubdp 0, 1, 4
-; CHECK-FAST-NEXT:    xsmaddadp 4, 1, 3
-; CHECK-FAST-NEXT:    xsmaddadp 0, 4, 2
-; CHECK-FAST-NEXT:    fmr 1, 0
+; CHECK-FAST-NEXT:    xsmaddadp 0, 1, 3
+; CHECK-FAST-NEXT:    xvcvsxwdp 3, 35
+; CHECK-FAST-NEXT:    xsadddp 1, 1, 3
+; CHECK-FAST-NEXT:    xsmaddadp 1, 0, 2
 ; CHECK-FAST-NEXT:    blr
 ;
 ; CHECK-FAST-NOVSX-LABEL: getNegatedExpression_crash:
@@ -375,21 +376,24 @@ define dso_local double @getNegatedExpression_crash(double %x, double %y) {
 ; CHECK-FAST-NOVSX-NEXT:    lfs 0, .LCPI9_0@toc@l(3)
 ; CHECK-FAST-NOVSX-NEXT:    addis 3, 2, .LCPI9_1@toc@ha
 ; CHECK-FAST-NOVSX-NEXT:    lfs 3, .LCPI9_1@toc@l(3)
-; CHECK-FAST-NOVSX-NEXT:    fmadd 3, 1, 3, 0
-; CHECK-FAST-NOVSX-NEXT:    fsub 0, 1, 0
-; CHECK-FAST-NOVSX-NEXT:    fmadd 1, 3, 2, 0
+; CHECK-FAST-NOVSX-NEXT:    addis 3, 2, .LCPI9_2@toc@ha
+; CHECK-FAST-NOVSX-NEXT:    fmadd 0, 1, 3, 0
+; CHECK-FAST-NOVSX-NEXT:    lfs 3, .LCPI9_2@toc@l(3)
+; CHECK-FAST-NOVSX-NEXT:    fadd 1, 1, 3
+; CHECK-FAST-NOVSX-NEXT:    fmadd 1, 0, 2, 1
 ; CHECK-FAST-NOVSX-NEXT:    blr
 ;
 ; CHECK-LABEL: getNegatedExpression_crash:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vspltisw 2, -1
 ; CHECK-NEXT:    addis 3, 2, .LCPI9_0@toc@ha
-; CHECK-NEXT:    xvcvsxwdp 4, 34
+; CHECK-NEXT:    vspltisw 3, 1
+; CHECK-NEXT:    xvcvsxwdp 0, 34
 ; CHECK-NEXT:    lfs 3, .LCPI9_0@toc@l(3)
-; CHECK-NEXT:    xssubdp 0, 1, 4
-; CHECK-NEXT:    xsmaddadp 4, 1, 3
-; CHECK-NEXT:    xsmaddadp 0, 4, 2
-; CHECK-NEXT:    fmr 1, 0
+; CHECK-NEXT:    xsmaddadp 0, 1, 3
+; CHECK-NEXT:    xvcvsxwdp 3, 35
+; CHECK-NEXT:    xsadddp 1, 1, 3
+; CHECK-NEXT:    xsmaddadp 1, 0, 2
 ; CHECK-NEXT:    blr
   %neg = fneg reassoc double %x
   %fma = call reassoc nsz double @llvm.fma.f64(double %neg, double 42.0, double -1.0)

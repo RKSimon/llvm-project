@@ -8,7 +8,7 @@ define void @factor2_v8i8(ptr %src) {
 ; CHECK-NEXT:    .pad #32
 ; CHECK-NEXT:    sub sp, #32
 ; CHECK-NEXT:    vldrw.u32 q1, [r0]
-; CHECK-NEXT:    mov r0, sp
+; CHECK-NEXT:    add r0, sp, #16
 ; CHECK-NEXT:    vmov.u8 r1, q1[8]
 ; CHECK-NEXT:    vmov.16 q0[0], r1
 ; CHECK-NEXT:    vmov.u8 r1, q1[9]
@@ -42,7 +42,7 @@ define void @factor2_v8i8(ptr %src) {
 ; CHECK-NEXT:    vmov.u8 r1, q1[7]
 ; CHECK-NEXT:    vmov.16 q2[7], r1
 ; CHECK-NEXT:    vstrh.32 q0, [r0, #8]
-; CHECK-NEXT:    add r1, sp, #16
+; CHECK-NEXT:    mov r1, sp
 ; CHECK-NEXT:    vshr.u32 q0, q0, #16
 ; CHECK-NEXT:    vstrh.32 q2, [r0]
 ; CHECK-NEXT:    vstrh.32 q0, [r1, #8]
@@ -375,22 +375,55 @@ define void @factor4_v8i32(ptr %src) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    .vsave {d8, d9, d10, d11, d12, d13, d14, d15}
 ; CHECK-NEXT:    vpush {d8, d9, d10, d11, d12, d13, d14, d15}
-; CHECK-NEXT:    vld40.32 {q4, q5, q6, q7}, [r0]
-; CHECK-NEXT:    vld41.32 {q4, q5, q6, q7}, [r0]
-; CHECK-NEXT:    vld42.32 {q4, q5, q6, q7}, [r0]
-; CHECK-NEXT:    vld43.32 {q4, q5, q6, q7}, [r0]!
-; CHECK-NEXT:    @ fake_use: $q4
-; CHECK-NEXT:    @ fake_use: $q5
-; CHECK-NEXT:    @ fake_use: $q6
+; CHECK-NEXT:    .pad #64
+; CHECK-NEXT:    sub sp, #64
 ; CHECK-NEXT:    vld40.32 {q0, q1, q2, q3}, [r0]
-; CHECK-NEXT:    @ fake_use: $q7
+; CHECK-NEXT:    vldrw.u32 q4, [r0, #112]
+; CHECK-NEXT:    mov r1, r0
+; CHECK-NEXT:    vldrw.u32 q6, [r0, #96]
 ; CHECK-NEXT:    vld41.32 {q0, q1, q2, q3}, [r0]
+; CHECK-NEXT:    vstrw.32 q4, [sp, #48] @ 16-byte Spill
+; CHECK-NEXT:    vldrw.u32 q5, [sp, #48] @ 16-byte Reload
+; CHECK-NEXT:    vstrw.32 q6, [sp, #16] @ 16-byte Spill
 ; CHECK-NEXT:    vld42.32 {q0, q1, q2, q3}, [r0]
-; CHECK-NEXT:    vld43.32 {q0, q1, q2, q3}, [r0]
-; CHECK-NEXT:    @ fake_use: $q0
-; CHECK-NEXT:    @ fake_use: $q1
+; CHECK-NEXT:    vmov.f32 s18, s27
+; CHECK-NEXT:    vmov.f32 s19, s23
+; CHECK-NEXT:    vldrw.u32 q5, [sp, #16] @ 16-byte Reload
+; CHECK-NEXT:    vld43.32 {q0, q1, q2, q3}, [r1]!
 ; CHECK-NEXT:    @ fake_use: $q2
+; CHECK-NEXT:    vmov.f32 s26, s22
 ; CHECK-NEXT:    @ fake_use: $q3
+; CHECK-NEXT:    vldrw.u32 q7, [r1]
+; CHECK-NEXT:    vstrw.32 q1, [sp, #32] @ 16-byte Spill
+; CHECK-NEXT:    vldrw.u32 q1, [r0, #80]
+; CHECK-NEXT:    vstrw.32 q0, [sp, #16] @ 16-byte Spill
+; CHECK-NEXT:    vmov.f32 s16, s31
+; CHECK-NEXT:    vmov.f32 s17, s7
+; CHECK-NEXT:    vmov.f32 s0, s4
+; CHECK-NEXT:    vstrw.32 q4, [sp] @ 16-byte Spill
+; CHECK-NEXT:    vldrw.u32 q4, [sp, #48] @ 16-byte Reload
+; CHECK-NEXT:    vmov.f32 s1, s5
+; CHECK-NEXT:    vmov.f32 s16, s29
+; CHECK-NEXT:    vmov.f32 s29, s0
+; CHECK-NEXT:    vldrw.u32 q0, [sp, #16] @ 16-byte Reload
+; CHECK-NEXT:    vmov.f32 s25, s6
+; CHECK-NEXT:    @ fake_use: $q0
+; CHECK-NEXT:    vmov.f32 s17, s5
+; CHECK-NEXT:    vldrw.u32 q1, [sp, #48] @ 16-byte Reload
+; CHECK-NEXT:    vldrw.u32 q0, [sp, #32] @ 16-byte Reload
+; CHECK-NEXT:    vmov.f32 s24, s30
+; CHECK-NEXT:    vmov.f32 s27, s18
+; CHECK-NEXT:    @ fake_use: $q0
+; CHECK-NEXT:    vldrw.u32 q0, [sp] @ 16-byte Reload
+; CHECK-NEXT:    vmov.f32 s18, s21
+; CHECK-NEXT:    vmov.f32 s19, s5
+; CHECK-NEXT:    @ fake_use: $q4
+; CHECK-NEXT:    vmov.f32 s30, s20
+; CHECK-NEXT:    @ fake_use: $q6
+; CHECK-NEXT:    vmov.f32 s31, s4
+; CHECK-NEXT:    @ fake_use: $q7
+; CHECK-NEXT:    @ fake_use: $q0
+; CHECK-NEXT:    add sp, #64
 ; CHECK-NEXT:    vpop {d8, d9, d10, d11, d12, d13, d14, d15}
 ; CHECK-NEXT:    bx lr
   %load = load <32 x i32>, ptr %src

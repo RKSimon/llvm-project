@@ -369,7 +369,7 @@ entry:
 define arm_aapcscc zeroext i1 @cmp_and8_short_short(ptr nocapture readonly %a, ptr nocapture readonly %b) {
 ; ARM-LABEL: cmp_and8_short_short:
 ; ARM:       @ %bb.0: @ %entry
-; ARM-NEXT:    ldrb r1, [r1]
+; ARM-NEXT:    ldrh r1, [r1]
 ; ARM-NEXT:    ldrb r0, [r0]
 ; ARM-NEXT:    and r0, r0, r1
 ; ARM-NEXT:    clz r0, r0
@@ -378,7 +378,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_short_short(ptr nocapture readonly %a, p
 ;
 ; ARMEB-LABEL: cmp_and8_short_short:
 ; ARMEB:       @ %bb.0: @ %entry
-; ARMEB-NEXT:    ldrb r1, [r1, #1]
+; ARMEB-NEXT:    ldrh r1, [r1]
 ; ARMEB-NEXT:    ldrb r0, [r0, #1]
 ; ARMEB-NEXT:    and r0, r0, r1
 ; ARMEB-NEXT:    clz r0, r0
@@ -387,7 +387,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_short_short(ptr nocapture readonly %a, p
 ;
 ; THUMB1-LABEL: cmp_and8_short_short:
 ; THUMB1:       @ %bb.0: @ %entry
-; THUMB1-NEXT:    ldrb r1, [r1]
+; THUMB1-NEXT:    ldrh r1, [r1]
 ; THUMB1-NEXT:    ldrb r2, [r0]
 ; THUMB1-NEXT:    ands r2, r1
 ; THUMB1-NEXT:    rsbs r0, r2, #0
@@ -396,7 +396,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_short_short(ptr nocapture readonly %a, p
 ;
 ; THUMB2-LABEL: cmp_and8_short_short:
 ; THUMB2:       @ %bb.0: @ %entry
-; THUMB2-NEXT:    ldrb r1, [r1]
+; THUMB2-NEXT:    ldrh r1, [r1]
 ; THUMB2-NEXT:    ldrb r0, [r0]
 ; THUMB2-NEXT:    ands r0, r1
 ; THUMB2-NEXT:    clz r0, r0
@@ -460,7 +460,7 @@ entry:
 define arm_aapcscc zeroext i1 @cmp_and8_int_int(ptr nocapture readonly %a, ptr nocapture readonly %b) {
 ; ARM-LABEL: cmp_and8_int_int:
 ; ARM:       @ %bb.0: @ %entry
-; ARM-NEXT:    ldrb r1, [r1]
+; ARM-NEXT:    ldr r1, [r1]
 ; ARM-NEXT:    ldrb r0, [r0]
 ; ARM-NEXT:    and r0, r0, r1
 ; ARM-NEXT:    clz r0, r0
@@ -469,7 +469,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_int_int(ptr nocapture readonly %a, ptr n
 ;
 ; ARMEB-LABEL: cmp_and8_int_int:
 ; ARMEB:       @ %bb.0: @ %entry
-; ARMEB-NEXT:    ldrb r1, [r1, #3]
+; ARMEB-NEXT:    ldr r1, [r1]
 ; ARMEB-NEXT:    ldrb r0, [r0, #3]
 ; ARMEB-NEXT:    and r0, r0, r1
 ; ARMEB-NEXT:    clz r0, r0
@@ -478,7 +478,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_int_int(ptr nocapture readonly %a, ptr n
 ;
 ; THUMB1-LABEL: cmp_and8_int_int:
 ; THUMB1:       @ %bb.0: @ %entry
-; THUMB1-NEXT:    ldrb r1, [r1]
+; THUMB1-NEXT:    ldr r1, [r1]
 ; THUMB1-NEXT:    ldrb r2, [r0]
 ; THUMB1-NEXT:    ands r2, r1
 ; THUMB1-NEXT:    rsbs r0, r2, #0
@@ -487,7 +487,7 @@ define arm_aapcscc zeroext i1 @cmp_and8_int_int(ptr nocapture readonly %a, ptr n
 ;
 ; THUMB2-LABEL: cmp_and8_int_int:
 ; THUMB2:       @ %bb.0: @ %entry
-; THUMB2-NEXT:    ldrb r1, [r1]
+; THUMB2-NEXT:    ldr r1, [r1]
 ; THUMB2-NEXT:    ldrb r0, [r0]
 ; THUMB2-NEXT:    ands r0, r1
 ; THUMB2-NEXT:    clz r0, r0
@@ -505,7 +505,7 @@ entry:
 define arm_aapcscc zeroext i1 @cmp_and16(ptr nocapture readonly %a, ptr nocapture readonly %b) {
 ; ARM-LABEL: cmp_and16:
 ; ARM:       @ %bb.0: @ %entry
-; ARM-NEXT:    ldrh r1, [r1]
+; ARM-NEXT:    ldr r1, [r1]
 ; ARM-NEXT:    ldrh r0, [r0]
 ; ARM-NEXT:    and r0, r0, r1
 ; ARM-NEXT:    clz r0, r0
@@ -514,7 +514,7 @@ define arm_aapcscc zeroext i1 @cmp_and16(ptr nocapture readonly %a, ptr nocaptur
 ;
 ; ARMEB-LABEL: cmp_and16:
 ; ARMEB:       @ %bb.0: @ %entry
-; ARMEB-NEXT:    ldrh r1, [r1, #2]
+; ARMEB-NEXT:    ldr r1, [r1]
 ; ARMEB-NEXT:    ldrh r0, [r0, #2]
 ; ARMEB-NEXT:    and r0, r0, r1
 ; ARMEB-NEXT:    clz r0, r0
@@ -523,7 +523,7 @@ define arm_aapcscc zeroext i1 @cmp_and16(ptr nocapture readonly %a, ptr nocaptur
 ;
 ; THUMB1-LABEL: cmp_and16:
 ; THUMB1:       @ %bb.0: @ %entry
-; THUMB1-NEXT:    ldrh r1, [r1]
+; THUMB1-NEXT:    ldr r1, [r1]
 ; THUMB1-NEXT:    ldrh r2, [r0]
 ; THUMB1-NEXT:    ands r2, r1
 ; THUMB1-NEXT:    rsbs r0, r2, #0
@@ -532,7 +532,7 @@ define arm_aapcscc zeroext i1 @cmp_and16(ptr nocapture readonly %a, ptr nocaptur
 ;
 ; THUMB2-LABEL: cmp_and16:
 ; THUMB2:       @ %bb.0: @ %entry
-; THUMB2-NEXT:    ldrh r1, [r1]
+; THUMB2-NEXT:    ldr r1, [r1]
 ; THUMB2-NEXT:    ldrh r0, [r0]
 ; THUMB2-NEXT:    ands r0, r1
 ; THUMB2-NEXT:    clz r0, r0

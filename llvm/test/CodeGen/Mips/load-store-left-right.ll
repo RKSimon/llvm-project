@@ -670,11 +670,11 @@ define void @copy_struct_S0() nounwind {
 ; MIPS32-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; MIPS32-NEXT:    addu $1, $2, $25
 ; MIPS32-NEXT:    lw $1, %got(struct_s0)($1)
-; MIPS32-NEXT:    lbu $2, 0($1)
-; MIPS32-NEXT:    sb $2, 2($1)
 ; MIPS32-NEXT:    lbu $2, 1($1)
-; MIPS32-NEXT:    jr $ra
 ; MIPS32-NEXT:    sb $2, 3($1)
+; MIPS32-NEXT:    lbu $2, 0($1)
+; MIPS32-NEXT:    jr $ra
+; MIPS32-NEXT:    sb $2, 2($1)
 ;
 ; MIPS32R6-LABEL: copy_struct_S0:
 ; MIPS32R6:       # %bb.0: # %entry
@@ -692,11 +692,11 @@ define void @copy_struct_S0() nounwind {
 ; MIPS64-NEXT:    daddu $1, $1, $25
 ; MIPS64-NEXT:    daddiu $1, $1, %lo(%neg(%gp_rel(copy_struct_S0)))
 ; MIPS64-NEXT:    ld $1, %got_disp(struct_s0)($1)
-; MIPS64-NEXT:    lbu $2, 0($1)
-; MIPS64-NEXT:    sb $2, 2($1)
 ; MIPS64-NEXT:    lbu $2, 1($1)
-; MIPS64-NEXT:    jr $ra
 ; MIPS64-NEXT:    sb $2, 3($1)
+; MIPS64-NEXT:    lbu $2, 0($1)
+; MIPS64-NEXT:    jr $ra
+; MIPS64-NEXT:    sb $2, 2($1)
 ;
 ; MIPS64R6-LABEL: copy_struct_S0:
 ; MIPS64R6:       # %bb.0: # %entry
@@ -818,15 +818,15 @@ define void @copy_struct_S2() nounwind {
 ; MIPS32-EL-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; MIPS32-EL-NEXT:    addu $1, $2, $25
 ; MIPS32-EL-NEXT:    lw $1, %got(struct_s2)($1)
-; MIPS32-EL-NEXT:    lwl $2, 3($1)
-; MIPS32-EL-NEXT:    lwr $2, 0($1)
-; MIPS32-EL-NEXT:    swl $2, 11($1)
-; MIPS32-EL-NEXT:    lwl $3, 7($1)
-; MIPS32-EL-NEXT:    lwr $3, 4($1)
-; MIPS32-EL-NEXT:    swl $3, 15($1)
-; MIPS32-EL-NEXT:    swr $2, 8($1)
+; MIPS32-EL-NEXT:    lwl $2, 7($1)
+; MIPS32-EL-NEXT:    lwr $2, 4($1)
+; MIPS32-EL-NEXT:    swl $2, 15($1)
+; MIPS32-EL-NEXT:    lwl $3, 3($1)
+; MIPS32-EL-NEXT:    lwr $3, 0($1)
+; MIPS32-EL-NEXT:    swl $3, 11($1)
+; MIPS32-EL-NEXT:    swr $2, 12($1)
 ; MIPS32-EL-NEXT:    jr $ra
-; MIPS32-EL-NEXT:    swr $3, 12($1)
+; MIPS32-EL-NEXT:    swr $3, 8($1)
 ;
 ; MIPS32-EB-LABEL: copy_struct_S2:
 ; MIPS32-EB:       # %bb.0: # %entry
@@ -834,15 +834,15 @@ define void @copy_struct_S2() nounwind {
 ; MIPS32-EB-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; MIPS32-EB-NEXT:    addu $1, $2, $25
 ; MIPS32-EB-NEXT:    lw $1, %got(struct_s2)($1)
-; MIPS32-EB-NEXT:    lwl $2, 0($1)
-; MIPS32-EB-NEXT:    lwr $2, 3($1)
-; MIPS32-EB-NEXT:    swl $2, 8($1)
-; MIPS32-EB-NEXT:    lwl $3, 4($1)
-; MIPS32-EB-NEXT:    lwr $3, 7($1)
-; MIPS32-EB-NEXT:    swl $3, 12($1)
-; MIPS32-EB-NEXT:    swr $2, 11($1)
+; MIPS32-EB-NEXT:    lwl $2, 4($1)
+; MIPS32-EB-NEXT:    lwr $2, 7($1)
+; MIPS32-EB-NEXT:    swl $2, 12($1)
+; MIPS32-EB-NEXT:    lwl $3, 0($1)
+; MIPS32-EB-NEXT:    lwr $3, 3($1)
+; MIPS32-EB-NEXT:    swl $3, 8($1)
+; MIPS32-EB-NEXT:    swr $2, 15($1)
 ; MIPS32-EB-NEXT:    jr $ra
-; MIPS32-EB-NEXT:    swr $3, 15($1)
+; MIPS32-EB-NEXT:    swr $3, 11($1)
 ;
 ; MIPS32R6-LABEL: copy_struct_S2:
 ; MIPS32R6:       # %bb.0: # %entry
@@ -850,11 +850,11 @@ define void @copy_struct_S2() nounwind {
 ; MIPS32R6-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; MIPS32R6-NEXT:    addu $1, $2, $25
 ; MIPS32R6-NEXT:    lw $1, %got(struct_s2)($1)
-; MIPS32R6-NEXT:    lw $2, 0($1)
-; MIPS32R6-NEXT:    sw $2, 8($1)
 ; MIPS32R6-NEXT:    lw $2, 4($1)
-; MIPS32R6-NEXT:    jr $ra
 ; MIPS32R6-NEXT:    sw $2, 12($1)
+; MIPS32R6-NEXT:    lw $2, 0($1)
+; MIPS32R6-NEXT:    jr $ra
+; MIPS32R6-NEXT:    sw $2, 8($1)
 ;
 ; MIPS64-EL-LABEL: copy_struct_S2:
 ; MIPS64-EL:       # %bb.0: # %entry

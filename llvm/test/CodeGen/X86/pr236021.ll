@@ -26,10 +26,8 @@ define i32 @PR236021() {
 ; X64-NEXT:    movl $63, %edx
 ; X64-NEXT:    cmpq (%rax), %rdx
 ; X64-NEXT:    sbbq 8(%rax), %rcx
-; X64-NEXT:    setl %al
-; X64-NEXT:    notb %al
+; X64-NEXT:    setge %al
 ; X64-NEXT:    movzbl %al, %eax
-; X64-NEXT:    andl $1, %eax
 ; X64-NEXT:    retq
   %v = load i128, ptr @x
   %a = insertelement <2 x i128> zeroinitializer, i128 %v, i32 0

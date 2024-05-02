@@ -103,11 +103,9 @@ define <vscale x 2 x i32> @preserve_false_avl_known_le(ptr %p, <vscale x 2 x i32
 define <4 x i16> @pr173141(i1 %0, <2 x i16> %conv33) {
 ; CHECK-LABEL: pr173141:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vsetivli zero, 1, e16, mf4, ta, ma
-; CHECK-NEXT:    vslidedown.vi v8, v8, 1
-; CHECK-NEXT:    vmv.x.s a0, v8
 ; CHECK-NEXT:    vsetivli zero, 4, e16, mf2, ta, ma
-; CHECK-NEXT:    vmv.v.x v8, a0
+; CHECK-NEXT:    vrgather.vi v9, v8, 1
+; CHECK-NEXT:    vmv1r.v v8, v9
 ; CHECK-NEXT:    ret
 entry:
   %1 = tail call i32 @llvm.riscv.orc.b.i32(i32 1)

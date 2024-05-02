@@ -253,8 +253,8 @@ define double @test_bitextract_double_b231_var(b231 %src, i32 %off) {
 ; GFX9-NEXT:    buffer_store_dword v3, off, s[0:3], s32 offset:12
 ; GFX9-NEXT:    buffer_store_dword v1, off, s[0:3], s32 offset:4
 ; GFX9-NEXT:    buffer_store_dword v7, off, s[0:3], s32 offset:28
-; GFX9-NEXT:    v_lshrrev_b32_e32 v0, 3, v8
-; GFX9-NEXT:    v_and_b32_e32 v0, 24, v0
+; GFX9-NEXT:    v_and_b32_e32 v0, 0xc0, v8
+; GFX9-NEXT:    v_lshrrev_b32_e32 v0, 3, v0
 ; GFX9-NEXT:    v_lshrrev_b32_e64 v1, 6, s32
 ; GFX9-NEXT:    v_add_u32_e32 v4, v0, v1
 ; GFX9-NEXT:    buffer_load_dword v0, v4, s[0:3], 0 offen
@@ -280,7 +280,7 @@ define double @test_bitextract_double_b231_var(b231 %src, i32 %off) {
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    s_mov_b32 s0, 0
-; GFX12-NEXT:    v_lshrrev_b32_e32 v11, 3, v8
+; GFX12-NEXT:    v_and_b32_e32 v11, 0xc0, v8
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-NEXT:    s_mov_b32 s1, s0
 ; GFX12-NEXT:    s_wait_alu depctr_sa_sdst(0)
@@ -297,7 +297,7 @@ define double @test_bitextract_double_b231_var(b231 %src, i32 %off) {
 ; GFX12-NEXT:    scratch_store_b64 off, v[9:10], s32 offset:48
 ; GFX12-NEXT:    scratch_store_b64 off, v[9:10], s32 offset:40
 ; GFX12-NEXT:    scratch_store_b64 off, v[9:10], s32 offset:32
-; GFX12-NEXT:    v_and_b32_e32 v9, 24, v11
+; GFX12-NEXT:    v_lshrrev_b32_e32 v9, 3, v11
 ; GFX12-NEXT:    v_xor_b32_e32 v4, 63, v4
 ; GFX12-NEXT:    s_clause 0x1
 ; GFX12-NEXT:    scratch_load_b64 v[0:1], v9, s32 offset:8

@@ -152,12 +152,22 @@ define void @wide_deinterleave4(ptr %src, ptr %dst0, ptr %dst1, ptr %dst2, ptr %
 ;
 ; CHECK-FA64-LABEL: wide_deinterleave4:
 ; CHECK-FA64:       // %bb.0:
-; CHECK-FA64-NEXT:    ld4 { v0.2d, v1.2d, v2.2d, v3.2d }, [x0], #64
-; CHECK-FA64-NEXT:    ld4 { v4.2d, v5.2d, v6.2d, v7.2d }, [x0]
-; CHECK-FA64-NEXT:    stp q0, q4, [x1]
-; CHECK-FA64-NEXT:    stp q1, q5, [x2]
-; CHECK-FA64-NEXT:    stp q2, q6, [x3]
-; CHECK-FA64-NEXT:    stp q3, q7, [x4]
+; CHECK-FA64-NEXT:    ldp q2, q0, [x0, #96]
+; CHECK-FA64-NEXT:    ldr q1, [x0, #80]
+; CHECK-FA64-NEXT:    ld4 { v3.2d, v4.2d, v5.2d, v6.2d }, [x0], #64
+; CHECK-FA64-NEXT:    ldr q7, [x0]
+; CHECK-FA64-NEXT:    zip1 v16.2d, v2.2d, v0.2d
+; CHECK-FA64-NEXT:    zip1 v17.2d, v7.2d, v1.2d
+; CHECK-FA64-NEXT:    zip2 v0.2d, v2.2d, v0.2d
+; CHECK-FA64-NEXT:    zip2 v1.2d, v7.2d, v1.2d
+; CHECK-FA64-NEXT:    zip1 v2.2d, v17.2d, v16.2d
+; CHECK-FA64-NEXT:    zip2 v16.2d, v17.2d, v16.2d
+; CHECK-FA64-NEXT:    zip1 v7.2d, v1.2d, v0.2d
+; CHECK-FA64-NEXT:    zip2 v0.2d, v1.2d, v0.2d
+; CHECK-FA64-NEXT:    stp q3, q2, [x1]
+; CHECK-FA64-NEXT:    stp q4, q7, [x2]
+; CHECK-FA64-NEXT:    stp q5, q16, [x3]
+; CHECK-FA64-NEXT:    stp q6, q0, [x4]
 ; CHECK-FA64-NEXT:    ret
   %wide = load <16 x double>, ptr %src
   %deinterleaved = call { <4 x double>, <4 x double>, <4 x double>, <4 x double> } @llvm.vector.deinterleave4.v16f64(<16 x double> %wide)
@@ -297,12 +307,25 @@ define void @wide_interleave4(ptr %dst, ptr %src0, ptr %src1, ptr %src2, ptr %sr
 ;
 ; CHECK-FA64-LABEL: wide_interleave4:
 ; CHECK-FA64:       // %bb.0:
-; CHECK-FA64-NEXT:    ldp q0, q4, [x1]
-; CHECK-FA64-NEXT:    ldp q1, q5, [x2]
-; CHECK-FA64-NEXT:    ldp q2, q6, [x3]
-; CHECK-FA64-NEXT:    ldp q3, q7, [x4]
-; CHECK-FA64-NEXT:    st4 { v0.4s, v1.4s, v2.4s, v3.4s }, [x0], #64
-; CHECK-FA64-NEXT:    st4 { v4.4s, v5.4s, v6.4s, v7.4s }, [x0]
+; CHECK-FA64-NEXT:    ldp q4, q3, [x1]
+; CHECK-FA64-NEXT:    mov x8, x0
+; CHECK-FA64-NEXT:    ldp q5, q0, [x2]
+; CHECK-FA64-NEXT:    ldr q1, [x3, #16]
+; CHECK-FA64-NEXT:    ldr q2, [x4, #16]
+; CHECK-FA64-NEXT:    ldr q6, [x3]
+; CHECK-FA64-NEXT:    zip2 v16.4s, v3.4s, v1.4s
+; CHECK-FA64-NEXT:    zip1 v1.4s, v3.4s, v1.4s
+; CHECK-FA64-NEXT:    ldr q7, [x4]
+; CHECK-FA64-NEXT:    zip2 v17.4s, v0.4s, v2.4s
+; CHECK-FA64-NEXT:    zip1 v0.4s, v0.4s, v2.4s
+; CHECK-FA64-NEXT:    st4 { v4.4s, v5.4s, v6.4s, v7.4s }, [x8], #64
+; CHECK-FA64-NEXT:    zip2 v2.4s, v16.4s, v17.4s
+; CHECK-FA64-NEXT:    zip1 v3.4s, v16.4s, v17.4s
+; CHECK-FA64-NEXT:    zip2 v4.4s, v1.4s, v0.4s
+; CHECK-FA64-NEXT:    zip1 v0.4s, v1.4s, v0.4s
+; CHECK-FA64-NEXT:    stp q3, q2, [x0, #96]
+; CHECK-FA64-NEXT:    str q4, [x0, #80]
+; CHECK-FA64-NEXT:    str q0, [x8]
 ; CHECK-FA64-NEXT:    ret
   %v0 = load <8 x i32>, ptr %src0
   %v1 = load <8 x i32>, ptr %src1

@@ -1156,13 +1156,21 @@ define amdgpu_ps <2 x i32> @s_copysign_f64_0_f16(half inreg %sign) {
 }
 
 define double @v_copysign_f64_0_f16(half %sign) {
-; SIVI-LABEL: v_copysign_f64_0_f16:
-; SIVI:       ; %bb.0:
-; SIVI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SIVI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
-; SIVI-NEXT:    v_and_b32_e32 v1, 0x80000000, v0
-; SIVI-NEXT:    v_mov_b32_e32 v0, 0
-; SIVI-NEXT:    s_setpc_b64 s[30:31]
+; SI-LABEL: v_copysign_f64_0_f16:
+; SI:       ; %bb.0:
+; SI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; SI-NEXT:    v_cvt_f32_f16_e32 v0, v0
+; SI-NEXT:    v_and_b32_e32 v1, 0x80000000, v0
+; SI-NEXT:    v_mov_b32_e32 v0, 0
+; SI-NEXT:    s_setpc_b64 s[30:31]
+;
+; VI-LABEL: v_copysign_f64_0_f16:
+; VI:       ; %bb.0:
+; VI-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; VI-NEXT:    v_lshlrev_b32_e32 v0, 16, v0
+; VI-NEXT:    v_and_b32_e32 v1, 0x80000000, v0
+; VI-NEXT:    v_mov_b32_e32 v0, 0
+; VI-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX11-LABEL: v_copysign_f64_0_f16:
 ; GFX11:       ; %bb.0:

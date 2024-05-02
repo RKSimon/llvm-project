@@ -8,8 +8,9 @@
 define void @fun_2x1b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_2x1b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepb %v0, 0(%r2)
-; CHECK-NEXT:    vsteh %v0, 0(%r3), 0
+; CHECK-NEXT:    llc %r0, 0(%r2)
+; CHECK-NEXT:    mhi %r0, 257
+; CHECK-NEXT:    sth %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %i = load i8, ptr %Src
  %ZE = zext i8 %i to i16
@@ -22,9 +23,10 @@ define void @fun_2x1b(ptr %Src, ptr %Dst) {
 define void @fun_4x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 ; CHECK-LABEL: fun_4x1b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepb %v0, 0(%r2)
-; CHECK-NEXT:    vstef %v0, 0(%r3), 0
-; CHECK-NEXT:    vstef %v0, 0(%r4), 0
+; CHECK-NEXT:    llc %r0, 0(%r2)
+; CHECK-NEXT:    msfi %r0, 16843009
+; CHECK-NEXT:    st %r0, 0(%r3)
+; CHECK-NEXT:    st %r0, 0(%r4)
 ; CHECK-NEXT:    br %r14
  %i = load i8, ptr %Src
  %ZE = zext i8 %i to i32
@@ -37,8 +39,11 @@ define void @fun_4x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 define void @fun_8x1b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_8x1b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepb %v0, 0(%r2)
-; CHECK-NEXT:    vsteg %v0, 0(%r3), 0
+; CHECK-NEXT:    llgc %r0, 0(%r2)
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    stg %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %i = load i8, ptr %Src
  %ZE = zext i8 %i to i64
@@ -51,9 +56,12 @@ define void @fun_8x1b(ptr %Src, ptr %Dst) {
 define void @fun_8x1b_4x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 ; CHECK-LABEL: fun_8x1b_4x1b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepb %v0, 0(%r2)
-; CHECK-NEXT:    vsteg %v0, 0(%r3), 0
-; CHECK-NEXT:    vstef %v0, 0(%r4), 0
+; CHECK-NEXT:    llgc %r0, 0(%r2)
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    stg %r0, 0(%r3)
+; CHECK-NEXT:    st %r0, 0(%r4)
 ; CHECK-NEXT:    br %r14
  %i = load i8, ptr %Src
  %ZE = zext i8 %i to i64
@@ -67,8 +75,9 @@ define void @fun_8x1b_4x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 define void @fun_2x2b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_2x2b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlreph %v0, 0(%r2)
-; CHECK-NEXT:    vstef %v0, 0(%r3), 0
+; CHECK-NEXT:    llh %r0, 0(%r2)
+; CHECK-NEXT:    msfi %r0, 65537
+; CHECK-NEXT:    st %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %i = load i16, ptr %Src
  %ZE = zext i16 %i to i32
@@ -80,8 +89,11 @@ define void @fun_2x2b(ptr %Src, ptr %Dst) {
 define void @fun_4x2b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_4x2b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlreph %v0, 0(%r2)
-; CHECK-NEXT:    vsteg %v0, 0(%r3), 0
+; CHECK-NEXT:    llgh %r0, 0(%r2)
+; CHECK-NEXT:    llihf %r1, 65537
+; CHECK-NEXT:    oilf %r1, 65537
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    stg %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %i = load i16, ptr %Src
  %ZE = zext i16 %i to i64
@@ -93,8 +105,11 @@ define void @fun_4x2b(ptr %Src, ptr %Dst) {
 define void @fun_2x4b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_2x4b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepf %v0, 0(%r2)
-; CHECK-NEXT:    vsteg %v0, 0(%r3), 0
+; CHECK-NEXT:    llgf %r0, 0(%r2)
+; CHECK-NEXT:    llihl %r1, 1
+; CHECK-NEXT:    oill %r1, 1
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    stg %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %i = load i32, ptr %Src
  %ZE = zext i32 %i to i64
@@ -109,7 +124,11 @@ define void @fun_2x4b(ptr %Src, ptr %Dst) {
 define void @fun_2Eltsx8x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 ; CHECK-LABEL: fun_2Eltsx8x1b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepb %v0, 0(%r2)
+; CHECK-NEXT:    llgc %r0, 0(%r2)
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r3), 3
 ; CHECK-NEXT:    vst %v0, 0(%r4), 3
 ; CHECK-NEXT:    br %r14
@@ -126,7 +145,10 @@ define void @fun_2Eltsx8x1b(ptr %Src, ptr %Dst, ptr %Dst2) {
 define void @fun_4Eltsx2x2b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_4Eltsx2x2b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlreph %v0, 0(%r2)
+; CHECK-NEXT:    llh %r0, 0(%r2)
+; CHECK-NEXT:    msfi %r0, 65537
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    vrepf %v0, %v0, 1
 ; CHECK-NEXT:    vst %v0, 0(%r3), 3
 ; CHECK-NEXT:    br %r14
  %i = load i16, ptr %Src
@@ -141,7 +163,10 @@ define void @fun_4Eltsx2x2b(ptr %Src, ptr %Dst) {
 define void @fun_6Eltsx2x2b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_6Eltsx2x2b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlreph %v0, 0(%r2)
+; CHECK-NEXT:    llh %r0, 0(%r2)
+; CHECK-NEXT:    msfi %r0, 65537
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    vrepf %v0, %v0, 1
 ; CHECK-NEXT:    vsteg %v0, 16(%r3), 0
 ; CHECK-NEXT:    vst %v0, 0(%r3), 4
 ; CHECK-NEXT:    br %r14
@@ -157,7 +182,11 @@ define void @fun_6Eltsx2x2b(ptr %Src, ptr %Dst) {
 define void @fun_2Eltsx2x4b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_2Eltsx2x4b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepf %v0, 0(%r2)
+; CHECK-NEXT:    llgf %r0, 0(%r2)
+; CHECK-NEXT:    llihl %r1, 1
+; CHECK-NEXT:    oill %r1, 1
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
 ; CHECK-NEXT:    vst %v0, 0(%r3), 3
 ; CHECK-NEXT:    br %r14
  %i = load i32, ptr %Src
@@ -172,8 +201,12 @@ define void @fun_2Eltsx2x4b(ptr %Src, ptr %Dst) {
 define void @fun_5Eltsx2x4b(ptr %Src, ptr %Dst) {
 ; CHECK-LABEL: fun_5Eltsx2x4b:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlrepf %v0, 0(%r2)
-; CHECK-NEXT:    vsteg %v0, 32(%r3), 0
+; CHECK-NEXT:    llgf %r0, 0(%r2)
+; CHECK-NEXT:    llihl %r1, 1
+; CHECK-NEXT:    oill %r1, 1
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    vlvgp %v0, %r0, %r0
+; CHECK-NEXT:    stg %r0, 32(%r3)
 ; CHECK-NEXT:    vst %v0, 16(%r3), 4
 ; CHECK-NEXT:    vst %v0, 0(%r3), 4
 ; CHECK-NEXT:    br %r14
@@ -190,9 +223,12 @@ define void @fun_5Eltsx2x4b(ptr %Src, ptr %Dst) {
 define void @fun_8x1b_arg(i8 %Arg, ptr %Dst) {
 ; CHECK-LABEL: fun_8x1b_arg:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    vlvgp %v0, %r2, %r2
-; CHECK-NEXT:    vrepb %v0, %v0, 7
-; CHECK-NEXT:    vsteg %v0, 0(%r3), 0
+; CHECK-NEXT:    llihf %r1, 16843009
+; CHECK-NEXT:    # kill: def $r2l killed $r2l def $r2d
+; CHECK-NEXT:    llgcr %r0, %r2
+; CHECK-NEXT:    oilf %r1, 16843009
+; CHECK-NEXT:    msgrkc %r0, %r0, %r1
+; CHECK-NEXT:    stg %r0, 0(%r3)
 ; CHECK-NEXT:    br %r14
  %ZE = zext i8 %Arg to i64
  %Val = mul i64 %ZE, 72340172838076673

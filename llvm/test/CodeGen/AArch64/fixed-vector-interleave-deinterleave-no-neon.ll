@@ -77,7 +77,7 @@ define void @deinterleave3_v1i16(ptr %dst0, ptr %dst1, ptr %dst2, ptr %src) {
 ; CHECK-LABEL: deinterleave3_v1i16:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ldr w8, [x3]
-; CHECK-NEXT:    ldrh w10, [x3, #4]
+; CHECK-NEXT:    ldrsh w10, [x3, #4]
 ; CHECK-NEXT:    lsr w9, w8, #16
 ; CHECK-NEXT:    strh w8, [x0]
 ; CHECK-NEXT:    strh w9, [x1]

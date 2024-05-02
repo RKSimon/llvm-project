@@ -591,8 +591,8 @@ define i64 @reduce_umax_v4i64_signbit(ptr %pa, ptr %pb) {
 ; X86-SSE2-NEXT:    pand %xmm3, %xmm0
 ; X86-SSE2-NEXT:    pandn %xmm1, %xmm3
 ; X86-SSE2-NEXT:    por %xmm0, %xmm3
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm3[3,3,3,3]
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm3[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm3[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm3[3,3,3,3]
 ; X86-SSE2-NEXT:    por %xmm0, %xmm1
 ; X86-SSE2-NEXT:    movd %xmm1, %eax
 ; X86-SSE2-NEXT:    notl %eax
@@ -1174,8 +1174,8 @@ define i64 @reduce_umax_v8i64_signbit_not(ptr %pa, ptr %pb) {
 ; X86-SSE2-NEXT:    pand %xmm1, %xmm4
 ; X86-SSE2-NEXT:    pandn %xmm2, %xmm1
 ; X86-SSE2-NEXT:    por %xmm4, %xmm1
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[3,3,3,3]
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[3,3,3,3]
 ; X86-SSE2-NEXT:    por %xmm0, %xmm1
 ; X86-SSE2-NEXT:    movd %xmm1, %eax
 ; X86-SSE2-NEXT:    notl %eax

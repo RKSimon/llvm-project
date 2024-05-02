@@ -277,8 +277,6 @@ define float @fadd_zero_minnum_nnan_nsz(float %x) {
 define float @fadd_zero_minnum_nnan_nsz_neg_const(float %x) {
 ; CHECK-LABEL: fadd_zero_minnum_nnan_nsz_neg_const:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    xorps %xmm1, %xmm1
-; CHECK-NEXT:    addss %xmm1, %xmm0
 ; CHECK-NEXT:    minss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; CHECK-NEXT:    retq
   %add = fadd float %x, 0.0
@@ -301,8 +299,6 @@ define float @fsub_negzero_maxnum_nnan_nsz(float %x) {
 define float @fsub_negzero_maxnum_nnan_nsz_pos_const(float %x) {
 ; CHECK-LABEL: fsub_negzero_maxnum_nnan_nsz_pos_const:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    xorps %xmm1, %xmm1
-; CHECK-NEXT:    addss %xmm1, %xmm0
 ; CHECK-NEXT:    maxss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; CHECK-NEXT:    retq
   %sub = fsub float %x, -0.0

@@ -233,10 +233,10 @@ define <16 x i8> @shuffle4_v16i8(<16 x i8> %a, <16 x i8> %b, <16 x i8> %c, <16 x
 ; CHECK-SD-NEXT:    adrp x8, .LCPI3_1
 ; CHECK-SD-NEXT:    ldr q3, [x8, :lo12:.LCPI3_1]
 ; CHECK-SD-NEXT:    adrp x8, .LCPI3_2
-; CHECK-SD-NEXT:    tbl v1.16b, { v0.16b }, v1.16b
-; CHECK-SD-NEXT:    tbl v0.16b, { v2.16b }, v3.16b
-; CHECK-SD-NEXT:    ldr q2, [x8, :lo12:.LCPI3_2]
-; CHECK-SD-NEXT:    tbl v0.16b, { v0.16b, v1.16b }, v2.16b
+; CHECK-SD-NEXT:    tbl v2.16b, { v2.16b }, v1.16b
+; CHECK-SD-NEXT:    tbl v1.16b, { v0.16b }, v3.16b
+; CHECK-SD-NEXT:    ldr q0, [x8, :lo12:.LCPI3_2]
+; CHECK-SD-NEXT:    tbl v0.16b, { v1.16b, v2.16b }, v0.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: shuffle4_v16i8:
@@ -356,7 +356,7 @@ define <16 x i8> @shuffle4_v8i8_v16i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 
 ; CHECK-SD-NEXT:    mov x8, #-63744 // =0xffffffffffff0700
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
 ; CHECK-SD-NEXT:    mov v2.d[1], v2.d[0]
-; CHECK-SD-NEXT:    movk x8, #511, lsl #16
+; CHECK-SD-NEXT:    movk x8, #261, lsl #16
 ; CHECK-SD-NEXT:    mov v0.d[1], v0.d[0]
 ; CHECK-SD-NEXT:    fmov d1, x8
 ; CHECK-SD-NEXT:    adrp x8, .LCPI6_0
@@ -401,7 +401,7 @@ define <8 x i8> @shuffle4_v8i8_v8i8(<8 x i8> %a, <8 x i8> %b, <8 x i8> %c, <8 x 
 ; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
 ; CHECK-SD-NEXT:    mov x8, #-63744 // =0xffffffffffff0700
-; CHECK-SD-NEXT:    movk x8, #511, lsl #16
+; CHECK-SD-NEXT:    movk x8, #261, lsl #16
 ; CHECK-SD-NEXT:    mov v2.d[1], v2.d[0]
 ; CHECK-SD-NEXT:    mov v0.d[1], v0.d[0]
 ; CHECK-SD-NEXT:    fmov d1, x8
@@ -562,13 +562,13 @@ define <16 x i8> @shuffle4_v4i16_trunc(<4 x i16> %ae, <4 x i16> %be, <4 x i16> %
 define <16 x i8> @shuffle4_v4i32_trunc(<4 x i32> %ae, <4 x i32> %be, <4 x i32> %ce, <4 x i32> %de) {
 ; CHECK-SD-LABEL: shuffle4_v4i32_trunc:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    xtn v4.4h, v0.4s
+; CHECK-SD-NEXT:    uzp1 v0.8h, v0.8h, v1.8h
+; CHECK-SD-NEXT:    uzp1 v1.8h, v2.8h, v3.8h
 ; CHECK-SD-NEXT:    adrp x8, .LCPI10_0
-; CHECK-SD-NEXT:    xtn v5.4h, v1.4s
+; CHECK-SD-NEXT:    xtn v2.8b, v0.8h
 ; CHECK-SD-NEXT:    ldr q0, [x8, :lo12:.LCPI10_0]
-; CHECK-SD-NEXT:    xtn v6.4h, v2.4s
-; CHECK-SD-NEXT:    xtn v7.4h, v3.4s
-; CHECK-SD-NEXT:    tbl v0.16b, { v4.16b, v5.16b, v6.16b, v7.16b }, v0.16b
+; CHECK-SD-NEXT:    xtn v3.8b, v1.8h
+; CHECK-SD-NEXT:    tbl v0.16b, { v2.16b, v3.16b }, v0.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: shuffle4_v4i32_trunc:
@@ -744,19 +744,16 @@ define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> 
 ; CHECK-SD-LABEL: insert4_v8i8:
 ; CHECK-SD:       // %bb.0:
 ; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
-; CHECK-SD-NEXT:    mov x9, #-63484 // =0xffffffffffff0804
-; CHECK-SD-NEXT:    mov v4.16b, v3.16b
+; CHECK-SD-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    adrp x8, .LCPI14_0
-; CHECK-SD-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-SD-NEXT:    movk x9, #782, lsl #32
-; CHECK-SD-NEXT:    mov v3.16b, v1.16b
-; CHECK-SD-NEXT:    fmov d2, x9
-; CHECK-SD-NEXT:    ldr q1, [x8, :lo12:.LCPI14_0]
-; CHECK-SD-NEXT:    tbl v1.16b, { v3.16b, v4.16b }, v1.16b
-; CHECK-SD-NEXT:    tbl v0.8b, { v0.16b }, v2.8b
-; CHECK-SD-NEXT:    trn1 v0.4h, v1.4h, v0.4h
-; CHECK-SD-NEXT:    trn2 v0.4h, v0.4h, v1.4h
+; CHECK-SD-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-SD-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-SD-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-SD-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-SD-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-SD-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-SD-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-SD-NEXT:    fmov d0, d4
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: insert4_v8i8:
@@ -829,17 +826,25 @@ define <8 x i8> @insert4_v8i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> 
 define <16 x i8> @insert4_v16i8(<8 x i8> %a, <16 x i8> %b, <8 x i8> %c, <16 x i8> %d) {
 ; CHECK-SD-LABEL: insert4_v16i8:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    mov v4.16b, v3.16b
-; CHECK-SD-NEXT:    adrp x8, .LCPI15_0
-; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q31_q0
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    dup v4.8b, v0.b[4]
 ; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    mov v3.16b, v1.16b
-; CHECK-SD-NEXT:    ldr q5, [x8, :lo12:.LCPI15_0]
-; CHECK-SD-NEXT:    mov v0.d[1], v2.d[0]
-; CHECK-SD-NEXT:    adrp x8, .LCPI15_1
-; CHECK-SD-NEXT:    ldr q1, [x8, :lo12:.LCPI15_1]
-; CHECK-SD-NEXT:    tbl v31.16b, { v3.16b, v4.16b }, v5.16b
-; CHECK-SD-NEXT:    tbl v0.16b, { v31.16b, v0.16b }, v1.16b
+; CHECK-SD-NEXT:    mov v4.b[1], v2.b[0]
+; CHECK-SD-NEXT:    mov v4.b[2], v1.b[15]
+; CHECK-SD-NEXT:    mov v4.b[3], v3.b[11]
+; CHECK-SD-NEXT:    mov v4.b[4], v2.b[6]
+; CHECK-SD-NEXT:    mov v4.b[5], v0.b[3]
+; CHECK-SD-NEXT:    mov v4.b[6], v3.b[8]
+; CHECK-SD-NEXT:    mov v4.b[7], v1.b[12]
+; CHECK-SD-NEXT:    mov v4.b[8], v0.b[4]
+; CHECK-SD-NEXT:    mov v4.b[9], v2.b[0]
+; CHECK-SD-NEXT:    mov v4.b[10], v1.b[15]
+; CHECK-SD-NEXT:    mov v4.b[11], v3.b[11]
+; CHECK-SD-NEXT:    mov v4.b[12], v2.b[6]
+; CHECK-SD-NEXT:    mov v4.b[13], v0.b[3]
+; CHECK-SD-NEXT:    mov v4.b[14], v3.b[8]
+; CHECK-SD-NEXT:    mov v4.b[15], v1.b[12]
+; CHECK-SD-NEXT:    mov v0.16b, v4.16b
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: insert4_v16i8:

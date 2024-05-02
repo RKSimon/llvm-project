@@ -196,25 +196,38 @@ define void @masked_store_factor2_128bit(ptr %ptr, <4 x i32> %v0, <4 x i32> %v1,
 define void @masked_store_factor4_64bit(ptr %ptr, <1 x i64> %v0, <1 x i64> %v1, <1 x i64> %v2, <1 x i64> %v3, <1 x i1> %mask) {
 ; CHECK-COMPAT-LABEL: masked_store_factor4_64bit:
 ; CHECK-COMPAT:       // %bb.0:
-; CHECK-COMPAT-NEXT:    // kill: def $w1 killed $w1 def $x1
-; CHECK-COMPAT-NEXT:    sbfx x8, x1, #0, #1
+; CHECK-COMPAT-NEXT:    mov z4.s, w1
 ; CHECK-COMPAT-NEXT:    ptrue p0.d, vl1
-; CHECK-COMPAT-NEXT:    // kill: def $d3 killed $d3 killed $z0_z1_z2_z3 def $z0_z1_z2_z3
-; CHECK-COMPAT-NEXT:    // kill: def $d2 killed $d2 killed $z0_z1_z2_z3 def $z0_z1_z2_z3
-; CHECK-COMPAT-NEXT:    fmov d4, x8
-; CHECK-COMPAT-NEXT:    // kill: def $d1 killed $d1 killed $z0_z1_z2_z3 def $z0_z1_z2_z3
-; CHECK-COMPAT-NEXT:    // kill: def $d0 killed $d0 killed $z0_z1_z2_z3 def $z0_z1_z2_z3
-; CHECK-COMPAT-NEXT:    cmpne p1.d, p0/z, z4.d, #0
-; CHECK-COMPAT-NEXT:    st4d { z0.d - z3.d }, p1, [x0]
+; CHECK-COMPAT-NEXT:    // kill: def $d2 killed $d2 def $z2
+; CHECK-COMPAT-NEXT:    // kill: def $d0 killed $d0 def $z0
+; CHECK-COMPAT-NEXT:    // kill: def $d3 killed $d3 def $z3
+; CHECK-COMPAT-NEXT:    // kill: def $d1 killed $d1 def $z1
+; CHECK-COMPAT-NEXT:    mov x8, #2 // =0x2
+; CHECK-COMPAT-NEXT:    ptrue p1.d, vl2
+; CHECK-COMPAT-NEXT:    splice z2.d, p0, z2.d, z3.d
+; CHECK-COMPAT-NEXT:    splice z0.d, p0, z0.d, z1.d
+; CHECK-COMPAT-NEXT:    uunpklo z4.d, z4.s
+; CHECK-COMPAT-NEXT:    lsl z4.d, z4.d, #63
+; CHECK-COMPAT-NEXT:    asr z4.d, z4.d, #63
+; CHECK-COMPAT-NEXT:    cmpne p2.d, p1/z, z4.d, #0
+; CHECK-COMPAT-NEXT:    st1d { z2.d }, p2, [x0, x8, lsl #3]
+; CHECK-COMPAT-NEXT:    st1d { z0.d }, p2, [x0]
 ; CHECK-COMPAT-NEXT:    ret
 ;
 ; CHECK-STREAMING-LABEL: masked_store_factor4_64bit:
 ; CHECK-STREAMING:       // %bb.0:
-; CHECK-STREAMING-NEXT:    sbfx x8, x1, #0, #1
+; CHECK-STREAMING-NEXT:    mov z4.s, w1
 ; CHECK-STREAMING-NEXT:    ptrue p0.d, vl1
-; CHECK-STREAMING-NEXT:    fmov d4, x8
-; CHECK-STREAMING-NEXT:    cmpne p1.d, p0/z, z4.d, #0
-; CHECK-STREAMING-NEXT:    st4d { z0.d - z3.d }, p1, [x0]
+; CHECK-STREAMING-NEXT:    mov x8, #2 // =0x2
+; CHECK-STREAMING-NEXT:    ptrue p1.d, vl2
+; CHECK-STREAMING-NEXT:    splice z2.d, p0, { z2.d, z3.d }
+; CHECK-STREAMING-NEXT:    splice z0.d, p0, { z0.d, z1.d }
+; CHECK-STREAMING-NEXT:    uunpklo z4.d, z4.s
+; CHECK-STREAMING-NEXT:    lsl z4.d, z4.d, #63
+; CHECK-STREAMING-NEXT:    asr z4.d, z4.d, #63
+; CHECK-STREAMING-NEXT:    cmpne p2.d, p1/z, z4.d, #0
+; CHECK-STREAMING-NEXT:    st1d { z2.d }, p2, [x0, x8, lsl #3]
+; CHECK-STREAMING-NEXT:    st1d { z0.d }, p2, [x0]
 ; CHECK-STREAMING-NEXT:    ret
   %interleaved = call <4 x i64> @llvm.vector.interleave4.v4i64(
       <1 x i64> %v0, <1 x i64> %v1, <1 x i64> %v2, <1 x i64> %v3)

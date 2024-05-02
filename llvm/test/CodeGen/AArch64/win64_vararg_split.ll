@@ -358,19 +358,17 @@ define ptr @fixed_split_va_start(i64 %a0, i64 %a1, i64 %a2, i64 %a3, i64 %a4, i6
 ; LINUX-LABEL: fixed_split_va_start:
 ; LINUX:       // %bb.0:
 ; LINUX-NEXT:    sub sp, sp, #144
-; LINUX-NEXT:    mov x8, sp
+; LINUX-NEXT:    mov x9, sp
 ; LINUX-NEXT:    mov x10, #-549755813888 // =0xffffff8000000000
-; LINUX-NEXT:    add x9, sp, #160
-; LINUX-NEXT:    add x8, x8, #128
-; LINUX-NEXT:    stp q1, q2, [sp, #16]
-; LINUX-NEXT:    mov x0, x9
-; LINUX-NEXT:    str q0, [sp]
-; LINUX-NEXT:    stp q3, q4, [sp, #48]
-; LINUX-NEXT:    str x9, [sp, #136]
-; LINUX-NEXT:    stp x8, x10, [sp, #152]
-; LINUX-NEXT:    stp q5, q6, [sp, #80]
-; LINUX-NEXT:    str q7, [sp, #112]
-; LINUX-NEXT:    add sp, sp, #144
+; LINUX-NEXT:    add x8, sp, #160
+; LINUX-NEXT:    add x9, x9, #128
+; LINUX-NEXT:    str x8, [sp, #136]
+; LINUX-NEXT:    mov x0, x8
+; LINUX-NEXT:    stp q4, q5, [sp, #64]
+; LINUX-NEXT:    stp q6, q7, [sp, #96]
+; LINUX-NEXT:    stp x9, x10, [sp, #152]
+; LINUX-NEXT:    stp q2, q3, [sp, #32]
+; LINUX-NEXT:    stp q0, q1, [sp], #144
 ; LINUX-NEXT:    ret
   %ap = alloca ptr, align 8
   call void @llvm.va_start(ptr %ap)

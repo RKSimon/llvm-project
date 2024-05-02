@@ -8,9 +8,18 @@ define <4 x i8> @test_bitextract_v4i8_const(<4 x b32> %src) {
 ; SSE2-LABEL: test_bitextract_v4i8_const:
 ; SSE2:       # %bb.0:
 ; SSE2-NEXT:    psrld $8, %xmm0
-; SSE2-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; SSE2-NEXT:    packuswb %xmm0, %xmm0
-; SSE2-NEXT:    packuswb %xmm0, %xmm0
+; SSE2-NEXT:    movdqa %xmm0, -{{[0-9]+}}(%rsp)
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %eax
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %ecx
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %edx
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %esi
+; SSE2-NEXT:    shll $8, %esi
+; SSE2-NEXT:    orl %edx, %esi
+; SSE2-NEXT:    shll $16, %ecx
+; SSE2-NEXT:    orl %esi, %ecx
+; SSE2-NEXT:    shll $24, %eax
+; SSE2-NEXT:    orl %ecx, %eax
+; SSE2-NEXT:    movd %eax, %xmm0
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: test_bitextract_v4i8_const:
@@ -18,16 +27,10 @@ define <4 x i8> @test_bitextract_v4i8_const(<4 x b32> %src) {
 ; SSE42-NEXT:    pshufb {{.*#+}} xmm0 = xmm0[1,5,9,13,u,u,u,u,u,u,u,u,u,u,u,u]
 ; SSE42-NEXT:    retq
 ;
-; AVX2-LABEL: test_bitextract_v4i8_const:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[1,5,9,13,u,u,u,u,u,u,u,u,u,u,u,u]
-; AVX2-NEXT:    retq
-;
-; AVX512-LABEL: test_bitextract_v4i8_const:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpsrld $8, %xmm0, %xmm0
-; AVX512-NEXT:    vpmovdb %xmm0, %xmm0
-; AVX512-NEXT:    retq
+; AVX-LABEL: test_bitextract_v4i8_const:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[1,5,9,13,u,u,u,u,u,u,u,u,u,u,u,u]
+; AVX-NEXT:    retq
   %result = bitextract <4 x i8>, <4 x b32> %src, <4 x i32> splat (i32 8)
   ret <4 x i8> %result
 }
@@ -38,55 +41,59 @@ define <4 x i8> @test_bitextract_v4i8_var(<4 x b32> %src, <4 x i32> %off) {
 ; SSE2-NEXT:    pshuflw {{.*#+}} xmm2 = xmm1[2,3,3,3,4,5,6,7]
 ; SSE2-NEXT:    movdqa %xmm0, %xmm3
 ; SSE2-NEXT:    psrld %xmm2, %xmm3
-; SSE2-NEXT:    pshuflw {{.*#+}} xmm4 = xmm1[0,1,1,1,4,5,6,7]
-; SSE2-NEXT:    movdqa %xmm0, %xmm2
-; SSE2-NEXT:    psrld %xmm4, %xmm2
+; SSE2-NEXT:    pshuflw {{.*#+}} xmm2 = xmm1[0,1,1,1,4,5,6,7]
+; SSE2-NEXT:    movdqa %xmm0, %xmm4
+; SSE2-NEXT:    psrld %xmm2, %xmm4
+; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm4 = xmm4[0],xmm3[0]
+; SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[2,3,2,3]
-; SSE2-NEXT:    pshuflw {{.*#+}} xmm4 = xmm1[2,3,3,3,4,5,6,7]
-; SSE2-NEXT:    movdqa %xmm0, %xmm5
-; SSE2-NEXT:    psrld %xmm4, %xmm5
-; SSE2-NEXT:    punpcklqdq {{.*#+}} xmm2 = xmm2[0],xmm3[0]
-; SSE2-NEXT:    pshuflw {{.*#+}} xmm1 = xmm1[0,1,1,1,4,5,6,7]
+; SSE2-NEXT:    pshuflw {{.*#+}} xmm3 = xmm1[0,1,1,1,4,5,6,7]
+; SSE2-NEXT:    psrld %xmm3, %xmm2
+; SSE2-NEXT:    shufps {{.*#+}} xmm4 = xmm4[0,3],xmm2[0,3]
+; SSE2-NEXT:    pshuflw {{.*#+}} xmm1 = xmm1[2,3,3,3,4,5,6,7]
 ; SSE2-NEXT:    psrld %xmm1, %xmm0
-; SSE2-NEXT:    punpckhqdq {{.*#+}} xmm0 = xmm0[1],xmm5[1]
-; SSE2-NEXT:    shufps {{.*#+}} xmm2 = xmm2[0,3],xmm0[0,3]
-; SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
-; SSE2-NEXT:    packuswb %xmm2, %xmm2
-; SSE2-NEXT:    packuswb %xmm2, %xmm2
-; SSE2-NEXT:    movdqa %xmm2, %xmm0
+; SSE2-NEXT:    pextrw $6, %xmm0, %eax
+; SSE2-NEXT:    movaps %xmm4, -{{[0-9]+}}(%rsp)
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %ecx
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %edx
+; SSE2-NEXT:    movzbl -{{[0-9]+}}(%rsp), %esi
+; SSE2-NEXT:    shll $8, %esi
+; SSE2-NEXT:    orl %edx, %esi
+; SSE2-NEXT:    shll $16, %ecx
+; SSE2-NEXT:    orl %esi, %ecx
+; SSE2-NEXT:    shll $24, %eax
+; SSE2-NEXT:    orl %ecx, %eax
+; SSE2-NEXT:    movd %eax, %xmm0
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: test_bitextract_v4i8_var:
 ; SSE42:       # %bb.0:
-; SSE42-NEXT:    pshuflw {{.*#+}} xmm2 = xmm1[2,3,3,3,4,5,6,7]
+; SSE42-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[2,3,2,3]
+; SSE42-NEXT:    pshuflw {{.*#+}} xmm3 = xmm2[2,3,3,3,4,5,6,7]
+; SSE42-NEXT:    movdqa %xmm0, %xmm4
+; SSE42-NEXT:    psrld %xmm3, %xmm4
+; SSE42-NEXT:    pextrb $12, %xmm4, %eax
+; SSE42-NEXT:    pshuflw {{.*#+}} xmm2 = xmm2[0,1,1,1,4,5,6,7]
 ; SSE42-NEXT:    movdqa %xmm0, %xmm3
 ; SSE42-NEXT:    psrld %xmm2, %xmm3
-; SSE42-NEXT:    pshufd {{.*#+}} xmm2 = xmm1[2,3,2,3]
-; SSE42-NEXT:    pshuflw {{.*#+}} xmm4 = xmm2[2,3,3,3,4,5,6,7]
-; SSE42-NEXT:    movdqa %xmm0, %xmm5
-; SSE42-NEXT:    psrld %xmm4, %xmm5
-; SSE42-NEXT:    pblendw {{.*#+}} xmm5 = xmm3[0,1,2,3],xmm5[4,5,6,7]
-; SSE42-NEXT:    pshuflw {{.*#+}} xmm1 = xmm1[0,1,1,1,4,5,6,7]
-; SSE42-NEXT:    movdqa %xmm0, %xmm3
-; SSE42-NEXT:    psrld %xmm1, %xmm3
-; SSE42-NEXT:    pshuflw {{.*#+}} xmm1 = xmm2[0,1,1,1,4,5,6,7]
+; SSE42-NEXT:    pextrb $8, %xmm3, %ecx
+; SSE42-NEXT:    pshuflw {{.*#+}} xmm3 = xmm1[0,1,1,1,4,5,6,7]
+; SSE42-NEXT:    movdqa %xmm0, %xmm2
+; SSE42-NEXT:    psrld %xmm3, %xmm2
+; SSE42-NEXT:    pshuflw {{.*#+}} xmm1 = xmm1[2,3,3,3,4,5,6,7]
 ; SSE42-NEXT:    psrld %xmm1, %xmm0
-; SSE42-NEXT:    pblendw {{.*#+}} xmm0 = xmm3[0,1,2,3],xmm0[4,5,6,7]
-; SSE42-NEXT:    pblendw {{.*#+}} xmm0 = xmm0[0,1],xmm5[2,3],xmm0[4,5],xmm5[6,7]
-; SSE42-NEXT:    pshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,u,u,u,u,u,u,u,u,u,u,u,u]
+; SSE42-NEXT:    pextrb $4, %xmm0, %edx
+; SSE42-NEXT:    pinsrb $1, %edx, %xmm2
+; SSE42-NEXT:    pinsrb $2, %ecx, %xmm2
+; SSE42-NEXT:    pinsrb $3, %eax, %xmm2
+; SSE42-NEXT:    movdqa %xmm2, %xmm0
 ; SSE42-NEXT:    retq
 ;
-; AVX2-LABEL: test_bitextract_v4i8_var:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
-; AVX2-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,u,u,u,u,u,u,u,u,u,u,u,u]
-; AVX2-NEXT:    retq
-;
-; AVX512-LABEL: test_bitextract_v4i8_var:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
-; AVX512-NEXT:    vpmovdb %xmm0, %xmm0
-; AVX512-NEXT:    retq
+; AVX-LABEL: test_bitextract_v4i8_var:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vpsrlvd %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0,4,8,12,4,5,6,7,8,9,10,11,12,13,14,15]
+; AVX-NEXT:    retq
   %result = bitextract <4 x i8>, <4 x b32> %src, <4 x i32> %off
   ret <4 x i8> %result
 }

@@ -724,8 +724,8 @@ define <128 x i4> @shuffle_v4i4_to_v128i4(<4 x i4> %arg) {
 ; GFX12-TRUE16-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-TRUE16-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-TRUE16-NEXT:    v_and_b16 v4.l, v4.l, 15
-; GFX12-TRUE16-NEXT:    v_and_b16 v2.l, v1.l, 15
 ; GFX12-TRUE16-NEXT:    v_and_b16 v3.l, v3.l, 15
+; GFX12-TRUE16-NEXT:    v_and_b16 v2.l, v1.l, 15
 ; GFX12-TRUE16-NEXT:    s_mov_b32 s0, 0
 ; GFX12-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX12-TRUE16-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v8, 24, v4

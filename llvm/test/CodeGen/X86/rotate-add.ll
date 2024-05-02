@@ -238,9 +238,9 @@ define i64 @test_rotl_udiv_special_case(i64 %i) {
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    movabsq $-6148914691236517205, %rcx # imm = 0xAAAAAAAAAAAAAAAB
 ; X64-NEXT:    mulq %rcx
-; X64-NEXT:    movq %rdx, %rax
-; X64-NEXT:    shrq %rax
-; X64-NEXT:    rolq $60, %rax
+; X64-NEXT:    rolq $59, %rdx
+; X64-NEXT:    movabsq $-576460752303423489, %rax # imm = 0xF7FFFFFFFFFFFFFF
+; X64-NEXT:    andq %rdx, %rax
 ; X64-NEXT:    retq
   %lhs_div = udiv i64 %i, 3
   %rhs_div = udiv i64 %i, 48
@@ -304,18 +304,17 @@ define i64 @test_rotl_mul_with_mask_special_case(i64 %i) {
 define i32 @test_fshl_with_mask_special_case(i32 %x) {
 ; X86-LABEL: test_fshl_with_mask_special_case:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl %ecx, %eax
-; X86-NEXT:    orl $1, %eax
-; X86-NEXT:    shldl $5, %ecx, %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    roll $5, %eax
+; X86-NEXT:    orl $32, %eax
 ; X86-NEXT:    andl $-31, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: test_fshl_with_mask_special_case:
 ; X64:       # %bb.0:
 ; X64-NEXT:    movl %edi, %eax
-; X64-NEXT:    orl $1, %eax
-; X64-NEXT:    shldl $5, %edi, %eax
+; X64-NEXT:    roll $5, %eax
+; X64-NEXT:    orl $32, %eax
 ; X64-NEXT:    andl $-31, %eax
 ; X64-NEXT:    retq
   %or1 = or i32 %x, 1

@@ -1528,26 +1528,20 @@ define <32 x i1> @vector_f32_ueq() {
 ; SDAG-GFX1150-LABEL: vector_f32_ueq:
 ; SDAG-GFX1150:       ; %bb.0: ; %entry
 ; SDAG-GFX1150-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v0, 48 :: v_dual_mov_b32 v1, 0
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v4, 64 :: v_dual_mov_b32 v5, 0
 ; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v8, 32 :: v_dual_mov_b32 v9, 0
-; SDAG-GFX1150-NEXT:    s_clause 0x1
-; SDAG-GFX1150-NEXT:    global_load_b128 v[0:3], v[0:1], off
-; SDAG-GFX1150-NEXT:    global_load_b128 v[4:7], v[4:5], off
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v12, 0x50 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1150-NEXT:    s_clause 0x1
+; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v12, 64 :: v_dual_mov_b32 v13, 0
+; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v14, 16 :: v_dual_mov_b32 v15, 0
+; SDAG-GFX1150-NEXT:    s_clause 0x5
+; SDAG-GFX1150-NEXT:    global_load_b128 v[0:3], v[8:9], off offset:16
+; SDAG-GFX1150-NEXT:    global_load_b128 v[4:7], v[12:13], off
 ; SDAG-GFX1150-NEXT:    global_load_b128 v[8:11], v[8:9], off
-; SDAG-GFX1150-NEXT:    global_load_b128 v[20:23], v[12:13], off
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v12, 16 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v14, 0x60 :: v_dual_mov_b32 v15, 0
+; SDAG-GFX1150-NEXT:    global_load_b128 v[20:23], v[12:13], off offset:16
+; SDAG-GFX1150-NEXT:    global_load_b128 v[27:30], v[14:15], off
+; SDAG-GFX1150-NEXT:    global_load_b128 v[31:34], v[12:13], off offset:32
+; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v14, 0 :: v_dual_mov_b32 v15, 0
 ; SDAG-GFX1150-NEXT:    s_clause 0x1
-; SDAG-GFX1150-NEXT:    global_load_b128 v[27:30], v[12:13], off
-; SDAG-GFX1150-NEXT:    global_load_b128 v[31:34], v[14:15], off
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v12, 0 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1150-NEXT:    v_dual_mov_b32 v14, 0x70 :: v_dual_mov_b32 v15, 0
-; SDAG-GFX1150-NEXT:    s_clause 0x1
-; SDAG-GFX1150-NEXT:    global_load_b128 v[35:38], v[12:13], off
-; SDAG-GFX1150-NEXT:    global_load_b128 v[48:51], v[14:15], off
+; SDAG-GFX1150-NEXT:    global_load_b128 v[35:38], v[14:15], off
+; SDAG-GFX1150-NEXT:    global_load_b128 v[48:51], v[12:13], off offset:48
 ; SDAG-GFX1150-NEXT:    s_waitcnt vmcnt(7)
 ; SDAG-GFX1150-NEXT:    v_cmp_nlg_f32_e32 vcc_lo, 0, v3
 ; SDAG-GFX1150-NEXT:    v_cndmask_b32_e64 v15, 0, 1, vcc_lo
@@ -1773,26 +1767,20 @@ define <32 x i1> @vector_f32_ueq() {
 ; SDAG-GFX1200-NEXT:    s_wait_samplecnt 0x0
 ; SDAG-GFX1200-NEXT:    s_wait_bvhcnt 0x0
 ; SDAG-GFX1200-NEXT:    s_wait_kmcnt 0x0
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v0, 48 :: v_dual_mov_b32 v1, 0
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v4, 64 :: v_dual_mov_b32 v5, 0
 ; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v8, 32 :: v_dual_mov_b32 v9, 0
-; SDAG-GFX1200-NEXT:    s_clause 0x1
-; SDAG-GFX1200-NEXT:    global_load_b128 v[0:3], v[0:1], off
-; SDAG-GFX1200-NEXT:    global_load_b128 v[4:7], v[4:5], off
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v12, 0x50 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1200-NEXT:    s_clause 0x1
+; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v12, 64 :: v_dual_mov_b32 v13, 0
+; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v14, 16 :: v_dual_mov_b32 v15, 0
+; SDAG-GFX1200-NEXT:    s_clause 0x5
+; SDAG-GFX1200-NEXT:    global_load_b128 v[0:3], v[8:9], off offset:16
+; SDAG-GFX1200-NEXT:    global_load_b128 v[4:7], v[12:13], off
 ; SDAG-GFX1200-NEXT:    global_load_b128 v[8:11], v[8:9], off
-; SDAG-GFX1200-NEXT:    global_load_b128 v[20:23], v[12:13], off
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v12, 16 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v14, 0x60 :: v_dual_mov_b32 v15, 0
+; SDAG-GFX1200-NEXT:    global_load_b128 v[20:23], v[12:13], off offset:16
+; SDAG-GFX1200-NEXT:    global_load_b128 v[27:30], v[14:15], off
+; SDAG-GFX1200-NEXT:    global_load_b128 v[31:34], v[12:13], off offset:32
+; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v14, 0 :: v_dual_mov_b32 v15, 0
 ; SDAG-GFX1200-NEXT:    s_clause 0x1
-; SDAG-GFX1200-NEXT:    global_load_b128 v[27:30], v[12:13], off
-; SDAG-GFX1200-NEXT:    global_load_b128 v[31:34], v[14:15], off
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v12, 0 :: v_dual_mov_b32 v13, 0
-; SDAG-GFX1200-NEXT:    v_dual_mov_b32 v14, 0x70 :: v_dual_mov_b32 v15, 0
-; SDAG-GFX1200-NEXT:    s_clause 0x1
-; SDAG-GFX1200-NEXT:    global_load_b128 v[35:38], v[12:13], off
-; SDAG-GFX1200-NEXT:    global_load_b128 v[48:51], v[14:15], off
+; SDAG-GFX1200-NEXT:    global_load_b128 v[35:38], v[14:15], off
+; SDAG-GFX1200-NEXT:    global_load_b128 v[48:51], v[12:13], off offset:48
 ; SDAG-GFX1200-NEXT:    s_wait_loadcnt 0x7
 ; SDAG-GFX1200-NEXT:    v_cmp_nlg_f32_e32 vcc_lo, 0, v3
 ; SDAG-GFX1200-NEXT:    s_wait_alu depctr_va_vcc(0)

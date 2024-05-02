@@ -43,11 +43,11 @@ start:
 define i128 @__muloti4(i128 %0, i128 %1, ptr nocapture nonnull writeonly align 4 %2) #2 {
 ; AARCH-LABEL: __muloti4:
 ; AARCH:       // %bb.0: // %Entry
-; AARCH-NEXT:    eor x8, x3, x2, asr #63
-; AARCH-NEXT:    eor x9, x1, x0, asr #63
+; AARCH-NEXT:    asr x8, x0, #63
+; AARCH-NEXT:    cmp x3, x2, asr #63
 ; AARCH-NEXT:    str wzr, [x4]
-; AARCH-NEXT:    orr x8, x9, x8
-; AARCH-NEXT:    cbz x8, .LBB1_2
+; AARCH-NEXT:    ccmp x1, x8, #0, eq
+; AARCH-NEXT:    b.eq .LBB1_2
 ; AARCH-NEXT:  // %bb.1: // %overflow
 ; AARCH-NEXT:    asr x9, x1, #63
 ; AARCH-NEXT:    umulh x10, x0, x2

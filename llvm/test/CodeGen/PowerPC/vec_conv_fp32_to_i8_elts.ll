@@ -27,8 +27,7 @@ define i16 @test2elt(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-P8-NEXT:    xxswapd vs0, v2
 ; CHECK-P8-NEXT:    mffprd r3, f0
 ; CHECK-P8-NEXT:    clrldi r3, r3, 48
-; CHECK-P8-NEXT:    sth r3, -2(r1)
-; CHECK-P8-NEXT:    lhz r3, -2(r1)
+; CHECK-P8-NEXT:    clrlwi r3, r3, 16
 ; CHECK-P8-NEXT:    blr
 ;
 ; CHECK-P9-LABEL: test2elt:
@@ -44,11 +43,10 @@ define i16 @test2elt(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-P9-NEXT:    mtvsrd v2, r3
 ; CHECK-P9-NEXT:    mffprwz r3, f0
 ; CHECK-P9-NEXT:    mtvsrd v3, r3
-; CHECK-P9-NEXT:    addi r3, r1, -2
+; CHECK-P9-NEXT:    li r3, 0
 ; CHECK-P9-NEXT:    vmrghb v2, v3, v2
-; CHECK-P9-NEXT:    vsldoi v2, v2, v2, 8
-; CHECK-P9-NEXT:    stxsihx v2, 0, r3
-; CHECK-P9-NEXT:    lhz r3, -2(r1)
+; CHECK-P9-NEXT:    vextuhrx r3, r3, v2
+; CHECK-P9-NEXT:    clrlwi r3, r3, 16
 ; CHECK-P9-NEXT:    blr
 ;
 ; CHECK-BE-LABEL: test2elt:
@@ -66,11 +64,10 @@ define i16 @test2elt(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-BE-NEXT:    mtfprwz f2, r3
 ; CHECK-BE-NEXT:    mffprwz r3, f0
 ; CHECK-BE-NEXT:    mtvsrwz v2, r3
-; CHECK-BE-NEXT:    addi r3, r1, -2
+; CHECK-BE-NEXT:    li r3, 0
 ; CHECK-BE-NEXT:    xxperm v2, vs2, vs1
-; CHECK-BE-NEXT:    vsldoi v2, v2, v2, 10
-; CHECK-BE-NEXT:    stxsihx v2, 0, r3
-; CHECK-BE-NEXT:    lhz r3, -2(r1)
+; CHECK-BE-NEXT:    vextuhlx r3, r3, v2
+; CHECK-BE-NEXT:    clrlwi r3, r3, 16
 ; CHECK-BE-NEXT:    blr
 entry:
   %0 = bitcast i64 %a.coerce to <2 x float>
@@ -667,8 +664,7 @@ define i16 @test2elt_signed(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-P8-NEXT:    xxswapd vs0, v2
 ; CHECK-P8-NEXT:    mffprd r3, f0
 ; CHECK-P8-NEXT:    clrldi r3, r3, 48
-; CHECK-P8-NEXT:    sth r3, -2(r1)
-; CHECK-P8-NEXT:    lhz r3, -2(r1)
+; CHECK-P8-NEXT:    clrlwi r3, r3, 16
 ; CHECK-P8-NEXT:    blr
 ;
 ; CHECK-P9-LABEL: test2elt_signed:
@@ -684,11 +680,10 @@ define i16 @test2elt_signed(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-P9-NEXT:    mtvsrd v2, r3
 ; CHECK-P9-NEXT:    mffprwz r3, f0
 ; CHECK-P9-NEXT:    mtvsrd v3, r3
-; CHECK-P9-NEXT:    addi r3, r1, -2
+; CHECK-P9-NEXT:    li r3, 0
 ; CHECK-P9-NEXT:    vmrghb v2, v3, v2
-; CHECK-P9-NEXT:    vsldoi v2, v2, v2, 8
-; CHECK-P9-NEXT:    stxsihx v2, 0, r3
-; CHECK-P9-NEXT:    lhz r3, -2(r1)
+; CHECK-P9-NEXT:    vextuhrx r3, r3, v2
+; CHECK-P9-NEXT:    clrlwi r3, r3, 16
 ; CHECK-P9-NEXT:    blr
 ;
 ; CHECK-BE-LABEL: test2elt_signed:
@@ -706,11 +701,10 @@ define i16 @test2elt_signed(i64 %a.coerce) local_unnamed_addr #0 {
 ; CHECK-BE-NEXT:    mtfprwz f2, r3
 ; CHECK-BE-NEXT:    mffprwz r3, f0
 ; CHECK-BE-NEXT:    mtvsrwz v2, r3
-; CHECK-BE-NEXT:    addi r3, r1, -2
+; CHECK-BE-NEXT:    li r3, 0
 ; CHECK-BE-NEXT:    xxperm v2, vs2, vs1
-; CHECK-BE-NEXT:    vsldoi v2, v2, v2, 10
-; CHECK-BE-NEXT:    stxsihx v2, 0, r3
-; CHECK-BE-NEXT:    lhz r3, -2(r1)
+; CHECK-BE-NEXT:    vextuhlx r3, r3, v2
+; CHECK-BE-NEXT:    clrlwi r3, r3, 16
 ; CHECK-BE-NEXT:    blr
 entry:
   %0 = bitcast i64 %a.coerce to <2 x float>

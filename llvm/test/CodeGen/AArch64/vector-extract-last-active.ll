@@ -27,10 +27,11 @@ define i8 @extract_last_i8(<16 x i8> %data, <16 x i8> %mask, i8 %passthru) {
 ;
 ; SVE-FIXED-LABEL: extract_last_i8:
 ; SVE-FIXED:       // %bb.0:
-; SVE-FIXED-NEXT:    cmtst v1.16b, v1.16b, v1.16b
 ; SVE-FIXED-NEXT:    ptrue p0.b, vl16
+; SVE-FIXED-NEXT:    // kill: def $q1 killed $q1 def $z1
 ; SVE-FIXED-NEXT:    // kill: def $q0 killed $q0 def $z0
 ; SVE-FIXED-NEXT:    cmpne p1.b, p0/z, z1.b, #0
+; SVE-FIXED-NEXT:    cmtst v1.16b, v1.16b, v1.16b
 ; SVE-FIXED-NEXT:    lastb w8, p1, z0.b
 ; SVE-FIXED-NEXT:    umaxv b0, v1.16b
 ; SVE-FIXED-NEXT:    fmov w9, s0
@@ -67,10 +68,11 @@ define i16 @extract_last_i16(<8 x i16> %data, <8 x i16> %mask, i16 %passthru) {
 ;
 ; SVE-FIXED-LABEL: extract_last_i16:
 ; SVE-FIXED:       // %bb.0:
-; SVE-FIXED-NEXT:    cmtst v1.8h, v1.8h, v1.8h
 ; SVE-FIXED-NEXT:    ptrue p0.h, vl8
+; SVE-FIXED-NEXT:    // kill: def $q1 killed $q1 def $z1
 ; SVE-FIXED-NEXT:    // kill: def $q0 killed $q0 def $z0
 ; SVE-FIXED-NEXT:    cmpne p1.h, p0/z, z1.h, #0
+; SVE-FIXED-NEXT:    cmtst v1.8h, v1.8h, v1.8h
 ; SVE-FIXED-NEXT:    lastb w8, p1, z0.h
 ; SVE-FIXED-NEXT:    umaxv h0, v1.8h
 ; SVE-FIXED-NEXT:    fmov w9, s0

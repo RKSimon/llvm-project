@@ -34,9 +34,8 @@ define void @masked_scatter_v4i8(ptr %a, ptr %b) {
 ; CHECK-NEXT:    ptrue p0.d, vl2
 ; CHECK-NEXT:    ldp q3, q4, [x1]
 ; CHECK-NEXT:    ushll v0.8h, v0.8b, #0
-; CHECK-NEXT:    cmeq v1.4h, v0.4h, #0
 ; CHECK-NEXT:    ushll v0.4s, v0.4h, #0
-; CHECK-NEXT:    sshll v1.4s, v1.4h, #0
+; CHECK-NEXT:    cmeq v1.4s, v0.4s, #0
 ; CHECK-NEXT:    sshll v2.2d, v1.2s, #0
 ; CHECK-NEXT:    sshll2 v1.2d, v1.4s, #0
 ; CHECK-NEXT:    cmpne p1.d, p0/z, z2.d, #0
@@ -1053,11 +1052,13 @@ define void @masked_scatter_v4i1(ptr %a, ptr %b) {
 ; CHECK-NEXT:    adrp x8, .LCPI27_0
 ; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI27_0]
 ; CHECK-NEXT:    cmeq v1.4s, v0.4s, #0
+; CHECK-NEXT:    xtn v3.4h, v1.4s
 ; CHECK-NEXT:    and v1.16b, v1.16b, v2.16b
+; CHECK-NEXT:    umov w9, v3.h[0]
 ; CHECK-NEXT:    addv s3, v1.4s
 ; CHECK-NEXT:    ldp q2, q1, [x1]
 ; CHECK-NEXT:    fmov w8, s3
-; CHECK-NEXT:    tbnz w8, #0, .LBB27_5
+; CHECK-NEXT:    tbnz w9, #0, .LBB27_5
 ; CHECK-NEXT:  // %bb.1: // %else
 ; CHECK-NEXT:    tbnz w8, #1, .LBB27_6
 ; CHECK-NEXT:  .LBB27_2: // %else2

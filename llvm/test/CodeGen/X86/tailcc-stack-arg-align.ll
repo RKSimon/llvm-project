@@ -99,8 +99,8 @@ define tailcc ptr @musttail_i256(ptr %p) nounwind {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    subq $48, %rsp
 ; CHECK-NEXT:    xorps %xmm0, %xmm0
-; CHECK-NEXT:    movaps %xmm0, 8(%rsp)
 ; CHECK-NEXT:    movaps %xmm0, 24(%rsp)
+; CHECK-NEXT:    movaps %xmm0, 8(%rsp)
 ; CHECK-NEXT:    movq %rdi, 56(%rsp)
 ; CHECK-NEXT:    movq 48(%rsp), %rax
 ; CHECK-NEXT:    movaps %xmm0, 40(%rsp)

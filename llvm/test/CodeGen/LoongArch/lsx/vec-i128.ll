@@ -352,22 +352,22 @@ entry:
 define void @sub_v4i128(ptr %res, ptr %a0, ptr %a1) nounwind {
 ; CHECK-LABEL: sub_v4i128:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vld $vr0, $a1, 32
-; CHECK-NEXT:    vld $vr1, $a1, 48
-; CHECK-NEXT:    vld $vr2, $a1, 0
-; CHECK-NEXT:    vld $vr3, $a1, 16
-; CHECK-NEXT:    vld $vr4, $a2, 16
-; CHECK-NEXT:    vld $vr5, $a2, 0
-; CHECK-NEXT:    vld $vr6, $a2, 48
-; CHECK-NEXT:    vld $vr7, $a2, 32
+; CHECK-NEXT:    vld $vr0, $a1, 48
+; CHECK-NEXT:    vld $vr1, $a1, 32
+; CHECK-NEXT:    vld $vr2, $a1, 16
+; CHECK-NEXT:    vld $vr3, $a1, 0
+; CHECK-NEXT:    vld $vr4, $a2, 0
+; CHECK-NEXT:    vld $vr5, $a2, 16
+; CHECK-NEXT:    vld $vr6, $a2, 32
+; CHECK-NEXT:    vld $vr7, $a2, 48
 ; CHECK-NEXT:    vsub.q $vr3, $vr3, $vr4
 ; CHECK-NEXT:    vsub.q $vr2, $vr2, $vr5
 ; CHECK-NEXT:    vsub.q $vr1, $vr1, $vr6
 ; CHECK-NEXT:    vsub.q $vr0, $vr0, $vr7
-; CHECK-NEXT:    vst $vr0, $a0, 32
-; CHECK-NEXT:    vst $vr1, $a0, 48
-; CHECK-NEXT:    vst $vr2, $a0, 0
-; CHECK-NEXT:    vst $vr3, $a0, 16
+; CHECK-NEXT:    vst $vr0, $a0, 48
+; CHECK-NEXT:    vst $vr1, $a0, 32
+; CHECK-NEXT:    vst $vr2, $a0, 16
+; CHECK-NEXT:    vst $vr3, $a0, 0
 ; CHECK-NEXT:    ret
 entry:
   %v0 = load <4 x i128>, ptr %a0
@@ -396,18 +396,18 @@ entry:
 define void @sub_v3i128(ptr %res, ptr %a0, ptr %a1) nounwind {
 ; CHECK-LABEL: sub_v3i128:
 ; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vld $vr0, $a1, 0
+; CHECK-NEXT:    vld $vr0, $a1, 32
 ; CHECK-NEXT:    vld $vr1, $a1, 16
-; CHECK-NEXT:    vld $vr2, $a1, 32
-; CHECK-NEXT:    vld $vr3, $a2, 32
+; CHECK-NEXT:    vld $vr2, $a1, 0
+; CHECK-NEXT:    vld $vr3, $a2, 0
 ; CHECK-NEXT:    vld $vr4, $a2, 16
-; CHECK-NEXT:    vld $vr5, $a2, 0
+; CHECK-NEXT:    vld $vr5, $a2, 32
 ; CHECK-NEXT:    vsub.q $vr2, $vr2, $vr3
 ; CHECK-NEXT:    vsub.q $vr1, $vr1, $vr4
 ; CHECK-NEXT:    vsub.q $vr0, $vr0, $vr5
-; CHECK-NEXT:    vst $vr0, $a0, 0
+; CHECK-NEXT:    vst $vr0, $a0, 32
 ; CHECK-NEXT:    vst $vr1, $a0, 16
-; CHECK-NEXT:    vst $vr2, $a0, 32
+; CHECK-NEXT:    vst $vr2, $a0, 0
 ; CHECK-NEXT:    ret
 entry:
   %v0 = load <3 x i128>, ptr %a0
@@ -491,10 +491,10 @@ define i128 @add_v1i128_scalar_use(ptr %res, ptr %a0, ptr %a1, i128 %b) nounwind
 ; LA32-NEXT:    sltu $a4, $a4, $t1
 ; LA32-NEXT:    add.w $a4, $a5, $a4
 ; LA32-NEXT:    add.w $a4, $a4, $a6
-; LA32-NEXT:    st.w $a2, $a0, 8
 ; LA32-NEXT:    st.w $a4, $a0, 12
-; LA32-NEXT:    st.w $a3, $a0, 0
+; LA32-NEXT:    st.w $a2, $a0, 8
 ; LA32-NEXT:    st.w $a1, $a0, 4
+; LA32-NEXT:    st.w $a3, $a0, 0
 ; LA32-NEXT:    ret
 ;
 ; LA64-LABEL: add_v1i128_scalar_use:
@@ -622,30 +622,32 @@ define void @add_v1i128_bitcast_v8f16(ptr %res, ptr %a, <8 x half> %h) nounwind 
 ;
 ; LA64-LABEL: add_v1i128_bitcast_v8f16:
 ; LA64:       # %bb.0: # %entry
-; LA64-NEXT:    ld.h $a3, $a2, 8
-; LA64-NEXT:    ld.hu $a4, $a2, 0
-; LA64-NEXT:    ld.hu $a5, $a2, 16
-; LA64-NEXT:    ld.h $a6, $a2, 24
-; LA64-NEXT:    slli.d $a3, $a3, 16
+; LA64-NEXT:    ld.hu $a3, $a2, 16
+; LA64-NEXT:    ld.h $a4, $a2, 24
+; LA64-NEXT:    slli.d $a3, $a3, 32
+; LA64-NEXT:    ld.h $a5, $a2, 8
+; LA64-NEXT:    ld.hu $a6, $a2, 0
+; LA64-NEXT:    slli.d $a4, $a4, 48
 ; LA64-NEXT:    or $a3, $a4, $a3
-; LA64-NEXT:    slli.d $a4, $a5, 32
-; LA64-NEXT:    slli.d $a5, $a6, 48
-; LA64-NEXT:    or $a4, $a5, $a4
-; LA64-NEXT:    bstrins.d $a4, $a3, 31, 0
-; LA64-NEXT:    ld.h $a3, $a2, 40
-; LA64-NEXT:    ld.hu $a5, $a2, 32
-; LA64-NEXT:    ld.hu $a6, $a2, 48
-; LA64-NEXT:    ld.h $a2, $a2, 56
-; LA64-NEXT:    slli.d $a3, $a3, 16
-; LA64-NEXT:    or $a3, $a5, $a3
-; LA64-NEXT:    slli.d $a5, $a6, 32
-; LA64-NEXT:    slli.d $a2, $a2, 48
-; LA64-NEXT:    ld.d $a6, $a1, 8
-; LA64-NEXT:    ld.d $a1, $a1, 0
+; LA64-NEXT:    slli.d $a4, $a5, 16
+; LA64-NEXT:    or $a4, $a6, $a4
+; LA64-NEXT:    ld.hu $a5, $a2, 48
+; LA64-NEXT:    bstrpick.d $a4, $a4, 31, 0
+; LA64-NEXT:    or $a3, $a4, $a3
+; LA64-NEXT:    ld.h $a4, $a2, 56
+; LA64-NEXT:    slli.d $a5, $a5, 32
+; LA64-NEXT:    ld.h $a6, $a2, 40
+; LA64-NEXT:    ld.hu $a2, $a2, 32
+; LA64-NEXT:    slli.d $a4, $a4, 48
+; LA64-NEXT:    or $a4, $a4, $a5
+; LA64-NEXT:    slli.d $a5, $a6, 16
 ; LA64-NEXT:    or $a2, $a2, $a5
-; LA64-NEXT:    bstrins.d $a2, $a3, 31, 0
-; LA64-NEXT:    add.d $a2, $a6, $a2
-; LA64-NEXT:    add.d $a3, $a1, $a4
+; LA64-NEXT:    ld.d $a5, $a1, 8
+; LA64-NEXT:    ld.d $a1, $a1, 0
+; LA64-NEXT:    bstrpick.d $a2, $a2, 31, 0
+; LA64-NEXT:    or $a2, $a2, $a4
+; LA64-NEXT:    add.d $a2, $a5, $a2
+; LA64-NEXT:    add.d $a3, $a1, $a3
 ; LA64-NEXT:    sltu $a1, $a3, $a1
 ; LA64-NEXT:    add.d $a1, $a2, $a1
 ; LA64-NEXT:    st.d $a3, $a0, 0

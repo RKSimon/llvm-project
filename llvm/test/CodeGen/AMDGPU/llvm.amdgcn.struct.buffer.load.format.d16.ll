@@ -71,10 +71,8 @@ define amdgpu_ps half @buffer_load_format_d16_xyzw(<4 x i32> inreg %rsrc) {
 ; UNPACKED:       ; %bb.0: ; %main_body
 ; UNPACKED-NEXT:    v_mov_b32_e32 v0, 0 ; encoding: [0x80,0x02,0x00,0x7e]
 ; UNPACKED-NEXT:    buffer_load_format_d16_xyzw v[0:3], v0, s[0:3], 0 idxen ; encoding: [0x00,0x20,0x2c,0xe0,0x00,0x00,0x00,0x80]
-; UNPACKED-NEXT:    s_mov_b32 s0, 0x1000504 ; encoding: [0xff,0x00,0x80,0xbe,0x04,0x05,0x00,0x01]
 ; UNPACKED-NEXT:    s_waitcnt vmcnt(0) ; encoding: [0x70,0x0f,0x8c,0xbf]
-; UNPACKED-NEXT:    v_perm_b32 v0, v2, v3, s0 ; encoding: [0x00,0x00,0xed,0xd1,0x02,0x07,0x02,0x00]
-; UNPACKED-NEXT:    v_lshrrev_b32_e32 v0, 16, v0 ; encoding: [0x90,0x00,0x00,0x20]
+; UNPACKED-NEXT:    v_mov_b32_e32 v0, v3 ; encoding: [0x03,0x03,0x00,0x7e]
 ; UNPACKED-NEXT:    ; return to shader part epilog
 ;
 ; PACKED-LABEL: buffer_load_format_d16_xyzw:

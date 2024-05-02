@@ -1159,11 +1159,14 @@ define i1 @pow2_and_i128(i128 %num, i128 %shift) {
 define i32 @pow2_bswap(i32 %a0, i32 %a1) {
 ; CHECK-LABEL: pow2_bswap:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movl %edi, %eax
-; CHECK-NEXT:    notl %eax
-; CHECK-NEXT:    shrl $5, %eax
-; CHECK-NEXT:    orl $67108863, %eax # imm = 0x3FFFFFF
-; CHECK-NEXT:    andl %esi, %eax
+; CHECK-NEXT:    movl %esi, %eax
+; CHECK-NEXT:    notl %edi
+; CHECK-NEXT:    shrl $5, %edi
+; CHECK-NEXT:    andl $67108864, %edi # imm = 0x4000000
+; CHECK-NEXT:    addl $67108864, %edi # imm = 0x4000000
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    divl %edi
+; CHECK-NEXT:    movl %edx, %eax
 ; CHECK-NEXT:    retq
   %cmp = icmp sgt i32 0, %a0
   %sel = select i1 %cmp, i32 4, i32 8
@@ -1207,15 +1210,19 @@ define i32 @pow2_bswap_vec(<4 x i32> %a0, i32 %a1, ptr %p2) {
 define i32 @pow2_bitreverse(i32 %a0, i32 %a1) {
 ; CHECK-LABEL: pow2_bitreverse:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    # kill: def $edi killed $edi def $rdi
+; CHECK-NEXT:    movl %esi, %eax
 ; CHECK-NEXT:    notl %edi
-; CHECK-NEXT:    shrl $5, %edi
-; CHECK-NEXT:    andl $67108864, %edi # imm = 0x4000000
-; CHECK-NEXT:    leal 536870912(,%rdi,8), %eax
-; CHECK-NEXT:    leal 134217728(%rax,%rdi,2), %eax
-; CHECK-NEXT:    andl $805306368, %eax # imm = 0x30000000
-; CHECK-NEXT:    decl %eax
-; CHECK-NEXT:    andl %esi, %eax
+; CHECK-NEXT:    shrl %edi
+; CHECK-NEXT:    andl $1073741824, %edi # imm = 0x40000000
+; CHECK-NEXT:    addl $1073741824, %edi # imm = 0x40000000
+; CHECK-NEXT:    movl %edi, %ecx
+; CHECK-NEXT:    shrl %ecx
+; CHECK-NEXT:    shrl $3, %edi
+; CHECK-NEXT:    orl %ecx, %edi
+; CHECK-NEXT:    andl $805306368, %edi # imm = 0x30000000
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    divl %edi
+; CHECK-NEXT:    movl %edx, %eax
 ; CHECK-NEXT:    retq
   %cmp = icmp sgt i32 0, %a0
   %sel = select i1 %cmp, i32 4, i32 8
@@ -1388,10 +1395,10 @@ define i8 @pow2_trunc_vec(i8 %x8, <4 x i32> %a, ptr %p) {
 define i8 @pow2_truncc_vec_fail(<4 x i32> %x, <4 x i32> %a) {
 ; CHECK-LABEL: pow2_truncc_vec_fail:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
 ; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    movzbl %al, %eax
 ; CHECK-NEXT:    movd %xmm1, %ecx
+; CHECK-NEXT:    andl $78, %ecx
 ; CHECK-NEXT:    divb %cl
 ; CHECK-NEXT:    movzbl %ah, %eax
 ; CHECK-NEXT:    # kill: def $al killed $al killed $eax

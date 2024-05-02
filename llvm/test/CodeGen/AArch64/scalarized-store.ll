@@ -235,17 +235,17 @@ define void @div_v8i16(ptr %p, ptr %q) {
 define void @div_v4i32(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v4i32:
 ; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    ldp w11, w8, [x0]
 ; CHECK-SD-NEXT:    ldp w10, w9, [x1]
-; CHECK-SD-NEXT:    ldr w8, [x0, #4]
-; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w8, w8, w9
-; CHECK-SD-NEXT:    ldr w9, [x0]
-; CHECK-SD-NEXT:    udiv w9, w9, w10
-; CHECK-SD-NEXT:    ldp w10, w13, [x0, #8]
+; CHECK-SD-NEXT:    udiv w9, w11, w10
+; CHECK-SD-NEXT:    ldr w10, [x0, #8]
+; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w10, w10, w11
 ; CHECK-SD-NEXT:    fmov s0, w9
+; CHECK-SD-NEXT:    ldr w11, [x0, #12]
 ; CHECK-SD-NEXT:    mov v0.s[1], w8
-; CHECK-SD-NEXT:    udiv w8, w13, w12
+; CHECK-SD-NEXT:    udiv w8, w11, w12
 ; CHECK-SD-NEXT:    mov v0.s[2], w10
 ; CHECK-SD-NEXT:    mov v0.s[3], w8
 ; CHECK-SD-NEXT:    str q0, [x0]
@@ -283,10 +283,10 @@ define void @div_v4i32(ptr %p, ptr %q) {
 define void @div_v2i64(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v2i64:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    ldp x8, x11, [x0]
-; CHECK-SD-NEXT:    ldp x9, x10, [x1]
-; CHECK-SD-NEXT:    udiv x8, x8, x9
-; CHECK-SD-NEXT:    udiv x9, x11, x10
+; CHECK-SD-NEXT:    ldp x8, x10, [x1]
+; CHECK-SD-NEXT:    ldp x11, x9, [x0]
+; CHECK-SD-NEXT:    udiv x8, x11, x8
+; CHECK-SD-NEXT:    udiv x9, x9, x10
 ; CHECK-SD-NEXT:    fmov d0, x8
 ; CHECK-SD-NEXT:    mov v0.d[1], x9
 ; CHECK-SD-NEXT:    str q0, [x0]
@@ -704,17 +704,17 @@ define void @rem_v2f64(ptr %p, ptr %q) {
 define ptr @div_v4i32_preinc(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v4i32_preinc:
 ; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    ldp w11, w8, [x0]
 ; CHECK-SD-NEXT:    ldp w10, w9, [x1]
-; CHECK-SD-NEXT:    ldr w8, [x0, #4]
-; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w8, w8, w9
-; CHECK-SD-NEXT:    ldr w9, [x0]
-; CHECK-SD-NEXT:    udiv w9, w9, w10
-; CHECK-SD-NEXT:    ldp w10, w13, [x0, #8]
+; CHECK-SD-NEXT:    udiv w9, w11, w10
+; CHECK-SD-NEXT:    ldr w10, [x0, #8]
+; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w10, w10, w11
 ; CHECK-SD-NEXT:    fmov s0, w9
+; CHECK-SD-NEXT:    ldr w11, [x0, #12]
 ; CHECK-SD-NEXT:    mov v0.s[1], w8
-; CHECK-SD-NEXT:    udiv w8, w13, w12
+; CHECK-SD-NEXT:    udiv w8, w11, w12
 ; CHECK-SD-NEXT:    mov v0.s[2], w10
 ; CHECK-SD-NEXT:    mov v0.s[3], w8
 ; CHECK-SD-NEXT:    str q0, [x0, #16]!
@@ -753,17 +753,17 @@ define ptr @div_v4i32_preinc(ptr %p, ptr %q) {
 define ptr @div_v4i32_predec(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v4i32_predec:
 ; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    ldp w11, w8, [x0]
 ; CHECK-SD-NEXT:    ldp w10, w9, [x1]
-; CHECK-SD-NEXT:    ldr w8, [x0, #4]
-; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w8, w8, w9
-; CHECK-SD-NEXT:    ldr w9, [x0]
-; CHECK-SD-NEXT:    udiv w9, w9, w10
-; CHECK-SD-NEXT:    ldp w10, w13, [x0, #8]
+; CHECK-SD-NEXT:    udiv w9, w11, w10
+; CHECK-SD-NEXT:    ldr w10, [x0, #8]
+; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
 ; CHECK-SD-NEXT:    udiv w10, w10, w11
 ; CHECK-SD-NEXT:    fmov s0, w9
+; CHECK-SD-NEXT:    ldr w11, [x0, #12]
 ; CHECK-SD-NEXT:    mov v0.s[1], w8
-; CHECK-SD-NEXT:    udiv w8, w13, w12
+; CHECK-SD-NEXT:    udiv w8, w11, w12
 ; CHECK-SD-NEXT:    mov v0.s[2], w10
 ; CHECK-SD-NEXT:    mov v0.s[3], w8
 ; CHECK-SD-NEXT:    str q0, [x0, #-16]!
@@ -802,20 +802,22 @@ define ptr @div_v4i32_predec(ptr %p, ptr %q) {
 define ptr @div_v4i32_postinc(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v4i32_postinc:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    ldp w10, w9, [x1]
-; CHECK-SD-NEXT:    ldr w8, [x0, #4]
-; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
-; CHECK-SD-NEXT:    udiv w8, w8, w9
-; CHECK-SD-NEXT:    ldr w9, [x0]
+; CHECK-SD-NEXT:    ldp w12, w9, [x0]
+; CHECK-SD-NEXT:    ldp w11, w10, [x1]
+; CHECK-SD-NEXT:    mov x8, x0
 ; CHECK-SD-NEXT:    udiv w9, w9, w10
-; CHECK-SD-NEXT:    ldp w10, w13, [x0, #8]
-; CHECK-SD-NEXT:    udiv w10, w10, w11
-; CHECK-SD-NEXT:    fmov s0, w9
-; CHECK-SD-NEXT:    mov v0.s[1], w8
-; CHECK-SD-NEXT:    udiv w8, w13, w12
-; CHECK-SD-NEXT:    mov v0.s[2], w10
-; CHECK-SD-NEXT:    mov v0.s[3], w8
-; CHECK-SD-NEXT:    str q0, [x0], #16
+; CHECK-SD-NEXT:    udiv w10, w12, w11
+; CHECK-SD-NEXT:    ldr w11, [x0, #8]
+; CHECK-SD-NEXT:    ldp w12, w13, [x1, #8]
+; CHECK-SD-NEXT:    udiv w11, w11, w12
+; CHECK-SD-NEXT:    fmov s0, w10
+; CHECK-SD-NEXT:    ldr w12, [x0, #12]
+; CHECK-SD-NEXT:    add x0, x0, #16
+; CHECK-SD-NEXT:    mov v0.s[1], w9
+; CHECK-SD-NEXT:    udiv w9, w12, w13
+; CHECK-SD-NEXT:    mov v0.s[2], w11
+; CHECK-SD-NEXT:    mov v0.s[3], w9
+; CHECK-SD-NEXT:    str q0, [x8]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: div_v4i32_postinc:
@@ -851,20 +853,22 @@ define ptr @div_v4i32_postinc(ptr %p, ptr %q) {
 define ptr @div_v4i32_postdec(ptr %p, ptr %q) {
 ; CHECK-SD-LABEL: div_v4i32_postdec:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    ldp w10, w9, [x1]
-; CHECK-SD-NEXT:    ldr w8, [x0, #4]
-; CHECK-SD-NEXT:    ldp w11, w12, [x1, #8]
-; CHECK-SD-NEXT:    udiv w8, w8, w9
-; CHECK-SD-NEXT:    ldr w9, [x0]
+; CHECK-SD-NEXT:    ldp w12, w9, [x0]
+; CHECK-SD-NEXT:    ldp w11, w10, [x1]
+; CHECK-SD-NEXT:    mov x8, x0
 ; CHECK-SD-NEXT:    udiv w9, w9, w10
-; CHECK-SD-NEXT:    ldp w10, w13, [x0, #8]
-; CHECK-SD-NEXT:    udiv w10, w10, w11
-; CHECK-SD-NEXT:    fmov s0, w9
-; CHECK-SD-NEXT:    mov v0.s[1], w8
-; CHECK-SD-NEXT:    udiv w8, w13, w12
-; CHECK-SD-NEXT:    mov v0.s[2], w10
-; CHECK-SD-NEXT:    mov v0.s[3], w8
-; CHECK-SD-NEXT:    str q0, [x0], #-16
+; CHECK-SD-NEXT:    udiv w10, w12, w11
+; CHECK-SD-NEXT:    ldr w11, [x0, #8]
+; CHECK-SD-NEXT:    ldp w12, w13, [x1, #8]
+; CHECK-SD-NEXT:    udiv w11, w11, w12
+; CHECK-SD-NEXT:    fmov s0, w10
+; CHECK-SD-NEXT:    ldr w12, [x0, #12]
+; CHECK-SD-NEXT:    sub x0, x0, #16
+; CHECK-SD-NEXT:    mov v0.s[1], w9
+; CHECK-SD-NEXT:    udiv w9, w12, w13
+; CHECK-SD-NEXT:    mov v0.s[2], w11
+; CHECK-SD-NEXT:    mov v0.s[3], w9
+; CHECK-SD-NEXT:    str q0, [x8]
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: div_v4i32_postdec:

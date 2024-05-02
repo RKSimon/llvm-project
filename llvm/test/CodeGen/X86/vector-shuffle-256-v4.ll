@@ -876,33 +876,14 @@ define <4 x double> @shuffle_v4f64_1436_split_load(ptr %px, ptr %py) {
 ; AVX2-NEXT:    vblendpd {{.*#+}} ymm0 = ymm0[0,1,2],ymm1[3]
 ; AVX2-NEXT:    retq
 ;
-; AVX512VL-SLOW-LABEL: shuffle_v4f64_1436_split_load:
-; AVX512VL-SLOW:       # %bb.0:
-; AVX512VL-SLOW-NEXT:    vmovapd (%rsi), %xmm0
-; AVX512VL-SLOW-NEXT:    vmovupd (%rdi), %ymm1
-; AVX512VL-SLOW-NEXT:    vshufpd {{.*#+}} ymm0 = ymm1[1],ymm0[0],ymm1[3],ymm0[3]
-; AVX512VL-SLOW-NEXT:    vbroadcastsd 16(%rsi), %ymm1
-; AVX512VL-SLOW-NEXT:    vblendpd {{.*#+}} ymm0 = ymm0[0,1,2],ymm1[3]
-; AVX512VL-SLOW-NEXT:    retq
-;
-; AVX512VL-FAST-ALL-LABEL: shuffle_v4f64_1436_split_load:
-; AVX512VL-FAST-ALL:       # %bb.0:
-; AVX512VL-FAST-ALL-NEXT:    vmovapd (%rsi), %xmm0
-; AVX512VL-FAST-ALL-NEXT:    vmovapd 16(%rsi), %xmm1
-; AVX512VL-FAST-ALL-NEXT:    vmovupd (%rdi), %ymm2
-; AVX512VL-FAST-ALL-NEXT:    vshufpd {{.*#+}} ymm2 = ymm2[1],ymm0[0],ymm2[3],ymm0[3]
-; AVX512VL-FAST-ALL-NEXT:    vpmovsxbq {{.*#+}} ymm0 = [0,1,2,4]
-; AVX512VL-FAST-ALL-NEXT:    vpermi2pd %ymm1, %ymm2, %ymm0
-; AVX512VL-FAST-ALL-NEXT:    retq
-;
-; AVX512VL-FAST-PERLANE-LABEL: shuffle_v4f64_1436_split_load:
-; AVX512VL-FAST-PERLANE:       # %bb.0:
-; AVX512VL-FAST-PERLANE-NEXT:    vmovapd (%rsi), %xmm0
-; AVX512VL-FAST-PERLANE-NEXT:    vmovupd (%rdi), %ymm1
-; AVX512VL-FAST-PERLANE-NEXT:    vshufpd {{.*#+}} ymm0 = ymm1[1],ymm0[0],ymm1[3],ymm0[3]
-; AVX512VL-FAST-PERLANE-NEXT:    vbroadcastsd 16(%rsi), %ymm1
-; AVX512VL-FAST-PERLANE-NEXT:    vblendpd {{.*#+}} ymm0 = ymm0[0,1,2],ymm1[3]
-; AVX512VL-FAST-PERLANE-NEXT:    retq
+; AVX512VL-LABEL: shuffle_v4f64_1436_split_load:
+; AVX512VL:       # %bb.0:
+; AVX512VL-NEXT:    vmovapd (%rsi), %xmm0
+; AVX512VL-NEXT:    vmovupd (%rdi), %ymm1
+; AVX512VL-NEXT:    vshufpd {{.*#+}} ymm0 = ymm1[1],ymm0[0],ymm1[3],ymm0[3]
+; AVX512VL-NEXT:    vbroadcastsd 16(%rsi), %ymm1
+; AVX512VL-NEXT:    vblendpd {{.*#+}} ymm0 = ymm0[0,1,2],ymm1[3]
+; AVX512VL-NEXT:    retq
   %pxhi = getelementptr inbounds nuw i8, ptr %px, i64 16
   %pyhi = getelementptr inbounds nuw i8, ptr %py, i64 16
   %x0 = load <2 x double>, ptr %px, align 16
@@ -2191,14 +2172,14 @@ define <4 x double> @add_v4f64_024u_135u_reverse(<4 x double> %a, <4 x double> %
 ;
 ; AVX2-LABEL: add_v4f64_024u_135u_reverse:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vhaddpd %ymm0, %ymm1, %ymm0
-; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,0,3,1]
+; AVX2-NEXT:    vhaddpd %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,2,0]
 ; AVX2-NEXT:    retq
 ;
 ; AVX512VL-LABEL: add_v4f64_024u_135u_reverse:
 ; AVX512VL:       # %bb.0:
-; AVX512VL-NEXT:    vhaddpd %ymm0, %ymm1, %ymm0
-; AVX512VL-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,0,3,1]
+; AVX512VL-NEXT:    vhaddpd %ymm1, %ymm0, %ymm0
+; AVX512VL-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[0,1,2,0]
 ; AVX512VL-NEXT:    retq
   %shuffle0 = shufflevector <4 x double> %a, <4 x double> %b, <4 x i32> <i32 0, i32 2, i32 4, i32 poison>
   %shuffle1 = shufflevector <4 x double> %a, <4 x double> %b, <4 x i32> <i32 1, i32 3, i32 5, i32 poison>

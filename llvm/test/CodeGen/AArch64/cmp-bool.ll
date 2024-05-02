@@ -25,8 +25,8 @@ if.end:
 define void @bool_ne(i1 zeroext %a, i1 zeroext %b, ptr nocapture %c) nounwind {
 ; CHECK-LABEL: bool_ne:
 ; CHECK:       // %bb.0: // %entry
-; CHECK-NEXT:    cmp w0, w1
-; CHECK-NEXT:    b.eq .LBB1_2
+; CHECK-NEXT:    eor w8, w0, w1
+; CHECK-NEXT:    cbz w8, .LBB1_2
 ; CHECK-NEXT:  // %bb.1: // %if.then
 ; CHECK-NEXT:    br x2
 ; CHECK-NEXT:  .LBB1_2: // %if.end

@@ -75,7 +75,7 @@ define i64 @csdb_emitted_for_superreg_use(ptr %p, i64 %b) speculative_load_harde
 ; CHECK-NEXT:    and w8, w8, w16
 ; CHECK-NEXT:    csdb
 ; CHECK-NEXT:    add x9, x1, x8
-; CHECK-NEXT:    cmp w8, #0
+; CHECK-NEXT:    cmp x8, #0
 ; CHECK-NEXT:    csel x0, x1, x9, eq
 ; CHECK-NEXT:    mov x1, sp
 ; CHECK-NEXT:    and x1, x1, x16

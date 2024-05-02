@@ -134,38 +134,39 @@ define void @long(ptr %p) {
 ; CHECK-THUMB-LABEL: long:
 ; CHECK-THUMB:       @ %bb.0:
 ; CHECK-THUMB-NEXT:    push {r4, r5, r6, lr}
-; CHECK-THUMB-NEXT:    mov.w r12, #4
-; CHECK-THUMB-NEXT:    movs r2, #3
-; CHECK-THUMB-NEXT:    movs r3, #2
-; CHECK-THUMB-NEXT:    movs r1, #1
-; CHECK-THUMB-NEXT:    mov.w lr, #8
-; CHECK-THUMB-NEXT:    movs r4, #7
-; CHECK-THUMB-NEXT:    movs r5, #6
-; CHECK-THUMB-NEXT:    movs r6, #5
-; CHECK-THUMB-NEXT:    strd r1, r3, [r0]
-; CHECK-THUMB-NEXT:    strd r2, r12, [r0, #8]
-; CHECK-THUMB-NEXT:    strd r6, r5, [r0, #16]
-; CHECK-THUMB-NEXT:    strd r4, lr, [r0, #24]
+; CHECK-THUMB-NEXT:    movs r2, #4
+; CHECK-THUMB-NEXT:    movs r4, #3
+; CHECK-THUMB-NEXT:    mov.w r12, #8
+; CHECK-THUMB-NEXT:    strd r4, r2, [r0, #8]
+; CHECK-THUMB-NEXT:    movs r1, #5
+; CHECK-THUMB-NEXT:    movs r5, #2
+; CHECK-THUMB-NEXT:    movs r6, #1
+; CHECK-THUMB-NEXT:    add.w r2, r0, #16
+; CHECK-THUMB-NEXT:    mov.w lr, #7
+; CHECK-THUMB-NEXT:    movs r3, #6
+; CHECK-THUMB-NEXT:    strd r6, r5, [r0]
+; CHECK-THUMB-NEXT:    stm.w r2, {r1, r3, lr}
+; CHECK-THUMB-NEXT:    str.w r12, [r0, #28]
 ; CHECK-THUMB-NEXT:    pop {r4, r5, r6, pc}
 ;
 ; CHECK-ARM-LABEL: long:
 ; CHECK-ARM:       @ %bb.0:
 ; CHECK-ARM-NEXT:    push {r4, r5, r6, lr}
-; CHECK-ARM-NEXT:    mov r12, #4
-; CHECK-ARM-NEXT:    mov r2, #3
-; CHECK-ARM-NEXT:    mov lr, #8
-; CHECK-ARM-NEXT:    mov r4, #7
-; CHECK-ARM-NEXT:    mov r5, #6
-; CHECK-ARM-NEXT:    mov r6, #5
-; CHECK-ARM-NEXT:    mov r1, #1
-; CHECK-ARM-NEXT:    mov r3, #2
-; CHECK-ARM-NEXT:    stm r0, {r1, r3}
-; CHECK-ARM-NEXT:    str r2, [r0, #8]
-; CHECK-ARM-NEXT:    str r12, [r0, #12]
-; CHECK-ARM-NEXT:    str r6, [r0, #16]
-; CHECK-ARM-NEXT:    str r5, [r0, #20]
-; CHECK-ARM-NEXT:    str r4, [r0, #24]
-; CHECK-ARM-NEXT:    str lr, [r0, #28]
+; CHECK-ARM-NEXT:    mov r2, #4
+; CHECK-ARM-NEXT:    mov r12, #8
+; CHECK-ARM-NEXT:    mov r4, #3
+; CHECK-ARM-NEXT:    mov r5, #2
+; CHECK-ARM-NEXT:    mov r6, #1
+; CHECK-ARM-NEXT:    str r2, [r0, #12]
+; CHECK-ARM-NEXT:    mov r1, #5
+; CHECK-ARM-NEXT:    add r2, r0, #16
+; CHECK-ARM-NEXT:    mov lr, #7
+; CHECK-ARM-NEXT:    mov r3, #6
+; CHECK-ARM-NEXT:    str r6, [r0]
+; CHECK-ARM-NEXT:    str r5, [r0, #4]
+; CHECK-ARM-NEXT:    str r4, [r0, #8]
+; CHECK-ARM-NEXT:    stm r2, {r1, r3, lr}
+; CHECK-ARM-NEXT:    str r12, [r0, #28]
 ; CHECK-ARM-NEXT:    pop {r4, r5, r6, pc}
   store <8 x i32> <i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8>, ptr %p, align 4
   ret void

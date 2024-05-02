@@ -63,23 +63,14 @@ define void @sink_interleave6_to_store(<8 x i16> %src0, <8 x i16> %src1, <8 x i1
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    tbz w1, #0, .LBB2_2
 ; CHECK-NEXT:  // %bb.1: // %store
-; CHECK-NEXT:    sub sp, sp, #48
-; CHECK-NEXT:    .cfi_def_cfa_offset 48
-; CHECK-NEXT:    zip2 v18.8h, v2.8h, v5.8h
-; CHECK-NEXT:    zip1 v7.8h, v2.8h, v5.8h
-; CHECK-NEXT:    mov x8, sp
-; CHECK-NEXT:    zip2 v17.8h, v1.8h, v4.8h
-; CHECK-NEXT:    zip1 v6.8h, v1.8h, v4.8h
-; CHECK-NEXT:    zip2 v16.8h, v0.8h, v3.8h
-; CHECK-NEXT:    zip1 v5.8h, v0.8h, v3.8h
-; CHECK-NEXT:    st3 { v16.8h, v17.8h, v18.8h }, [x8]
-; CHECK-NEXT:    mov x8, x0
-; CHECK-NEXT:    st3 { v5.8h, v6.8h, v7.8h }, [x8], #48
-; CHECK-NEXT:    ldp q1, q0, [sp, #16]
-; CHECK-NEXT:    ldr q2, [sp]
-; CHECK-NEXT:    stp q1, q0, [x0, #64]
-; CHECK-NEXT:    str q2, [x8]
-; CHECK-NEXT:    add sp, sp, #48
+; CHECK-NEXT:    zip1 v18.8h, v2.8h, v5.8h
+; CHECK-NEXT:    zip2 v7.8h, v2.8h, v5.8h
+; CHECK-NEXT:    zip1 v17.8h, v1.8h, v4.8h
+; CHECK-NEXT:    zip2 v6.8h, v1.8h, v4.8h
+; CHECK-NEXT:    zip1 v16.8h, v0.8h, v3.8h
+; CHECK-NEXT:    zip2 v5.8h, v0.8h, v3.8h
+; CHECK-NEXT:    st3 { v16.8h, v17.8h, v18.8h }, [x0], #48
+; CHECK-NEXT:    st3 { v5.8h, v6.8h, v7.8h }, [x0]
 ; CHECK-NEXT:  .LBB2_2: // %exit
 ; CHECK-NEXT:    ret
 entry:

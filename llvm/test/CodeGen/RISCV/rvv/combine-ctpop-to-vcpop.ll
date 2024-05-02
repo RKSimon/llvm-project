@@ -3,11 +3,21 @@
 ; RUN: llc < %s -mtriple=riscv64 -mattr=+v,+zbb | FileCheck %s --check-prefixes=CHECK,RV64
 
 define i2 @test_v2i1(<2 x i1> %x) {
-; CHECK-LABEL: test_v2i1:
-; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vsetivli zero, 2, e8, mf8, ta, ma
-; CHECK-NEXT:    vcpop.m a0, v0
-; CHECK-NEXT:    ret
+; RV32-LABEL: test_v2i1:
+; RV32:       # %bb.0: # %entry
+; RV32-NEXT:    vsetivli zero, 1, e8, m1, ta, ma
+; RV32-NEXT:    vmv.x.s a0, v0
+; RV32-NEXT:    andi a0, a0, 3
+; RV32-NEXT:    cpop a0, a0
+; RV32-NEXT:    ret
+;
+; RV64-LABEL: test_v2i1:
+; RV64:       # %bb.0: # %entry
+; RV64-NEXT:    vsetivli zero, 1, e8, m1, ta, ma
+; RV64-NEXT:    vmv.x.s a0, v0
+; RV64-NEXT:    andi a0, a0, 3
+; RV64-NEXT:    cpopw a0, a0
+; RV64-NEXT:    ret
 entry:
   %a = bitcast <2 x i1> %x to i2
   %b = call i2 @llvm.ctpop.i2(i2 %a)
@@ -15,11 +25,21 @@ entry:
 }
 
 define i4 @test_v4i1(<4 x i1> %x) {
-; CHECK-LABEL: test_v4i1:
-; CHECK:       # %bb.0: # %entry
-; CHECK-NEXT:    vsetivli zero, 4, e8, mf4, ta, ma
-; CHECK-NEXT:    vcpop.m a0, v0
-; CHECK-NEXT:    ret
+; RV32-LABEL: test_v4i1:
+; RV32:       # %bb.0: # %entry
+; RV32-NEXT:    vsetivli zero, 1, e8, m1, ta, ma
+; RV32-NEXT:    vmv.x.s a0, v0
+; RV32-NEXT:    andi a0, a0, 15
+; RV32-NEXT:    cpop a0, a0
+; RV32-NEXT:    ret
+;
+; RV64-LABEL: test_v4i1:
+; RV64:       # %bb.0: # %entry
+; RV64-NEXT:    vsetivli zero, 1, e8, m1, ta, ma
+; RV64-NEXT:    vmv.x.s a0, v0
+; RV64-NEXT:    andi a0, a0, 15
+; RV64-NEXT:    cpopw a0, a0
+; RV64-NEXT:    ret
 entry:
   %a = bitcast <4 x i1> %x to i4
   %b = call i4 @llvm.ctpop.i4(i4 %a)

@@ -603,22 +603,28 @@ define i32 @sext_ashr_trunc_i16(i32 %x) {
 define amdgpu_ps i32 @s_sext_ashr_trunc_i16(i32 inreg %x) {
 ; GFX9-LABEL: s_sext_ashr_trunc_i16:
 ; GFX9:       ; %bb.0:
-; GFX9-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX9-NEXT:    s_sext_i32_i16 s0, s0
+; GFX9-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX9-NEXT:    ; return to shader part epilog
 ;
 ; GFX10-LABEL: s_sext_ashr_trunc_i16:
 ; GFX10:       ; %bb.0:
-; GFX10-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX10-NEXT:    s_sext_i32_i16 s0, s0
+; GFX10-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX10-NEXT:    ; return to shader part epilog
 ;
 ; GFX11-TRUE16-LABEL: s_sext_ashr_trunc_i16:
 ; GFX11-TRUE16:       ; %bb.0:
-; GFX11-TRUE16-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX11-TRUE16-NEXT:    s_sext_i32_i16 s0, s0
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GFX11-TRUE16-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX11-TRUE16-NEXT:    ; return to shader part epilog
 ;
 ; GFX11-FAKE16-LABEL: s_sext_ashr_trunc_i16:
 ; GFX11-FAKE16:       ; %bb.0:
-; GFX11-FAKE16-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX11-FAKE16-NEXT:    s_sext_i32_i16 s0, s0
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GFX11-FAKE16-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX11-FAKE16-NEXT:    ; return to shader part epilog
 ;
 ; GFX1250-TRUE16-LABEL: s_sext_ashr_trunc_i16:
@@ -627,7 +633,9 @@ define amdgpu_ps i32 @s_sext_ashr_trunc_i16(i32 inreg %x) {
 ; GFX1250-TRUE16-NEXT:    s_mov_b64 s[64:65], 0
 ; GFX1250-TRUE16-NEXT:    v_nop
 ; GFX1250-TRUE16-NEXT:    global_prefetch_b8 v0, s[64:65] scope:SCOPE_SE
-; GFX1250-TRUE16-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX1250-TRUE16-NEXT:    s_sext_i32_i16 s0, s0
+; GFX1250-TRUE16-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GFX1250-TRUE16-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX1250-TRUE16-NEXT:    ; return to shader part epilog
 ;
 ; GFX1250-FAKE16-LABEL: s_sext_ashr_trunc_i16:
@@ -636,7 +644,9 @@ define amdgpu_ps i32 @s_sext_ashr_trunc_i16(i32 inreg %x) {
 ; GFX1250-FAKE16-NEXT:    s_mov_b64 s[64:65], 0
 ; GFX1250-FAKE16-NEXT:    v_nop
 ; GFX1250-FAKE16-NEXT:    global_prefetch_b8 v0, s[64:65] scope:SCOPE_SE
-; GFX1250-FAKE16-NEXT:    s_bfe_i32 s0, s0, 0x80008
+; GFX1250-FAKE16-NEXT:    s_sext_i32_i16 s0, s0
+; GFX1250-FAKE16-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GFX1250-FAKE16-NEXT:    s_ashr_i32 s0, s0, 8
 ; GFX1250-FAKE16-NEXT:    ; return to shader part epilog
   %t = trunc i32 %x to i16
   %s = ashr i16 %t, 8

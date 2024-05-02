@@ -948,22 +948,22 @@ define void @deinterleave2_nxi64_factor3(ptr %ptr, <vscale x 8 x i64>* %s1, <vsc
 ; CHECK-LABEL: deinterleave2_nxi64_factor3:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p0.d
-; CHECK-NEXT:    ld3d { z0.d - z2.d }, p0/z, [x0, #3, mul vl]
-; CHECK-NEXT:    ld3d { z3.d - z5.d }, p0/z, [x0]
-; CHECK-NEXT:    ld3d { z16.d - z18.d }, p0/z, [x0, #9, mul vl]
-; CHECK-NEXT:    ld3d { z19.d - z21.d }, p0/z, [x0, #6, mul vl]
-; CHECK-NEXT:    str z16, [x1, #3, mul vl]
-; CHECK-NEXT:    str z0, [x1, #1, mul vl]
-; CHECK-NEXT:    str z19, [x1, #2, mul vl]
-; CHECK-NEXT:    str z3, [x1]
-; CHECK-NEXT:    str z17, [x2, #3, mul vl]
-; CHECK-NEXT:    str z4, [x2]
-; CHECK-NEXT:    str z1, [x2, #1, mul vl]
-; CHECK-NEXT:    str z20, [x2, #2, mul vl]
-; CHECK-NEXT:    str z21, [x3, #2, mul vl]
-; CHECK-NEXT:    str z18, [x3, #3, mul vl]
-; CHECK-NEXT:    str z5, [x3]
-; CHECK-NEXT:    str z2, [x3, #1, mul vl]
+; CHECK-NEXT:    ld3d { z0.d - z2.d }, p0/z, [x0]
+; CHECK-NEXT:    ld3d { z3.d - z5.d }, p0/z, [x0, #3, mul vl]
+; CHECK-NEXT:    ld3d { z16.d - z18.d }, p0/z, [x0, #6, mul vl]
+; CHECK-NEXT:    ld3d { z19.d - z21.d }, p0/z, [x0, #9, mul vl]
+; CHECK-NEXT:    str z16, [x1, #2, mul vl]
+; CHECK-NEXT:    str z3, [x1, #1, mul vl]
+; CHECK-NEXT:    str z19, [x1, #3, mul vl]
+; CHECK-NEXT:    str z0, [x1]
+; CHECK-NEXT:    str z20, [x2, #3, mul vl]
+; CHECK-NEXT:    str z17, [x2, #2, mul vl]
+; CHECK-NEXT:    str z4, [x2, #1, mul vl]
+; CHECK-NEXT:    str z1, [x2]
+; CHECK-NEXT:    str z21, [x3, #3, mul vl]
+; CHECK-NEXT:    str z18, [x3, #2, mul vl]
+; CHECK-NEXT:    str z5, [x3, #1, mul vl]
+; CHECK-NEXT:    str z2, [x3]
 ; CHECK-NEXT:    ret
   %wide.vec = load <vscale x 24 x i64>, ptr %ptr, align 8
   %ldN = tail call { <vscale x 8 x i64>, <vscale x 8 x i64>, <vscale x 8 x i64> } @llvm.vector.deinterleave3.nxv24i64(<vscale x 24 x i64> %wide.vec)

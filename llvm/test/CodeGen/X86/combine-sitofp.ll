@@ -331,9 +331,9 @@ define <2 x double> @sitofp_trunc_nsw_v2i64_v2f64(<2 x i64> %a0) {
 define <4 x double> @sitofp_trunc_nsw_v4i64_v4f64(<4 x i64> %a0) {
 ; SSE-LABEL: sitofp_trunc_nsw_v4i64_v4f64:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,2,2,3]
 ; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,2,3]
 ; SSE-NEXT:    cvtdq2pd %xmm0, %xmm0
+; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,2,2,3]
 ; SSE-NEXT:    cvtdq2pd %xmm1, %xmm1
 ; SSE-NEXT:    retq
 ;
@@ -413,13 +413,13 @@ define <4 x float> @sitofp_trunc_nsw_v4i64_v4f32(<4 x i64> %a0) {
 define <8 x double> @sitofp_trunc_nsw_v8i64_v8f64(<8 x i64> %a0) {
 ; SSE-LABEL: sitofp_trunc_nsw_v8i64_v8f64:
 ; SSE:       # %bb.0:
-; SSE-NEXT:    pshufd {{.*#+}} xmm3 = xmm3[0,2,2,3]
 ; SSE-NEXT:    pshufd {{.*#+}} xmm2 = xmm2[0,2,2,3]
-; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,2,2,3]
 ; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,2,3]
 ; SSE-NEXT:    cvtdq2pd %xmm0, %xmm0
+; SSE-NEXT:    pshufd {{.*#+}} xmm1 = xmm1[0,2,2,3]
 ; SSE-NEXT:    cvtdq2pd %xmm1, %xmm1
 ; SSE-NEXT:    cvtdq2pd %xmm2, %xmm2
+; SSE-NEXT:    pshufd {{.*#+}} xmm3 = xmm3[0,2,2,3]
 ; SSE-NEXT:    cvtdq2pd %xmm3, %xmm3
 ; SSE-NEXT:    retq
 ;

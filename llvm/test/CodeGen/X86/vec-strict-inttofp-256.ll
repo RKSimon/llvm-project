@@ -808,8 +808,7 @@ define <4 x double> @uitofp_v4i64_v4f64(<4 x i64> %x) #0 {
 ; AVX1-64-NEXT:    vunpcklpd {{.*#+}} xmm2 = xmm3[0],xmm2[0]
 ; AVX1-64-NEXT:    vextractps $2, %xmm0, %eax
 ; AVX1-64-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm3
-; AVX1-64-NEXT:    vmovq %xmm0, %rax
-; AVX1-64-NEXT:    movl %eax, %eax
+; AVX1-64-NEXT:    vmovd %xmm0, %eax
 ; AVX1-64-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm4
 ; AVX1-64-NEXT:    vunpcklpd {{.*#+}} xmm3 = xmm4[0],xmm3[0]
 ; AVX1-64-NEXT:    vinsertf128 $1, %xmm2, %ymm3, %ymm2
@@ -851,8 +850,7 @@ define <4 x double> @uitofp_v4i64_v4f64(<4 x i64> %x) #0 {
 ; AVX2-64-NEXT:    vunpcklpd {{.*#+}} xmm1 = xmm1[0],xmm3[0]
 ; AVX2-64-NEXT:    vextractps $2, %xmm0, %eax
 ; AVX2-64-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm3
-; AVX2-64-NEXT:    vmovq %xmm0, %rax
-; AVX2-64-NEXT:    movl %eax, %eax
+; AVX2-64-NEXT:    vmovd %xmm0, %eax
 ; AVX2-64-NEXT:    vcvtsi2sd %rax, %xmm15, %xmm0
 ; AVX2-64-NEXT:    vunpcklpd {{.*#+}} xmm0 = xmm0[0],xmm3[0]
 ; AVX2-64-NEXT:    vinsertf128 $1, %xmm1, %ymm0, %ymm0
@@ -1090,24 +1088,23 @@ define <4 x float> @uitofp_v4i64_v4f32(<4 x i64> %x) #0 {
 ; AVX1-64-NEXT:    vpcmpgtq %xmm0, %xmm2, %xmm2
 ; AVX1-64-NEXT:    vpackssdw %xmm3, %xmm2, %xmm2
 ; AVX1-64-NEXT:    vpsrlq $1, %xmm0, %xmm3
-; AVX1-64-NEXT:    vpsrlq $1, %xmm1, %xmm4
-; AVX1-64-NEXT:    vinsertf128 $1, %xmm4, %ymm3, %ymm3
-; AVX1-64-NEXT:    vandpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm4
-; AVX1-64-NEXT:    vorpd %ymm4, %ymm3, %ymm3
-; AVX1-64-NEXT:    vblendvpd %xmm0, %xmm3, %xmm0, %xmm0
+; AVX1-64-NEXT:    vpsrlq $1, %xmm1, %xmm1
+; AVX1-64-NEXT:    vinsertf128 $1, %xmm1, %ymm3, %ymm1
+; AVX1-64-NEXT:    vandpd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %ymm3
+; AVX1-64-NEXT:    vorpd %ymm3, %ymm1, %ymm1
+; AVX1-64-NEXT:    vblendvpd %ymm0, %ymm1, %ymm0, %ymm0
 ; AVX1-64-NEXT:    vpextrq $1, %xmm0, %rax
-; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm4
-; AVX1-64-NEXT:    vmovq %xmm0, %rax
-; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm0
-; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0],xmm4[0],xmm0[2,3]
-; AVX1-64-NEXT:    vextractf128 $1, %ymm3, %xmm3
-; AVX1-64-NEXT:    vblendvpd %xmm1, %xmm3, %xmm1, %xmm1
-; AVX1-64-NEXT:    vmovq %xmm1, %rax
-; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm3
-; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0,1],xmm3[0],xmm0[3]
-; AVX1-64-NEXT:    vpextrq $1, %xmm1, %rax
 ; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm1
-; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm0[0,1,2],xmm1[0]
+; AVX1-64-NEXT:    vmovq %xmm0, %rax
+; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm3
+; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm1 = xmm3[0],xmm1[0],xmm3[2,3]
+; AVX1-64-NEXT:    vextractf128 $1, %ymm0, %xmm0
+; AVX1-64-NEXT:    vmovq %xmm0, %rax
+; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm3
+; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm1 = xmm1[0,1],xmm3[0],xmm1[3]
+; AVX1-64-NEXT:    vpextrq $1, %xmm0, %rax
+; AVX1-64-NEXT:    vcvtsi2ss %rax, %xmm15, %xmm0
+; AVX1-64-NEXT:    vinsertps {{.*#+}} xmm0 = xmm1[0,1,2],xmm0[0]
 ; AVX1-64-NEXT:    vaddps %xmm0, %xmm0, %xmm1
 ; AVX1-64-NEXT:    vblendvps %xmm2, %xmm1, %xmm0, %xmm0
 ; AVX1-64-NEXT:    vzeroupper

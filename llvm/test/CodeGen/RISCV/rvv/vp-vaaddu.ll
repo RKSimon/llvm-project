@@ -101,9 +101,14 @@ define <vscale x 2 x i8> @vaaddu_6(<vscale x 2 x i8> %x, <vscale x 2 x i8> %y, <
 define <vscale x 2 x i8> @vaaddu_7(<vscale x 2 x i8> %x, <vscale x 2 x i8> %y, <vscale x 2 x i1> %m, i32 zeroext %vl) {
 ; CHECK-LABEL: vaaddu_7:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 0
 ; CHECK-NEXT:    vsetvli a0, zero, e8, mf4, ta, ma
-; CHECK-NEXT:    vaaddu.vv v8, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    li a0, 1
+; CHECK-NEXT:    csrwi vxrm, 2
+; CHECK-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
+; CHECK-NEXT:    vaaddu.vx v8, v10, a0
+; CHECK-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
+; CHECK-NEXT:    vnsrl.wi v8, v8, 0
 ; CHECK-NEXT:    ret
   %xz = call <vscale x 2 x i32> @llvm.vp.zext.nxv2i32.nxv2i8(<vscale x 2 x i8> %x, <vscale x 2 x i1> %m, i32 %vl)
   %yz = call <vscale x 2 x i32> @llvm.vp.zext.nxv2i32.nxv2i8(<vscale x 2 x i8> %y, <vscale x 2 x i1> %m, i32 %vl)
@@ -118,11 +123,12 @@ define <vscale x 2 x i8> @vaaddu_7(<vscale x 2 x i8> %x, <vscale x 2 x i8> %y, <
 define <vscale x 2 x i16> @vaaddu_8(<vscale x 2 x i8> %x, <vscale x 2 x i8> %y, <vscale x 2 x i1> %m, i32 zeroext %vl) {
 ; CHECK-LABEL: vaaddu_8:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    csrwi vxrm, 0
 ; CHECK-NEXT:    vsetvli a0, zero, e8, mf4, ta, ma
-; CHECK-NEXT:    vaaddu.vv v9, v8, v9
+; CHECK-NEXT:    vwaddu.vv v10, v8, v9
+; CHECK-NEXT:    li a0, 1
+; CHECK-NEXT:    csrwi vxrm, 2
 ; CHECK-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
-; CHECK-NEXT:    vzext.vf2 v8, v9
+; CHECK-NEXT:    vaaddu.vx v8, v10, a0
 ; CHECK-NEXT:    ret
   %xz = call <vscale x 2 x i32> @llvm.vp.zext.nxv2i32.nxv2i8(<vscale x 2 x i8> %x, <vscale x 2 x i1> %m, i32 %vl)
   %yz = call <vscale x 2 x i32> @llvm.vp.zext.nxv2i32.nxv2i8(<vscale x 2 x i8> %y, <vscale x 2 x i1> %m, i32 %vl)
@@ -136,12 +142,9 @@ define <vscale x 2 x i16> @vaaddu_8(<vscale x 2 x i8> %x, <vscale x 2 x i8> %y, 
 define <vscale x 2 x i8> @vaaddu_9(<vscale x 2 x i16> %x, <vscale x 2 x i16> %y, <vscale x 2 x i1> %m, i32 zeroext %vl) {
 ; CHECK-LABEL: vaaddu_9:
 ; CHECK:       # %bb.0:
+; CHECK-NEXT:    csrwi vxrm, 0
 ; CHECK-NEXT:    vsetvli a0, zero, e16, mf2, ta, ma
-; CHECK-NEXT:    vwaddu.vv v10, v8, v9
-; CHECK-NEXT:    vsetvli zero, zero, e32, m1, ta, ma
-; CHECK-NEXT:    vadd.vi v8, v10, 1
-; CHECK-NEXT:    vsetvli zero, zero, e16, mf2, ta, ma
-; CHECK-NEXT:    vnsrl.wi v8, v8, 1
+; CHECK-NEXT:    vaaddu.vv v8, v8, v9
 ; CHECK-NEXT:    vsetvli zero, zero, e8, mf4, ta, ma
 ; CHECK-NEXT:    vnsrl.wi v8, v8, 0
 ; CHECK-NEXT:    ret

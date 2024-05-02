@@ -517,10 +517,10 @@ define i128 @fptosi_i128(fp128 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $52, %esp
 ; X86-NEXT:    popl %esi
@@ -659,10 +659,10 @@ define i128 @fptoui_i128(fp128 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $52, %esp
 ; X86-NEXT:    popl %esi
@@ -699,10 +699,10 @@ define fp128 @sitofp_i8(i8 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -739,10 +739,10 @@ define fp128 @sitofp_i16(i16 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -777,10 +777,10 @@ define fp128 @sitofp_i32(i32 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -816,10 +816,10 @@ define fp128 @sitofp_i64(i64 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -860,10 +860,10 @@ define fp128 @sitofp_i128(i128 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $52, %esp
 ; X86-NEXT:    popl %esi
@@ -900,10 +900,10 @@ define fp128 @uitofp_i8(i8 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -940,10 +940,10 @@ define fp128 @uitofp_i16(i16 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -978,10 +978,10 @@ define fp128 @uitofp_i32(i32 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -1017,10 +1017,10 @@ define fp128 @uitofp_i64(i64 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $20, %esp
 ; X86-NEXT:    popl %esi
@@ -1061,10 +1061,10 @@ define fp128 @uitofp_i128(i128 %x) nounwind strictfp {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-NEXT:    movl %edi, 8(%esi)
-; X86-NEXT:    movl %edx, 12(%esi)
-; X86-NEXT:    movl %eax, (%esi)
+; X86-NEXT:    movl %edi, 12(%esi)
+; X86-NEXT:    movl %edx, 8(%esi)
 ; X86-NEXT:    movl %ecx, 4(%esi)
+; X86-NEXT:    movl %eax, (%esi)
 ; X86-NEXT:    movl %esi, %eax
 ; X86-NEXT:    addl $52, %esp
 ; X86-NEXT:    popl %esi

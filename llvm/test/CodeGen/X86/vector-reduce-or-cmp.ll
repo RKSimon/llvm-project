@@ -1708,8 +1708,8 @@ define i1 @signtest_v4i64(<4 x i64> %a0) {
 ; X86-SSE2-LABEL: signtest_v4i64:
 ; X86-SSE2:       # %bb.0:
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[3,3,3,3]
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[3,3,3,3]
 ; X86-SSE2-NEXT:    por %xmm1, %xmm0
 ; X86-SSE2-NEXT:    movd %xmm0, %eax
 ; X86-SSE2-NEXT:    testl %eax, %eax

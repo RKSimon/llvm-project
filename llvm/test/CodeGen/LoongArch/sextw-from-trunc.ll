@@ -100,9 +100,10 @@ define i64 @r4(i64 %a, i64 %b) {
 ; CHECK-LABEL: r4:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    xor $a0, $a0, $a1
-; CHECK-NEXT:    sltui $a0, $a0, 1
-; CHECK-NEXT:    sub.d $a1, $zero, $a0
-; CHECK-NEXT:    xor $a0, $a1, $a0
+; CHECK-NEXT:    sltui $a1, $a0, 1
+; CHECK-NEXT:    sltu $a0, $zero, $a0
+; CHECK-NEXT:    addi.d $a0, $a0, -1
+; CHECK-NEXT:    xor $a0, $a0, $a1
 ; CHECK-NEXT:    ret
   %eq = icmp eq i64 %a, %b
   %ze = zext i1 %eq to i64

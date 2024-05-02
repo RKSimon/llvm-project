@@ -6,6 +6,7 @@
 define <2 x double> @test_gather_v2i32_index(ptr %base, <2 x i32> %ind, <2 x i1> %mask, <2 x double> %src0) {
 ; WIDEN_SKX-LABEL: test_gather_v2i32_index:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm1, %xmm1
 ; WIDEN_SKX-NEXT:    vpmovq2m %xmm1, %k0
 ; WIDEN_SKX-NEXT:    vpbroadcastq %rdi, %xmm1
@@ -13,7 +14,7 @@ define <2 x double> @test_gather_v2i32_index(ptr %base, <2 x i32> %ind, <2 x i1>
 ; WIDEN_SKX-NEXT:    vpsllq $3, %xmm0, %xmm0
 ; WIDEN_SKX-NEXT:    vpaddq %xmm0, %xmm1, %xmm0
 ; WIDEN_SKX-NEXT:    kmovw %k0, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB0_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -34,15 +35,16 @@ define <2 x double> @test_gather_v2i32_index(ptr %base, <2 x i32> %ind, <2 x i1>
 ;
 ; WIDEN_KNL-LABEL: test_gather_v2i32_index:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm1
-; WIDEN_KNL-NEXT:    vptestmq %zmm1, %zmm1, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_KNL-NEXT:    vpmovsxdq %xmm0, %xmm0
 ; WIDEN_KNL-NEXT:    vpsllq $3, %xmm0, %xmm0
 ; WIDEN_KNL-NEXT:    vmovq %rdi, %xmm1
 ; WIDEN_KNL-NEXT:    vpbroadcastq %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vpaddq %xmm0, %xmm1, %xmm0
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB0_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al
@@ -77,6 +79,7 @@ define <2 x double> @test_gather_v2i32_index(ptr %base, <2 x i32> %ind, <2 x i1>
 define void @test_scatter_v2i32_index(<2 x double> %a1, ptr %base, <2 x i32> %ind, <2 x i1> %mask) {
 ; WIDEN_SKX-LABEL: test_scatter_v2i32_index:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm2, %xmm2
 ; WIDEN_SKX-NEXT:    vpmovq2m %xmm2, %k0
 ; WIDEN_SKX-NEXT:    vpbroadcastq %rdi, %xmm2
@@ -84,7 +87,7 @@ define void @test_scatter_v2i32_index(<2 x double> %a1, ptr %base, <2 x i32> %in
 ; WIDEN_SKX-NEXT:    vpsllq $3, %xmm1, %xmm1
 ; WIDEN_SKX-NEXT:    vpaddq %xmm1, %xmm2, %xmm1
 ; WIDEN_SKX-NEXT:    kmovw %k0, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB1_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -103,15 +106,16 @@ define void @test_scatter_v2i32_index(<2 x double> %a1, ptr %base, <2 x i32> %in
 ;
 ; WIDEN_KNL-LABEL: test_scatter_v2i32_index:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm2
-; WIDEN_KNL-NEXT:    vptestmq %zmm2, %zmm2, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_KNL-NEXT:    vpmovsxdq %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vpsllq $3, %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vmovq %rdi, %xmm2
 ; WIDEN_KNL-NEXT:    vpbroadcastq %xmm2, %xmm2
 ; WIDEN_KNL-NEXT:    vpaddq %xmm1, %xmm2, %xmm1
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB1_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al
@@ -163,9 +167,10 @@ define void @test_scatter_v2i32_index(<2 x double> %a1, ptr %base, <2 x i32> %in
 define <2 x i32> @test_gather_v2i32_data(<2 x ptr> %ptr, <2 x i1> %mask, <2 x i32> %src0) {
 ; WIDEN_SKX-LABEL: test_gather_v2i32_data:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm1, %xmm1
 ; WIDEN_SKX-NEXT:    vmovmskpd %xmm1, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB2_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -186,10 +191,11 @@ define <2 x i32> @test_gather_v2i32_data(<2 x ptr> %ptr, <2 x i1> %mask, <2 x i3
 ;
 ; WIDEN_KNL-LABEL: test_gather_v2i32_data:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm1
-; WIDEN_KNL-NEXT:    vptestmq %zmm1, %zmm1, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB2_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al
@@ -224,9 +230,10 @@ define <2 x i32> @test_gather_v2i32_data(<2 x ptr> %ptr, <2 x i1> %mask, <2 x i3
 define void @test_scatter_v2i32_data(<2 x i32>%a1, <2 x ptr> %ptr, <2 x i1>%mask) {
 ; WIDEN_SKX-LABEL: test_scatter_v2i32_data:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm2, %xmm2
 ; WIDEN_SKX-NEXT:    vmovmskpd %xmm2, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB3_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -245,10 +252,11 @@ define void @test_scatter_v2i32_data(<2 x i32>%a1, <2 x ptr> %ptr, <2 x i1>%mask
 ;
 ; WIDEN_KNL-LABEL: test_scatter_v2i32_data:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm2
-; WIDEN_KNL-NEXT:    vptestmq %zmm2, %zmm2, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB3_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al
@@ -294,6 +302,7 @@ define void @test_scatter_v2i32_data(<2 x i32>%a1, <2 x ptr> %ptr, <2 x i1>%mask
 define <2 x i32> @test_gather_v2i32_data_index(ptr %base, <2 x i32> %ind, <2 x i1> %mask, <2 x i32> %src0) {
 ; WIDEN_SKX-LABEL: test_gather_v2i32_data_index:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm1, %xmm1
 ; WIDEN_SKX-NEXT:    vpmovq2m %xmm1, %k0
 ; WIDEN_SKX-NEXT:    vpbroadcastq %rdi, %xmm1
@@ -301,7 +310,7 @@ define <2 x i32> @test_gather_v2i32_data_index(ptr %base, <2 x i32> %ind, <2 x i
 ; WIDEN_SKX-NEXT:    vpsllq $2, %xmm0, %xmm0
 ; WIDEN_SKX-NEXT:    vpaddq %xmm0, %xmm1, %xmm0
 ; WIDEN_SKX-NEXT:    kmovw %k0, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB4_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -322,15 +331,16 @@ define <2 x i32> @test_gather_v2i32_data_index(ptr %base, <2 x i32> %ind, <2 x i
 ;
 ; WIDEN_KNL-LABEL: test_gather_v2i32_data_index:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm1
-; WIDEN_KNL-NEXT:    vptestmq %zmm1, %zmm1, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm1, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm1, %ecx
 ; WIDEN_KNL-NEXT:    vpmovsxdq %xmm0, %xmm0
 ; WIDEN_KNL-NEXT:    vpsllq $2, %xmm0, %xmm0
 ; WIDEN_KNL-NEXT:    vmovq %rdi, %xmm1
 ; WIDEN_KNL-NEXT:    vpbroadcastq %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vpaddq %xmm0, %xmm1, %xmm0
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB4_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al
@@ -366,6 +376,7 @@ define <2 x i32> @test_gather_v2i32_data_index(ptr %base, <2 x i32> %ind, <2 x i
 define void @test_scatter_v2i32_data_index(<2 x i32> %a1, ptr %base, <2 x i32> %ind, <2 x i1> %mask) {
 ; WIDEN_SKX-LABEL: test_scatter_v2i32_data_index:
 ; WIDEN_SKX:       # %bb.0:
+; WIDEN_SKX-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_SKX-NEXT:    vpsllq $63, %xmm2, %xmm2
 ; WIDEN_SKX-NEXT:    vpmovq2m %xmm2, %k0
 ; WIDEN_SKX-NEXT:    vpbroadcastq %rdi, %xmm2
@@ -373,7 +384,7 @@ define void @test_scatter_v2i32_data_index(<2 x i32> %a1, ptr %base, <2 x i32> %
 ; WIDEN_SKX-NEXT:    vpsllq $2, %xmm1, %xmm1
 ; WIDEN_SKX-NEXT:    vpaddq %xmm1, %xmm2, %xmm1
 ; WIDEN_SKX-NEXT:    kmovw %k0, %eax
-; WIDEN_SKX-NEXT:    testb $1, %al
+; WIDEN_SKX-NEXT:    testb $1, %cl
 ; WIDEN_SKX-NEXT:    jne .LBB5_1
 ; WIDEN_SKX-NEXT:  # %bb.2: # %else
 ; WIDEN_SKX-NEXT:    testb $2, %al
@@ -392,15 +403,16 @@ define void @test_scatter_v2i32_data_index(<2 x i32> %a1, ptr %base, <2 x i32> %
 ;
 ; WIDEN_KNL-LABEL: test_scatter_v2i32_data_index:
 ; WIDEN_KNL:       # %bb.0:
-; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm2
-; WIDEN_KNL-NEXT:    vptestmq %zmm2, %zmm2, %k0
+; WIDEN_KNL-NEXT:    vpsllq $63, %xmm2, %xmm3
+; WIDEN_KNL-NEXT:    vptestmq %zmm3, %zmm3, %k0
+; WIDEN_KNL-NEXT:    vmovd %xmm2, %ecx
 ; WIDEN_KNL-NEXT:    vpmovsxdq %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vpsllq $2, %xmm1, %xmm1
 ; WIDEN_KNL-NEXT:    vmovq %rdi, %xmm2
 ; WIDEN_KNL-NEXT:    vpbroadcastq %xmm2, %xmm2
 ; WIDEN_KNL-NEXT:    vpaddq %xmm1, %xmm2, %xmm1
 ; WIDEN_KNL-NEXT:    kmovw %k0, %eax
-; WIDEN_KNL-NEXT:    testb $1, %al
+; WIDEN_KNL-NEXT:    testb $1, %cl
 ; WIDEN_KNL-NEXT:    jne .LBB5_1
 ; WIDEN_KNL-NEXT:  # %bb.2: # %else
 ; WIDEN_KNL-NEXT:    testb $2, %al

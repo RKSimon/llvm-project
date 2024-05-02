@@ -2548,7 +2548,7 @@ define i16 @s_select_dec_swapped_i16(i32 inreg %a, i32 inreg %b, i16 inreg %x) {
 ; GFX9-SDAG-LABEL: s_select_dec_swapped_i16:
 ; GFX9-SDAG:       ; %bb.0:
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX9-SDAG-NEXT:    s_add_i32 s4, s18, 0xffff
+; GFX9-SDAG-NEXT:    s_add_i32 s4, s18, -1
 ; GFX9-SDAG-NEXT:    s_cmp_ge_u32 s16, s17
 ; GFX9-SDAG-NEXT:    s_cselect_b32 s4, s18, s4
 ; GFX9-SDAG-NEXT:    v_mov_b32_e32 v0, s4
@@ -2569,7 +2569,7 @@ define i16 @s_select_dec_swapped_i16(i32 inreg %a, i32 inreg %b, i16 inreg %x) {
 ; GFX12-SDAG-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
-; GFX12-SDAG-NEXT:    s_add_co_i32 s3, s2, 0xffff
+; GFX12-SDAG-NEXT:    s_add_co_i32 s3, s2, -1
 ; GFX12-SDAG-NEXT:    s_cmp_ge_u32 s0, s1
 ; GFX12-SDAG-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-SDAG-NEXT:    s_cselect_b32 s0, s2, s3
@@ -2847,14 +2847,13 @@ define i32 @s_add_three_carries(i32 inreg %a, i32 inreg %b, i32 inreg %d, i32 in
 ; GFX9-SDAG-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX9-SDAG-NEXT:    s_cmp_lt_u32 s16, s17
 ; GFX9-SDAG-NEXT:    s_cselect_b64 s[4:5], -1, 0
-; GFX9-SDAG-NEXT:    s_cmp_lt_u32 s18, s19
-; GFX9-SDAG-NEXT:    s_cselect_b64 s[6:7], -1, 0
 ; GFX9-SDAG-NEXT:    s_cmp_lt_u32 s17, s18
-; GFX9-SDAG-NEXT:    s_cselect_b32 s8, 1, 0
+; GFX9-SDAG-NEXT:    s_cselect_b32 s6, 1, 0
+; GFX9-SDAG-NEXT:    s_cmp_lt_u32 s18, s19
+; GFX9-SDAG-NEXT:    s_cselect_b32 s7, 1, 0
 ; GFX9-SDAG-NEXT:    s_cmp_lg_u64 s[4:5], 0
-; GFX9-SDAG-NEXT:    s_addc_u32 s4, s19, 0
-; GFX9-SDAG-NEXT:    s_cmp_lg_u64 s[6:7], 0
-; GFX9-SDAG-NEXT:    s_addc_u32 s4, s4, s8
+; GFX9-SDAG-NEXT:    s_addc_u32 s4, s6, s19
+; GFX9-SDAG-NEXT:    s_add_i32 s4, s4, s7
 ; GFX9-SDAG-NEXT:    v_mov_b32_e32 v0, s4
 ; GFX9-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
@@ -2885,16 +2884,15 @@ define i32 @s_add_three_carries(i32 inreg %a, i32 inreg %b, i32 inreg %d, i32 in
 ; GFX12-SDAG-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-SDAG-NEXT:    s_cmp_lt_u32 s0, s1
 ; GFX12-SDAG-NEXT:    s_cselect_b32 s0, -1, 0
-; GFX12-SDAG-NEXT:    s_cmp_lt_u32 s2, s3
-; GFX12-SDAG-NEXT:    s_cselect_b32 s4, -1, 0
 ; GFX12-SDAG-NEXT:    s_cmp_lt_u32 s1, s2
 ; GFX12-SDAG-NEXT:    s_cselect_b32 s1, 1, 0
+; GFX12-SDAG-NEXT:    s_cmp_lt_u32 s2, s3
+; GFX12-SDAG-NEXT:    s_cselect_b32 s2, 1, 0
 ; GFX12-SDAG-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-SDAG-NEXT:    s_cmp_lg_u32 s0, 0
-; GFX12-SDAG-NEXT:    s_add_co_ci_u32 s0, s3, 0
-; GFX12-SDAG-NEXT:    s_cmp_lg_u32 s4, 0
+; GFX12-SDAG-NEXT:    s_add_co_ci_u32 s0, s1, s3
 ; GFX12-SDAG-NEXT:    s_wait_alu depctr_sa_sdst(0)
-; GFX12-SDAG-NEXT:    s_add_co_ci_u32 s0, s0, s1
+; GFX12-SDAG-NEXT:    s_add_co_i32 s0, s0, s2
 ; GFX12-SDAG-NEXT:    s_wait_alu depctr_sa_sdst(0)
 ; GFX12-SDAG-NEXT:    v_mov_b32_e32 v0, s0
 ; GFX12-SDAG-NEXT:    s_setpc_b64 s[30:31]
