@@ -369,12 +369,21 @@ define void @histogram_sext_from_i16_to_i64(ptr %base, <vscale x 4 x i16> %indic
 ; CHECK-LABEL: histogram_sext_from_i16_to_i64:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    ptrue p1.s
-; CHECK-NEXT:    mov z3.s, #1 // =0x1
+; CHECK-NEXT:    mov z4.d, #1 // =0x1
+; CHECK-NEXT:    ptrue p2.d
 ; CHECK-NEXT:    sxth z0.s, p1/m, z0.s
-; CHECK-NEXT:    histcnt z1.s, p0/z, z0.s, z0.s
-; CHECK-NEXT:    ld1w { z2.s }, p0/z, [x0, z0.s, sxtw #2]
-; CHECK-NEXT:    mad z1.s, p1/m, z3.s, z2.s
-; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, sxtw #2]
+; CHECK-NEXT:    punpklo p1.h, p0.b
+; CHECK-NEXT:    punpkhi p0.h, p0.b
+; CHECK-NEXT:    sunpklo z1.d, z0.s
+; CHECK-NEXT:    sunpkhi z0.d, z0.s
+; CHECK-NEXT:    histcnt z2.d, p1/z, z1.d, z1.d
+; CHECK-NEXT:    ld1w { z3.d }, p1/z, [x0, z1.d, lsl #2]
+; CHECK-NEXT:    mad z2.d, p2/m, z4.d, z3.d
+; CHECK-NEXT:    st1w { z2.d }, p1, [x0, z1.d, lsl #2]
+; CHECK-NEXT:    histcnt z1.d, p0/z, z0.d, z0.d
+; CHECK-NEXT:    ld1w { z2.d }, p0/z, [x0, z0.d, lsl #2]
+; CHECK-NEXT:    mad z1.d, p2/m, z4.d, z2.d
+; CHECK-NEXT:    st1w { z1.d }, p0, [x0, z0.d, lsl #2]
 ; CHECK-NEXT:    ret
   %extended = sext <vscale x 4 x i16> %indices to <vscale x 4 x i64>
   %buckets = getelementptr i32, ptr %base, <vscale x 4 x i64> %extended
@@ -389,9 +398,9 @@ define void @histogram_zext_from_i8_to_i32(ptr %base, <vscale x 4 x i8> %indices
 ; CHECK-NEXT:    mov z3.s, #1 // =0x1
 ; CHECK-NEXT:    ptrue p1.s
 ; CHECK-NEXT:    histcnt z1.s, p0/z, z0.s, z0.s
-; CHECK-NEXT:    ld1w { z2.s }, p0/z, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    ld1w { z2.s }, p0/z, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    mad z1.s, p1/m, z3.s, z2.s
-; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    ret
   %extended = zext <vscale x 4 x i8> %indices to <vscale x 4 x i32>
   %buckets = getelementptr i32, ptr %base, <vscale x 4 x i32> %extended
@@ -406,9 +415,9 @@ define void @histogram_zext_from_i16_to_i32(ptr %base, <vscale x 4 x i16> %indic
 ; CHECK-NEXT:    mov z3.s, #1 // =0x1
 ; CHECK-NEXT:    ptrue p1.s
 ; CHECK-NEXT:    histcnt z1.s, p0/z, z0.s, z0.s
-; CHECK-NEXT:    ld1w { z2.s }, p0/z, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    ld1w { z2.s }, p0/z, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    mad z1.s, p1/m, z3.s, z2.s
-; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, uxtw #2]
+; CHECK-NEXT:    st1w { z1.s }, p0, [x0, z0.s, sxtw #2]
 ; CHECK-NEXT:    ret
   %extended = zext <vscale x 4 x i16> %indices to <vscale x 4 x i32>
   %buckets = getelementptr i32, ptr %base, <vscale x 4 x i32> %extended

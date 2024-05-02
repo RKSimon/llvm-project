@@ -273,12 +273,12 @@ define arm_aapcs_vfpcc <16 x i8> @ext_add_ashr_trunc_i8i32(<16 x i8> %a, <16 x i
 ; CHECK-NEXT:    .pad #48
 ; CHECK-NEXT:    sub sp, #48
 ; CHECK-NEXT:    add r0, sp, #16
-; CHECK-NEXT:    mov r1, sp
+; CHECK-NEXT:    add r1, sp, #32
 ; CHECK-NEXT:    vstrw.32 q1, [r0]
 ; CHECK-NEXT:    vstrw.32 q0, [r1]
 ; CHECK-NEXT:    vldrb.u16 q0, [r0, #8]
 ; CHECK-NEXT:    vldrb.s16 q1, [r1, #8]
-; CHECK-NEXT:    add r2, sp, #32
+; CHECK-NEXT:    mov r2, sp
 ; CHECK-NEXT:    vhadd.s16 q0, q1, q0
 ; CHECK-NEXT:    vstrb.16 q0, [r2, #8]
 ; CHECK-NEXT:    vldrb.u16 q0, [r0]

@@ -1450,8 +1450,8 @@ define void @test_constrained_libcall_multichain(ptr %firstptr, ptr %result) #0 
 ; PC64LE-NEXT:    nop
 ; PC64LE-NEXT:    xsrsp 0, 1
 ; PC64LE-NEXT:    stfs 0, 0(29)
-; PC64LE-NEXT:    stfd 1, -16(30)
 ; PC64LE-NEXT:    stfd 2, -8(30)
+; PC64LE-NEXT:    stfd 1, -16(30)
 ; PC64LE-NEXT:    addi 1, 1, 80
 ; PC64LE-NEXT:    ld 0, 16(1)
 ; PC64LE-NEXT:    lfd 31, -8(1) # 8-byte Folded Reload
@@ -1501,8 +1501,8 @@ define void @test_constrained_libcall_multichain(ptr %firstptr, ptr %result) #0 
 ; PC64LE9-NEXT:    nop
 ; PC64LE9-NEXT:    xsrsp 0, 1
 ; PC64LE9-NEXT:    stfs 0, 0(29)
-; PC64LE9-NEXT:    stfd 1, -16(30)
 ; PC64LE9-NEXT:    stfd 2, -8(30)
+; PC64LE9-NEXT:    stfd 1, -16(30)
 ; PC64LE9-NEXT:    addi 1, 1, 80
 ; PC64LE9-NEXT:    ld 0, 16(1)
 ; PC64LE9-NEXT:    lfd 31, -8(1) # 8-byte Folded Reload
@@ -1556,8 +1556,8 @@ define void @test_constrained_libcall_multichain(ptr %firstptr, ptr %result) #0 
 ; PC64-NEXT:    frsp 0, 1
 ; PC64-NEXT:    stfs 0, 0(29)
 ; PC64-NEXT:    ld 29, 120(1) # 8-byte Folded Reload
-; PC64-NEXT:    stfd 1, -16(30)
 ; PC64-NEXT:    stfd 2, -8(30)
+; PC64-NEXT:    stfd 1, -16(30)
 ; PC64-NEXT:    ld 30, 128(1) # 8-byte Folded Reload
 ; PC64-NEXT:    lfd 31, 168(1) # 8-byte Folded Reload
 ; PC64-NEXT:    lfd 30, 160(1) # 8-byte Folded Reload

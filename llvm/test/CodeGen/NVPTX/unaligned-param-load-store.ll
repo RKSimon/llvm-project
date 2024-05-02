@@ -65,7 +65,7 @@ define %s_i8i32p @test_s_i8i32p(%s_i8i32p %a) {
 ; CHECK-LABEL: test_s_i8i32p(
 ; CHECK:       {
 ; CHECK-NEXT:    .reg .b16 %rs<12>;
-; CHECK-NEXT:    .reg .b32 %r<20>;
+; CHECK-NEXT:    .reg .b32 %r<25>;
 ; CHECK-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
@@ -103,16 +103,21 @@ define %s_i8i32p @test_s_i8i32p(%s_i8i32p %a) {
 ; CHECK-NEXT:    ld.param.b8 %rs6, [retval0+8];
 ; CHECK-NEXT:    ld.param.b64 %rd2, [retval0+16];
 ; CHECK-NEXT:    } // callseq 1
-; CHECK-NEXT:    cvt.u32.u16 %r15, %rs3;
-; CHECK-NEXT:    cvt.u32.u16 %r16, %rs4;
+; CHECK-NEXT:    cvt.u32.u16 %r15, %rs6;
+; CHECK-NEXT:    shl.b32 %r16, %r15, 24;
 ; CHECK-NEXT:    cvt.u32.u16 %r17, %rs5;
-; CHECK-NEXT:    cvt.u32.u16 %r18, %rs6;
+; CHECK-NEXT:    and.b32 %r18, %r17, 255;
+; CHECK-NEXT:    shl.b32 %r19, %r18, 16;
+; CHECK-NEXT:    or.b32 %r20, %r19, %r16;
+; CHECK-NEXT:    cvt.u32.u16 %r21, %rs3;
+; CHECK-NEXT:    cvt.u32.u16 %r22, %rs4;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r14;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+4], %rs2;
-; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r18;
-; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r17;
-; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r16;
-; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r15;
+; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r22;
+; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r21;
+; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r15;
+; CHECK-NEXT:    shr.u32 %r24, %r20, 16;
+; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r24;
 ; CHECK-NEXT:    st.param.b64 [func_retval0+16], %rd2;
 ; CHECK-NEXT:    ret;
   %r = tail call %s_i8i32p @test_s_i8i32p(%s_i8i32p %a)
@@ -124,7 +129,7 @@ define %s_i8i64p @test_s_i8i64p(%s_i8i64p %a) {
 ; CHECK-LABEL: test_s_i8i64p(
 ; CHECK:       {
 ; CHECK-NEXT:    .reg .b16 %rs<20>;
-; CHECK-NEXT:    .reg .b64 %rd<68>;
+; CHECK-NEXT:    .reg .b64 %rd<69>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b8 %rd4, [test_s_i8i64p_param_0+10];
@@ -216,18 +221,19 @@ define %s_i8i64p @test_s_i8i64p(%s_i8i64p %a) {
 ; CHECK-NEXT:    or.b64 %rd61, %rd58, %rd60;
 ; CHECK-NEXT:    st.param.b64 [func_retval0], %rd31;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+8], %rs2;
-; CHECK-NEXT:    st.param.b8 [func_retval0+12], %rd43;
-; CHECK-NEXT:    st.param.b8 [func_retval0+11], %rd39;
+; CHECK-NEXT:    shr.u64 %rd64, %rd61, 56;
+; CHECK-NEXT:    st.param.b8 [func_retval0+16], %rd64;
+; CHECK-NEXT:    shr.u64 %rd65, %rd61, 48;
+; CHECK-NEXT:    st.param.b8 [func_retval0+15], %rd65;
+; CHECK-NEXT:    shr.u64 %rd66, %rd54, 40;
+; CHECK-NEXT:    st.param.b8 [func_retval0+14], %rd66;
+; CHECK-NEXT:    shr.u64 %rd67, %rd61, 32;
+; CHECK-NEXT:    st.param.b8 [func_retval0+13], %rd67;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+10], %rd35;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+9], %rd33;
-; CHECK-NEXT:    shr.u64 %rd64, %rd50, 32;
-; CHECK-NEXT:    st.param.b8 [func_retval0+13], %rd64;
-; CHECK-NEXT:    shr.u64 %rd65, %rd54, 40;
-; CHECK-NEXT:    st.param.b8 [func_retval0+14], %rd65;
-; CHECK-NEXT:    shr.u64 %rd66, %rd58, 48;
-; CHECK-NEXT:    st.param.b8 [func_retval0+15], %rd66;
-; CHECK-NEXT:    shr.u64 %rd67, %rd61, 56;
-; CHECK-NEXT:    st.param.b8 [func_retval0+16], %rd67;
+; CHECK-NEXT:    st.param.b8 [func_retval0+12], %rd43;
+; CHECK-NEXT:    shr.u64 %rd68, %rd61, 16;
+; CHECK-NEXT:    st.param.b8 [func_retval0+11], %rd68;
 ; CHECK-NEXT:    st.param.b64 [func_retval0+24], %rd32;
 ; CHECK-NEXT:    ret;
   %r = tail call %s_i8i64p @test_s_i8i64p(%s_i8i64p %a)
@@ -279,7 +285,7 @@ define %s_i8f16x2p @test_s_i8f16x2p(%s_i8f16x2p %a) {
 ; CHECK-LABEL: test_s_i8f16x2p(
 ; CHECK:       {
 ; CHECK-NEXT:    .reg .b16 %rs<12>;
-; CHECK-NEXT:    .reg .b32 %r<20>;
+; CHECK-NEXT:    .reg .b32 %r<25>;
 ; CHECK-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
@@ -317,16 +323,21 @@ define %s_i8f16x2p @test_s_i8f16x2p(%s_i8f16x2p %a) {
 ; CHECK-NEXT:    ld.param.b8 %rs6, [retval0+8];
 ; CHECK-NEXT:    ld.param.b64 %rd2, [retval0+16];
 ; CHECK-NEXT:    } // callseq 4
-; CHECK-NEXT:    cvt.u32.u16 %r15, %rs3;
-; CHECK-NEXT:    cvt.u32.u16 %r16, %rs4;
+; CHECK-NEXT:    cvt.u32.u16 %r15, %rs6;
+; CHECK-NEXT:    shl.b32 %r16, %r15, 24;
 ; CHECK-NEXT:    cvt.u32.u16 %r17, %rs5;
-; CHECK-NEXT:    cvt.u32.u16 %r18, %rs6;
+; CHECK-NEXT:    and.b32 %r18, %r17, 255;
+; CHECK-NEXT:    shl.b32 %r19, %r18, 16;
+; CHECK-NEXT:    or.b32 %r20, %r19, %r16;
+; CHECK-NEXT:    cvt.u32.u16 %r21, %rs3;
+; CHECK-NEXT:    cvt.u32.u16 %r22, %rs4;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r14;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+4], %rs2;
-; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r18;
-; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r17;
-; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r16;
-; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r15;
+; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r22;
+; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r21;
+; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r15;
+; CHECK-NEXT:    shr.u32 %r24, %r20, 16;
+; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r24;
 ; CHECK-NEXT:    st.param.b64 [func_retval0+16], %rd2;
 ; CHECK-NEXT:    ret;
   %r = tail call %s_i8f16x2p @test_s_i8f16x2p(%s_i8f16x2p %a)
@@ -338,7 +349,7 @@ define %s_i8f32p @test_s_i8f32p(%s_i8f32p %a) {
 ; CHECK-LABEL: test_s_i8f32p(
 ; CHECK:       {
 ; CHECK-NEXT:    .reg .b16 %rs<12>;
-; CHECK-NEXT:    .reg .b32 %r<20>;
+; CHECK-NEXT:    .reg .b32 %r<25>;
 ; CHECK-NEXT:    .reg .b64 %rd<4>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
@@ -376,16 +387,21 @@ define %s_i8f32p @test_s_i8f32p(%s_i8f32p %a) {
 ; CHECK-NEXT:    ld.param.b8 %rs6, [retval0+8];
 ; CHECK-NEXT:    ld.param.b64 %rd2, [retval0+16];
 ; CHECK-NEXT:    } // callseq 5
-; CHECK-NEXT:    cvt.u32.u16 %r15, %rs3;
-; CHECK-NEXT:    cvt.u32.u16 %r16, %rs4;
+; CHECK-NEXT:    cvt.u32.u16 %r15, %rs6;
+; CHECK-NEXT:    shl.b32 %r16, %r15, 24;
 ; CHECK-NEXT:    cvt.u32.u16 %r17, %rs5;
-; CHECK-NEXT:    cvt.u32.u16 %r18, %rs6;
+; CHECK-NEXT:    and.b32 %r18, %r17, 255;
+; CHECK-NEXT:    shl.b32 %r19, %r18, 16;
+; CHECK-NEXT:    or.b32 %r20, %r19, %r16;
+; CHECK-NEXT:    cvt.u32.u16 %r21, %rs3;
+; CHECK-NEXT:    cvt.u32.u16 %r22, %rs4;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r14;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+4], %rs2;
-; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r18;
-; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r17;
-; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r16;
-; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r15;
+; CHECK-NEXT:    st.param.b8 [func_retval0+6], %r22;
+; CHECK-NEXT:    st.param.b8 [func_retval0+5], %r21;
+; CHECK-NEXT:    st.param.b8 [func_retval0+8], %r15;
+; CHECK-NEXT:    shr.u32 %r24, %r20, 16;
+; CHECK-NEXT:    st.param.b8 [func_retval0+7], %r24;
 ; CHECK-NEXT:    st.param.b64 [func_retval0+16], %rd2;
 ; CHECK-NEXT:    ret;
   %r = tail call %s_i8f32p @test_s_i8f32p(%s_i8f32p %a)
@@ -397,7 +413,7 @@ define %s_i8f64p @test_s_i8f64p(%s_i8f64p %a) {
 ; CHECK-LABEL: test_s_i8f64p(
 ; CHECK:       {
 ; CHECK-NEXT:    .reg .b16 %rs<20>;
-; CHECK-NEXT:    .reg .b64 %rd<68>;
+; CHECK-NEXT:    .reg .b64 %rd<69>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b8 %rd4, [test_s_i8f64p_param_0+10];
@@ -489,18 +505,19 @@ define %s_i8f64p @test_s_i8f64p(%s_i8f64p %a) {
 ; CHECK-NEXT:    or.b64 %rd61, %rd58, %rd60;
 ; CHECK-NEXT:    st.param.b64 [func_retval0], %rd31;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+8], %rs2;
-; CHECK-NEXT:    st.param.b8 [func_retval0+12], %rd43;
-; CHECK-NEXT:    st.param.b8 [func_retval0+11], %rd39;
+; CHECK-NEXT:    shr.u64 %rd64, %rd61, 56;
+; CHECK-NEXT:    st.param.b8 [func_retval0+16], %rd64;
+; CHECK-NEXT:    shr.u64 %rd65, %rd61, 48;
+; CHECK-NEXT:    st.param.b8 [func_retval0+15], %rd65;
+; CHECK-NEXT:    shr.u64 %rd66, %rd54, 40;
+; CHECK-NEXT:    st.param.b8 [func_retval0+14], %rd66;
+; CHECK-NEXT:    shr.u64 %rd67, %rd61, 32;
+; CHECK-NEXT:    st.param.b8 [func_retval0+13], %rd67;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+10], %rd35;
 ; CHECK-NEXT:    st.param.b8 [func_retval0+9], %rd33;
-; CHECK-NEXT:    shr.u64 %rd64, %rd50, 32;
-; CHECK-NEXT:    st.param.b8 [func_retval0+13], %rd64;
-; CHECK-NEXT:    shr.u64 %rd65, %rd54, 40;
-; CHECK-NEXT:    st.param.b8 [func_retval0+14], %rd65;
-; CHECK-NEXT:    shr.u64 %rd66, %rd58, 48;
-; CHECK-NEXT:    st.param.b8 [func_retval0+15], %rd66;
-; CHECK-NEXT:    shr.u64 %rd67, %rd61, 56;
-; CHECK-NEXT:    st.param.b8 [func_retval0+16], %rd67;
+; CHECK-NEXT:    st.param.b8 [func_retval0+12], %rd43;
+; CHECK-NEXT:    shr.u64 %rd68, %rd61, 16;
+; CHECK-NEXT:    st.param.b8 [func_retval0+11], %rd68;
 ; CHECK-NEXT:    st.param.b64 [func_retval0+24], %rd32;
 ; CHECK-NEXT:    ret;
   %r = tail call %s_i8f64p @test_s_i8f64p(%s_i8f64p %a)

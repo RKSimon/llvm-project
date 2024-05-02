@@ -364,28 +364,28 @@ define i128 @cmov_bsf128_undef(i128 %x, i128 %y) nounwind {
 ; X86-NEXT:    pushl %ebx
 ; X86-NEXT:    pushl %edi
 ; X86-NEXT:    pushl %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %ebx
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edi
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
-; X86-NEXT:    movl %ecx, %edi
-; X86-NEXT:    orl %esi, %edi
-; X86-NEXT:    movl %edx, %ebp
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl %edx, %ebx
+; X86-NEXT:    orl %edi, %ebx
+; X86-NEXT:    movl %ecx, %ebp
+; X86-NEXT:    orl %esi, %ebp
 ; X86-NEXT:    orl %ebx, %ebp
-; X86-NEXT:    orl %edi, %ebp
 ; X86-NEXT:    je .LBB9_11
 ; X86-NEXT:  # %bb.1: # %select.true.sink
-; X86-NEXT:    testl %edx, %edx
+; X86-NEXT:    testl %ecx, %ecx
 ; X86-NEXT:    jne .LBB9_2
 ; X86-NEXT:  # %bb.3: # %select.true.sink
-; X86-NEXT:    rep bsfl %ecx, %edi
-; X86-NEXT:    addl $32, %edi
-; X86-NEXT:    testl %ebx, %ebx
+; X86-NEXT:    rep bsfl %edx, %ebx
+; X86-NEXT:    addl $32, %ebx
+; X86-NEXT:    testl %esi, %esi
 ; X86-NEXT:    je .LBB9_6
 ; X86-NEXT:  .LBB9_5:
-; X86-NEXT:    rep bsfl %ebx, %esi
-; X86-NEXT:    orl %ecx, %edx
+; X86-NEXT:    rep bsfl %esi, %esi
+; X86-NEXT:    orl %edx, %ecx
 ; X86-NEXT:    je .LBB9_8
 ; X86-NEXT:    jmp .LBB9_9
 ; X86-NEXT:  .LBB9_11: # %select.end
@@ -399,19 +399,19 @@ define i128 @cmov_bsf128_undef(i128 %x, i128 %y) nounwind {
 ; X86-NEXT:    movl %ecx, 12(%eax)
 ; X86-NEXT:    jmp .LBB9_10
 ; X86-NEXT:  .LBB9_2:
-; X86-NEXT:    rep bsfl %edx, %edi
-; X86-NEXT:    testl %ebx, %ebx
+; X86-NEXT:    rep bsfl %ecx, %ebx
+; X86-NEXT:    testl %esi, %esi
 ; X86-NEXT:    jne .LBB9_5
 ; X86-NEXT:  .LBB9_6: # %select.true.sink
-; X86-NEXT:    rep bsfl %esi, %esi
+; X86-NEXT:    rep bsfl %edi, %esi
 ; X86-NEXT:    addl $32, %esi
-; X86-NEXT:    orl %ecx, %edx
+; X86-NEXT:    orl %edx, %ecx
 ; X86-NEXT:    jne .LBB9_9
 ; X86-NEXT:  .LBB9_8: # %select.true.sink
 ; X86-NEXT:    addl $64, %esi
-; X86-NEXT:    movl %esi, %edi
+; X86-NEXT:    movl %esi, %ebx
 ; X86-NEXT:  .LBB9_9: # %select.true.sink
-; X86-NEXT:    movl %edi, (%eax)
+; X86-NEXT:    movl %ebx, (%eax)
 ; X86-NEXT:    movl $0, 12(%eax)
 ; X86-NEXT:    movl $0, 8(%eax)
 ; X86-NEXT:    movl $0, 4(%eax)

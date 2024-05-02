@@ -884,8 +884,10 @@ define <2 x i64> @orn2xi64(<2 x i64> %a, <2 x i64> %b)  {
 define <2 x i32> @bsl2xi32_const(<2 x i32> %a, <2 x i32> %b)  {
 ; CHECK-SD-LABEL: bsl2xi32_const:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    movi d2, #0x000000ffffffff
-; CHECK-SD-NEXT:    bif v0.8b, v1.8b, v2.8b
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
+; CHECK-SD-NEXT:    mov v0.s[1], v1.s[1]
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: bsl2xi32_const:
@@ -923,8 +925,10 @@ define <4 x i16> @bsl4xi16_const(<4 x i16> %a, <4 x i16> %b)  {
 define <1 x i64> @bsl1xi64_const(<1 x i64> %a, <1 x i64> %b)  {
 ; CHECK-SD-LABEL: bsl1xi64_const:
 ; CHECK-SD:       // %bb.0:
-; CHECK-SD-NEXT:    movi d2, #0xffffffffffffff00
-; CHECK-SD-NEXT:    bif v0.8b, v1.8b, v2.8b
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 def $q0
+; CHECK-SD-NEXT:    // kill: def $d1 killed $d1 def $q1
+; CHECK-SD-NEXT:    mov v0.b[0], v1.b[0]
+; CHECK-SD-NEXT:    // kill: def $d0 killed $d0 killed $q0
 ; CHECK-SD-NEXT:    ret
 ;
 ; CHECK-GI-LABEL: bsl1xi64_const:
@@ -981,12 +985,17 @@ define <8 x i16> @bsl8xi16_const(<8 x i16> %a, <8 x i16> %b)  {
 }
 
 define <2 x i64> @bsl2xi64_const(<2 x i64> %a, <2 x i64> %b)  {
-; CHECK-LABEL: bsl2xi64_const:
-; CHECK:       // %bb.0:
-; CHECK-NEXT:    adrp x8, .LCPI75_0
-; CHECK-NEXT:    ldr q2, [x8, :lo12:.LCPI75_0]
-; CHECK-NEXT:    bif v0.16b, v1.16b, v2.16b
-; CHECK-NEXT:    ret
+; CHECK-SD-LABEL: bsl2xi64_const:
+; CHECK-SD:       // %bb.0:
+; CHECK-SD-NEXT:    mov v0.d[1], v1.d[1]
+; CHECK-SD-NEXT:    ret
+;
+; CHECK-GI-LABEL: bsl2xi64_const:
+; CHECK-GI:       // %bb.0:
+; CHECK-GI-NEXT:    adrp x8, .LCPI75_0
+; CHECK-GI-NEXT:    ldr q2, [x8, :lo12:.LCPI75_0]
+; CHECK-GI-NEXT:    bif v0.16b, v1.16b, v2.16b
+; CHECK-GI-NEXT:    ret
 	%tmp1 = and <2 x i64> %a, < i64 -1, i64 0 >
 	%tmp2 = and <2 x i64> %b, < i64 0, i64 -1 >
 	%tmp3 = or <2 x i64> %tmp1, %tmp2

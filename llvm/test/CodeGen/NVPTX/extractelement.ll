@@ -7,15 +7,15 @@ target triple = "nvptx64-nvidia-cuda"
 define i16  @test_v2i8(i16 %a) {
 ; CHECK-LABEL: test_v2i8(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b16 %rs<5>;
+; CHECK-NEXT:    .reg .b16 %rs<6>;
 ; CHECK-NEXT:    .reg .b32 %r<2>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
-; CHECK-NEXT:    ld.param.b16 %rs1, [test_v2i8_param_0];
-; CHECK-NEXT:    cvt.s16.s8 %rs2, %rs1;
-; CHECK-NEXT:    shr.s16 %rs3, %rs1, 8;
-; CHECK-NEXT:    add.s16 %rs4, %rs2, %rs3;
-; CHECK-NEXT:    cvt.u32.u16 %r1, %rs4;
+; CHECK-NEXT:    ld.param.v2.b8 {%rs1, %rs2}, [test_v2i8_param_0];
+; CHECK-NEXT:    cvt.s16.s8 %rs3, %rs1;
+; CHECK-NEXT:    cvt.s16.s8 %rs4, %rs2;
+; CHECK-NEXT:    add.s16 %rs5, %rs3, %rs4;
+; CHECK-NEXT:    cvt.u32.u16 %r1, %rs5;
 ; CHECK-NEXT:    st.param.b32 [func_retval0], %r1;
 ; CHECK-NEXT:    ret;
   %v = bitcast i16 %a to <2 x i8>

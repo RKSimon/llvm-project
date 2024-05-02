@@ -2505,8 +2505,8 @@ define arm_aapcs_vfpcc void @ssatmul_16t_q7(ptr nocapture readonly %pSrcA, ptr n
 ; CHECK-NEXT:    vldrw.u32 q5, [r6]
 ; CHECK-NEXT:    adr r6, .LCPI18_3
 ; CHECK-NEXT:    vldrw.u32 q6, [r6]
-; CHECK-NEXT:    add r5, sp, #32
-; CHECK-NEXT:    add r6, sp, #64
+; CHECK-NEXT:    add r5, sp, #64
+; CHECK-NEXT:    add r6, sp, #32
 ; CHECK-NEXT:    movs r3, #0
 ; CHECK-NEXT:    vstrw.32 q0, [sp] @ 16-byte Spill
 ; CHECK-NEXT:  .LBB18_2: @ %vector.body
@@ -2648,8 +2648,8 @@ define arm_aapcs_vfpcc void @ssatmul_16ti_q7(ptr nocapture readonly %pSrcA, ptr 
 ; CHECK-NEXT:    vldrw.u32 q5, [r6]
 ; CHECK-NEXT:    adr r6, .LCPI19_3
 ; CHECK-NEXT:    vldrw.u32 q6, [r6]
-; CHECK-NEXT:    add r5, sp, #32
-; CHECK-NEXT:    add r6, sp, #64
+; CHECK-NEXT:    add r5, sp, #64
+; CHECK-NEXT:    add r6, sp, #32
 ; CHECK-NEXT:    movs r3, #0
 ; CHECK-NEXT:    vstrw.32 q0, [sp] @ 16-byte Spill
 ; CHECK-NEXT:  .LBB19_2: @ %vector.body

@@ -184,7 +184,8 @@ define i8 @udiv8_constant_add(i8 %a) nounwind {
 ; RV32IMZB-NEXT:    slli a0, a0, 24
 ; RV32IMZB-NEXT:    srli a0, a0, 25
 ; RV32IMZB-NEXT:    add a0, a0, a1
-; RV32IMZB-NEXT:    srli a0, a0, 2
+; RV32IMZB-NEXT:    slli a0, a0, 24
+; RV32IMZB-NEXT:    srli a0, a0, 26
 ; RV32IMZB-NEXT:    ret
 ;
 ; RV64IM-LABEL: udiv8_constant_add:
@@ -210,7 +211,8 @@ define i8 @udiv8_constant_add(i8 %a) nounwind {
 ; RV64IMZB-NEXT:    slli a0, a0, 56
 ; RV64IMZB-NEXT:    srli a0, a0, 57
 ; RV64IMZB-NEXT:    add a0, a0, a1
-; RV64IMZB-NEXT:    srli a0, a0, 2
+; RV64IMZB-NEXT:    slli a0, a0, 56
+; RV64IMZB-NEXT:    srli a0, a0, 58
 ; RV64IMZB-NEXT:    ret
   %1 = udiv i8 %a, 7
   ret i8 %1

@@ -14,7 +14,9 @@ target triple = "arm64-apple-ios"
 define void @test(ptr nocapture %su) {
 ; CHECK-LABEL: test:
 ; CHECK:       ; %bb.0: ; %entry
-; CHECK-NEXT:    str wzr, [x0, #96]
+; CHECK-NEXT:    ldrh w8, [x0, #100]
+; CHECK-NEXT:    lsl x8, x8, #32
+; CHECK-NEXT:    str w8, [x0, #96]
 ; CHECK-NEXT:    ret
 entry:
   %r1 = getelementptr inbounds %"struct.SU", ptr %su, i64 1, i32 5

@@ -16,9 +16,9 @@ define i1 @va_func(i32 %a, i8 %b, i8 %c, ...) {
 ; CHECK-NEXT:    .seh_endprologue
 ; CHECK-NEXT:    add x8, sp, #40
 ; CHECK-NEXT:    mov w19, w0
-; CHECK-NEXT:    stp x3, x4, [sp, #40]
-; CHECK-NEXT:    stp x5, x6, [sp, #56]
-; CHECK-NEXT:    str x7, [sp, #72]
+; CHECK-NEXT:    stp x6, x7, [sp, #64]
+; CHECK-NEXT:    stp x4, x5, [sp, #48]
+; CHECK-NEXT:    str x3, [sp, #40]
 ; CHECK-NEXT:    str x8, [sp, #8]
 ; CHECK-NEXT:    str w0, [sp, #4]
 ; CHECK-NEXT:    strb w1, [sp, #3]
@@ -50,9 +50,9 @@ define i1 @va_func(i32 %a, i8 %b, i8 %c, ...) {
 ; GISEL-NEXT:    .seh_endprologue
 ; GISEL-NEXT:    add x8, sp, #40
 ; GISEL-NEXT:    mov w19, w0
-; GISEL-NEXT:    stp x3, x4, [sp, #40]
-; GISEL-NEXT:    stp x5, x6, [sp, #56]
-; GISEL-NEXT:    str x7, [sp, #72]
+; GISEL-NEXT:    stp x6, x7, [sp, #64]
+; GISEL-NEXT:    stp x4, x5, [sp, #48]
+; GISEL-NEXT:    str x3, [sp, #40]
 ; GISEL-NEXT:    str x8, [sp, #8]
 ; GISEL-NEXT:    str w0, [sp, #4]
 ; GISEL-NEXT:    strb w1, [sp, #3]

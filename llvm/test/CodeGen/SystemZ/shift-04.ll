@@ -85,7 +85,12 @@ define i32 @f6(i32 %a, i64 %amt) {
 define i32 @f7(i32 %a, i64 %amt) {
 ; CHECK-LABEL: f7:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    rll %r2, %r2, 10(%r3)
+; CHECK-NEXT:    lhi %r1, 22
+; CHECK-NEXT:    sr %r1, %r3
+; CHECK-NEXT:    lr %r0, %r2
+; CHECK-NEXT:    sll %r0, 10(%r3)
+; CHECK-NEXT:    srl %r2, 0(%r1)
+; CHECK-NEXT:    or %r2, %r0
 ; CHECK-NEXT:    br %r14
   %add = add i64 %amt, 10
   %sub = sub i64 32, %add

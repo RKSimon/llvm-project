@@ -4,10 +4,8 @@
 define void @bitcast_16i8_store(ptr %p, <16 x i8> %a0) {
 ; AVX512-LABEL: bitcast_16i8_store:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
-; AVX512-NEXT:    vpmovb2m %zmm0, %k0 # encoding: [0x62,0xf2,0x7e,0x48,0x29,0xc0]
-; AVX512-NEXT:    kmovw %k0, (%rdi) # EVEX TO VEX Compression encoding: [0xc5,0xf8,0x91,0x07]
-; AVX512-NEXT:    vzeroupper # encoding: [0xc5,0xf8,0x77]
+; AVX512-NEXT:    vpmovmskb %xmm0, %eax # encoding: [0xc5,0xf9,0xd7,0xc0]
+; AVX512-NEXT:    movw %ax, (%rdi) # encoding: [0x66,0x89,0x07]
 ; AVX512-NEXT:    retq # encoding: [0xc3]
   %a1 = icmp slt <16 x i8> %a0, zeroinitializer
   %a2 = bitcast <16 x i1> %a1 to i16
@@ -18,9 +16,8 @@ define void @bitcast_16i8_store(ptr %p, <16 x i8> %a0) {
 define void @bitcast_32i8_store(ptr %p, <32 x i8> %a0) {
 ; AVX512-LABEL: bitcast_32i8_store:
 ; AVX512:       # %bb.0:
-; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
-; AVX512-NEXT:    vpmovb2m %zmm0, %k0 # encoding: [0x62,0xf2,0x7e,0x48,0x29,0xc0]
-; AVX512-NEXT:    kmovd %k0, (%rdi) # EVEX TO VEX Compression encoding: [0xc4,0xe1,0xf9,0x91,0x07]
+; AVX512-NEXT:    vpmovmskb %ymm0, %eax # encoding: [0xc5,0xfd,0xd7,0xc0]
+; AVX512-NEXT:    movl %eax, (%rdi) # encoding: [0x89,0x07]
 ; AVX512-NEXT:    vzeroupper # encoding: [0xc5,0xf8,0x77]
 ; AVX512-NEXT:    retq # encoding: [0xc3]
   %a1 = icmp slt <32 x i8> %a0, zeroinitializer

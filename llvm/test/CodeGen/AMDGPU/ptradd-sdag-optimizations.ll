@@ -291,27 +291,17 @@ define ptr addrspace(1) @complextype_global_gep(i64 %offset) {
 
 ; Tests the tryFoldToMad64_32 PTRADD combine.
 define amdgpu_kernel void @fold_mad64(ptr addrspace(1) %p) {
-; GFX942_PTRADD-LABEL: fold_mad64:
-; GFX942_PTRADD:       ; %bb.0:
-; GFX942_PTRADD-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x0
-; GFX942_PTRADD-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
-; GFX942_PTRADD-NEXT:    v_mul_hi_u32_u24_e32 v1, 12, v0
-; GFX942_PTRADD-NEXT:    v_mul_u32_u24_e32 v0, 12, v0
-; GFX942_PTRADD-NEXT:    v_mov_b32_e32 v2, 1.0
-; GFX942_PTRADD-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_PTRADD-NEXT:    v_lshl_add_u64 v[0:1], s[0:1], 0, v[0:1]
-; GFX942_PTRADD-NEXT:    global_store_dword v[0:1], v2, off
-; GFX942_PTRADD-NEXT:    s_endpgm
-;
-; GFX942_LEGACY-LABEL: fold_mad64:
-; GFX942_LEGACY:       ; %bb.0:
-; GFX942_LEGACY-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x0
-; GFX942_LEGACY-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
-; GFX942_LEGACY-NEXT:    v_mov_b32_e32 v2, 1.0
-; GFX942_LEGACY-NEXT:    s_waitcnt lgkmcnt(0)
-; GFX942_LEGACY-NEXT:    v_mad_u64_u32 v[0:1], s[0:1], v0, 12, s[0:1]
-; GFX942_LEGACY-NEXT:    global_store_dword v[0:1], v2, off
-; GFX942_LEGACY-NEXT:    s_endpgm
+; GFX942-LABEL: fold_mad64:
+; GFX942:       ; %bb.0:
+; GFX942-NEXT:    s_load_dwordx2 s[0:1], s[4:5], 0x0
+; GFX942-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX942-NEXT:    v_mul_hi_u32_u24_e32 v1, 12, v0
+; GFX942-NEXT:    v_mul_u32_u24_e32 v0, 12, v0
+; GFX942-NEXT:    v_mov_b32_e32 v2, 1.0
+; GFX942-NEXT:    s_waitcnt lgkmcnt(0)
+; GFX942-NEXT:    v_lshl_add_u64 v[0:1], s[0:1], 0, v[0:1]
+; GFX942-NEXT:    global_store_dword v[0:1], v2, off
+; GFX942-NEXT:    s_endpgm
   %voffset32 = call i32 @llvm.amdgcn.workitem.id.x()
   %voffset = zext i32 %voffset32 to i64
   %p1 = getelementptr inbounds %S, ptr addrspace(1) %p, i64 %voffset, i32 0

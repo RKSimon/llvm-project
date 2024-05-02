@@ -386,9 +386,9 @@ define zeroext i8 @test_byval_mem32(ptr byval(%struct_S32) align 1 %s) {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    std 3, -32(1)
 ; CHECK-NEXT:    clrldi 3, 3, 56
-; CHECK-NEXT:    std 4, -24(1)
-; CHECK-NEXT:    std 5, -16(1)
 ; CHECK-NEXT:    std 6, -8(1)
+; CHECK-NEXT:    std 5, -16(1)
+; CHECK-NEXT:    std 4, -24(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i8, ptr %s, align 1
@@ -426,10 +426,10 @@ define zeroext i8 @test_byval_mem32_2(float %f, ptr byval(%struct_S32) align 1 %
 ; CHECK-LABEL: test_byval_mem32_2:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    clrldi 3, 4, 56
-; CHECK-NEXT:    std 4, -32(1)
-; CHECK-NEXT:    std 5, -24(1)
-; CHECK-NEXT:    std 6, -16(1)
 ; CHECK-NEXT:    std 7, -8(1)
+; CHECK-NEXT:    std 6, -16(1)
+; CHECK-NEXT:    std 5, -24(1)
+; CHECK-NEXT:    std 4, -32(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i8, ptr %s, align 1
@@ -478,9 +478,9 @@ define zeroext i8 @test_byval_mem32_3(i64 %i1, float %f, i64 %i2, double %d, i32
 ; CHECK-LABEL: test_byval_mem32_3:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    clrldi 3, 8, 56
-; CHECK-NEXT:    std 8, 72(1)
-; CHECK-NEXT:    std 9, 80(1)
 ; CHECK-NEXT:    std 10, 88(1)
+; CHECK-NEXT:    std 9, 80(1)
+; CHECK-NEXT:    std 8, 72(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i8, ptr %s, align 1
@@ -524,13 +524,13 @@ define zeroext i8 @test_byval_mem64(ptr byval(%struct_S64) align 1 %s) {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    std 3, -64(1)
 ; CHECK-NEXT:    clrldi 3, 3, 56
-; CHECK-NEXT:    std 4, -56(1)
-; CHECK-NEXT:    std 5, -48(1)
-; CHECK-NEXT:    std 6, -40(1)
-; CHECK-NEXT:    std 7, -32(1)
-; CHECK-NEXT:    std 8, -24(1)
-; CHECK-NEXT:    std 9, -16(1)
 ; CHECK-NEXT:    std 10, -8(1)
+; CHECK-NEXT:    std 9, -16(1)
+; CHECK-NEXT:    std 8, -24(1)
+; CHECK-NEXT:    std 7, -32(1)
+; CHECK-NEXT:    std 6, -40(1)
+; CHECK-NEXT:    std 5, -48(1)
+; CHECK-NEXT:    std 4, -56(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i8, ptr %s, align 1
@@ -589,13 +589,13 @@ define zeroext i8 @test_byval_mem65(ptr byval(%struct_S65) align 1 %s) {
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    std 3, 32(1)
 ; CHECK-NEXT:    clrldi 3, 3, 56
-; CHECK-NEXT:    std 4, 40(1)
-; CHECK-NEXT:    std 5, 48(1)
-; CHECK-NEXT:    std 6, 56(1)
-; CHECK-NEXT:    std 7, 64(1)
-; CHECK-NEXT:    std 8, 72(1)
-; CHECK-NEXT:    std 9, 80(1)
 ; CHECK-NEXT:    std 10, 88(1)
+; CHECK-NEXT:    std 9, 80(1)
+; CHECK-NEXT:    std 8, 72(1)
+; CHECK-NEXT:    std 7, 64(1)
+; CHECK-NEXT:    std 6, 56(1)
+; CHECK-NEXT:    std 5, 48(1)
+; CHECK-NEXT:    std 4, 40(1)
 ; CHECK-NEXT:    blr
 entry:
   %0 = load i8, ptr %s, align 1

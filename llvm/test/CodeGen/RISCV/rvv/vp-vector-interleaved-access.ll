@@ -31,12 +31,22 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor2_v2(ptr %ptr, i32 %
 define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor3_v2(ptr %ptr, i32 %evl) {
 ; RV32-LABEL: load_factor3_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 1
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 699051
+; RV32-NEXT:    addi a2, a2, -1365
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
 ; RV32-NEXT:    vlseg3e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: load_factor3_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 1
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 699051
+; RV64-NEXT:    addi a2, a2, -1365
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
@@ -57,6 +67,11 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor
 define {<vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor3_partial(ptr %ptr, i32 %evl) {
 ; RV32-LABEL: load_factor3_partial:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 1
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 699051
+; RV32-NEXT:    addi a2, a2, -1365
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
 ; RV32-NEXT:    vlseg3e32.v v7, (a0)
 ; RV32-NEXT:    vmv1r.v v8, v7
@@ -64,6 +79,11 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor3_partial(ptr %ptr, 
 ;
 ; RV64-LABEL: load_factor3_partial:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 1
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 699051
+; RV64-NEXT:    addi a2, a2, -1365
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
@@ -87,6 +107,11 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor3_no_extract(ptr %pt
 ; RV32-NEXT:    li a2, 12
 ; RV32-NEXT:    beq a1, a2, .LBB3_2
 ; RV32-NEXT:  # %bb.1: # %bb0
+; RV32-NEXT:    slli a2, a1, 1
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 699051
+; RV32-NEXT:    addi a2, a2, -1365
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
 ; RV32-NEXT:    vlseg3e32.v v7, (a0)
 ; RV32-NEXT:    j .LBB3_3
@@ -104,6 +129,11 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor3_no_extract(ptr %pt
 ; RV64-NEXT:    li a3, 12
 ; RV64-NEXT:    beq a2, a3, .LBB3_2
 ; RV64-NEXT:  # %bb.1: # %bb0
+; RV64-NEXT:    slli a2, a1, 1
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 699051
+; RV64-NEXT:    addi a2, a2, -1365
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
@@ -173,12 +203,22 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 
 define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor5_v2(ptr %ptr, i32 %evl) {
 ; RV32-LABEL: load_factor5_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 2
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 838861
+; RV32-NEXT:    addi a2, a2, -819
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
 ; RV32-NEXT:    vlseg5e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: load_factor5_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 2
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 838861
+; RV64-NEXT:    addi a2, a2, -819
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
@@ -203,12 +243,22 @@ define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 
 define {<vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>, <vscale x 2 x i32>} @load_factor7_v2(ptr %ptr, i32 %evl) {
 ; RV32-LABEL: load_factor7_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 3
+; RV32-NEXT:    sub a2, a2, a1
+; RV32-NEXT:    lui a1, 748983
+; RV32-NEXT:    addi a1, a1, -585
+; RV32-NEXT:    mul a1, a2, a1
 ; RV32-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
 ; RV32-NEXT:    vlseg7e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: load_factor7_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 3
+; RV64-NEXT:    subw a2, a2, a1
+; RV64-NEXT:    lui a1, 748983
+; RV64-NEXT:    addi a1, a1, -585
+; RV64-NEXT:    mul a1, a2, a1
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, m1, ta, ma
@@ -298,12 +348,22 @@ define void @store_factor2_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, pt
 define void @store_factor3_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, <vscale x 1 x i32> %v2, ptr %ptr, i32 %evl) {
 ; RV32-LABEL: store_factor3_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 1
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 699051
+; RV32-NEXT:    addi a2, a2, -1365
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
 ; RV32-NEXT:    vsseg3e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: store_factor3_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 1
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 699051
+; RV64-NEXT:    addi a2, a2, -1365
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
@@ -344,12 +404,22 @@ define void @store_factor4_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, pt
 define void @store_factor5_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, <vscale x 1 x i32> %v2, <vscale x 1 x i32> %v3, <vscale x 1 x i32> %v4, ptr %ptr, i32 %evl) {
 ; RV32-LABEL: store_factor5_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 2
+; RV32-NEXT:    add a1, a2, a1
+; RV32-NEXT:    lui a2, 838861
+; RV32-NEXT:    addi a2, a2, -819
+; RV32-NEXT:    mul a1, a1, a2
 ; RV32-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
 ; RV32-NEXT:    vsseg5e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: store_factor5_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 2
+; RV64-NEXT:    add a1, a2, a1
+; RV64-NEXT:    lui a2, 838861
+; RV64-NEXT:    addi a2, a2, -819
+; RV64-NEXT:    mul a1, a1, a2
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
@@ -364,12 +434,22 @@ define void @store_factor5_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, <v
 define void @store_factor7_v2(<vscale x 1 x i32> %v0, <vscale x 1 x i32> %v1, <vscale x 1 x i32> %v2, <vscale x 1 x i32> %v3, <vscale x 1 x i32> %v4, <vscale x 1 x i32> %v5, <vscale x 1 x i32> %v6, ptr %ptr, i32 %evl) {
 ; RV32-LABEL: store_factor7_v2:
 ; RV32:       # %bb.0:
+; RV32-NEXT:    slli a2, a1, 3
+; RV32-NEXT:    sub a2, a2, a1
+; RV32-NEXT:    lui a1, 748983
+; RV32-NEXT:    addi a1, a1, -585
+; RV32-NEXT:    mul a1, a2, a1
 ; RV32-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
 ; RV32-NEXT:    vsseg7e32.v v8, (a0)
 ; RV32-NEXT:    ret
 ;
 ; RV64-LABEL: store_factor7_v2:
 ; RV64:       # %bb.0:
+; RV64-NEXT:    slli a2, a1, 3
+; RV64-NEXT:    subw a2, a2, a1
+; RV64-NEXT:    lui a1, 748983
+; RV64-NEXT:    addi a1, a1, -585
+; RV64-NEXT:    mul a1, a2, a1
 ; RV64-NEXT:    slli a1, a1, 32
 ; RV64-NEXT:    srli a1, a1, 32
 ; RV64-NEXT:    vsetvli zero, a1, e32, mf2, ta, ma
