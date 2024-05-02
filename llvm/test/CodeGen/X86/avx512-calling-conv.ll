@@ -166,7 +166,7 @@ define <16 x i32> @test6(<16 x i32>%a, <16 x i32>%b) {
 ; KNL-NEXT:    pushq %rax
 ; KNL-NEXT:    .cfi_def_cfa_offset 16
 ; KNL-NEXT:    vpcmpgtd %zmm1, %zmm0, %k1
-; KNL-NEXT:    vpternlogd $255, %zmm0, %zmm0, %zmm0 {%k1} {z}
+; KNL-NEXT:    vpternlogd {{.*#+}} zmm0 {%k1} {z} = -1
 ; KNL-NEXT:    vpmovdb %zmm0, %xmm0
 ; KNL-NEXT:    callq _func16xi1
 ; KNL-NEXT:    vpmovzxbd {{.*#+}} zmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero,xmm0[8],zero,zero,zero,xmm0[9],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[11],zero,zero,zero,xmm0[12],zero,zero,zero,xmm0[13],zero,zero,zero,xmm0[14],zero,zero,zero,xmm0[15],zero,zero,zero
@@ -194,7 +194,7 @@ define <16 x i32> @test6(<16 x i32>%a, <16 x i32>%b) {
 ; KNL_X32-NEXT:    subl $12, %esp
 ; KNL_X32-NEXT:    .cfi_def_cfa_offset 16
 ; KNL_X32-NEXT:    vpcmpgtd %zmm1, %zmm0, %k1
-; KNL_X32-NEXT:    vpternlogd $255, %zmm0, %zmm0, %zmm0 {%k1} {z}
+; KNL_X32-NEXT:    vpternlogd {{.*#+}} zmm0 {%k1} {z} = -1
 ; KNL_X32-NEXT:    vpmovdb %zmm0, %xmm0
 ; KNL_X32-NEXT:    calll _func16xi1
 ; KNL_X32-NEXT:    vpmovzxbd {{.*#+}} zmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero,xmm0[8],zero,zero,zero,xmm0[9],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[11],zero,zero,zero,xmm0[12],zero,zero,zero,xmm0[13],zero,zero,zero,xmm0[14],zero,zero,zero,xmm0[15],zero,zero,zero
@@ -900,8 +900,10 @@ define <17 x i1> @test16(<17 x i1> %a, <17 x i1> %b) nounwind {
 ; KNL-NEXT:    korw %k1, %k0, %k0
 ; KNL-NEXT:    kmovw {{[-0-9]+}}(%r{{[sb]}}p), %k1 ## 2-byte Reload
 ; KNL-NEXT:    kandw %k1, %k0, %k0
-; KNL-NEXT:    kmovw {{[0-9]+}}(%rsp), %k1
-; KNL-NEXT:    kmovw {{[0-9]+}}(%rsp), %k2
+; KNL-NEXT:    movzbl {{[0-9]+}}(%rsp), %ecx
+; KNL-NEXT:    kmovw %ecx, %k1
+; KNL-NEXT:    movzbl {{[0-9]+}}(%rsp), %ecx
+; KNL-NEXT:    kmovw %ecx, %k2
 ; KNL-NEXT:    kandw %k1, %k2, %k1
 ; KNL-NEXT:    kmovw %k1, %edx
 ; KNL-NEXT:    kshiftrw $1, %k0, %k1
@@ -1534,8 +1536,10 @@ define <17 x i1> @test16(<17 x i1> %a, <17 x i1> %b) nounwind {
 ; KNL_X32-NEXT:    korw %k1, %k0, %k0
 ; KNL_X32-NEXT:    kmovw (%esp), %k1 ## 2-byte Reload
 ; KNL_X32-NEXT:    kandw %k1, %k0, %k0
-; KNL_X32-NEXT:    kmovw {{[0-9]+}}(%esp), %k1
-; KNL_X32-NEXT:    kmovw {{[0-9]+}}(%esp), %k2
+; KNL_X32-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; KNL_X32-NEXT:    kmovw %eax, %k1
+; KNL_X32-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; KNL_X32-NEXT:    kmovw %eax, %k2
 ; KNL_X32-NEXT:    kandw %k1, %k2, %k1
 ; KNL_X32-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; KNL_X32-NEXT:    kmovw %k1, %ebx

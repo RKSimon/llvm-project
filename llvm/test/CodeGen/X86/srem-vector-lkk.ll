@@ -14,7 +14,7 @@ define <4 x i16> @fold_srem_vec_1(<4 x i16> %x) {
 ; SSE-NEXT:    movzwl %cx, %ecx
 ; SSE-NEXT:    movswl %cx, %edx
 ; SSE-NEXT:    shrl $15, %ecx
-; SSE-NEXT:    sarl $9, %edx
+; SSE-NEXT:    shrl $9, %edx
 ; SSE-NEXT:    addl %ecx, %edx
 ; SSE-NEXT:    imull $-1003, %edx, %ecx # imm = 0xFC15
 ; SSE-NEXT:    subl %ecx, %eax
@@ -26,7 +26,7 @@ define <4 x i16> @fold_srem_vec_1(<4 x i16> %x) {
 ; SSE-NEXT:    movzwl %dx, %edx
 ; SSE-NEXT:    movswl %dx, %esi
 ; SSE-NEXT:    shrl $15, %edx
-; SSE-NEXT:    sarl $6, %esi
+; SSE-NEXT:    shrl $6, %esi
 ; SSE-NEXT:    addl %edx, %esi
 ; SSE-NEXT:    imull $95, %esi, %edx
 ; SSE-NEXT:    subl %edx, %ecx
@@ -65,7 +65,7 @@ define <4 x i16> @fold_srem_vec_1(<4 x i16> %x) {
 ; AVX-NEXT:    movzwl %cx, %ecx
 ; AVX-NEXT:    movswl %cx, %edx
 ; AVX-NEXT:    shrl $15, %ecx
-; AVX-NEXT:    sarl $9, %edx
+; AVX-NEXT:    shrl $9, %edx
 ; AVX-NEXT:    addl %ecx, %edx
 ; AVX-NEXT:    imull $-1003, %edx, %ecx # imm = 0xFC15
 ; AVX-NEXT:    subl %ecx, %eax
@@ -77,7 +77,7 @@ define <4 x i16> @fold_srem_vec_1(<4 x i16> %x) {
 ; AVX-NEXT:    movzwl %dx, %edx
 ; AVX-NEXT:    movswl %dx, %esi
 ; AVX-NEXT:    shrl $15, %edx
-; AVX-NEXT:    sarl $6, %esi
+; AVX-NEXT:    shrl $6, %esi
 ; AVX-NEXT:    addl %edx, %esi
 ; AVX-NEXT:    imull $95, %esi, %edx
 ; AVX-NEXT:    subl %edx, %ecx
@@ -180,13 +180,13 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; SSE-NEXT:    leal 31(%rax), %ecx
 ; SSE-NEXT:    testw %ax, %ax
 ; SSE-NEXT:    cmovnsl %eax, %ecx
-; SSE-NEXT:    andl $-32, %ecx
+; SSE-NEXT:    andl $65504, %ecx # imm = 0xFFE0
 ; SSE-NEXT:    subl %ecx, %eax
 ; SSE-NEXT:    movd %xmm0, %ecx
 ; SSE-NEXT:    leal 63(%rcx), %edx
 ; SSE-NEXT:    testw %cx, %cx
 ; SSE-NEXT:    cmovnsl %ecx, %edx
-; SSE-NEXT:    andl $-64, %edx
+; SSE-NEXT:    andl $65472, %edx # imm = 0xFFC0
 ; SSE-NEXT:    subl %edx, %ecx
 ; SSE-NEXT:    movd %ecx, %xmm0
 ; SSE-NEXT:    pinsrw $1, %eax, %xmm0
@@ -194,7 +194,7 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; SSE-NEXT:    leal 7(%rax), %ecx
 ; SSE-NEXT:    testw %ax, %ax
 ; SSE-NEXT:    cmovnsl %eax, %ecx
-; SSE-NEXT:    andl $-8, %ecx
+; SSE-NEXT:    andl $65528, %ecx # imm = 0xFFF8
 ; SSE-NEXT:    subl %ecx, %eax
 ; SSE-NEXT:    pinsrw $2, %eax, %xmm0
 ; SSE-NEXT:    pextrw $3, %xmm1, %eax
@@ -205,7 +205,7 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; SSE-NEXT:    movzwl %cx, %ecx
 ; SSE-NEXT:    movswl %cx, %edx
 ; SSE-NEXT:    shrl $15, %ecx
-; SSE-NEXT:    sarl $6, %edx
+; SSE-NEXT:    shrl $6, %edx
 ; SSE-NEXT:    addl %ecx, %edx
 ; SSE-NEXT:    imull $95, %edx, %ecx
 ; SSE-NEXT:    subl %ecx, %eax
@@ -218,13 +218,13 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; AVX-NEXT:    leal 31(%rax), %ecx
 ; AVX-NEXT:    testw %ax, %ax
 ; AVX-NEXT:    cmovnsl %eax, %ecx
-; AVX-NEXT:    andl $-32, %ecx
+; AVX-NEXT:    andl $65504, %ecx # imm = 0xFFE0
 ; AVX-NEXT:    subl %ecx, %eax
 ; AVX-NEXT:    vmovd %xmm0, %ecx
 ; AVX-NEXT:    leal 63(%rcx), %edx
 ; AVX-NEXT:    testw %cx, %cx
 ; AVX-NEXT:    cmovnsl %ecx, %edx
-; AVX-NEXT:    andl $-64, %edx
+; AVX-NEXT:    andl $65472, %edx # imm = 0xFFC0
 ; AVX-NEXT:    subl %edx, %ecx
 ; AVX-NEXT:    vmovd %ecx, %xmm1
 ; AVX-NEXT:    vpinsrw $1, %eax, %xmm1, %xmm1
@@ -232,7 +232,7 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; AVX-NEXT:    leal 7(%rax), %ecx
 ; AVX-NEXT:    testw %ax, %ax
 ; AVX-NEXT:    cmovnsl %eax, %ecx
-; AVX-NEXT:    andl $-8, %ecx
+; AVX-NEXT:    andl $65528, %ecx # imm = 0xFFF8
 ; AVX-NEXT:    subl %ecx, %eax
 ; AVX-NEXT:    vpinsrw $2, %eax, %xmm1, %xmm1
 ; AVX-NEXT:    vpextrw $3, %xmm0, %eax
@@ -243,7 +243,7 @@ define <4 x i16> @dont_fold_srem_power_of_two(<4 x i16> %x) {
 ; AVX-NEXT:    movzwl %cx, %ecx
 ; AVX-NEXT:    movswl %cx, %edx
 ; AVX-NEXT:    shrl $15, %ecx
-; AVX-NEXT:    sarl $6, %edx
+; AVX-NEXT:    shrl $6, %edx
 ; AVX-NEXT:    addl %ecx, %edx
 ; AVX-NEXT:    imull $95, %edx, %ecx
 ; AVX-NEXT:    subl %ecx, %eax
@@ -265,7 +265,7 @@ define <4 x i16> @dont_fold_srem_one(<4 x i16> %x) {
 ; SSE-NEXT:    movzwl %ax, %edx
 ; SSE-NEXT:    movswl %dx, %eax
 ; SSE-NEXT:    shrl $15, %edx
-; SSE-NEXT:    sarl $4, %eax
+; SSE-NEXT:    shrl $4, %eax
 ; SSE-NEXT:    addl %edx, %eax
 ; SSE-NEXT:    leal (%rax,%rax,2), %edx
 ; SSE-NEXT:    shll $3, %edx
@@ -306,7 +306,7 @@ define <4 x i16> @dont_fold_srem_one(<4 x i16> %x) {
 ; AVX-NEXT:    movzwl %cx, %ecx
 ; AVX-NEXT:    movswl %cx, %edx
 ; AVX-NEXT:    shrl $15, %ecx
-; AVX-NEXT:    sarl $4, %edx
+; AVX-NEXT:    shrl $4, %edx
 ; AVX-NEXT:    addl %ecx, %edx
 ; AVX-NEXT:    leal (%rdx,%rdx,2), %ecx
 ; AVX-NEXT:    shll $3, %ecx
@@ -351,7 +351,7 @@ define <4 x i16> @dont_fold_urem_i16_smax(<4 x i16> %x) {
 ; SSE-NEXT:    movzwl %cx, %ecx
 ; SSE-NEXT:    movswl %cx, %edx
 ; SSE-NEXT:    shrl $15, %ecx
-; SSE-NEXT:    sarl $4, %edx
+; SSE-NEXT:    shrl $4, %edx
 ; SSE-NEXT:    addl %ecx, %edx
 ; SSE-NEXT:    leal (%rdx,%rdx,2), %ecx
 ; SSE-NEXT:    shll $3, %ecx
@@ -361,7 +361,7 @@ define <4 x i16> @dont_fold_urem_i16_smax(<4 x i16> %x) {
 ; SSE-NEXT:    leal 32767(%rax), %ecx
 ; SSE-NEXT:    testw %ax, %ax
 ; SSE-NEXT:    cmovnsl %eax, %ecx
-; SSE-NEXT:    andl $-32768, %ecx # imm = 0x8000
+; SSE-NEXT:    andl $32768, %ecx # imm = 0x8000
 ; SSE-NEXT:    addl %eax, %ecx
 ; SSE-NEXT:    pxor %xmm1, %xmm1
 ; SSE-NEXT:    pinsrw $1, %ecx, %xmm1
@@ -389,7 +389,7 @@ define <4 x i16> @dont_fold_urem_i16_smax(<4 x i16> %x) {
 ; AVX-NEXT:    movzwl %cx, %ecx
 ; AVX-NEXT:    movswl %cx, %edx
 ; AVX-NEXT:    shrl $15, %ecx
-; AVX-NEXT:    sarl $4, %edx
+; AVX-NEXT:    shrl $4, %edx
 ; AVX-NEXT:    addl %ecx, %edx
 ; AVX-NEXT:    leal (%rdx,%rdx,2), %ecx
 ; AVX-NEXT:    shll $3, %ecx
@@ -399,7 +399,7 @@ define <4 x i16> @dont_fold_urem_i16_smax(<4 x i16> %x) {
 ; AVX-NEXT:    leal 32767(%rax), %ecx
 ; AVX-NEXT:    testw %ax, %ax
 ; AVX-NEXT:    cmovnsl %eax, %ecx
-; AVX-NEXT:    andl $-32768, %ecx # imm = 0x8000
+; AVX-NEXT:    andl $32768, %ecx # imm = 0x8000
 ; AVX-NEXT:    addl %eax, %ecx
 ; AVX-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; AVX-NEXT:    vpinsrw $1, %ecx, %xmm1, %xmm1

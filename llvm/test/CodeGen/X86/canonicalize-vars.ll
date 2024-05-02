@@ -133,38 +133,58 @@ define double @canonicalize_fp64(double %a, double %b) unnamed_addr #0 {
 ; SSE-LABEL: canonicalize_fp64:
 ; SSE:       # %bb.0: # %start
 ; SSE-NEXT:    movapd %xmm0, %xmm2
-; SSE-NEXT:    cmpunordsd %xmm0, %xmm2
-; SSE-NEXT:    movapd %xmm2, %xmm3
-; SSE-NEXT:    andpd %xmm1, %xmm3
-; SSE-NEXT:    maxsd %xmm0, %xmm1
-; SSE-NEXT:    andnpd %xmm1, %xmm2
-; SSE-NEXT:    orpd %xmm3, %xmm2
-; SSE-NEXT:    mulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
-; SSE-NEXT:    movapd %xmm2, %xmm0
+; SSE-NEXT:    cmpltpd %xmm1, %xmm2
+; SSE-NEXT:    movapd %xmm0, %xmm3
+; SSE-NEXT:    cmpunordpd %xmm0, %xmm3
+; SSE-NEXT:    orpd %xmm2, %xmm3
+; SSE-NEXT:    movd %xmm3, %eax
+; SSE-NEXT:    testb $1, %al
+; SSE-NEXT:    jne .LBB3_2
+; SSE-NEXT:  # %bb.1: # %start
+; SSE-NEXT:    movapd %xmm0, %xmm1
+; SSE-NEXT:  .LBB3_2: # %start
+; SSE-NEXT:    mulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; SSE-NEXT:    movapd %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: canonicalize_fp64:
 ; AVX1:       # %bb.0: # %start
-; AVX1-NEXT:    vmaxsd %xmm0, %xmm1, %xmm2
-; AVX1-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
-; AVX1-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX1-NEXT:    vcmpltpd %xmm1, %xmm0, %xmm2
+; AVX1-NEXT:    vcmpunordpd %xmm0, %xmm0, %xmm3
+; AVX1-NEXT:    vorpd %xmm2, %xmm3, %xmm2
+; AVX1-NEXT:    vmovd %xmm2, %eax
+; AVX1-NEXT:    testb $1, %al
+; AVX1-NEXT:    jne .LBB3_2
+; AVX1-NEXT:  # %bb.1: # %start
+; AVX1-NEXT:    vmovapd %xmm0, %xmm1
+; AVX1-NEXT:  .LBB3_2: # %start
+; AVX1-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: canonicalize_fp64:
 ; AVX2:       # %bb.0: # %start
-; AVX2-NEXT:    vmaxsd %xmm0, %xmm1, %xmm2
-; AVX2-NEXT:    vcmpunordsd %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vblendvpd %xmm0, %xmm1, %xmm2, %xmm0
-; AVX2-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vcmpltpd %xmm1, %xmm0, %xmm2
+; AVX2-NEXT:    vcmpunordpd %xmm0, %xmm0, %xmm3
+; AVX2-NEXT:    vorpd %xmm2, %xmm3, %xmm2
+; AVX2-NEXT:    vmovd %xmm2, %eax
+; AVX2-NEXT:    testb $1, %al
+; AVX2-NEXT:    jne .LBB3_2
+; AVX2-NEXT:  # %bb.1: # %start
+; AVX2-NEXT:    vmovapd %xmm0, %xmm1
+; AVX2-NEXT:  .LBB3_2: # %start
+; AVX2-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512F-LABEL: canonicalize_fp64:
 ; AVX512F:       # %bb.0: # %start
-; AVX512F-NEXT:    vmaxsd %xmm0, %xmm1, %xmm2
-; AVX512F-NEXT:    vcmpunordsd %xmm0, %xmm0, %k1
-; AVX512F-NEXT:    vmovsd %xmm1, %xmm2, %xmm2 {%k1}
-; AVX512F-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm0
+; AVX512F-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
+; AVX512F-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
+; AVX512F-NEXT:    vcmpltpd %zmm1, %zmm0, %k0
+; AVX512F-NEXT:    vcmpunordpd %zmm0, %zmm0, %k1
+; AVX512F-NEXT:    korw %k0, %k1, %k1
+; AVX512F-NEXT:    vmovsd %xmm1, %xmm0, %xmm0 {%k1}
+; AVX512F-NEXT:    vmulsd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX512F-NEXT:    vzeroupper
 ; AVX512F-NEXT:    retq
 start:
   %c = fcmp olt double %a, %b
@@ -210,38 +230,58 @@ define float @canonicalize_fp32(float %aa, float %bb) unnamed_addr #0 {
 ; SSE-LABEL: canonicalize_fp32:
 ; SSE:       # %bb.0: # %start
 ; SSE-NEXT:    movaps %xmm0, %xmm2
-; SSE-NEXT:    cmpunordss %xmm0, %xmm2
-; SSE-NEXT:    movaps %xmm2, %xmm3
-; SSE-NEXT:    andps %xmm1, %xmm3
-; SSE-NEXT:    maxss %xmm0, %xmm1
-; SSE-NEXT:    andnps %xmm1, %xmm2
-; SSE-NEXT:    orps %xmm3, %xmm2
-; SSE-NEXT:    mulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
-; SSE-NEXT:    movaps %xmm2, %xmm0
+; SSE-NEXT:    cmpltps %xmm1, %xmm2
+; SSE-NEXT:    movaps %xmm0, %xmm3
+; SSE-NEXT:    cmpunordps %xmm0, %xmm3
+; SSE-NEXT:    orps %xmm2, %xmm3
+; SSE-NEXT:    movd %xmm3, %eax
+; SSE-NEXT:    testb $1, %al
+; SSE-NEXT:    jne .LBB4_2
+; SSE-NEXT:  # %bb.1: # %start
+; SSE-NEXT:    movaps %xmm0, %xmm1
+; SSE-NEXT:  .LBB4_2: # %start
+; SSE-NEXT:    mulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1
+; SSE-NEXT:    movaps %xmm1, %xmm0
 ; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: canonicalize_fp32:
 ; AVX1:       # %bb.0: # %start
-; AVX1-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
-; AVX1-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
-; AVX1-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
-; AVX1-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX1-NEXT:    vcmpltps %xmm1, %xmm0, %xmm2
+; AVX1-NEXT:    vcmpunordps %xmm0, %xmm0, %xmm3
+; AVX1-NEXT:    vorps %xmm2, %xmm3, %xmm2
+; AVX1-NEXT:    vmovd %xmm2, %eax
+; AVX1-NEXT:    testb $1, %al
+; AVX1-NEXT:    jne .LBB4_2
+; AVX1-NEXT:  # %bb.1: # %start
+; AVX1-NEXT:    vmovaps %xmm0, %xmm1
+; AVX1-NEXT:  .LBB4_2: # %start
+; AVX1-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm0
 ; AVX1-NEXT:    retq
 ;
 ; AVX2-LABEL: canonicalize_fp32:
 ; AVX2:       # %bb.0: # %start
-; AVX2-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
-; AVX2-NEXT:    vcmpunordss %xmm0, %xmm0, %xmm0
-; AVX2-NEXT:    vblendvps %xmm0, %xmm1, %xmm2, %xmm0
-; AVX2-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX2-NEXT:    vcmpltps %xmm1, %xmm0, %xmm2
+; AVX2-NEXT:    vcmpunordps %xmm0, %xmm0, %xmm3
+; AVX2-NEXT:    vorps %xmm2, %xmm3, %xmm2
+; AVX2-NEXT:    vmovd %xmm2, %eax
+; AVX2-NEXT:    testb $1, %al
+; AVX2-NEXT:    jne .LBB4_2
+; AVX2-NEXT:  # %bb.1: # %start
+; AVX2-NEXT:    vmovaps %xmm0, %xmm1
+; AVX2-NEXT:  .LBB4_2: # %start
+; AVX2-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %xmm0
 ; AVX2-NEXT:    retq
 ;
 ; AVX512F-LABEL: canonicalize_fp32:
 ; AVX512F:       # %bb.0: # %start
-; AVX512F-NEXT:    vmaxss %xmm0, %xmm1, %xmm2
-; AVX512F-NEXT:    vcmpunordss %xmm0, %xmm0, %k1
-; AVX512F-NEXT:    vmovss %xmm1, %xmm2, %xmm2 {%k1}
-; AVX512F-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %xmm0
+; AVX512F-NEXT:    # kill: def $xmm1 killed $xmm1 def $zmm1
+; AVX512F-NEXT:    # kill: def $xmm0 killed $xmm0 def $zmm0
+; AVX512F-NEXT:    vcmpltps %zmm1, %zmm0, %k0
+; AVX512F-NEXT:    vcmpunordps %zmm0, %zmm0, %k1
+; AVX512F-NEXT:    korw %k0, %k1, %k1
+; AVX512F-NEXT:    vmovss %xmm1, %xmm0, %xmm0 {%k1}
+; AVX512F-NEXT:    vmulss {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
+; AVX512F-NEXT:    vzeroupper
 ; AVX512F-NEXT:    retq
 start:
   %cc = fcmp olt float %aa, %bb
@@ -569,11 +609,11 @@ define void @vec_canonicalize_var_v4f64(<4 x double> addrspace(1)* %out) #1 {
 ; SSE-LABEL: vec_canonicalize_var_v4f64:
 ; SSE:       # %bb.0:
 ; SSE-NEXT:    movapd {{.*#+}} xmm0 = [1.0E+0,1.0E+0]
-; SSE-NEXT:    movapd 16(%rdi), %xmm1
+; SSE-NEXT:    movapd (%rdi), %xmm1
 ; SSE-NEXT:    mulpd %xmm0, %xmm1
-; SSE-NEXT:    mulpd (%rdi), %xmm0
-; SSE-NEXT:    movapd %xmm0, (%rdi)
-; SSE-NEXT:    movapd %xmm1, 16(%rdi)
+; SSE-NEXT:    mulpd 16(%rdi), %xmm0
+; SSE-NEXT:    movapd %xmm0, 16(%rdi)
+; SSE-NEXT:    movapd %xmm1, (%rdi)
 ; SSE-NEXT:    retq
 ;
 ; AVX1-LABEL: vec_canonicalize_var_v4f64:

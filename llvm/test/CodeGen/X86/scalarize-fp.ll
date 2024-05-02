@@ -671,7 +671,12 @@ define <8 x float> @splat0_fdiv_v8f32(<8 x float> %vx, <8 x float> %vy) {
 ;
 ; AVX-LABEL: splat0_fdiv_v8f32:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vdivss %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vrcpss %xmm1, %xmm1, %xmm2
+; AVX-NEXT:    vmulss %xmm2, %xmm0, %xmm3
+; AVX-NEXT:    vmulss %xmm3, %xmm1, %xmm1
+; AVX-NEXT:    vsubss %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vmulss %xmm0, %xmm2, %xmm0
+; AVX-NEXT:    vaddss %xmm0, %xmm3, %xmm0
 ; AVX-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX-NEXT:    retq
@@ -745,6 +750,12 @@ define <8 x float> @splat0_fdiv_const_op1_v8f32(<8 x float> %vx) {
 ;
 ; AVX-LABEL: splat0_fdiv_const_op1_v8f32:
 ; AVX:       # %bb.0:
+; AVX-NEXT:    vmovss {{.*#+}} xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX-NEXT:    vrcpss %xmm1, %xmm1, %xmm1
+; AVX-NEXT:    vmulss %xmm1, %xmm0, %xmm2
+; AVX-NEXT:    vsubss %xmm2, %xmm0, %xmm0
+; AVX-NEXT:    vmulss %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    vaddss %xmm0, %xmm2, %xmm0
 ; AVX-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX-NEXT:    retq
@@ -764,8 +775,12 @@ define <8 x float> @splat0_fdiv_const_op0_v8f32(<8 x float> %vx) {
 ;
 ; AVX-LABEL: splat0_fdiv_const_op0_v8f32:
 ; AVX:       # %bb.0:
-; AVX-NEXT:    vmovss {{.*#+}} xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-; AVX-NEXT:    vdivss %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    vrcpss %xmm0, %xmm0, %xmm1
+; AVX-NEXT:    vmulss %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    vmovss {{.*#+}} xmm2 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+; AVX-NEXT:    vsubss %xmm0, %xmm2, %xmm0
+; AVX-NEXT:    vmulss %xmm0, %xmm1, %xmm0
+; AVX-NEXT:    vaddss %xmm0, %xmm1, %xmm0
 ; AVX-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX-NEXT:    retq

@@ -55,6 +55,9 @@ define <32 x i8> @combine_and_pshufb(<32 x i8> %a0) {
 ; CHECK-LABEL: combine_and_pshufb:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; CHECK-NEXT:    vpblendw {{.*#+}} xmm1 = xmm0[0],xmm1[1],xmm0[2,3,4,5,6,7]
+; CHECK-NEXT:    vpblendd {{.*#+}} ymm0 = ymm1[0,1,2,3],ymm0[4,5,6,7]
+; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; CHECK-NEXT:    vpblendw {{.*#+}} ymm0 = ymm0[0],ymm1[1,2,3],ymm0[4],ymm1[5,6,7],ymm0[8],ymm1[9,10,11],ymm0[12],ymm1[13,14,15]
 ; CHECK-NEXT:    ret{{[l|q]}}
   %1 = shufflevector <32 x i8> %a0, <32 x i8> zeroinitializer, <32 x i32> <i32 0, i32 1, i32 32, i32 32, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
@@ -134,7 +137,7 @@ define <8 x i32> @combine_as_vpermd(<8 x i32> %a0) {
 define <8 x float> @combine_as_vpermps(<8 x float> %a0) {
 ; AVX2-LABEL: combine_as_vpermps:
 ; AVX2:       # %bb.0:
-; AVX2-NEXT:    vmovaps {{.*#+}} ymm1 = [6,4,7,5,1,u,4,7]
+; AVX2-NEXT:    vmovaps {{.*#+}} ymm1 = [6,4,7,5,1,0,4,7]
 ; AVX2-NEXT:    vpermps %ymm0, %ymm1, %ymm0
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
@@ -857,11 +860,12 @@ define internal fastcc <8 x float> @PR34577(<8 x float> %inp0, <8 x float> %inp1
 ; AVX512-LABEL: PR34577:
 ; AVX512:       # %bb.0: # %entry
 ; AVX512-NEXT:    # kill: def $ymm1 killed $ymm1 def $zmm1
-; AVX512-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[1,1,1,1]
-; AVX512-NEXT:    vxorps %xmm2, %xmm2, %xmm2
-; AVX512-NEXT:    vblendps {{.*#+}} ymm2 = ymm2[0,1,2,3],ymm0[4,5],ymm2[6,7]
-; AVX512-NEXT:    vpmovsxbd {{.*#+}} ymm0 = [23,18,7,2,20,0,3,2]
-; AVX512-NEXT:    vpermi2ps %zmm2, %zmm1, %zmm0
+; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 def $zmm0
+; AVX512-NEXT:    vpmovsxbq {{.*#+}} ymm2 = [8,0,1,0]
+; AVX512-NEXT:    vxorpd %xmm3, %xmm3, %xmm3
+; AVX512-NEXT:    vpermt2pd %zmm3, %zmm2, %zmm0
+; AVX512-NEXT:    vpmovsxbd {{.*#+}} ymm2 = [0,1,23,18,4,5,19,18]
+; AVX512-NEXT:    vpermt2ps %zmm1, %zmm2, %zmm0
 ; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 killed $zmm0
 ; AVX512-NEXT:    ret{{[l|q]}}
 entry:

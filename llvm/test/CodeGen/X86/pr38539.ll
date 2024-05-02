@@ -6,10 +6,10 @@
 define void @f() nounwind {
 ; X64-LABEL: f:
 ; X64:       # %bb.0: # %BB
-; X64-NEXT:    movzbl (%rax), %eax
+; X64-NEXT:    leaq -{{[0-9]+}}(%rsp), %rax
+; X64-NEXT:    movzbl (%rax), %ecx
 ; X64-NEXT:    cmpb $0, (%rax)
 ; X64-NEXT:    setne (%rax)
-; X64-NEXT:    leaq -{{[0-9]+}}(%rsp), %rax
 ; X64-NEXT:    movq %rax, (%rax)
 ; X64-NEXT:    movb $0, (%rax)
 ; X64-NEXT:    retq
@@ -102,8 +102,8 @@ define void @f() nounwind {
 ; X86-NEXT:    movb $65, %cl
 ; X86-NEXT:    subb %al, %cl
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    negb %al
 ; X86-NEXT:    movsbl %al, %esi
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
@@ -143,8 +143,8 @@ define void @f() nounwind {
 ; X86-NEXT:    movl $0, {{[0-9]+}}(%esp)
 ; X86-NEXT:    movl {{[-0-9]+}}(%e{{[sb]}}p), %ecx # 4-byte Reload
 ; X86-NEXT:    movl %ecx, %eax
+; X86-NEXT:    andb $96, %al
 ; X86-NEXT:    shrb $3, %al
-; X86-NEXT:    andb $12, %al
 ; X86-NEXT:    movzbl %al, %eax
 ; X86-NEXT:    movl 72(%esp,%eax), %ebx
 ; X86-NEXT:    movl 64(%esp,%eax), %esi
@@ -269,10 +269,10 @@ BB:
 define void @g() nounwind {
 ; X64-LABEL: g:
 ; X64:       # %bb.0: # %BB
-; X64-NEXT:    movzbl (%rax), %eax
+; X64-NEXT:    leaq -{{[0-9]+}}(%rsp), %rax
+; X64-NEXT:    movzbl (%rax), %ecx
 ; X64-NEXT:    cmpb $0, (%rax)
 ; X64-NEXT:    setne (%rax)
-; X64-NEXT:    leaq -{{[0-9]+}}(%rsp), %rax
 ; X64-NEXT:    movq %rax, (%rax)
 ; X64-NEXT:    movb $0, (%rax)
 ; X64-NEXT:    retq
@@ -283,10 +283,10 @@ define void @g() nounwind {
 ; X86-NEXT:    movl %esp, %ebp
 ; X86-NEXT:    andl $-8, %esp
 ; X86-NEXT:    subl $8, %esp
-; X86-NEXT:    movzbl (%eax), %eax
+; X86-NEXT:    leal -{{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movzbl (%eax), %ecx
 ; X86-NEXT:    cmpb $0, (%eax)
 ; X86-NEXT:    setne (%eax)
-; X86-NEXT:    leal -{{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl %eax, (%eax)
 ; X86-NEXT:    movb $0, (%eax)
 ; X86-NEXT:    movl %ebp, %esp

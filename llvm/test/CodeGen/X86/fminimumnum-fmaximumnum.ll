@@ -1946,12 +1946,12 @@ define <4 x half> @test_fmaximumnum_v4f16(<4 x half> %x, <4 x half> %y) nounwind
 ; AVX512-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm3[0],xmm0[0],xmm3[1],xmm0[1],xmm3[2],xmm0[2],xmm3[3],xmm0[3]
 ; AVX512-NEXT:    vpunpckldq {{.*#+}} xmm0 = xmm0[0],xmm2[0],xmm0[1],xmm2[1]
 ; AVX512-NEXT:    vmovdqa %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
-; AVX512-NEXT:    vpshuflw {{.*#+}} xmm0 = xmm4[3,3,3,3,4,5,6,7]
+; AVX512-NEXT:    vpsrlq $48, %xmm4, %xmm0
 ; AVX512-NEXT:    vcvtph2ps %xmm0, %xmm0
 ; AVX512-NEXT:    vucomiss %xmm0, %xmm0
 ; AVX512-NEXT:    setp %al
 ; AVX512-NEXT:    kmovw %eax, %k1
-; AVX512-NEXT:    vpshuflw {{.*#+}} xmm2 = xmm6[3,3,3,3,4,5,6,7]
+; AVX512-NEXT:    vpsrlq $48, %xmm6, %xmm2
 ; AVX512-NEXT:    vcvtph2ps %xmm2, %xmm2
 ; AVX512-NEXT:    vucomiss %xmm2, %xmm2
 ; AVX512-NEXT:    setp %al
