@@ -9,12 +9,16 @@ define i1 @intcoord_cond_next55(double %tmp48.reload) {
 ; CHECK-NEXT:    lis 3, .LCPI0_0@ha
 ; CHECK-NEXT:    lfs 0, .LCPI0_0@l(3)
 ; CHECK-NEXT:    fcmpu 0, 1, 0
-; CHECK-NEXT:    blt 0, .LBB0_2
-; CHECK-NEXT:  # %bb.1: # %bb72.exitStub
-; CHECK-NEXT:    li 3, 1
-; CHECK-NEXT:    blr
-; CHECK-NEXT:  .LBB0_2: # %cond_next62.exitStub
+; CHECK-NEXT:    crnor 20, 3, 0
+; CHECK-NEXT:    bc 12, 20, .LBB0_3
+; CHECK-NEXT:  # %bb.1: # %cond_next55
+; CHECK-NEXT:    fcmpu 0, 1, 1
+; CHECK-NEXT:    bc 12, 3, .LBB0_3
+; CHECK-NEXT:  # %bb.2: # %cond_next62.exitStub
 ; CHECK-NEXT:    li 3, 0
+; CHECK-NEXT:    blr
+; CHECK-NEXT:  .LBB0_3: # %bb72.exitStub
+; CHECK-NEXT:    li 3, 1
 ; CHECK-NEXT:    blr
 newFuncRoot:
         br label %cond_next55

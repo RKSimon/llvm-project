@@ -85,14 +85,14 @@ bb1:
 define void @subvector_v32i8(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v32i8:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v32i8:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <32 x i8>, ptr %in
   br label %bb1
@@ -167,14 +167,14 @@ bb1:
 define void @subvector_v16i16(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v16i16:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v16i16:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <16 x i16>, ptr %in
   br label %bb1
@@ -228,14 +228,14 @@ bb1:
 define void @subvector_v8i32(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v8i32:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v8i32:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <8 x i32>, ptr %in
   br label %bb1
@@ -269,14 +269,14 @@ bb1:
 define void @subvector_v4i64(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v4i64:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v4i64:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <4 x i64>, ptr %in
   br label %bb1
@@ -350,14 +350,14 @@ bb1:
 define void @subvector_v16f16(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v16f16:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v16f16:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <16 x half>, ptr %in
   br label %bb1
@@ -411,14 +411,14 @@ bb1:
 define void @subvector_v8f32(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v8f32:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v8f32:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <8 x float>,ptr %in
   br label %bb1
@@ -452,14 +452,14 @@ bb1:
 define void @subvector_v4f64(ptr %in, ptr %out) {
 ; CHECK-LABEL: subvector_v4f64:
 ; CHECK:       // %bb.0: // %bb1
-; CHECK-NEXT:    ldp q0, q1, [x0]
-; CHECK-NEXT:    stp q0, q1, [x1]
+; CHECK-NEXT:    ldp q1, q0, [x0]
+; CHECK-NEXT:    stp q1, q0, [x1]
 ; CHECK-NEXT:    ret
 ;
 ; NONEON-NOSVE-LABEL: subvector_v4f64:
 ; NONEON-NOSVE:       // %bb.0: // %bb1
-; NONEON-NOSVE-NEXT:    ldp q0, q1, [x0]
-; NONEON-NOSVE-NEXT:    stp q0, q1, [x1]
+; NONEON-NOSVE-NEXT:    ldp q1, q0, [x0]
+; NONEON-NOSVE-NEXT:    stp q1, q0, [x1]
 ; NONEON-NOSVE-NEXT:    ret
   %a = load <4 x double>, ptr %in
   br label %bb1

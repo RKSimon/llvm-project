@@ -19,12 +19,12 @@ define i32 @t0() {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    adrp x8, src
 ; CHECK-NEXT:    add x8, x8, :lo12:src
-; CHECK-NEXT:    ldr x9, [x8]
+; CHECK-NEXT:    ldur w9, [x8, #7]
 ; CHECK-NEXT:    adrp x10, dst
 ; CHECK-NEXT:    add x10, x10, :lo12:dst
-; CHECK-NEXT:    str x9, [x10]
-; CHECK-NEXT:    ldur w8, [x8, #7]
-; CHECK-NEXT:    stur w8, [x10, #7]
+; CHECK-NEXT:    stur w9, [x10, #7]
+; CHECK-NEXT:    ldr x8, [x8]
+; CHECK-NEXT:    str x8, [x10]
 ; CHECK-NEXT:    mov w0, #0 // =0x0
 ; CHECK-NEXT:    ret
 entry:
@@ -37,10 +37,10 @@ define void @t1(ptr nocapture %C) nounwind {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    adrp x8, .L.str1
 ; CHECK-NEXT:    add x8, x8, :lo12:.L.str1
-; CHECK-NEXT:    ldr q0, [x8]
-; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ldur q0, [x8, #15]
 ; CHECK-NEXT:    stur q0, [x0, #15]
+; CHECK-NEXT:    ldr q0, [x8]
+; CHECK-NEXT:    str q0, [x0]
 ; CHECK-NEXT:    ret
 entry:
   tail call void @llvm.memcpy.p0.p0.i64(ptr %C, ptr @.str1, i64 31, i1 false)
@@ -55,8 +55,8 @@ define void @t2(ptr nocapture %C) nounwind {
 ; CHECK-NEXT:    str w8, [x0, #32]
 ; CHECK-NEXT:    adrp x8, .L.str2
 ; CHECK-NEXT:    add x8, x8, :lo12:.L.str2
-; CHECK-NEXT:    ldp q0, q1, [x8]
-; CHECK-NEXT:    stp q0, q1, [x0]
+; CHECK-NEXT:    ldp q1, q0, [x8]
+; CHECK-NEXT:    stp q1, q0, [x0]
 ; CHECK-NEXT:    ret
 entry:
   tail call void @llvm.memcpy.p0.p0.i64(ptr %C, ptr @.str2, i64 36, i1 false)
@@ -68,10 +68,10 @@ define void @t3(ptr nocapture %C) nounwind {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    adrp x8, .L.str3
 ; CHECK-NEXT:    add x8, x8, :lo12:.L.str3
+; CHECK-NEXT:    ldr x9, [x8, #16]
+; CHECK-NEXT:    str x9, [x0, #16]
 ; CHECK-NEXT:    ldr q0, [x8]
 ; CHECK-NEXT:    str q0, [x0]
-; CHECK-NEXT:    ldr x8, [x8, #16]
-; CHECK-NEXT:    str x8, [x0, #16]
 ; CHECK-NEXT:    ret
 entry:
   tail call void @llvm.memcpy.p0.p0.i64(ptr %C, ptr @.str3, i64 24, i1 false)
@@ -113,12 +113,12 @@ define void @t6() nounwind {
 ; CHECK:       // %bb.0: // %entry
 ; CHECK-NEXT:    adrp x8, .L.str6
 ; CHECK-NEXT:    add x8, x8, :lo12:.L.str6
-; CHECK-NEXT:    ldr x9, [x8]
+; CHECK-NEXT:    ldur x9, [x8, #6]
 ; CHECK-NEXT:    adrp x10, spool.splbuf
 ; CHECK-NEXT:    add x10, x10, :lo12:spool.splbuf
-; CHECK-NEXT:    str x9, [x10]
-; CHECK-NEXT:    ldur x8, [x8, #6]
-; CHECK-NEXT:    stur x8, [x10, #6]
+; CHECK-NEXT:    stur x9, [x10, #6]
+; CHECK-NEXT:    ldr x8, [x8]
+; CHECK-NEXT:    str x8, [x10]
 ; CHECK-NEXT:    ret
 entry:
   call void @llvm.memcpy.p0.p0.i64(ptr @spool.splbuf, ptr @.str6, i64 14, i1 false)

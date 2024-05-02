@@ -1193,20 +1193,24 @@ define void @test_ldst_v4i8(ptr %a, ptr %b) {
 define void @test_ldst_v4i8_unaligned(ptr %a, ptr %b) {
 ; O0-LABEL: test_ldst_v4i8_unaligned(
 ; O0:       {
-; O0-NEXT:    .reg .b32 %r<5>;
+; O0-NEXT:    .reg .b32 %r<9>;
 ; O0-NEXT:    .reg .b64 %rd<3>;
 ; O0-EMPTY:
 ; O0-NEXT:  // %bb.0:
 ; O0-NEXT:    ld.param.b64 %rd2, [test_ldst_v4i8_unaligned_param_1];
 ; O0-NEXT:    ld.param.b64 %rd1, [test_ldst_v4i8_unaligned_param_0];
-; O0-NEXT:    ld.b8 %r1, [%rd1];
-; O0-NEXT:    ld.b8 %r2, [%rd1+1];
-; O0-NEXT:    ld.b8 %r3, [%rd1+2];
-; O0-NEXT:    ld.b8 %r4, [%rd1+3];
-; O0-NEXT:    st.b8 [%rd2+3], %r4;
-; O0-NEXT:    st.b8 [%rd2+2], %r3;
-; O0-NEXT:    st.b8 [%rd2+1], %r2;
-; O0-NEXT:    st.b8 [%rd2], %r1;
+; O0-NEXT:    ld.b8 %r1, [%rd1+2];
+; O0-NEXT:    shl.b32 %r2, %r1, 16;
+; O0-NEXT:    ld.b8 %r3, [%rd1+3];
+; O0-NEXT:    shl.b32 %r4, %r3, 24;
+; O0-NEXT:    or.b32 %r5, %r4, %r2;
+; O0-NEXT:    ld.b8 %r6, [%rd1];
+; O0-NEXT:    ld.b8 %r7, [%rd1+1];
+; O0-NEXT:    st.b8 [%rd2+1], %r7;
+; O0-NEXT:    st.b8 [%rd2], %r6;
+; O0-NEXT:    st.b8 [%rd2+3], %r3;
+; O0-NEXT:    shr.u32 %r8, %r5, 16;
+; O0-NEXT:    st.b8 [%rd2+2], %r8;
 ; O0-NEXT:    ret;
 ;
 ; O3-LABEL: test_ldst_v4i8_unaligned(
@@ -1216,15 +1220,15 @@ define void @test_ldst_v4i8_unaligned(ptr %a, ptr %b) {
 ; O3-EMPTY:
 ; O3-NEXT:  // %bb.0:
 ; O3-NEXT:    ld.param.b64 %rd1, [test_ldst_v4i8_unaligned_param_0];
-; O3-NEXT:    ld.b8 %r1, [%rd1+1];
-; O3-NEXT:    ld.b8 %r2, [%rd1];
-; O3-NEXT:    ld.b8 %r3, [%rd1+3];
-; O3-NEXT:    ld.b8 %r4, [%rd1+2];
+; O3-NEXT:    ld.b8 %r1, [%rd1];
+; O3-NEXT:    ld.b8 %r2, [%rd1+1];
+; O3-NEXT:    ld.b8 %r3, [%rd1+2];
+; O3-NEXT:    ld.b8 %r4, [%rd1+3];
 ; O3-NEXT:    ld.param.b64 %rd2, [test_ldst_v4i8_unaligned_param_1];
-; O3-NEXT:    st.b8 [%rd2+2], %r4;
-; O3-NEXT:    st.b8 [%rd2+3], %r3;
-; O3-NEXT:    st.b8 [%rd2], %r2;
-; O3-NEXT:    st.b8 [%rd2+1], %r1;
+; O3-NEXT:    st.b8 [%rd2+3], %r4;
+; O3-NEXT:    st.b8 [%rd2+2], %r3;
+; O3-NEXT:    st.b8 [%rd2+1], %r2;
+; O3-NEXT:    st.b8 [%rd2], %r1;
 ; O3-NEXT:    ret;
   %t1 = load <4 x i8>, ptr %a, align 1
   store <4 x i8> %t1, ptr %b, align 1
@@ -2304,19 +2308,24 @@ entry:
 define <4 x float> @test_uitofp_v4i8(<4 x i8> %a) {
 ; CHECK-LABEL: test_uitofp_v4i8(
 ; CHECK:       {
-; CHECK-NEXT:    .reg .b32 %r<10>;
+; CHECK-NEXT:    .reg .b16 %rs<5>;
+; CHECK-NEXT:    .reg .b32 %r<12>;
 ; CHECK-EMPTY:
 ; CHECK-NEXT:  // %bb.0:
 ; CHECK-NEXT:    ld.param.b32 %r1, [test_uitofp_v4i8_param_0];
 ; CHECK-NEXT:    prmt.b32 %r2, %r1, 0, 0x7773U;
-; CHECK-NEXT:    cvt.rn.f32.u32 %r3, %r2;
-; CHECK-NEXT:    prmt.b32 %r4, %r1, 0, 0x7772U;
-; CHECK-NEXT:    cvt.rn.f32.u32 %r5, %r4;
-; CHECK-NEXT:    prmt.b32 %r6, %r1, 0, 0x7771U;
-; CHECK-NEXT:    cvt.rn.f32.u32 %r7, %r6;
+; CHECK-NEXT:    prmt.b32 %r3, %r1, 0, 0x7772U;
+; CHECK-NEXT:    prmt.b32 %r4, %r3, %r2, 0x5410U;
+; CHECK-NEXT:    mov.b32 {%rs1, %rs2}, %r4;
+; CHECK-NEXT:    cvt.rn.f32.u16 %r5, %rs2;
+; CHECK-NEXT:    cvt.rn.f32.u16 %r6, %rs1;
+; CHECK-NEXT:    prmt.b32 %r7, %r1, 0, 0x7771U;
 ; CHECK-NEXT:    prmt.b32 %r8, %r1, 0, 0x7770U;
-; CHECK-NEXT:    cvt.rn.f32.u32 %r9, %r8;
-; CHECK-NEXT:    st.param.v4.b32 [func_retval0], {%r9, %r7, %r5, %r3};
+; CHECK-NEXT:    prmt.b32 %r9, %r8, %r7, 0x5410U;
+; CHECK-NEXT:    mov.b32 {%rs3, %rs4}, %r9;
+; CHECK-NEXT:    cvt.rn.f32.u16 %r10, %rs4;
+; CHECK-NEXT:    cvt.rn.f32.u16 %r11, %rs3;
+; CHECK-NEXT:    st.param.v4.b32 [func_retval0], {%r11, %r10, %r6, %r5};
 ; CHECK-NEXT:    ret;
   %r = uitofp <4 x i8> %a to <4 x float>
   ret <4 x float> %r

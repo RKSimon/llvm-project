@@ -747,13 +747,13 @@ define amdgpu_kernel void @v_ctpop_v16i16(ptr addrspace(1) noalias %out, ptr add
 ; EG:       ; %bb.0:
 ; EG-NEXT:    ALU 2, @10, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    TEX 1 @6
-; EG-NEXT:    ALU 25, @13, KC0[CB0:0-32], KC1[]
+; EG-NEXT:    ALU 26, @13, KC0[CB0:0-32], KC1[]
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T0.XYZW, T14.X, 0
 ; EG-NEXT:    MEM_RAT_CACHELESS STORE_RAW T12.XYZW, T13.X, 1
 ; EG-NEXT:    CF_END
 ; EG-NEXT:    Fetch clause starting at 6:
-; EG-NEXT:     VTX_READ_128 T12.XYZW, T0.X, 16, #1
-; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T12.XYZW, T0.X, 0, #1
+; EG-NEXT:     VTX_READ_128 T0.XYZW, T0.X, 16, #1
 ; EG-NEXT:    ALU clause starting at 10:
 ; EG-NEXT:     LSHL * T0.W, T0.X, literal.x,
 ; EG-NEXT:    5(7.006492e-45), 0(0.000000e+00)
@@ -776,14 +776,15 @@ define amdgpu_kernel void @v_ctpop_v16i16(ptr addrspace(1) noalias %out, ptr add
 ; EG-NEXT:     BCNT_INT T12.X, PS,
 ; EG-NEXT:     BCNT_INT T0.Z, PV.Z,
 ; EG-NEXT:     LSHR T1.W, T0.X, literal.x,
-; EG-NEXT:     ADD_INT * T2.W, KC0[2].Y, literal.x,
-; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
-; EG-NEXT:     LSHR T13.X, PS, literal.x,
+; EG-NEXT:     LSHR * T13.X, KC0[2].Y, literal.y,
+; EG-NEXT:    16(2.242078e-44), 2(2.802597e-45)
 ; EG-NEXT:     BCNT_INT T0.Y, PV.W,
-; EG-NEXT:     AND_INT * T1.W, T0.X, literal.y,
-; EG-NEXT:    2(2.802597e-45), 65535(9.183409e-41)
+; EG-NEXT:     AND_INT * T1.W, T0.X, literal.x,
+; EG-NEXT:    65535(9.183409e-41), 0(0.000000e+00)
 ; EG-NEXT:     BCNT_INT T0.X, PV.W,
-; EG-NEXT:     LSHR * T14.X, KC0[2].Y, literal.x,
+; EG-NEXT:     ADD_INT * T1.W, KC0[2].Y, literal.x,
+; EG-NEXT:    16(2.242078e-44), 0(0.000000e+00)
+; EG-NEXT:     LSHR * T14.X, PV.W, literal.x,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
   %tid = call i32 @llvm.amdgcn.workitem.id.x()
   %in.gep = getelementptr <16 x i16>, ptr addrspace(1) %in, i32 %tid
@@ -1292,7 +1293,7 @@ define amdgpu_kernel void @ctpop_i16_in_br(ptr addrspace(1) %out, ptr addrspace(
 ; SI-NEXT:    buffer_store_short v0, off, s[0:3], 0
 ; SI-NEXT:    s_endpgm
 ; SI-NEXT:  .LBB14_4:
-; SI-NEXT:                    ; implicit-def: $vgpr0
+; SI-NEXT:    ; implicit-def: $vgpr0
 ; SI-NEXT:    s_branch .LBB14_2
 ;
 ; VI-LABEL: ctpop_i16_in_br:

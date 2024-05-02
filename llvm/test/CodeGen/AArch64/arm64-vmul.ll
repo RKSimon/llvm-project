@@ -2416,7 +2416,15 @@ define <8 x i16> @vmulq_built_dup_fromsmall_test(<8 x i16> %a, <4 x i16> %b) {
 ; CHECK-LABEL: vmulq_built_dup_fromsmall_test:
 ; CHECK:       // %bb.0:
 ; CHECK-NEXT:    // kill: def $d1 killed $d1 def $q1
-; CHECK-NEXT:    mul.8h v0, v0, v1[0]
+; CHECK-NEXT:    mov.16b v2, v1
+; CHECK-NEXT:    mov.h v2[1], v1[0]
+; CHECK-NEXT:    mov.h v2[2], v1[0]
+; CHECK-NEXT:    mov.h v2[3], v1[0]
+; CHECK-NEXT:    mov.h v2[4], v1[0]
+; CHECK-NEXT:    mov.h v2[5], v1[0]
+; CHECK-NEXT:    mov.h v2[6], v1[0]
+; CHECK-NEXT:    mov.h v2[7], v1[0]
+; CHECK-NEXT:    mul.8h v0, v0, v2
 ; CHECK-NEXT:    ret
   %vget_lane = extractelement <4 x i16> %b, i32 0
   %vecinit.i = insertelement <8 x i16> undef, i16 %vget_lane, i32 0
