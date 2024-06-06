@@ -8,15 +8,14 @@ define <16 x i32> @test_shuf1(<16 x i32> %x, <16 x i32> %y) {
 ; CHECKLE-NEXT:    ext v3.16b, v6.16b, v1.16b, #4
 ; CHECKLE-NEXT:    uzp1 v5.4s, v1.4s, v0.4s
 ; CHECKLE-NEXT:    uzp2 v16.4s, v2.4s, v4.4s
-; CHECKLE-NEXT:    dup v17.4s, v4.s[0]
+; CHECKLE-NEXT:    ext v6.16b, v6.16b, v4.16b, #12
 ; CHECKLE-NEXT:    trn2 v4.4s, v1.4s, v3.4s
-; CHECKLE-NEXT:    mov v17.s[0], v6.s[3]
 ; CHECKLE-NEXT:    trn2 v1.4s, v5.4s, v1.4s
 ; CHECKLE-NEXT:    rev64 v3.4s, v7.4s
 ; CHECKLE-NEXT:    trn1 v2.4s, v16.4s, v2.4s
 ; CHECKLE-NEXT:    mov v4.s[0], v7.s[1]
+; CHECKLE-NEXT:    mov v3.d[0], v6.d[0]
 ; CHECKLE-NEXT:    ext v1.16b, v0.16b, v1.16b, #12
-; CHECKLE-NEXT:    mov v3.d[0], v17.d[0]
 ; CHECKLE-NEXT:    mov v2.s[3], v7.s[0]
 ; CHECKLE-NEXT:    mov v0.16b, v4.16b
 ; CHECKLE-NEXT:    ret
@@ -38,23 +37,22 @@ define <16 x i32> @test_shuf1(<16 x i32> %x, <16 x i32> %y) {
 ; CHECKBE-NEXT:    ext v6.16b, v3.16b, v1.16b, #4
 ; CHECKBE-NEXT:    uzp1 v16.4s, v1.4s, v0.4s
 ; CHECKBE-NEXT:    uzp2 v7.4s, v2.4s, v4.4s
-; CHECKBE-NEXT:    dup v4.4s, v4.s[0]
-; CHECKBE-NEXT:    rev64 v17.4s, v5.4s
-; CHECKBE-NEXT:    trn2 v6.4s, v1.4s, v6.4s
-; CHECKBE-NEXT:    mov v4.s[0], v3.s[3]
+; CHECKBE-NEXT:    ext v3.16b, v3.16b, v4.16b, #12
+; CHECKBE-NEXT:    trn2 v4.4s, v1.4s, v6.4s
+; CHECKBE-NEXT:    rev64 v6.4s, v5.4s
 ; CHECKBE-NEXT:    trn2 v1.4s, v16.4s, v1.4s
 ; CHECKBE-NEXT:    trn1 v2.4s, v7.4s, v2.4s
-; CHECKBE-NEXT:    rev64 v3.4s, v17.4s
-; CHECKBE-NEXT:    mov v6.s[0], v5.s[1]
-; CHECKBE-NEXT:    rev64 v4.4s, v4.4s
+; CHECKBE-NEXT:    rev64 v3.4s, v3.4s
+; CHECKBE-NEXT:    mov v4.s[0], v5.s[1]
+; CHECKBE-NEXT:    rev64 v6.4s, v6.4s
 ; CHECKBE-NEXT:    ext v0.16b, v0.16b, v1.16b, #12
 ; CHECKBE-NEXT:    mov v2.s[3], v5.s[0]
-; CHECKBE-NEXT:    rev64 v1.4s, v6.4s
-; CHECKBE-NEXT:    mov v3.d[0], v4.d[0]
+; CHECKBE-NEXT:    rev64 v1.4s, v4.4s
+; CHECKBE-NEXT:    mov v6.d[0], v3.d[0]
 ; CHECKBE-NEXT:    rev64 v4.4s, v0.4s
 ; CHECKBE-NEXT:    rev64 v2.4s, v2.4s
 ; CHECKBE-NEXT:    ext v0.16b, v1.16b, v1.16b, #8
-; CHECKBE-NEXT:    ext v3.16b, v3.16b, v3.16b, #8
+; CHECKBE-NEXT:    ext v3.16b, v6.16b, v6.16b, #8
 ; CHECKBE-NEXT:    ext v1.16b, v4.16b, v4.16b, #8
 ; CHECKBE-NEXT:    ext v2.16b, v2.16b, v2.16b, #8
 ; CHECKBE-NEXT:    ret

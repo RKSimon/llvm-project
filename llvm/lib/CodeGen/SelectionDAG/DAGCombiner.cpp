@@ -26040,8 +26040,11 @@ SDValue DAGCombiner::visitVECTOR_SHUFFLE(SDNode *N) {
                      SmallVectorImpl<int> &Mask) -> bool {
     // Don't try to fold splats; they're likely to simplify somehow, or they
     // might be free.
-    if (OtherSVN->isSplat())
-      return false;
+    if (OtherSVN->isSplat()) {
+      // Still to merge if the 'splat' is just a single element.
+      if (count_if(OtherSVN->getMask(), [](int M) { return M >= 0; }) > 1)
+        return false;
+    }
 
     SV0 = SV1 = SDValue();
     Mask.clear();

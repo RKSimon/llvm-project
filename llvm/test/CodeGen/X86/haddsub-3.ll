@@ -2,9 +2,9 @@
 ; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+sse2            | FileCheck %s --check-prefix=SSE2
 ; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+ssse3           | FileCheck %s --check-prefixes=SSSE3,SSSE3-SLOW
 ; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+ssse3,fast-hops | FileCheck %s --check-prefixes=SSSE3,SSSE3-FAST
-; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx             | FileCheck %s --check-prefixes=AVX1,AVX1-SLOW
-; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx,fast-hops   | FileCheck %s --check-prefixes=AVX1,AVX1-FAST
-; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx2            | FileCheck %s --check-prefix=AVX2
+; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx             | FileCheck %s --check-prefixes=AVX,AVX1,AVX1-SLOW
+; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx,fast-hops   | FileCheck %s --check-prefixes=AVX,AVX1,AVX1-FAST
+; RUN: llc < %s -mtriple=x86_64-unknown -mattr=+avx2            | FileCheck %s --check-prefixes=AVX,AVX2
 
 define float @pr26491(<4 x float> %a0) {
 ; SSE2-LABEL: pr26491:
@@ -136,37 +136,15 @@ define <4 x float> @PR48823(<4 x float> %0, <4 x float> %1) {
 ; SSE2-NEXT:    subps %xmm2, %xmm0
 ; SSE2-NEXT:    retq
 ;
-; SSSE3-SLOW-LABEL: PR48823:
-; SSSE3-SLOW:       # %bb.0:
-; SSSE3-SLOW-NEXT:    movaps %xmm0, %xmm2
-; SSSE3-SLOW-NEXT:    shufps {{.*#+}} xmm2 = xmm2[1,1],xmm1[2,3]
-; SSSE3-SLOW-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,2]
-; SSSE3-SLOW-NEXT:    subps %xmm2, %xmm0
-; SSSE3-SLOW-NEXT:    retq
+; SSSE3-LABEL: PR48823:
+; SSSE3:       # %bb.0:
+; SSSE3-NEXT:    hsubps %xmm1, %xmm0
+; SSSE3-NEXT:    retq
 ;
-; SSSE3-FAST-LABEL: PR48823:
-; SSSE3-FAST:       # %bb.0:
-; SSSE3-FAST-NEXT:    hsubps %xmm1, %xmm0
-; SSSE3-FAST-NEXT:    retq
-;
-; AVX1-SLOW-LABEL: PR48823:
-; AVX1-SLOW:       # %bb.0:
-; AVX1-SLOW-NEXT:    vshufps {{.*#+}} xmm2 = xmm0[1,1],xmm1[2,3]
-; AVX1-SLOW-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,2]
-; AVX1-SLOW-NEXT:    vsubps %xmm2, %xmm0, %xmm0
-; AVX1-SLOW-NEXT:    retq
-;
-; AVX1-FAST-LABEL: PR48823:
-; AVX1-FAST:       # %bb.0:
-; AVX1-FAST-NEXT:    vhsubps %xmm1, %xmm0, %xmm0
-; AVX1-FAST-NEXT:    retq
-;
-; AVX2-LABEL: PR48823:
-; AVX2:       # %bb.0:
-; AVX2-NEXT:    vshufps {{.*#+}} xmm2 = xmm0[1,1],xmm1[2,3]
-; AVX2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,2]
-; AVX2-NEXT:    vsubps %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    retq
+; AVX-LABEL: PR48823:
+; AVX:       # %bb.0:
+; AVX-NEXT:    vhsubps %xmm1, %xmm0, %xmm0
+; AVX-NEXT:    retq
   %3 = shufflevector <4 x float> %0, <4 x float> poison, <4 x i32> <i32 1, i32 undef, i32 undef, i32 undef>
   %4 = fsub <4 x float> %0, %3
   %5 = shufflevector <4 x float> %1, <4 x float> poison, <4 x i32> <i32 undef, i32 undef, i32 undef, i32 2>

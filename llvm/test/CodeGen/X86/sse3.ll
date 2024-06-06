@@ -395,14 +395,14 @@ entry:
 define <4 x i32> @t17() nounwind {
 ; X86-LABEL: t17:
 ; X86:       # %bb.0: # %entry
-; X86-NEXT:    pshufd {{.*#+}} xmm0 = mem[0,1,0,1]
-; X86-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
+; X86-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
+; X86-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,0,1]
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: t17:
 ; X64:       # %bb.0: # %entry
-; X64-NEXT:    pshufd {{.*#+}} xmm0 = mem[0,1,0,1]
-; X64-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
+; X64-NEXT:    movd {{.*#+}} xmm0 = mem[0],zero,zero,zero
+; X64-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[1,1,0,1]
 ; X64-NEXT:    retq
 entry:
   %tmp1 = load <4 x float>, ptr undef, align 16

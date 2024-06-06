@@ -1517,34 +1517,36 @@ define <4 x i32> @shuffle_v4i32_2345(<4 x i32> %a, <4 x i32> %b) {
 define <4 x i32> @shuffle_v4i32_2456(<4 x i32> %a, <4 x i32> %b) {
 ; SSE2-LABEL: shuffle_v4i32_2456:
 ; SSE2:       # %bb.0:
-; SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[2,3],xmm1[0,1]
+; SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[2,0],xmm1[0,0]
 ; SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[1,2]
 ; SSE2-NEXT:    retq
 ;
 ; SSE3-LABEL: shuffle_v4i32_2456:
 ; SSE3:       # %bb.0:
-; SSE3-NEXT:    shufps {{.*#+}} xmm0 = xmm0[2,3],xmm1[0,1]
+; SSE3-NEXT:    shufps {{.*#+}} xmm0 = xmm0[2,0],xmm1[0,0]
 ; SSE3-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[1,2]
 ; SSE3-NEXT:    retq
 ;
 ; SSSE3-LABEL: shuffle_v4i32_2456:
 ; SSSE3:       # %bb.0:
-; SSSE3-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
-; SSSE3-NEXT:    palignr {{.*#+}} xmm1 = xmm0[12,13,14,15],xmm1[0,1,2,3,4,5,6,7,8,9,10,11]
-; SSSE3-NEXT:    movdqa %xmm1, %xmm0
+; SSSE3-NEXT:    movdqa %xmm1, %xmm2
+; SSSE3-NEXT:    palignr {{.*#+}} xmm2 = xmm0[8,9,10,11,12,13,14,15],xmm2[0,1,2,3,4,5,6,7]
+; SSSE3-NEXT:    shufps {{.*#+}} xmm2 = xmm2[0,2],xmm1[1,2]
+; SSSE3-NEXT:    movaps %xmm2, %xmm0
 ; SSSE3-NEXT:    retq
 ;
 ; SSE41-LABEL: shuffle_v4i32_2456:
 ; SSE41:       # %bb.0:
-; SSE41-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
-; SSE41-NEXT:    palignr {{.*#+}} xmm1 = xmm0[12,13,14,15],xmm1[0,1,2,3,4,5,6,7,8,9,10,11]
-; SSE41-NEXT:    movdqa %xmm1, %xmm0
+; SSE41-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
+; SSE41-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[0,0,1,2]
+; SSE41-NEXT:    pblendw {{.*#+}} xmm0 = xmm2[0,1],xmm0[2,3,4,5,6,7]
 ; SSE41-NEXT:    retq
 ;
 ; AVX1OR2-LABEL: shuffle_v4i32_2456:
 ; AVX1OR2:       # %bb.0:
-; AVX1OR2-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
-; AVX1OR2-NEXT:    vpalignr {{.*#+}} xmm0 = xmm0[12,13,14,15],xmm1[0,1,2,3,4,5,6,7,8,9,10,11]
+; AVX1OR2-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[2,3,2,3]
+; AVX1OR2-NEXT:    vshufps {{.*#+}} xmm1 = xmm1[0,0,1,2]
+; AVX1OR2-NEXT:    vblendps {{.*#+}} xmm0 = xmm0[0],xmm1[1,2,3]
 ; AVX1OR2-NEXT:    retq
 ;
 ; AVX512VL-LABEL: shuffle_v4i32_2456:

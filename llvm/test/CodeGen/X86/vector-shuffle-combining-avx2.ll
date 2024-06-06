@@ -829,20 +829,19 @@ define <32 x i8> @PR27320(<8 x i32> %a0) {
 define internal fastcc <8 x float> @PR34577(<8 x float> %inp0, <8 x float> %inp1, <8 x float> %inp2) {
 ; AVX2-LABEL: PR34577:
 ; AVX2:       # %bb.0: # %entry
-; AVX2-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[1,1,1,1]
-; AVX2-NEXT:    vxorps %xmm2, %xmm2, %xmm2
-; AVX2-NEXT:    vblendps {{.*#+}} ymm0 = ymm2[0,1,2,3],ymm0[4,5,6,7]
-; AVX2-NEXT:    vmovaps {{.*#+}} ymm2 = [u,u,7,2,u,u,3,2]
-; AVX2-NEXT:    vpermps %ymm1, %ymm2, %ymm1
-; AVX2-NEXT:    vblendps {{.*#+}} ymm0 = ymm0[0,1],ymm1[2,3],ymm0[4,5],ymm1[6,7]
+; AVX2-NEXT:    vinserti128 $1, %xmm0, %ymm0, %ymm0
+; AVX2-NEXT:    vpmovsxbd {{.*#+}} ymm2 = [0,0,7,2,0,0,3,2]
+; AVX2-NEXT:    vpermd %ymm1, %ymm2, %ymm1
+; AVX2-NEXT:    vpshufb {{.*#+}} ymm0 = zero,zero,zero,zero,zero,zero,zero,zero,ymm0[u,u,u,u,u,u,u,u,24,25,26,27,28,29,30,31,u,u,u,u,u,u,u,u]
+; AVX2-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1],ymm1[2,3],ymm0[4,5],ymm1[6,7]
 ; AVX2-NEXT:    ret{{[l|q]}}
 ;
 ; AVX512-LABEL: PR34577:
 ; AVX512:       # %bb.0: # %entry
 ; AVX512-NEXT:    # kill: def $ymm1 killed $ymm1 def $zmm1
-; AVX512-NEXT:    vpermpd {{.*#+}} ymm0 = ymm0[1,1,1,1]
+; AVX512-NEXT:    vinsertf128 $1, %xmm0, %ymm0, %ymm0
 ; AVX512-NEXT:    vxorps %xmm2, %xmm2, %xmm2
-; AVX512-NEXT:    vblendps {{.*#+}} ymm2 = ymm2[0,1,2,3],ymm0[4,5],ymm2[6,7]
+; AVX512-NEXT:    vunpckhpd {{.*#+}} ymm2 = ymm0[1],ymm2[1],ymm0[3],ymm2[3]
 ; AVX512-NEXT:    vmovaps {{.*#+}} ymm0 = [23,18,7,2,20,u,3,2]
 ; AVX512-NEXT:    vpermi2ps %zmm2, %zmm1, %zmm0
 ; AVX512-NEXT:    # kill: def $ymm0 killed $ymm0 killed $zmm0

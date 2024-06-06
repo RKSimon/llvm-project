@@ -1146,12 +1146,16 @@ define <4 x i64> @reduce_ctpop_v4i64_buildvector_v4i64(<4 x i64> %a0, <4 x i64> 
 ; AVX512VPOPCNT-NEXT:    vpopcntq %ymm1, %ymm1
 ; AVX512VPOPCNT-NEXT:    vpopcntq %ymm2, %ymm2
 ; AVX512VPOPCNT-NEXT:    vpopcntq %ymm3, %ymm3
-; AVX512VPOPCNT-NEXT:    vperm2i128 {{.*#+}} ymm4 = ymm1[2,3],ymm3[2,3]
-; AVX512VPOPCNT-NEXT:    vinserti128 $1, %xmm3, %ymm1, %ymm1
+; AVX512VPOPCNT-NEXT:    vextracti128 $1, %ymm0, %xmm4
+; AVX512VPOPCNT-NEXT:    vpaddq %ymm4, %ymm0, %ymm0
+; AVX512VPOPCNT-NEXT:    vextracti128 $1, %ymm1, %xmm4
 ; AVX512VPOPCNT-NEXT:    vpaddq %ymm4, %ymm1, %ymm1
-; AVX512VPOPCNT-NEXT:    vperm2i128 {{.*#+}} ymm3 = ymm0[2,3],ymm2[2,3]
+; AVX512VPOPCNT-NEXT:    vextracti128 $1, %ymm2, %xmm4
+; AVX512VPOPCNT-NEXT:    vextracti128 $1, %ymm3, %xmm5
+; AVX512VPOPCNT-NEXT:    vpaddq %xmm5, %xmm3, %xmm3
+; AVX512VPOPCNT-NEXT:    vinserti128 $1, %xmm3, %ymm1, %ymm1
+; AVX512VPOPCNT-NEXT:    vpaddq %xmm4, %xmm2, %xmm2
 ; AVX512VPOPCNT-NEXT:    vinserti128 $1, %xmm2, %ymm0, %ymm0
-; AVX512VPOPCNT-NEXT:    vpaddq %ymm3, %ymm0, %ymm0
 ; AVX512VPOPCNT-NEXT:    vpunpckhqdq {{.*#+}} ymm2 = ymm0[1],ymm1[1],ymm0[3],ymm1[3]
 ; AVX512VPOPCNT-NEXT:    vpunpcklqdq {{.*#+}} ymm0 = ymm0[0],ymm1[0],ymm0[2],ymm1[2]
 ; AVX512VPOPCNT-NEXT:    vpaddq %ymm2, %ymm0, %ymm0
