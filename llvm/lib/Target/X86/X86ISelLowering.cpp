@@ -52975,6 +52975,7 @@ static SDValue combineConstantPoolLoads(SDNode *N, const SDLoc &dl,
   SDValue Ptr = Ld->getBasePtr();
   SDValue Chain = Ld->getChain();
   ISD::LoadExtType Ext = Ld->getExtensionType();
+  const TargetLowering &TLI = DAG.getTargetLoweringInfo();
 
   if (Ext != ISD::NON_EXTLOAD || !Subtarget.hasAVX() || !Ld->isSimple())
     return SDValue();
@@ -53032,6 +53033,100 @@ static SDValue combineConstantPoolLoads(SDNode *N, const SDLoc &dl,
                                                  RegVT.getSizeInBits());
               Extract = DAG.getBitcast(RegVT, Extract);
               return DCI.CombineTo(N, Extract, SDValue(User, 1));
+            }
+          }
+        }
+      }
+    }
+  }
+
+  auto MergeBits = [&](EVT UserVT, const APInt &Undefs, const APInt &UserUndefs,
+                       ArrayRef<APInt> Bits,
+                       ArrayRef<APInt> UserBits) -> Constant * {
+    unsigned BW = Undefs.getBitWidth();
+    unsigned UserBW = UserUndefs.getBitWidth();
+    if (UserUndefs.extractBits(BW, 0).isAllOnes()) {
+      // If the lower elements are all undef, then only merge if all other
+      // subvector matches.
+      bool MatchSubvector = true;
+      for (unsigned I = BW; (I + BW) <= UserBW; I += BW) {
+        MatchSubvector &= MatchingBits(Undefs, UserUndefs.extractBits(BW, I),
+                                       Bits, UserBits.slice(I, BW));
+      }
+      if (!MatchSubvector)
+        return nullptr;
+    }
+    APInt MergedUndefs = UserUndefs;
+    SmallVector<APInt> MergedBits(UserBits.begin(), UserBits.end());
+    for (unsigned I = 0, E = Undefs.getBitWidth(); I != E; ++I) {
+      if (Undefs[I])
+        continue;
+      if (MergedUndefs[I]) {
+        MergedBits[I] = Bits[I];
+        MergedUndefs.clearBit(I);
+        continue;
+      }
+      if (Bits[I] != MergedBits[I])
+        return nullptr;
+    }
+    return getConstantVector(UserVT.getSimpleVT(), MergedBits, MergedUndefs,
+                             *DAG.getContext());
+  };
+
+  // Try again, but try to find another constant pool entry that we can merge
+  // with.
+  for (SDUse &Use : Chain->uses()) {
+    SDNode *User = Use.getUser();
+    auto *UserLd = dyn_cast<MemSDNode>(User);
+    if (User != N && UserLd &&
+        (User->getOpcode() == X86ISD::SUBV_BROADCAST_LOAD ||
+         User->getOpcode() == X86ISD::VBROADCAST_LOAD ||
+         ISD::isNormalLoad(User)) &&
+        UserLd->getChain() == Chain && !User->hasAnyUseOfValue(1) &&
+        User->getValueSizeInBits(0).getFixedValue() >
+            RegVT.getFixedSizeInBits()) {
+      EVT UserVT = User->getValueType(0);
+      SDValue UserPtr = UserLd->getBasePtr();
+      const Constant *UserC = getTargetConstantFromBasePtr(UserPtr);
+
+      // See if we are loading a constant that matches in the lower
+      // bits of a longer constant (but from a different constant pool ptr).
+      if (UserC && UserPtr != Ptr) {
+        unsigned LdSize = LdC->getType()->getPrimitiveSizeInBits();
+        unsigned UserSize = UserC->getType()->getPrimitiveSizeInBits();
+        if (LdSize < UserSize || !ISD::isNormalLoad(User)) {
+          APInt Undefs, UserUndefs;
+          SmallVector<APInt> Bits, UserBits;
+          unsigned NumBits = std::min(RegVT.getScalarSizeInBits(),
+                                      UserVT.getScalarSizeInBits());
+          if (UserVT.getScalarSizeInBits() == NumBits &&
+              getTargetConstantBitsFromNode(SDValue(N, 0), NumBits, Undefs,
+                                            Bits) &&
+              getTargetConstantBitsFromNode(SDValue(User, 0), NumBits,
+                                            UserUndefs, UserBits)) {
+            ConstantPoolSDNode *CP = getTargetConstantPoolFromBasePtr(Ptr);
+            ConstantPoolSDNode *UserCP =
+                getTargetConstantPoolFromBasePtr(UserPtr);
+            if (CP->getOpcode() != Ptr.getOpcode() &&
+                UserCP->getOpcode() == CP->getOpcode() &&
+                UserPtr.getOpcode() == Ptr.getOpcode() &&
+                UserVT.getSizeInBits() == UserSize) {
+              if (Constant *NewC =
+                      MergeBits(UserVT, Undefs, UserUndefs, Bits, UserBits)) {
+                MVT PVT = TLI.getPointerTy(DAG.getDataLayout());
+                SDValue CV = DAG.getConstantPool(
+                    NewC, PVT, UserCP->getAlign(), UserCP->getOffset(),
+                    UserCP->getOpcode() == ISD::TargetConstantPool,
+                    UserCP->getTargetFlags());
+                assert((Ptr.getOpcode() == X86ISD::Wrapper ||
+                        Ptr.getOpcode() == X86ISD::WrapperRIP) &&
+                       "Unexpected wrapper");
+                SDValue Wrapper =
+                    DAG.getNode(Ptr.getOpcode(), SDLoc(N), PVT, CV);
+                DAG.ReplaceAllUsesWith(Ptr.getNode(), &Wrapper);
+                DAG.ReplaceAllUsesWith(UserPtr.getNode(), &Wrapper);
+                return SDValue();
+              }
             }
           }
         }

@@ -7692,10 +7692,11 @@ define <16 x i16> @PR34369(<16 x i16> %vec, <16 x i16> %mask) {
 ;
 ; AVX2-FAST-LABEL: PR34369:
 ; AVX2-FAST:       # %bb.0:
-; AVX2-FAST-NEXT:    vextracti128 $1, %ymm0, %xmm2
-; AVX2-FAST-NEXT:    vpshufb {{.*#+}} xmm2 = xmm2[u,u,u,u,u,u,10,11,u,u,u,u,u,u,4,5]
-; AVX2-FAST-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[6,7,0,1,0,1,u,u,10,11,4,5,4,5,u,u,30,31,16,17,28,29,16,17,18,19,20,21,24,25,24,25]
-; AVX2-FAST-NEXT:    vpblendw {{.*#+}} xmm2 = xmm0[0,1,2],xmm2[3],xmm0[4,5,6],xmm2[7]
+; AVX2-FAST-NEXT:    vmovdqa {{.*#+}} ymm2 = [6,7,0,1,0,1,10,11,10,11,4,5,4,5,4,5,14,15,0,1,12,13,0,1,2,3,4,5,8,9,8,9]
+; AVX2-FAST-NEXT:    vextracti128 $1, %ymm0, %xmm3
+; AVX2-FAST-NEXT:    vpshufb %xmm2, %xmm3, %xmm3
+; AVX2-FAST-NEXT:    vpshufb %ymm2, %ymm0, %ymm0
+; AVX2-FAST-NEXT:    vpblendw {{.*#+}} xmm2 = xmm0[0,1,2],xmm3[3],xmm0[4,5,6],xmm3[7]
 ; AVX2-FAST-NEXT:    vpblendd {{.*#+}} ymm0 = ymm2[0,1,2,3],ymm0[4,5,6,7]
 ; AVX2-FAST-NEXT:    vpxor %xmm2, %xmm2, %xmm2
 ; AVX2-FAST-NEXT:    vpcmpeqw %ymm2, %ymm1, %ymm1
