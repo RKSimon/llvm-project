@@ -506,20 +506,24 @@ define void @store_i16_stride8_vf4(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX2-FP-NEXT:    vpunpcklqdq {{.*#+}} xmm3 = xmm4[0],xmm3[0]
 ; AVX2-FP-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm0
 ; AVX2-FP-NEXT:    vinserti128 $1, %xmm3, %ymm2, %ymm1
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm2 = ymm1[u,u,u,u,u,u,u,u,0,1,8,9,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,18,19,26,27]
-; AVX2-FP-NEXT:    vpermq {{.*#+}} ymm3 = ymm1[2,3,0,1]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm4 = ymm3[u,u,u,u,u,u,u,u,u,u,u,u,0,1,8,9,u,u,u,u,u,u,u,u,18,19,26,27,u,u,u,u]
-; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm2 = ymm2[0,1,2],ymm4[3],ymm2[4,5],ymm4[6],ymm2[7]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm4 = ymm0[0,1,8,9,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,18,19,26,27,u,u,u,u,u,u,u,u]
-; AVX2-FP-NEXT:    vpermq {{.*#+}} ymm5 = ymm0[2,3,0,1]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm6 = ymm5[u,u,u,u,0,1,8,9,u,u,u,u,u,u,u,u,18,19,26,27,u,u,u,u,u,u,u,u,u,u,u,u]
-; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm4 = ymm4[0],ymm6[1],ymm4[2,3],ymm6[4],ymm4[5,6,7]
-; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm2 = ymm4[0,1],ymm2[2,3],ymm4[4,5],ymm2[6,7]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm1 = ymm1[u,u,u,u,u,u,u,u,4,5,12,13,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,22,23,30,31]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm3 = ymm3[u,u,u,u,u,u,u,u,u,u,u,u,4,5,12,13,u,u,u,u,u,u,u,u,22,23,30,31,u,u,u,u]
+; AVX2-FP-NEXT:    vmovdqa {{.*#+}} ymm2 = [50462976,117835012,151519488,151519488,319951120,387323156,454693650,454693650]
+; AVX2-FP-NEXT:    vpshufb %ymm2, %ymm1, %ymm3
+; AVX2-FP-NEXT:    vpermq {{.*#+}} ymm4 = ymm1[2,3,0,1]
+; AVX2-FP-NEXT:    vpshufb %ymm2, %ymm4, %ymm2
+; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm2 = ymm3[0,1,2],ymm2[3],ymm3[4,5],ymm2[6],ymm3[7]
+; AVX2-FP-NEXT:    vmovdqa {{.*#+}} ymm3 = [151519488,151519488,185207048,252579084,454693650,454693650,454695192,522067228]
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm0, %ymm5
+; AVX2-FP-NEXT:    vpermq {{.*#+}} ymm6 = ymm0[2,3,0,1]
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm6, %ymm3
+; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm3 = ymm5[0],ymm3[1],ymm5[2,3],ymm3[4],ymm5[5,6,7]
+; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm2 = ymm3[0,1],ymm2[2,3],ymm3[4,5],ymm2[6,7]
+; AVX2-FP-NEXT:    vmovdqa {{.*#+}} ymm3 = [50462976,117835012,218891524,218891524,319951120,387323156,522065686,522065686]
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm1, %ymm1
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm4, %ymm3
 ; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm1 = ymm1[0,1,2],ymm3[3],ymm1[4,5],ymm3[6],ymm1[7]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm0 = ymm0[4,5,12,13,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,u,22,23,30,31,u,u,u,u,u,u,u,u]
-; AVX2-FP-NEXT:    vpshufb {{.*#+}} ymm3 = ymm5[u,u,u,u,4,5,12,13,u,u,u,u,u,u,u,u,22,23,30,31,u,u,u,u,u,u,u,u,u,u,u,u]
+; AVX2-FP-NEXT:    vmovdqa {{.*#+}} ymm3 = [218891524,218891524,185207048,252579084,522065686,522065686,454695192,522067228]
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm0, %ymm0
+; AVX2-FP-NEXT:    vpshufb %ymm3, %ymm6, %ymm3
 ; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0],ymm3[1],ymm0[2,3],ymm3[4],ymm0[5,6,7]
 ; AVX2-FP-NEXT:    vpblendd {{.*#+}} ymm0 = ymm0[0,1],ymm1[2,3],ymm0[4,5],ymm1[6,7]
 ; AVX2-FP-NEXT:    vmovdqa %ymm0, 32(%rax)

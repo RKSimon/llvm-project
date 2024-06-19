@@ -975,15 +975,20 @@ define void @interleave_24i16_out(ptr %p, ptr %q1, ptr %q2, ptr %q3) nounwind {
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm4 = xmm4[0],xmm1[1],xmm4[2,3],xmm1[4],xmm4[5,6],xmm1[7]
 ; SSE42-NEXT:    pshufb {{.*#+}} xmm4 = xmm4[0,1,6,7,12,13,2,3,8,9,14,15,u,u,u,u]
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm4 = xmm4[0,1,2,3,4,5],xmm3[6,7]
-; SSE42-NEXT:    movdqa %xmm0, %xmm3
-; SSE42-NEXT:    pblendw {{.*#+}} xmm3 = xmm3[0,1],xmm1[2],xmm3[3,4],xmm1[5],xmm3[6,7]
-; SSE42-NEXT:    pblendw {{.*#+}} xmm3 = xmm2[0],xmm3[1,2],xmm2[3],xmm3[4,5],xmm2[6],xmm3[7]
-; SSE42-NEXT:    pshufb {{.*#+}} xmm3 = xmm3[2,3,8,9,14,15,4,5,10,11,0,1,6,7,12,13]
+; SSE42-NEXT:    movdqa {{.*#+}} xmm3 = [770,2312,3854,1284,2826,256,1798,3340]
+; SSE42-NEXT:    movdqa %xmm2, %xmm5
+; SSE42-NEXT:    pshufb %xmm3, %xmm5
+; SSE42-NEXT:    movdqa %xmm0, %xmm6
+; SSE42-NEXT:    pblendw {{.*#+}} xmm6 = xmm6[0,1],xmm1[2],xmm6[3,4],xmm1[5],xmm6[6,7]
+; SSE42-NEXT:    pshufb %xmm3, %xmm6
+; SSE42-NEXT:    pblendw {{.*#+}} xmm6 = xmm6[0,1,2,3,4],xmm5[5,6,7]
+; SSE42-NEXT:    movdqa {{.*#+}} xmm3 = [1284,2826,256,1798,3340,770,2312,3854]
+; SSE42-NEXT:    pshufb %xmm3, %xmm2
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0,1],xmm0[2],xmm1[3,4],xmm0[5],xmm1[6,7]
-; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0],xmm2[1],xmm1[2,3],xmm2[4],xmm1[5,6],xmm2[7]
-; SSE42-NEXT:    pshufb {{.*#+}} xmm1 = xmm1[4,5,10,11,0,1,6,7,12,13,2,3,8,9,14,15]
+; SSE42-NEXT:    pshufb %xmm3, %xmm1
+; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0,1,2,3,4],xmm2[5,6,7]
 ; SSE42-NEXT:    movdqu %xmm4, (%rsi)
-; SSE42-NEXT:    movdqu %xmm3, (%rdx)
+; SSE42-NEXT:    movdqu %xmm6, (%rdx)
 ; SSE42-NEXT:    movdqu %xmm1, (%rcx)
 ; SSE42-NEXT:    retq
 ;
@@ -1120,15 +1125,20 @@ define void @interleave_24i16_out_reverse(ptr %p, ptr %q1, ptr %q2, ptr %q3) nou
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm4 = xmm4[0],xmm2[1],xmm4[2,3],xmm2[4],xmm4[5,6],xmm2[7]
 ; SSE42-NEXT:    pshufb {{.*#+}} xmm4 = xmm4[14,15,8,9,2,3,12,13,6,7,0,1,u,u,u,u]
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm4 = xmm4[0,1,2,3,4,5],xmm3[6,7]
-; SSE42-NEXT:    movdqa %xmm2, %xmm3
-; SSE42-NEXT:    pblendw {{.*#+}} xmm3 = xmm3[0,1],xmm1[2],xmm3[3,4],xmm1[5],xmm3[6,7]
-; SSE42-NEXT:    pblendw {{.*#+}} xmm3 = xmm3[0],xmm0[1],xmm3[2,3],xmm0[4],xmm3[5,6],xmm0[7]
-; SSE42-NEXT:    pshufb {{.*#+}} xmm3 = xmm3[12,13,6,7,0,1,10,11,4,5,14,15,8,9,2,3]
+; SSE42-NEXT:    movdqa {{.*#+}} xmm3 = [3340,1798,256,2826,1284,3854,2312,770]
+; SSE42-NEXT:    movdqa %xmm0, %xmm5
+; SSE42-NEXT:    pshufb %xmm3, %xmm5
+; SSE42-NEXT:    movdqa %xmm2, %xmm6
+; SSE42-NEXT:    pblendw {{.*#+}} xmm6 = xmm6[0,1],xmm1[2],xmm6[3,4],xmm1[5],xmm6[6,7]
+; SSE42-NEXT:    pshufb %xmm3, %xmm6
+; SSE42-NEXT:    pblendw {{.*#+}} xmm6 = xmm6[0,1,2,3,4],xmm5[5,6,7]
+; SSE42-NEXT:    movdqa {{.*#+}} xmm3 = [2826,1284,3854,2312,770,3340,1798,256]
+; SSE42-NEXT:    pshufb %xmm3, %xmm0
 ; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0,1],xmm2[2],xmm1[3,4],xmm2[5],xmm1[6,7]
-; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm0[0],xmm1[1,2],xmm0[3],xmm1[4,5],xmm0[6],xmm1[7]
-; SSE42-NEXT:    pshufb {{.*#+}} xmm1 = xmm1[10,11,4,5,14,15,8,9,2,3,12,13,6,7,0,1]
+; SSE42-NEXT:    pshufb %xmm3, %xmm1
+; SSE42-NEXT:    pblendw {{.*#+}} xmm1 = xmm1[0,1,2,3,4],xmm0[5,6,7]
 ; SSE42-NEXT:    movdqu %xmm4, (%rsi)
-; SSE42-NEXT:    movdqu %xmm3, (%rdx)
+; SSE42-NEXT:    movdqu %xmm6, (%rdx)
 ; SSE42-NEXT:    movdqu %xmm1, (%rcx)
 ; SSE42-NEXT:    retq
 ;
@@ -1294,10 +1304,11 @@ define void @interleave_24i16_in(ptr %p, ptr %q1, ptr %q2, ptr %q3) nounwind {
 ; AVX2-SLOW-NEXT:    vmovdqu (%rdx), %xmm1
 ; AVX2-SLOW-NEXT:    vmovdqu (%rcx), %xmm2
 ; AVX2-SLOW-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm3
-; AVX2-SLOW-NEXT:    vpshufb {{.*#+}} ymm4 = ymm3[0,1,u,u,6,7,2,3,u,u,8,9,4,5,u,u,16,17,u,u,22,23,18,19,u,u,24,25,20,21,u,u]
+; AVX2-SLOW-NEXT:    vmovdqa {{.*#+}} ymm4 = [256,256,1798,770,770,2312,1284,1284,4368,1798,5910,4882,2312,6424,5396,2826]
+; AVX2-SLOW-NEXT:    vpshufb %ymm4, %ymm3, %ymm5
 ; AVX2-SLOW-NEXT:    vpermq {{.*#+}} ymm3 = ymm3[2,3,0,1]
-; AVX2-SLOW-NEXT:    vpshufb {{.*#+}} ymm3 = ymm3[u,u,0,1,u,u,u,u,2,3,u,u,u,u,4,5,u,u,22,23,u,u,u,u,24,25,u,u,u,u,26,27]
-; AVX2-SLOW-NEXT:    vpblendw {{.*#+}} ymm3 = ymm4[0],ymm3[1],ymm4[2,3],ymm3[4],ymm4[5,6],ymm3[7],ymm4[8],ymm3[9],ymm4[10,11],ymm3[12],ymm4[13,14],ymm3[15]
+; AVX2-SLOW-NEXT:    vpshufb %ymm4, %ymm3, %ymm3
+; AVX2-SLOW-NEXT:    vpblendw {{.*#+}} ymm3 = ymm5[0],ymm3[1],ymm5[2,3],ymm3[4],ymm5[5,6],ymm3[7],ymm5[8],ymm3[9],ymm5[10,11],ymm3[12],ymm5[13,14],ymm3[15]
 ; AVX2-SLOW-NEXT:    vpmovsxbd {{.*#+}} ymm4 = [0,0,0,0,1,1,0,2]
 ; AVX2-SLOW-NEXT:    vpermd %ymm2, %ymm4, %ymm4
 ; AVX2-SLOW-NEXT:    vpmovsxbw {{.*#+}} ymm5 = [65535,65535,0,65535,65535,0,65535,65535,0,65535,65535,0,65535,65535,0,65535]
@@ -1339,10 +1350,11 @@ define void @interleave_24i16_in(ptr %p, ptr %q1, ptr %q2, ptr %q3) nounwind {
 ; AVX2-FAST-PERLANE-NEXT:    vmovdqu (%rdx), %xmm1
 ; AVX2-FAST-PERLANE-NEXT:    vmovdqu (%rcx), %xmm2
 ; AVX2-FAST-PERLANE-NEXT:    vinserti128 $1, %xmm1, %ymm0, %ymm3
-; AVX2-FAST-PERLANE-NEXT:    vpshufb {{.*#+}} ymm4 = ymm3[0,1,u,u,6,7,2,3,u,u,8,9,4,5,u,u,16,17,u,u,22,23,18,19,u,u,24,25,20,21,u,u]
+; AVX2-FAST-PERLANE-NEXT:    vmovdqa {{.*#+}} ymm4 = [256,256,1798,770,770,2312,1284,1284,4368,1798,5910,4882,2312,6424,5396,2826]
+; AVX2-FAST-PERLANE-NEXT:    vpshufb %ymm4, %ymm3, %ymm5
 ; AVX2-FAST-PERLANE-NEXT:    vpermq {{.*#+}} ymm3 = ymm3[2,3,0,1]
-; AVX2-FAST-PERLANE-NEXT:    vpshufb {{.*#+}} ymm3 = ymm3[u,u,0,1,u,u,u,u,2,3,u,u,u,u,4,5,u,u,22,23,u,u,u,u,24,25,u,u,u,u,26,27]
-; AVX2-FAST-PERLANE-NEXT:    vpblendw {{.*#+}} ymm3 = ymm4[0],ymm3[1],ymm4[2,3],ymm3[4],ymm4[5,6],ymm3[7],ymm4[8],ymm3[9],ymm4[10,11],ymm3[12],ymm4[13,14],ymm3[15]
+; AVX2-FAST-PERLANE-NEXT:    vpshufb %ymm4, %ymm3, %ymm3
+; AVX2-FAST-PERLANE-NEXT:    vpblendw {{.*#+}} ymm3 = ymm5[0],ymm3[1],ymm5[2,3],ymm3[4],ymm5[5,6],ymm3[7],ymm5[8],ymm3[9],ymm5[10,11],ymm3[12],ymm5[13,14],ymm3[15]
 ; AVX2-FAST-PERLANE-NEXT:    vpmovsxbd {{.*#+}} ymm4 = [0,0,0,0,1,1,0,2]
 ; AVX2-FAST-PERLANE-NEXT:    vpermd %ymm2, %ymm4, %ymm4
 ; AVX2-FAST-PERLANE-NEXT:    vpmovsxbw {{.*#+}} ymm5 = [65535,65535,0,65535,65535,0,65535,65535,0,65535,65535,0,65535,65535,0,65535]

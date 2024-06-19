@@ -40959,22 +40959,48 @@ static SDValue combineTargetShuffle(SDValue N, const SDLoc &DL,
     SDValue N0 = N.getOperand(0);
     SDValue N1 = N.getOperand(1);
 
-    // blend(bitcast(x),bitcast(y)) -> bitcast(blend(x,y)) to narrower types.
-    // TODO: Handle MVT::v16i16 repeated blend mask.
-    if (N0.getOpcode() == ISD::BITCAST && N1.getOpcode() == ISD::BITCAST &&
-        N0.getOperand(0).getValueType() == N1.getOperand(0).getValueType()) {
-      MVT SrcVT = N0.getOperand(0).getSimpleValueType();
-      if ((VT.getScalarSizeInBits() % SrcVT.getScalarSizeInBits()) == 0 &&
-          SrcVT.getScalarSizeInBits() >= 32) {
-        unsigned Size = VT.getVectorNumElements();
-        unsigned NewSize = SrcVT.getVectorNumElements();
-        APInt BlendMask = N.getConstantOperandAPInt(2).zextOrTrunc(Size);
-        APInt NewBlendMask = APIntOps::ScaleBitMask(BlendMask, NewSize);
-        return DAG.getBitcast(
-            VT, DAG.getNode(X86ISD::BLENDI, DL, SrcVT, N0.getOperand(0),
-                            N1.getOperand(0),
-                            DAG.getTargetConstant(NewBlendMask.getZExtValue(),
-                                                  DL, MVT::i8)));
+    if (N0.getOpcode() == ISD::BITCAST && N1.getOpcode() == ISD::BITCAST) {
+      // blend(bitcast(x),bitcast(y)) -> bitcast(blend(x,y)) to narrower types.
+      // TODO: Handle MVT::v16i16 repeated blend mask.
+      if (N0.getOperand(0).getValueType() == N1.getOperand(0).getValueType()) {
+        MVT SrcVT = N0.getOperand(0).getSimpleValueType();
+        if ((VT.getScalarSizeInBits() % SrcVT.getScalarSizeInBits()) == 0 &&
+            SrcVT.getScalarSizeInBits() >= 32) {
+          unsigned Size = VT.getVectorNumElements();
+          unsigned NewSize = SrcVT.getVectorNumElements();
+          APInt BlendMask = N.getConstantOperandAPInt(2).zextOrTrunc(Size);
+          APInt NewBlendMask = APIntOps::ScaleBitMask(BlendMask, NewSize);
+          return DAG.getBitcast(
+              VT, DAG.getNode(X86ISD::BLENDI, DL, SrcVT, N0.getOperand(0),
+                              N1.getOperand(0),
+                              DAG.getTargetConstant(NewBlendMask.getZExtValue(),
+                                                    DL, MVT::i8)));
+        }
+      }
+      // Share PSHUFB masks:
+      // blend(pshufb(x,m1),pshufb(y,m2))
+      // --> m3 = blend(m1,m2)
+      //     blend(pshufb(x,m3),pshufb(y,m3))
+      if (N0.hasOneUse() && N1.hasOneUse()) {
+        SDValue LHS = peekThroughOneUseBitcasts(N0);
+        SDValue RHS = peekThroughOneUseBitcasts(N1);
+        if (LHS.getOpcode() == X86ISD::PSHUFB &&
+            RHS.getOpcode() == X86ISD::PSHUFB &&
+            LHS.getOperand(1) != RHS.getOperand(1) &&
+            (LHS.getOperand(1).hasOneUse() || RHS.getOperand(1).hasOneUse())) {
+          MVT ShufVT = LHS.getSimpleValueType();
+          SDValue BlendMask = DAG.getBitcast(
+              ShufVT, DAG.getNode(X86ISD::BLENDI, DL, VT,
+                                  DAG.getBitcast(VT, LHS.getOperand(1)),
+                                  DAG.getBitcast(VT, RHS.getOperand(1)),
+                                  N.getOperand(2)));
+          SDValue NewLHS = DAG.getNode(X86ISD::PSHUFB, DL, ShufVT,
+                                       LHS.getOperand(0), BlendMask);
+          SDValue NewRHS = DAG.getNode(X86ISD::PSHUFB, DL, ShufVT,
+                                       RHS.getOperand(0), BlendMask);
+          return DAG.getNode(X86ISD::BLENDI, DL, VT, DAG.getBitcast(VT, NewLHS),
+                             DAG.getBitcast(VT, NewRHS), N.getOperand(2));
+        }
       }
     }
     return SDValue();
