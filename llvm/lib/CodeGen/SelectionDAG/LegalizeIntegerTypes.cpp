@@ -2920,14 +2920,14 @@ std::pair <SDValue, SDValue> DAGTypeLegalizer::ExpandAtomic(SDNode *Node) {
                          Node->getOperand(0));
 }
 
-/// N is a shift by a value that needs to be expanded,
-/// and the shift amount is a constant 'Amt'.  Expand the operation.
-void DAGTypeLegalizer::ExpandShiftByConstant(SDNode *N, const APInt &Amt,
-                                             SDValue &Lo, SDValue &Hi) {
-  SDLoc DL(N);
+/// Shift 'In' by constant shift amount 'Amt'. Expand the operation.
+void DAGTypeLegalizer::ExpandShiftByConstant(unsigned Opcode, const SDLoc &DL,
+                                             EVT VT, SDValue In,
+                                             const APInt &Amt, SDValue &Lo,
+                                             SDValue &Hi) {
   // Expand the incoming operand to be shifted, so that we have its parts
   SDValue InL, InH;
-  GetExpandedInteger(N->getOperand(0), InL, InH);
+  GetExpandedInteger(In, InL, InH);
 
   // Though Amt shouldn't usually be 0, it's possible. E.g. when legalization
   // splitted a vector shift, like this: <op1, op2> SHL <0, 2>.
@@ -2938,10 +2938,10 @@ void DAGTypeLegalizer::ExpandShiftByConstant(SDNode *N, const APInt &Amt,
   }
 
   EVT NVT = InL.getValueType();
-  unsigned VTBits = N->getValueType(0).getSizeInBits();
+  unsigned VTBits = VT.getSizeInBits();
   unsigned NVTBits = NVT.getSizeInBits();
 
-  if (N->getOpcode() == ISD::SHL) {
+  if (Opcode == ISD::SHL) {
     if (Amt.uge(VTBits)) {
       Lo = Hi = DAG.getConstant(0, DL, NVT);
     } else if (Amt.ugt(NVTBits)) {
@@ -2964,7 +2964,7 @@ void DAGTypeLegalizer::ExpandShiftByConstant(SDNode *N, const APInt &Amt,
     return;
   }
 
-  if (N->getOpcode() == ISD::SRL) {
+  if (Opcode == ISD::SRL) {
     if (Amt.uge(VTBits)) {
       Lo = Hi = DAG.getConstant(0, DL, NVT);
     } else if (Amt.ugt(NVTBits)) {
@@ -2987,7 +2987,7 @@ void DAGTypeLegalizer::ExpandShiftByConstant(SDNode *N, const APInt &Amt,
     return;
   }
 
-  assert(N->getOpcode() == ISD::SRA && "Unknown shift!");
+  assert(Opcode == ISD::SRA && "Unknown shift!");
   if (Amt.uge(VTBits)) {
     Hi = Lo = DAG.getNode(ISD::SRA, DL, NVT, InH,
                           DAG.getShiftAmountConstant(NVTBits - 1, NVT, DL));
@@ -3792,12 +3792,25 @@ void DAGTypeLegalizer::ExpandIntRes_CTLZ(SDNode *N,
   Hi = DAG.getConstant(0, dl, NVT);
 }
 
-void DAGTypeLegalizer::ExpandIntRes_CTPOP(SDNode *N,
-                                          SDValue &Lo, SDValue &Hi) {
+void DAGTypeLegalizer::ExpandIntRes_CTPOP(SDNode *N, SDValue &Lo, SDValue &Hi) {
   SDLoc dl(N);
+  EVT VT = N->getValueType(0);
+
   // ctpop(HiLo) -> ctpop(Hi)+ctpop(Lo)
   GetExpandedInteger(N->getOperand(0), Lo, Hi);
   EVT NVT = Lo.getValueType();
+
+  // If the active bits would fit into the half type, then shift down and
+  // only perform ctpop in the shifted lower half.
+  KnownBits Known = DAG.computeKnownBits(N->getOperand(0));
+  unsigned LZ = Known.countMinLeadingZeros();
+  unsigned TZ = Known.countMinTrailingZeros();
+  unsigned BitWidth = VT.getScalarSizeInBits();
+  unsigned LoBits = NVT.getScalarSizeInBits();
+  if ((BitWidth - (LZ + TZ)) <= LoBits)
+    ExpandShiftByConstant(ISD::SRL, dl, VT, N->getOperand(0), APInt(LoBits, TZ),
+                          Lo, Hi);
+
   Lo = DAG.getNode(ISD::ADD, dl, NVT, DAG.getNode(ISD::CTPOP, dl, NVT, Lo),
                    DAG.getNode(ISD::CTPOP, dl, NVT, Hi));
   Hi = DAG.getConstant(0, dl, NVT);
@@ -4635,8 +4648,9 @@ void DAGTypeLegalizer::ExpandIntRes_Shift(SDNode *N,
 
   // If we can emit an efficient shift operation, do so now.  Check to see if
   // the RHS is a constant.
-  if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(N->getOperand(1)))
-    return ExpandShiftByConstant(N, CN->getAPIntValue(), Lo, Hi);
+  if (auto *CN = dyn_cast<ConstantSDNode>(N->getOperand(1)))
+    return ExpandShiftByConstant(N->getOpcode(), dl, VT, N->getOperand(0),
+                                 CN->getAPIntValue(), Lo, Hi);
 
   // If we can determine that the high bit of the shift is zero or one, even if
   // the low bits are variable, emit this shift in an optimized form.
