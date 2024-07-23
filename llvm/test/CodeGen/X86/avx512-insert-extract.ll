@@ -1665,11 +1665,14 @@ define i32 @test_insertelement_variable_v32i1(<32 x i8> %a, i8 %b, i32 %index) n
 ;
 ; SKX-LABEL: test_insertelement_variable_v32i1:
 ; SKX:       ## %bb.0:
+; SKX-NEXT:    movl %esi, %ecx
 ; SKX-NEXT:    vptestmb %ymm0, %ymm0, %k0
 ; SKX-NEXT:    testb %dil, %dil
 ; SKX-NEXT:    setne %al
-; SKX-NEXT:    vpbroadcastb %esi, %ymm0
-; SKX-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %k1
+; SKX-NEXT:    movl $1, %edx
+; SKX-NEXT:    ## kill: def $cl killed $cl killed $ecx
+; SKX-NEXT:    shll %cl, %edx
+; SKX-NEXT:    kmovd %edx, %k1
 ; SKX-NEXT:    vpmovm2b %k0, %ymm0
 ; SKX-NEXT:    vpbroadcastb %eax, %ymm0 {%k1}
 ; SKX-NEXT:    vpsllw $7, %ymm0, %ymm0
@@ -1731,11 +1734,14 @@ define i64 @test_insertelement_variable_v64i1(<64 x i8> %a, i8 %b, i32 %index) n
 ;
 ; SKX-LABEL: test_insertelement_variable_v64i1:
 ; SKX:       ## %bb.0:
+; SKX-NEXT:    movl %esi, %ecx
 ; SKX-NEXT:    vptestmb %zmm0, %zmm0, %k0
 ; SKX-NEXT:    testb %dil, %dil
 ; SKX-NEXT:    setne %al
-; SKX-NEXT:    vpbroadcastb %esi, %zmm0
-; SKX-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %zmm0, %k1
+; SKX-NEXT:    movl $1, %edx
+; SKX-NEXT:    ## kill: def $cl killed $cl killed $ecx
+; SKX-NEXT:    shlq %cl, %rdx
+; SKX-NEXT:    kmovq %rdx, %k1
 ; SKX-NEXT:    vpmovm2b %k0, %zmm0
 ; SKX-NEXT:    vpbroadcastb %eax, %zmm0 {%k1}
 ; SKX-NEXT:    vpsllw $7, %zmm0, %zmm0

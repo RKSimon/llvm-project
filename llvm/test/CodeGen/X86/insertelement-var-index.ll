@@ -852,8 +852,11 @@ define <16 x i8> @arg_i8_v16i8(<16 x i8> %v, i8 %x, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: arg_i8_v16i8:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastb %esi, %xmm1
-; AVX512BW-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastb %edi, %xmm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -906,8 +909,11 @@ define <8 x i16> @arg_i16_v8i16(<8 x i16> %v, i16 %x, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: arg_i16_v8i16:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastw %esi, %xmm1
-; AVX512BW-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastw %edi, %xmm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -949,12 +955,25 @@ define <4 x i32> @arg_i32_v4i32(<4 x i32> %v, i32 %x, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    vmovaps -{{[0-9]+}}(%rsp), %xmm0
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_i32_v4i32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %xmm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vpbroadcastd %edi, %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_i32_v4i32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastd %edi, %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_i32_v4i32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastd %edi, %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_i32_v4i32:
 ; X86AVX2:       # %bb.0:
@@ -994,13 +1013,25 @@ define <2 x i64> @arg_i64_v2i64(<2 x i64> %v, i64 %x, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    vmovaps -{{[0-9]+}}(%rsp), %xmm0
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_i64_v2i64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %xmm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vpbroadcastq %rdi, %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_i64_v2i64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastq %rdi, %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_i64_v2i64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastq %rdi, %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_i64_v2i64:
 ; X86AVX2:       # %bb.0:
@@ -1070,12 +1101,25 @@ define <4 x float> @arg_f32_v4f32(<4 x float> %v, float %x, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvps %xmm2, %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_f32_v4f32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %edi, %xmm2
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %k1
-; AVX512-NEXT:    vbroadcastss %xmm1, %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_f32_v4f32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %edi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastss %xmm1, %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_f32_v4f32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %edi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastss %xmm1, %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_f32_v4f32:
 ; X86AVX2:       # %bb.0:
@@ -1128,13 +1172,25 @@ define <2 x double> @arg_f64_v2f64(<2 x double> %v, double %x, i32 %y) nounwind 
 ; AVX2-NEXT:    vblendvpd %xmm2, %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_f64_v2f64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %edi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %xmm2
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2, %k1
-; AVX512-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = xmm1[0,0]
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_f64_v2f64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %edi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = xmm1[0,0]
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_f64_v2f64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %edi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = xmm1[0,0]
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_f64_v2f64:
 ; X86AVX2:       # %bb.0:
@@ -1188,8 +1244,11 @@ define <16 x i8> @load_i8_v16i8(<16 x i8> %v, ptr %p, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: load_i8_v16i8:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastb %esi, %xmm1
-; AVX512BW-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastb (%rdi), %xmm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -1247,8 +1306,11 @@ define <8 x i16> @load_i16_v8i16(<8 x i16> %v, ptr %p, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: load_i16_v8i16:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastw %esi, %xmm1
-; AVX512BW-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastw (%rdi), %xmm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -1294,12 +1356,25 @@ define <4 x i32> @load_i32_v4i32(<4 x i32> %v, ptr %p, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    vmovaps -{{[0-9]+}}(%rsp), %xmm0
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: load_i32_v4i32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %xmm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vpbroadcastd (%rdi), %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_i32_v4i32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastd (%rdi), %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_i32_v4i32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastd (%rdi), %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_i32_v4i32:
 ; X86AVX2:       # %bb.0:
@@ -1343,13 +1418,25 @@ define <2 x i64> @load_i64_v2i64(<2 x i64> %v, ptr %p, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    vmovaps -{{[0-9]+}}(%rsp), %xmm0
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: load_i64_v2i64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %xmm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vpbroadcastq (%rdi), %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_i64_v2i64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastq (%rdi), %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_i64_v2i64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastq (%rdi), %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_i64_v2i64:
 ; X86AVX2:       # %bb.0:
@@ -1423,12 +1510,25 @@ define <4 x float> @load_f32_v4f32(<4 x float> %v, ptr %p, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvps %xmm2, %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: load_f32_v4f32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %xmm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vbroadcastss (%rdi), %xmm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_f32_v4f32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastss (%rdi), %xmm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_f32_v4f32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastss (%rdi), %xmm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_f32_v4f32:
 ; X86AVX2:       # %bb.0:
@@ -1484,13 +1584,25 @@ define <2 x double> @load_f64_v2f64(<2 x double> %v, ptr %p, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvpd %xmm2, %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: load_f64_v2f64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %xmm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm1, %k1
-; AVX512-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = mem[0,0]
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_f64_v2f64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = mem[0,0]
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_f64_v2f64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vmovddup {{.*#+}} xmm0 {%k1} = mem[0,0]
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_f64_v2f64:
 ; X86AVX2:       # %bb.0:
@@ -1557,8 +1669,11 @@ define <32 x i8> @arg_i8_v32i8(<32 x i8> %v, i8 %x, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: arg_i8_v32i8:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastb %esi, %ymm1
-; AVX512BW-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastb %edi, %ymm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -1625,8 +1740,11 @@ define <16 x i16> @arg_i16_v16i16(<16 x i16> %v, i16 %x, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: arg_i16_v16i16:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastw %esi, %ymm1
-; AVX512BW-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastw %edi, %ymm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -1676,12 +1794,25 @@ define <8 x i32> @arg_i32_v8i32(<8 x i32> %v, i32 %x, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    popq %rbp
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_i32_v8i32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %ymm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vpbroadcastd %edi, %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_i32_v8i32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastd %edi, %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_i32_v8i32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastd %edi, %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_i32_v8i32:
 ; X86AVX2:       # %bb.0:
@@ -1729,13 +1860,25 @@ define <4 x i64> @arg_i64_v4i64(<4 x i64> %v, i64 %x, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    popq %rbp
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_i64_v4i64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %ymm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vpbroadcastq %rdi, %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_i64_v4i64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastq %rdi, %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_i64_v4i64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastq %rdi, %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_i64_v4i64:
 ; X86AVX2:       # %bb.0:
@@ -1799,12 +1942,25 @@ define <8 x float> @arg_f32_v8f32(<8 x float> %v, float %x, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvps %ymm2, %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_f32_v8f32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %edi, %ymm2
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm2, %k1
-; AVX512-NEXT:    vbroadcastss %xmm1, %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_f32_v8f32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %edi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastss %xmm1, %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_f32_v8f32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %edi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastss %xmm1, %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_f32_v8f32:
 ; X86AVX2:       # %bb.0:
@@ -1852,13 +2008,25 @@ define <4 x double> @arg_f64_v4f64(<4 x double> %v, double %x, i32 %y) nounwind 
 ; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: arg_f64_v4f64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %edi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %ymm2
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm2, %k1
-; AVX512-NEXT:    vbroadcastsd %xmm1, %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: arg_f64_v4f64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %edi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastsd %xmm1, %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: arg_f64_v4f64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %edi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastsd %xmm1, %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: arg_f64_v4f64:
 ; X86AVX2:       # %bb.0:
@@ -1926,8 +2094,11 @@ define <32 x i8> @load_i8_v32i8(<32 x i8> %v, ptr %p, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: load_i8_v32i8:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastb %esi, %ymm1
-; AVX512BW-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastb (%rdi), %ymm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -1999,8 +2170,11 @@ define <16 x i16> @load_i16_v16i16(<16 x i16> %v, ptr %p, i32 %y) nounwind {
 ;
 ; AVX512BW-LABEL: load_i16_v16i16:
 ; AVX512BW:       # %bb.0:
-; AVX512BW-NEXT:    vpbroadcastw %esi, %ymm1
-; AVX512BW-NEXT:    vpcmpeqw {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movl $1, %eax
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shll %cl, %eax
+; AVX512BW-NEXT:    kmovd %eax, %k1
 ; AVX512BW-NEXT:    vpbroadcastw (%rdi), %ymm0 {%k1}
 ; AVX512BW-NEXT:    retq
 ;
@@ -2054,12 +2228,25 @@ define <8 x i32> @load_i32_v8i32(<8 x i32> %v, ptr %p, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    popq %rbp
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: load_i32_v8i32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %ymm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vpbroadcastd (%rdi), %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_i32_v8i32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastd (%rdi), %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_i32_v8i32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastd (%rdi), %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_i32_v8i32:
 ; X86AVX2:       # %bb.0:
@@ -2111,13 +2298,25 @@ define <4 x i64> @load_i64_v4i64(<4 x i64> %v, ptr %p, i32 %y) nounwind {
 ; AVX1OR2-NEXT:    popq %rbp
 ; AVX1OR2-NEXT:    retq
 ;
-; AVX512-LABEL: load_i64_v4i64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %ymm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vpbroadcastq (%rdi), %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_i64_v4i64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vpbroadcastq (%rdi), %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_i64_v4i64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vpbroadcastq (%rdi), %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_i64_v4i64:
 ; X86AVX2:       # %bb.0:
@@ -2183,12 +2382,25 @@ define <8 x float> @load_f32_v8f32(<8 x float> %v, ptr %p, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvps %ymm2, %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: load_f32_v8f32:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    vpbroadcastd %esi, %ymm1
-; AVX512-NEXT:    vpcmpeqd {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vbroadcastss (%rdi), %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_f32_v8f32:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastss (%rdi), %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_f32_v8f32:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastss (%rdi), %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_f32_v8f32:
 ; X86AVX2:       # %bb.0:
@@ -2238,13 +2450,25 @@ define <4 x double> @load_f64_v4f64(<4 x double> %v, ptr %p, i32 %y) nounwind {
 ; AVX2-NEXT:    vblendvpd %ymm2, %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    retq
 ;
-; AVX512-LABEL: load_f64_v4f64:
-; AVX512:       # %bb.0:
-; AVX512-NEXT:    movl %esi, %eax
-; AVX512-NEXT:    vpbroadcastq %rax, %ymm1
-; AVX512-NEXT:    vpcmpeqq {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm1, %k1
-; AVX512-NEXT:    vbroadcastsd (%rdi), %ymm0 {%k1}
-; AVX512-NEXT:    retq
+; AVX512F-LABEL: load_f64_v4f64:
+; AVX512F:       # %bb.0:
+; AVX512F-NEXT:    movl %esi, %ecx
+; AVX512F-NEXT:    movb $1, %al
+; AVX512F-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512F-NEXT:    shlb %cl, %al
+; AVX512F-NEXT:    kmovw %eax, %k1
+; AVX512F-NEXT:    vbroadcastsd (%rdi), %ymm0 {%k1}
+; AVX512F-NEXT:    retq
+;
+; AVX512BW-LABEL: load_f64_v4f64:
+; AVX512BW:       # %bb.0:
+; AVX512BW-NEXT:    movl %esi, %ecx
+; AVX512BW-NEXT:    movb $1, %al
+; AVX512BW-NEXT:    # kill: def $cl killed $cl killed $ecx
+; AVX512BW-NEXT:    shlb %cl, %al
+; AVX512BW-NEXT:    kmovd %eax, %k1
+; AVX512BW-NEXT:    vbroadcastsd (%rdi), %ymm0 {%k1}
+; AVX512BW-NEXT:    retq
 ;
 ; X86AVX2-LABEL: load_f64_v4f64:
 ; X86AVX2:       # %bb.0:

@@ -18226,6 +18226,21 @@ SDValue X86TargetLowering::LowerINSERT_VECTOR_ELT(SDValue Op,
           (Subtarget.hasSSE41() && (EltVT == MVT::f32 || EltVT == MVT::f64))))
       return SDValue();
 
+    unsigned NumMaskElts = std::max(NumElts, 8u);
+    MVT IntMaskVT = MVT::getIntegerVT(NumMaskElts);
+    MVT MaskVT = MVT::getVectorVT(MVT::i1, NumMaskElts);
+    if (isTypeLegal(MaskVT)) {
+      SDValue Mask = DAG.getNode(ISD::SHL, dl, IntMaskVT,
+                                 DAG.getConstant(1, dl, IntMaskVT),
+                                 DAG.getZExtOrTrunc(N2, dl, MVT::i8));
+      Mask = DAG.getBitcast(MaskVT, Mask);
+      Mask = DAG.getNode(ISD::EXTRACT_SUBVECTOR, dl,
+                         MVT::getVectorVT(MVT::i1, NumElts), Mask,
+                         DAG.getVectorIdxConstant(0, dl));
+      SDValue EltSplat = DAG.getSplatBuildVector(VT, dl, N1);
+      return DAG.getSelect(dl, VT, Mask, EltSplat, N0);
+    }
+
     MVT IdxSVT = MVT::getIntegerVT(EltSizeInBits);
     MVT IdxVT = MVT::getVectorVT(IdxSVT, NumElts);
     if (!isTypeLegal(IdxSVT) || !isTypeLegal(IdxVT))

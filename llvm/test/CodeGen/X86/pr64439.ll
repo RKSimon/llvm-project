@@ -7,8 +7,9 @@ define void @f(ptr %0, <32 x i1> %1, i32 %2) nounwind {
 ; CHECK-NEXT:    vpsllw $7, %ymm0, %ymm1
 ; CHECK-NEXT:    vpmovb2m %ymm1, %k0
 ; CHECK-NEXT:    vpextrb $3, %xmm0, %eax
-; CHECK-NEXT:    vpbroadcastb %esi, %ymm0
-; CHECK-NEXT:    vpcmpeqb {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %ymm0, %k1
+; CHECK-NEXT:    movl $1, %ecx
+; CHECK-NEXT:    shlxl %esi, %ecx, %ecx
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    vpmovm2b %k0, %ymm0
 ; CHECK-NEXT:    vpbroadcastb %eax, %ymm0 {%k1}
 ; CHECK-NEXT:    vpsllw $7, %ymm0, %ymm0
