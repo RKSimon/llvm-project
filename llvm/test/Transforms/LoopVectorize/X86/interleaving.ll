@@ -3,7 +3,7 @@
 ; RUN: opt -S -mtriple=x86_64-pc_linux -passes=loop-vectorize,instcombine -mcpu=sandybridge < %s | FileCheck %s --check-prefix=AVX1
 ; RUN: opt -S -mtriple=x86_64-pc_linux -passes=loop-vectorize,instcombine -mcpu=haswell < %s | FileCheck %s --check-prefix=AVX2
 ; RUN: opt -S -mtriple=x86_64-pc_linux -passes=loop-vectorize,instcombine -mcpu=slm < %s | FileCheck %s --check-prefix=SSE
-; RUN: opt -S -mtriple=x86_64-pc_linux -passes=loop-vectorize,instcombine -mcpu=atom < %s | FileCheck %s --check-prefix=ATOM
+; RUN: opt -S -mtriple=x86_64-pc_linux -passes=loop-vectorize,instcombine -mcpu=atom < %s | FileCheck %s --check-prefix=SSE
 
 define void @foo(ptr noalias nocapture %a, ptr noalias nocapture readonly %b) {
 ; SSE-LABEL: @foo(
@@ -149,26 +149,6 @@ define void @foo(ptr noalias nocapture %a, ptr noalias nocapture readonly %b) {
 ; AVX2-NEXT:    ret void
 ; AVX2:       for.body:
 ; AVX2-NEXT:    br i1 poison, label [[FOR_COND_CLEANUP]], label [[FOR_BODY]], !llvm.loop [[LOOP3:![0-9]+]]
-;
-; ATOM-LABEL: @foo(
-; ATOM-NEXT:  entry:
-; ATOM-NEXT:    br label [[FOR_BODY:%.*]]
-; ATOM:       for.cond.cleanup:
-; ATOM-NEXT:    ret void
-; ATOM:       for.body:
-; ATOM-NEXT:    [[INDVARS_IV:%.*]] = phi i64 [ 0, [[ENTRY:%.*]] ], [ [[INDVARS_IV_NEXT:%.*]], [[FOR_BODY]] ]
-; ATOM-NEXT:    [[TMP0:%.*]] = shl nuw nsw i64 [[INDVARS_IV]], 1
-; ATOM-NEXT:    [[ARRAYIDX:%.*]] = getelementptr inbounds i32, ptr [[B:%.*]], i64 [[TMP0]]
-; ATOM-NEXT:    [[TMP1:%.*]] = load i32, ptr [[ARRAYIDX]], align 4
-; ATOM-NEXT:    [[TMP2:%.*]] = or disjoint i64 [[TMP0]], 1
-; ATOM-NEXT:    [[ARRAYIDX3:%.*]] = getelementptr inbounds i32, ptr [[B]], i64 [[TMP2]]
-; ATOM-NEXT:    [[TMP3:%.*]] = load i32, ptr [[ARRAYIDX3]], align 4
-; ATOM-NEXT:    [[ADD4:%.*]] = add nsw i32 [[TMP3]], [[TMP1]]
-; ATOM-NEXT:    [[ARRAYIDX6:%.*]] = getelementptr inbounds i32, ptr [[A:%.*]], i64 [[INDVARS_IV]]
-; ATOM-NEXT:    store i32 [[ADD4]], ptr [[ARRAYIDX6]], align 4
-; ATOM-NEXT:    [[INDVARS_IV_NEXT]] = add nuw nsw i64 [[INDVARS_IV]], 1
-; ATOM-NEXT:    [[EXITCOND:%.*]] = icmp eq i64 [[INDVARS_IV_NEXT]], 1024
-; ATOM-NEXT:    br i1 [[EXITCOND]], label [[FOR_COND_CLEANUP:%.*]], label [[FOR_BODY]]
 ;
 entry:
   br label %for.body

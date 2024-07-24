@@ -232,9 +232,6 @@ unsigned X86TTIImpl::getMaxInterleaveFactor(ElementCount VF) {
   if (VF.isScalar())
     return 1;
 
-  if (ST->isAtom())
-    return 1;
-
   // Sandybridge and Haswell have multiple execution ports and pipelined
   // vector units.
   if (ST->hasAVX())
@@ -6243,10 +6240,7 @@ bool X86TTIImpl::supportsEfficientVectorElementLoadStore() const {
 }
 
 bool X86TTIImpl::enableInterleavedAccessVectorization() {
-  // TODO: We expect this to be beneficial regardless of arch,
-  // but there are currently some unexplained performance artifacts on Atom.
-  // As a temporary solution, disable on Atom.
-  return !(ST->isAtom());
+  return true;
 }
 
 // Get estimation for interleaved load/store operations and strided load.
