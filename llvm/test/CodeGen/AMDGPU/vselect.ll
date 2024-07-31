@@ -130,10 +130,10 @@ define amdgpu_kernel void @test_select_v2f32(ptr addrspace(1) %out, ptr addrspac
 ; EG-NEXT:     MOV T0.X, KC0[2].Z,
 ; EG-NEXT:     MOV * T1.X, KC0[2].W,
 ; EG-NEXT:    ALU clause starting at 12:
-; EG-NEXT:     SETNE_DX10 * T0.W, T0.Y, T1.Y,
-; EG-NEXT:     CNDE_INT T0.Y, PV.W, T1.Y, T0.Y,
-; EG-NEXT:     SETNE_DX10 * T0.W, T0.X, T1.X,
-; EG-NEXT:     CNDE_INT T0.X, PV.W, T1.X, T0.X,
+; EG-NEXT:     SETNE * T0.W, T0.Y, T1.Y,
+; EG-NEXT:     CNDE T0.Y, PV.W, T1.Y, T0.Y,
+; EG-NEXT:     SETNE * T0.W, T0.X, T1.X,
+; EG-NEXT:     CNDE T0.X, PV.W, T1.X, T0.X,
 ; EG-NEXT:     LSHR * T1.X, KC0[2].Y, literal.x,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
 entry:
@@ -310,14 +310,14 @@ define amdgpu_kernel void @test_select_v4f32(ptr addrspace(1) %out, ptr addrspac
 ; EG-NEXT:     MOV T0.X, KC0[2].Z,
 ; EG-NEXT:     MOV * T1.X, KC0[2].W,
 ; EG-NEXT:    ALU clause starting at 12:
-; EG-NEXT:     SETNE_DX10 T2.W, T0.W, T1.W,
-; EG-NEXT:     SETNE_DX10 * T3.W, T0.Z, T1.Z,
-; EG-NEXT:     CNDE_INT * T0.W, PV.W, T1.W, T0.W,
-; EG-NEXT:     CNDE_INT T0.Z, T3.W, T1.Z, T0.Z,
-; EG-NEXT:     SETNE_DX10 * T1.W, T0.Y, T1.Y,
-; EG-NEXT:     CNDE_INT T0.Y, PV.W, T1.Y, T0.Y,
-; EG-NEXT:     SETNE_DX10 * T1.W, T0.X, T1.X,
-; EG-NEXT:     CNDE_INT T0.X, PV.W, T1.X, T0.X,
+; EG-NEXT:     SETNE T2.W, T0.W, T1.W,
+; EG-NEXT:     SETNE * T3.W, T0.Z, T1.Z,
+; EG-NEXT:     CNDE * T0.W, PV.W, T1.W, T0.W,
+; EG-NEXT:     CNDE T0.Z, T3.W, T1.Z, T0.Z,
+; EG-NEXT:     SETNE * T1.W, T0.Y, T1.Y,
+; EG-NEXT:     CNDE T0.Y, PV.W, T1.Y, T0.Y,
+; EG-NEXT:     SETNE * T1.W, T0.X, T1.X,
+; EG-NEXT:     CNDE T0.X, PV.W, T1.X, T0.X,
 ; EG-NEXT:     LSHR * T1.X, KC0[2].Y, literal.x,
 ; EG-NEXT:    2(2.802597e-45), 0(0.000000e+00)
 entry:

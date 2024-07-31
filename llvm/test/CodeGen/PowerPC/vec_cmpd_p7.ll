@@ -43,16 +43,22 @@ define <2 x i64> @v2si64_cmp_gt(<2 x i64> %x, <2 x i64> %y) nounwind readnone {
 ; CHECK-NEXT:    addi 3, 1, -48
 ; CHECK-NEXT:    stxvd2x 1, 0, 3
 ; CHECK-NEXT:    ld 3, -24(1)
-; CHECK-NEXT:    ld 4, -40(1)
-; CHECK-NEXT:    ld 6, -48(1)
-; CHECK-NEXT:    cmpd 4, 3
-; CHECK-NEXT:    li 3, 0
-; CHECK-NEXT:    li 4, -1
-; CHECK-NEXT:    iselgt 5, 4, 3
-; CHECK-NEXT:    std 5, -8(1)
-; CHECK-NEXT:    ld 5, -32(1)
-; CHECK-NEXT:    cmpd 6, 5
-; CHECK-NEXT:    iselgt 3, 4, 3
+; CHECK-NEXT:    ld 5, -40(1)
+; CHECK-NEXT:    sradi 4, 3, 63
+; CHECK-NEXT:    rldicl 6, 5, 1, 63
+; CHECK-NEXT:    subc 3, 3, 5
+; CHECK-NEXT:    ld 5, -48(1)
+; CHECK-NEXT:    adde 3, 6, 4
+; CHECK-NEXT:    rldicl 6, 5, 1, 63
+; CHECK-NEXT:    xori 3, 3, 1
+; CHECK-NEXT:    neg 3, 3
+; CHECK-NEXT:    std 3, -8(1)
+; CHECK-NEXT:    ld 3, -32(1)
+; CHECK-NEXT:    sradi 4, 3, 63
+; CHECK-NEXT:    subc 3, 3, 5
+; CHECK-NEXT:    adde 3, 6, 4
+; CHECK-NEXT:    xori 3, 3, 1
+; CHECK-NEXT:    neg 3, 3
 ; CHECK-NEXT:    std 3, -16(1)
 ; CHECK-NEXT:    addi 3, 1, -16
 ; CHECK-NEXT:    lxvd2x 0, 0, 3
@@ -66,16 +72,22 @@ define <2 x i64> @v2si64_cmp_gt(<2 x i64> %x, <2 x i64> %y) nounwind readnone {
 ; CHECK-BE-NEXT:    addi 3, 1, -48
 ; CHECK-BE-NEXT:    stxvd2x 34, 0, 3
 ; CHECK-BE-NEXT:    ld 3, -24(1)
-; CHECK-BE-NEXT:    ld 4, -40(1)
-; CHECK-BE-NEXT:    ld 6, -48(1)
-; CHECK-BE-NEXT:    cmpd 4, 3
-; CHECK-BE-NEXT:    li 3, 0
-; CHECK-BE-NEXT:    li 4, -1
-; CHECK-BE-NEXT:    iselgt 5, 4, 3
-; CHECK-BE-NEXT:    std 5, -8(1)
-; CHECK-BE-NEXT:    ld 5, -32(1)
-; CHECK-BE-NEXT:    cmpd 6, 5
-; CHECK-BE-NEXT:    iselgt 3, 4, 3
+; CHECK-BE-NEXT:    ld 5, -40(1)
+; CHECK-BE-NEXT:    sradi 4, 3, 63
+; CHECK-BE-NEXT:    rldicl 6, 5, 1, 63
+; CHECK-BE-NEXT:    subc 3, 3, 5
+; CHECK-BE-NEXT:    ld 5, -48(1)
+; CHECK-BE-NEXT:    adde 3, 6, 4
+; CHECK-BE-NEXT:    rldicl 6, 5, 1, 63
+; CHECK-BE-NEXT:    xori 3, 3, 1
+; CHECK-BE-NEXT:    neg 3, 3
+; CHECK-BE-NEXT:    std 3, -8(1)
+; CHECK-BE-NEXT:    ld 3, -32(1)
+; CHECK-BE-NEXT:    sradi 4, 3, 63
+; CHECK-BE-NEXT:    subc 3, 3, 5
+; CHECK-BE-NEXT:    adde 3, 6, 4
+; CHECK-BE-NEXT:    xori 3, 3, 1
+; CHECK-BE-NEXT:    neg 3, 3
 ; CHECK-BE-NEXT:    std 3, -16(1)
 ; CHECK-BE-NEXT:    addi 3, 1, -16
 ; CHECK-BE-NEXT:    lxvd2x 34, 0, 3
@@ -89,23 +101,21 @@ define <2 x i64> @v2si64_cmp_gt(<2 x i64> %x, <2 x i64> %y) nounwind readnone {
 define <2 x i64> @v2ui64_cmp_gt(<2 x i64> %x, <2 x i64> %y) nounwind readnone {
 ; CHECK-LABEL: v2ui64_cmp_gt:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    xxswapd 0, 35
-; CHECK-NEXT:    addi 3, 1, -32
-; CHECK-NEXT:    xxswapd 1, 34
-; CHECK-NEXT:    stxvd2x 0, 0, 3
+; CHECK-NEXT:    xxswapd 0, 34
 ; CHECK-NEXT:    addi 3, 1, -48
+; CHECK-NEXT:    xxswapd 1, 35
+; CHECK-NEXT:    stxvd2x 0, 0, 3
+; CHECK-NEXT:    addi 3, 1, -32
 ; CHECK-NEXT:    stxvd2x 1, 0, 3
-; CHECK-NEXT:    ld 3, -24(1)
-; CHECK-NEXT:    ld 4, -40(1)
-; CHECK-NEXT:    ld 6, -48(1)
-; CHECK-NEXT:    cmpld 4, 3
-; CHECK-NEXT:    li 3, 0
-; CHECK-NEXT:    li 4, -1
-; CHECK-NEXT:    iselgt 5, 4, 3
-; CHECK-NEXT:    std 5, -8(1)
-; CHECK-NEXT:    ld 5, -32(1)
-; CHECK-NEXT:    cmpld 6, 5
-; CHECK-NEXT:    iselgt 3, 4, 3
+; CHECK-NEXT:    ld 3, -40(1)
+; CHECK-NEXT:    ld 4, -24(1)
+; CHECK-NEXT:    subc 3, 4, 3
+; CHECK-NEXT:    subfe 3, 4, 4
+; CHECK-NEXT:    ld 4, -32(1)
+; CHECK-NEXT:    std 3, -8(1)
+; CHECK-NEXT:    ld 3, -48(1)
+; CHECK-NEXT:    subc 3, 4, 3
+; CHECK-NEXT:    subfe 3, 4, 4
 ; CHECK-NEXT:    std 3, -16(1)
 ; CHECK-NEXT:    addi 3, 1, -16
 ; CHECK-NEXT:    lxvd2x 0, 0, 3
@@ -114,21 +124,19 @@ define <2 x i64> @v2ui64_cmp_gt(<2 x i64> %x, <2 x i64> %y) nounwind readnone {
 ;
 ; CHECK-BE-LABEL: v2ui64_cmp_gt:
 ; CHECK-BE:       # %bb.0:
-; CHECK-BE-NEXT:    addi 3, 1, -32
-; CHECK-BE-NEXT:    stxvd2x 35, 0, 3
 ; CHECK-BE-NEXT:    addi 3, 1, -48
 ; CHECK-BE-NEXT:    stxvd2x 34, 0, 3
-; CHECK-BE-NEXT:    ld 3, -24(1)
-; CHECK-BE-NEXT:    ld 4, -40(1)
-; CHECK-BE-NEXT:    ld 6, -48(1)
-; CHECK-BE-NEXT:    cmpld 4, 3
-; CHECK-BE-NEXT:    li 3, 0
-; CHECK-BE-NEXT:    li 4, -1
-; CHECK-BE-NEXT:    iselgt 5, 4, 3
-; CHECK-BE-NEXT:    std 5, -8(1)
-; CHECK-BE-NEXT:    ld 5, -32(1)
-; CHECK-BE-NEXT:    cmpld 6, 5
-; CHECK-BE-NEXT:    iselgt 3, 4, 3
+; CHECK-BE-NEXT:    addi 3, 1, -32
+; CHECK-BE-NEXT:    stxvd2x 35, 0, 3
+; CHECK-BE-NEXT:    ld 3, -40(1)
+; CHECK-BE-NEXT:    ld 4, -24(1)
+; CHECK-BE-NEXT:    subc 3, 4, 3
+; CHECK-BE-NEXT:    subfe 3, 4, 4
+; CHECK-BE-NEXT:    ld 4, -32(1)
+; CHECK-BE-NEXT:    std 3, -8(1)
+; CHECK-BE-NEXT:    ld 3, -48(1)
+; CHECK-BE-NEXT:    subc 3, 4, 3
+; CHECK-BE-NEXT:    subfe 3, 4, 4
 ; CHECK-BE-NEXT:    std 3, -16(1)
 ; CHECK-BE-NEXT:    addi 3, 1, -16
 ; CHECK-BE-NEXT:    lxvd2x 34, 0, 3

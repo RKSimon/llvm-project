@@ -11,28 +11,24 @@ define <2 x i1> @uaddo(ptr %ptr, ptr %ptr2) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    push {r4, r5, r6, r7, lr}
 ; CHECK-NEXT:    vld1.64 {d18, d19}, [r0]
+; CHECK-NEXT:    movs r7, #0
 ; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]
 ; CHECK-NEXT:    vmov r3, r2, d18
 ; CHECK-NEXT:    vadd.i64 q8, q9, q8
-; CHECK-NEXT:    movs r1, #0
-; CHECK-NEXT:    vmov r6, r7, d19
-; CHECK-NEXT:    vmov lr, r12, d16
-; CHECK-NEXT:    vmov r4, r5, d17
-; CHECK-NEXT:    subs.w r3, lr, r3
-; CHECK-NEXT:    sbcs.w r2, r12, r2
-; CHECK-NEXT:    mov.w r2, #0
-; CHECK-NEXT:    it lo
-; CHECK-NEXT:    movlo r2, #1
-; CHECK-NEXT:    cmp r2, #0
-; CHECK-NEXT:    it ne
-; CHECK-NEXT:    movne.w r2, #-1
-; CHECK-NEXT:    subs r3, r4, r6
-; CHECK-NEXT:    sbcs.w r3, r5, r7
+; CHECK-NEXT:    vmov r5, r6, d19
+; CHECK-NEXT:    vmov r1, r12, d16
+; CHECK-NEXT:    vmov lr, r4, d17
+; CHECK-NEXT:    subs r1, r1, r3
+; CHECK-NEXT:    sbcs.w r1, r12, r2
+; CHECK-NEXT:    mov.w r1, #0
 ; CHECK-NEXT:    it lo
 ; CHECK-NEXT:    movlo r1, #1
-; CHECK-NEXT:    cmp r1, #0
-; CHECK-NEXT:    it ne
-; CHECK-NEXT:    movne.w r1, #-1
+; CHECK-NEXT:    rsbs r2, r1, #0
+; CHECK-NEXT:    subs.w r1, lr, r5
+; CHECK-NEXT:    sbcs.w r1, r4, r6
+; CHECK-NEXT:    it lo
+; CHECK-NEXT:    movlo r7, #1
+; CHECK-NEXT:    rsbs r1, r7, #0
 ; CHECK-NEXT:    vst1.64 {d16, d17}, [r0]
 ; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    pop {r4, r5, r6, r7, pc}
@@ -50,28 +46,24 @@ define <2 x i1> @usubo(ptr %ptr, ptr %ptr2) {
 ; CHECK:       @ %bb.0:
 ; CHECK-NEXT:    push {r4, r5, r6, r7, lr}
 ; CHECK-NEXT:    vld1.64 {d16, d17}, [r1]
-; CHECK-NEXT:    movs r1, #0
+; CHECK-NEXT:    movs r7, #0
 ; CHECK-NEXT:    vld1.64 {d18, d19}, [r0]
 ; CHECK-NEXT:    vsub.i64 q8, q9, q8
-; CHECK-NEXT:    vmov lr, r12, d18
-; CHECK-NEXT:    vmov r4, r5, d19
+; CHECK-NEXT:    vmov r1, r12, d18
+; CHECK-NEXT:    vmov lr, r4, d19
 ; CHECK-NEXT:    vmov r3, r2, d16
-; CHECK-NEXT:    vmov r6, r7, d17
-; CHECK-NEXT:    subs.w r3, lr, r3
-; CHECK-NEXT:    sbcs.w r2, r12, r2
-; CHECK-NEXT:    mov.w r2, #0
-; CHECK-NEXT:    it lo
-; CHECK-NEXT:    movlo r2, #1
-; CHECK-NEXT:    cmp r2, #0
-; CHECK-NEXT:    it ne
-; CHECK-NEXT:    movne.w r2, #-1
-; CHECK-NEXT:    subs r3, r4, r6
-; CHECK-NEXT:    sbcs.w r3, r5, r7
+; CHECK-NEXT:    vmov r5, r6, d17
+; CHECK-NEXT:    subs r1, r1, r3
+; CHECK-NEXT:    sbcs.w r1, r12, r2
+; CHECK-NEXT:    mov.w r1, #0
 ; CHECK-NEXT:    it lo
 ; CHECK-NEXT:    movlo r1, #1
-; CHECK-NEXT:    cmp r1, #0
-; CHECK-NEXT:    it ne
-; CHECK-NEXT:    movne.w r1, #-1
+; CHECK-NEXT:    rsbs r2, r1, #0
+; CHECK-NEXT:    subs.w r1, lr, r5
+; CHECK-NEXT:    sbcs.w r1, r4, r6
+; CHECK-NEXT:    it lo
+; CHECK-NEXT:    movlo r7, #1
+; CHECK-NEXT:    rsbs r1, r7, #0
 ; CHECK-NEXT:    vst1.64 {d16, d17}, [r0]
 ; CHECK-NEXT:    mov r0, r2
 ; CHECK-NEXT:    pop {r4, r5, r6, r7, pc}

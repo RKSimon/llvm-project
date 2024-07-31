@@ -18,21 +18,19 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm3, %xmm1
 ; CHECK-NEXT:    setnp %cl
 ; CHECK-NEXT:    sete %dl
-; CHECK-NEXT:    testb %cl, %dl
-; CHECK-NEXT:    setne %cl
-; CHECK-NEXT:    kmovd %ecx, %k0
+; CHECK-NEXT:    andb %cl, %dl
+; CHECK-NEXT:    kmovd %edx, %k0
 ; CHECK-NEXT:    kshiftlw $15, %k0, %k0
+; CHECK-NEXT:    kshiftrw $14, %k0, %k0
 ; CHECK-NEXT:    vmovd %eax, %xmm3
 ; CHECK-NEXT:    vcvtph2ps %xmm3, %xmm3
 ; CHECK-NEXT:    vcvtph2ps %xmm5, %xmm6
-; CHECK-NEXT:    kshiftrw $14, %k0, %k0
 ; CHECK-NEXT:    vucomiss %xmm3, %xmm6
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    andl $1, %eax
-; CHECK-NEXT:    kmovw %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    andl $1, %ecx
+; CHECK-NEXT:    kmovw %ecx, %k1
 ; CHECK-NEXT:    korw %k0, %k1, %k0
 ; CHECK-NEXT:    movw $-5, %ax
 ; CHECK-NEXT:    kmovd %eax, %k1
@@ -43,9 +41,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm3, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $13, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -59,9 +56,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm4, %xmm3
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $12, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -73,25 +69,23 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm4, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $11, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
 ; CHECK-NEXT:    movw $-33, %ax
 ; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vpsrldq {{.*#+}} xmm4 = xmm2[10,11,12,13,14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
 ; CHECK-NEXT:    vcvtph2ps %xmm4, %xmm7
 ; CHECK-NEXT:    vpsrldq {{.*#+}} xmm4 = xmm5[10,11,12,13,14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
 ; CHECK-NEXT:    vcvtph2ps %xmm4, %xmm4
-; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vucomiss %xmm7, %xmm4
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $10, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -103,9 +97,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm7, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $9, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -119,23 +112,21 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm7, %xmm5
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $8, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
 ; CHECK-NEXT:    movw $-257, %ax # imm = 0xFEFF
 ; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vextracti128 $1, %ymm2, %xmm2
 ; CHECK-NEXT:    vcvtph2ps %xmm2, %xmm7
-; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vucomiss %xmm7, %xmm6
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $7, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -147,9 +138,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm6, %xmm1
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $6, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -161,9 +151,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm1, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $5, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -175,9 +164,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm1, %xmm3
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $4, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -189,9 +177,8 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm1, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $3, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
@@ -203,35 +190,32 @@ define void @main.41() local_unnamed_addr #1 {
 ; CHECK-NEXT:    vucomiss %xmm1, %xmm4
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    kshiftrw $2, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
 ; CHECK-NEXT:    movw $-16385, %ax # imm = 0xBFFF
 ; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vshufps {{.*#+}} xmm1 = xmm2[3,3,3,3]
 ; CHECK-NEXT:    vcvtph2ps %xmm1, %xmm1
-; CHECK-NEXT:    kandw %k1, %k0, %k0
 ; CHECK-NEXT:    vucomiss %xmm1, %xmm0
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $14, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k0
 ; CHECK-NEXT:    kshiftlw $1, %k0, %k0
+; CHECK-NEXT:    kshiftrw $1, %k0, %k0
 ; CHECK-NEXT:    vpsrldq {{.*#+}} xmm0 = xmm2[14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
 ; CHECK-NEXT:    vcvtph2ps %xmm0, %xmm0
-; CHECK-NEXT:    kshiftrw $1, %k0, %k0
 ; CHECK-NEXT:    vucomiss %xmm0, %xmm5
 ; CHECK-NEXT:    setnp %al
 ; CHECK-NEXT:    sete %cl
-; CHECK-NEXT:    testb %al, %cl
-; CHECK-NEXT:    setne %al
-; CHECK-NEXT:    kmovd %eax, %k1
+; CHECK-NEXT:    andb %al, %cl
+; CHECK-NEXT:    kmovd %ecx, %k1
 ; CHECK-NEXT:    kshiftlw $15, %k1, %k1
 ; CHECK-NEXT:    korw %k1, %k0, %k1
 ; CHECK-NEXT:    vmovdqu8 {{.*#+}} xmm0 {%k1} {z} = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]

@@ -9,25 +9,31 @@
 define <1 x i64> @setcc_v1i128(<1 x i128> %a) {
 ; CHECK-PWR9-LABEL: setcc_v1i128:
 ; CHECK-PWR9:       # %bb.0: # %entry
+; CHECK-PWR9-NEXT:    li r4, 0
 ; CHECK-PWR9-NEXT:    mfvsrld r3, vs34
-; CHECK-PWR9-NEXT:    cmpldi r3, 35708
-; CHECK-PWR9-NEXT:    mfvsrd r3, vs34
-; CHECK-PWR9-NEXT:    cmpdi cr1, r3, 0
-; CHECK-PWR9-NEXT:    li r3, 1
-; CHECK-PWR9-NEXT:    crnand 4*cr5+lt, 4*cr1+eq, lt
-; CHECK-PWR9-NEXT:    isel r3, 0, r3, 4*cr5+lt
+; CHECK-PWR9-NEXT:    ori r4, r4, 35708
+; CHECK-PWR9-NEXT:    subc r4, r3, r4
+; CHECK-PWR9-NEXT:    mfvsrd r4, vs34
+; CHECK-PWR9-NEXT:    subfe r3, r3, r3
+; CHECK-PWR9-NEXT:    cntlzd r4, r4
+; CHECK-PWR9-NEXT:    neg r3, r3
+; CHECK-PWR9-NEXT:    rldicl r4, r4, 58, 63
+; CHECK-PWR9-NEXT:    and r3, r4, r3
 ; CHECK-PWR9-NEXT:    blr
 ;
 ; CHECK-PWR8-LABEL: setcc_v1i128:
 ; CHECK-PWR8:       # %bb.0: # %entry
-; CHECK-PWR8-NEXT:    mfvsrd r3, vs34
 ; CHECK-PWR8-NEXT:    xxswapd vs0, vs34
-; CHECK-PWR8-NEXT:    cmpdi r3, 0
+; CHECK-PWR8-NEXT:    li r4, 0
 ; CHECK-PWR8-NEXT:    mffprd r3, f0
-; CHECK-PWR8-NEXT:    cmpldi cr1, r3, 35708
-; CHECK-PWR8-NEXT:    li r3, 1
-; CHECK-PWR8-NEXT:    crnand 4*cr5+lt, eq, 4*cr1+lt
-; CHECK-PWR8-NEXT:    isel r3, 0, r3, 4*cr5+lt
+; CHECK-PWR8-NEXT:    ori r4, r4, 35708
+; CHECK-PWR8-NEXT:    subc r4, r3, r4
+; CHECK-PWR8-NEXT:    mfvsrd r4, vs34
+; CHECK-PWR8-NEXT:    subfe r3, r3, r3
+; CHECK-PWR8-NEXT:    neg r3, r3
+; CHECK-PWR8-NEXT:    cntlzd r4, r4
+; CHECK-PWR8-NEXT:    rldicl r4, r4, 58, 63
+; CHECK-PWR8-NEXT:    and r3, r4, r3
 ; CHECK-PWR8-NEXT:    blr
 ;
 ; CHECK-PWR7-LABEL: setcc_v1i128:

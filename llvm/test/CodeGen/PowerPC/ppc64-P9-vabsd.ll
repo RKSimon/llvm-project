@@ -2022,33 +2022,31 @@ define <2 x i64> @absd_int64_ugt(<2 x i64>, <2 x i64>) {
 ;
 ; CHECK-PWR7-LABEL: absd_int64_ugt:
 ; CHECK-PWR7:       # %bb.0:
-; CHECK-PWR7-NEXT:    addi r3, r1, -64
-; CHECK-PWR7-NEXT:    addi r4, r1, -80
-; CHECK-PWR7-NEXT:    li r5, 0
-; CHECK-PWR7-NEXT:    li r6, -1
-; CHECK-PWR7-NEXT:    stxvd2x v3, 0, r3
-; CHECK-PWR7-NEXT:    stxvd2x v2, 0, r4
-; CHECK-PWR7-NEXT:    addi r9, r1, -16
-; CHECK-PWR7-NEXT:    ld r3, -56(r1)
-; CHECK-PWR7-NEXT:    ld r4, -72(r1)
-; CHECK-PWR7-NEXT:    ld r8, -80(r1)
-; CHECK-PWR7-NEXT:    cmpld r4, r3
-; CHECK-PWR7-NEXT:    iselgt r7, r6, r5
-; CHECK-PWR7-NEXT:    std r7, -8(r1)
-; CHECK-PWR7-NEXT:    ld r7, -64(r1)
-; CHECK-PWR7-NEXT:    cmpld r8, r7
-; CHECK-PWR7-NEXT:    iselgt r5, r6, r5
-; CHECK-PWR7-NEXT:    std r5, -16(r1)
-; CHECK-PWR7-NEXT:    sub r5, r4, r3
-; CHECK-PWR7-NEXT:    sub r3, r3, r4
-; CHECK-PWR7-NEXT:    lxvd2x v2, 0, r9
-; CHECK-PWR7-NEXT:    std r5, -40(r1)
-; CHECK-PWR7-NEXT:    sub r5, r8, r7
-; CHECK-PWR7-NEXT:    std r5, -48(r1)
-; CHECK-PWR7-NEXT:    addi r5, r1, -48
-; CHECK-PWR7-NEXT:    lxvd2x v3, 0, r5
+; CHECK-PWR7-NEXT:    addi r3, r1, -80
+; CHECK-PWR7-NEXT:    addi r4, r1, -64
+; CHECK-PWR7-NEXT:    stxvd2x v2, 0, r3
+; CHECK-PWR7-NEXT:    stxvd2x v3, 0, r4
+; CHECK-PWR7-NEXT:    ld r3, -72(r1)
+; CHECK-PWR7-NEXT:    ld r4, -56(r1)
+; CHECK-PWR7-NEXT:    ld r6, -64(r1)
+; CHECK-PWR7-NEXT:    subc r5, r4, r3
+; CHECK-PWR7-NEXT:    subfe r5, r4, r4
+; CHECK-PWR7-NEXT:    std r5, -8(r1)
+; CHECK-PWR7-NEXT:    ld r5, -80(r1)
+; CHECK-PWR7-NEXT:    subc r7, r6, r5
+; CHECK-PWR7-NEXT:    subfe r7, r6, r6
+; CHECK-PWR7-NEXT:    std r7, -16(r1)
+; CHECK-PWR7-NEXT:    addi r7, r1, -16
+; CHECK-PWR7-NEXT:    lxvd2x v2, 0, r7
+; CHECK-PWR7-NEXT:    sub r7, r3, r4
+; CHECK-PWR7-NEXT:    sub r3, r4, r3
+; CHECK-PWR7-NEXT:    std r7, -40(r1)
+; CHECK-PWR7-NEXT:    sub r7, r5, r6
+; CHECK-PWR7-NEXT:    std r7, -48(r1)
+; CHECK-PWR7-NEXT:    addi r7, r1, -48
+; CHECK-PWR7-NEXT:    lxvd2x v3, 0, r7
 ; CHECK-PWR7-NEXT:    std r3, -24(r1)
-; CHECK-PWR7-NEXT:    sub r3, r7, r8
+; CHECK-PWR7-NEXT:    sub r3, r6, r5
 ; CHECK-PWR7-NEXT:    std r3, -32(r1)
 ; CHECK-PWR7-NEXT:    addi r3, r1, -32
 ; CHECK-PWR7-NEXT:    lxvd2x v4, 0, r3
