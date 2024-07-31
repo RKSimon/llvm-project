@@ -50,16 +50,22 @@ define <2 x i64> @getsmaxi64(<2 x i64> %a, <2 x i64> %b) {
 ; PWR7-NEXT:    addi 3, 1, -48
 ; PWR7-NEXT:    stxvd2x 1, 0, 3
 ; PWR7-NEXT:    ld 3, -24(1)
-; PWR7-NEXT:    ld 4, -40(1)
-; PWR7-NEXT:    ld 6, -48(1)
-; PWR7-NEXT:    cmpd 4, 3
-; PWR7-NEXT:    li 3, 0
-; PWR7-NEXT:    li 4, -1
-; PWR7-NEXT:    iselgt 5, 4, 3
-; PWR7-NEXT:    std 5, -8(1)
-; PWR7-NEXT:    ld 5, -32(1)
-; PWR7-NEXT:    cmpd 6, 5
-; PWR7-NEXT:    iselgt 3, 4, 3
+; PWR7-NEXT:    ld 5, -40(1)
+; PWR7-NEXT:    sradi 4, 3, 63
+; PWR7-NEXT:    rldicl 6, 5, 1, 63
+; PWR7-NEXT:    subc 3, 3, 5
+; PWR7-NEXT:    ld 5, -48(1)
+; PWR7-NEXT:    adde 3, 6, 4
+; PWR7-NEXT:    rldicl 6, 5, 1, 63
+; PWR7-NEXT:    xori 3, 3, 1
+; PWR7-NEXT:    neg 3, 3
+; PWR7-NEXT:    std 3, -8(1)
+; PWR7-NEXT:    ld 3, -32(1)
+; PWR7-NEXT:    sradi 4, 3, 63
+; PWR7-NEXT:    subc 3, 3, 5
+; PWR7-NEXT:    adde 3, 6, 4
+; PWR7-NEXT:    xori 3, 3, 1
+; PWR7-NEXT:    neg 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 0, 0, 3
@@ -135,23 +141,29 @@ define <2 x i64> @getsmini64(<2 x i64> %a, <2 x i64> %b) {
 ;
 ; PWR7-LABEL: getsmini64:
 ; PWR7:       # %bb.0: # %entry
-; PWR7-NEXT:    xxswapd 0, 35
-; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    xxswapd 1, 34
-; PWR7-NEXT:    stxvd2x 0, 0, 3
+; PWR7-NEXT:    xxswapd 0, 34
 ; PWR7-NEXT:    addi 3, 1, -48
+; PWR7-NEXT:    xxswapd 1, 35
+; PWR7-NEXT:    stxvd2x 0, 0, 3
+; PWR7-NEXT:    addi 3, 1, -32
 ; PWR7-NEXT:    stxvd2x 1, 0, 3
-; PWR7-NEXT:    ld 3, -24(1)
-; PWR7-NEXT:    ld 4, -40(1)
-; PWR7-NEXT:    ld 6, -48(1)
-; PWR7-NEXT:    cmpd 4, 3
-; PWR7-NEXT:    li 3, 0
-; PWR7-NEXT:    li 4, -1
-; PWR7-NEXT:    isellt 5, 4, 3
-; PWR7-NEXT:    std 5, -8(1)
+; PWR7-NEXT:    ld 3, -40(1)
+; PWR7-NEXT:    ld 5, -24(1)
+; PWR7-NEXT:    sradi 4, 3, 63
+; PWR7-NEXT:    rldicl 6, 5, 1, 63
+; PWR7-NEXT:    subc 3, 3, 5
 ; PWR7-NEXT:    ld 5, -32(1)
-; PWR7-NEXT:    cmpd 6, 5
-; PWR7-NEXT:    isellt 3, 4, 3
+; PWR7-NEXT:    adde 3, 6, 4
+; PWR7-NEXT:    rldicl 6, 5, 1, 63
+; PWR7-NEXT:    xori 3, 3, 1
+; PWR7-NEXT:    neg 3, 3
+; PWR7-NEXT:    std 3, -8(1)
+; PWR7-NEXT:    ld 3, -48(1)
+; PWR7-NEXT:    sradi 4, 3, 63
+; PWR7-NEXT:    subc 3, 3, 5
+; PWR7-NEXT:    adde 3, 6, 4
+; PWR7-NEXT:    xori 3, 3, 1
+; PWR7-NEXT:    neg 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 0, 0, 3

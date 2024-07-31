@@ -399,13 +399,15 @@ define arm_aapcs_vfpcc <2 x i64> @vcmp_slt_v2i64(<2 x i64> %src, <2 x i64> %srcb
 ; CHECK-NEXT:    subs r0, r2, r0
 ; CHECK-NEXT:    sbcs.w r0, r3, r1
 ; CHECK-NEXT:    mov.w r1, #0
-; CHECK-NEXT:    csetm r0, lt
+; CHECK-NEXT:    cset r0, lt
 ; CHECK-NEXT:    vmov r3, r2, d1
+; CHECK-NEXT:    rsbs r0, r0, #0
 ; CHECK-NEXT:    bfi r1, r0, #0, #8
 ; CHECK-NEXT:    vmov r0, r12, d3
 ; CHECK-NEXT:    subs r0, r3, r0
 ; CHECK-NEXT:    sbcs.w r0, r2, r12
-; CHECK-NEXT:    csetm r0, lt
+; CHECK-NEXT:    cset r0, lt
+; CHECK-NEXT:    rsbs r0, r0, #0
 ; CHECK-NEXT:    bfi r1, r0, #8, #8
 ; CHECK-NEXT:    vmsr p0, r1
 ; CHECK-NEXT:    vpsel q0, q2, q3
@@ -455,34 +457,36 @@ define arm_aapcs_vfpcc <2 x i32> @vcmp_multi_v2i32(<2 x i64> %a, <2 x i32> %b, <
 ; CHECK-NEXT:    vmov r1, r3, d1
 ; CHECK-NEXT:    vmov.i32 q0, #0x0
 ; CHECK-NEXT:    orrs r1, r3
+; CHECK-NEXT:    vmov r3, s8
 ; CHECK-NEXT:    csetm r1, eq
 ; CHECK-NEXT:    bfi r2, r1, #8, #8
 ; CHECK-NEXT:    vmsr p0, r2
-; CHECK-NEXT:    vmov r2, s4
 ; CHECK-NEXT:    vpsel q0, q0, q2
 ; CHECK-NEXT:    vmov r1, s0
-; CHECK-NEXT:    cmp r2, #0
-; CHECK-NEXT:    cset r2, ne
+; CHECK-NEXT:    subs r2, r1, r3
+; CHECK-NEXT:    asr.w r12, r1, #31
+; CHECK-NEXT:    sbcs.w r2, r12, r3, asr #31
+; CHECK-NEXT:    vmov r3, s4
+; CHECK-NEXT:    cset r2, lt
+; CHECK-NEXT:    cmp r3, #0
+; CHECK-NEXT:    cset r3, ne
 ; CHECK-NEXT:    cmp r1, #0
-; CHECK-NEXT:    csel r12, zr, r2, eq
-; CHECK-NEXT:    vmov r2, s8
-; CHECK-NEXT:    asrs r3, r1, #31
-; CHECK-NEXT:    subs r1, r1, r2
-; CHECK-NEXT:    sbcs.w r1, r3, r2, asr #31
-; CHECK-NEXT:    vmov r2, s6
-; CHECK-NEXT:    csel r1, zr, r12, ge
+; CHECK-NEXT:    csel r1, zr, r3, eq
+; CHECK-NEXT:    vmov r3, s10
+; CHECK-NEXT:    ands r1, r2
 ; CHECK-NEXT:    rsbs r1, r1, #0
 ; CHECK-NEXT:    bfi r0, r1, #0, #8
 ; CHECK-NEXT:    vmov r1, s2
-; CHECK-NEXT:    cmp r2, #0
-; CHECK-NEXT:    cset r2, ne
+; CHECK-NEXT:    subs r2, r1, r3
+; CHECK-NEXT:    asr.w r12, r1, #31
+; CHECK-NEXT:    sbcs.w r2, r12, r3, asr #31
+; CHECK-NEXT:    vmov r3, s6
+; CHECK-NEXT:    cset r2, lt
+; CHECK-NEXT:    cmp r3, #0
+; CHECK-NEXT:    cset r3, ne
 ; CHECK-NEXT:    cmp r1, #0
-; CHECK-NEXT:    csel r12, zr, r2, eq
-; CHECK-NEXT:    vmov r2, s10
-; CHECK-NEXT:    asrs r3, r1, #31
-; CHECK-NEXT:    subs r1, r1, r2
-; CHECK-NEXT:    sbcs.w r1, r3, r2, asr #31
-; CHECK-NEXT:    csel r1, zr, r12, ge
+; CHECK-NEXT:    csel r1, zr, r3, eq
+; CHECK-NEXT:    ands r1, r2
 ; CHECK-NEXT:    rsbs r1, r1, #0
 ; CHECK-NEXT:    bfi r0, r1, #8, #8
 ; CHECK-NEXT:    vmsr p0, r0

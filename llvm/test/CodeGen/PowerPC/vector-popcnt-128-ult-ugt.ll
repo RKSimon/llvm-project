@@ -12176,18 +12176,17 @@ define <2 x i64> @ugt_2_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_2_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 2
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 2
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 2
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 2
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 2
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12310,18 +12309,17 @@ define <2 x i64> @ult_3_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_3_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 3
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 3
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 3
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12444,18 +12442,17 @@ define <2 x i64> @ugt_3_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_3_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 3
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 3
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 3
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 3
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 3
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12578,18 +12575,17 @@ define <2 x i64> @ult_4_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_4_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 4
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 4
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 4
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12712,18 +12708,17 @@ define <2 x i64> @ugt_4_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_4_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 4
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 4
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 4
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 4
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 4
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12846,18 +12841,17 @@ define <2 x i64> @ult_5_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_5_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 5
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 5
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 5
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -12980,18 +12974,17 @@ define <2 x i64> @ugt_5_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_5_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 5
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 5
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 5
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 5
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 5
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13114,18 +13107,17 @@ define <2 x i64> @ult_6_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_6_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 6
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 6
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 6
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13248,18 +13240,17 @@ define <2 x i64> @ugt_6_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_6_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 6
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 6
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 6
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 6
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 6
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13382,18 +13373,17 @@ define <2 x i64> @ult_7_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_7_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 7
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 7
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 7
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13516,18 +13506,17 @@ define <2 x i64> @ugt_7_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_7_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 7
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 7
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 7
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 7
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 7
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13650,18 +13639,17 @@ define <2 x i64> @ult_8_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_8_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 8
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 8
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 8
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13784,18 +13772,17 @@ define <2 x i64> @ugt_8_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_8_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 8
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 8
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 8
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 8
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 8
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -13918,18 +13905,17 @@ define <2 x i64> @ult_9_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_9_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 9
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 9
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 9
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14052,18 +14038,17 @@ define <2 x i64> @ugt_9_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_9_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 9
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 9
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 9
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 9
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 9
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14186,18 +14171,17 @@ define <2 x i64> @ult_10_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_10_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 10
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 10
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 10
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14320,18 +14304,17 @@ define <2 x i64> @ugt_10_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_10_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 10
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 10
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 10
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 10
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 10
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14454,18 +14437,17 @@ define <2 x i64> @ult_11_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_11_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 11
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 11
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 11
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14588,18 +14570,17 @@ define <2 x i64> @ugt_11_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_11_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 11
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 11
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 11
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 11
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 11
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14722,18 +14703,17 @@ define <2 x i64> @ult_12_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_12_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 12
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 12
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 12
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14856,18 +14836,17 @@ define <2 x i64> @ugt_12_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_12_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 12
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 12
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 12
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 12
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 12
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -14990,18 +14969,17 @@ define <2 x i64> @ult_13_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_13_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 13
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 13
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 13
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15124,18 +15102,17 @@ define <2 x i64> @ugt_13_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_13_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 13
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 13
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 13
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 13
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 13
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15258,18 +15235,17 @@ define <2 x i64> @ult_14_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_14_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 14
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 14
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 14
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15392,18 +15368,17 @@ define <2 x i64> @ugt_14_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_14_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 14
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 14
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 14
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 14
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 14
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15526,18 +15501,17 @@ define <2 x i64> @ult_15_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_15_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 15
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 15
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 15
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15660,18 +15634,17 @@ define <2 x i64> @ugt_15_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_15_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 15
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 15
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 15
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 15
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 15
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15794,18 +15767,17 @@ define <2 x i64> @ult_16_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_16_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 16
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 16
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 16
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -15928,18 +15900,17 @@ define <2 x i64> @ugt_16_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_16_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 16
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 16
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 16
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 16
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 16
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16062,18 +16033,17 @@ define <2 x i64> @ult_17_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_17_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 17
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 17
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 17
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16196,18 +16166,17 @@ define <2 x i64> @ugt_17_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_17_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 17
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 17
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 17
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 17
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 17
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16330,18 +16299,17 @@ define <2 x i64> @ult_18_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_18_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 18
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 18
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 18
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16464,18 +16432,17 @@ define <2 x i64> @ugt_18_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_18_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 18
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 18
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 18
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 18
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 18
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16598,18 +16565,17 @@ define <2 x i64> @ult_19_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_19_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 19
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 19
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 19
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16732,18 +16698,17 @@ define <2 x i64> @ugt_19_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_19_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 19
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 19
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 19
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 19
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 19
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -16866,18 +16831,17 @@ define <2 x i64> @ult_20_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_20_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 20
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 20
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 20
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17000,18 +16964,17 @@ define <2 x i64> @ugt_20_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_20_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 20
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 20
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 20
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 20
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 20
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17134,18 +17097,17 @@ define <2 x i64> @ult_21_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_21_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 21
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 21
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 21
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17268,18 +17230,17 @@ define <2 x i64> @ugt_21_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_21_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 21
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 21
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 21
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 21
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 21
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17402,18 +17363,17 @@ define <2 x i64> @ult_22_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_22_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 22
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 22
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 22
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17536,18 +17496,17 @@ define <2 x i64> @ugt_22_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_22_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 22
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 22
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 22
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 22
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 22
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17670,18 +17629,17 @@ define <2 x i64> @ult_23_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_23_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 23
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 23
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 23
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17804,18 +17762,17 @@ define <2 x i64> @ugt_23_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_23_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 23
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 23
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 23
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 23
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 23
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -17938,18 +17895,17 @@ define <2 x i64> @ult_24_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_24_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 24
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 24
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 24
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18072,18 +18028,17 @@ define <2 x i64> @ugt_24_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_24_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 24
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 24
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 24
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 24
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 24
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18206,18 +18161,17 @@ define <2 x i64> @ult_25_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_25_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 25
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 25
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 25
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18340,18 +18294,17 @@ define <2 x i64> @ugt_25_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_25_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 25
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 25
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 25
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 25
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 25
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18474,18 +18427,17 @@ define <2 x i64> @ult_26_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_26_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 26
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 26
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 26
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18608,18 +18560,17 @@ define <2 x i64> @ugt_26_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_26_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 26
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 26
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 26
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 26
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 26
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18742,18 +18693,17 @@ define <2 x i64> @ult_27_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_27_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 27
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 27
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 27
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -18876,18 +18826,17 @@ define <2 x i64> @ugt_27_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_27_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 27
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 27
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 27
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 27
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 27
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19010,18 +18959,17 @@ define <2 x i64> @ult_28_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_28_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 28
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 28
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 28
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19144,18 +19092,17 @@ define <2 x i64> @ugt_28_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_28_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 28
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 28
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 28
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 28
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 28
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19278,18 +19225,17 @@ define <2 x i64> @ult_29_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_29_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 29
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 29
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 29
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19412,18 +19358,17 @@ define <2 x i64> @ugt_29_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_29_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 29
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 29
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 29
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 29
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 29
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19546,18 +19491,17 @@ define <2 x i64> @ult_30_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_30_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 30
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 30
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 30
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19680,18 +19624,17 @@ define <2 x i64> @ugt_30_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_30_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 30
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 30
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 30
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 30
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 30
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19814,18 +19757,17 @@ define <2 x i64> @ult_31_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_31_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 31
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 31
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 31
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -19948,18 +19890,17 @@ define <2 x i64> @ugt_31_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_31_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 31
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 31
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 31
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 31
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 31
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20082,18 +20023,17 @@ define <2 x i64> @ult_32_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_32_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 32
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 32
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 32
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20216,18 +20156,17 @@ define <2 x i64> @ugt_32_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_32_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 32
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 32
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 32
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 32
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 32
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20350,18 +20289,17 @@ define <2 x i64> @ult_33_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_33_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 33
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 33
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 33
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20484,18 +20422,17 @@ define <2 x i64> @ugt_33_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_33_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 33
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 33
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 33
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 33
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 33
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20618,18 +20555,17 @@ define <2 x i64> @ult_34_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_34_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 34
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 34
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 34
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20752,18 +20688,17 @@ define <2 x i64> @ugt_34_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_34_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 34
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 34
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 34
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 34
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 34
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -20886,18 +20821,17 @@ define <2 x i64> @ult_35_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_35_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 35
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 35
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 35
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21020,18 +20954,17 @@ define <2 x i64> @ugt_35_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_35_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 35
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 35
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 35
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 35
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 35
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21154,18 +21087,17 @@ define <2 x i64> @ult_36_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_36_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 36
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 36
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 36
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21288,18 +21220,17 @@ define <2 x i64> @ugt_36_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_36_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 36
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 36
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 36
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 36
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 36
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21422,18 +21353,17 @@ define <2 x i64> @ult_37_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_37_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 37
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 37
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 37
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21556,18 +21486,17 @@ define <2 x i64> @ugt_37_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_37_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 37
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 37
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 37
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 37
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 37
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21690,18 +21619,17 @@ define <2 x i64> @ult_38_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_38_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 38
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 38
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 38
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21824,18 +21752,17 @@ define <2 x i64> @ugt_38_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_38_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 38
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 38
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 38
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 38
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 38
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -21958,18 +21885,17 @@ define <2 x i64> @ult_39_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_39_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 39
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 39
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 39
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22092,18 +22018,17 @@ define <2 x i64> @ugt_39_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_39_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 39
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 39
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 39
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 39
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 39
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22226,18 +22151,17 @@ define <2 x i64> @ult_40_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_40_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 40
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 40
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 40
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22360,18 +22284,17 @@ define <2 x i64> @ugt_40_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_40_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 40
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 40
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 40
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 40
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 40
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22494,18 +22417,17 @@ define <2 x i64> @ult_41_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_41_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 41
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 41
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 41
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22628,18 +22550,17 @@ define <2 x i64> @ugt_41_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_41_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 41
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 41
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 41
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 41
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 41
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22762,18 +22683,17 @@ define <2 x i64> @ult_42_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_42_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 42
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 42
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 42
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -22896,18 +22816,17 @@ define <2 x i64> @ugt_42_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_42_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 42
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 42
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 42
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 42
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 42
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23030,18 +22949,17 @@ define <2 x i64> @ult_43_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_43_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 43
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 43
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 43
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23164,18 +23082,17 @@ define <2 x i64> @ugt_43_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_43_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 43
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 43
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 43
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 43
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 43
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23298,18 +23215,17 @@ define <2 x i64> @ult_44_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_44_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 44
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 44
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 44
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23432,18 +23348,17 @@ define <2 x i64> @ugt_44_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_44_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 44
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 44
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 44
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 44
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 44
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23566,18 +23481,17 @@ define <2 x i64> @ult_45_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_45_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 45
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 45
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 45
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23700,18 +23614,17 @@ define <2 x i64> @ugt_45_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_45_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 45
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 45
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 45
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 45
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 45
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23834,18 +23747,17 @@ define <2 x i64> @ult_46_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_46_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 46
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 46
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 46
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -23968,18 +23880,17 @@ define <2 x i64> @ugt_46_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_46_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 46
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 46
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 46
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 46
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 46
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24102,18 +24013,17 @@ define <2 x i64> @ult_47_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_47_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 47
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 47
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 47
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24236,18 +24146,17 @@ define <2 x i64> @ugt_47_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_47_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 47
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 47
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 47
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 47
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 47
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24370,18 +24279,17 @@ define <2 x i64> @ult_48_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_48_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 48
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 48
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 48
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24504,18 +24412,17 @@ define <2 x i64> @ugt_48_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_48_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 48
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 48
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 48
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 48
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 48
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24638,18 +24545,17 @@ define <2 x i64> @ult_49_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_49_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 49
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 49
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 49
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24772,18 +24678,17 @@ define <2 x i64> @ugt_49_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_49_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 49
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 49
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 49
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 49
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 49
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -24906,18 +24811,17 @@ define <2 x i64> @ult_50_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_50_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 50
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 50
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 50
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25040,18 +24944,17 @@ define <2 x i64> @ugt_50_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_50_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 50
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 50
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 50
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 50
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 50
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25174,18 +25077,17 @@ define <2 x i64> @ult_51_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_51_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 51
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 51
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 51
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25308,18 +25210,17 @@ define <2 x i64> @ugt_51_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_51_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 51
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 51
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 51
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 51
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 51
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25442,18 +25343,17 @@ define <2 x i64> @ult_52_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_52_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 52
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 52
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 52
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25576,18 +25476,17 @@ define <2 x i64> @ugt_52_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_52_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 52
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 52
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 52
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 52
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 52
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25710,18 +25609,17 @@ define <2 x i64> @ult_53_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_53_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 53
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 53
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 53
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25844,18 +25742,17 @@ define <2 x i64> @ugt_53_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_53_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 53
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 53
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 53
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 53
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 53
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -25978,18 +25875,17 @@ define <2 x i64> @ult_54_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_54_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 54
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 54
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 54
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26112,18 +26008,17 @@ define <2 x i64> @ugt_54_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_54_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 54
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 54
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 54
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 54
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 54
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26246,18 +26141,17 @@ define <2 x i64> @ult_55_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_55_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 55
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 55
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 55
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26380,18 +26274,17 @@ define <2 x i64> @ugt_55_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_55_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 55
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 55
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 55
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 55
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 55
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26514,18 +26407,17 @@ define <2 x i64> @ult_56_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_56_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 56
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 56
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 56
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26648,18 +26540,17 @@ define <2 x i64> @ugt_56_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_56_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 56
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 56
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 56
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 56
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 56
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26782,18 +26673,17 @@ define <2 x i64> @ult_57_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_57_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 57
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 57
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 57
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -26916,18 +26806,17 @@ define <2 x i64> @ugt_57_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_57_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 57
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 57
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 57
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 57
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 57
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27050,18 +26939,17 @@ define <2 x i64> @ult_58_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_58_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 58
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 58
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 58
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27184,18 +27072,17 @@ define <2 x i64> @ugt_58_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_58_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 58
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 58
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 58
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 58
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 58
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27318,18 +27205,17 @@ define <2 x i64> @ult_59_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_59_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 59
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 59
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 59
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27452,18 +27338,17 @@ define <2 x i64> @ugt_59_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_59_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 59
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 59
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 59
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 59
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 59
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27586,18 +27471,17 @@ define <2 x i64> @ult_60_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_60_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 60
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 60
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 60
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27720,18 +27604,17 @@ define <2 x i64> @ugt_60_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_60_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 60
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 60
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 60
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 60
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 60
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27854,18 +27737,17 @@ define <2 x i64> @ult_61_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_61_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 61
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 61
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 61
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -27988,18 +27870,17 @@ define <2 x i64> @ugt_61_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_61_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 61
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 61
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 61
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 61
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 61
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -28122,18 +28003,17 @@ define <2 x i64> @ult_62_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_62_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 62
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 62
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 62
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -28256,18 +28136,17 @@ define <2 x i64> @ugt_62_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ugt_62_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 62
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 62
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    iselgt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 62
-; PWR7-NEXT:    iselgt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subfic 4, 4, 62
+; PWR7-NEXT:    subfe 4, 5, 5
+; PWR7-NEXT:    subfic 3, 3, 62
+; PWR7-NEXT:    subfe 3, 5, 5
+; PWR7-NEXT:    std 4, -8(1)
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3
@@ -28390,18 +28269,17 @@ define <2 x i64> @ult_63_v2i64(<2 x i64> %0) {
 ; PWR7-LABEL: ult_63_v2i64:
 ; PWR7:       # %bb.0:
 ; PWR7-NEXT:    addi 3, 1, -32
-; PWR7-NEXT:    li 5, -1
+; PWR7-NEXT:    li 5, 63
 ; PWR7-NEXT:    stxvd2x 34, 0, 3
 ; PWR7-NEXT:    ld 4, -24(1)
 ; PWR7-NEXT:    ld 3, -32(1)
 ; PWR7-NEXT:    popcntd 4, 4
 ; PWR7-NEXT:    popcntd 3, 3
-; PWR7-NEXT:    cmpldi 4, 63
-; PWR7-NEXT:    li 4, 0
-; PWR7-NEXT:    isellt 6, 5, 4
-; PWR7-NEXT:    cmpldi 3, 63
-; PWR7-NEXT:    isellt 3, 5, 4
-; PWR7-NEXT:    std 6, -8(1)
+; PWR7-NEXT:    subc 6, 4, 5
+; PWR7-NEXT:    subfe 4, 4, 4
+; PWR7-NEXT:    std 4, -8(1)
+; PWR7-NEXT:    subc 4, 3, 5
+; PWR7-NEXT:    subfe 3, 3, 3
 ; PWR7-NEXT:    std 3, -16(1)
 ; PWR7-NEXT:    addi 3, 1, -16
 ; PWR7-NEXT:    lxvd2x 34, 0, 3

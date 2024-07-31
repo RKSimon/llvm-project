@@ -156,12 +156,10 @@ define <2 x i64> @sabd_2d(<2 x i64> %a, <2 x i64> %b) {
 ; CHECK-NEXT:    movwlt r0, #1
 ; CHECK-NEXT:    subs r1, r4, r1
 ; CHECK-NEXT:    sbcs r1, r5, lr
+; CHECK-NEXT:    rsb r0, r0, #0
 ; CHECK-NEXT:    movwlt r6, #1
-; CHECK-NEXT:    cmp r6, #0
-; CHECK-NEXT:    mvnne r6, #0
-; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    vdup.32 d19, r6
-; CHECK-NEXT:    mvnne r0, #0
+; CHECK-NEXT:    rsb r1, r6, #0
+; CHECK-NEXT:    vdup.32 d19, r1
 ; CHECK-NEXT:    vdup.32 d18, r0
 ; CHECK-NEXT:    veor q8, q8, q9
 ; CHECK-NEXT:    vsub.i64 q0, q9, q8
@@ -487,12 +485,10 @@ define <2 x i64> @smaxmin_v2i64(<2 x i64> %0, <2 x i64> %1) {
 ; CHECK-NEXT:    movwlt r0, #1
 ; CHECK-NEXT:    subs r1, r4, r1
 ; CHECK-NEXT:    sbcs r1, r5, lr
+; CHECK-NEXT:    rsb r0, r0, #0
 ; CHECK-NEXT:    movwlt r6, #1
-; CHECK-NEXT:    cmp r6, #0
-; CHECK-NEXT:    mvnne r6, #0
-; CHECK-NEXT:    cmp r0, #0
-; CHECK-NEXT:    vdup.32 d19, r6
-; CHECK-NEXT:    mvnne r0, #0
+; CHECK-NEXT:    rsb r1, r6, #0
+; CHECK-NEXT:    vdup.32 d19, r1
 ; CHECK-NEXT:    vdup.32 d18, r0
 ; CHECK-NEXT:    veor q8, q8, q9
 ; CHECK-NEXT:    vsub.i64 q0, q9, q8

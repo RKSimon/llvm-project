@@ -516,59 +516,67 @@ define <8 x i1> @test_fcmp_une(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, ne
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, ne
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, ne
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, ne
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, ne
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, ne
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, ne
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, ne
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, ne
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, ne
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, ne
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_une:
@@ -595,58 +603,66 @@ define <8 x i1> @test_fcmp_ueq(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT-NEXT:    mov h2, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s3, h5
 ; CHECK-CVT-NEXT:    mov h5, v0.h[3]
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, vc
 ; CHECK-CVT-NEXT:    fcmp s6, s4
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    mov h4, v1.h[3]
 ; CHECK-CVT-NEXT:    mov h6, v1.h[4]
-; CHECK-CVT-NEXT:    csetm w9, eq
-; CHECK-CVT-NEXT:    csinv w9, w9, wzr, vc
+; CHECK-CVT-NEXT:    fcvt s5, h5
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, eq
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, vc
 ; CHECK-CVT-NEXT:    fcmp s2, s3
-; CHECK-CVT-NEXT:    mov h2, v0.h[4]
-; CHECK-CVT-NEXT:    fcvt s3, h4
-; CHECK-CVT-NEXT:    fcvt s4, h5
-; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    mov h3, v0.h[4]
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h4
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v5.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov h3, v1.h[5]
-; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    mov v5.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
-; CHECK-CVT-NEXT:    fcmp s2, s6
-; CHECK-CVT-NEXT:    fcvt s2, h3
-; CHECK-CVT-NEXT:    fcvt s3, h4
-; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    fmov s2, w9
+; CHECK-CVT-NEXT:    cset w9, eq
+; CHECK-CVT-NEXT:    fcvt s3, h3
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, vc
+; CHECK-CVT-NEXT:    fcmp s5, s4
+; CHECK-CVT-NEXT:    mov h4, v1.h[5]
+; CHECK-CVT-NEXT:    mov h5, v0.h[5]
+; CHECK-CVT-NEXT:    mov v2.h[1], w8
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
+; CHECK-CVT-NEXT:    cset w9, eq
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, vc
+; CHECK-CVT-NEXT:    fcmp s3, s6
+; CHECK-CVT-NEXT:    mov h3, v1.h[6]
+; CHECK-CVT-NEXT:    mov v2.h[2], w8
+; CHECK-CVT-NEXT:    fcvt s4, h4
+; CHECK-CVT-NEXT:    fcvt s5, h5
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
+; CHECK-CVT-NEXT:    cset w9, eq
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v5.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
-; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    fcvt s2, h4
-; CHECK-CVT-NEXT:    fcvt s3, h6
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, vc
+; CHECK-CVT-NEXT:    fcvt s3, h3
+; CHECK-CVT-NEXT:    mov v2.h[3], w8
+; CHECK-CVT-NEXT:    fcmp s5, s4
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v5.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
-; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov v5.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
+; CHECK-CVT-NEXT:    cset w9, eq
+; CHECK-CVT-NEXT:    mov v2.h[4], w8
+; CHECK-CVT-NEXT:    csinc w8, w9, wzr, vc
+; CHECK-CVT-NEXT:    fcmp s4, s3
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, vc
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v5.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, vc
-; CHECK-CVT-NEXT:    mov v5.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, vc
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ueq:
@@ -666,59 +682,67 @@ define <8 x i1> @test_fcmp_ugt(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, hi
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, hi
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, hi
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, hi
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, hi
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, hi
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, hi
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, hi
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, hi
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, hi
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, hi
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ugt:
@@ -736,59 +760,67 @@ define <8 x i1> @test_fcmp_uge(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, pl
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, pl
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, pl
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, pl
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, pl
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, pl
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, pl
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, pl
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, pl
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, pl
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, pl
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_uge:
@@ -806,59 +838,67 @@ define <8 x i1> @test_fcmp_ult(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, lt
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, lt
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, lt
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, lt
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, lt
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, lt
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, lt
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, lt
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, lt
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, lt
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, lt
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ult:
@@ -876,59 +916,67 @@ define <8 x i1> @test_fcmp_ule(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, le
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, le
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, le
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, le
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, le
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, le
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, le
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, le
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, le
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, le
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, le
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, le
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, le
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, le
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, le
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, le
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ule:
@@ -946,59 +994,67 @@ define <8 x i1> @test_fcmp_uno(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, vs
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, vs
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, vs
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, vs
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, vs
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, vs
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, vs
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, vs
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, vs
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, vs
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, vs
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_uno:
@@ -1027,58 +1083,66 @@ define <8 x i1> @test_fcmp_one(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT-NEXT:    mov h2, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s3, h5
 ; CHECK-CVT-NEXT:    mov h5, v0.h[3]
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, le
 ; CHECK-CVT-NEXT:    fcmp s6, s4
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    mov h4, v1.h[3]
 ; CHECK-CVT-NEXT:    mov h6, v1.h[4]
-; CHECK-CVT-NEXT:    csetm w9, mi
-; CHECK-CVT-NEXT:    csinv w9, w9, wzr, le
+; CHECK-CVT-NEXT:    fcvt s5, h5
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, mi
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, le
 ; CHECK-CVT-NEXT:    fcmp s2, s3
-; CHECK-CVT-NEXT:    mov h2, v0.h[4]
-; CHECK-CVT-NEXT:    fcvt s3, h4
-; CHECK-CVT-NEXT:    fcvt s4, h5
-; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    mov h3, v0.h[4]
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h4
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v5.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov h3, v1.h[5]
-; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    mov v5.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
-; CHECK-CVT-NEXT:    fcmp s2, s6
-; CHECK-CVT-NEXT:    fcvt s2, h3
-; CHECK-CVT-NEXT:    fcvt s3, h4
-; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    fmov s2, w9
+; CHECK-CVT-NEXT:    cset w9, mi
+; CHECK-CVT-NEXT:    fcvt s3, h3
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, le
+; CHECK-CVT-NEXT:    fcmp s5, s4
+; CHECK-CVT-NEXT:    mov h4, v1.h[5]
+; CHECK-CVT-NEXT:    mov h5, v0.h[5]
+; CHECK-CVT-NEXT:    mov v2.h[1], w8
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
+; CHECK-CVT-NEXT:    cset w9, mi
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, le
+; CHECK-CVT-NEXT:    fcmp s3, s6
+; CHECK-CVT-NEXT:    mov h3, v1.h[6]
+; CHECK-CVT-NEXT:    mov v2.h[2], w8
+; CHECK-CVT-NEXT:    fcvt s4, h4
+; CHECK-CVT-NEXT:    fcvt s5, h5
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
+; CHECK-CVT-NEXT:    cset w9, mi
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v5.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
-; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    fcvt s2, h4
-; CHECK-CVT-NEXT:    fcvt s3, h6
+; CHECK-CVT-NEXT:    csinc w9, w9, wzr, le
+; CHECK-CVT-NEXT:    fcvt s3, h3
+; CHECK-CVT-NEXT:    mov v2.h[3], w8
+; CHECK-CVT-NEXT:    fcmp s5, s4
+; CHECK-CVT-NEXT:    sbfx w8, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v5.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
-; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov v5.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
+; CHECK-CVT-NEXT:    cset w9, mi
+; CHECK-CVT-NEXT:    mov v2.h[4], w8
+; CHECK-CVT-NEXT:    csinc w8, w9, wzr, le
+; CHECK-CVT-NEXT:    fcmp s4, s3
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, le
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v5.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    csinv w8, w8, wzr, le
-; CHECK-CVT-NEXT:    mov v5.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    csinc w8, w8, wzr, le
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v2.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_one:
@@ -1097,59 +1161,67 @@ define <8 x i1> @test_fcmp_oeq(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, eq
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, eq
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, eq
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, eq
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, eq
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, eq
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_oeq:
@@ -1166,59 +1238,67 @@ define <8 x i1> @test_fcmp_ogt(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, gt
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, gt
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, gt
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, gt
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, gt
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, gt
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, gt
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, gt
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, gt
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, gt
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, gt
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ogt:
@@ -1235,59 +1315,67 @@ define <8 x i1> @test_fcmp_oge(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, ge
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, ge
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, ge
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, ge
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, ge
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, ge
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, ge
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, ge
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, ge
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, ge
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, ge
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_oge:
@@ -1304,59 +1392,67 @@ define <8 x i1> @test_fcmp_olt(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, mi
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, mi
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, mi
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, mi
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, mi
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, mi
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_olt:
@@ -1373,59 +1469,67 @@ define <8 x i1> @test_fcmp_ole(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, ls
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, ls
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, ls
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, ls
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, ls
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, ls
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, ls
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, ls
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, ls
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, ls
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, ls
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ole:
@@ -1442,59 +1546,67 @@ define <8 x i1> @test_fcmp_ord(<8 x half> %a, <8 x half> %b) #0 {
 ; CHECK-CVT:       // %bb.0:
 ; CHECK-CVT-NEXT:    mov h2, v1.h[1]
 ; CHECK-CVT-NEXT:    mov h3, v0.h[1]
-; CHECK-CVT-NEXT:    fcvt s4, h1
-; CHECK-CVT-NEXT:    fcvt s5, h0
-; CHECK-CVT-NEXT:    mov h6, v1.h[2]
+; CHECK-CVT-NEXT:    fcvt s5, h1
+; CHECK-CVT-NEXT:    fcvt s6, h0
+; CHECK-CVT-NEXT:    mov h4, v1.h[2]
+; CHECK-CVT-NEXT:    mov h7, v0.h[2]
 ; CHECK-CVT-NEXT:    fcvt s2, h2
 ; CHECK-CVT-NEXT:    fcvt s3, h3
 ; CHECK-CVT-NEXT:    fcmp s3, s2
-; CHECK-CVT-NEXT:    mov h2, v0.h[2]
-; CHECK-CVT-NEXT:    mov h3, v1.h[3]
-; CHECK-CVT-NEXT:    csetm w8, vc
-; CHECK-CVT-NEXT:    fcmp s5, s4
-; CHECK-CVT-NEXT:    fcvt s5, h6
-; CHECK-CVT-NEXT:    fcvt s2, h2
-; CHECK-CVT-NEXT:    mov h4, v0.h[3]
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    mov h6, v0.h[4]
-; CHECK-CVT-NEXT:    csetm w9, vc
-; CHECK-CVT-NEXT:    fcmp s2, s5
-; CHECK-CVT-NEXT:    fmov s2, w9
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    mov h5, v1.h[4]
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h7
+; CHECK-CVT-NEXT:    mov h4, v1.h[3]
+; CHECK-CVT-NEXT:    cset w8, vc
+; CHECK-CVT-NEXT:    fcmp s6, s5
+; CHECK-CVT-NEXT:    mov h5, v0.h[3]
+; CHECK-CVT-NEXT:    mov h6, v1.h[4]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    cset w9, vc
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    sbfx w9, w9, #0, #1
+; CHECK-CVT-NEXT:    fcvt s4, h5
+; CHECK-CVT-NEXT:    mov h2, v0.h[4]
 ; CHECK-CVT-NEXT:    fcvt s6, h6
-; CHECK-CVT-NEXT:    mov v2.h[1], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
+; CHECK-CVT-NEXT:    fmov s5, w9
+; CHECK-CVT-NEXT:    fcvt s2, h2
+; CHECK-CVT-NEXT:    mov v5.h[1], w8
+; CHECK-CVT-NEXT:    cset w8, vc
 ; CHECK-CVT-NEXT:    fcmp s4, s3
 ; CHECK-CVT-NEXT:    mov h3, v1.h[5]
 ; CHECK-CVT-NEXT:    mov h4, v0.h[5]
-; CHECK-CVT-NEXT:    fcvt s5, h5
-; CHECK-CVT-NEXT:    mov v2.h[2], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
-; CHECK-CVT-NEXT:    fcvt s3, h3
-; CHECK-CVT-NEXT:    fcvt s4, h4
-; CHECK-CVT-NEXT:    fcmp s6, s5
-; CHECK-CVT-NEXT:    mov h5, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[2], w8
+; CHECK-CVT-NEXT:    cset w8, vc
+; CHECK-CVT-NEXT:    fcmp s2, s6
+; CHECK-CVT-NEXT:    fcvt s2, h3
+; CHECK-CVT-NEXT:    fcvt s3, h4
+; CHECK-CVT-NEXT:    mov h4, v1.h[6]
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
 ; CHECK-CVT-NEXT:    mov h6, v0.h[6]
 ; CHECK-CVT-NEXT:    mov h1, v1.h[7]
 ; CHECK-CVT-NEXT:    mov h0, v0.h[7]
-; CHECK-CVT-NEXT:    mov v2.h[3], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    fcvt s3, h5
-; CHECK-CVT-NEXT:    fcvt s4, h6
+; CHECK-CVT-NEXT:    mov v5.h[3], w8
+; CHECK-CVT-NEXT:    cset w8, vc
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcvt s2, h4
+; CHECK-CVT-NEXT:    fcvt s3, h6
 ; CHECK-CVT-NEXT:    fcvt s1, h1
 ; CHECK-CVT-NEXT:    fcvt s0, h0
-; CHECK-CVT-NEXT:    mov v2.h[4], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
-; CHECK-CVT-NEXT:    fcmp s4, s3
-; CHECK-CVT-NEXT:    mov v2.h[5], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
+; CHECK-CVT-NEXT:    mov v5.h[4], w8
+; CHECK-CVT-NEXT:    cset w8, vc
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    fcmp s3, s2
+; CHECK-CVT-NEXT:    mov v5.h[5], w8
+; CHECK-CVT-NEXT:    cset w8, vc
 ; CHECK-CVT-NEXT:    fcmp s0, s1
-; CHECK-CVT-NEXT:    mov v2.h[6], w8
-; CHECK-CVT-NEXT:    csetm w8, vc
-; CHECK-CVT-NEXT:    mov v2.h[7], w8
-; CHECK-CVT-NEXT:    xtn v0.8b, v2.8h
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[6], w8
+; CHECK-CVT-NEXT:    cset w8, vc
+; CHECK-CVT-NEXT:    sbfx w8, w8, #0, #1
+; CHECK-CVT-NEXT:    mov v5.h[7], w8
+; CHECK-CVT-NEXT:    xtn v0.8b, v5.8h
 ; CHECK-CVT-NEXT:    ret
 ;
 ; CHECK-FP16-LABEL: test_fcmp_ord:
