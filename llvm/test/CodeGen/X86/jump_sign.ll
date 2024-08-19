@@ -307,12 +307,19 @@ define i32 @func_p(i32 %a, i32 %b) nounwind {
 define i32 @func_q(i32 %a0, i32 %a1, i32 %a2) {
 ; CHECK-LABEL: func_q:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; CHECK-NEXT:    xorl %ecx, %ecx
-; CHECK-NEXT:    subl {{[0-9]+}}(%esp), %eax
-; CHECK-NEXT:    sbbl %ecx, %ecx
-; CHECK-NEXT:    negl %eax
-; CHECK-NEXT:    xorl %ecx, %eax
+; CHECK-NEXT:    pushl %esi
+; CHECK-NEXT:    .cfi_def_cfa_offset 8
+; CHECK-NEXT:    .cfi_offset %esi, -8
+; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; CHECK-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; CHECK-NEXT:    movl %edx, %esi
+; CHECK-NEXT:    subl %ecx, %esi
+; CHECK-NEXT:    xorl %eax, %eax
+; CHECK-NEXT:    cmpl %edx, %ecx
+; CHECK-NEXT:    sbbl %eax, %eax
+; CHECK-NEXT:    xorl %esi, %eax
+; CHECK-NEXT:    popl %esi
+; CHECK-NEXT:    .cfi_def_cfa_offset 4
 ; CHECK-NEXT:    retl
   %t1 = icmp ult i32 %a0, %a1
   %t2 = sub i32 %a1, %a0

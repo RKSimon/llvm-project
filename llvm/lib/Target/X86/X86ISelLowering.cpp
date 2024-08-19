@@ -56051,6 +56051,23 @@ static SDValue combineSub(SDNode *N, SelectionDAG &DAG,
   if (SDValue V = combineSubABS(N, DAG))
     return V;
 
+  if (isa<ConstantSDNode>(Op0) && Op1.getOpcode() == X86ISD::CMOV &&
+      (Op1.getOperand(0).getOpcode() == ISD::SUB ||
+       Op1.getOperand(0).getOpcode() == X86ISD::SUB) &&
+      (Op1.getOperand(1).getOpcode() == ISD::SUB ||
+       Op1.getOperand(1).getOpcode() == X86ISD::SUB) &&
+      Op1.hasOneUse()) {
+    EVT VT = Op1.getValueType();
+    return DAG.getNode(X86ISD::CMOV, DL, VT,
+                       DAG.getNode(ISD::SUB, DL, VT, Op0, Op1.getOperand(0)),
+                       DAG.getNode(ISD::SUB, DL, VT, Op0, Op1.getOperand(1)),
+                       Op1.getOperand(2), Op1.getOperand(3));
+  }
+
+  if (isNullConstant(Op0) && Op1.getOpcode() == X86ISD::SUB)
+    return DAG.getNode(X86ISD::SUB, DL, Op1->getVTList(), Op1.getOperand(1),
+                       Op1.getOperand(0));
+
   // Try to synthesize horizontal subs from subs of shuffles.
   if (SDValue V = combineToHorizontalAddSub(N, DAG, Subtarget))
     return V;
