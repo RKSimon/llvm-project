@@ -410,11 +410,11 @@ X86TargetLowering::X86TargetLowering(const X86TargetMachine &TM,
 
   if (!Subtarget.hasBMI()) {
     setOperationAction(ISD::CTTZ           , MVT::i32  , Custom);
-    setOperationAction(ISD::CTTZ_ZERO_UNDEF, MVT::i32  , Legal);
+    setOperationAction(ISD::CTTZ_ZERO_UNDEF, MVT::i32  , Custom);
     if (Subtarget.is64Bit()) {
       setOperationPromotedToType(ISD::CTTZ , MVT::i32, MVT::i64);
       setOperationAction(ISD::CTTZ         , MVT::i64  , Custom);
-      setOperationAction(ISD::CTTZ_ZERO_UNDEF, MVT::i64, Legal);
+      setOperationAction(ISD::CTTZ_ZERO_UNDEF, MVT::i64, Custom);
     }
   }
 
@@ -3237,17 +3237,9 @@ bool X86TargetLowering::shouldFormOverflowOp(unsigned Opcode, EVT VT,
   return VT.isSimple() || !isOperationExpand(Opcode, VT);
 }
 
-bool X86TargetLowering::isCheapToSpeculateCttz(Type *Ty) const {
-  // Speculate cttz only if we can directly use TZCNT or can promote to i32/i64.
-  return Subtarget.hasBMI() || Subtarget.canUseCMOV() ||
-         (!Ty->isVectorTy() &&
-          Ty->getScalarSizeInBits() < (Subtarget.is64Bit() ? 64u : 32u));
-}
+bool X86TargetLowering::isCheapToSpeculateCttz(Type *Ty) const { return true; }
 
-bool X86TargetLowering::isCheapToSpeculateCtlz(Type *Ty) const {
-  // Speculate ctlz only if we can directly use LZCNT.
-  return Subtarget.hasLZCNT() || Subtarget.canUseCMOV();
-}
+bool X86TargetLowering::isCheapToSpeculateCtlz(Type *Ty) const { return true; }
 
 bool X86TargetLowering::ShouldShrinkFPConstant(EVT VT) const {
   // Don't shrink FP constpool if SSE2 is available since cvtss2sd is more
@@ -28094,17 +28086,13 @@ static SDValue LowerCTLZ(SDValue Op, const X86Subtarget &Subtarget,
     Op = DAG.getNode(ISD::ZERO_EXTEND, dl, OpVT, Op);
   }
 
+  SDValue Fallback = DAG.getUNDEF(OpVT);
+  if (Opc == ISD::CTLZ && !DAG.isKnownNeverZero(Op))
+    Fallback = DAG.getConstant(NumBits + NumBits - 1, dl, OpVT);
+
   // Issue a bsr (scan bits in reverse) which also sets EFLAGS.
   SDVTList VTs = DAG.getVTList(OpVT, MVT::i32);
-  Op = DAG.getNode(X86ISD::BSR, dl, VTs, Op);
-
-  if (Opc == ISD::CTLZ) {
-    // If src is zero (i.e. bsr sets ZF), returns NumBits.
-    SDValue Ops[] = {Op, DAG.getConstant(NumBits + NumBits - 1, dl, OpVT),
-                     DAG.getTargetConstant(X86::COND_E, dl, MVT::i8),
-                     Op.getValue(1)};
-    Op = DAG.getNode(X86ISD::CMOV, dl, OpVT, Ops);
-  }
+  Op = DAG.getNode(X86ISD::BSR, dl, VTs, Fallback, Op);
 
   // Finally xor with NumBits-1.
   Op = DAG.getNode(ISD::XOR, dl, OpVT, Op,
@@ -28122,22 +28110,15 @@ static SDValue LowerCTTZ(SDValue Op, const X86Subtarget &Subtarget,
   SDValue N0 = Op.getOperand(0);
   SDLoc dl(Op);
 
-  assert(!VT.isVector() && Op.getOpcode() == ISD::CTTZ &&
-         "Only scalar CTTZ requires custom lowering");
+  assert(!VT.isVector() && "Only scalar CTTZ requires custom lowering");
+
+  SDValue Fallback = DAG.getUNDEF(VT);
+  if (Op.getOpcode() == ISD::CTTZ && !DAG.isKnownNeverZero(N0))
+    Fallback = DAG.getConstant(NumBits, dl, VT);
 
   // Issue a bsf (scan bits forward) which also sets EFLAGS.
   SDVTList VTs = DAG.getVTList(VT, MVT::i32);
-  Op = DAG.getNode(X86ISD::BSF, dl, VTs, N0);
-
-  // If src is known never zero we can skip the CMOV.
-  if (DAG.isKnownNeverZero(N0))
-    return Op;
-
-  // If src is zero (i.e. bsf sets ZF), returns NumBits.
-  SDValue Ops[] = {Op, DAG.getConstant(NumBits, dl, VT),
-                   DAG.getTargetConstant(X86::COND_E, dl, MVT::i8),
-                   Op.getValue(1)};
-  return DAG.getNode(X86ISD::CMOV, dl, VT, Ops);
+  return DAG.getNode(X86ISD::BSF, dl, VTs, Fallback, N0);
 }
 
 static SDValue lowerAddSub(SDValue Op, SelectionDAG &DAG,
@@ -37299,12 +37280,18 @@ void X86TargetLowering::computeKnownBitsForTargetNode(const SDValue Op,
     Known = KnownBits::mul(Known, Known2);
     break;
   }
-  case X86ISD::BSR:
-    // BSR(0) is undef, but any use of BSR already accounts for non-zero inputs.
-    // Similar KnownBits behaviour to CTLZ_ZERO_UNDEF.
+  case X86ISD::BSR: {
     // TODO: Bound with input known bits?
     Known.Zero.setBitsFrom(Log2_32(BitWidth));
+
+    if (!Op.getOperand(0).isUndef() &&
+        !DAG.isKnownNeverZero(Op.getOperand(1), Depth + 1)) {
+      KnownBits Known2;
+      Known2 = DAG.computeKnownBits(Op.getOperand(0), DemandedElts, Depth + 1);
+      Known = Known.intersectWith(Known2);
+    }
     break;
+  }
   case X86ISD::SETCC:
     Known.Zero.setBitsFrom(1);
     break;
@@ -53133,7 +53120,7 @@ static SDValue combineXorSubCTLZ(SDNode *N, const SDLoc &DL, SelectionDAG &DAG,
   }
 
   SDVTList VTs = DAG.getVTList(OpVT, MVT::i32);
-  Op = DAG.getNode(X86ISD::BSR, DL, VTs, Op);
+  Op = DAG.getNode(X86ISD::BSR, DL, VTs, DAG.getUNDEF(OpVT), Op);
   if (VT == MVT::i8)
     Op = DAG.getNode(ISD::TRUNCATE, DL, MVT::i8, Op);
 

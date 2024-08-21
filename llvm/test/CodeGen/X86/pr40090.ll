@@ -7,6 +7,7 @@ define i64 @foo(i64 %x, i64 %y) {
 ; CHECK-NEXT:    bsrq %rdi, %rax
 ; CHECK-NEXT:    orq $64, %rax
 ; CHECK-NEXT:    bsrq %rsi, %rcx
+; CHECK-NEXT:    testq %rsi, %rsi
 ; CHECK-NEXT:    cmoveq %rax, %rcx
 ; CHECK-NEXT:    movl $63, %eax
 ; CHECK-NEXT:    subq %rcx, %rax

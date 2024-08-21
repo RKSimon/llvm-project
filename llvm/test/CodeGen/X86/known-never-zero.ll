@@ -42,11 +42,10 @@ define i32 @or_known_nonzero(i32 %x) {
 define i32 @or_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: or_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    orl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    orl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: or_maybe_zero:
@@ -96,9 +95,8 @@ define i32 @select_maybe_zero(i1 %c, i32 %x) {
 ; X86-NEXT:    xorl %ecx, %ecx
 ; X86-NEXT:    testb $1, {{[0-9]+}}(%esp)
 ; X86-NEXT:    cmovnel %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: select_maybe_zero:
@@ -192,11 +190,10 @@ define i32 @shl_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: shl_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    shll %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    shll %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: shl_maybe_zero:
@@ -244,9 +241,8 @@ define i32 @uaddsat_maybe_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    addl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl $-1, %ecx
 ; X86-NEXT:    cmovael %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: uaddsat_maybe_zero:
@@ -295,13 +291,12 @@ define i32 @umax_known_nonzero(i32 %x, i32 %y) {
 define i32 @umax_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: umax_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    cmpl %eax, %ecx
-; X86-NEXT:    cmoval %ecx, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    cmpl %ecx, %eax
+; X86-NEXT:    cmoval %eax, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: umax_maybe_zero:
@@ -357,9 +352,8 @@ define i32 @umin_maybe_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    cmpl $54, %eax
 ; X86-NEXT:    movl $54, %ecx
 ; X86-NEXT:    cmovbl %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: umin_maybe_zero:
@@ -471,9 +465,8 @@ define i32 @smin_maybe_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    cmpl $54, %eax
 ; X86-NEXT:    movl $54, %ecx
 ; X86-NEXT:    cmovll %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: smin_maybe_zero:
@@ -585,9 +578,8 @@ define i32 @smax_known_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    testl %eax, %eax
 ; X86-NEXT:    movl $-1, %ecx
 ; X86-NEXT:    cmovnsl %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: smax_known_zero:
@@ -636,11 +628,10 @@ define i32 @rotr_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: rotr_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    rorl %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    rorl %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: rotr_maybe_zero:
@@ -690,11 +681,10 @@ define i32 @rotr_with_fshr_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: rotr_with_fshr_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    rorl %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    rorl %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: rotr_with_fshr_maybe_zero:
@@ -744,11 +734,10 @@ define i32 @rotl_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: rotl_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    roll %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    roll %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: rotl_maybe_zero:
@@ -798,11 +787,10 @@ define i32 @rotl_with_fshl_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: rotl_with_fshl_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    roll %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    roll %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: rotl_with_fshl_maybe_zero:
@@ -871,11 +859,10 @@ define i32 @sra_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: sra_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    sarl %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    sarl %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sra_maybe_zero:
@@ -944,11 +931,10 @@ define i32 @srl_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: srl_maybe_zero:
 ; X86:       # %bb.0:
 ; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %ecx
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    shrl %cl, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-NEXT:    shrl %cl, %edx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %edx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: srl_maybe_zero:
@@ -997,9 +983,9 @@ define i32 @udiv_maybe_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    xorl %edx, %edx
 ; X86-NEXT:    divl {{[0-9]+}}(%esp)
-; X86-NEXT:    bsfl %eax, %ecx
-; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    movl $32, %ecx
+; X86-NEXT:    rep bsfl %eax, %ecx
+; X86-NEXT:    movl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: udiv_maybe_zero:
@@ -1048,9 +1034,9 @@ define i32 @sdiv_maybe_zero(i32 %x, i32 %y) {
 ; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    cltd
 ; X86-NEXT:    idivl {{[0-9]+}}(%esp)
-; X86-NEXT:    bsfl %eax, %ecx
-; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    movl $32, %ecx
+; X86-NEXT:    rep bsfl %eax, %ecx
+; X86-NEXT:    movl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sdiv_maybe_zero:
@@ -1093,12 +1079,11 @@ define i32 @add_known_nonzero(i32 %xx, i32 %y) {
 define i32 @add_maybe_zero(i32 %xx, i32 %y) {
 ; X86-LABEL: add_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    orl $1, %eax
-; X86-NEXT:    addl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    orl $1, %ecx
+; X86-NEXT:    addl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: add_maybe_zero:
@@ -1175,9 +1160,8 @@ define i32 @sub_maybe_zero(i32 %x) {
 ; X86-NEXT:    movl %eax, %ecx
 ; X86-NEXT:    orl $64, %ecx
 ; X86-NEXT:    subl %eax, %ecx
-; X86-NEXT:    bsfl %ecx, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sub_maybe_zero:
@@ -1199,11 +1183,10 @@ define i32 @sub_maybe_zero(i32 %x) {
 define i32 @sub_maybe_zero2(i32 %x) {
 ; X86-LABEL: sub_maybe_zero2:
 ; X86:       # %bb.0:
-; X86-NEXT:    xorl %eax, %eax
-; X86-NEXT:    subl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    xorl %ecx, %ecx
+; X86-NEXT:    subl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sub_maybe_zero2:
@@ -1223,12 +1206,11 @@ define i32 @sub_maybe_zero2(i32 %x) {
 define i32 @mul_known_nonzero_nsw(i32 %x, i32 %yy) {
 ; X86-LABEL: mul_known_nonzero_nsw:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl $256, %eax # imm = 0x100
-; X86-NEXT:    orl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    imull {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl $256, %ecx # imm = 0x100
+; X86-NEXT:    orl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    imull {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: mul_known_nonzero_nsw:
@@ -1250,12 +1232,11 @@ define i32 @mul_known_nonzero_nsw(i32 %x, i32 %yy) {
 define i32 @mul_known_nonzero_nuw(i32 %x, i32 %yy) {
 ; X86-LABEL: mul_known_nonzero_nuw:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl $256, %eax # imm = 0x100
-; X86-NEXT:    orl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    imull {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl $256, %ecx # imm = 0x100
+; X86-NEXT:    orl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    imull {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: mul_known_nonzero_nuw:
@@ -1277,11 +1258,10 @@ define i32 @mul_known_nonzero_nuw(i32 %x, i32 %yy) {
 define i32 @mul_maybe_zero(i32 %x, i32 %y) {
 ; X86-LABEL: mul_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    imull {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    imull {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: mul_maybe_zero:
@@ -1307,10 +1287,9 @@ define i32 @bitcast_known_nonzero(<2 x i16> %xx) {
 ; X86-NEXT:    cvttps2dq %xmm0, %xmm0
 ; X86-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,2,2,3,4,5,6,7]
 ; X86-NEXT:    pmullw {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0 # [256,256,u,u,u,u,u,u]
-; X86-NEXT:    movd %xmm0, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movd %xmm0, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: bitcast_known_nonzero:
@@ -1336,10 +1315,9 @@ define i32 @bitcast_known_nonzero(<2 x i16> %xx) {
 define i32 @bitcast_maybe_zero(<2 x i16> %x) {
 ; X86-LABEL: bitcast_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movd %xmm0, %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movd %xmm0, %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: bitcast_maybe_zero:
@@ -1358,9 +1336,8 @@ define i32 @bitcast_maybe_zero(<2 x i16> %x) {
 define i32 @bitcast_from_float(float %x) {
 ; X86-LABEL: bitcast_from_float:
 ; X86:       # %bb.0:
-; X86-NEXT:    bsfl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl {{[0-9]+}}(%esp), %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: bitcast_from_float:
@@ -1404,10 +1381,9 @@ define i32 @zext_known_nonzero(i16 %xx) {
 define i32 @zext_maybe_zero(i16 %x) {
 ; X86-LABEL: zext_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movzwl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: zext_maybe_zero:
@@ -1451,10 +1427,9 @@ define i32 @sext_known_nonzero(i16 %xx) {
 define i32 @sext_maybe_zero(i16 %x) {
 ; X86-LABEL: sext_maybe_zero:
 ; X86:       # %bb.0:
-; X86-NEXT:    movswl {{[0-9]+}}(%esp), %eax
-; X86-NEXT:    bsfl %eax, %ecx
+; X86-NEXT:    movswl {{[0-9]+}}(%esp), %ecx
 ; X86-NEXT:    movl $32, %eax
-; X86-NEXT:    cmovnel %ecx, %eax
+; X86-NEXT:    rep bsfl %ecx, %eax
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: sext_maybe_zero:

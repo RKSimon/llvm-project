@@ -13,41 +13,23 @@ declare i32 @llvm.ctlz.i32(i32, i1)
 declare i64 @llvm.ctlz.i64(i64, i1)
 
 define i8 @ctlo_i8(i8 %x) {
-; X86-NOCMOV-LABEL: ctlo_i8:
-; X86-NOCMOV:       # %bb.0:
-; X86-NOCMOV-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
-; X86-NOCMOV-NEXT:    xorb $-1, %al
-; X86-NOCMOV-NEXT:    je .LBB0_1
-; X86-NOCMOV-NEXT:  # %bb.2: # %cond.false
-; X86-NOCMOV-NEXT:    movzbl %al, %eax
-; X86-NOCMOV-NEXT:    bsrl %eax, %eax
-; X86-NOCMOV-NEXT:    xorl $7, %eax
-; X86-NOCMOV-NEXT:    # kill: def $al killed $al killed $eax
-; X86-NOCMOV-NEXT:    retl
-; X86-NOCMOV-NEXT:  .LBB0_1:
-; X86-NOCMOV-NEXT:    movb $8, %al
-; X86-NOCMOV-NEXT:    # kill: def $al killed $al killed $eax
-; X86-NOCMOV-NEXT:    retl
-;
-; X86-CMOV-LABEL: ctlo_i8:
-; X86-CMOV:       # %bb.0:
-; X86-CMOV-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
-; X86-CMOV-NEXT:    notb %al
-; X86-CMOV-NEXT:    movzbl %al, %eax
-; X86-CMOV-NEXT:    bsrl %eax, %ecx
-; X86-CMOV-NEXT:    movl $15, %eax
-; X86-CMOV-NEXT:    cmovnel %ecx, %eax
-; X86-CMOV-NEXT:    xorl $7, %eax
-; X86-CMOV-NEXT:    # kill: def $al killed $al killed $eax
-; X86-CMOV-NEXT:    retl
+; X86-LABEL: ctlo_i8:
+; X86:       # %bb.0:
+; X86-NEXT:    movzbl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    notb %al
+; X86-NEXT:    movzbl %al, %ecx
+; X86-NEXT:    movl $15, %eax
+; X86-NEXT:    bsrl %ecx, %eax
+; X86-NEXT:    xorl $7, %eax
+; X86-NEXT:    # kill: def $al killed $al killed $eax
+; X86-NEXT:    retl
 ;
 ; X64-LABEL: ctlo_i8:
 ; X64:       # %bb.0:
 ; X64-NEXT:    notb %dil
-; X64-NEXT:    movzbl %dil, %eax
-; X64-NEXT:    bsrl %eax, %ecx
+; X64-NEXT:    movzbl %dil, %ecx
 ; X64-NEXT:    movl $15, %eax
-; X64-NEXT:    cmovnel %ecx, %eax
+; X64-NEXT:    bsrl %ecx, %eax
 ; X64-NEXT:    xorl $7, %eax
 ; X64-NEXT:    # kill: def $al killed $al killed $eax
 ; X64-NEXT:    retq
@@ -119,38 +101,21 @@ define i8 @ctlo_i8_undef(i8 %x) {
 }
 
 define i16 @ctlo_i16(i16 %x) {
-; X86-NOCMOV-LABEL: ctlo_i16:
-; X86-NOCMOV:       # %bb.0:
-; X86-NOCMOV-NEXT:    movzwl {{[0-9]+}}(%esp), %eax
-; X86-NOCMOV-NEXT:    xorw $-1, %ax
-; X86-NOCMOV-NEXT:    je .LBB2_1
-; X86-NOCMOV-NEXT:  # %bb.2: # %cond.false
-; X86-NOCMOV-NEXT:    bsrw %ax, %ax
-; X86-NOCMOV-NEXT:    xorl $15, %eax
-; X86-NOCMOV-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NOCMOV-NEXT:    retl
-; X86-NOCMOV-NEXT:  .LBB2_1:
-; X86-NOCMOV-NEXT:    movw $16, %ax
-; X86-NOCMOV-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-NOCMOV-NEXT:    retl
-;
-; X86-CMOV-LABEL: ctlo_i16:
-; X86-CMOV:       # %bb.0:
-; X86-CMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-CMOV-NEXT:    notl %eax
-; X86-CMOV-NEXT:    bsrw %ax, %cx
-; X86-CMOV-NEXT:    movw $31, %ax
-; X86-CMOV-NEXT:    cmovnew %cx, %ax
-; X86-CMOV-NEXT:    xorl $15, %eax
-; X86-CMOV-NEXT:    # kill: def $ax killed $ax killed $eax
-; X86-CMOV-NEXT:    retl
+; X86-LABEL: ctlo_i16:
+; X86:       # %bb.0:
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    notl %ecx
+; X86-NEXT:    movw $31, %ax
+; X86-NEXT:    bsrw %cx, %ax
+; X86-NEXT:    xorl $15, %eax
+; X86-NEXT:    # kill: def $ax killed $ax killed $eax
+; X86-NEXT:    retl
 ;
 ; X64-LABEL: ctlo_i16:
 ; X64:       # %bb.0:
 ; X64-NEXT:    notl %edi
-; X64-NEXT:    bsrw %di, %cx
 ; X64-NEXT:    movw $31, %ax
-; X64-NEXT:    cmovnew %cx, %ax
+; X64-NEXT:    bsrw %di, %ax
 ; X64-NEXT:    xorl $15, %eax
 ; X64-NEXT:    # kill: def $ax killed $ax killed $eax
 ; X64-NEXT:    retq
@@ -208,35 +173,20 @@ define i16 @ctlo_i16_undef(i16 %x) {
 }
 
 define i32 @ctlo_i32(i32 %x) {
-; X86-NOCMOV-LABEL: ctlo_i32:
-; X86-NOCMOV:       # %bb.0:
-; X86-NOCMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-NOCMOV-NEXT:    xorl $-1, %eax
-; X86-NOCMOV-NEXT:    je .LBB4_1
-; X86-NOCMOV-NEXT:  # %bb.2: # %cond.false
-; X86-NOCMOV-NEXT:    bsrl %eax, %eax
-; X86-NOCMOV-NEXT:    xorl $31, %eax
-; X86-NOCMOV-NEXT:    retl
-; X86-NOCMOV-NEXT:  .LBB4_1:
-; X86-NOCMOV-NEXT:    movl $32, %eax
-; X86-NOCMOV-NEXT:    retl
-;
-; X86-CMOV-LABEL: ctlo_i32:
-; X86-CMOV:       # %bb.0:
-; X86-CMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
-; X86-CMOV-NEXT:    notl %eax
-; X86-CMOV-NEXT:    bsrl %eax, %ecx
-; X86-CMOV-NEXT:    movl $63, %eax
-; X86-CMOV-NEXT:    cmovnel %ecx, %eax
-; X86-CMOV-NEXT:    xorl $31, %eax
-; X86-CMOV-NEXT:    retl
+; X86-LABEL: ctlo_i32:
+; X86:       # %bb.0:
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    notl %ecx
+; X86-NEXT:    movl $63, %eax
+; X86-NEXT:    bsrl %ecx, %eax
+; X86-NEXT:    xorl $31, %eax
+; X86-NEXT:    retl
 ;
 ; X64-LABEL: ctlo_i32:
 ; X64:       # %bb.0:
 ; X64-NEXT:    notl %edi
-; X64-NEXT:    bsrl %edi, %ecx
 ; X64-NEXT:    movl $63, %eax
-; X64-NEXT:    cmovnel %ecx, %eax
+; X64-NEXT:    bsrl %edi, %eax
 ; X64-NEXT:    xorl $31, %eax
 ; X64-NEXT:    retq
 ;
@@ -294,52 +244,51 @@ define i64 @ctlo_i64(i64 %x) {
 ; X86-NOCMOV-LABEL: ctlo_i64:
 ; X86-NOCMOV:       # %bb.0:
 ; X86-NOCMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NOCMOV-NEXT:    notl %eax
+; X86-NOCMOV-NEXT:    testl %eax, %eax
+; X86-NOCMOV-NEXT:    jne .LBB6_1
+; X86-NOCMOV-NEXT:  # %bb.2:
 ; X86-NOCMOV-NEXT:    movl {{[0-9]+}}(%esp), %ecx
 ; X86-NOCMOV-NEXT:    notl %ecx
-; X86-NOCMOV-NEXT:    notl %eax
-; X86-NOCMOV-NEXT:    bsrl %eax, %edx
 ; X86-NOCMOV-NEXT:    movl $63, %eax
-; X86-NOCMOV-NEXT:    je .LBB6_2
-; X86-NOCMOV-NEXT:  # %bb.1:
-; X86-NOCMOV-NEXT:    movl %edx, %eax
-; X86-NOCMOV-NEXT:  .LBB6_2:
-; X86-NOCMOV-NEXT:    testl %ecx, %ecx
-; X86-NOCMOV-NEXT:    jne .LBB6_3
-; X86-NOCMOV-NEXT:  # %bb.4:
+; X86-NOCMOV-NEXT:    bsrl %ecx, %eax
 ; X86-NOCMOV-NEXT:    xorl $31, %eax
 ; X86-NOCMOV-NEXT:    addl $32, %eax
 ; X86-NOCMOV-NEXT:    xorl %edx, %edx
 ; X86-NOCMOV-NEXT:    retl
-; X86-NOCMOV-NEXT:  .LBB6_3:
-; X86-NOCMOV-NEXT:    bsrl %ecx, %eax
+; X86-NOCMOV-NEXT:  .LBB6_1:
+; X86-NOCMOV-NEXT:    bsrl %eax, %eax
 ; X86-NOCMOV-NEXT:    xorl $31, %eax
 ; X86-NOCMOV-NEXT:    xorl %edx, %edx
 ; X86-NOCMOV-NEXT:    retl
 ;
 ; X86-CMOV-LABEL: ctlo_i64:
 ; X86-CMOV:       # %bb.0:
-; X86-CMOV-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-CMOV-NEXT:    pushl %esi
+; X86-CMOV-NEXT:    .cfi_def_cfa_offset 8
+; X86-CMOV-NEXT:    .cfi_offset %esi, -8
+; X86-CMOV-NEXT:    movl {{[0-9]+}}(%esp), %edx
 ; X86-CMOV-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-CMOV-NEXT:    notl %edx
 ; X86-CMOV-NEXT:    notl %ecx
-; X86-CMOV-NEXT:    notl %eax
-; X86-CMOV-NEXT:    bsrl %eax, %eax
-; X86-CMOV-NEXT:    movl $63, %edx
-; X86-CMOV-NEXT:    cmovnel %eax, %edx
-; X86-CMOV-NEXT:    xorl $31, %edx
-; X86-CMOV-NEXT:    addl $32, %edx
-; X86-CMOV-NEXT:    bsrl %ecx, %eax
+; X86-CMOV-NEXT:    bsrl %ecx, %esi
+; X86-CMOV-NEXT:    xorl $31, %esi
+; X86-CMOV-NEXT:    movl $63, %eax
+; X86-CMOV-NEXT:    bsrl %edx, %eax
 ; X86-CMOV-NEXT:    xorl $31, %eax
+; X86-CMOV-NEXT:    addl $32, %eax
 ; X86-CMOV-NEXT:    testl %ecx, %ecx
-; X86-CMOV-NEXT:    cmovel %edx, %eax
+; X86-CMOV-NEXT:    cmovnel %esi, %eax
 ; X86-CMOV-NEXT:    xorl %edx, %edx
+; X86-CMOV-NEXT:    popl %esi
+; X86-CMOV-NEXT:    .cfi_def_cfa_offset 4
 ; X86-CMOV-NEXT:    retl
 ;
 ; X64-LABEL: ctlo_i64:
 ; X64:       # %bb.0:
 ; X64-NEXT:    notq %rdi
-; X64-NEXT:    bsrq %rdi, %rcx
 ; X64-NEXT:    movl $127, %eax
-; X64-NEXT:    cmovneq %rcx, %rax
+; X64-NEXT:    bsrq %rdi, %rax
 ; X64-NEXT:    xorq $63, %rax
 ; X64-NEXT:    retq
 ;
