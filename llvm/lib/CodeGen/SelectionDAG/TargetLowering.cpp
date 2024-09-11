@@ -840,6 +840,16 @@ SDValue TargetLowering::SimplifyMultipleUseDemandedBits(
     }
     break;
   }
+  case ISD::SRA: {
+    // If we are only demanding sign bits then we can use the shift source
+    // directly.
+    SDValue Op0 = Op.getOperand(0);
+    unsigned NumSignBits = DAG.ComputeNumSignBits(Op0, DemandedElts, Depth + 1);
+    unsigned UpperDemandedBits = BitWidth - DemandedBits.countr_zero();
+    if (NumSignBits >= UpperDemandedBits)
+      return Op0;
+    break;
+  }
   case ISD::SETCC: {
     SDValue Op0 = Op.getOperand(0);
     SDValue Op1 = Op.getOperand(1);

@@ -7,9 +7,9 @@ define <16 x i8> @div16xi8(<16 x i8> %x) {
 ; CHECK-NEXT:    movi v1.16b, #41
 ; CHECK-NEXT:    smull2 v2.8h, v0.16b, v1.16b
 ; CHECK-NEXT:    smull v0.8h, v0.8b, v1.8b
-; CHECK-NEXT:    uzp2 v0.16b, v0.16b, v2.16b
-; CHECK-NEXT:    sshr v0.16b, v0.16b, #2
-; CHECK-NEXT:    usra v0.16b, v0.16b, #7
+; CHECK-NEXT:    uzp2 v1.16b, v0.16b, v2.16b
+; CHECK-NEXT:    sshr v0.16b, v1.16b, #2
+; CHECK-NEXT:    usra v0.16b, v1.16b, #7
 ; CHECK-NEXT:    ret
   %div = sdiv <16 x i8> %x, <i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25, i8 25>
   ret <16 x i8> %div
@@ -23,9 +23,9 @@ define <8 x i16> @div8xi16(<8 x i16> %x) {
 ; CHECK-NEXT:    smull2 v2.4s, v0.8h, v1.8h
 ; CHECK-NEXT:    smull v1.4s, v0.4h, v1.4h
 ; CHECK-NEXT:    uzp2 v1.8h, v1.8h, v2.8h
-; CHECK-NEXT:    add v0.8h, v1.8h, v0.8h
-; CHECK-NEXT:    sshr v0.8h, v0.8h, #12
-; CHECK-NEXT:    usra v0.8h, v0.8h, #15
+; CHECK-NEXT:    add v1.8h, v1.8h, v0.8h
+; CHECK-NEXT:    sshr v0.8h, v1.8h, #12
+; CHECK-NEXT:    usra v0.8h, v1.8h, #15
 ; CHECK-NEXT:    ret
   %div = sdiv <8 x i16> %x, <i16 6577, i16 6577, i16 6577, i16 6577, i16 6577, i16 6577, i16 6577, i16 6577>
   ret <8 x i16> %div
