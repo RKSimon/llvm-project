@@ -3,6 +3,7 @@ set(LLVM_LINK_COMPONENTS
   AsmParser
   Core
   Passes
+  SelectionDAG
   Support
   ScalarOpts
   TransformUtils

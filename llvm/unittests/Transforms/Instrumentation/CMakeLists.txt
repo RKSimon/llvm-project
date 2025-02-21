@@ -5,6 +5,7 @@ set(LLVM_LINK_COMPONENTS
   Instrumentation
   Passes
   ProfileData
+  SelectionDAG
   Support
 )
 

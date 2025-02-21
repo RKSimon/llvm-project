@@ -3260,7 +3260,8 @@ bool X86TargetLowering::shouldReduceLoadWidth(SDNode *Load,
   // those uses are extracted directly into a store, then the extract + store
   // can be store-folded. Therefore, it's probably not worth splitting the load.
   EVT VT = Load->getValueType(0);
-  if ((VT.is256BitVector() || VT.is512BitVector()) && !Load->hasOneUse()) {
+  if ((VT.is256BitVector() || VT.is512BitVector()) &&
+      !Load->hasNUsesOfValue(1, 0)) {
     for (SDUse &Use : Load->uses()) {
       // Skip uses of the chain value. Result 0 of the node is the load value.
       if (Use.getResNo() != 0)

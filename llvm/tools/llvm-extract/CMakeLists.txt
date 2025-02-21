@@ -6,6 +6,7 @@ set(LLVM_LINK_COMPONENTS
   IRReader
   IRPrinter
   Passes
+  SelectionDAG
   Support
   )
 
