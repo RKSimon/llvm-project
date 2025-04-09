@@ -39646,6 +39646,11 @@ static bool matchBinaryPermuteShuffle(
   return false;
 }
 
+static SDValue combineConcatVectorOps(const SDLoc &DL, MVT VT,
+                                      ArrayRef<SDValue> Ops, SelectionDAG &DAG,
+                                      const X86Subtarget &Subtarget,
+                                      unsigned Depth = 0);
+
 static SDValue combineX86ShuffleChainWithExtract(
     ArrayRef<SDValue> Inputs, unsigned RootOpcode, MVT RootVT,
     ArrayRef<int> BaseMask, int Depth, ArrayRef<const SDNode *> SrcNodes,
@@ -39733,6 +39738,33 @@ static SDValue combineX86ShuffleChain(
       if (isTargetShuffleEquivalent(RootVT, ScaledMask, IdentityMask, DAG, V1,
                                     V2))
         return CanonicalizeShuffleInput(RootVT, V1);
+    }
+  }
+
+  // If this is a shuffle of 128/256-bit subvectors, see if we can concatenate
+  // them back together.
+  if (Subtarget.hasAVX() && llvm::none_of(Mask, isUndefOrZero) &&
+      ((RootVT.is256BitVector() && NumBaseMaskElts == 2) ||
+       (RootVT.is512BitVector() && NumBaseMaskElts == 2) ||
+       (RootVT.is512BitVector() && NumBaseMaskElts == 4))) {
+    SmallVector<SDValue, 2> ConcatOps, SubOps[2];
+    if (collectConcatOps(V1.getNode(), SubOps[0], DAG) &&
+        SubOps[0].size() == NumBaseMaskElts &&
+        (UnaryShuffle || (collectConcatOps(V2.getNode(), SubOps[1], DAG) &&
+                          SubOps[0].size() == SubOps[1].size()))) {
+      for (int M : Mask)
+        ConcatOps.push_back(SubOps[M / NumBaseMaskElts][M % NumBaseMaskElts]);
+      EVT SubVT = ConcatOps[0].getValueType();
+      if (SubVT.isSimple() && all_of(ConcatOps, [SubVT](SDValue Op) {
+            return Op.getValueType() == SubVT;
+          })) {
+        MVT ConcatVT =
+            MVT::getVectorVT(SubVT.getSimpleVT().getScalarType(),
+                             RootSizeInBits / SubVT.getScalarSizeInBits());
+        if (SDValue ConcatSrc = combineConcatVectorOps(
+                DL, ConcatVT, ConcatOps, DAG, Subtarget, Depth + 1))
+          return DAG.getBitcast(RootVT, ConcatSrc);
+      }
     }
   }
 
@@ -41925,11 +41957,6 @@ static SDValue canonicalizeLaneShuffleWithRepeatedOps(SDValue V,
 
   return SDValue();
 }
-
-static SDValue combineConcatVectorOps(const SDLoc &DL, MVT VT,
-                                      ArrayRef<SDValue> Ops, SelectionDAG &DAG,
-                                      const X86Subtarget &Subtarget,
-                                      unsigned Depth = 0);
 
 /// Try to combine x86 target specific shuffles.
 static SDValue combineTargetShuffle(SDValue N, const SDLoc &DL,
