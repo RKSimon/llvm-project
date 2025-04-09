@@ -392,10 +392,8 @@ define <16 x i32> @splatconstant_shift_v16i32(<16 x i32> %a) nounwind {
 define <32 x i16> @splatconstant_shift_v32i16(<32 x i16> %a) nounwind {
 ; AVX512DQ-LABEL: splatconstant_shift_v32i16:
 ; AVX512DQ:       # %bb.0:
-; AVX512DQ-NEXT:    vpsllw $3, %ymm0, %ymm1
-; AVX512DQ-NEXT:    vextracti64x4 $1, %zmm0, %ymm0
-; AVX512DQ-NEXT:    vpsllw $3, %ymm0, %ymm0
-; AVX512DQ-NEXT:    vinserti64x4 $1, %ymm0, %zmm1, %zmm0
+; AVX512DQ-NEXT:    vpslld $3, %zmm0, %zmm0
+; AVX512DQ-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    retq
 ;
 ; AVX512BW-LABEL: splatconstant_shift_v32i16:
@@ -409,10 +407,7 @@ define <32 x i16> @splatconstant_shift_v32i16(<32 x i16> %a) nounwind {
 define <64 x i8> @splatconstant_shift_v64i8(<64 x i8> %a) nounwind {
 ; AVX512DQ-LABEL: splatconstant_shift_v64i8:
 ; AVX512DQ:       # %bb.0:
-; AVX512DQ-NEXT:    vpsllw $3, %ymm0, %ymm1
-; AVX512DQ-NEXT:    vextracti64x4 $1, %zmm0, %ymm0
-; AVX512DQ-NEXT:    vpsllw $3, %ymm0, %ymm0
-; AVX512DQ-NEXT:    vinserti64x4 $1, %ymm0, %zmm1, %zmm0
+; AVX512DQ-NEXT:    vpslld $3, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    vpandd {{\.?LCPI[0-9]+_[0-9]+}}(%rip){1to16}, %zmm0, %zmm0
 ; AVX512DQ-NEXT:    retq
 ;

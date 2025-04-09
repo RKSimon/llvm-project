@@ -58471,6 +58471,32 @@ static SDValue combineConcatVectorOps(const SDLoc &DL, MVT VT,
         }
         return DAG.getBitcast(VT, Res);
       }
+      // Special case: non-AVX512BW vectors can use v16i32 logical shift + mask.
+      if ((VT == MVT::v32i16 || VT == MVT::v64i8) &&
+          Subtarget.useAVX512Regs() && !Subtarget.hasBWI() &&
+          llvm::all_of(Ops, [Op0](SDValue Op) {
+            return Op0.getOperand(1) == Op.getOperand(1);
+          })) {
+        if (SDValue Concat = CombineSubOperand(VT, Ops, 0)) {
+          APInt Mask;
+          uint64_t ShiftAmt = Op0.getConstantOperandVal(1);
+          uint64_t MaskBits = EltSizeInBits - ShiftAmt;
+          if (Op0.getOpcode() == X86ISD::VSHLI) {
+            // Zero out the rightmost bits.
+            Mask = APInt::getHighBitsSet(EltSizeInBits, MaskBits);
+          } else {
+            // Zero out the leftmost bits.
+            Mask = APInt::getLowBitsSet(EltSizeInBits, MaskBits);
+          }
+          // Make a large shift.
+          SDValue Shift = getTargetVShiftByConstNode(
+              Op0.getOpcode(), DL, MVT::v16i32,
+              DAG.getBitcast(MVT::v16i32, Concat), ShiftAmt, DAG);
+          // Zero out the out of bounds bits.
+          return DAG.getNode(ISD::AND, DL, VT, DAG.getBitcast(VT, Shift),
+                             DAG.getConstant(Mask, DL, VT));
+        }
+      }
       [[fallthrough]];
     case X86ISD::VSRAI:
     case X86ISD::VSHL:
