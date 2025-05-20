@@ -546,12 +546,13 @@ define i64 @reduce_ctpop_v8i64(<8 x i64> %a0) {
 ; SSE42-NEXT:    pshufb %xmm1, %xmm4
 ; SSE42-NEXT:    paddb %xmm6, %xmm4
 ; SSE42-NEXT:    paddb %xmm0, %xmm4
-; SSE42-NEXT:    paddb %xmm2, %xmm4
 ; SSE42-NEXT:    pxor %xmm0, %xmm0
-; SSE42-NEXT:    psadbw %xmm4, %xmm0
-; SSE42-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; SSE42-NEXT:    paddq %xmm0, %xmm1
-; SSE42-NEXT:    movq %xmm1, %rax
+; SSE42-NEXT:    psadbw %xmm0, %xmm4
+; SSE42-NEXT:    psadbw %xmm0, %xmm2
+; SSE42-NEXT:    paddq %xmm4, %xmm2
+; SSE42-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; SSE42-NEXT:    paddq %xmm2, %xmm0
+; SSE42-NEXT:    movq %xmm0, %rax
 ; SSE42-NEXT:    retq
 ;
 ; AVX2-LABEL: reduce_ctpop_v8i64:
@@ -811,16 +812,15 @@ define i64 @reduce_ctpop_v16i64(<16 x i64> %a0) {
 ; SSE42-NEXT:    pshufb %xmm3, %xmm1
 ; SSE42-NEXT:    paddb %xmm7, %xmm1
 ; SSE42-NEXT:    paddb %xmm11, %xmm1
-; SSE42-NEXT:    paddb %xmm5, %xmm1
 ; SSE42-NEXT:    movdqa %xmm4, %xmm3
 ; SSE42-NEXT:    pand %xmm9, %xmm3
-; SSE42-NEXT:    movdqa %xmm8, %xmm5
-; SSE42-NEXT:    pshufb %xmm3, %xmm5
+; SSE42-NEXT:    movdqa %xmm8, %xmm7
+; SSE42-NEXT:    pshufb %xmm3, %xmm7
 ; SSE42-NEXT:    psrlw $4, %xmm4
 ; SSE42-NEXT:    pand %xmm9, %xmm4
-; SSE42-NEXT:    movdqa %xmm8, %xmm7
-; SSE42-NEXT:    pshufb %xmm4, %xmm7
-; SSE42-NEXT:    paddb %xmm5, %xmm7
+; SSE42-NEXT:    movdqa %xmm8, %xmm10
+; SSE42-NEXT:    pshufb %xmm4, %xmm10
+; SSE42-NEXT:    paddb %xmm7, %xmm10
 ; SSE42-NEXT:    movdqa %xmm0, %xmm3
 ; SSE42-NEXT:    pand %xmm9, %xmm3
 ; SSE42-NEXT:    movdqa %xmm8, %xmm4
@@ -830,7 +830,7 @@ define i64 @reduce_ctpop_v16i64(<16 x i64> %a0) {
 ; SSE42-NEXT:    movdqa %xmm8, %xmm3
 ; SSE42-NEXT:    pshufb %xmm0, %xmm3
 ; SSE42-NEXT:    paddb %xmm4, %xmm3
-; SSE42-NEXT:    paddb %xmm7, %xmm3
+; SSE42-NEXT:    paddb %xmm10, %xmm3
 ; SSE42-NEXT:    movdqa %xmm6, %xmm0
 ; SSE42-NEXT:    pand %xmm9, %xmm0
 ; SSE42-NEXT:    movdqa %xmm8, %xmm4
@@ -842,20 +842,24 @@ define i64 @reduce_ctpop_v16i64(<16 x i64> %a0) {
 ; SSE42-NEXT:    paddb %xmm4, %xmm0
 ; SSE42-NEXT:    movdqa %xmm2, %xmm4
 ; SSE42-NEXT:    pand %xmm9, %xmm4
-; SSE42-NEXT:    movdqa %xmm8, %xmm5
-; SSE42-NEXT:    pshufb %xmm4, %xmm5
+; SSE42-NEXT:    movdqa %xmm8, %xmm6
+; SSE42-NEXT:    pshufb %xmm4, %xmm6
 ; SSE42-NEXT:    psrlw $4, %xmm2
 ; SSE42-NEXT:    pand %xmm9, %xmm2
 ; SSE42-NEXT:    pshufb %xmm2, %xmm8
-; SSE42-NEXT:    paddb %xmm5, %xmm8
+; SSE42-NEXT:    paddb %xmm6, %xmm8
 ; SSE42-NEXT:    paddb %xmm0, %xmm8
-; SSE42-NEXT:    paddb %xmm3, %xmm8
-; SSE42-NEXT:    paddb %xmm1, %xmm8
 ; SSE42-NEXT:    pxor %xmm0, %xmm0
-; SSE42-NEXT:    psadbw %xmm8, %xmm0
-; SSE42-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
-; SSE42-NEXT:    paddq %xmm0, %xmm1
-; SSE42-NEXT:    movq %xmm1, %rax
+; SSE42-NEXT:    psadbw %xmm0, %xmm8
+; SSE42-NEXT:    psadbw %xmm0, %xmm3
+; SSE42-NEXT:    paddq %xmm8, %xmm3
+; SSE42-NEXT:    psadbw %xmm0, %xmm1
+; SSE42-NEXT:    psadbw %xmm0, %xmm5
+; SSE42-NEXT:    paddq %xmm1, %xmm5
+; SSE42-NEXT:    paddq %xmm3, %xmm5
+; SSE42-NEXT:    pshufd {{.*#+}} xmm0 = xmm5[2,3,2,3]
+; SSE42-NEXT:    paddq %xmm5, %xmm0
+; SSE42-NEXT:    movq %xmm0, %rax
 ; SSE42-NEXT:    retq
 ;
 ; AVX2-LABEL: reduce_ctpop_v16i64:
@@ -889,9 +893,10 @@ define i64 @reduce_ctpop_v16i64(<16 x i64> %a0) {
 ; AVX2-NEXT:    vpshufb %ymm1, %ymm6, %ymm1
 ; AVX2-NEXT:    vpaddb %ymm3, %ymm1, %ymm1
 ; AVX2-NEXT:    vpaddb %ymm2, %ymm1, %ymm1
-; AVX2-NEXT:    vpaddb %ymm1, %ymm0, %ymm0
-; AVX2-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX2-NEXT:    vpsadbw %ymm1, %ymm0, %ymm0
+; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX2-NEXT:    vpsadbw %ymm2, %ymm1, %ymm1
+; AVX2-NEXT:    vpsadbw %ymm2, %ymm0, %ymm0
+; AVX2-NEXT:    vpaddq %ymm1, %ymm0, %ymm0
 ; AVX2-NEXT:    vextracti128 $1, %ymm0, %xmm1
 ; AVX2-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
