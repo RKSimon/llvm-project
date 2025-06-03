@@ -253,7 +253,7 @@ define void @store_i32_stride4_vf4(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX-NEXT:    vmovaps (%rcx), %xmm3
 ; AVX-NEXT:    vinsertps {{.*#+}} xmm4 = xmm0[1],xmm1[1],zero,zero
 ; AVX-NEXT:    vunpcklps {{.*#+}} xmm5 = xmm2[0],xmm3[0],xmm2[1],xmm3[1]
-; AVX-NEXT:    vblendps {{.*#+}} xmm4 = xmm4[0,1],xmm5[2,3]
+; AVX-NEXT:    vmovsd {{.*#+}} xmm4 = xmm4[0],xmm5[1]
 ; AVX-NEXT:    vmovlhps {{.*#+}} xmm5 = xmm2[0],xmm3[0]
 ; AVX-NEXT:    vunpcklps {{.*#+}} xmm6 = xmm0[0],xmm1[0],xmm0[1],xmm1[1]
 ; AVX-NEXT:    vshufps {{.*#+}} xmm5 = xmm6[0,1],xmm5[0,2]
@@ -263,7 +263,7 @@ define void @store_i32_stride4_vf4(ptr %in.vecptr0, ptr %in.vecptr1, ptr %in.vec
 ; AVX-NEXT:    vshufps {{.*#+}} xmm5 = xmm6[2,0],xmm5[2,3]
 ; AVX-NEXT:    vunpckhps {{.*#+}} xmm0 = xmm0[2],xmm1[2],xmm0[3],xmm1[3]
 ; AVX-NEXT:    vinsertps {{.*#+}} xmm1 = zero,zero,xmm2[2],xmm3[2]
-; AVX-NEXT:    vblendps {{.*#+}} xmm0 = xmm0[0,1],xmm1[2,3]
+; AVX-NEXT:    vmovsd {{.*#+}} xmm0 = xmm0[0],xmm1[1]
 ; AVX-NEXT:    vinsertf128 $1, %xmm5, %ymm0, %ymm0
 ; AVX-NEXT:    vmovaps %ymm0, 32(%r8)
 ; AVX-NEXT:    vmovaps %ymm4, (%r8)

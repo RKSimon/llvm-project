@@ -124,6 +124,31 @@ bool X86FixupInstTuningPass::processInstruction(
     return ReplaceInTie;
   };
 
+  // `vmovsd x, y` -> `vblendpd x, y, 1`
+  // `vmovss x, y` -> `vblendps x, y, 1`
+  auto ProcessMOVSrr = [&](unsigned NewOpc) -> bool {
+    if (!NewOpcPreferable(NewOpc, /*ReplaceInTie=*/false))
+      return false;
+    MI.setDesc(TII->get(NewOpc));
+    MI.addOperand(MachineOperand::CreateImm(1));
+    return true;
+  };
+
+  // `vblendpd x, y, 1` -> `vmovsd x, y`
+  // `vblendps x, y, 1` -> `vmovss x, y`
+  // `vblendps x, y, 3` -> `vmovsd x, y`
+  auto ProcessBLENDrri = [&](unsigned NewOpc, unsigned Mask,
+                             unsigned Imm) -> bool {
+    if (!NewOpcPreferable(NewOpc))
+      return false;
+    unsigned BlendMask = MI.getOperand(NumOperands - 1).getImm();
+    if ((BlendMask & Mask) != Imm)
+      return false;
+    MI.setDesc(TII->get(NewOpc));
+    MI.removeOperand(NumOperands - 1);
+    return true;
+  };
+
   // `vpermilpd r, i` -> `vshufpd r, r, i`
   // `vpermilpd r, i, k` -> `vshufpd r, r, i, k`
   // `vshufpd` is always as fast or faster than `vpermilpd` and takes
@@ -223,6 +248,26 @@ bool X86FixupInstTuningPass::processInstruction(
   };
 
   switch (Opc) {
+  case X86::BLENDPDrri:
+    return ProcessBLENDrri(X86::MOVSDrr, 3, 1);
+  case X86::BLENDPSrri:
+    return ProcessBLENDrri(X86::MOVSSrr, 15, 1) ||
+           ProcessBLENDrri(X86::MOVSDrr, 15, 3);
+  case X86::VBLENDPDrri:
+    return ProcessBLENDrri(X86::VMOVSDrr, 3, 1);
+  case X86::VBLENDPSrri:
+    return ProcessBLENDrri(X86::VMOVSSrr, 15, 1) ||
+           ProcessBLENDrri(X86::VMOVSDrr, 15, 3);
+  
+  case X86::MOVSDrr:
+    return ST->hasSSE41() ? ProcessMOVSrr(X86::BLENDPDrri) : false;
+  case X86::MOVSSrr:
+    return ST->hasSSE41() ? ProcessMOVSrr(X86::BLENDPSrri) : false;
+  case X86::VMOVSDrr:
+    return ProcessMOVSrr(X86::VBLENDPDrri);
+  case X86::VMOVSSrr:
+    return ProcessMOVSrr(X86::VBLENDPSrri);
+
   case X86::VPERMILPDri:
     return ProcessVPERMILPDri(X86::VSHUFPDrri);
   case X86::VPERMILPDYri:
