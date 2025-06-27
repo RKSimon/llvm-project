@@ -45079,25 +45079,78 @@ bool X86TargetLowering::canCreateUndefOrPoisonForTargetNode(
     bool PoisonOnly, bool ConsiderFlags, unsigned Depth) const {
 
   switch (Op.getOpcode()) {
+  // X86 arithmetic ops.
+  case X86ISD::ADD:
+  case X86ISD::SUB:
+  case X86ISD::ADC:
+  case X86ISD::SBB:
+    return false;
+  case X86ISD::BSR:
+  case X86ISD::BSF:
+    return !Subtarget.hasBitScanPassThrough();
+  // SSE/AVX logic ops.
+  case X86ISD::FAND:
+  case X86ISD::FOR:
+  case X86ISD::FXOR:
+  case X86ISD::FANDN:
+  case X86ISD::ANDNP:
+  case X86ISD::VPTERNLOG:
+    return false;
+  // SSE vector extractions/insertions indices are always inbounds.
+  case X86ISD::PEXTRB:
+  case X86ISD::PEXTRW:
+  case X86ISD::PINSRB:
+  case X86ISD::PINSRW:
+    return false;
   // SSE vector multiplies are either inbounds or saturate.
+  case X86ISD::PMULDQ:
+  case X86ISD::PMULUDQ:
   case X86ISD::VPMADDUBSW:
   case X86ISD::VPMADDWD:
-  // SSE vector shifts handle out of bounds shift amounts.
+    return false;
+  // SSE/AVX2 vector shifts handle out of bounds shift amounts.
+  case X86ISD::VSHL:
+  case X86ISD::VSRL:
+  case X86ISD::VSRA:
+  case X86ISD::VSHLV:
+  case X86ISD::VSRLV:
+  case X86ISD::VSRAV:
   case X86ISD::VSHLI:
   case X86ISD::VSRLI:
   case X86ISD::VSRAI:
     return false;
+  // SSE/AVX blends.
+  case X86ISD::BLENDI:
+  case X86ISD::BLENDV:
+    return false;
+  // SSE/AVX shuffles.
+  case X86ISD::PACKSS:
+  case X86ISD::PACKUS:
+  case X86ISD::PALIGNR:
   case X86ISD::PSHUFD:
+  case X86ISD::PSHUFHW:
+  case X86ISD::PSHUFLW:
   case X86ISD::VPERMILPI:
   case X86ISD::VPERMV3:
   case X86ISD::UNPCKH:
   case X86ISD::UNPCKL:
+  case X86ISD::VBROADCAST:
     return false;
-    // SSE comparisons handle all icmp/fcmp cases.
-    // TODO: Add CMPM/MM with test coverage.
+  // SSE/AVX comparisons handle all icmp/fcmp cases.
+  // TODO: Add CMPMM with test coverage.
   case X86ISD::CMPP:
+  case X86ISD::CMPM:
   case X86ISD::PCMPEQ:
   case X86ISD::PCMPGT:
+    return false;
+  // SSE/AVX Conversions
+  case X86ISD::CVTTP2SI:
+  case X86ISD::CVTTP2UI:
+  case X86ISD::CVTTS2SI:
+  case X86ISD::CVTTS2UI:
+    return false;
+  // Misc
+  case X86ISD::GF2P8AFFINEQB:
     return false;
   case ISD::INTRINSIC_WO_CHAIN:
     switch (Op->getConstantOperandVal(0)) {
