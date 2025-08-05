@@ -2030,31 +2030,31 @@ define i128 @abd_subnsw_i128(i128 %a, i128 %b) nounwind {
 ; RV32I-NEXT:  .LBB31_2:
 ; RV32I-NEXT:    sub a6, a2, a6
 ; RV32I-NEXT:    sub a1, a1, a4
-; RV32I-NEXT:    sltu a2, a6, t1
-; RV32I-NEXT:    sub a1, a1, t0
-; RV32I-NEXT:    sub a2, a7, a2
+; RV32I-NEXT:    sltu a4, a6, t1
+; RV32I-NEXT:    sub a2, a1, t0
+; RV32I-NEXT:    sub a1, a7, a4
 ; RV32I-NEXT:    sub a4, a6, t1
 ; RV32I-NEXT:    sub a3, a5, a3
-; RV32I-NEXT:    bgez a2, .LBB31_4
+; RV32I-NEXT:    bgez a1, .LBB31_4
 ; RV32I-NEXT:  # %bb.3:
 ; RV32I-NEXT:    neg a5, a4
-; RV32I-NEXT:    or a6, a3, a1
+; RV32I-NEXT:    or a6, a3, a2
 ; RV32I-NEXT:    snez a4, a4
 ; RV32I-NEXT:    snez a7, a3
-; RV32I-NEXT:    snez a6, a6
-; RV32I-NEXT:    add a2, a2, a4
-; RV32I-NEXT:    add a1, a1, a7
-; RV32I-NEXT:    sltu a7, a5, a6
-; RV32I-NEXT:    neg a2, a2
-; RV32I-NEXT:    sub a4, a5, a6
-; RV32I-NEXT:    neg a1, a1
-; RV32I-NEXT:    sub a2, a2, a7
 ; RV32I-NEXT:    neg a3, a3
+; RV32I-NEXT:    snez a6, a6
+; RV32I-NEXT:    add a1, a1, a4
+; RV32I-NEXT:    add a2, a2, a7
+; RV32I-NEXT:    sltu a7, a5, a6
+; RV32I-NEXT:    neg a1, a1
+; RV32I-NEXT:    sub a4, a5, a6
+; RV32I-NEXT:    sub a1, a1, a7
+; RV32I-NEXT:    neg a2, a2
 ; RV32I-NEXT:  .LBB31_4:
 ; RV32I-NEXT:    sw a3, 0(a0)
-; RV32I-NEXT:    sw a1, 4(a0)
+; RV32I-NEXT:    sw a2, 4(a0)
 ; RV32I-NEXT:    sw a4, 8(a0)
-; RV32I-NEXT:    sw a2, 12(a0)
+; RV32I-NEXT:    sw a1, 12(a0)
 ; RV32I-NEXT:    ret
 ;
 ; RV64I-LABEL: abd_subnsw_i128:
@@ -2093,31 +2093,31 @@ define i128 @abd_subnsw_i128(i128 %a, i128 %b) nounwind {
 ; RV32ZBB-NEXT:  .LBB31_2:
 ; RV32ZBB-NEXT:    sub a6, a2, a6
 ; RV32ZBB-NEXT:    sub a1, a1, a4
-; RV32ZBB-NEXT:    sltu a2, a6, t1
-; RV32ZBB-NEXT:    sub a1, a1, t0
-; RV32ZBB-NEXT:    sub a2, a7, a2
+; RV32ZBB-NEXT:    sltu a4, a6, t1
+; RV32ZBB-NEXT:    sub a2, a1, t0
+; RV32ZBB-NEXT:    sub a1, a7, a4
 ; RV32ZBB-NEXT:    sub a4, a6, t1
 ; RV32ZBB-NEXT:    sub a3, a5, a3
-; RV32ZBB-NEXT:    bgez a2, .LBB31_4
+; RV32ZBB-NEXT:    bgez a1, .LBB31_4
 ; RV32ZBB-NEXT:  # %bb.3:
 ; RV32ZBB-NEXT:    neg a5, a4
-; RV32ZBB-NEXT:    or a6, a3, a1
+; RV32ZBB-NEXT:    or a6, a3, a2
 ; RV32ZBB-NEXT:    snez a4, a4
 ; RV32ZBB-NEXT:    snez a7, a3
-; RV32ZBB-NEXT:    snez a6, a6
-; RV32ZBB-NEXT:    add a2, a2, a4
-; RV32ZBB-NEXT:    add a1, a1, a7
-; RV32ZBB-NEXT:    sltu a7, a5, a6
-; RV32ZBB-NEXT:    neg a2, a2
-; RV32ZBB-NEXT:    sub a4, a5, a6
-; RV32ZBB-NEXT:    neg a1, a1
-; RV32ZBB-NEXT:    sub a2, a2, a7
 ; RV32ZBB-NEXT:    neg a3, a3
+; RV32ZBB-NEXT:    snez a6, a6
+; RV32ZBB-NEXT:    add a1, a1, a4
+; RV32ZBB-NEXT:    add a2, a2, a7
+; RV32ZBB-NEXT:    sltu a7, a5, a6
+; RV32ZBB-NEXT:    neg a1, a1
+; RV32ZBB-NEXT:    sub a4, a5, a6
+; RV32ZBB-NEXT:    sub a1, a1, a7
+; RV32ZBB-NEXT:    neg a2, a2
 ; RV32ZBB-NEXT:  .LBB31_4:
 ; RV32ZBB-NEXT:    sw a3, 0(a0)
-; RV32ZBB-NEXT:    sw a1, 4(a0)
+; RV32ZBB-NEXT:    sw a2, 4(a0)
 ; RV32ZBB-NEXT:    sw a4, 8(a0)
-; RV32ZBB-NEXT:    sw a2, 12(a0)
+; RV32ZBB-NEXT:    sw a1, 12(a0)
 ; RV32ZBB-NEXT:    ret
 ;
 ; RV64ZBB-LABEL: abd_subnsw_i128:
@@ -2161,31 +2161,31 @@ define i128 @abd_subnsw_i128_undef(i128 %a, i128 %b) nounwind {
 ; RV32I-NEXT:  .LBB32_2:
 ; RV32I-NEXT:    sub a6, a2, a6
 ; RV32I-NEXT:    sub a1, a1, a4
-; RV32I-NEXT:    sltu a2, a6, t1
-; RV32I-NEXT:    sub a1, a1, t0
-; RV32I-NEXT:    sub a2, a7, a2
+; RV32I-NEXT:    sltu a4, a6, t1
+; RV32I-NEXT:    sub a2, a1, t0
+; RV32I-NEXT:    sub a1, a7, a4
 ; RV32I-NEXT:    sub a4, a6, t1
 ; RV32I-NEXT:    sub a3, a5, a3
-; RV32I-NEXT:    bgez a2, .LBB32_4
+; RV32I-NEXT:    bgez a1, .LBB32_4
 ; RV32I-NEXT:  # %bb.3:
 ; RV32I-NEXT:    neg a5, a4
-; RV32I-NEXT:    or a6, a3, a1
+; RV32I-NEXT:    or a6, a3, a2
 ; RV32I-NEXT:    snez a4, a4
 ; RV32I-NEXT:    snez a7, a3
-; RV32I-NEXT:    snez a6, a6
-; RV32I-NEXT:    add a2, a2, a4
-; RV32I-NEXT:    add a1, a1, a7
-; RV32I-NEXT:    sltu a7, a5, a6
-; RV32I-NEXT:    neg a2, a2
-; RV32I-NEXT:    sub a4, a5, a6
-; RV32I-NEXT:    neg a1, a1
-; RV32I-NEXT:    sub a2, a2, a7
 ; RV32I-NEXT:    neg a3, a3
+; RV32I-NEXT:    snez a6, a6
+; RV32I-NEXT:    add a1, a1, a4
+; RV32I-NEXT:    add a2, a2, a7
+; RV32I-NEXT:    sltu a7, a5, a6
+; RV32I-NEXT:    neg a1, a1
+; RV32I-NEXT:    sub a4, a5, a6
+; RV32I-NEXT:    sub a1, a1, a7
+; RV32I-NEXT:    neg a2, a2
 ; RV32I-NEXT:  .LBB32_4:
 ; RV32I-NEXT:    sw a3, 0(a0)
-; RV32I-NEXT:    sw a1, 4(a0)
+; RV32I-NEXT:    sw a2, 4(a0)
 ; RV32I-NEXT:    sw a4, 8(a0)
-; RV32I-NEXT:    sw a2, 12(a0)
+; RV32I-NEXT:    sw a1, 12(a0)
 ; RV32I-NEXT:    ret
 ;
 ; RV64I-LABEL: abd_subnsw_i128_undef:
@@ -2224,31 +2224,31 @@ define i128 @abd_subnsw_i128_undef(i128 %a, i128 %b) nounwind {
 ; RV32ZBB-NEXT:  .LBB32_2:
 ; RV32ZBB-NEXT:    sub a6, a2, a6
 ; RV32ZBB-NEXT:    sub a1, a1, a4
-; RV32ZBB-NEXT:    sltu a2, a6, t1
-; RV32ZBB-NEXT:    sub a1, a1, t0
-; RV32ZBB-NEXT:    sub a2, a7, a2
+; RV32ZBB-NEXT:    sltu a4, a6, t1
+; RV32ZBB-NEXT:    sub a2, a1, t0
+; RV32ZBB-NEXT:    sub a1, a7, a4
 ; RV32ZBB-NEXT:    sub a4, a6, t1
 ; RV32ZBB-NEXT:    sub a3, a5, a3
-; RV32ZBB-NEXT:    bgez a2, .LBB32_4
+; RV32ZBB-NEXT:    bgez a1, .LBB32_4
 ; RV32ZBB-NEXT:  # %bb.3:
 ; RV32ZBB-NEXT:    neg a5, a4
-; RV32ZBB-NEXT:    or a6, a3, a1
+; RV32ZBB-NEXT:    or a6, a3, a2
 ; RV32ZBB-NEXT:    snez a4, a4
 ; RV32ZBB-NEXT:    snez a7, a3
-; RV32ZBB-NEXT:    snez a6, a6
-; RV32ZBB-NEXT:    add a2, a2, a4
-; RV32ZBB-NEXT:    add a1, a1, a7
-; RV32ZBB-NEXT:    sltu a7, a5, a6
-; RV32ZBB-NEXT:    neg a2, a2
-; RV32ZBB-NEXT:    sub a4, a5, a6
-; RV32ZBB-NEXT:    neg a1, a1
-; RV32ZBB-NEXT:    sub a2, a2, a7
 ; RV32ZBB-NEXT:    neg a3, a3
+; RV32ZBB-NEXT:    snez a6, a6
+; RV32ZBB-NEXT:    add a1, a1, a4
+; RV32ZBB-NEXT:    add a2, a2, a7
+; RV32ZBB-NEXT:    sltu a7, a5, a6
+; RV32ZBB-NEXT:    neg a1, a1
+; RV32ZBB-NEXT:    sub a4, a5, a6
+; RV32ZBB-NEXT:    sub a1, a1, a7
+; RV32ZBB-NEXT:    neg a2, a2
 ; RV32ZBB-NEXT:  .LBB32_4:
 ; RV32ZBB-NEXT:    sw a3, 0(a0)
-; RV32ZBB-NEXT:    sw a1, 4(a0)
+; RV32ZBB-NEXT:    sw a2, 4(a0)
 ; RV32ZBB-NEXT:    sw a4, 8(a0)
-; RV32ZBB-NEXT:    sw a2, 12(a0)
+; RV32ZBB-NEXT:    sw a1, 12(a0)
 ; RV32ZBB-NEXT:    ret
 ;
 ; RV64ZBB-LABEL: abd_subnsw_i128_undef:

@@ -11,17 +11,16 @@ define i32 @PR120906(ptr %p) {
 ; CHECK-NEXT:    paddb %xmm1, %xmm1
 ; CHECK-NEXT:    pxor %xmm2, %xmm2
 ; CHECK-NEXT:    pcmpgtb %xmm1, %xmm2
-; CHECK-NEXT:    movdqa {{.*#+}} xmm1 = [11,11,11,11,u,u,u,u,u,u,u,u,u,u,u,u]
-; CHECK-NEXT:    movdqa %xmm1, %xmm3
-; CHECK-NEXT:    paddb %xmm1, %xmm3
-; CHECK-NEXT:    pand %xmm2, %xmm3
-; CHECK-NEXT:    pandn %xmm1, %xmm2
-; CHECK-NEXT:    por %xmm1, %xmm2
-; CHECK-NEXT:    por %xmm3, %xmm2
-; CHECK-NEXT:    punpcklbw {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1],xmm2[2],xmm0[2],xmm2[3],xmm0[3],xmm2[4],xmm0[4],xmm2[5],xmm0[5],xmm2[6],xmm0[6],xmm2[7],xmm0[7]
-; CHECK-NEXT:    punpcklwd {{.*#+}} xmm2 = xmm2[0],xmm0[0],xmm2[1],xmm0[1],xmm2[2],xmm0[2],xmm2[3],xmm0[3]
-; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
-; CHECK-NEXT:    por %xmm2, %xmm0
+; CHECK-NEXT:    movd {{.*#+}} xmm1 = [11,11,11,11,0,0,0,0,0,0,0,0,0,0,0,0]
+; CHECK-NEXT:    movdqa %xmm2, %xmm3
+; CHECK-NEXT:    pandn %xmm1, %xmm3
+; CHECK-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
+; CHECK-NEXT:    por %xmm1, %xmm3
+; CHECK-NEXT:    por %xmm2, %xmm3
+; CHECK-NEXT:    punpcklbw {{.*#+}} xmm3 = xmm3[0],xmm0[0],xmm3[1],xmm0[1],xmm3[2],xmm0[2],xmm3[3],xmm0[3],xmm3[4],xmm0[4],xmm3[5],xmm0[5],xmm3[6],xmm0[6],xmm3[7],xmm0[7]
+; CHECK-NEXT:    punpcklwd {{.*#+}} xmm3 = xmm3[0],xmm0[0],xmm3[1],xmm0[1],xmm3[2],xmm0[2],xmm3[3],xmm0[3]
+; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm3[2,3,2,3]
+; CHECK-NEXT:    por %xmm3, %xmm0
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; CHECK-NEXT:    por %xmm0, %xmm1
 ; CHECK-NEXT:    movd %xmm1, %eax

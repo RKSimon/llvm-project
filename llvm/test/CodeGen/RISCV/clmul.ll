@@ -2916,19 +2916,19 @@ define i64 @clmul_i64(i64 %a, i64 %b) nounwind {
 ; RV32I-NEXT:    addi s2, s2, 1365
 ; RV32I-NEXT:    srli a2, a3, 1
 ; RV32I-NEXT:    and a3, a3, s2
-; RV32I-NEXT:    and a2, a2, s2
 ; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or t5, a2, a3
-; RV32I-NEXT:    srli a2, a4, 1
-; RV32I-NEXT:    and a3, a4, s2
-; RV32I-NEXT:    and a2, a2, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or t2, a2, a3
-; RV32I-NEXT:    srli a3, a3, 31
-; RV32I-NEXT:    seqz a2, a3
-; RV32I-NEXT:    addi a2, a2, -1
-; RV32I-NEXT:    slli a3, t5, 31
-; RV32I-NEXT:    and a2, a2, a3
+; RV32I-NEXT:    and a7, a2, s2
+; RV32I-NEXT:    or t5, a7, a3
+; RV32I-NEXT:    srli a3, a4, 1
+; RV32I-NEXT:    and a4, a4, s2
+; RV32I-NEXT:    and a3, a3, s2
+; RV32I-NEXT:    slli a4, a4, 1
+; RV32I-NEXT:    slli a2, a2, 31
+; RV32I-NEXT:    or t2, a3, a4
+; RV32I-NEXT:    srli a4, a4, 31
+; RV32I-NEXT:    seqz a3, a4
+; RV32I-NEXT:    addi a3, a3, -1
+; RV32I-NEXT:    and a2, a3, a2
 ; RV32I-NEXT:    sw a2, 296(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    andi a2, t2, 2
 ; RV32I-NEXT:    seqz a2, a2
@@ -5706,6 +5706,7 @@ define i64 @clmul_i64(i64 %a, i64 %b) nounwind {
 ; RV32IMZBS-NEXT:    xor a4, a4, a1
 ; RV32IMZBS-NEXT:    lui a1, 61681
 ; RV32IMZBS-NEXT:    addi a1, a1, -241
+; RV32IMZBS-NEXT:    sw a1, 336(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    srli a3, s8, 4
 ; RV32IMZBS-NEXT:    and s1, s8, a1
 ; RV32IMZBS-NEXT:    and a3, a3, a1
@@ -5718,283 +5719,282 @@ define i64 @clmul_i64(i64 %a, i64 %b) nounwind {
 ; RV32IMZBS-NEXT:    or s2, a3, s2
 ; RV32IMZBS-NEXT:    xor t3, a5, t3
 ; RV32IMZBS-NEXT:    lui a3, 209715
-; RV32IMZBS-NEXT:    lw a5, 156(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t5, t5, a5
-; RV32IMZBS-NEXT:    lui s3, 349525
-; RV32IMZBS-NEXT:    addi a5, a3, 819
-; RV32IMZBS-NEXT:    lw a3, 72(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s0, s0, a3
-; RV32IMZBS-NEXT:    addi a3, s3, 1365
+; RV32IMZBS-NEXT:    lw a1, 156(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t5, t5, a1
+; RV32IMZBS-NEXT:    lui a1, 349525
+; RV32IMZBS-NEXT:    addi a3, a3, 819
+; RV32IMZBS-NEXT:    sw a3, 328(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    lw a5, 72(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor s0, s0, a5
+; RV32IMZBS-NEXT:    addi a1, a1, 1365
 ; RV32IMZBS-NEXT:    xor a7, a7, t0
-; RV32IMZBS-NEXT:    lw t0, 160(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t0, t1, t0
-; RV32IMZBS-NEXT:    lw t1, 76(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t1, t4, t1
+; RV32IMZBS-NEXT:    lw a5, 160(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t0, t1, a5
+; RV32IMZBS-NEXT:    lw a5, 76(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t1, t4, a5
 ; RV32IMZBS-NEXT:    xor a0, a0, a2
 ; RV32IMZBS-NEXT:    lw a2, 164(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, t6, a2
-; RV32IMZBS-NEXT:    lw t4, 84(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor a4, a4, t4
+; RV32IMZBS-NEXT:    lw a5, 84(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor a4, a4, a5
 ; RV32IMZBS-NEXT:    srli t4, s1, 2
-; RV32IMZBS-NEXT:    and s1, s1, a5
+; RV32IMZBS-NEXT:    and s1, s1, a3
 ; RV32IMZBS-NEXT:    srli t6, s2, 2
-; RV32IMZBS-NEXT:    and s2, s2, a5
+; RV32IMZBS-NEXT:    and s2, s2, a3
 ; RV32IMZBS-NEXT:    xor t3, t3, t5
-; RV32IMZBS-NEXT:    lw t5, 92(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t5, s0, t5
+; RV32IMZBS-NEXT:    lw a5, 92(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t5, s0, a5
 ; RV32IMZBS-NEXT:    xor a7, a7, t0
-; RV32IMZBS-NEXT:    lw t0, 88(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t0, t1, t0
+; RV32IMZBS-NEXT:    lw a5, 88(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t0, t1, a5
 ; RV32IMZBS-NEXT:    xor a0, a0, a2
 ; RV32IMZBS-NEXT:    lw a2, 80(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, a4, a2
-; RV32IMZBS-NEXT:    and a4, t4, a5
+; RV32IMZBS-NEXT:    and a4, t4, a3
 ; RV32IMZBS-NEXT:    slli s1, s1, 2
-; RV32IMZBS-NEXT:    and t1, t6, a5
+; RV32IMZBS-NEXT:    and t1, t6, a3
 ; RV32IMZBS-NEXT:    slli s2, s2, 2
 ; RV32IMZBS-NEXT:    xor t3, t3, t5
 ; RV32IMZBS-NEXT:    xor a7, a7, t0
 ; RV32IMZBS-NEXT:    xor a0, a0, a2
-; RV32IMZBS-NEXT:    sw a0, 336(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 332(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    or a4, a4, s1
 ; RV32IMZBS-NEXT:    or a0, t1, s2
 ; RV32IMZBS-NEXT:    xor a2, t3, t2
 ; RV32IMZBS-NEXT:    xor a6, a7, a6
 ; RV32IMZBS-NEXT:    srli a7, a4, 1
-; RV32IMZBS-NEXT:    and a4, a4, a3
+; RV32IMZBS-NEXT:    sw a1, 320(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    and a4, a4, a1
 ; RV32IMZBS-NEXT:    srli t0, a0, 1
-; RV32IMZBS-NEXT:    and a0, a0, a3
+; RV32IMZBS-NEXT:    and a0, a0, a1
 ; RV32IMZBS-NEXT:    xor a2, a6, a2
-; RV32IMZBS-NEXT:    sw a2, 332(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    and a2, a7, a3
+; RV32IMZBS-NEXT:    sw a2, 324(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    and a2, a7, a1
 ; RV32IMZBS-NEXT:    slli a4, a4, 1
-; RV32IMZBS-NEXT:    and a7, t0, a3
+; RV32IMZBS-NEXT:    and a6, t0, a1
 ; RV32IMZBS-NEXT:    slli a0, a0, 1
-; RV32IMZBS-NEXT:    or t3, a2, a4
-; RV32IMZBS-NEXT:    or t1, a7, a0
+; RV32IMZBS-NEXT:    slli a7, a7, 31
+; RV32IMZBS-NEXT:    or s6, a2, a4
+; RV32IMZBS-NEXT:    or t1, a6, a0
 ; RV32IMZBS-NEXT:    srli a0, a0, 31
-; RV32IMZBS-NEXT:    slli a2, t3, 1
+; RV32IMZBS-NEXT:    slli a2, s6, 1
 ; RV32IMZBS-NEXT:    andi a4, t1, 2
-; RV32IMZBS-NEXT:    slli a7, t3, 2
-; RV32IMZBS-NEXT:    andi s6, t1, 4
-; RV32IMZBS-NEXT:    slli t0, t3, 3
-; RV32IMZBS-NEXT:    andi t5, t1, 8
-; RV32IMZBS-NEXT:    slli t6, t3, 4
-; RV32IMZBS-NEXT:    andi s0, t1, 16
-; RV32IMZBS-NEXT:    slli s1, t3, 5
-; RV32IMZBS-NEXT:    andi s2, t1, 32
-; RV32IMZBS-NEXT:    slli t4, t3, 6
-; RV32IMZBS-NEXT:    andi s4, t1, 64
-; RV32IMZBS-NEXT:    slli t2, t3, 7
-; RV32IMZBS-NEXT:    andi s3, t1, 128
-; RV32IMZBS-NEXT:    slli s5, t3, 8
-; RV32IMZBS-NEXT:    andi s8, t1, 256
-; RV32IMZBS-NEXT:    slli a6, t3, 31
+; RV32IMZBS-NEXT:    slli a6, s6, 2
+; RV32IMZBS-NEXT:    andi t4, t1, 4
+; RV32IMZBS-NEXT:    slli t5, s6, 3
+; RV32IMZBS-NEXT:    andi t6, t1, 8
+; RV32IMZBS-NEXT:    slli t0, s6, 4
+; RV32IMZBS-NEXT:    andi s1, t1, 16
+; RV32IMZBS-NEXT:    slli a1, s6, 5
+; RV32IMZBS-NEXT:    andi s3, t1, 32
+; RV32IMZBS-NEXT:    slli a3, s6, 6
+; RV32IMZBS-NEXT:    andi s5, t1, 64
+; RV32IMZBS-NEXT:    slli t2, s6, 7
+; RV32IMZBS-NEXT:    andi s7, t1, 128
+; RV32IMZBS-NEXT:    slli s8, s6, 8
+; RV32IMZBS-NEXT:    andi s9, t1, 256
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
-; RV32IMZBS-NEXT:    and a0, a0, a6
-; RV32IMZBS-NEXT:    sw a0, 328(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a0, t3, 9
+; RV32IMZBS-NEXT:    and a0, a0, a7
+; RV32IMZBS-NEXT:    sw a0, 316(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a0, s6, 9
 ; RV32IMZBS-NEXT:    seqz a4, a4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    and a2, a4, a2
-; RV32IMZBS-NEXT:    sw a2, 324(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 312(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a2, t1, 512
-; RV32IMZBS-NEXT:    seqz a4, s6
+; RV32IMZBS-NEXT:    seqz a4, t4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
-; RV32IMZBS-NEXT:    and a4, a4, a7
-; RV32IMZBS-NEXT:    sw a4, 320(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, t3, 10
-; RV32IMZBS-NEXT:    seqz a7, t5
+; RV32IMZBS-NEXT:    and a4, a4, a6
+; RV32IMZBS-NEXT:    sw a4, 308(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a4, s6, 10
+; RV32IMZBS-NEXT:    seqz a7, t6
 ; RV32IMZBS-NEXT:    addi a7, a7, -1
-; RV32IMZBS-NEXT:    and a6, a7, t0
-; RV32IMZBS-NEXT:    sw a6, 316(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    and a5, a7, t5
+; RV32IMZBS-NEXT:    sw a5, 304(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a7, t1, 1024
-; RV32IMZBS-NEXT:    seqz t5, s0
+; RV32IMZBS-NEXT:    seqz t5, s1
 ; RV32IMZBS-NEXT:    addi t5, t5, -1
-; RV32IMZBS-NEXT:    and a6, t5, t6
-; RV32IMZBS-NEXT:    sw a6, 312(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli t5, t3, 11
-; RV32IMZBS-NEXT:    seqz t6, s2
+; RV32IMZBS-NEXT:    and a5, t5, t0
+; RV32IMZBS-NEXT:    sw a5, 300(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli s10, s6, 11
+; RV32IMZBS-NEXT:    seqz t6, s3
 ; RV32IMZBS-NEXT:    addi t6, t6, -1
-; RV32IMZBS-NEXT:    and a6, t6, s1
-; RV32IMZBS-NEXT:    sw a6, 304(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    not s2, t1
-; RV32IMZBS-NEXT:    seqz t6, s4
+; RV32IMZBS-NEXT:    and a1, t6, a1
+; RV32IMZBS-NEXT:    sw a1, 296(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    not a5, t1
+; RV32IMZBS-NEXT:    seqz t6, s5
 ; RV32IMZBS-NEXT:    addi t6, t6, -1
-; RV32IMZBS-NEXT:    and a6, t6, t4
-; RV32IMZBS-NEXT:    sw a6, 308(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli s10, t3, 12
-; RV32IMZBS-NEXT:    seqz s1, s3
+; RV32IMZBS-NEXT:    and a1, t6, a3
+; RV32IMZBS-NEXT:    sw a1, 292(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli s11, s6, 12
+; RV32IMZBS-NEXT:    seqz s1, s7
 ; RV32IMZBS-NEXT:    addi s1, s1, -1
-; RV32IMZBS-NEXT:    and a6, s1, t2
-; RV32IMZBS-NEXT:    sw a6, 296(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a6, t3, 13
-; RV32IMZBS-NEXT:    seqz s1, s8
+; RV32IMZBS-NEXT:    and s3, s1, t2
+; RV32IMZBS-NEXT:    slli a1, s6, 13
+; RV32IMZBS-NEXT:    seqz s1, s9
 ; RV32IMZBS-NEXT:    addi s1, s1, -1
-; RV32IMZBS-NEXT:    and s1, s1, s5
-; RV32IMZBS-NEXT:    slli t0, t3, 14
+; RV32IMZBS-NEXT:    and s5, s1, s8
+; RV32IMZBS-NEXT:    slli s7, s6, 14
 ; RV32IMZBS-NEXT:    seqz a2, a2
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and a0, a2, a0
-; RV32IMZBS-NEXT:    sw a0, 292(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a0, t3, 15
+; RV32IMZBS-NEXT:    and t5, a2, a0
+; RV32IMZBS-NEXT:    slli a0, s6, 15
 ; RV32IMZBS-NEXT:    seqz a2, a7
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and a2, a2, a4
-; RV32IMZBS-NEXT:    sw a2, 300(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    bexti a2, s2, 11
+; RV32IMZBS-NEXT:    and s1, a2, a4
+; RV32IMZBS-NEXT:    bexti a2, a5, 11
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and t5, a2, t5
-; RV32IMZBS-NEXT:    bexti a2, s2, 12
+; RV32IMZBS-NEXT:    and s9, a2, s10
+; RV32IMZBS-NEXT:    bexti a2, a5, 12
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and s10, a2, s10
-; RV32IMZBS-NEXT:    bexti a2, s2, 13
+; RV32IMZBS-NEXT:    and s10, a2, s11
+; RV32IMZBS-NEXT:    bexti a2, a5, 13
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and s8, a2, a6
-; RV32IMZBS-NEXT:    bexti a2, s2, 14
+; RV32IMZBS-NEXT:    and s8, a2, a1
+; RV32IMZBS-NEXT:    bexti a2, a5, 14
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and t6, a2, t0
-; RV32IMZBS-NEXT:    bexti a2, s2, 15
+; RV32IMZBS-NEXT:    and s7, a2, s7
+; RV32IMZBS-NEXT:    bexti a2, a5, 15
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    and s0, a2, a0
-; RV32IMZBS-NEXT:    bexti a0, s2, 16
+; RV32IMZBS-NEXT:    and t4, a2, a0
+; RV32IMZBS-NEXT:    bexti a0, a5, 16
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
-; RV32IMZBS-NEXT:    slli a4, t3, 16
+; RV32IMZBS-NEXT:    slli a4, s6, 16
 ; RV32IMZBS-NEXT:    and a4, a0, a4
-; RV32IMZBS-NEXT:    bexti a0, s2, 17
+; RV32IMZBS-NEXT:    bexti a0, a5, 17
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
-; RV32IMZBS-NEXT:    slli a2, t3, 17
+; RV32IMZBS-NEXT:    slli a2, s6, 17
 ; RV32IMZBS-NEXT:    and a0, a0, a2
-; RV32IMZBS-NEXT:    bexti a2, s2, 18
+; RV32IMZBS-NEXT:    bexti a2, a5, 18
 ; RV32IMZBS-NEXT:    addi a2, a2, -1
-; RV32IMZBS-NEXT:    slli a7, t3, 18
+; RV32IMZBS-NEXT:    slli a7, s6, 18
 ; RV32IMZBS-NEXT:    and a2, a2, a7
-; RV32IMZBS-NEXT:    bexti a7, s2, 19
+; RV32IMZBS-NEXT:    bexti a7, a5, 19
 ; RV32IMZBS-NEXT:    addi a7, a7, -1
-; RV32IMZBS-NEXT:    slli s11, t3, 19
+; RV32IMZBS-NEXT:    slli s11, s6, 19
 ; RV32IMZBS-NEXT:    and s11, a7, s11
-; RV32IMZBS-NEXT:    bexti a7, s2, 20
+; RV32IMZBS-NEXT:    bexti a7, a5, 20
 ; RV32IMZBS-NEXT:    addi a7, a7, -1
-; RV32IMZBS-NEXT:    slli ra, t3, 20
+; RV32IMZBS-NEXT:    slli ra, s6, 20
 ; RV32IMZBS-NEXT:    and ra, a7, ra
-; RV32IMZBS-NEXT:    bexti a7, s2, 21
+; RV32IMZBS-NEXT:    bexti a7, a5, 21
 ; RV32IMZBS-NEXT:    addi a7, a7, -1
-; RV32IMZBS-NEXT:    slli a6, t3, 21
+; RV32IMZBS-NEXT:    slli a6, s6, 21
 ; RV32IMZBS-NEXT:    and a7, a7, a6
-; RV32IMZBS-NEXT:    bexti a6, s2, 22
+; RV32IMZBS-NEXT:    bexti a6, a5, 22
 ; RV32IMZBS-NEXT:    addi a6, a6, -1
-; RV32IMZBS-NEXT:    slli t0, t3, 22
-; RV32IMZBS-NEXT:    and a6, a6, t0
-; RV32IMZBS-NEXT:    bexti t0, s2, 23
-; RV32IMZBS-NEXT:    addi t0, t0, -1
-; RV32IMZBS-NEXT:    slli t4, t3, 23
-; RV32IMZBS-NEXT:    and t0, t0, t4
-; RV32IMZBS-NEXT:    bexti t4, s2, 24
-; RV32IMZBS-NEXT:    addi t4, t4, -1
-; RV32IMZBS-NEXT:    slli s3, t3, 24
-; RV32IMZBS-NEXT:    and t4, t4, s3
-; RV32IMZBS-NEXT:    bexti s3, s2, 25
-; RV32IMZBS-NEXT:    addi s3, s3, -1
-; RV32IMZBS-NEXT:    slli t2, t3, 25
-; RV32IMZBS-NEXT:    and t2, s3, t2
-; RV32IMZBS-NEXT:    bexti s3, s2, 26
-; RV32IMZBS-NEXT:    addi s3, s3, -1
-; RV32IMZBS-NEXT:    slli s5, t3, 26
-; RV32IMZBS-NEXT:    and s3, s3, s5
-; RV32IMZBS-NEXT:    bexti s5, s2, 27
-; RV32IMZBS-NEXT:    addi s5, s5, -1
-; RV32IMZBS-NEXT:    slli s6, t3, 27
-; RV32IMZBS-NEXT:    and s5, s5, s6
-; RV32IMZBS-NEXT:    bexti s6, s2, 28
-; RV32IMZBS-NEXT:    addi s6, s6, -1
-; RV32IMZBS-NEXT:    slli s7, t3, 28
-; RV32IMZBS-NEXT:    and s6, s6, s7
-; RV32IMZBS-NEXT:    bexti s7, s2, 29
-; RV32IMZBS-NEXT:    addi s7, s7, -1
-; RV32IMZBS-NEXT:    slli s9, t3, 29
-; RV32IMZBS-NEXT:    and s7, s7, s9
+; RV32IMZBS-NEXT:    slli t3, s6, 22
+; RV32IMZBS-NEXT:    and a6, a6, t3
+; RV32IMZBS-NEXT:    bexti t3, a5, 23
+; RV32IMZBS-NEXT:    addi t3, t3, -1
+; RV32IMZBS-NEXT:    slli s0, s6, 23
+; RV32IMZBS-NEXT:    and t3, t3, s0
+; RV32IMZBS-NEXT:    bexti s0, a5, 24
+; RV32IMZBS-NEXT:    addi s0, s0, -1
+; RV32IMZBS-NEXT:    slli t0, s6, 24
+; RV32IMZBS-NEXT:    and t0, s0, t0
+; RV32IMZBS-NEXT:    bexti s0, a5, 25
+; RV32IMZBS-NEXT:    addi s0, s0, -1
+; RV32IMZBS-NEXT:    slli t2, s6, 25
+; RV32IMZBS-NEXT:    and t2, s0, t2
+; RV32IMZBS-NEXT:    bexti s0, a5, 26
+; RV32IMZBS-NEXT:    addi s0, s0, -1
+; RV32IMZBS-NEXT:    slli s2, s6, 26
+; RV32IMZBS-NEXT:    and s0, s0, s2
+; RV32IMZBS-NEXT:    bexti s2, a5, 27
+; RV32IMZBS-NEXT:    addi s2, s2, -1
+; RV32IMZBS-NEXT:    slli a1, s6, 27
+; RV32IMZBS-NEXT:    and a1, s2, a1
+; RV32IMZBS-NEXT:    bexti s2, a5, 28
+; RV32IMZBS-NEXT:    addi s2, s2, -1
+; RV32IMZBS-NEXT:    slli a3, s6, 28
+; RV32IMZBS-NEXT:    and a3, s2, a3
+; RV32IMZBS-NEXT:    bexti s2, a5, 29
+; RV32IMZBS-NEXT:    addi s2, s2, -1
+; RV32IMZBS-NEXT:    slli s4, s6, 29
+; RV32IMZBS-NEXT:    and s2, s2, s4
 ; RV32IMZBS-NEXT:    andi t1, t1, 1
 ; RV32IMZBS-NEXT:    seqz t1, t1
 ; RV32IMZBS-NEXT:    addi t1, t1, -1
-; RV32IMZBS-NEXT:    and t1, t1, t3
-; RV32IMZBS-NEXT:    slli t3, t3, 30
-; RV32IMZBS-NEXT:    bexti s2, s2, 30
-; RV32IMZBS-NEXT:    addi s2, s2, -1
-; RV32IMZBS-NEXT:    and t3, s2, t3
-; RV32IMZBS-NEXT:    lw s2, 324(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t1, t1, s2
-; RV32IMZBS-NEXT:    lw s2, 320(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw s9, 316(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s2, s2, s9
-; RV32IMZBS-NEXT:    lw s9, 312(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw s4, 304(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s9, s9, s4
-; RV32IMZBS-NEXT:    lw s4, 296(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s1, s4, s1
-; RV32IMZBS-NEXT:    xor t5, t5, s10
+; RV32IMZBS-NEXT:    and t1, t1, s6
+; RV32IMZBS-NEXT:    slli s6, s6, 30
+; RV32IMZBS-NEXT:    bexti a5, a5, 30
+; RV32IMZBS-NEXT:    addi a5, a5, -1
+; RV32IMZBS-NEXT:    and a5, a5, s6
+; RV32IMZBS-NEXT:    lw s4, 312(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t1, t1, s4
+; RV32IMZBS-NEXT:    lw s4, 308(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw s6, 304(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor s4, s4, s6
+; RV32IMZBS-NEXT:    lw s6, 300(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t6, 296(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor s6, s6, t6
+; RV32IMZBS-NEXT:    xor s3, s3, s5
+; RV32IMZBS-NEXT:    xor s5, s9, s10
 ; RV32IMZBS-NEXT:    xor a0, a4, a0
-; RV32IMZBS-NEXT:    xor a4, a6, t0
-; RV32IMZBS-NEXT:    xor a6, s7, t3
-; RV32IMZBS-NEXT:    xor t0, t1, s2
-; RV32IMZBS-NEXT:    lw t1, 308(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t1, s9, t1
-; RV32IMZBS-NEXT:    lw t3, 292(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t3, s1, t3
-; RV32IMZBS-NEXT:    xor t5, t5, s8
+; RV32IMZBS-NEXT:    xor a4, a6, t3
+; RV32IMZBS-NEXT:    xor a5, s2, a5
+; RV32IMZBS-NEXT:    xor a6, t1, s4
+; RV32IMZBS-NEXT:    lw t1, 292(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor t1, s6, t1
+; RV32IMZBS-NEXT:    xor t3, s3, t5
+; RV32IMZBS-NEXT:    xor t5, s5, s8
 ; RV32IMZBS-NEXT:    xor a0, a0, a2
-; RV32IMZBS-NEXT:    xor a2, a4, t4
-; RV32IMZBS-NEXT:    lw a4, 328(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor a4, a6, a4
-; RV32IMZBS-NEXT:    xor a6, t0, t1
-; RV32IMZBS-NEXT:    lw t0, 300(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t0, t3, t0
-; RV32IMZBS-NEXT:    xor t1, t5, t6
+; RV32IMZBS-NEXT:    xor a2, a4, t0
+; RV32IMZBS-NEXT:    lw a4, 316(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor a4, a5, a4
+; RV32IMZBS-NEXT:    xor a5, a6, t1
+; RV32IMZBS-NEXT:    xor a6, t3, s1
+; RV32IMZBS-NEXT:    xor t0, t5, s7
 ; RV32IMZBS-NEXT:    xor a0, a0, s11
 ; RV32IMZBS-NEXT:    xor a2, a2, t2
-; RV32IMZBS-NEXT:    xor a6, a6, t0
-; RV32IMZBS-NEXT:    xor t0, t1, s0
+; RV32IMZBS-NEXT:    xor a5, a5, a6
+; RV32IMZBS-NEXT:    xor a6, t0, t4
 ; RV32IMZBS-NEXT:    xor a0, a0, ra
-; RV32IMZBS-NEXT:    xor a2, a2, s3
-; RV32IMZBS-NEXT:    xor a6, a6, t0
+; RV32IMZBS-NEXT:    xor a2, a2, s0
+; RV32IMZBS-NEXT:    xor a5, a5, a6
 ; RV32IMZBS-NEXT:    xor a0, a0, a7
-; RV32IMZBS-NEXT:    xor a2, a2, s5
-; RV32IMZBS-NEXT:    xor a0, a6, a0
-; RV32IMZBS-NEXT:    xor a2, a2, s6
-; RV32IMZBS-NEXT:    xor a0, a0, a2
+; RV32IMZBS-NEXT:    xor a1, a2, a1
+; RV32IMZBS-NEXT:    xor a0, a5, a0
+; RV32IMZBS-NEXT:    xor a1, a1, a3
+; RV32IMZBS-NEXT:    xor a0, a0, a1
 ; RV32IMZBS-NEXT:    xor a0, a0, a4
-; RV32IMZBS-NEXT:    srli a2, a0, 8
-; RV32IMZBS-NEXT:    srli a4, a0, 24
-; RV32IMZBS-NEXT:    lw a6, 344(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    and a2, a2, a6
-; RV32IMZBS-NEXT:    or a2, a2, a4
-; RV32IMZBS-NEXT:    and a4, a0, a6
+; RV32IMZBS-NEXT:    srli a1, a0, 8
+; RV32IMZBS-NEXT:    srli a2, a0, 24
+; RV32IMZBS-NEXT:    lw a3, 344(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    and a1, a1, a3
+; RV32IMZBS-NEXT:    or a1, a1, a2
+; RV32IMZBS-NEXT:    and a2, a0, a3
 ; RV32IMZBS-NEXT:    slli a0, a0, 24
-; RV32IMZBS-NEXT:    slli a4, a4, 8
-; RV32IMZBS-NEXT:    or a0, a0, a4
+; RV32IMZBS-NEXT:    slli a2, a2, 8
 ; RV32IMZBS-NEXT:    or a0, a0, a2
-; RV32IMZBS-NEXT:    srli a2, a0, 4
-; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    and a1, a2, a1
+; RV32IMZBS-NEXT:    or a0, a0, a1
+; RV32IMZBS-NEXT:    srli a1, a0, 4
+; RV32IMZBS-NEXT:    lw a2, 336(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    and a0, a0, a2
+; RV32IMZBS-NEXT:    and a1, a1, a2
 ; RV32IMZBS-NEXT:    slli a0, a0, 4
 ; RV32IMZBS-NEXT:    or a0, a1, a0
 ; RV32IMZBS-NEXT:    srli a1, a0, 2
-; RV32IMZBS-NEXT:    and a0, a0, a5
-; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    lw a2, 328(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    and a0, a0, a2
+; RV32IMZBS-NEXT:    and a1, a1, a2
 ; RV32IMZBS-NEXT:    slli a0, a0, 2
 ; RV32IMZBS-NEXT:    or a0, a1, a0
 ; RV32IMZBS-NEXT:    lui a1, 349525
 ; RV32IMZBS-NEXT:    addi a1, a1, 1364
-; RV32IMZBS-NEXT:    and a3, a0, a3
+; RV32IMZBS-NEXT:    lw a2, 320(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    and a2, a0, a2
 ; RV32IMZBS-NEXT:    srli a0, a0, 1
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    slli a3, a3, 1
-; RV32IMZBS-NEXT:    or a0, a0, a3
+; RV32IMZBS-NEXT:    slli a2, a2, 1
+; RV32IMZBS-NEXT:    or a0, a0, a2
 ; RV32IMZBS-NEXT:    srli a0, a0, 1
-; RV32IMZBS-NEXT:    lw a1, 332(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 324(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a0, a1
 ; RV32IMZBS-NEXT:    lw a0, 340(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a2, 336(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a2, 332(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a0, a2, a0
 ; RV32IMZBS-NEXT:    lw ra, 396(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    lw s0, 392(sp) # 4-byte Folded Reload
@@ -8922,40 +8922,40 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32I-NEXT:    sw a1, 716(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    lui s2, 349525
 ; RV32I-NEXT:    addi s2, s2, 1365
-; RV32I-NEXT:    srli a1, t2, 1
-; RV32I-NEXT:    and a3, t2, s2
-; RV32I-NEXT:    and a1, a1, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or a1, a1, a3
+; RV32I-NEXT:    srli a3, t2, 1
+; RV32I-NEXT:    and a1, t2, s2
+; RV32I-NEXT:    slli a1, a1, 1
+; RV32I-NEXT:    and t0, a3, s2
+; RV32I-NEXT:    or a1, t0, a1
 ; RV32I-NEXT:    xor a0, a4, a0
 ; RV32I-NEXT:    sw a0, 708(sp) # 4-byte Folded Spill
-; RV32I-NEXT:    srli a0, s4, 1
-; RV32I-NEXT:    and a3, s4, s2
-; RV32I-NEXT:    and a0, a0, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or a2, a0, a3
+; RV32I-NEXT:    srli a4, s4, 1
+; RV32I-NEXT:    and a0, s4, s2
+; RV32I-NEXT:    slli a0, a0, 1
+; RV32I-NEXT:    and t0, a4, s2
+; RV32I-NEXT:    or a2, t0, a0
 ; RV32I-NEXT:    xor a0, a7, a5
 ; RV32I-NEXT:    sw a0, 704(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    srli a0, s0, 1
-; RV32I-NEXT:    and a3, s0, s2
+; RV32I-NEXT:    and a5, s0, s2
 ; RV32I-NEXT:    and a0, a0, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or a0, a0, a3
-; RV32I-NEXT:    srli a3, a3, 31
-; RV32I-NEXT:    seqz a3, a3
-; RV32I-NEXT:    addi a3, a3, -1
-; RV32I-NEXT:    slli a4, a1, 31
-; RV32I-NEXT:    and a3, a3, a4
+; RV32I-NEXT:    slli a5, a5, 1
+; RV32I-NEXT:    slli a3, a3, 31
+; RV32I-NEXT:    or a0, a0, a5
+; RV32I-NEXT:    srli a5, a5, 31
+; RV32I-NEXT:    seqz a5, a5
+; RV32I-NEXT:    addi a5, a5, -1
+; RV32I-NEXT:    and a3, a5, a3
 ; RV32I-NEXT:    sw a3, 700(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    srli a3, s5, 1
-; RV32I-NEXT:    and a4, s5, s2
+; RV32I-NEXT:    and a5, s5, s2
 ; RV32I-NEXT:    and a3, a3, s2
-; RV32I-NEXT:    slli a4, a4, 1
-; RV32I-NEXT:    or t3, a3, a4
-; RV32I-NEXT:    srli a4, a4, 31
-; RV32I-NEXT:    seqz a3, a4
+; RV32I-NEXT:    slli a5, a5, 1
+; RV32I-NEXT:    slli a4, a4, 31
+; RV32I-NEXT:    or t3, a3, a5
+; RV32I-NEXT:    srli a5, a5, 31
+; RV32I-NEXT:    seqz a3, a5
 ; RV32I-NEXT:    addi a3, a3, -1
-; RV32I-NEXT:    slli a4, a2, 31
 ; RV32I-NEXT:    and a3, a3, a4
 ; RV32I-NEXT:    sw a3, 692(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    andi a3, a0, 2
@@ -14929,34 +14929,36 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    xor a5, a3, a5
 ; RV32IMZBS-NEXT:    lui a2, 349525
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    addi s5, a2, 1365
+; RV32IMZBS-NEXT:    addi s6, a2, 1365
 ; RV32IMZBS-NEXT:    xor a1, t1, t6
 ; RV32IMZBS-NEXT:    srli t1, a6, 1
-; RV32IMZBS-NEXT:    and a6, a6, s5
+; RV32IMZBS-NEXT:    and a6, a6, s6
 ; RV32IMZBS-NEXT:    xor t2, s2, s3
 ; RV32IMZBS-NEXT:    srli t6, t3, 1
-; RV32IMZBS-NEXT:    and t3, t3, s5
+; RV32IMZBS-NEXT:    and t3, t3, s6
 ; RV32IMZBS-NEXT:    xor t4, t4, t5
 ; RV32IMZBS-NEXT:    srli t5, s1, 1
-; RV32IMZBS-NEXT:    and s1, s1, s5
+; RV32IMZBS-NEXT:    and s1, s1, s6
 ; RV32IMZBS-NEXT:    xor a7, a7, t0
 ; RV32IMZBS-NEXT:    srli t0, s4, 1
-; RV32IMZBS-NEXT:    and s0, s4, s5
+; RV32IMZBS-NEXT:    and s0, s4, s6
 ; RV32IMZBS-NEXT:    xor a4, a4, a5
-; RV32IMZBS-NEXT:    and a5, t1, s5
+; RV32IMZBS-NEXT:    and a5, t1, s6
 ; RV32IMZBS-NEXT:    slli a6, a6, 1
-; RV32IMZBS-NEXT:    and t1, t6, s5
+; RV32IMZBS-NEXT:    and t6, t6, s6
 ; RV32IMZBS-NEXT:    slli t3, t3, 1
+; RV32IMZBS-NEXT:    slli t1, t1, 31
 ; RV32IMZBS-NEXT:    lw a2, 676(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t6, a0, a2
+; RV32IMZBS-NEXT:    xor s2, a0, a2
 ; RV32IMZBS-NEXT:    lw a0, 680(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s2, a1, a0
-; RV32IMZBS-NEXT:    and t5, t5, s5
+; RV32IMZBS-NEXT:    xor s3, a1, a0
+; RV32IMZBS-NEXT:    and s4, t5, s6
 ; RV32IMZBS-NEXT:    slli s1, s1, 1
-; RV32IMZBS-NEXT:    and t0, t0, s5
+; RV32IMZBS-NEXT:    and t0, t0, s6
 ; RV32IMZBS-NEXT:    slli s0, s0, 1
+; RV32IMZBS-NEXT:    slli t5, t5, 31
 ; RV32IMZBS-NEXT:    lw a0, 672(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s3, t2, a0
+; RV32IMZBS-NEXT:    xor s5, t2, a0
 ; RV32IMZBS-NEXT:    lw a0, 660(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t4, t4, a0
 ; RV32IMZBS-NEXT:    lw a0, 652(sp) # 4-byte Folded Reload
@@ -14966,36 +14968,34 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    xor a0, a4, a0
 ; RV32IMZBS-NEXT:    sw a0, 716(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    or a0, a5, a6
-; RV32IMZBS-NEXT:    or a1, t1, t3
+; RV32IMZBS-NEXT:    or a1, t6, t3
 ; RV32IMZBS-NEXT:    srli a4, t3, 31
-; RV32IMZBS-NEXT:    xor a2, s2, t6
+; RV32IMZBS-NEXT:    xor a2, s3, s2
 ; RV32IMZBS-NEXT:    sw a2, 708(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    or a3, t5, s1
+; RV32IMZBS-NEXT:    or a3, s4, s1
 ; RV32IMZBS-NEXT:    or t3, t0, s0
 ; RV32IMZBS-NEXT:    srli s0, s0, 31
-; RV32IMZBS-NEXT:    xor a2, t4, s3
+; RV32IMZBS-NEXT:    xor a2, t4, s5
 ; RV32IMZBS-NEXT:    sw a2, 704(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    slli a5, a0, 1
 ; RV32IMZBS-NEXT:    andi a6, a1, 2
 ; RV32IMZBS-NEXT:    slli a7, a0, 2
 ; RV32IMZBS-NEXT:    andi t0, a1, 4
-; RV32IMZBS-NEXT:    slli t1, a0, 3
-; RV32IMZBS-NEXT:    andi t4, a1, 8
-; RV32IMZBS-NEXT:    slli t5, a0, 4
-; RV32IMZBS-NEXT:    andi t6, a1, 16
-; RV32IMZBS-NEXT:    slli s1, a0, 5
-; RV32IMZBS-NEXT:    andi s2, a1, 32
-; RV32IMZBS-NEXT:    slli s3, a0, 31
+; RV32IMZBS-NEXT:    slli t4, a0, 3
+; RV32IMZBS-NEXT:    andi t6, a1, 8
+; RV32IMZBS-NEXT:    slli s1, a0, 4
+; RV32IMZBS-NEXT:    andi s2, a1, 16
+; RV32IMZBS-NEXT:    slli s3, a0, 5
 ; RV32IMZBS-NEXT:    seqz a4, a4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
-; RV32IMZBS-NEXT:    and a2, a4, s3
+; RV32IMZBS-NEXT:    and a2, a4, t1
 ; RV32IMZBS-NEXT:    sw a2, 692(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a3, 31
-; RV32IMZBS-NEXT:    seqz s0, s0
-; RV32IMZBS-NEXT:    addi s0, s0, -1
-; RV32IMZBS-NEXT:    and a4, s0, a4
-; RV32IMZBS-NEXT:    sw a4, 700(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a0, 6
+; RV32IMZBS-NEXT:    andi a4, a1, 32
+; RV32IMZBS-NEXT:    seqz t1, s0
+; RV32IMZBS-NEXT:    addi t1, t1, -1
+; RV32IMZBS-NEXT:    and a2, t1, t5
+; RV32IMZBS-NEXT:    sw a2, 700(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli t1, a0, 6
 ; RV32IMZBS-NEXT:    seqz a6, a6
 ; RV32IMZBS-NEXT:    addi a6, a6, -1
 ; RV32IMZBS-NEXT:    and a2, a6, a5
@@ -15006,45 +15006,45 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    and a2, a6, a7
 ; RV32IMZBS-NEXT:    sw a2, 684(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    slli a6, a0, 7
-; RV32IMZBS-NEXT:    seqz a7, t4
+; RV32IMZBS-NEXT:    seqz a7, t6
 ; RV32IMZBS-NEXT:    addi a7, a7, -1
-; RV32IMZBS-NEXT:    and a2, a7, t1
+; RV32IMZBS-NEXT:    and a2, a7, t4
 ; RV32IMZBS-NEXT:    sw a2, 672(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a7, a1, 128
-; RV32IMZBS-NEXT:    seqz t0, t6
+; RV32IMZBS-NEXT:    seqz t0, s2
 ; RV32IMZBS-NEXT:    addi t0, t0, -1
-; RV32IMZBS-NEXT:    and a2, t0, t5
+; RV32IMZBS-NEXT:    and a2, t0, s1
 ; RV32IMZBS-NEXT:    sw a2, 668(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    slli t0, a0, 8
-; RV32IMZBS-NEXT:    seqz t1, s2
-; RV32IMZBS-NEXT:    addi t1, t1, -1
-; RV32IMZBS-NEXT:    and a2, t1, s1
-; RV32IMZBS-NEXT:    sw a2, 664(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi t1, a1, 256
-; RV32IMZBS-NEXT:    seqz a5, a5
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a4, a5, a4
-; RV32IMZBS-NEXT:    sw a4, 680(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a0, 9
-; RV32IMZBS-NEXT:    seqz a5, a7
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a2, a5, a6
-; RV32IMZBS-NEXT:    sw a2, 652(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi a5, a1, 512
-; RV32IMZBS-NEXT:    seqz a6, t1
-; RV32IMZBS-NEXT:    addi a6, a6, -1
-; RV32IMZBS-NEXT:    and a2, a6, t0
-; RV32IMZBS-NEXT:    sw a2, 644(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a6, a0, 10
-; RV32IMZBS-NEXT:    seqz a5, a5
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a4, a5, a4
-; RV32IMZBS-NEXT:    sw a4, 660(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi a4, a1, 1024
 ; RV32IMZBS-NEXT:    seqz a4, a4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
-; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 676(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    and a2, a4, s3
+; RV32IMZBS-NEXT:    sw a2, 664(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    andi a4, a1, 256
+; RV32IMZBS-NEXT:    seqz a5, a5
+; RV32IMZBS-NEXT:    addi a5, a5, -1
+; RV32IMZBS-NEXT:    and a2, a5, t1
+; RV32IMZBS-NEXT:    sw a2, 680(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a0, 9
+; RV32IMZBS-NEXT:    seqz a7, a7
+; RV32IMZBS-NEXT:    addi a7, a7, -1
+; RV32IMZBS-NEXT:    and a2, a7, a6
+; RV32IMZBS-NEXT:    sw a2, 652(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    andi a6, a1, 512
+; RV32IMZBS-NEXT:    seqz a4, a4
+; RV32IMZBS-NEXT:    addi a4, a4, -1
+; RV32IMZBS-NEXT:    and a2, a4, t0
+; RV32IMZBS-NEXT:    sw a2, 644(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a4, a0, 10
+; RV32IMZBS-NEXT:    seqz a6, a6
+; RV32IMZBS-NEXT:    addi a6, a6, -1
+; RV32IMZBS-NEXT:    and a2, a6, a5
+; RV32IMZBS-NEXT:    sw a2, 660(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    andi a5, a1, 1024
+; RV32IMZBS-NEXT:    seqz a5, a5
+; RV32IMZBS-NEXT:    addi a5, a5, -1
+; RV32IMZBS-NEXT:    and a4, a5, a4
+; RV32IMZBS-NEXT:    sw a4, 676(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    not a5, a1
 ; RV32IMZBS-NEXT:    bexti a4, a5, 11
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
@@ -15243,7 +15243,7 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    bexti a1, a0, 17
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    slli a4, a3, 17
-; RV32IMZBS-NEXT:    and s6, a1, a4
+; RV32IMZBS-NEXT:    and s5, a1, a4
 ; RV32IMZBS-NEXT:    bexti a1, a0, 18
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    slli a4, a3, 18
@@ -15340,7 +15340,7 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    lw ra, 516(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    lw s11, 504(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor ra, ra, s11
-; RV32IMZBS-NEXT:    xor s6, s9, s6
+; RV32IMZBS-NEXT:    xor s5, s9, s5
 ; RV32IMZBS-NEXT:    xor t6, s0, t6
 ; RV32IMZBS-NEXT:    xor t4, t5, t4
 ; RV32IMZBS-NEXT:    xor t1, t1, t3
@@ -15363,7 +15363,7 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    xor a2, a2, t2
 ; RV32IMZBS-NEXT:    lw t2, 520(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t2, ra, t2
-; RV32IMZBS-NEXT:    xor t3, s6, s10
+; RV32IMZBS-NEXT:    xor t3, s5, s10
 ; RV32IMZBS-NEXT:    xor t5, t6, s1
 ; RV32IMZBS-NEXT:    lw t6, 700(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t4, t4, t6
@@ -15458,8 +15458,8 @@ define void @commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %p
 ; RV32IMZBS-NEXT:    slli a0, a0, 2
 ; RV32IMZBS-NEXT:    or a0, a3, a0
 ; RV32IMZBS-NEXT:    srli a3, a1, 1
-; RV32IMZBS-NEXT:    and a1, a1, s5
-; RV32IMZBS-NEXT:    and a4, a0, s5
+; RV32IMZBS-NEXT:    and a1, a1, s6
+; RV32IMZBS-NEXT:    and a4, a0, s6
 ; RV32IMZBS-NEXT:    srli a0, a0, 1
 ; RV32IMZBS-NEXT:    and a3, a3, a2
 ; RV32IMZBS-NEXT:    and a0, a0, a2
@@ -17979,42 +17979,42 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32I-NEXT:    sw a1, 720(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    lui s2, 349525
 ; RV32I-NEXT:    addi s2, s2, 1365
-; RV32I-NEXT:    srli a1, a6, 1
-; RV32I-NEXT:    and a3, a6, s2
-; RV32I-NEXT:    and a1, a1, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or a1, a1, a3
+; RV32I-NEXT:    srli a3, a6, 1
+; RV32I-NEXT:    and a1, a6, s2
+; RV32I-NEXT:    slli a1, a1, 1
+; RV32I-NEXT:    and a6, a3, s2
+; RV32I-NEXT:    or a1, a6, a1
 ; RV32I-NEXT:    xor a0, t0, a0
 ; RV32I-NEXT:    sw a0, 712(sp) # 4-byte Folded Spill
-; RV32I-NEXT:    srli a0, s1, 1
+; RV32I-NEXT:    srli a6, s1, 1
 ; RV32I-NEXT:    and s1, s1, s2
-; RV32I-NEXT:    and a0, a0, s2
 ; RV32I-NEXT:    slli s1, s1, 1
+; RV32I-NEXT:    and a0, a6, s2
 ; RV32I-NEXT:    or a4, a0, s1
 ; RV32I-NEXT:    xor a0, t1, a5
 ; RV32I-NEXT:    sw a0, 708(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    srli a0, t3, 1
-; RV32I-NEXT:    and a3, t3, s2
+; RV32I-NEXT:    and a5, t3, s2
 ; RV32I-NEXT:    and a0, a0, s2
-; RV32I-NEXT:    slli a3, a3, 1
-; RV32I-NEXT:    or a0, a0, a3
-; RV32I-NEXT:    srli a3, a3, 31
-; RV32I-NEXT:    seqz a3, a3
-; RV32I-NEXT:    addi a3, a3, -1
-; RV32I-NEXT:    slli a5, a1, 31
-; RV32I-NEXT:    and a3, a3, a5
+; RV32I-NEXT:    slli a5, a5, 1
+; RV32I-NEXT:    slli a3, a3, 31
+; RV32I-NEXT:    or a0, a0, a5
+; RV32I-NEXT:    srli a5, a5, 31
+; RV32I-NEXT:    seqz a5, a5
+; RV32I-NEXT:    addi a5, a5, -1
+; RV32I-NEXT:    and a3, a5, a3
 ; RV32I-NEXT:    sw a3, 700(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    srli a3, s4, 1
 ; RV32I-NEXT:    and a5, s4, s2
 ; RV32I-NEXT:    and a3, a3, s2
 ; RV32I-NEXT:    slli a5, a5, 1
+; RV32I-NEXT:    slli a6, a6, 31
 ; RV32I-NEXT:    or t1, a3, a5
 ; RV32I-NEXT:    srli a5, a5, 31
 ; RV32I-NEXT:    seqz a3, a5
 ; RV32I-NEXT:    addi a3, a3, -1
-; RV32I-NEXT:    slli a5, a4, 31
-; RV32I-NEXT:    and a3, a3, a5
-; RV32I-NEXT:    sw a3, 696(sp) # 4-byte Folded Spill
+; RV32I-NEXT:    and a2, a3, a6
+; RV32I-NEXT:    sw a2, 696(sp) # 4-byte Folded Spill
 ; RV32I-NEXT:    andi a3, a0, 2
 ; RV32I-NEXT:    seqz a3, a3
 ; RV32I-NEXT:    addi a3, a3, -1
@@ -23994,32 +23994,34 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    xor a5, a3, a5
 ; RV32IMZBS-NEXT:    lui a2, 349525
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    addi s5, a2, 1365
+; RV32IMZBS-NEXT:    addi s6, a2, 1365
 ; RV32IMZBS-NEXT:    xor a1, t1, t6
 ; RV32IMZBS-NEXT:    srli t1, a6, 1
-; RV32IMZBS-NEXT:    and a6, a6, s5
+; RV32IMZBS-NEXT:    and a6, a6, s6
 ; RV32IMZBS-NEXT:    xor t2, s2, s3
 ; RV32IMZBS-NEXT:    srli t6, t3, 1
-; RV32IMZBS-NEXT:    and t3, t3, s5
+; RV32IMZBS-NEXT:    and t3, t3, s6
 ; RV32IMZBS-NEXT:    xor t4, t4, t5
 ; RV32IMZBS-NEXT:    srli t5, s1, 1
-; RV32IMZBS-NEXT:    and s1, s1, s5
+; RV32IMZBS-NEXT:    and s1, s1, s6
 ; RV32IMZBS-NEXT:    xor a7, a7, t0
 ; RV32IMZBS-NEXT:    srli t0, s4, 1
-; RV32IMZBS-NEXT:    and s0, s4, s5
+; RV32IMZBS-NEXT:    and s0, s4, s6
 ; RV32IMZBS-NEXT:    xor a4, a4, a5
-; RV32IMZBS-NEXT:    and a5, t1, s5
+; RV32IMZBS-NEXT:    and a5, t1, s6
 ; RV32IMZBS-NEXT:    slli a6, a6, 1
-; RV32IMZBS-NEXT:    and t1, t6, s5
+; RV32IMZBS-NEXT:    and t6, t6, s6
 ; RV32IMZBS-NEXT:    slli t3, t3, 1
+; RV32IMZBS-NEXT:    slli s2, t1, 31
 ; RV32IMZBS-NEXT:    lw a2, 664(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor t6, a0, a2
+; RV32IMZBS-NEXT:    xor t1, a0, a2
 ; RV32IMZBS-NEXT:    lw a0, 668(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor s2, a1, a0
-; RV32IMZBS-NEXT:    and t5, t5, s5
+; RV32IMZBS-NEXT:    xor s3, a1, a0
+; RV32IMZBS-NEXT:    and s4, t5, s6
 ; RV32IMZBS-NEXT:    slli s1, s1, 1
-; RV32IMZBS-NEXT:    and s3, t0, s5
+; RV32IMZBS-NEXT:    and s5, t0, s6
 ; RV32IMZBS-NEXT:    slli s0, s0, 1
+; RV32IMZBS-NEXT:    slli t5, t5, 31
 ; RV32IMZBS-NEXT:    lw a0, 660(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t2, t2, a0
 ; RV32IMZBS-NEXT:    lw a0, 648(sp) # 4-byte Folded Reload
@@ -24031,12 +24033,12 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    xor a0, a4, a0
 ; RV32IMZBS-NEXT:    sw a0, 704(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    or a0, a5, a6
-; RV32IMZBS-NEXT:    or a1, t1, t3
+; RV32IMZBS-NEXT:    or a1, t6, t3
 ; RV32IMZBS-NEXT:    srli a4, t3, 31
-; RV32IMZBS-NEXT:    xor a2, s2, t6
+; RV32IMZBS-NEXT:    xor a2, s3, t1
 ; RV32IMZBS-NEXT:    sw a2, 696(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    or a3, t5, s1
-; RV32IMZBS-NEXT:    or t1, s3, s0
+; RV32IMZBS-NEXT:    or a3, s4, s1
+; RV32IMZBS-NEXT:    or t1, s5, s0
 ; RV32IMZBS-NEXT:    srli s0, s0, 31
 ; RV32IMZBS-NEXT:    xor a2, t4, t2
 ; RV32IMZBS-NEXT:    sw a2, 692(sp) # 4-byte Folded Spill
@@ -24046,21 +24048,19 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    andi t2, a1, 4
 ; RV32IMZBS-NEXT:    slli t3, a0, 3
 ; RV32IMZBS-NEXT:    andi t4, a1, 8
-; RV32IMZBS-NEXT:    slli t5, a0, 4
-; RV32IMZBS-NEXT:    andi t6, a1, 16
-; RV32IMZBS-NEXT:    slli s1, a0, 5
-; RV32IMZBS-NEXT:    andi s2, a1, 32
-; RV32IMZBS-NEXT:    slli s3, a0, 31
+; RV32IMZBS-NEXT:    slli t6, a0, 4
+; RV32IMZBS-NEXT:    andi s1, a1, 16
+; RV32IMZBS-NEXT:    slli s3, a0, 5
 ; RV32IMZBS-NEXT:    seqz a4, a4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
-; RV32IMZBS-NEXT:    and a2, a4, s3
+; RV32IMZBS-NEXT:    and a2, a4, s2
 ; RV32IMZBS-NEXT:    sw a2, 680(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a3, 31
+; RV32IMZBS-NEXT:    andi a4, a1, 32
 ; RV32IMZBS-NEXT:    seqz s0, s0
 ; RV32IMZBS-NEXT:    addi s0, s0, -1
-; RV32IMZBS-NEXT:    and a4, s0, a4
-; RV32IMZBS-NEXT:    sw a4, 688(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a0, 6
+; RV32IMZBS-NEXT:    and a2, s0, t5
+; RV32IMZBS-NEXT:    sw a2, 688(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli t5, a0, 6
 ; RV32IMZBS-NEXT:    seqz a6, a6
 ; RV32IMZBS-NEXT:    addi a6, a6, -1
 ; RV32IMZBS-NEXT:    and a2, a6, a5
@@ -24076,61 +24076,60 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    and a2, a7, t3
 ; RV32IMZBS-NEXT:    sw a2, 660(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a7, a1, 128
-; RV32IMZBS-NEXT:    seqz t2, t6
+; RV32IMZBS-NEXT:    seqz t2, s1
 ; RV32IMZBS-NEXT:    addi t2, t2, -1
-; RV32IMZBS-NEXT:    and a2, t2, t5
+; RV32IMZBS-NEXT:    and a2, t2, t6
 ; RV32IMZBS-NEXT:    sw a2, 656(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    slli t2, a0, 8
-; RV32IMZBS-NEXT:    seqz t3, s2
-; RV32IMZBS-NEXT:    addi t3, t3, -1
-; RV32IMZBS-NEXT:    and a2, t3, s1
-; RV32IMZBS-NEXT:    sw a2, 652(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi t3, a1, 256
-; RV32IMZBS-NEXT:    seqz a5, a5
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a4, a5, a4
-; RV32IMZBS-NEXT:    sw a4, 668(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a4, a0, 9
-; RV32IMZBS-NEXT:    seqz a5, a7
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a2, a5, a6
-; RV32IMZBS-NEXT:    sw a2, 640(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi a5, a1, 512
-; RV32IMZBS-NEXT:    seqz a6, t3
-; RV32IMZBS-NEXT:    addi a6, a6, -1
-; RV32IMZBS-NEXT:    and a2, a6, t2
-; RV32IMZBS-NEXT:    sw a2, 632(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    slli a6, a0, 10
-; RV32IMZBS-NEXT:    seqz a5, a5
-; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    and a4, a5, a4
-; RV32IMZBS-NEXT:    sw a4, 648(sp) # 4-byte Folded Spill
-; RV32IMZBS-NEXT:    andi a4, a1, 1024
 ; RV32IMZBS-NEXT:    seqz a4, a4
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
-; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 664(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    and a2, a4, s3
+; RV32IMZBS-NEXT:    sw a2, 652(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    andi a4, a1, 256
+; RV32IMZBS-NEXT:    seqz a5, a5
+; RV32IMZBS-NEXT:    addi a5, a5, -1
+; RV32IMZBS-NEXT:    and a2, a5, t5
+; RV32IMZBS-NEXT:    sw a2, 668(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a0, 9
+; RV32IMZBS-NEXT:    seqz a7, a7
+; RV32IMZBS-NEXT:    addi a7, a7, -1
+; RV32IMZBS-NEXT:    and a7, a7, a6
+; RV32IMZBS-NEXT:    andi a6, a1, 512
+; RV32IMZBS-NEXT:    seqz a4, a4
+; RV32IMZBS-NEXT:    addi a4, a4, -1
+; RV32IMZBS-NEXT:    and a2, a4, t2
+; RV32IMZBS-NEXT:    sw a2, 636(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a4, a0, 10
+; RV32IMZBS-NEXT:    seqz a6, a6
+; RV32IMZBS-NEXT:    addi a6, a6, -1
+; RV32IMZBS-NEXT:    and a2, a6, a5
+; RV32IMZBS-NEXT:    sw a2, 648(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    andi a5, a1, 1024
+; RV32IMZBS-NEXT:    seqz a5, a5
+; RV32IMZBS-NEXT:    addi a5, a5, -1
+; RV32IMZBS-NEXT:    and a4, a5, a4
+; RV32IMZBS-NEXT:    sw a4, 664(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    not a5, a1
 ; RV32IMZBS-NEXT:    bexti a4, a5, 11
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 11
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 616(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 620(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 12
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 12
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 608(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 612(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 13
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 13
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 628(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 632(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 14
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 14
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 636(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 640(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 15
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 15
@@ -24140,223 +24139,223 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 16
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 592(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 596(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 17
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 17
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 584(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 588(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 18
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 18
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 604(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 608(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 19
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 19
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 612(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 616(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 20
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 20
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 620(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 624(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 21
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 21
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 624(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 628(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 22
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 22
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 572(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 576(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 23
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 23
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 568(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 572(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 24
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 24
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 576(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 580(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 25
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 25
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 580(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 584(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 26
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 26
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 588(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 592(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 27
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 27
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 596(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 600(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 28
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 28
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 600(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 604(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a4, a5, 29
 ; RV32IMZBS-NEXT:    addi a4, a4, -1
 ; RV32IMZBS-NEXT:    slli a6, a0, 29
 ; RV32IMZBS-NEXT:    and a2, a4, a6
-; RV32IMZBS-NEXT:    sw a2, 564(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a2, 568(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a1, a1, 1
 ; RV32IMZBS-NEXT:    seqz a1, a1
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    and a1, a1, a0
-; RV32IMZBS-NEXT:    sw a1, 556(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a1, 560(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    slli a0, a0, 30
 ; RV32IMZBS-NEXT:    bexti a1, a5, 30
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    and a0, a1, a0
-; RV32IMZBS-NEXT:    sw a0, 560(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 564(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 2
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 1
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 552(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 556(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 4
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 2
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 548(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 552(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 8
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 3
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 544(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 548(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 16
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 4
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 536(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 540(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 32
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 5
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 528(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 532(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 64
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 6
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 540(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 544(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 128
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 7
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 520(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 524(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 256
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 8
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 512(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 516(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 512
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    slli a1, a3, 9
 ; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 524(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a0, 528(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    andi a0, t1, 1024
 ; RV32IMZBS-NEXT:    seqz a0, a0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
-; RV32IMZBS-NEXT:    slli a1, a3, 10
-; RV32IMZBS-NEXT:    and a0, a0, a1
-; RV32IMZBS-NEXT:    sw a0, 532(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a4, a3, 10
+; RV32IMZBS-NEXT:    and a0, a0, a4
+; RV32IMZBS-NEXT:    sw a0, 536(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    not a0, t1
 ; RV32IMZBS-NEXT:    bexti a1, a0, 11
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 11
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 500(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 11
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 504(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 12
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    slli s0, a3, 12
 ; RV32IMZBS-NEXT:    and a1, a1, s0
-; RV32IMZBS-NEXT:    sw a1, 488(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a1, 492(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 13
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 13
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 504(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 13
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 508(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 14
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 14
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 508(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 14
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 512(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 15
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 15
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 516(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 15
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 520(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 16
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 16
-; RV32IMZBS-NEXT:    and s9, a1, a4
+; RV32IMZBS-NEXT:    slli a5, a3, 16
+; RV32IMZBS-NEXT:    and s7, a1, a5
 ; RV32IMZBS-NEXT:    bexti a1, a0, 17
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 17
-; RV32IMZBS-NEXT:    and s6, a1, a4
+; RV32IMZBS-NEXT:    slli a5, a3, 17
+; RV32IMZBS-NEXT:    and s5, a1, a5
 ; RV32IMZBS-NEXT:    bexti a1, a0, 18
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 18
-; RV32IMZBS-NEXT:    and s10, a1, a4
+; RV32IMZBS-NEXT:    slli a5, a3, 18
+; RV32IMZBS-NEXT:    and s9, a1, a5
 ; RV32IMZBS-NEXT:    bexti a1, a0, 19
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 19
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 484(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 19
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 488(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 20
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    slli s1, a3, 20
 ; RV32IMZBS-NEXT:    and a1, a1, s1
-; RV32IMZBS-NEXT:    sw a1, 492(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    sw a1, 496(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 21
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 21
-; RV32IMZBS-NEXT:    and a1, a1, a4
-; RV32IMZBS-NEXT:    sw a1, 496(sp) # 4-byte Folded Spill
+; RV32IMZBS-NEXT:    slli a5, a3, 21
+; RV32IMZBS-NEXT:    and a1, a1, a5
+; RV32IMZBS-NEXT:    sw a1, 500(sp) # 4-byte Folded Spill
 ; RV32IMZBS-NEXT:    bexti a1, a0, 22
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
-; RV32IMZBS-NEXT:    slli a4, a3, 22
-; RV32IMZBS-NEXT:    and s0, a1, a4
+; RV32IMZBS-NEXT:    slli a5, a3, 22
+; RV32IMZBS-NEXT:    and s11, a1, a5
 ; RV32IMZBS-NEXT:    bexti a1, a0, 23
 ; RV32IMZBS-NEXT:    addi a1, a1, -1
 ; RV32IMZBS-NEXT:    slli a5, a3, 23
 ; RV32IMZBS-NEXT:    and t6, a1, a5
-; RV32IMZBS-NEXT:    bexti a5, a0, 24
+; RV32IMZBS-NEXT:    bexti a4, a0, 24
+; RV32IMZBS-NEXT:    addi a4, a4, -1
+; RV32IMZBS-NEXT:    slli a5, a3, 24
+; RV32IMZBS-NEXT:    and s0, a4, a5
+; RV32IMZBS-NEXT:    bexti a5, a0, 25
 ; RV32IMZBS-NEXT:    addi a5, a5, -1
-; RV32IMZBS-NEXT:    slli a6, a3, 24
+; RV32IMZBS-NEXT:    slli a6, a3, 25
 ; RV32IMZBS-NEXT:    and s1, a5, a6
-; RV32IMZBS-NEXT:    bexti a6, a0, 25
+; RV32IMZBS-NEXT:    bexti a6, a0, 26
 ; RV32IMZBS-NEXT:    addi a6, a6, -1
-; RV32IMZBS-NEXT:    slli a7, a3, 25
-; RV32IMZBS-NEXT:    and s2, a6, a7
-; RV32IMZBS-NEXT:    bexti a7, a0, 26
-; RV32IMZBS-NEXT:    addi a7, a7, -1
 ; RV32IMZBS-NEXT:    slli t2, a3, 26
-; RV32IMZBS-NEXT:    and s3, a7, t2
+; RV32IMZBS-NEXT:    and s2, a6, t2
 ; RV32IMZBS-NEXT:    bexti t2, a0, 27
 ; RV32IMZBS-NEXT:    addi t2, t2, -1
 ; RV32IMZBS-NEXT:    slli t3, a3, 27
-; RV32IMZBS-NEXT:    and s7, t2, t3
+; RV32IMZBS-NEXT:    and s4, t2, t3
 ; RV32IMZBS-NEXT:    bexti t3, a0, 28
 ; RV32IMZBS-NEXT:    addi t3, t3, -1
 ; RV32IMZBS-NEXT:    slli t0, a3, 28
-; RV32IMZBS-NEXT:    and s4, t3, t0
+; RV32IMZBS-NEXT:    and s3, t3, t0
 ; RV32IMZBS-NEXT:    bexti t0, a0, 29
 ; RV32IMZBS-NEXT:    addi t0, t0, -1
 ; RV32IMZBS-NEXT:    slli a2, a3, 29
@@ -24370,7 +24369,7 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    addi a0, a0, -1
 ; RV32IMZBS-NEXT:    and t4, a0, a3
 ; RV32IMZBS-NEXT:    lw a0, 676(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a1, 556(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 560(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t3, a1, a0
 ; RV32IMZBS-NEXT:    lw a0, 672(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    lw a1, 660(sp) # 4-byte Folded Reload
@@ -24378,106 +24377,105 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    lw a0, 656(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    lw a1, 652(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a6, a0, a1
-; RV32IMZBS-NEXT:    lw a0, 640(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a1, 632(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor a7, a0, a1
-; RV32IMZBS-NEXT:    lw a0, 616(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a1, 608(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 636(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor a7, a7, a0
+; RV32IMZBS-NEXT:    lw a0, 620(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 612(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t2, a0, a1
-; RV32IMZBS-NEXT:    lw a0, 592(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a3, 584(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 596(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a3, 588(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a3, a0, a3
-; RV32IMZBS-NEXT:    lw a0, 572(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a4, 568(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 576(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a4, 572(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a0, a4
-; RV32IMZBS-NEXT:    lw a0, 564(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a5, 560(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 568(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a5, 564(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a5, a0, a5
-; RV32IMZBS-NEXT:    lw a0, 552(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 556(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t0, t0, a0
-; RV32IMZBS-NEXT:    lw a0, 548(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a1, 544(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a0, 552(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 548(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    lw a1, 536(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw a2, 528(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 540(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a2, 532(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a1, a2
-; RV32IMZBS-NEXT:    lw a2, 520(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw ra, 512(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a2, 524(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw ra, 516(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, a2, ra
-; RV32IMZBS-NEXT:    lw ra, 500(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    lw s11, 488(sp) # 4-byte Folded Reload
-; RV32IMZBS-NEXT:    xor ra, ra, s11
-; RV32IMZBS-NEXT:    xor s6, s9, s6
-; RV32IMZBS-NEXT:    xor t6, s0, t6
+; RV32IMZBS-NEXT:    lw ra, 504(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw s10, 492(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    xor ra, ra, s10
+; RV32IMZBS-NEXT:    xor s5, s7, s5
+; RV32IMZBS-NEXT:    xor t6, s11, t6
 ; RV32IMZBS-NEXT:    xor t4, t5, t4
 ; RV32IMZBS-NEXT:    xor t1, t3, t1
 ; RV32IMZBS-NEXT:    lw t3, 668(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a6, a6, t3
 ; RV32IMZBS-NEXT:    lw t3, 648(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a7, a7, t3
-; RV32IMZBS-NEXT:    lw t3, 628(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t3, 632(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t2, t2, t3
-; RV32IMZBS-NEXT:    lw t3, 604(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t3, 608(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a3, a3, t3
-; RV32IMZBS-NEXT:    lw t3, 576(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t3, 580(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a4, t3
 ; RV32IMZBS-NEXT:    lw t3, 680(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a5, a5, t3
 ; RV32IMZBS-NEXT:    xor a0, t0, a0
-; RV32IMZBS-NEXT:    lw t0, 540(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t0, 544(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a1, t0
-; RV32IMZBS-NEXT:    lw t0, 524(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t0, 528(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, a2, t0
-; RV32IMZBS-NEXT:    lw t0, 504(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t0, 508(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t0, ra, t0
-; RV32IMZBS-NEXT:    xor t3, s6, s10
-; RV32IMZBS-NEXT:    xor t5, t6, s1
+; RV32IMZBS-NEXT:    xor t3, s5, s9
+; RV32IMZBS-NEXT:    xor t5, t6, s0
 ; RV32IMZBS-NEXT:    lw t6, 688(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t4, t4, t6
 ; RV32IMZBS-NEXT:    xor a6, t1, a6
 ; RV32IMZBS-NEXT:    lw t1, 664(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a7, a7, t1
-; RV32IMZBS-NEXT:    lw t1, 636(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t1, 640(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t1, t2, t1
-; RV32IMZBS-NEXT:    lw t2, 612(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t2, 616(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a3, a3, t2
-; RV32IMZBS-NEXT:    lw t2, 580(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t2, 584(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a4, t2
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    lw a1, 532(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 536(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a2, a1
-; RV32IMZBS-NEXT:    lw a2, 508(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a2, 512(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, t0, a2
-; RV32IMZBS-NEXT:    lw t0, 484(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t0, 488(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor t0, t3, t0
-; RV32IMZBS-NEXT:    xor t2, t5, s2
+; RV32IMZBS-NEXT:    xor t2, t5, s1
 ; RV32IMZBS-NEXT:    xor a6, a6, a7
 ; RV32IMZBS-NEXT:    lw a7, 644(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a7, t1, a7
-; RV32IMZBS-NEXT:    lw t1, 620(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t1, 624(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a3, a3, t1
-; RV32IMZBS-NEXT:    lw t1, 588(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw t1, 592(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a4, t1
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    lw a1, 516(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 520(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a2, a1
-; RV32IMZBS-NEXT:    lw a2, 492(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a2, 496(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a2, t0, a2
-; RV32IMZBS-NEXT:    xor t0, t2, s3
+; RV32IMZBS-NEXT:    xor t0, t2, s2
 ; RV32IMZBS-NEXT:    xor a6, a6, a7
-; RV32IMZBS-NEXT:    lw a7, 624(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a7, 628(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a3, a3, a7
-; RV32IMZBS-NEXT:    lw a7, 596(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a7, 600(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a4, a7
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    lw a1, 496(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a1, 500(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a1, a2, a1
-; RV32IMZBS-NEXT:    xor a2, t0, s7
+; RV32IMZBS-NEXT:    xor a2, t0, s4
 ; RV32IMZBS-NEXT:    xor a3, a6, a3
-; RV32IMZBS-NEXT:    lw a6, 600(sp) # 4-byte Folded Reload
+; RV32IMZBS-NEXT:    lw a6, 604(sp) # 4-byte Folded Reload
 ; RV32IMZBS-NEXT:    xor a4, a4, a6
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
-; RV32IMZBS-NEXT:    xor a1, a2, s4
+; RV32IMZBS-NEXT:    xor a1, a2, s3
 ; RV32IMZBS-NEXT:    xor a3, a3, a4
 ; RV32IMZBS-NEXT:    xor a0, a0, a1
 ; RV32IMZBS-NEXT:    xor a3, a3, a5
@@ -24525,8 +24523,8 @@ define void @mul_use_commutative_clmul_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0
 ; RV32IMZBS-NEXT:    slli a0, a0, 2
 ; RV32IMZBS-NEXT:    or a0, a3, a0
 ; RV32IMZBS-NEXT:    srli a3, a1, 1
-; RV32IMZBS-NEXT:    and a1, a1, s5
-; RV32IMZBS-NEXT:    and a4, a0, s5
+; RV32IMZBS-NEXT:    and a1, a1, s6
+; RV32IMZBS-NEXT:    and a4, a0, s6
 ; RV32IMZBS-NEXT:    srli a0, a0, 1
 ; RV32IMZBS-NEXT:    and a3, a3, a2
 ; RV32IMZBS-NEXT:    and a0, a0, a2

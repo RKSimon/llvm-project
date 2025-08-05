@@ -148,20 +148,21 @@ define i64 @pr155345(ptr %p1, i1 %cond, ptr %p2, ptr %p3) {
 ; X86ASM-LABEL: pr155345:
 ; X86ASM:       # %bb.0: # %entry
 ; X86ASM-NEXT:    movzbl (%rdi), %edi
-; X86ASM-NEXT:    xorl %eax, %eax
-; X86ASM-NEXT:    orb $1, %dil
+; X86ASM-NEXT:    orq $1, %rdi
 ; X86ASM-NEXT:    movb %dil, (%rdx)
-; X86ASM-NEXT:    movzbl %dil, %edx
-; X86ASM-NEXT:    cmovel %edx, %eax
-; X86ASM-NEXT:    sete %dil
+; X86ASM-NEXT:    movsbq %dil, %rdx
+; X86ASM-NEXT:    xorl %eax, %eax
+; X86ASM-NEXT:    testq %rdx, %rdx
+; X86ASM-NEXT:    cmovel %edi, %eax
+; X86ASM-NEXT:    sete %r8b
 ; X86ASM-NEXT:    testb $1, %sil
-; X86ASM-NEXT:    cmovnel %edx, %eax
+; X86ASM-NEXT:    cmovnel %edi, %eax
 ; X86ASM-NEXT:    movb %dl, (%rcx)
 ; X86ASM-NEXT:    movl $1, %edx
 ; X86ASM-NEXT:    movl %eax, %ecx
 ; X86ASM-NEXT:    shlq %cl, %rdx
-; X86ASM-NEXT:    orb %sil, %dil
-; X86ASM-NEXT:    movzbl %dil, %eax
+; X86ASM-NEXT:    orb %sil, %r8b
+; X86ASM-NEXT:    movzbl %r8b, %eax
 ; X86ASM-NEXT:    andl %edx, %eax
 ; X86ASM-NEXT:    andl $1, %eax
 ; X86ASM-NEXT:    retq

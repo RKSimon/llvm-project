@@ -138,26 +138,30 @@ define <3 x float> @safe_math_fract_v3f32(<3 x float> %x, ptr addrspace(1) write
 ; GFX6-LABEL: safe_math_fract_v3f32:
 ; GFX6:       ; %bb.0:
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX6-NEXT:    v_floor_f32_e32 v7, v2
-; GFX6-NEXT:    v_floor_f32_e32 v5, v0
-; GFX6-NEXT:    v_sub_f32_e32 v8, v2, v7
-; GFX6-NEXT:    v_sub_f32_e32 v9, v0, v5
-; GFX6-NEXT:    v_min_f32_e32 v8, 0x3f7fffff, v8
-; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v2, v2
-; GFX6-NEXT:    v_min_f32_e32 v9, 0x3f7fffff, v9
-; GFX6-NEXT:    v_cndmask_b32_e32 v8, v8, v2, vcc
-; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v0, v0
-; GFX6-NEXT:    v_mov_b32_e32 v10, 0x204
-; GFX6-NEXT:    v_cndmask_b32_e32 v9, v9, v0, vcc
-; GFX6-NEXT:    v_cmp_class_f32_e32 vcc, v0, v10
 ; GFX6-NEXT:    s_mov_b32 s6, 0
+; GFX6-NEXT:    v_floor_f32_e32 v6, v1
+; GFX6-NEXT:    s_mov_b32 s4, s6
+; GFX6-NEXT:    v_floor_f32_e32 v7, v2
+; GFX6-NEXT:    v_sub_f32_e32 v8, v1, v6
+; GFX6-NEXT:    v_floor_f32_e32 v5, v0
+; GFX6-NEXT:    v_sub_f32_e32 v9, v2, v7
+; GFX6-NEXT:    v_min_f32_e32 v8, s4, v8
+; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, s4, v1
+; GFX6-NEXT:    v_sub_f32_e32 v10, v0, v5
+; GFX6-NEXT:    v_min_f32_e32 v9, 0x3f7fffff, v9
+; GFX6-NEXT:    v_cndmask_b32_e32 v1, v8, v1, vcc
+; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v2, v2
+; GFX6-NEXT:    v_min_f32_e32 v10, 0x3f7fffff, v10
+; GFX6-NEXT:    v_cndmask_b32_e32 v8, v9, v2, vcc
+; GFX6-NEXT:    v_cmp_u_f32_e32 vcc, v0, v0
+; GFX6-NEXT:    v_cndmask_b32_e32 v9, v10, v0, vcc
+; GFX6-NEXT:    v_mov_b32_e32 v10, 0x204
+; GFX6-NEXT:    v_cmp_class_f32_e32 vcc, v0, v10
 ; GFX6-NEXT:    v_cndmask_b32_e64 v0, v9, 0, vcc
 ; GFX6-NEXT:    v_cmp_class_f32_e32 vcc, v2, v10
 ; GFX6-NEXT:    s_mov_b32 s7, 0xf000
-; GFX6-NEXT:    s_mov_b32 s4, s6
 ; GFX6-NEXT:    s_mov_b32 s5, s6
 ; GFX6-NEXT:    v_cndmask_b32_e64 v2, v8, 0, vcc
-; GFX6-NEXT:    v_floor_f32_e32 v6, v1
 ; GFX6-NEXT:    buffer_store_dword v7, v[3:4], s[4:7], 0 addr64 offset:8
 ; GFX6-NEXT:    buffer_store_dwordx2 v[5:6], v[3:4], s[4:7], 0 addr64
 ; GFX6-NEXT:    s_waitcnt vmcnt(0) expcnt(0)

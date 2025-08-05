@@ -1362,9 +1362,9 @@ define <2 x i64> @clmul_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 define <16 x i8> @clmulr_v16i8(<16 x i8> %a, <16 x i8> %b) nounwind {
 ; SSE2-LABEL: clmulr_v16i8:
 ; SSE2:       # %bb.0:
+; SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]
 ; SSE2-NEXT:    movdqa %xmm0, %xmm3
 ; SSE2-NEXT:    psrlw $4, %xmm3
-; SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]
 ; SSE2-NEXT:    pand %xmm2, %xmm3
 ; SSE2-NEXT:    pand %xmm2, %xmm0
 ; SSE2-NEXT:    psllw $4, %xmm0
@@ -2707,20 +2707,20 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm12 = [2,2]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm12, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
@@ -2728,7 +2728,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -2737,14 +2737,14 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm11 = [64,64]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -2753,7 +2753,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm3
@@ -2762,14 +2762,14 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm15 = [512,512]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
@@ -2778,7 +2778,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
@@ -2786,7 +2786,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm4
@@ -2795,7 +2795,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm14 = [4096,4096]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm14, %xmm5
@@ -2803,7 +2803,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [8192,8192]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2813,7 +2813,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
@@ -2821,7 +2821,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -2829,7 +2829,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [65536,65536]
@@ -2840,7 +2840,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [131072,131072]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
@@ -2849,7 +2849,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm10 = [262144,262144]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -2858,7 +2858,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [524288,524288]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2868,7 +2868,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [1048576,1048576]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2878,7 +2878,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [2097152,2097152]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2888,7 +2888,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [4194304,4194304]
@@ -2900,7 +2900,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm9, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm7 = [8388608,8388608]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm7, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
@@ -2909,7 +2909,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm9, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [16777216,16777216]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2918,7 +2918,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [33554432,33554432]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, (%rsp) # 16-byte Spill
@@ -2928,7 +2928,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [67108864,67108864]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2938,7 +2938,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [134217728,134217728]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2948,7 +2948,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm0 = [268435456,268435456]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2958,7 +2958,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm0, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -2972,14 +2972,14 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm6, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm1
@@ -3141,7 +3141,7 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm8
 ; SSE2-NOPCLMUL-NEXT:    pmuludq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm8, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm8, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm5
@@ -3310,9 +3310,9 @@ define <2 x i64> @clmulr_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 define <16 x i8> @clmulh_v16i8(<16 x i8> %a, <16 x i8> %b) nounwind {
 ; SSE2-LABEL: clmulh_v16i8:
 ; SSE2:       # %bb.0:
+; SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]
 ; SSE2-NEXT:    movdqa %xmm0, %xmm3
 ; SSE2-NEXT:    psrlw $4, %xmm3
-; SSE2-NEXT:    movdqa {{.*#+}} xmm2 = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]
 ; SSE2-NEXT:    pand %xmm2, %xmm3
 ; SSE2-NEXT:    pand %xmm2, %xmm0
 ; SSE2-NEXT:    psllw $4, %xmm0
@@ -4595,20 +4595,20 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm12 = [2,2]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm12, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
@@ -4616,7 +4616,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -4625,14 +4625,14 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm11 = [64,64]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -4641,7 +4641,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm3
@@ -4650,14 +4650,14 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm15 = [512,512]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm7
@@ -4666,7 +4666,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
@@ -4674,7 +4674,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm4
@@ -4683,7 +4683,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm14 = [4096,4096]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm14, %xmm5
@@ -4691,7 +4691,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [8192,8192]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4701,7 +4701,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm5
@@ -4709,7 +4709,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -4717,7 +4717,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [65536,65536]
@@ -4728,7 +4728,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [131072,131072]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
@@ -4737,7 +4737,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm10 = [262144,262144]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -4746,7 +4746,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [524288,524288]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4756,7 +4756,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [1048576,1048576]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4766,7 +4766,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [2097152,2097152]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4776,7 +4776,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [4194304,4194304]
@@ -4788,7 +4788,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm9, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm7 = [8388608,8388608]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm7, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, %xmm5
@@ -4797,7 +4797,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm9, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm9, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [16777216,16777216]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4806,7 +4806,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [33554432,33554432]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, (%rsp) # 16-byte Spill
@@ -4816,7 +4816,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm5 = [67108864,67108864]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4826,7 +4826,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm5, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm5, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [134217728,134217728]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4836,7 +4836,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm5
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm0 = [268435456,268435456]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4846,7 +4846,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm0, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -4860,14 +4860,14 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm6, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm1
@@ -5029,7 +5029,7 @@ define <2 x i64> @clmulh_v2i64(<2 x i64> %a, <2 x i64> %b) nounwind {
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm8
 ; SSE2-NOPCLMUL-NEXT:    pmuludq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm8, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm8, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm5
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm5
@@ -5861,20 +5861,20 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm12 = [2,2]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm12, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -5882,7 +5882,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
@@ -5891,14 +5891,14 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm11 = [64,64]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm3
@@ -5907,7 +5907,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm2
@@ -5916,14 +5916,14 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm15 = [512,512]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
@@ -5932,7 +5932,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
@@ -5940,7 +5940,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -5949,7 +5949,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm14 = [4096,4096]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm14, %xmm4
@@ -5957,7 +5957,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [8192,8192]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -5967,7 +5967,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -5975,7 +5975,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
@@ -5983,7 +5983,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [65536,65536]
@@ -5994,7 +5994,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [131072,131072]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -6003,7 +6003,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm10 = [262144,262144]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
@@ -6012,7 +6012,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [524288,524288]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6022,7 +6022,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm2 = [1048576,1048576]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6032,7 +6032,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [2097152,2097152]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6042,7 +6042,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [4194304,4194304]
@@ -6054,7 +6054,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm9, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm7 = [8388608,8388608]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm7, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -6063,7 +6063,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm9, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [16777216,16777216]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6072,7 +6072,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [33554432,33554432]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, (%rsp) # 16-byte Spill
@@ -6082,7 +6082,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [67108864,67108864]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6092,7 +6092,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [134217728,134217728]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6102,7 +6102,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm0 = [268435456,268435456]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6112,7 +6112,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm0, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6126,14 +6126,14 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm6, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm6, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm5
@@ -6295,7 +6295,7 @@ define void @commutative_clmulh_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm8
 ; SSE2-NOPCLMUL-NEXT:    pmuludq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm8, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm8, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
@@ -6540,20 +6540,20 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm12 = [2,2]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm12, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -6561,7 +6561,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
@@ -6570,14 +6570,14 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm11 = [64,64]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm3
@@ -6586,7 +6586,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm2
@@ -6595,14 +6595,14 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm15 = [512,512]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm7
@@ -6611,7 +6611,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
@@ -6619,7 +6619,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
@@ -6628,7 +6628,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm14 = [4096,4096]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand %xmm14, %xmm4
@@ -6636,7 +6636,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [8192,8192]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6646,7 +6646,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm4
@@ -6654,7 +6654,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm3
@@ -6662,7 +6662,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [65536,65536]
@@ -6673,7 +6673,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [131072,131072]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -6682,7 +6682,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm10 = [262144,262144]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
@@ -6691,7 +6691,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm6 = [524288,524288]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6701,7 +6701,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm7, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm7, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm2 = [1048576,1048576]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6711,7 +6711,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm7
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm7
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm7
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [2097152,2097152]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6721,7 +6721,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm7, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [4194304,4194304]
@@ -6733,7 +6733,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm9, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm9, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm7 = [8388608,8388608]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm7, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm1, %xmm4
@@ -6742,7 +6742,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm9
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm9, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm9, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [16777216,16777216]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6751,7 +6751,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [33554432,33554432]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, (%rsp) # 16-byte Spill
@@ -6761,7 +6761,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm4 = [67108864,67108864]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm4, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6771,7 +6771,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm4, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm4, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm3 = [134217728,134217728]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6781,7 +6781,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
-; SSE2-NOPCLMUL-NEXT:    por %xmm3, %xmm4
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm3, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    movdqa {{.*#+}} xmm0 = [268435456,268435456]
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm0, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6791,7 +6791,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm3
-; SSE2-NOPCLMUL-NEXT:    por %xmm0, %xmm3
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm0, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm4, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm2, %xmm3
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm3, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
@@ -6805,14 +6805,14 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm6, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm6, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm2, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm2, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm5, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm8, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm2, %xmm6
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm3, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm2
-; SSE2-NOPCLMUL-NEXT:    por %xmm6, %xmm2
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm6, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm2
 ; SSE2-NOPCLMUL-NEXT:    movdqa %xmm2, {{[-0-9]+}}(%r{{[sb]}}p) # 16-byte Spill
 ; SSE2-NOPCLMUL-NEXT:    psrlq $32, %xmm5
@@ -6974,7 +6974,7 @@ define void @commutative_clmulr_v2i64(<2 x i64> %x, <2 x i64> %y, ptr %p0, ptr %
 ; SSE2-NOPCLMUL-NEXT:    pmuludq %xmm0, %xmm8
 ; SSE2-NOPCLMUL-NEXT:    pmuludq {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm0
-; SSE2-NOPCLMUL-NEXT:    por %xmm8, %xmm0
+; SSE2-NOPCLMUL-NEXT:    paddq %xmm8, %xmm0
 ; SSE2-NOPCLMUL-NEXT:    pxor {{[-0-9]+}}(%r{{[sb]}}p), %xmm0 # 16-byte Folded Reload
 ; SSE2-NOPCLMUL-NEXT:    psllq $32, %xmm4
 ; SSE2-NOPCLMUL-NEXT:    pxor %xmm0, %xmm4
