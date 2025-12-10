@@ -1302,20 +1302,19 @@ inline BinaryOpc_match<ValTy, AllOnes_match, true> m_Not(const ValTy &V) {
 template <typename... PatternTs> struct ReassociatableOpc_match {
   unsigned Opcode;
   std::tuple<PatternTs...> Patterns;
+  constexpr static size_t NumPatterns = std::tuple_size_v<std::tuple<PatternTs...>>;
 
   ReassociatableOpc_match(unsigned Opcode, const PatternTs &...Patterns)
       : Opcode(Opcode), Patterns(Patterns...) {}
 
   template <typename MatchContext>
   bool match(const MatchContext &Ctx, SDValue N) {
-    constexpr size_t NumPatterns = std::tuple_size_v<std::tuple<PatternTs...>>;
-
     SmallVector<SDValue> Leaves;
     collectLeaves(N, Leaves);
     if (Leaves.size() != NumPatterns)
       return false;
 
-    SmallBitVector Used(NumPatterns);
+    llvm::Bitset<NumPatterns> Used;
     return std::apply(
         [&](auto &...P) -> bool {
           return reassociatableMatchHelper(Ctx, Leaves, Used, P...);
@@ -1336,23 +1335,24 @@ template <typename... PatternTs> struct ReassociatableOpc_match {
   template <typename MatchContext, typename PatternHd, typename... PatternTl>
   [[nodiscard]] inline bool
   reassociatableMatchHelper(const MatchContext &Ctx, ArrayRef<SDValue> Leaves,
-                            SmallBitVector &Used, PatternHd &HeadPattern,
+                            llvm::Bitset<NumPatterns> &Used,
+                            PatternHd &HeadPattern,
                             PatternTl &...TailPatterns) {
-    for (size_t Match = 0, N = Used.size(); Match < N; Match++) {
+    for (size_t Match = 0; Match != NumPatterns; Match++) {
       if (Used[Match] || !(sd_context_match(Leaves[Match], Ctx, HeadPattern)))
         continue;
-      Used[Match] = true;
+      Used.set(Match);
       if (reassociatableMatchHelper(Ctx, Leaves, Used, TailPatterns...))
         return true;
-      Used[Match] = false;
+      Used.reset(Match);
     }
     return false;
   }
 
   template <typename MatchContext>
-  [[nodiscard]] inline bool reassociatableMatchHelper(const MatchContext &Ctx,
-                                                      ArrayRef<SDValue> Leaves,
-                                                      SmallBitVector &Used) {
+  [[nodiscard]] inline bool
+  reassociatableMatchHelper(const MatchContext &Ctx, ArrayRef<SDValue> Leaves,
+                            llvm::Bitset<NumPatterns> &Used) {
     return true;
   }
 };
