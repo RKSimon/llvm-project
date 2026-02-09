@@ -4280,6 +4280,40 @@ void SelectionDAGBuilder::visitShuffleVector(const User &I) {
 
   assert(SrcNumElts > MaskNumElts);
 
+  // See if we can recreate a binary shuffle by splitting or widening an unary
+  // shuffle with sources twice the destination size.
+  if (SrcNumElts == (MaskNumElts * 2) && Src2.isUndef() &&
+      TLI.isTypeLegal(VT)) {
+    SmallVector<int, 16> SplitMask(Mask.begin(), Mask.end());
+    for (int &M : SplitMask)
+      M = M >= (int)SrcNumElts ? -1 : M;
+    bool LoOnly = all_of(SplitMask,
+                         [MaskNumElts](int M) { return M < (int)MaskNumElts; });
+    bool HiOnly = all_of(SplitMask, [MaskNumElts](int M) {
+      return M < 0 || M >= (int)MaskNumElts;
+    });
+    if (LoOnly || HiOnly || Src1.getOpcode() == ISD::CONCAT_VECTORS ||
+        isa<LoadSDNode>(Src1) ||
+        (TLI.isExtractSubvectorCheap(VT, SrcVT, 0) &&
+         TLI.isExtractSubvectorCheap(VT, SrcVT, MaskNumElts))) {
+      SDValue LHS = DAG.getExtractSubvector(DL, VT, Src1, 0);
+      SDValue RHS = DAG.getExtractSubvector(DL, VT, Src1, MaskNumElts);
+      SDValue Result = DAG.getVectorShuffle(VT, DL, LHS, RHS, SplitMask);
+      setValue(&I, Result);
+      return;
+    }
+    if (TLI.isTypeLegal(SrcVT)) {
+      SmallVector<int, 16> WideMask(Mask.begin(), Mask.end());
+      WideMask.append(SrcNumElts - MaskNumElts, -1);
+      if (TLI.isShuffleMaskLegal(WideMask, SrcVT.getSimpleVT())) {
+        SDValue Wide = DAG.getVectorShuffle(SrcVT, DL, Src1, Src2, WideMask);
+        SDValue Result = DAG.getExtractSubvector(DL, VT, Wide, 0);
+        setValue(&I, Result);
+        return;
+      }
+    }
+  }
+
   // Analyze the access pattern of the vector to see if we can extract
   // two subvectors and do the shuffle.
   int StartIdx[2] = {-1, -1}; // StartIdx to extract from
