@@ -13500,6 +13500,35 @@ bool llvm::isMinSignedConstant(SDValue V) {
   return Const != nullptr && Const->isMinSignedValue();
 }
 
+bool llvm::isNeutralConstant(unsigned Opcode, const APInt &C,
+                             unsigned OperandNo) {
+  switch (Opcode) {
+  case ISD::ADD:
+  case ISD::OR:
+  case ISD::XOR:
+  case ISD::UMAX:
+    return C.isZero();
+  case ISD::MUL:
+    return C.isOne();
+  case ISD::AND:
+  case ISD::UMIN:
+    return C.isAllOnes();
+  case ISD::SMAX:
+    return C.isMinSignedValue();
+  case ISD::SMIN:
+    return C.isMaxSignedValue();
+  case ISD::SUB:
+  case ISD::SHL:
+  case ISD::SRA:
+  case ISD::SRL:
+    return OperandNo == 1 && C.isZero();
+  case ISD::UDIV:
+  case ISD::SDIV:
+    return OperandNo == 1 && C.isOne();
+  }
+  return false;
+}
+
 bool llvm::isNeutralConstant(unsigned Opcode, SDNodeFlags Flags, SDValue V,
                              unsigned OperandNo) {
   // NOTE: The cases should match with IR's ConstantExpr::getBinOpIdentity().
@@ -13507,31 +13536,10 @@ bool llvm::isNeutralConstant(unsigned Opcode, SDNodeFlags Flags, SDValue V,
   if (auto *ConstV = isConstOrConstSplat(V, /*AllowUndefs*/ false,
                                          /*AllowTruncation*/ true)) {
     APInt Const = ConstV->getAPIntValue().trunc(V.getScalarValueSizeInBits());
-    switch (Opcode) {
-    case ISD::ADD:
-    case ISD::OR:
-    case ISD::XOR:
-    case ISD::UMAX:
-      return Const.isZero();
-    case ISD::MUL:
-      return Const.isOne();
-    case ISD::AND:
-    case ISD::UMIN:
-      return Const.isAllOnes();
-    case ISD::SMAX:
-      return Const.isMinSignedValue();
-    case ISD::SMIN:
-      return Const.isMaxSignedValue();
-    case ISD::SUB:
-    case ISD::SHL:
-    case ISD::SRA:
-    case ISD::SRL:
-      return OperandNo == 1 && Const.isZero();
-    case ISD::UDIV:
-    case ISD::SDIV:
-      return OperandNo == 1 && Const.isOne();
-    }
-  } else if (auto *ConstFP = isConstOrConstSplatFP(V)) {
+    return isNeutralConstant(Opcode, Const, OperandNo);
+  }
+
+  if (auto *ConstFP = isConstOrConstSplatFP(V)) {
     switch (Opcode) {
     case ISD::FADD:
       return ConstFP->isZero() &&

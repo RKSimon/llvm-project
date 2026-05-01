@@ -1949,6 +1949,12 @@ LLVM_ABI bool isOneConstant(SDValue V);
 /// Returns true if \p V is a constant min signed integer value.
 LLVM_ABI bool isMinSignedConstant(SDValue V);
 
+/// Returns true if \p C is a neutral integer element of Opc.
+/// When OperandNo is 0, it checks that C is a left identity. Otherwise, it
+/// checks that C is a right identity.
+LLVM_ABI bool isNeutralConstant(unsigned Opc, const APInt &C,
+                                unsigned OperandNo);
+
 /// Returns true if \p V is a neutral element of Opc with Flags.
 /// When OperandNo is 0, it checks that V is a left identity. Otherwise, it
 /// checks that V is a right identity.

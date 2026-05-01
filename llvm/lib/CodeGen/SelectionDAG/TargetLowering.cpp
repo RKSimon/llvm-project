@@ -821,13 +821,19 @@ SDValue TargetLowering::SimplifyMultipleUseDemandedBits(
       return Op.getOperand(1);
     break;
   }
-  case ISD::ADD: {
+  case ISD::ADD:
+  case ISD::SMAX:
+  case ISD::SMIN:
+  case ISD::UMAX:
+  case ISD::UMIN: {
     RHSKnown = DAG.computeKnownBits(Op.getOperand(1), DemandedElts, Depth + 1);
-    if (RHSKnown.isZero())
+    if (RHSKnown.isConstant() &&
+        isNeutralConstant(Op.getOpcode(), RHSKnown.getConstant(), 1))
       return Op.getOperand(0);
 
     LHSKnown = DAG.computeKnownBits(Op.getOperand(0), DemandedElts, Depth + 1);
-    if (LHSKnown.isZero())
+    if (LHSKnown.isConstant() &&
+        isNeutralConstant(Op.getOpcode(), LHSKnown.getConstant(), 0))
       return Op.getOperand(1);
     break;
   }
@@ -3849,6 +3855,27 @@ bool TargetLowering::SimplifyDemandedVectorElts(
     KnownZero |= SrcZero;
     KnownUndef &= SrcUndef;
     KnownUndef &= ~KnownZero;
+
+    // Attempt to avoid multi-use ops if we don't need anything from them.
+    if (!DemandedElts.isAllOnes())
+      if (SimplifyDemandedVectorEltsBinOp(Op0, Op1))
+        return true;
+    break;
+  }
+  case ISD::SMAX:
+  case ISD::SMIN:
+  case ISD::UMAX:
+  case ISD::UMIN: {
+    SDValue Op0 = Op.getOperand(0);
+    SDValue Op1 = Op.getOperand(1);
+
+    APInt SrcUndef, SrcZero;
+    if (SimplifyDemandedVectorElts(Op1, DemandedElts, SrcUndef, SrcZero, TLO,
+                                   Depth + 1))
+      return true;
+    if (SimplifyDemandedVectorElts(Op0, DemandedElts, SrcUndef, SrcZero, TLO,
+                                   Depth + 1))
+      return true;
 
     // Attempt to avoid multi-use ops if we don't need anything from them.
     if (!DemandedElts.isAllOnes())
