@@ -3555,47 +3555,51 @@ define i8 @test_v128i8(<128 x i8> %a0) nounwind {
 define i64 @test_v6i64(<6 x i64> %a0) nounwind {
 ; X86-SSE2-LABEL: test_v6i64:
 ; X86-SSE2:       # %bb.0:
+; X86-SSE2-NEXT:    pushl %ebp
+; X86-SSE2-NEXT:    pushl %ebx
 ; X86-SSE2-NEXT:    pushl %edi
 ; X86-SSE2-NEXT:    pushl %esi
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %edi
 ; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE2-NEXT:    cmpl %ebx, %edi
+; X86-SSE2-NEXT:    movl %edx, %ecx
+; X86-SSE2-NEXT:    sbbl %esi, %ecx
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-SSE2-NEXT:    cmovll %esi, %edx
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-SSE2-NEXT:    cmovll %ebx, %edi
+; X86-SSE2-NEXT:    cmpl %eax, %ecx
+; X86-SSE2-NEXT:    movl %esi, %ebx
+; X86-SSE2-NEXT:    sbbl %ebp, %ebx
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-SSE2-NEXT:    cmovll %ebp, %esi
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-SSE2-NEXT:    cmovll %eax, %ecx
+; X86-SSE2-NEXT:    cmpl %edi, %ecx
+; X86-SSE2-NEXT:    movl %esi, %eax
+; X86-SSE2-NEXT:    sbbl %edx, %eax
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE2-NEXT:    cmovll %edx, %esi
+; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE2-NEXT:    cmovll %edi, %ecx
+; X86-SSE2-NEXT:    cmpl %ebx, %eax
+; X86-SSE2-NEXT:    movl %edx, %edi
+; X86-SSE2-NEXT:    sbbl %ebp, %edi
+; X86-SSE2-NEXT:    cmovll %ebp, %edx
+; X86-SSE2-NEXT:    cmovll %ebx, %eax
 ; X86-SSE2-NEXT:    cmpl %ecx, %eax
 ; X86-SSE2-NEXT:    movl %edx, %edi
 ; X86-SSE2-NEXT:    sbbl %esi, %edi
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-SSE2-NEXT:    cmovll %esi, %edx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-SSE2-NEXT:    cmovll %ecx, %eax
-; X86-SSE2-NEXT:    cmpl %eax, %edi
-; X86-SSE2-NEXT:    movl %esi, %ecx
-; X86-SSE2-NEXT:    sbbl %edx, %ecx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE2-NEXT:    cmovgel %esi, %edx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE2-NEXT:    cmovgel %edi, %eax
-; X86-SSE2-NEXT:    cmpl %eax, %ecx
-; X86-SSE2-NEXT:    movl %esi, %edi
-; X86-SSE2-NEXT:    sbbl %edx, %edi
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-SSE2-NEXT:    cmovgel %esi, %edx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE2-NEXT:    cmovgel %ecx, %eax
-; X86-SSE2-NEXT:    cmpl %eax, %edi
-; X86-SSE2-NEXT:    movl %esi, %ecx
-; X86-SSE2-NEXT:    sbbl %edx, %ecx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE2-NEXT:    cmovgel %esi, %edx
-; X86-SSE2-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE2-NEXT:    cmovgel %edi, %eax
-; X86-SSE2-NEXT:    cmpl %eax, %ecx
-; X86-SSE2-NEXT:    movl %esi, %edi
-; X86-SSE2-NEXT:    sbbl %edx, %edi
-; X86-SSE2-NEXT:    cmovgel %ecx, %eax
-; X86-SSE2-NEXT:    cmovgel %esi, %edx
+; X86-SSE2-NEXT:    cmovll %esi, %edx
 ; X86-SSE2-NEXT:    popl %esi
 ; X86-SSE2-NEXT:    popl %edi
+; X86-SSE2-NEXT:    popl %ebx
+; X86-SSE2-NEXT:    popl %ebp
 ; X86-SSE2-NEXT:    retl
 ;
 ; X64-SSE2-LABEL: test_v6i64:
@@ -3648,47 +3652,51 @@ define i64 @test_v6i64(<6 x i64> %a0) nounwind {
 ;
 ; X86-SSE4-LABEL: test_v6i64:
 ; X86-SSE4:       # %bb.0:
+; X86-SSE4-NEXT:    pushl %ebp
+; X86-SSE4-NEXT:    pushl %ebx
 ; X86-SSE4-NEXT:    pushl %edi
 ; X86-SSE4-NEXT:    pushl %esi
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %edi
 ; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE4-NEXT:    cmpl %ebx, %edi
+; X86-SSE4-NEXT:    movl %edx, %ecx
+; X86-SSE4-NEXT:    sbbl %esi, %ecx
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-SSE4-NEXT:    cmovll %esi, %edx
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-SSE4-NEXT:    cmovll %ebx, %edi
+; X86-SSE4-NEXT:    cmpl %eax, %ecx
+; X86-SSE4-NEXT:    movl %esi, %ebx
+; X86-SSE4-NEXT:    sbbl %ebp, %ebx
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-SSE4-NEXT:    cmovll %ebp, %esi
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-SSE4-NEXT:    cmovll %eax, %ecx
+; X86-SSE4-NEXT:    cmpl %edi, %ecx
+; X86-SSE4-NEXT:    movl %esi, %eax
+; X86-SSE4-NEXT:    sbbl %edx, %eax
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-SSE4-NEXT:    cmovll %edx, %esi
+; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-SSE4-NEXT:    cmovll %edi, %ecx
+; X86-SSE4-NEXT:    cmpl %ebx, %eax
+; X86-SSE4-NEXT:    movl %edx, %edi
+; X86-SSE4-NEXT:    sbbl %ebp, %edi
+; X86-SSE4-NEXT:    cmovll %ebp, %edx
+; X86-SSE4-NEXT:    cmovll %ebx, %eax
 ; X86-SSE4-NEXT:    cmpl %ecx, %eax
 ; X86-SSE4-NEXT:    movl %edx, %edi
 ; X86-SSE4-NEXT:    sbbl %esi, %edi
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-SSE4-NEXT:    cmovll %esi, %edx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-SSE4-NEXT:    cmovll %ecx, %eax
-; X86-SSE4-NEXT:    cmpl %eax, %edi
-; X86-SSE4-NEXT:    movl %esi, %ecx
-; X86-SSE4-NEXT:    sbbl %edx, %ecx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE4-NEXT:    cmovgel %esi, %edx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE4-NEXT:    cmovgel %edi, %eax
-; X86-SSE4-NEXT:    cmpl %eax, %ecx
-; X86-SSE4-NEXT:    movl %esi, %edi
-; X86-SSE4-NEXT:    sbbl %edx, %edi
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-SSE4-NEXT:    cmovgel %esi, %edx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE4-NEXT:    cmovgel %ecx, %eax
-; X86-SSE4-NEXT:    cmpl %eax, %edi
-; X86-SSE4-NEXT:    movl %esi, %ecx
-; X86-SSE4-NEXT:    sbbl %edx, %ecx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-SSE4-NEXT:    cmovgel %esi, %edx
-; X86-SSE4-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-SSE4-NEXT:    cmovgel %edi, %eax
-; X86-SSE4-NEXT:    cmpl %eax, %ecx
-; X86-SSE4-NEXT:    movl %esi, %edi
-; X86-SSE4-NEXT:    sbbl %edx, %edi
-; X86-SSE4-NEXT:    cmovgel %ecx, %eax
-; X86-SSE4-NEXT:    cmovgel %esi, %edx
+; X86-SSE4-NEXT:    cmovll %esi, %edx
 ; X86-SSE4-NEXT:    popl %esi
 ; X86-SSE4-NEXT:    popl %edi
+; X86-SSE4-NEXT:    popl %ebx
+; X86-SSE4-NEXT:    popl %ebp
 ; X86-SSE4-NEXT:    retl
 ;
 ; X64-SSE41-LABEL: test_v6i64:
@@ -3759,47 +3767,51 @@ define i64 @test_v6i64(<6 x i64> %a0) nounwind {
 ;
 ; X86-AVX-LABEL: test_v6i64:
 ; X86-AVX:       # %bb.0:
+; X86-AVX-NEXT:    pushl %ebp
+; X86-AVX-NEXT:    pushl %ebx
 ; X86-AVX-NEXT:    pushl %edi
 ; X86-AVX-NEXT:    pushl %esi
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %edi
 ; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-AVX-NEXT:    cmpl %ebx, %edi
+; X86-AVX-NEXT:    movl %edx, %ecx
+; X86-AVX-NEXT:    sbbl %esi, %ecx
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-AVX-NEXT:    cmovll %esi, %edx
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
+; X86-AVX-NEXT:    cmovll %ebx, %edi
+; X86-AVX-NEXT:    cmpl %eax, %ecx
+; X86-AVX-NEXT:    movl %esi, %ebx
+; X86-AVX-NEXT:    sbbl %ebp, %ebx
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ebx
+; X86-AVX-NEXT:    cmovll %ebp, %esi
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ebp
+; X86-AVX-NEXT:    cmovll %eax, %ecx
+; X86-AVX-NEXT:    cmpl %edi, %ecx
+; X86-AVX-NEXT:    movl %esi, %eax
+; X86-AVX-NEXT:    sbbl %edx, %eax
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-AVX-NEXT:    cmovll %edx, %esi
+; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %edx
+; X86-AVX-NEXT:    cmovll %edi, %ecx
+; X86-AVX-NEXT:    cmpl %ebx, %eax
+; X86-AVX-NEXT:    movl %edx, %edi
+; X86-AVX-NEXT:    sbbl %ebp, %edi
+; X86-AVX-NEXT:    cmovll %ebp, %edx
+; X86-AVX-NEXT:    cmovll %ebx, %eax
 ; X86-AVX-NEXT:    cmpl %ecx, %eax
 ; X86-AVX-NEXT:    movl %edx, %edi
 ; X86-AVX-NEXT:    sbbl %esi, %edi
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-AVX-NEXT:    cmovll %esi, %edx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
 ; X86-AVX-NEXT:    cmovll %ecx, %eax
-; X86-AVX-NEXT:    cmpl %eax, %edi
-; X86-AVX-NEXT:    movl %esi, %ecx
-; X86-AVX-NEXT:    sbbl %edx, %ecx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX-NEXT:    cmovgel %esi, %edx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-AVX-NEXT:    cmovgel %edi, %eax
-; X86-AVX-NEXT:    cmpl %eax, %ecx
-; X86-AVX-NEXT:    movl %esi, %edi
-; X86-AVX-NEXT:    sbbl %edx, %edi
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %edi
-; X86-AVX-NEXT:    cmovgel %esi, %edx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-AVX-NEXT:    cmovgel %ecx, %eax
-; X86-AVX-NEXT:    cmpl %eax, %edi
-; X86-AVX-NEXT:    movl %esi, %ecx
-; X86-AVX-NEXT:    sbbl %edx, %ecx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %ecx
-; X86-AVX-NEXT:    cmovgel %esi, %edx
-; X86-AVX-NEXT:    movl {{[0-9]+}}(%esp), %esi
-; X86-AVX-NEXT:    cmovgel %edi, %eax
-; X86-AVX-NEXT:    cmpl %eax, %ecx
-; X86-AVX-NEXT:    movl %esi, %edi
-; X86-AVX-NEXT:    sbbl %edx, %edi
-; X86-AVX-NEXT:    cmovgel %ecx, %eax
-; X86-AVX-NEXT:    cmovgel %esi, %edx
+; X86-AVX-NEXT:    cmovll %esi, %edx
 ; X86-AVX-NEXT:    popl %esi
 ; X86-AVX-NEXT:    popl %edi
+; X86-AVX-NEXT:    popl %ebx
+; X86-AVX-NEXT:    popl %ebp
 ; X86-AVX-NEXT:    retl
 ;
 ; X64-AVX1-LABEL: test_v6i64:
