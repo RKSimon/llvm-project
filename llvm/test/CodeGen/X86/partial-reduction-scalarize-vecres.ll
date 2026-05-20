@@ -163,11 +163,10 @@ define i32 @test_prdx_mla_wide_input(<1 x i32> %acc, <4 x i32> %in) {
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
 ; CHECK-NEXT:    paddd %xmm0, %xmm1
-; CHECK-NEXT:    movd %xmm1, %eax
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[1,1,1,1]
-; CHECK-NEXT:    movd %xmm0, %ecx
+; CHECK-NEXT:    paddd %xmm1, %xmm0
+; CHECK-NEXT:    movd %xmm0, %eax
 ; CHECK-NEXT:    addl %edi, %eax
-; CHECK-NEXT:    addl %ecx, %eax
 ; CHECK-NEXT:    retq
   %prdx = call <1 x i32> @llvm.vector.partial.reduce.add(<1 x i32> %acc, <4 x i32> %in)
   %res = extractelement <1 x i32> %prdx, i32 0

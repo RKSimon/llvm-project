@@ -23,10 +23,10 @@ define i32 @PR231055(<4 x i32> %x, <4 x i1> %m) {
 ; X86-SSE2-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm2[0]
 ; X86-SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,3],xmm3[0,3]
 ; X86-SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}, %xmm0
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
-; X86-SSE2-NEXT:    paddd %xmm0, %xmm2
-; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[1,1,1,1]
-; X86-SSE2-NEXT:    paddd %xmm2, %xmm0
+; X86-SSE2-NEXT:    pxor %xmm2, %xmm2
+; X86-SSE2-NEXT:    psadbw %xmm0, %xmm2
+; X86-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; X86-SSE2-NEXT:    paddq %xmm2, %xmm0
 ; X86-SSE2-NEXT:    movd %xmm0, %ecx
 ; X86-SSE2-NEXT:    pslld $31, %xmm1
 ; X86-SSE2-NEXT:    movmskps %xmm1, %eax
@@ -45,10 +45,10 @@ define i32 @PR231055(<4 x i32> %x, <4 x i1> %m) {
 ; X64-SSE2-NEXT:    punpcklqdq {{.*#+}} xmm0 = xmm0[0],xmm2[0]
 ; X64-SSE2-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,3],xmm3[0,3]
 ; X64-SSE2-NEXT:    andps {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
-; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
-; X64-SSE2-NEXT:    paddd %xmm0, %xmm2
-; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[1,1,1,1]
-; X64-SSE2-NEXT:    paddd %xmm2, %xmm0
+; X64-SSE2-NEXT:    pxor %xmm2, %xmm2
+; X64-SSE2-NEXT:    psadbw %xmm0, %xmm2
+; X64-SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; X64-SSE2-NEXT:    paddq %xmm2, %xmm0
 ; X64-SSE2-NEXT:    movd %xmm0, %ecx
 ; X64-SSE2-NEXT:    pslld $31, %xmm1
 ; X64-SSE2-NEXT:    movmskps %xmm1, %eax
@@ -58,10 +58,10 @@ define i32 @PR231055(<4 x i32> %x, <4 x i1> %m) {
 ; SSE4-LABEL: PR231055:
 ; SSE4:       # %bb.0:
 ; SSE4-NEXT:    pshufb {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[15],zero,zero,zero
-; SSE4-NEXT:    pshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
-; SSE4-NEXT:    paddd %xmm0, %xmm2
-; SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[1,1,1,1]
-; SSE4-NEXT:    paddd %xmm2, %xmm0
+; SSE4-NEXT:    pxor %xmm2, %xmm2
+; SSE4-NEXT:    psadbw %xmm0, %xmm2
+; SSE4-NEXT:    pshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
+; SSE4-NEXT:    paddq %xmm2, %xmm0
 ; SSE4-NEXT:    movd %xmm0, %ecx
 ; SSE4-NEXT:    pslld $31, %xmm1
 ; SSE4-NEXT:    movmskps %xmm1, %eax
@@ -71,10 +71,10 @@ define i32 @PR231055(<4 x i32> %x, <4 x i1> %m) {
 ; AVX2-LABEL: PR231055:
 ; AVX2:       # %bb.0:
 ; AVX2-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[15],zero,zero,zero
+; AVX2-NEXT:    vpxor %xmm2, %xmm2, %xmm2
+; AVX2-NEXT:    vpsadbw %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vpshufd {{.*#+}} xmm2 = xmm0[2,3,2,3]
-; AVX2-NEXT:    vpaddd %xmm2, %xmm0, %xmm0
-; AVX2-NEXT:    vpshufd {{.*#+}} xmm2 = xmm0[1,1,1,1]
-; AVX2-NEXT:    vpaddd %xmm2, %xmm0, %xmm0
+; AVX2-NEXT:    vpaddq %xmm2, %xmm0, %xmm0
 ; AVX2-NEXT:    vmovd %xmm0, %ecx
 ; AVX2-NEXT:    vpslld $31, %xmm1, %xmm0
 ; AVX2-NEXT:    vmovmskps %xmm0, %eax
@@ -85,8 +85,9 @@ define i32 @PR231055(<4 x i32> %x, <4 x i1> %m) {
 ; AVX512F:       # %bb.0:
 ; AVX512F-NEXT:    vpslld $31, %xmm1, %xmm1
 ; AVX512F-NEXT:    vptestmd %zmm1, %zmm1, %k0
+; AVX512F-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[15],zero,zero,zero
 ; AVX512F-NEXT:    vpxor %xmm1, %xmm1, %xmm1
-; AVX512F-NEXT:    vpshufb {{.*#+}} xmm0 = xmm0[0],zero,xmm0[5],zero,xmm0[10],zero,xmm0[15],zero,xmm0[u,u,u,u,u,u,u,u]
+; AVX512F-NEXT:    vpmovdw %zmm0, %ymm0
 ; AVX512F-NEXT:    vpsadbw %xmm1, %xmm0, %xmm0
 ; AVX512F-NEXT:    vmovd %xmm0, %ecx
 ; AVX512F-NEXT:    kmovw %k0, %eax
