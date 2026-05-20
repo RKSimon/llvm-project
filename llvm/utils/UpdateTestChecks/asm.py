@@ -291,6 +291,7 @@ SCRUB_X86_SPILL_RELOAD_RE = re.compile(
 SCRUB_X86_SP_RE = re.compile(r"\d+\(%(esp|rsp)\)")
 SCRUB_X86_RIP_RE = re.compile(r"[.\w]+\(%rip\)")
 SCRUB_X86_LCP_RE = re.compile(r"\.?LCPI[0-9]+_[0-9]+")
+SCRUB_X86_KILL_RE = re.compile(r"\# kill: def \$al killed \$al killed \$[e|r]ax")
 SCRUB_X86_RET_RE = re.compile(r"ret[l|q]")
 
 
@@ -321,6 +322,7 @@ def scrub_asm_x86(asm, args):
     if getattr(args, "extra_scrub", False):
         # Avoid generating different checks for 32- and 64-bit because of 'retl' vs 'retq'.
         asm = SCRUB_X86_RET_RE.sub(r"ret{{[l|q]}}", asm)
+        asm = SCRUB_X86_KILL_RE.sub(r"# kill: def $al killed $al killed ${{[e|r]}}ax", asm)
     # Strip kill operands inserted into the asm.
     asm = common.SCRUB_KILL_COMMENT_RE.sub("", asm)
     # Strip trailing whitespace.

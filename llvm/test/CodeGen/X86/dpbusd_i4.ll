@@ -108,16 +108,20 @@ define i32 @mul_zext_i4i4(<16 x i4> %a, <16 x i4> %b, i32 %c) {
 ; CHECK-LABEL: mul_zext_i4i4:
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    vpbroadcastd {{.*#+}} xmm2 = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]
-; CHECK-NEXT:    vpand %xmm2, %xmm1, %xmm1
 ; CHECK-NEXT:    vpand %xmm2, %xmm0, %xmm0
-; CHECK-NEXT:    vpxor %xmm2, %xmm2, %xmm2
-; CHECK-NEXT:    vpdpbusd %xmm1, %xmm0, %xmm2
-; CHECK-NEXT:    vpshufd {{.*#+}} xmm0 = xmm2[2,3,2,3]
-; CHECK-NEXT:    vpaddd %xmm0, %xmm2, %xmm0
-; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
-; CHECK-NEXT:    vpaddd %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpmovzxbd {{.*#+}} zmm0 = xmm0[0],zero,zero,zero,xmm0[1],zero,zero,zero,xmm0[2],zero,zero,zero,xmm0[3],zero,zero,zero,xmm0[4],zero,zero,zero,xmm0[5],zero,zero,zero,xmm0[6],zero,zero,zero,xmm0[7],zero,zero,zero,xmm0[8],zero,zero,zero,xmm0[9],zero,zero,zero,xmm0[10],zero,zero,zero,xmm0[11],zero,zero,zero,xmm0[12],zero,zero,zero,xmm0[13],zero,zero,zero,xmm0[14],zero,zero,zero,xmm0[15],zero,zero,zero
+; CHECK-NEXT:    vpand %xmm2, %xmm1, %xmm1
+; CHECK-NEXT:    vpmovzxbd {{.*#+}} zmm1 = xmm1[0],zero,zero,zero,xmm1[1],zero,zero,zero,xmm1[2],zero,zero,zero,xmm1[3],zero,zero,zero,xmm1[4],zero,zero,zero,xmm1[5],zero,zero,zero,xmm1[6],zero,zero,zero,xmm1[7],zero,zero,zero,xmm1[8],zero,zero,zero,xmm1[9],zero,zero,zero,xmm1[10],zero,zero,zero,xmm1[11],zero,zero,zero,xmm1[12],zero,zero,zero,xmm1[13],zero,zero,zero,xmm1[14],zero,zero,zero,xmm1[15],zero,zero,zero
+; CHECK-NEXT:    vpmulld %zmm1, %zmm0, %zmm0
+; CHECK-NEXT:    vpmovdb %zmm0, %xmm0
+; CHECK-NEXT:    vpxor %xmm1, %xmm1, %xmm1
+; CHECK-NEXT:    vpsadbw %xmm1, %xmm0, %xmm0
+; CHECK-NEXT:    vpshufd {{.*#+}} xmm1 = xmm0[2,3,2,3]
+; CHECK-NEXT:    vpaddq %xmm1, %xmm0, %xmm0
 ; CHECK-NEXT:    vmovd %xmm0, %eax
 ; CHECK-NEXT:    addl %edi, %eax
+; CHECK-NEXT:    # kill: def $eax killed $eax killed $rax
+; CHECK-NEXT:    vzeroupper
 ; CHECK-NEXT:    retq
 entry:
   %0 = zext <16 x i4> %a to <16 x i32>
