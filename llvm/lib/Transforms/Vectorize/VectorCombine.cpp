@@ -2444,7 +2444,8 @@ bool VectorCombine::foldConcatOfBoolMasks(Instruction &I) {
   return true;
 }
 
-// Fold binop(shuffle(V0, Mask), shuffle(V1, Mask)) -> shuffle(binop(V0, V1), Mask)
+// Fold binop(shuffle(V0, Mask), shuffle(V1, Mask))
+// --> shuffle(binop(V0, V1), Mask)
 bool VectorCombine::foldBinopOfShuffles(Instruction &I) {
   // It is not safe to transform things like div, urem, etc. because we may
   // create undefined behavior when executing those on unknown vector elements.
