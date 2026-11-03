@@ -2098,13 +2098,12 @@ define void @vec384_i8_widen_to_i32_factor4_broadcast_to_v12i32_factor12(ptr %in
 ; AVX1-NEXT:    vmovdqa (%rdi), %xmm0
 ; AVX1-NEXT:    vpalignr {{.*#+}} xmm1 = mem[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],xmm0[0]
 ; AVX1-NEXT:    vpshufb {{.*#+}} xmm1 = xmm1[15,0,1,2,15,4,5,6,15,8,9,10,15,12,13,14]
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm2 = mem[0,0,0,0]
 ; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX1-NEXT:    vpaddb (%rsi), %xmm1, %xmm1
+; AVX1-NEXT:    vpaddb 32(%rsi), %xmm0, %xmm2
 ; AVX1-NEXT:    vpaddb 16(%rsi), %xmm0, %xmm0
-; AVX1-NEXT:    vpaddb 32(%rsi), %xmm2, %xmm2
-; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm0, 16(%rdx)
+; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm1, (%rdx)
 ; AVX1-NEXT:    retq
 ;
@@ -2319,13 +2318,12 @@ define void @vec384_i8_widen_to_i64_factor8_broadcast_to_v6i64_factor6(ptr %in.e
 ; AVX1-NEXT:    vmovdqa (%rdi), %xmm0
 ; AVX1-NEXT:    vpalignr {{.*#+}} xmm1 = mem[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],xmm0[0]
 ; AVX1-NEXT:    vpshufb {{.*#+}} xmm1 = xmm1[15,0,1,2,3,4,5,6,15,8,9,10,11,12,13,14]
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm2 = mem[0,1,0,1]
 ; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,0,1]
 ; AVX1-NEXT:    vpaddb (%rsi), %xmm1, %xmm1
+; AVX1-NEXT:    vpaddb 32(%rsi), %xmm0, %xmm2
 ; AVX1-NEXT:    vpaddb 16(%rsi), %xmm0, %xmm0
-; AVX1-NEXT:    vpaddb 32(%rsi), %xmm2, %xmm2
-; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm0, 16(%rdx)
+; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm1, (%rdx)
 ; AVX1-NEXT:    retq
 ;
@@ -2427,13 +2425,13 @@ define void @vec384_i8_widen_to_i96_factor12_broadcast_to_v4i96_factor4(ptr %in.
 ; AVX1-NEXT:    vmovdqa (%rdi), %xmm0
 ; AVX1-NEXT:    vpalignr {{.*#+}} xmm1 = mem[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],xmm0[0]
 ; AVX1-NEXT:    vpshufb {{.*#+}} xmm1 = xmm1[15,0,1,2,3,4,5,6,7,8,9,10,15,12,13,14]
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm2 = mem[0,0,1,1]
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,1,0,1]
+; AVX1-NEXT:    vpshufd {{.*#+}} xmm2 = xmm0[0,1,0,1]
+; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,0,1,1]
 ; AVX1-NEXT:    vpaddb (%rsi), %xmm1, %xmm1
-; AVX1-NEXT:    vpaddb 16(%rsi), %xmm0, %xmm0
-; AVX1-NEXT:    vpaddb 32(%rsi), %xmm2, %xmm2
-; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
-; AVX1-NEXT:    vmovdqa %xmm0, 16(%rdx)
+; AVX1-NEXT:    vpaddb 32(%rsi), %xmm0, %xmm0
+; AVX1-NEXT:    vpaddb 16(%rsi), %xmm2, %xmm2
+; AVX1-NEXT:    vmovdqa %xmm2, 16(%rdx)
+; AVX1-NEXT:    vmovdqa %xmm0, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm1, (%rdx)
 ; AVX1-NEXT:    retq
 ;
@@ -2762,13 +2760,12 @@ define void @vec384_i16_widen_to_i32_factor2_broadcast_to_v12i32_factor12(ptr %i
 ; AVX1-NEXT:    vpshufb {{.*#+}} xmm1 = xmm1[2,3,6,7,10,11,14,15,u,u,u,u,u,u,u,u]
 ; AVX1-NEXT:    vpshuflw {{.*#+}} xmm2 = xmm0[0,0,0,0,4,5,6,7]
 ; AVX1-NEXT:    vpunpcklwd {{.*#+}} xmm1 = xmm2[0],xmm1[0],xmm2[1],xmm1[1],xmm2[2],xmm1[2],xmm2[3],xmm1[3]
-; AVX1-NEXT:    vpshufd {{.*#+}} xmm2 = mem[0,0,0,0]
 ; AVX1-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
 ; AVX1-NEXT:    vpaddb (%rsi), %xmm1, %xmm1
+; AVX1-NEXT:    vpaddb 32(%rsi), %xmm0, %xmm2
 ; AVX1-NEXT:    vpaddb 16(%rsi), %xmm0, %xmm0
-; AVX1-NEXT:    vpaddb 32(%rsi), %xmm2, %xmm2
-; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm0, 16(%rdx)
+; AVX1-NEXT:    vmovdqa %xmm2, 32(%rdx)
 ; AVX1-NEXT:    vmovdqa %xmm1, (%rdx)
 ; AVX1-NEXT:    retq
 ;

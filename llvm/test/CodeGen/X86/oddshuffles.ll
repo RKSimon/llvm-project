@@ -236,12 +236,11 @@ define void @v7i16(<4 x i16> %a, <4 x i16> %b, ptr %p) nounwind {
 ; SSE2-NEXT:    pshuflw {{.*#+}} xmm0 = xmm1[0,1,0,3,4,5,6,7]
 ; SSE2-NEXT:    pshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,4,7,6,7]
 ; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,2,1,3]
-; SSE2-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[1,2,3,2,4,5,6,7]
-; SSE2-NEXT:    pshufhw {{.*#+}} xmm1 = xmm0[0,1,2,3,5,6,4,7]
+; SSE2-NEXT:    pshuflw {{.*#+}} xmm1 = xmm0[1,2,3,2,4,5,6,7]
 ; SSE2-NEXT:    movw %ax, 12(%rdi)
-; SSE2-NEXT:    movq %xmm0, (%rdi)
-; SSE2-NEXT:    pshufd {{.*#+}} xmm0 = xmm1[2,3,2,3]
+; SSE2-NEXT:    psrldq {{.*#+}} xmm0 = xmm0[10,11,12,13,14,15],zero,zero,zero,zero,zero,zero,zero,zero,zero,zero
 ; SSE2-NEXT:    movd %xmm0, 8(%rdi)
+; SSE2-NEXT:    movq %xmm1, (%rdi)
 ; SSE2-NEXT:    retq
 ;
 ; SSE42-LABEL: v7i16:

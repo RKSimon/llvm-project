@@ -6471,6 +6471,18 @@ defm VPSHUFL : avx512_shift_rmi_w<0x70, MRMSrcReg, MRMSrcMem, "vpshuflw",
                                   X86PShuflw, SchedWriteShuffle>,
                                   EVEX, AVX512XDIi8Base;
 
+let Predicates = [HasAVX512] in {
+  defm : pshuffle_lowering<"VPSHUFDZ", X86PShufd, v32i16, VR512>;
+  defm : pshuffle_lowering<"VPSHUFDZ", X86PShufd, v64i8, VR512>;
+}
+
+let Predicates = [HasAVX512, HasVLX] in {
+  defm : pshuffle_lowering<"VPSHUFDZ128", X86PShufd, v8i16, VR128X>;
+  defm : pshuffle_lowering<"VPSHUFDZ128", X86PShufd, v16i8, VR128X>;
+  defm : pshuffle_lowering<"VPSHUFDZ256", X86PShufd, v16i16, VR256X>;
+  defm : pshuffle_lowering<"VPSHUFDZ256", X86PShufd, v32i8, VR256X>;
+}
+
 //===----------------------------------------------------------------------===//
 // AVX-512 - VPSHUFB
 //===----------------------------------------------------------------------===//

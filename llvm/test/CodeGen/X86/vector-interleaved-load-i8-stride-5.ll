@@ -293,7 +293,7 @@ define void @load_i8_stride5_vf4(ptr %in.vec, ptr %out.vec0, ptr %out.vec1, ptr 
 ; SSE-NEXT:    pandn %xmm0, %xmm8
 ; SSE-NEXT:    por %xmm5, %xmm8
 ; SSE-NEXT:    punpcklbw {{.*#+}} xmm8 = xmm8[0],xmm4[0],xmm8[1],xmm4[1],xmm8[2],xmm4[2],xmm8[3],xmm4[3],xmm8[4],xmm4[4],xmm8[5],xmm4[5],xmm8[6],xmm4[6],xmm8[7],xmm4[7]
-; SSE-NEXT:    shufps {{.*#+}} xmm8 = xmm8[1,1],xmm2[2,0]
+; SSE-NEXT:    shufps {{.*#+}} xmm8 = xmm8[0,1],xmm2[2,0]
 ; SSE-NEXT:    pshufhw {{.*#+}} xmm4 = xmm8[0,1,2,3,6,5,6,7]
 ; SSE-NEXT:    pshufd {{.*#+}} xmm4 = xmm4[2,1,2,3]
 ; SSE-NEXT:    pshuflw {{.*#+}} xmm4 = xmm4[3,0,1,2,4,5,6,7]

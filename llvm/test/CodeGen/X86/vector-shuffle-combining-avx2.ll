@@ -1347,8 +1347,8 @@ define <4 x i16> @PR176951(<32 x i64> %shuffle, <16 x i16> %0, <16 x i1> %cmp) n
 ; X86-AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0,1,2,3,4],mem[5],xmm0[6,7]
 ; X86-AVX2-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; X86-AVX2-NEXT:    vpshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,5,4,6,7]
-; X86-AVX2-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X86-AVX2-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
+; X86-AVX2-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X86-AVX2-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
 ; X86-AVX2-NEXT:    movl %ebp, %esp
 ; X86-AVX2-NEXT:    popl %ebp
@@ -1373,8 +1373,8 @@ define <4 x i16> @PR176951(<32 x i64> %shuffle, <16 x i16> %0, <16 x i1> %cmp) n
 ; X86-AVX512-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0,1,2,3,4],mem[5],xmm0[6,7]
 ; X86-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X86-AVX512-NEXT:    vpshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,5,4,6,7]
-; X86-AVX512-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X86-AVX512-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
+; X86-AVX512-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X86-AVX512-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
 ; X86-AVX512-NEXT:    movl %ebp, %esp
 ; X86-AVX512-NEXT:    popl %ebp
@@ -1406,8 +1406,8 @@ define <4 x i16> @PR176951(<32 x i64> %shuffle, <16 x i16> %0, <16 x i1> %cmp) n
 ; X64-AVX2-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0,1,2,3,4],mem[5],xmm0[6,7]
 ; X64-AVX2-NEXT:    vxorps %xmm1, %xmm1, %xmm1
 ; X64-AVX2-NEXT:    vpshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,5,4,6,7]
-; X64-AVX2-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X64-AVX2-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
+; X64-AVX2-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X64-AVX2-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
 ; X64-AVX2-NEXT:    movq %rbp, %rsp
 ; X64-AVX2-NEXT:    popq %rbp
@@ -1427,8 +1427,8 @@ define <4 x i16> @PR176951(<32 x i64> %shuffle, <16 x i16> %0, <16 x i1> %cmp) n
 ; X64-AVX512-NEXT:    vpblendw {{.*#+}} xmm0 = xmm0[0,1,2,3,4],xmm4[5],xmm0[6,7]
 ; X64-AVX512-NEXT:    vpxor %xmm1, %xmm1, %xmm1
 ; X64-AVX512-NEXT:    vpshufhw {{.*#+}} xmm0 = xmm0[0,1,2,3,5,4,6,7]
-; X64-AVX512-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X64-AVX512-NEXT:    vpshufd {{.*#+}} xmm0 = xmm0[2,2,2,2]
+; X64-AVX512-NEXT:    vpcmpgtw %xmm1, %xmm0, %xmm0
 ; X64-AVX512-NEXT:    vpunpcklwd {{.*#+}} xmm0 = xmm1[0],xmm0[0],xmm1[1],xmm0[1],xmm1[2],xmm0[2],xmm1[3],xmm0[3]
 ; X64-AVX512-NEXT:    vzeroupper
 ; X64-AVX512-NEXT:    retq

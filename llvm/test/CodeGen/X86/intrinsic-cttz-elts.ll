@@ -202,7 +202,7 @@ define i32 @ctz_zero_v8i1() {
 define i32 @ctz_zero_v17i1() {
 ; CHECK-LABEL: ctz_zero_v17i1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movdqa {{.*#+}} xmm0 = [84281096,16909060,84281096,16909060]
+; CHECK-NEXT:    movdqa {{.*#+}} xmm0 = [8,7,6,5,4,3,2,1,8,7,6,5,4,3,2,1]
 ; CHECK-NEXT:    pmaxub {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; CHECK-NEXT:    pshufd {{.*#+}} xmm1 = xmm0[1,1,1,1]
 ; CHECK-NEXT:    pmaxub %xmm0, %xmm1
@@ -236,7 +236,7 @@ define i32 @ctz_zero_v17i1() {
 define i32 @ctz_zero_v31i1() {
 ; CHECK-LABEL: ctz_zero_v31i1:
 ; CHECK:       # %bb.0:
-; CHECK-NEXT:    movdqa {{.*#+}} xmm0 = [16777216,16777216,16777216,16777216]
+; CHECK-NEXT:    movdqa {{.*#+}} xmm0 = [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1]
 ; CHECK-NEXT:    pmaxub {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0
 ; CHECK-NEXT:    movdqa %xmm0, %xmm1
 ; CHECK-NEXT:    psrld $24, %xmm1

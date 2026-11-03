@@ -3825,6 +3825,27 @@ defm PSHUFHW : sse2_pshuffle<"pshufhw", v8i16, v16i16, X86PShufhw,
 defm PSHUFLW : sse2_pshuffle<"pshuflw", v8i16, v16i16, X86PShuflw,
                              SchedWriteShuffle, NoVLX_Or_NoBWI>, TB, XD;
 
+multiclass pshuffle_lowering<string InstrStr, SDNode OpNode,
+                             ValueType VT, RegisterClass RC> {
+  def : Pat<(VT (OpNode RC:$src, (i8 timm:$imm))),
+            (!cast<Instruction>(InstrStr#ri) RC:$src, timm:$imm)>;
+}
+
+let Predicates = [NoAVX] in {
+  defm : pshuffle_lowering<"PSHUFD", X86PShufd, v8i16, VR128>;
+  defm : pshuffle_lowering<"PSHUFD", X86PShufd, v16i8, VR128>;
+}
+
+let Predicates = [HasAVX, NoVLX] in {
+  defm : pshuffle_lowering<"VPSHUFD", X86PShufd, v8i16, VR128>;
+  defm : pshuffle_lowering<"VPSHUFD", X86PShufd, v16i8, VR128>;
+}
+
+let Predicates = [HasAVX2, NoVLX] in {
+  defm : pshuffle_lowering<"VPSHUFDY", X86PShufd, v16i16, VR256>;
+  defm : pshuffle_lowering<"VPSHUFDY", X86PShufd, v32i8, VR256>;
+}
+
 //===---------------------------------------------------------------------===//
 // Packed Integer Pack Instructions (SSE & AVX)
 //===---------------------------------------------------------------------===//

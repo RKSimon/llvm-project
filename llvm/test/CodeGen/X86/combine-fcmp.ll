@@ -94,9 +94,9 @@ define i8 @concat_fcmp_v8f64_v2f64(<2 x double> %a0, <2 x double> %a1, <2 x doub
 ; SSE-NEXT:    cmpltpd %xmm4, %xmm2
 ; SSE-NEXT:    cmpltpd %xmm4, %xmm3
 ; SSE-NEXT:    packssdw %xmm3, %xmm2
+; SSE-NEXT:    packssdw %xmm2, %xmm1
 ; SSE-NEXT:    packssdw %xmm0, %xmm0
-; SSE-NEXT:    packssdw %xmm2, %xmm2
-; SSE-NEXT:    packsswb %xmm2, %xmm0
+; SSE-NEXT:    packsswb %xmm1, %xmm0
 ; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,3,2,3]
 ; SSE-NEXT:    pmovmskb %xmm0, %eax
 ; SSE-NEXT:    # kill: def $al killed $al killed $eax
